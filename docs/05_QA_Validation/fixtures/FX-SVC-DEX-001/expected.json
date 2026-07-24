@@ -1,4 +1,6 @@
 {
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-SVC-DEX-001",
   "status": "verifying",
@@ -44,6 +46,26 @@
     "requires_asset_in": true,
     "requires_pool_output": true,
     "requires_user_net_output": true,
-    "notes": "Do not treat pool WETH output as the user's final asset. Final user asset is native ETH."
+    "notes": "Do not treat pool WETH output as the user's final asset. Final user asset is native ETH.",
+    "requirements": [
+      {
+        "requirement_id": "REQ-DEX-ASSET-IN",
+        "description": "USDC pool input must match the Transfer and Swap evidence exactly.",
+        "mandatory": true,
+        "evidence_refs": ["EV-DEX-TRANSFER-IN", "EV-DEX-SWAP"]
+      },
+      {
+        "requirement_id": "REQ-DEX-POOL-OUTPUT",
+        "description": "WETH pool output must match the Transfer and Swap evidence exactly.",
+        "mandatory": true,
+        "evidence_refs": ["EV-DEX-TRANSFER-OUT", "EV-DEX-SWAP"]
+      },
+      {
+        "requirement_id": "REQ-DEX-USER-NET-OUTPUT",
+        "description": "The final user output must be native ETH after WETH withdrawal.",
+        "mandatory": true,
+        "evidence_refs": ["EV-DEX-WITHDRAWAL", "EV-DEX-INTERNAL-ETH"]
+      }
+    ]
   }
 }

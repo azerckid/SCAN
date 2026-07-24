@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://azerckid.github.io/SCAN/schemas/fixture-expected.schema.json",
+  "title": "SCAN Reference Fixture Expected Result 0.1",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "fixture_version",
+    "fixture_id",
+    "status",
+    "tolerance",
+    "scoring"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "pattern": "fixture-expected\\.schema\\.json$"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "fixture_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "fixture_id": {
+      "type": "string",
+      "pattern": "^FX-[A-Z0-9-]+$"
+    },
+    "status": {
+      "enum": ["candidate", "verifying", "confirmed", "deprecated"]
+    },
+    "tolerance": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "scoring": {
+      "type": "object",
+      "required": ["requirements"],
+      "properties": {
+        "requirements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/scoringRequirement"
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "scoringRequirement": {
+      "type": "object",
+      "required": [
+        "requirement_id",
+        "description",
+        "mandatory",
+        "evidence_refs"
+      ],
+      "properties": {
+        "requirement_id": {
+          "type": "string",
+          "pattern": "^REQ-[A-Z0-9-]+$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mandatory": {
+          "type": "boolean"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^EV-[A-Z0-9-]+$"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

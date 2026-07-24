@@ -1,4 +1,6 @@
 {
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-AUTH-001",
   "status": "verifying",
@@ -65,6 +67,35 @@
     "requires_allowance_snapshots": true,
     "requires_transfer_from_trace": true,
     "requires_transfer_event": true,
-    "requires_failed_transaction_exclusion": true
+    "requires_failed_transaction_exclusion": true,
+    "requirements": [
+      {
+        "requirement_id": "REQ-AUTH-APPROVAL",
+        "description": "Approval event and approve calldata must identify the same owner, spender, and amount.",
+        "mandatory": true,
+        "evidence_refs": ["EV-AUTH-APPROVAL-EVENT", "EV-AUTH-APPROVE-CALL"]
+      },
+      {
+        "requirement_id": "REQ-AUTH-ALLOWANCE",
+        "description": "Four historical allowance snapshots must reproduce the approval and consumption delta.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-AUTH-STATE-BEFORE-APPROVAL",
+          "EV-AUTH-STATE-AFTER-APPROVAL",
+          "EV-AUTH-STATE-BEFORE-CONSUMPTION",
+          "EV-AUTH-STATE-AFTER-CONSUMPTION"
+        ]
+      },
+      {
+        "requirement_id": "REQ-AUTH-CONSUMPTION",
+        "description": "Successful transferFrom calldata and Transfer event must match the consumed allowance delta.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-AUTH-OUTER-CALL",
+          "EV-AUTH-TRANSFER-FROM",
+          "EV-AUTH-TRANSFER-EVENT"
+        ]
+      }
+    ]
   }
 }

@@ -1,6 +1,6 @@
 # Fixture: FX-SVC-DEX-001
 > Created: 2026-07-24 19:19
-> Last Updated: 2026-07-24 19:48
+> Last Updated: 2026-07-25 02:49
 > Status: Verifying
 
 ## 1. 목적
@@ -33,6 +33,9 @@
 | `expected.json` | `asset_in` / `pool_output` / `user_net_output` 분리 기준 정답 |
 | `evidence.json` | 이벤트·internal call·출처·조회 시각 |
 
+세 JSON은 공통 `schema_version: 0.1`을 따르며, 채점 요구사항은 증거 ID로
+이벤트와 internal call을 참조한다.
+
 ## 4. 검증 절차 (수행 기록)
 
 1. fee-on-transfer·rebase가 아닌 USDC/WETH Uniswap V2 단일 홉 TX를 선정했다.
@@ -49,6 +52,7 @@
 
 - **QA_Validation**: [Reference Fixtures](../../01_REFERENCE_FIXTURES.md) - fixture 필드·허용 오차·승격 기준
 - **Technical_Specs**: [데이터 소스 등록부](../../../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - 등록 소스 ID와 제약
+- **Technical_Specs**: [Reference Fixture Schema](../../../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) - JSON 0.1 계약
 - **Concept_Design**: [예상문제 은행](../../../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - `SVC-DEX-001` 문제·완료 조건
 - **Explorer**: [Etherscan TX](https://etherscan.io/tx/0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5) (UI 교차확인)
 - **Explorer API**: [Blockscout internal txs](https://eth.blockscout.com/api/v2/transactions/0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5/internal-transactions)
