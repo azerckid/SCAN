@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-24 21:30
+> Last Updated: 2026-07-25 01:49
 > Status: Draft
 
 ## 1. 문서 목적
@@ -75,7 +75,7 @@
 | FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 검증 중 | AUTH-DECODE, allowance 연결 |
 | FX-EVM-PROXY-001 | EVM-PROXY-001 | 2 | 후보 | PROXY, archive state |
-| FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 후보 | FREEZE, state/logs |
+| FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 검증 중 | FREEZE, state/logs |
 | FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | RECON, PRICE, 다주소 집계 |
 | FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
 
@@ -194,18 +194,21 @@
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-FREEZE-001 |
-| 상태 | 후보 |
-| 데이터 형태 | 공개 온체인 + 발행사 공지 |
-| 체인 | TBD (EVM) |
-| 주소·TX | 토큰 T=TBD, 확인 모드=주소별 또는 pause, 대상 A=TBD(해당 시), 이벤트 TX=TBD |
-| 기준 정답 | 모드별 동결/pause 여부, 이벤트·상태 근거 |
+| 상태 | 검증 중 |
+| 패키지 | [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) |
+| 데이터 형태 | 공개 온체인 + 발행사·규제기관 공식 자료 |
+| 체인 | Ethereum (`chain_id` 1) |
+| 주소·TX | USDC, 대상 `0xd96f2b...4307`, 설정 TX `0xc67cf2...af72`, 해제 TX `0xecf903...1537` |
+| 기준 정답 | `Blacklisted`와 `UnBlacklisted` 이벤트 + archive 상태 `false→true→false` |
 | 허용 오차 | 해당 없음(boolean/상태 exact) |
-| 확정 사실 | 블랙리스트/pause 이벤트 및 상태 값 |
-| 휴리스틱 | 공지와 온체인 불일치 시 충돌로 기록 |
-| 필요 데이터 소스 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM`, `DS-OSINT-WEB` |
-| 재현 절차 | 1) 모드 선택 2) 이벤트 검색 3) 상태 조회 4) 공지 교차검증 |
-| 저작권·출처 | 발행사 공지 URL=TBD |
-| 마지막 확인 | 2026-07-24 16:03 |
+| 확정 사실(온체인) | 설정·해제 TX, 이벤트 로그, 네 블록의 `isBlacklisted` 상태 |
+| 확정 사실(공식 맥락) | OFAC 2022 지정·2025 해제 원문에 대상 주소가 모두 명시됨 |
+| 휴리스틱·제외 | Circle 자료는 주소별 공지가 아닌 정책·Tornado Cash 대응 맥락. 범죄 의도·현재 제재 상태는 채점하지 않음 |
+| 필수 데이터 소스 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM`, `DS-OSINT-WEB` |
+| 보조 provenance | `DS-EVM-RPC-PUBLIC`, `DS-SANCTIONS-PUBLIC` |
+| 재현 절차 | 설정 이벤트·전후 상태 → 해제 이벤트·전후 상태 → Blockscout API → Circle·OFAC 원문 분리 검증 |
+| 저작권·출처 | Circle 공식 문서·GitHub(Apache-2.0), OFAC 공식 고시 URL. 원문 복제 없음 |
+| 마지막 확인 | 2026-07-25 01:49 |
 
 ---
 
@@ -269,9 +272,9 @@
 ## 9. 다음 단계
 
 1. 데이터 소스 등록부와 함께 각 fixture의 공개 데이터 확보 가능성을 점검한다.
-2. `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`은 검증 중으로 승격됨. 다음은 [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) 공개 사례를 선정한다.
-3. 각 디렉터리의 `input.json`, `expected.json`, `evidence.json`을 채우고 수동 재현에 성공하면 `검증 중`으로 올린다.
-4. 기능 우선순위 문서에 확정 fixture를 검증 입력으로 연결한다.
+2. `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`은 검증 중으로 승격됨.
+3. 세 패키지의 공통 필드를 비교해 `fixture_version: 0.1` 공통 스키마 확정 여부를 결정한다.
+4. 확정 fixture를 기능 우선순위 문서의 검증 입력으로 연결한다.
 
 ## 10. Related Documents
 

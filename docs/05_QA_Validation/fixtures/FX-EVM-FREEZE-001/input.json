@@ -2,15 +2,25 @@
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-FREEZE-001",
   "problem_id": "EVM-FREEZE-001",
-  "status": "candidate",
+  "status": "verifying",
   "chain": {
-    "name": null,
-    "chain_id": null
+    "name": "ethereum",
+    "chain_id": 1
   },
-  "token_address": null,
-  "mode": null,
-  "target_address": null,
-  "observation_block": null,
-  "event_transaction_hashes": [],
-  "selection_notes": "Token, freeze mode, target, and reproducible observation block not selected yet."
+  "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+  "token_symbol": "USDC",
+  "token_decimals": 6,
+  "mode": "address_blacklist_lifecycle",
+  "target_address": "0xd96f2b1c14db8458374d9aca76e26c3d18364307",
+  "state_blocks": {
+    "before_blacklist": 15302548,
+    "after_blacklist": 15302549,
+    "before_unblacklist": 22099071,
+    "after_unblacklist": 22099072
+  },
+  "event_transaction_hashes": [
+    "0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72",
+    "0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537"
+  ],
+  "selection_notes": "Public USDC blacklist lifecycle for a Tornado Cash address named in OFAC's 2022 designation and 2025 removal. Scoring covers exact onchain events and historical states; it does not infer criminal intent or current sanctions status."
 }

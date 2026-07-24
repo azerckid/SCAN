@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-24 20:04
+> Last Updated: 2026-07-25 01:49
 > Status: Draft
 
 ## 1. 문서 목적
@@ -79,8 +79,8 @@
 | 이용약관 주의 | 공급자 ToS | 동일 |
 | 대회 규정 | 미확인 | 미확인 |
 | 상태 | 검증 중 | 검증 중 |
-| 마지막 확인 | 2026-07-24 20:04 | 2026-07-24 20:04 |
-| 비고 | `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`에 `https://ethereum.publicnode.com` 사용. receipt/logs·TX 확인 | `FX-EVM-AUTH-001`에 `https://eth.drpc.org` 사용. 4개 과거 블록 allowance `eth_call` 및 `trace_transaction` 확인 |
+| 마지막 확인 | 2026-07-25 01:49 | 2026-07-25 01:49 |
+| 비고 | `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`에 `https://ethereum.publicnode.com` 사용. receipt/logs·TX 또는 최신 상태 확인 | `FX-EVM-AUTH-001`의 allowance 4지점·trace, `FX-EVM-FREEZE-001`의 blacklist 4지점·이벤트를 `https://eth.drpc.org`에서 확인 |
 
 ### 5.2 탐색기 API
 
@@ -100,9 +100,9 @@
 | 이용약관 주의 | 스크래핑·재배포 제한 가능 |
 | 대회 규정 | 미확인 |
 | 상태 | 검증 중 |
-| 마지막 확인 | 2026-07-24 19:43 |
-| 관련 fixture | FLOW-EVM-001, SVC-DEX-001, EVM-AUTH-001 |
-| 비고 | `FX-SVC-DEX-001`의 internal ETH, `FX-EVM-AUTH-001`의 거래·token transfer·internal trace를 **Blockscout API**로 검증. Etherscan TX 페이지는 UI 교차확인만이며 API 검증으로 치지 않음 |
+| 마지막 확인 | 2026-07-25 01:49 |
+| 관련 fixture | FLOW-EVM-001, SVC-DEX-001, EVM-AUTH-001, EVM-FREEZE-001 |
+| 비고 | `FX-SVC-DEX-001`의 internal ETH, `FX-EVM-AUTH-001`의 거래·token transfer·internal trace, `FX-EVM-FREEZE-001`의 blacklist 설정·해제 TX와 로그를 **Blockscout API**로 검증. Etherscan TX 페이지는 UI 교차확인만이며 API 검증으로 치지 않음 |
 
 ### 5.3 Bitcoin UTXO
 
@@ -123,7 +123,7 @@
 | 대회 규정 | 미확인 | 미확인 |
 | 상태 | 후보 | 후보 |
 | 마지막 확인 | 2026-07-24 15:49 | 2026-07-24 15:49 |
-| 관련 fixture | BTC-CJ-001 (또는 BTC-UTXO-001 추가 세트) |
+| 관련 fixture | BTC-CJ-001 | BTC-UTXO-001 추가 세트 |
 
 ### 5.4 주소 라벨·제재 목록
 
@@ -142,8 +142,10 @@
 | 대체 소스 | 다른 라벨 DB, 탐색기 라벨 | 공식 원문, 다른 정리본 |
 | 이용약관 주의 | 재배포 제한 가능 | 공적 자료라도 2차 라이선스 확인 |
 | 대회 규정 | 미확인 | 미확인 |
-| 상태 | 후보 | 후보 |
-| 마지막 확인 | 2026-07-24 15:49 | 2026-07-24 15:49 |
+| 상태 | 후보 | 검증 중 |
+| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 01:49 |
+| 관련 fixture | FLOW-EVM-001 등 | EVM-FREEZE-001 (`FX-EVM-FREEZE-001`) |
+| 비고 |  | OFAC 2022 지정·2025 해제 원문에서 대상 주소를 확인. 고시 시점의 역사적 맥락으로 사용하며 현재 제재 상태로 간주하지 않음 |
 
 ### 5.5 ENS·OSINT
 
@@ -162,8 +164,10 @@
 | 대체 소스 | 다른 ENS 인덱서, 탐색기 | 다른 검색·아카이브 |
 | 이용약관 주의 | API ToS, SNS ToS | 스크래핑·자동화 제한 |
 | 대회 규정 | 미확인 | 미확인 |
-| 상태 | 후보 | 후보 |
-| 마지막 확인 | 2026-07-24 15:49 | 2026-07-24 15:49 |
+| 상태 | 후보 | 검증 중 |
+| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 01:49 |
+| 관련 fixture | OSINT-ENS-001 | EVM-FREEZE-001 (`FX-EVM-FREEZE-001`) |
+| 비고 |  | Circle 공식 블로그·USDC Terms·컨트랙트 주소 문서·고정 GitHub 커밋을 확인. 주소별 공지와 정책·대응 맥락을 구분 |
 
 ### 5.6 브리지·DEX·가격
 

@@ -1,10 +1,212 @@
 {
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-FREEZE-001",
-  "status": "candidate",
-  "captured_at": null,
-  "state_evidence": [],
-  "event_evidence": [],
-  "issuer_sources": [],
-  "provenance_notes": "Preserve state block, raw call result, event logs, issuer URL, and retrieval time."
+  "status": "verifying",
+  "captured_at": "2026-07-24T16:49:31Z",
+  "token": {
+    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "symbol": "USDC",
+    "decimals": 6
+  },
+  "target_address": "0xd96f2b1c14db8458374d9aca76e26c3d18364307",
+  "event_evidence": [
+    {
+      "evidence_type": "blacklisted_event",
+      "transaction_hash": "0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72",
+      "block_number": 15302549,
+      "block_timestamp": 1659975301,
+      "transaction_from": "0x5db0115f3b72d19cea34dd697cf412ff86dc7e1b",
+      "transaction_to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "transaction_status": "0x1",
+      "call_selector": "0xf9f92be4",
+      "call_signature": "blacklist(address)",
+      "call_input": "0xf9f92be4000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307",
+      "event": "Blacklisted(address)",
+      "topic0": "0xffa4e6181777692565cf28528fc88fd1516ea86b56da075235fa575af6a4b855",
+      "topic1": "0x000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307",
+      "log_index": 85
+    },
+    {
+      "evidence_type": "unblacklisted_event",
+      "transaction_hash": "0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537",
+      "block_number": 22099072,
+      "block_timestamp": 1742606135,
+      "transaction_from": "0x10df6b6fe66dd319b1f82bab2d054cbb61cdad2e",
+      "transaction_to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "transaction_status": "0x1",
+      "call_selector": "0x1a895266",
+      "call_signature": "unBlacklist(address)",
+      "call_input": "0x1a895266000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307",
+      "event": "UnBlacklisted(address)",
+      "topic0": "0x117e3210bb9aa7d9baff172026820255c6f6c30ba8999d1c2fd88e2848137c4e",
+      "topic1": "0x000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307",
+      "log_index": 7
+    }
+  ],
+  "state_evidence": [
+    {
+      "label": "before_blacklist",
+      "block_number": 15302548,
+      "block_tag": "0xe97f94",
+      "result": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "decoded_is_blacklisted": false
+    },
+    {
+      "label": "after_blacklist",
+      "block_number": 15302549,
+      "block_tag": "0xe97f95",
+      "result": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "decoded_is_blacklisted": true
+    },
+    {
+      "label": "before_unblacklist",
+      "block_number": 22099071,
+      "block_tag": "0x151347f",
+      "result": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "decoded_is_blacklisted": true
+    },
+    {
+      "label": "after_unblacklist",
+      "block_number": 22099072,
+      "block_tag": "0x1513480",
+      "result": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "decoded_is_blacklisted": false
+    }
+  ],
+  "state_query": {
+    "method": "eth_call",
+    "endpoint": "https://eth.drpc.org",
+    "source_id": "DS-EVM-RPC-ARCHIVE",
+    "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "signature": "isBlacklisted(address)",
+    "selector": "0xfe575a87",
+    "target": "0xd96f2b1c14db8458374d9aca76e26c3d18364307",
+    "data": "0xfe575a87000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307",
+    "retrieved_at": "2026-07-24T16:49:31Z",
+    "reproduced_twice": true
+  },
+  "balance_context": {
+    "method": "eth_call",
+    "endpoint": "https://eth.drpc.org",
+    "source_id": "DS-EVM-RPC-ARCHIVE",
+    "signature": "balanceOf(address)",
+    "selector": "0x70a08231",
+    "data": "0x70a08231000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307",
+    "before_blacklist_block": 15302548,
+    "after_blacklist_block": 15302549,
+    "result_both_blocks": "0x00000000000000000000000000000000000000000000000000000000e8754700",
+    "amount_raw_both_blocks": "3900000000",
+    "retrieved_at": "2026-07-24T16:49:31Z",
+    "notes": "The blacklist transition did not transfer or burn the balance. This value is context, not a scoring requirement."
+  },
+  "issuer_sources": [
+    {
+      "source_id": "DS-OSINT-WEB",
+      "provider": "Circle",
+      "title": "The Responsibility of Trust",
+      "url": "https://www.circle.com/blog/the-responsibility-of-trust",
+      "published_at": "2022-08-09",
+      "address_specific": false,
+      "role": "issuer_context_for_tornado_cash_response",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "provider": "Circle",
+      "title": "USDC Terms",
+      "url": "https://www.circle.com/legal/usdc-terms",
+      "last_updated_by_publisher": "2025-12-12",
+      "address_specific": false,
+      "role": "issuer_blocklisting_policy",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "provider": "Circle Developers",
+      "title": "USDC Contract Addresses",
+      "url": "https://developers.circle.com/stablecoins/usdc-contract-addresses",
+      "ethereum_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "match": true,
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "provider": "Circle GitHub",
+      "title": "Blacklistable.sol",
+      "commit_sha": "7acbe662898945f1a989ad74e28cfbc8897f4a4b",
+      "url": "https://github.com/circlefin/stablecoin-evm/blob/7acbe662898945f1a989ad74e28cfbc8897f4a4b/contracts/v1/Blacklistable.sol",
+      "role": "pinned_event_and_state_interface_definition",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    }
+  ],
+  "regulatory_sources": [
+    {
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "provider": "U.S. Treasury OFAC",
+      "title": "Cyber-related Designation",
+      "url": "https://ofac.treasury.gov/recent-actions/20220808",
+      "published_at": "2022-08-08",
+      "target_address_listed": true,
+      "role": "historical_designation_context",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    },
+    {
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "provider": "U.S. Treasury OFAC",
+      "title": "Cyber-related Designation Removal; North Korea Designation Update and Removal",
+      "url": "https://ofac.treasury.gov/recent-actions/20250321",
+      "published_at": "2025-03-21",
+      "target_address_listed": true,
+      "role": "historical_designation_removal_context",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider": "ethereum.publicnode.com",
+      "endpoint": "https://ethereum.publicnode.com",
+      "methods": [
+        "eth_getTransactionByHash",
+        "eth_call(latest)"
+      ],
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "dRPC",
+      "endpoint": "https://eth.drpc.org",
+      "methods": [
+        "eth_getLogs",
+        "eth_getTransactionReceipt",
+        "eth_call"
+      ],
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "provider": "Blockscout",
+      "api": true,
+      "blacklist_transaction_url": "https://eth.blockscout.com/api/v2/transactions/0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72",
+      "blacklist_logs_url": "https://eth.blockscout.com/api/v2/transactions/0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72/logs",
+      "unblacklist_transaction_url": "https://eth.blockscout.com/api/v2/transactions/0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537",
+      "unblacklist_logs_url": "https://eth.blockscout.com/api/v2/transactions/0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537/logs",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    }
+  ],
+  "consistency_checks": {
+    "blacklist_call_matches_event_target": true,
+    "blacklist_event_matches_state_transition": true,
+    "unblacklist_call_matches_event_target": true,
+    "unblacklist_event_matches_state_transition": true,
+    "archive_state_reproduced_twice": true,
+    "ofac_designation_and_removal_name_target": true,
+    "issuer_page_is_not_misrepresented_as_address_specific": true
+  },
+  "uncertainty": {
+    "issuer_address_specific_notice": "not_found",
+    "legal_or_criminal_attribution": "not_scored",
+    "notes": "OFAC official actions enumerate the target address. Circle's public pages provide issuer policy and Tornado Cash response context but do not enumerate this address, so they are not treated as address-specific proof."
+  },
+  "provenance_notes": "Onchain event/state facts, issuer context, and regulatory context are stored separately. The 2025 regulatory removal and UnBlacklisted event are recorded as separate facts and are not assumed to have identical effective timestamps."
 }

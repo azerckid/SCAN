@@ -1,24 +1,62 @@
 {
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-FREEZE-001",
-  "status": "candidate",
-  "mode": null,
+  "status": "verifying",
+  "mode": "address_blacklist_lifecycle",
   "address_freeze": {
-    "target_address": null,
-    "is_frozen": null,
-    "state_field": null
+    "target_address": "0xd96f2b1c14db8458374d9aca76e26c3d18364307",
+    "state_field": "isBlacklisted(address)",
+    "transitions": [
+      {
+        "type": "blacklist",
+        "transaction_hash": "0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72",
+        "block_number": 15302549,
+        "block_timestamp": 1659975301,
+        "event": "Blacklisted(address)",
+        "log_index": 85,
+        "state_before": false,
+        "state_after": true
+      },
+      {
+        "type": "unblacklist",
+        "transaction_hash": "0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537",
+        "block_number": 22099072,
+        "block_timestamp": 1742606135,
+        "event": "UnBlacklisted(address)",
+        "log_index": 7,
+        "state_before": true,
+        "state_after": false
+      }
+    ]
   },
   "token_pause": {
-    "is_paused": null,
-    "state_field": null
+    "applicable": false,
+    "reason": "This fixture tests address-level blacklist transitions, not global token pause."
   },
-  "expected_event_log_indices": [],
-  "issuer_notice": {
-    "url": null,
-    "published_at": null,
-    "matches_onchain_state": null
+  "regulatory_context": {
+    "designation_date": "2022-08-08",
+    "removal_date": "2025-03-21",
+    "address_present_in_both_official_actions": true,
+    "role": "context_only_not_onchain_state"
+  },
+  "issuer_context": {
+    "url": "https://www.circle.com/blog/the-responsibility-of-trust",
+    "published_at": "2022-08-09",
+    "address_specific": false,
+    "assessment": "Circle states that it complied with the Tornado Cash sanctions and blocked related addresses, but the page does not enumerate this address."
   },
   "tolerance": {
     "boolean_state": "exact"
+  },
+  "classification": {
+    "onchain_fact": "The USDC contract changed the target from not blacklisted to blacklisted in 2022 and from blacklisted to not blacklisted in 2025.",
+    "legal_or_criminal_conclusion": "not_scored"
+  },
+  "scoring": {
+    "requires_token_and_target": true,
+    "requires_both_event_transactions": true,
+    "requires_both_event_logs": true,
+    "requires_four_historical_state_snapshots": true,
+    "requires_official_context_separated_from_onchain_fact": true
   }
 }
