@@ -1,4 +1,6 @@
 {
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-SVC-DEX-001",
   "status": "verifying",
@@ -13,6 +15,9 @@
   },
   "event_evidence": [
     {
+      "evidence_id": "EV-DEX-TRANSFER-IN",
+      "evidence_type": "transfer_event",
+      "source_id": "DS-EVM-RPC-PUBLIC",
       "log_index": 275,
       "type": "Transfer",
       "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
@@ -22,6 +27,9 @@
       "role": "asset_in"
     },
     {
+      "evidence_id": "EV-DEX-TRANSFER-OUT",
+      "evidence_type": "transfer_event",
+      "source_id": "DS-EVM-RPC-PUBLIC",
       "log_index": 276,
       "type": "Transfer",
       "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -31,6 +39,9 @@
       "role": "pool_output_weth"
     },
     {
+      "evidence_id": "EV-DEX-SWAP",
+      "evidence_type": "swap_event",
+      "source_id": "DS-EVM-RPC-PUBLIC",
       "log_index": 278,
       "type": "Swap",
       "address": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
@@ -41,6 +52,9 @@
       "role": "pool_swap"
     },
     {
+      "evidence_id": "EV-DEX-WITHDRAWAL",
+      "evidence_type": "withdrawal_event",
+      "source_id": "DS-EVM-RPC-PUBLIC",
       "log_index": 279,
       "type": "Withdrawal",
       "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -50,6 +64,8 @@
   ],
   "call_evidence": [
     {
+      "evidence_id": "EV-DEX-INTERNAL-ETH",
+      "evidence_type": "internal_eth_transfer",
       "type": "internal_eth_transfer",
       "from": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
       "to": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
@@ -59,6 +75,28 @@
       "provider": "Blockscout API",
       "endpoint": "https://eth.blockscout.com/api/v2/transactions/0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5/internal-transactions",
       "retrieved_at": "2026-07-24T10:43:17Z"
+    }
+  ],
+  "state_evidence": [],
+  "context_evidence": [],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Transaction receipt and Transfer, Swap, and Withdrawal logs"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Internal native ETH transfer that establishes user net output"
+    },
+    {
+      "source_id": "DS-DEX-META",
+      "role": "supporting",
+      "required": true,
+      "purpose": "Official router and factory provenance plus reproducible pool identity"
     }
   ],
   "sources": [
@@ -145,5 +183,15 @@
       "recomputed_twice": true
     }
   ],
+  "consistency_checks": {
+    "swap_matches_transfers": true,
+    "withdrawal_matches_pool_out": true,
+    "internal_eth_matches_withdrawal": true,
+    "amounts_recomputed_twice": true
+  },
+  "uncertainty": {
+    "heuristic_links": "none",
+    "notes": "Pool WETH output and final native ETH output are separate deterministic facts."
+  },
   "provenance_notes": "Pool output and user net output are recorded separately. WETH pool out must not be scored as the user's final asset."
 }

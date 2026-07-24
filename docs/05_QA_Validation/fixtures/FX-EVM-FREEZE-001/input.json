@@ -1,4 +1,6 @@
 {
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-FREEZE-001",
   "problem_id": "EVM-FREEZE-001",

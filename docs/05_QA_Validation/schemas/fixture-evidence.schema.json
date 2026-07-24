@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://azerckid.github.io/SCAN/schemas/fixture-evidence.schema.json",
+  "title": "SCAN Reference Fixture Evidence 0.1",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "fixture_version",
+    "fixture_id",
+    "status",
+    "captured_at",
+    "event_evidence",
+    "call_evidence",
+    "state_evidence",
+    "context_evidence",
+    "source_requirements",
+    "sources",
+    "consistency_checks",
+    "uncertainty",
+    "provenance_notes"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "pattern": "fixture-evidence\\.schema\\.json$"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "fixture_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "fixture_id": {
+      "type": "string",
+      "pattern": "^FX-[A-Z0-9-]+$"
+    },
+    "status": {
+      "enum": ["candidate", "verifying", "confirmed", "deprecated"]
+    },
+    "captured_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "event_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceItem"
+      }
+    },
+    "call_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceItem"
+      }
+    },
+    "state_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceItem"
+      }
+    },
+    "context_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceItem"
+      }
+    },
+    "source_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/sourceRequirement"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["source_id", "provider", "retrieved_at"],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "pattern": "^DS-[A-Z0-9-]+$"
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1
+          },
+          "retrieved_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "consistency_checks": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "boolean"
+      }
+    },
+    "uncertainty": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "provenance_notes": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "evidenceItem": {
+      "type": "object",
+      "required": ["evidence_id", "evidence_type", "source_id"],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^EV-[A-Z0-9-]+$"
+        },
+        "evidence_type": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^DS-[A-Z0-9-]+$"
+        }
+      },
+      "additionalProperties": true
+    },
+    "sourceRequirement": {
+      "type": "object",
+      "required": ["source_id", "role", "required", "purpose"],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^DS-[A-Z0-9-]+$"
+        },
+        "role": {
+          "enum": ["scoring", "context", "supporting"]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

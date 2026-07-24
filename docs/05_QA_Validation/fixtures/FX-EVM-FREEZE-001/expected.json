@@ -1,4 +1,6 @@
 {
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-FREEZE-001",
   "status": "verifying",
@@ -57,6 +59,36 @@
     "requires_both_event_transactions": true,
     "requires_both_event_logs": true,
     "requires_four_historical_state_snapshots": true,
-    "requires_official_context_separated_from_onchain_fact": true
+    "requires_official_context_separated_from_onchain_fact": true,
+    "requirements": [
+      {
+        "requirement_id": "REQ-FREEZE-BLACKLIST",
+        "description": "Blacklist call, event, and before/after state must identify one target transition.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-FREEZE-BLACKLIST-CALL",
+          "EV-FREEZE-BLACKLIST-EVENT",
+          "EV-FREEZE-STATE-BEFORE-BLACKLIST",
+          "EV-FREEZE-STATE-AFTER-BLACKLIST"
+        ]
+      },
+      {
+        "requirement_id": "REQ-FREEZE-UNBLACKLIST",
+        "description": "Unblacklist call, event, and before/after state must identify one target transition.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-FREEZE-UNBLACKLIST-CALL",
+          "EV-FREEZE-UNBLACKLIST-EVENT",
+          "EV-FREEZE-STATE-BEFORE-UNBLACKLIST",
+          "EV-FREEZE-STATE-AFTER-UNBLACKLIST"
+        ]
+      },
+      {
+        "requirement_id": "REQ-FREEZE-CONTEXT-SEPARATION",
+        "description": "Official issuer context must remain separate from onchain facts.",
+        "mandatory": true,
+        "evidence_refs": ["EV-FREEZE-CIRCLE-RESPONSE"]
+      }
+    ]
   }
 }

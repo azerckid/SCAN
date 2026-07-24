@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 01:49
+> Last Updated: 2026-07-25 02:49
 > Status: Draft
 
 ## 1. 문서 목적
@@ -15,6 +15,7 @@
 병행 문서:
 
 - [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md)
+- [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md)
 
 ## 2. 정보 구분 원칙
 

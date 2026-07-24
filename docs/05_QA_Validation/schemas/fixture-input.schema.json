@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://azerckid.github.io/SCAN/schemas/fixture-input.schema.json",
+  "title": "SCAN Reference Fixture Input 0.1",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "fixture_version",
+    "fixture_id",
+    "problem_id",
+    "status",
+    "chain",
+    "selection_notes"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "pattern": "fixture-input\\.schema\\.json$"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "fixture_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "fixture_id": {
+      "type": "string",
+      "pattern": "^FX-[A-Z0-9-]+$"
+    },
+    "problem_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9-]+$"
+    },
+    "status": {
+      "enum": ["candidate", "verifying", "confirmed", "deprecated"]
+    },
+    "chain": {
+      "type": "object",
+      "required": ["name", "chain_id"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chain_id": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "selection_notes": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": true
+}

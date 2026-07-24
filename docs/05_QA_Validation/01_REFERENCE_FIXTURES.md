@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 01:49
+> Last Updated: 2026-07-25 02:49
 > Status: Draft
 
 ## 1. 문서 목적
@@ -35,11 +35,15 @@
 
 ## 4. Fixture 필드 표준
 
-각 fixture는 아래 필드를 채운다.
+각 fixture는 아래 필드를 채운다. JSON의 규범적 구조와 증거 연결 규칙은
+[Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md)를
+따른다.
 
 | 필드 | 설명 |
 |:---|:---|
 | Fixture ID | `FX-...` |
+| Schema Version | 공통 JSON 계약 버전. 현재 `0.1` |
+| Fixture Version | 개별 사례 데이터 개정 버전. 현재 `0.1` |
 | 연결 문제 ID | 예상문제 은행 ID |
 | 상태 | 후보 / 검증 중 / 확정 / 폐기 |
 | 데이터 형태 | 공개 사건 / 공개 온체인 / 자체 테스트 / JSON fixture |
@@ -48,6 +52,8 @@
 | 기준 정답 | reference answer 요약 |
 | 허용 오차 | raw 단위, 수수료, 가격 정밀도 규칙 |
 | 확정 사실 | 재조회로 고정되는 사실. 필요 시 `확정 사실(이벤트)`와 `확정 사실(호출·상태)`처럼 증거 유형을 분행 |
+| 증거 참조 | `expected.json`의 채점 요구사항과 `evidence.json`의 증거 ID 연결 |
+| 소스 역할 | `scoring` / `context` / `supporting`과 필수 여부 |
 | 휴리스틱 | 추정으로만 둘 항목. 문제 유형이 둘 이상이면 분기별로 나눔 |
 | 필요 데이터 소스 | 등록부 소스 ID만 사용 (`DS-...`). 설명문·데이터 종류 나열 금지 |
 | 재현 절차 | 단계 목록 |
@@ -265,21 +271,23 @@
 
 - 8개 후보의 실제 공개 사건/TX 선정
 - `FX-UNCERTAIN-001`을 믹서와 CoinJoin 중 무엇으로 고정할지
-- `fixture_version: 0.1` JSON 필드의 공통 스키마 확정 여부
 - 가격 아카이브 공급자 확정
 - 저작권상 보고서를 어느 수준까지 인용할지
 
 ## 9. 다음 단계
 
-1. 데이터 소스 등록부와 함께 각 fixture의 공개 데이터 확보 가능성을 점검한다.
-2. `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`은 검증 중으로 승격됨.
-3. 세 패키지의 공통 필드를 비교해 `fixture_version: 0.1` 공통 스키마 확정 여부를 결정한다.
+1. `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`은 공통
+   `schema_version: 0.1` 자동 검증을 통과한 검증 중 fixture로 유지한다.
+2. AUTH `SwapRouter02`의 고정 가능한 공식 배포 출처를 보강한다.
+3. 세 fixture를 동일 입력으로 다시 재현한 뒤 `확정` 승격 여부를 판단한다.
 4. 확정 fixture를 기능 우선순위 문서의 검증 입력으로 연결한다.
+5. 나머지 후보 fixture의 공개 데이터를 선정한다.
 
 ## 10. Related Documents
 
 - **Concept_Design**: [SCAN 2026 예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 문제·완료조건·대표 사례 후보의 기준
 - **Concept_Design**: [SCAN 2026 참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 준비 전략
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - fixture별 필요 소스와 제약
+- **Technical_Specs**: [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) - JSON 0.1 계약과 증거·소스 역할
 - **QA_Validation**: [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) - 우선 구축 fixture 패키지
 - 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, `../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md`

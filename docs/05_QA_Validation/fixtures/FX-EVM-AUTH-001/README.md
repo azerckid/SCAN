@@ -1,6 +1,6 @@
 # Fixture: FX-EVM-AUTH-001
 > Created: 2026-07-24 19:19
-> Last Updated: 2026-07-24 21:30
+> Last Updated: 2026-07-25 02:49
 > Status: Verifying
 
 ## 1. 목적
@@ -33,6 +33,9 @@
 | `expected.json` | 승인 유형별 증거, allowance 전후와 실제 전송 기준 정답 |
 | `evidence.json` | 이벤트·calldata·상태 조회 원본과 provenance |
 
+세 JSON은 공통 `schema_version: 0.1`을 따르며, 채점 요구사항은 이벤트·호출·
+상태 증거 ID를 각각 참조한다.
+
 ## 4. 검증 절차 (수행 기록)
 
 1. 승인 유형을 `approve`로 확정하고 승인 TX calldata와 `Approval` 로그를 분리 기록했다.
@@ -48,6 +51,7 @@
 
 - **QA_Validation**: [Reference Fixtures](../../01_REFERENCE_FIXTURES.md) - AUTH 증거 유형과 승격 기준
 - **Technical_Specs**: [데이터 소스 등록부](../../../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - archive state 필수 소스
+- **Technical_Specs**: [Reference Fixture Schema](../../../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) - JSON 0.1 계약
 - **Concept_Design**: [예상문제 은행](../../../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - `EVM-AUTH-001` 문제·완료 조건
 - **Explorer**: [승인 TX](https://etherscan.io/tx/0x3f7037014b8709f02bf2032d70ce4ec6854a53ed141b63d6a7ea359a9dccdabd), [소비 TX](https://etherscan.io/tx/0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51) - UI 교차확인
 - **Official metadata**: [Uniswap Deployments](https://developers.uniswap.org/deployments) - Ethereum `SwapRouter02` 주소
