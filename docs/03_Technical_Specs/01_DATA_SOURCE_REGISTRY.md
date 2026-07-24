@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 02:49
+> Last Updated: 2026-07-25 03:18
 > Status: Draft
 
 ## 1. 문서 목적
@@ -188,9 +188,9 @@
 | 이용약관 주의 | 각 서비스 ToS | 동일 | 재배포·지연 데이터 제한 |
 | 대회 규정 | 미확인 | 미확인 | 미확인 |
 | 상태 | 후보 | 검증 중 | 후보 |
-| 마지막 확인 | 2026-07-24 15:49 | 2026-07-24 19:43 | 2026-07-24 15:49 |
+| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 03:18 | 2026-07-24 15:49 |
 | 관련 fixture | SVC-BRG-001 | SVC-DEX-001 (`FX-SVC-DEX-001`), EVM-AUTH-001 (`FX-EVM-AUTH-001`) | FLOW-MULTI-001 |
-| 비고 |  | Universal Router: 공식 `deploy-addresses/mainnet.json`의 `UniversalRouterV1`. Factory: V2 Deployments. Pool: Pair Addresses 가이드 + 재현 가능 `eth_call getPair` 기록 |  |
+| 비고 |  | Universal Router: 공식 `deploy-addresses/mainnet.json`의 `UniversalRouterV1`. Factory: V2 Deployments. Pool: Pair Addresses 가이드 + 재현 가능 `eth_call getPair` 기록. AUTH `SwapRouter02`: 공식 `sdk-core` 커밋 `baff6d3c...d28a`의 `SWAP_ROUTER_02_ADDRESSES(1)`과 MIT 라이선스 고정 |  |
 
 ## 6. fixture별 최소 소스 요구
 

@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 02:49
+> Last Updated: 2026-07-25 03:18
 > Status: Draft
 
 ## 1. 문서 목적
@@ -79,7 +79,7 @@
 | FX-FLOW-EVM-001 | FLOW-EVM-001 | 1 | 후보 | 수집, PATH, LABEL, 증거 |
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 검증 중 | EVM-LOG, DECODE, RECON |
 | FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | XCHAIN, BRIDGE, RECON |
-| FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 검증 중 | AUTH-DECODE, allowance 연결 |
+| FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | AUTH-DECODE, allowance 연결 |
 | FX-EVM-PROXY-001 | EVM-PROXY-001 | 2 | 후보 | PROXY, archive state |
 | FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 검증 중 | FREEZE, state/logs |
 | FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | RECON, PRICE, 다주소 집계 |
@@ -157,7 +157,7 @@
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-AUTH-001 |
-| 상태 | 검증 중 |
+| 상태 | 확정 |
 | 패키지 | [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md) |
 | 데이터 형태 | 공개 온체인 |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -168,10 +168,10 @@
 | 확정 사실(호출·상태) | `approve`/`permit` 호출 TX·calldata·nonce, allowance 전후 상태(archive), `TransferFrom`(또는 동등) 소비 호출 TX. 이벤트 로그와 한 줄로 합치지 않음 |
 | 휴리스틱 | 피싱·탈취·피해자 여부는 판정하지 않음. fixture는 권한 소비 연결만 검증 |
 | 필수 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM` |
-| 보조 provenance | `DS-DEX-META` — `SwapRouter02` 공식 주소 확인용이며 권한 소비 채점의 필수 소스는 아님 |
+| 보조 provenance | `DS-DEX-META` — Uniswap `sdk-core` 고정 커밋의 `SWAP_ROUTER_02_ADDRESSES(1)`로 주소를 확인하며 권한 소비 채점의 필수 소스는 아님 |
 | 재현 절차 | Approval·approve calldata → archive allowance 전후 → 실패 TX 제외 → 성공 TX trace의 transferFrom → Transfer 로그·감소량 대조 |
-| 저작권·출처 | publicnode RPC, dRPC archive/trace, Blockscout API, Uniswap Deployments. 본문 복제 없음 |
-| 마지막 확인 | 2026-07-24 21:30 |
+| 저작권·출처 | publicnode RPC, dRPC archive/trace, Blockscout API, Uniswap `sdk-core` 고정 커밋(MIT), Deployments 교차확인. 본문 복제 없음 |
+| 마지막 확인 | 2026-07-25 03:18 (동일 입력 재현 통과) |
 
 ---
 
@@ -276,12 +276,12 @@
 
 ## 9. 다음 단계
 
-1. `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`은 공통
-   `schema_version: 0.1` 자동 검증을 통과한 검증 중 fixture로 유지한다.
-2. AUTH `SwapRouter02`의 고정 가능한 공식 배포 출처를 보강한다.
-3. 세 fixture를 동일 입력으로 다시 재현한 뒤 `확정` 승격 여부를 판단한다.
-4. 확정 fixture를 기능 우선순위 문서의 검증 입력으로 연결한다.
-5. 나머지 후보 fixture의 공개 데이터를 선정한다.
+1. `FX-EVM-AUTH-001`은 동일 입력 재현과 고정 provenance를 통과해
+   `fixture_version: 0.2`, `confirmed`로 승격했다.
+2. `FX-SVC-DEX-001`, `FX-EVM-FREEZE-001`을 동일 입력으로 다시 재현해
+   `확정` 승격 여부를 판단한다.
+3. 확정 fixture를 기능 우선순위 문서의 검증 입력으로 연결한다.
+4. 나머지 후보 fixture의 공개 데이터를 선정한다.
 
 ## 10. Related Documents
 
