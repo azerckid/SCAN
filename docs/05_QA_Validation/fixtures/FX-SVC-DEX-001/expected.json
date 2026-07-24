@@ -1,0 +1,26 @@
+{
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-DEX-001",
+  "status": "candidate",
+  "asset_in": {
+    "token_address": null,
+    "symbol": null,
+    "decimals": null,
+    "amount_raw": null
+  },
+  "asset_out": {
+    "token_address": null,
+    "symbol": null,
+    "decimals": null,
+    "amount_raw": null
+  },
+  "dex": {
+    "name": null,
+    "router_address": null,
+    "pool_addresses": []
+  },
+  "expected_event_log_indices": [],
+  "tolerance": {
+    "token_amount_raw": 0
+  }
+}

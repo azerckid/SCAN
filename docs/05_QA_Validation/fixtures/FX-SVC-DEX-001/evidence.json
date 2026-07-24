@@ -1,0 +1,10 @@
+{
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-DEX-001",
+  "status": "candidate",
+  "captured_at": null,
+  "block_number": null,
+  "sources": [],
+  "raw_artifacts": [],
+  "provenance_notes": "Preserve receipt, raw logs, endpoint or explorer URL, and retrieval time."
+}

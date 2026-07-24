@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-24 19:14
+> Last Updated: 2026-07-24 19:19
 > Status: Draft
 
 ## 1. 문서 목적
@@ -259,15 +259,15 @@
 
 - 8개 후보의 실제 공개 사건/TX 선정
 - `FX-UNCERTAIN-001`을 믹서와 CoinJoin 중 무엇으로 고정할지
-- JSON fixture 저장 경로와 스키마 (예: `docs/05_QA_Validation/fixtures/`)
+- `fixture_version: 0.1` JSON 필드의 공통 스키마 확정 여부
 - 가격 아카이브 공급자 확정
 - 저작권상 보고서를 어느 수준까지 인용할지
 
 ## 9. 다음 단계
 
 1. 데이터 소스 등록부와 함께 각 fixture의 공개 데이터 확보 가능성을 점검한다.
-2. 확보가 쉬운 순으로 `검증 중`에 올린다. 권장 시작: `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`.
-3. 확정 fixture부터 JSON reference answer를 추가한다.
+2. [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) 순서로 공개 사례를 선정한다.
+3. 각 디렉터리의 `input.json`, `expected.json`, `evidence.json`을 채우고 수동 재현에 성공하면 `검증 중`으로 올린다.
 4. 기능 우선순위 문서에 확정 fixture를 검증 입력으로 연결한다.
 
 ## 10. Related Documents
@@ -275,4 +275,5 @@
 - **Concept_Design**: [SCAN 2026 예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 문제·완료조건·대표 사례 후보의 기준
 - **Concept_Design**: [SCAN 2026 참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 준비 전략
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - fixture별 필요 소스와 제약
+- **QA_Validation**: [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) - 우선 구축 fixture 패키지
 - 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, `../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md`

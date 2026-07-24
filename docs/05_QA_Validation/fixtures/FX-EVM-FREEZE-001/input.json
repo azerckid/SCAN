@@ -1,0 +1,16 @@
+{
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-FREEZE-001",
+  "problem_id": "EVM-FREEZE-001",
+  "status": "candidate",
+  "chain": {
+    "name": null,
+    "chain_id": null
+  },
+  "token_address": null,
+  "mode": null,
+  "target_address": null,
+  "observation_block": null,
+  "event_transaction_hashes": [],
+  "selection_notes": "Token, freeze mode, target, and reproducible observation block not selected yet."
+}

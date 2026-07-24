@@ -1,0 +1,11 @@
+{
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-AUTH-001",
+  "status": "candidate",
+  "captured_at": null,
+  "event_evidence": [],
+  "call_evidence": [],
+  "state_evidence": [],
+  "sources": [],
+  "provenance_notes": "Keep Approval and Transfer logs separate from approve or permit calldata and archive allowance state."
+}

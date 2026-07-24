@@ -1,0 +1,10 @@
+{
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-FREEZE-001",
+  "status": "candidate",
+  "captured_at": null,
+  "state_evidence": [],
+  "event_evidence": [],
+  "issuer_sources": [],
+  "provenance_notes": "Preserve state block, raw call result, event logs, issuer URL, and retrieval time."
+}

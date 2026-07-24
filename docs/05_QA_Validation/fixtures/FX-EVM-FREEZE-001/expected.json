@@ -1,0 +1,24 @@
+{
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-FREEZE-001",
+  "status": "candidate",
+  "mode": null,
+  "address_freeze": {
+    "target_address": null,
+    "is_frozen": null,
+    "state_field": null
+  },
+  "token_pause": {
+    "is_paused": null,
+    "state_field": null
+  },
+  "expected_event_log_indices": [],
+  "issuer_notice": {
+    "url": null,
+    "published_at": null,
+    "matches_onchain_state": null
+  },
+  "tolerance": {
+    "boolean_state": "exact"
+  }
+}

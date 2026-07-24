@@ -1,0 +1,28 @@
+{
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-AUTH-001",
+  "status": "candidate",
+  "approval": {
+    "type": null,
+    "owner": null,
+    "spender": null,
+    "amount_raw": null,
+    "nonce": null,
+    "approval_log_index": null
+  },
+  "allowance": {
+    "before_raw": null,
+    "after_raw": null
+  },
+  "consumption": {
+    "caller": null,
+    "from": null,
+    "to": null,
+    "amount_raw": null,
+    "transfer_log_indices": []
+  },
+  "tolerance": {
+    "allowance_raw": 0,
+    "transfer_amount_raw": 0
+  }
+}
