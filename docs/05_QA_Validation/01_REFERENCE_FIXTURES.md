@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-24 19:19
+> Last Updated: 2026-07-24 19:48
 > Status: Draft
 
 ## 1. 문서 목적
@@ -71,7 +71,7 @@
 | Fixture ID | 문제 ID | Draft | 상태 | 핵심 검증 기능 |
 |:---|:---|:---:|:---|:---|
 | FX-FLOW-EVM-001 | FLOW-EVM-001 | 1 | 후보 | 수집, PATH, LABEL, 증거 |
-| FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 후보 | EVM-LOG, DECODE, RECON |
+| FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 검증 중 | EVM-LOG, DECODE, RECON |
 | FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 후보 | AUTH-DECODE, allowance 연결 |
 | FX-EVM-PROXY-001 | EVM-PROXY-001 | 2 | 후보 | PROXY, archive state |
@@ -110,18 +110,19 @@
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | SVC-DEX-001 |
-| 상태 | 후보 |
+| 상태 | 검증 중 |
+| 패키지 | [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md) |
 | 데이터 형태 | 공개 온체인 / JSON fixture |
-| 체인 | TBD (EVM) |
-| 주소·TX | 스왑 TX=TBD, 라우터/페어=TBD |
-| 기준 정답 | in/out 자산·수량, 사용 DEX/라우터 라벨 |
-| 허용 오차 | raw 오차 0. 사람 단위는 decimals 병기 |
-| 확정 사실 | Swap/Transfer 이벤트 값 |
-| 휴리스틱 | 라우터 라벨 충돌 시 출처 비교 |
-| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-DEX-META` |
-| 재현 절차 | 1) TX receipt/logs 2) in/out 계산 3) 라벨 조회 4) 증거 출력 |
-| 저작권·출처 | 탐색기 URL=TBD |
-| 마지막 확인 | 2026-07-24 15:49 |
+| 체인 | Ethereum (`chain_id` 1) |
+| 주소·TX | TX `0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5`, 라우터 `0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b`, 풀 `0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc` |
+| 기준 정답 | USDC in `25000000000` raw; pool_output WETH `14449515027026387018`; user_net_output ETH 동일 raw |
+| 허용 오차 | raw 오차 0 |
+| 확정 사실 | Transfer·Swap·Withdrawal 로그 + Router→user internal ETH 전송 |
+| 휴리스틱 | 해당 없음 |
+| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-DEX-META` |
+| 재현 절차 | RPC 로그로 pool_output 계산 → Blockscout API로 user_net_output 확인 → Factory.getPair로 풀 provenance |
+| 저작권·출처 | publicnode RPC, Blockscout API, Uniswap deploy JSON/V2 Deployments/Pair Addresses, Etherscan UI(교차만). 본문 복제 없음 |
+| 마지막 확인 | 2026-07-24 19:48 |
 
 ---
 
@@ -266,7 +267,7 @@
 ## 9. 다음 단계
 
 1. 데이터 소스 등록부와 함께 각 fixture의 공개 데이터 확보 가능성을 점검한다.
-2. [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) 순서로 공개 사례를 선정한다.
+2. `FX-SVC-DEX-001`은 검증 중으로 승격됨. 다음은 [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) 공개 사례를 선정한다.
 3. 각 디렉터리의 `input.json`, `expected.json`, `evidence.json`을 채우고 수동 재현에 성공하면 `검증 중`으로 올린다.
 4. 기능 우선순위 문서에 확정 fixture를 검증 입력으로 연결한다.
 

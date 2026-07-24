@@ -1,10 +1,149 @@
 {
   "fixture_version": "0.1",
   "fixture_id": "FX-SVC-DEX-001",
-  "status": "candidate",
-  "captured_at": null,
-  "block_number": null,
-  "sources": [],
-  "raw_artifacts": [],
-  "provenance_notes": "Preserve receipt, raw logs, endpoint or explorer URL, and retrieval time."
+  "status": "verifying",
+  "captured_at": "2026-07-24T10:43:17Z",
+  "block_number": 16642512,
+  "block_timestamp": 1676565263,
+  "transaction": {
+    "hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+    "from": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+    "to": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+    "status": "0x1"
+  },
+  "event_evidence": [
+    {
+      "log_index": 275,
+      "type": "Transfer",
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "from": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "to": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+      "value_raw": "25000000000",
+      "role": "asset_in"
+    },
+    {
+      "log_index": 276,
+      "type": "Transfer",
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "from": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+      "to": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "value_raw": "14449515027026387018",
+      "role": "pool_output_weth"
+    },
+    {
+      "log_index": 278,
+      "type": "Swap",
+      "address": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+      "amount0In": "25000000000",
+      "amount1In": "0",
+      "amount0Out": "0",
+      "amount1Out": "14449515027026387018",
+      "role": "pool_swap"
+    },
+    {
+      "log_index": 279,
+      "type": "Withdrawal",
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "value_raw": "14449515027026387018",
+      "role": "weth_unwrap"
+    }
+  ],
+  "call_evidence": [
+    {
+      "type": "internal_eth_transfer",
+      "from": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "to": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "value_wei": "14449515027026387018",
+      "role": "user_net_output_eth",
+      "source_id": "DS-EXPLORER-EVM",
+      "provider": "Blockscout API",
+      "endpoint": "https://eth.blockscout.com/api/v2/transactions/0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5/internal-transactions",
+      "retrieved_at": "2026-07-24T10:43:17Z"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider": "ethereum.publicnode.com",
+      "endpoint": "https://ethereum.publicnode.com",
+      "methods": [
+        "eth_getTransactionReceipt",
+        "eth_getTransactionByHash",
+        "eth_getBlockByNumber",
+        "eth_call"
+      ],
+      "retrieved_at": "2026-07-24T10:43:17Z",
+      "notes": "Receipt logs for Transfer/Swap/Withdrawal; Factory getPair for pool provenance"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "provider": "Blockscout",
+      "api": true,
+      "endpoint": "https://eth.blockscout.com/api/v2/transactions/0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5/internal-transactions",
+      "role": "internal_eth_transfer_verification",
+      "retrieved_at": "2026-07-24T10:43:17Z"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "provider": "Etherscan",
+      "api": false,
+      "url": "https://etherscan.io/tx/0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+      "role": "ui_cross_check_only_not_api_verification",
+      "retrieved_at": "2026-07-24T10:31:00Z"
+    },
+    {
+      "source_id": "DS-DEX-META",
+      "provider": "Uniswap official deployments + reproducible Factory.getPair",
+      "router": {
+        "address": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+        "label": "Uniswap Universal Router V1",
+        "deployment_json_url": "https://raw.githubusercontent.com/Uniswap/universal-router/main/deploy-addresses/mainnet.json",
+        "deployment_json_key": "UniversalRouterV1",
+        "deployment_json_value": "0xEf1c6E67703c7BD7107eed8303Fbe6EC2554BF6B",
+        "match": true
+      },
+      "factory": {
+        "address": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+        "label": "Uniswap V2 Factory",
+        "deployments_url": "https://docs.uniswap.org/contracts/v2/reference/smart-contracts/v2-deployments"
+      },
+      "pool": {
+        "address": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+        "label": "Uniswap V2 USDC/WETH",
+        "pair_address_guide_url": "https://docs.uniswap.org/contracts/v2/guides/smart-contract-integration/getting-pair-addresses",
+        "get_pair": {
+          "method": "eth_call",
+          "endpoint": "https://ethereum.publicnode.com",
+          "source_id": "DS-EVM-RPC-PUBLIC",
+          "to": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+          "signature": "getPair(address,address)",
+          "selector": "0xe6a43905",
+          "tokenA": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "tokenB": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "token_order_note": "USDC as tokenA, WETH as tokenB",
+          "data": "0xe6a43905000000000000000000000000a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "block": "latest",
+          "result": "0x000000000000000000000000b4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+          "decoded_pair": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+          "match": true,
+          "retrieved_at": "2026-07-24T10:48:27Z"
+        },
+        "etherscan_url": "https://etherscan.io/address/0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc"
+      },
+      "retrieved_at": "2026-07-24T10:48:27Z"
+    }
+  ],
+  "raw_artifacts": [
+    {
+      "kind": "amount_consistency",
+      "usdc_amount_raw": "25000000000",
+      "weth_pool_out_raw": "14449515027026387018",
+      "eth_user_net_raw": "14449515027026387018",
+      "swap_matches_transfers": true,
+      "withdrawal_matches_pool_out": true,
+      "internal_eth_matches_withdrawal": true,
+      "recomputed_twice": true
+    }
+  ],
+  "provenance_notes": "Pool output and user net output are recorded separately. WETH pool out must not be scored as the user's final asset."
 }

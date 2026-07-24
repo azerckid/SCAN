@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-24 16:03
+> Last Updated: 2026-07-24 19:48
 > Status: Draft
 
 ## 1. 문서 목적
@@ -78,9 +78,9 @@
 | 대체 소스 | 다른 RPC, 탐색기 API | 다른 archive 공급자, 탐색기 historical API |
 | 이용약관 주의 | 공급자 ToS | 동일 |
 | 대회 규정 | 미확인 | 미확인 |
-| 상태 | 후보 | 후보 |
-| 마지막 확인 | 2026-07-24 15:49 | 2026-07-24 15:49 |
-| 비고 | `BASIC`, `FLOW` 기본 조회 | `EVM-PROXY`, `BASIC-EVM-002`, `EVM-FREEZE`에 중요 |
+| 상태 | 검증 중 | 후보 |
+| 마지막 확인 | 2026-07-24 19:43 | 2026-07-24 15:49 |
+| 비고 | `FX-SVC-DEX-001`에 `https://ethereum.publicnode.com` 사용. receipt/logs 및 Factory.getPair 확인 | `EVM-PROXY`, `BASIC-EVM-002`, `EVM-FREEZE`에 중요 |
 
 ### 5.2 탐색기 API
 
@@ -99,9 +99,10 @@
 | 대체 소스 | RPC + self-index, 다른 탐색기 |
 | 이용약관 주의 | 스크래핑·재배포 제한 가능 |
 | 대회 규정 | 미확인 |
-| 상태 | 후보 |
-| 마지막 확인 | 2026-07-24 15:49 |
+| 상태 | 검증 중 |
+| 마지막 확인 | 2026-07-24 19:43 |
 | 관련 fixture | FLOW-EVM-001, SVC-DEX-001, EVM-AUTH-001 |
+| 비고 | `FX-SVC-DEX-001`에서 **Blockscout API**(internal-transactions)로 실제 API 검증. Etherscan TX 페이지는 UI 교차확인만이며 API 검증으로 치지 않음 |
 
 ### 5.3 Bitcoin UTXO
 
@@ -181,9 +182,10 @@
 | 대체 소스 | 양단 RPC 수동 매칭 | 로그 직접 디코딩 | 다른 가격 API, DEX TWAP |
 | 이용약관 주의 | 각 서비스 ToS | 동일 | 재배포·지연 데이터 제한 |
 | 대회 규정 | 미확인 | 미확인 | 미확인 |
-| 상태 | 후보 | 후보 | 후보 |
-| 마지막 확인 | 2026-07-24 15:49 | 2026-07-24 15:49 | 2026-07-24 15:49 |
-| 관련 fixture | SVC-BRG-001 | SVC-DEX-001 | FLOW-MULTI-001 |
+| 상태 | 후보 | 검증 중 | 후보 |
+| 마지막 확인 | 2026-07-24 15:49 | 2026-07-24 19:43 | 2026-07-24 15:49 |
+| 관련 fixture | SVC-BRG-001 | SVC-DEX-001 (`FX-SVC-DEX-001`) | FLOW-MULTI-001 |
+| 비고 |  | Universal Router: 공식 `deploy-addresses/mainnet.json`의 `UniversalRouterV1`. Factory: V2 Deployments. Pool: Pair Addresses 가이드 + 재현 가능 `eth_call getPair` 기록 |  |
 
 ## 6. fixture별 최소 소스 요구
 
