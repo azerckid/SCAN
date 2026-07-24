@@ -1,6 +1,6 @@
 # SCAN 2026 참가·분석 도구 준비 전략
 > Created: 2026-07-24 01:14
-> Last Updated: 2026-07-24 11:58
+> Last Updated: 2026-07-24 15:49
 > Status: Draft
 
 ## 1. 문서 목적
@@ -457,4 +457,6 @@ Python은 데이터 수집, 테이블 처리, 그래프 분석, 자동화와 실
 ## 17. Related Documents
 
 - **Concept_Design**: [SCAN 2026 예상문제 은행](./02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - Draft 2 확정본(30문항, 완료·부분·실패 조건, 기능 행렬)
-- 후속 문서 후보: 데이터 소스 등록부, 대표 fixture, 공식 규정 변경 기록, 기능 우선순위, 도구 요구사항, 기술 선택 기록.
+- **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - 분석 데이터 소스 비교·제약
+- **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 대표 검증 사례 후보
+- 후속 문서 후보: 공식 규정 변경 기록, 기능 우선순위, 도구 요구사항, 기술 선택 기록.
