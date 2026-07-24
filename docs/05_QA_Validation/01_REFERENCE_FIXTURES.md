@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-24 19:48
+> Last Updated: 2026-07-24 20:04
 > Status: Draft
 
 ## 1. 문서 목적
@@ -73,15 +73,15 @@
 | FX-FLOW-EVM-001 | FLOW-EVM-001 | 1 | 후보 | 수집, PATH, LABEL, 증거 |
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 검증 중 | EVM-LOG, DECODE, RECON |
 | FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | XCHAIN, BRIDGE, RECON |
-| FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 후보 | AUTH-DECODE, allowance 연결 |
+| FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 검증 중 | AUTH-DECODE, allowance 연결 |
 | FX-EVM-PROXY-001 | EVM-PROXY-001 | 2 | 후보 | PROXY, archive state |
 | FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 후보 | FREEZE, state/logs |
 | FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | RECON, PRICE, 다주소 집계 |
 | FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
 
-## 6. Fixture 상세 (후보)
+## 6. Fixture 상세
 
-주소·TX는 아직 선정 전이다. `TBD`는 공개 사례 확정 후 채운다.
+`후보` fixture의 `TBD`는 공개 사례 확정 후 채운다. `검증 중` fixture는 패키지의 JSON을 기준 정답과 provenance 원본으로 사용한다.
 
 ---
 
@@ -151,19 +151,20 @@
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-AUTH-001 |
-| 상태 | 후보 |
-| 데이터 형태 | 공개 온체인 / 자체 테스트 |
-| 체인 | TBD (EVM) |
-| 주소·TX | 피해자 V=TBD, 토큰 T=TBD, 승인 TX=TBD, 소비 TX=TBD |
-| 기준 정답 | 승인 유형을 `approve`(이벤트) 또는 `permit`(호출) 중 하나로 먼저 확정한 뒤, 해당 유형 증거 + 소비 TX + 금액 + allowance 전후 스냅샷 |
+| 상태 | 검증 중 |
+| 패키지 | [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md) |
+| 데이터 형태 | 공개 온체인 |
+| 체인 | Ethereum (`chain_id` 1) |
+| 주소·TX | V `0x193070...af59`, USDC, 승인 TX `0x3f7037...dabd`, 소비 TX `0x7b888f...af51` |
+| 기준 정답 | `approve` calldata·Approval 로그 + Router의 `transferFrom` trace + USDC `4500000` raw 전송 + allowance 4지점 |
 | 허용 오차 | allowance·전송량 raw 오차 0 |
 | 확정 사실(이벤트) | `Approval` 로그. 소비 구간에 `Transfer` 등 전송 이벤트가 있으면 별도 행으로 기록. 호출 calldata와 한 줄로 합치지 않음 |
 | 확정 사실(호출·상태) | `approve`/`permit` 호출 TX·calldata·nonce, allowance 전후 상태(archive), `TransferFrom`(또는 동등) 소비 호출 TX. 이벤트 로그와 한 줄로 합치지 않음 |
-| 휴리스틱 | 피싱 UI 맥락(오프체인)은 추정 |
-| 필요 데이터 소스 | `DS-EXPLORER-EVM` 또는 `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE` |
-| 재현 절차 | 1) 승인 유형 판별 2) 이벤트 증거 표 작성 3) 호출·상태 증거 표 작성(allowance 필수) 4) 소비 TX 연결 5) 두 표를 분리해 출력 |
-| 저작권·출처 | TBD |
-| 마지막 확인 | 2026-07-24 19:14 |
+| 휴리스틱 | 피싱·탈취·피해자 여부는 판정하지 않음. fixture는 권한 소비 연결만 검증 |
+| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM`, `DS-DEX-META` |
+| 재현 절차 | Approval·approve calldata → archive allowance 전후 → 실패 TX 제외 → 성공 TX trace의 transferFrom → Transfer 로그·감소량 대조 |
+| 저작권·출처 | publicnode RPC, dRPC archive/trace, Blockscout API, Uniswap Deployments. 본문 복제 없음 |
+| 마지막 확인 | 2026-07-24 20:04 |
 
 ---
 
@@ -267,7 +268,7 @@
 ## 9. 다음 단계
 
 1. 데이터 소스 등록부와 함께 각 fixture의 공개 데이터 확보 가능성을 점검한다.
-2. `FX-SVC-DEX-001`은 검증 중으로 승격됨. 다음은 [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) 공개 사례를 선정한다.
+2. `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`은 검증 중으로 승격됨. 다음은 [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) 공개 사례를 선정한다.
 3. 각 디렉터리의 `input.json`, `expected.json`, `evidence.json`을 채우고 수동 재현에 성공하면 `검증 중`으로 올린다.
 4. 기능 우선순위 문서에 확정 fixture를 검증 입력으로 연결한다.
 

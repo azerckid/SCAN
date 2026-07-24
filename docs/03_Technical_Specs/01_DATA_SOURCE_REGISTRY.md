@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-24 19:48
+> Last Updated: 2026-07-24 20:04
 > Status: Draft
 
 ## 1. 문서 목적
@@ -78,9 +78,9 @@
 | 대체 소스 | 다른 RPC, 탐색기 API | 다른 archive 공급자, 탐색기 historical API |
 | 이용약관 주의 | 공급자 ToS | 동일 |
 | 대회 규정 | 미확인 | 미확인 |
-| 상태 | 검증 중 | 후보 |
-| 마지막 확인 | 2026-07-24 19:43 | 2026-07-24 15:49 |
-| 비고 | `FX-SVC-DEX-001`에 `https://ethereum.publicnode.com` 사용. receipt/logs 및 Factory.getPair 확인 | `EVM-PROXY`, `BASIC-EVM-002`, `EVM-FREEZE`에 중요 |
+| 상태 | 검증 중 | 검증 중 |
+| 마지막 확인 | 2026-07-24 20:04 | 2026-07-24 20:04 |
+| 비고 | `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`에 `https://ethereum.publicnode.com` 사용. receipt/logs·TX 확인 | `FX-EVM-AUTH-001`에 `https://eth.drpc.org` 사용. 4개 과거 블록 allowance `eth_call` 및 `trace_transaction` 확인 |
 
 ### 5.2 탐색기 API
 
@@ -102,7 +102,7 @@
 | 상태 | 검증 중 |
 | 마지막 확인 | 2026-07-24 19:43 |
 | 관련 fixture | FLOW-EVM-001, SVC-DEX-001, EVM-AUTH-001 |
-| 비고 | `FX-SVC-DEX-001`에서 **Blockscout API**(internal-transactions)로 실제 API 검증. Etherscan TX 페이지는 UI 교차확인만이며 API 검증으로 치지 않음 |
+| 비고 | `FX-SVC-DEX-001`의 internal ETH, `FX-EVM-AUTH-001`의 거래·token transfer·internal trace를 **Blockscout API**로 검증. Etherscan TX 페이지는 UI 교차확인만이며 API 검증으로 치지 않음 |
 
 ### 5.3 Bitcoin UTXO
 
@@ -184,7 +184,7 @@
 | 대회 규정 | 미확인 | 미확인 | 미확인 |
 | 상태 | 후보 | 검증 중 | 후보 |
 | 마지막 확인 | 2026-07-24 15:49 | 2026-07-24 19:43 | 2026-07-24 15:49 |
-| 관련 fixture | SVC-BRG-001 | SVC-DEX-001 (`FX-SVC-DEX-001`) | FLOW-MULTI-001 |
+| 관련 fixture | SVC-BRG-001 | SVC-DEX-001 (`FX-SVC-DEX-001`), EVM-AUTH-001 (`FX-EVM-AUTH-001`) | FLOW-MULTI-001 |
 | 비고 |  | Universal Router: 공식 `deploy-addresses/mainnet.json`의 `UniversalRouterV1`. Factory: V2 Deployments. Pool: Pair Addresses 가이드 + 재현 가능 `eth_call getPair` 기록 |  |
 
 ## 6. fixture별 최소 소스 요구
@@ -194,7 +194,7 @@
 | FLOW-EVM-001 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-LABEL-PUBLIC` | 경로·라벨 검증 불가 |
 | SVC-DEX-001 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-DEX-META` | in/out 복원 불가 |
 | SVC-BRG-001 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` | 양단 매칭 실패 |
-| EVM-AUTH-001 | `DS-EXPLORER-EVM` 또는 `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE` | 승인·allowance·탈취 연결 불가 |
+| EVM-AUTH-001 | `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM` | 승인·allowance·권한 소비 연결 불가 |
 | EVM-PROXY-001 | `DS-EVM-RPC-ARCHIVE` | 구현체 이력 검증 불가 |
 | EVM-FREEZE-001 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM`, `DS-OSINT-WEB` | 동결 여부 확정 불가 |
 | FLOW-MULTI-001 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-PRICE` | 환산 피해액 실패 |

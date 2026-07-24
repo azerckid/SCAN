@@ -2,19 +2,29 @@
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-AUTH-001",
   "problem_id": "EVM-AUTH-001",
-  "status": "candidate",
+  "status": "verifying",
   "chain": {
-    "name": null,
-    "chain_id": null
+    "name": "ethereum",
+    "chain_id": 1
   },
-  "victim_address": null,
-  "token_address": null,
-  "approval_type": null,
-  "approval_transaction_hash": null,
-  "consumption_transaction_hash": null,
+  "subject_address": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+  "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+  "token_symbol": "USDC",
+  "token_decimals": 6,
+  "approval_type": "approve",
+  "spender_address": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+  "approval_transaction_hash": "0x3f7037014b8709f02bf2032d70ce4ec6854a53ed141b63d6a7ea359a9dccdabd",
+  "consumption_transaction_hash": "0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51",
   "state_blocks": {
-    "before": null,
-    "after": null
+    "before_approval": 24500452,
+    "after_approval": 24500453,
+    "before_consumption": 24500504,
+    "after_consumption": 24500505
   },
-  "selection_notes": "Approval or permit case with reproducible historical allowance state not selected yet."
+  "excluded_intermediate_transactions": [
+    "0x35e89b0cbd4ba35cfd77d281bba9a0b16c027e686fe81d8059e922aec5cafd61",
+    "0xd35b4dd2fb4a8b719247f4f45742e99eb71f07a3668cd15f4b17060f00f93715",
+    "0x6759edc572968feaaddf99eac55893e84eee5a3bddf0d216b55b61636173875b"
+  ],
+  "selection_notes": "Public approve-to-consumption control case. The three intermediate router transactions reverted and are excluded. This fixture proves allowance use only; it does not classify the subject as a victim or the transaction as theft."
 }

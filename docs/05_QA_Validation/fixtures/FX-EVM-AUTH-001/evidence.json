@@ -1,11 +1,194 @@
 {
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-AUTH-001",
-  "status": "candidate",
-  "captured_at": null,
-  "event_evidence": [],
-  "call_evidence": [],
-  "state_evidence": [],
-  "sources": [],
-  "provenance_notes": "Keep Approval and Transfer logs separate from approve or permit calldata and archive allowance state."
+  "status": "verifying",
+  "captured_at": "2026-07-24T11:04:13Z",
+  "event_evidence": [
+    {
+      "evidence_type": "approval_event",
+      "transaction_hash": "0x3f7037014b8709f02bf2032d70ce4ec6854a53ed141b63d6a7ea359a9dccdabd",
+      "block_number": 24500453,
+      "block_timestamp": 1771619279,
+      "log_index": 307,
+      "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "owner": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+      "spender": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+      "amount_raw": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+      "topic0": "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925"
+    },
+    {
+      "evidence_type": "transfer_event",
+      "transaction_hash": "0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51",
+      "block_number": 24500505,
+      "block_timestamp": 1771619903,
+      "log_index": 363,
+      "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "from": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+      "to": "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
+      "amount_raw": "4500000",
+      "topic0": "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+    }
+  ],
+  "call_evidence": [
+    {
+      "evidence_type": "approve_call",
+      "transaction_hash": "0x3f7037014b8709f02bf2032d70ce4ec6854a53ed141b63d6a7ea359a9dccdabd",
+      "transaction_nonce": 326,
+      "from": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+      "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "selector": "0x095ea7b3",
+      "signature": "approve(address,uint256)",
+      "spender": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+      "amount_raw": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+      "input": "0x095ea7b300000000000000000000000068b3465833fb72a70ecdf485e0e4c7bd8665fc45ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "status": "0x1"
+    },
+    {
+      "evidence_type": "outer_consumption_call",
+      "transaction_hash": "0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51",
+      "transaction_nonce": 330,
+      "from": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+      "to": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+      "selector": "0x5ae401dc",
+      "signature": "multicall(uint256,bytes[])",
+      "status": "0x1"
+    },
+    {
+      "evidence_type": "internal_transfer_from_call",
+      "transaction_hash": "0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51",
+      "trace_address": [
+        0,
+        0,
+        2,
+        0
+      ],
+      "from": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+      "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "selector": "0x23b872dd",
+      "signature": "transferFrom(address,address,uint256)",
+      "token_owner": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+      "recipient": "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
+      "amount_raw": "4500000",
+      "input": "0x23b872dd000000000000000000000000193070aea3df0e8e0436f6ed810fd8bbe687af5900000000000000000000000088e6a0c2ddd26feeb64f039a2c41296fcb3f5640000000000000000000000000000000000000000000000000000000000044aa20",
+      "output": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "success": true
+    }
+  ],
+  "state_evidence": [
+    {
+      "label": "before_approval",
+      "block_number": 24500452,
+      "block_tag": "0x175d8e4",
+      "result": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "decoded_amount_raw": "0"
+    },
+    {
+      "label": "after_approval",
+      "block_number": 24500453,
+      "block_tag": "0x175d8e5",
+      "result": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "decoded_amount_raw": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+    },
+    {
+      "label": "before_consumption",
+      "block_number": 24500504,
+      "block_tag": "0x175d918",
+      "result": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "decoded_amount_raw": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+    },
+    {
+      "label": "after_consumption",
+      "block_number": 24500505,
+      "block_tag": "0x175d919",
+      "result": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffbb55df",
+      "decoded_amount_raw": "115792089237316195423570985008687907853269984665640564039457584007913125139935"
+    }
+  ],
+  "state_query": {
+    "method": "eth_call",
+    "endpoint": "https://eth.drpc.org",
+    "source_id": "DS-EVM-RPC-ARCHIVE",
+    "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "signature": "allowance(address,address)",
+    "selector": "0xdd62ed3e",
+    "owner": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+    "spender": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+    "data": "0xdd62ed3e000000000000000000000000193070aea3df0e8e0436f6ed810fd8bbe687af5900000000000000000000000068b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+    "retrieved_at": "2026-07-24T11:04:13Z"
+  },
+  "excluded_transactions": [
+    {
+      "transaction_hash": "0x35e89b0cbd4ba35cfd77d281bba9a0b16c027e686fe81d8059e922aec5cafd61",
+      "block_number": 24500466,
+      "transaction_nonce": 327,
+      "status": "reverted"
+    },
+    {
+      "transaction_hash": "0xd35b4dd2fb4a8b719247f4f45742e99eb71f07a3668cd15f4b17060f00f93715",
+      "block_number": 24500476,
+      "transaction_nonce": 328,
+      "status": "reverted"
+    },
+    {
+      "transaction_hash": "0x6759edc572968feaaddf99eac55893e84eee5a3bddf0d216b55b61636173875b",
+      "block_number": 24500498,
+      "transaction_nonce": 329,
+      "status": "reverted"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider": "ethereum.publicnode.com",
+      "endpoint": "https://ethereum.publicnode.com",
+      "methods": [
+        "eth_getTransactionByHash",
+        "eth_getTransactionReceipt"
+      ],
+      "retrieved_at": "2026-07-24T11:04:13Z"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "dRPC",
+      "endpoint": "https://eth.drpc.org",
+      "methods": [
+        "eth_call",
+        "trace_transaction"
+      ],
+      "retrieved_at": "2026-07-24T11:04:13Z"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "provider": "Blockscout",
+      "api": true,
+      "transaction_url": "https://eth.blockscout.com/api/v2/transactions/0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51",
+      "trace_url": "https://eth.blockscout.com/api/v2/transactions/0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51/internal-transactions",
+      "token_transfers_url": "https://eth.blockscout.com/api/v2/transactions/0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51/token-transfers",
+      "retrieved_at": "2026-07-24T11:04:13Z"
+    },
+    {
+      "source_id": "DS-DEX-META",
+      "provider": "Uniswap official deployments",
+      "deployments_url": "https://developers.uniswap.org/deployments",
+      "contract_key": "SwapRouter02",
+      "address": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+      "match": true,
+      "retrieved_at": "2026-07-24T11:04:13Z"
+    }
+  ],
+  "consistency_checks": {
+    "approval_event_matches_calldata": true,
+    "allowance_before_approval_is_zero": true,
+    "allowance_after_approval_matches_event": true,
+    "allowance_delta_matches_transfer_from": true,
+    "transfer_from_matches_transfer_event": true,
+    "archive_state_reproduced_twice": true,
+    "intermediate_reverted_transactions_excluded": true
+  },
+  "uncertainty": {
+    "criminal_context": "not_assessed",
+    "victim_status": "not_asserted",
+    "notes": "This fixture validates authorization linkage. It does not establish theft, phishing, or malicious intent."
+  },
+  "provenance_notes": "Approval event, approve calldata, historical allowance state, transferFrom trace, and Transfer event are stored as separate evidence types."
 }
