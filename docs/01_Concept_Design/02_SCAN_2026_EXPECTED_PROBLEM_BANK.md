@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 은행
 > Created: 2026-07-24 01:20
-> Last Updated: 2026-07-24 15:49
+> Last Updated: 2026-07-25 01:35
 > Status: Draft 2
 
 ## 1. 문서 목적
@@ -95,7 +95,7 @@
 | EVM-TOKEN-001 | EVM | 하 | ERC-20 Transfer 로그로 실이동 복원 |
 | EVM-TOKEN-002 | EVM | 중 | 내부 호출 포함 실제 ETH 이동 경로 |
 | EVM-NFT-001 | EVM | 중 | ERC-721/1155 이동과 승인·운영자 변경 복원 |
-| EVM-AUTH-001 | EVM | 중 | approve/permit 이후 허용량 탈취 TX 식별 |
+| EVM-AUTH-001 | EVM | 중 | approve/permit 이후 권한 소비 TX 식별 |
 | EVM-PROXY-001 | EVM | 중 | 프록시 구현체·관리자 변경 이력 추적 |
 | EVM-FREEZE-001 | EVM | 중 | 스테이블코인 블랙리스트·동결 확인 |
 | FLOW-EVM-001 | 자금 흐름 | 중 | 피싱 출금 50 ETH 최종 도착지 |
@@ -130,7 +130,7 @@
 | EVM-TOKEN-001 | 하 | 단일 토큰의 Transfer 이벤트를 한 조건으로 필터링 |
 | EVM-TOKEN-002 | 중 | call trace 파싱, 성공·실패 호출 구분, 내부 value 합산 필요 |
 | EVM-NFT-001 | 중 | ERC-721/1155 표준별 이벤트와 승인·운영자 변경을 함께 해석 |
-| EVM-AUTH-001 | 중 | approve/permit calldata·allowance·후속 전송을 연결해 탈취를 입증 |
+| EVM-AUTH-001 | 중 | approve/permit calldata·allowance·후속 전송을 연결해 권한 소비를 입증(탈취 여부는 별도 판정) |
 | EVM-PROXY-001 | 중 | 프록시 스토리지·업그레이드 이벤트·권한 변경을 조합 |
 | EVM-FREEZE-001 | 중 | 스테이블코인 동결 상태·이벤트와 발행사 정보를 교차확인 |
 | FLOW-EVM-001 | 중 | 명확한 시드에서 N홉 추적 후 서비스 라벨 교차검증 필요 |
@@ -505,10 +505,10 @@
 난이도: 중
 
 문제 설명:
-주소 V가 토큰 T에 대해 승인한 허용량이 이후 어떤 TX에서 탈취·소비되었는지 식별하라.
+주소 V가 토큰 T에 대해 승인한 허용량이 이후 어떤 TX에서 소비되었는지 식별하고, 탈취 여부는 별도 근거로 판정하라.
 
 주어진 단서:
-- 피해자 주소 V
+- 대상 주소 V
 - 토큰 컨트랙트 T
 - 승인 발생 시각 창
 

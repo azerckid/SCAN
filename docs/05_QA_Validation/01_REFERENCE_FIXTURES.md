@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-24 20:04
+> Last Updated: 2026-07-24 21:30
 > Status: Draft
 
 ## 1. 문서 목적
@@ -161,10 +161,11 @@
 | 확정 사실(이벤트) | `Approval` 로그. 소비 구간에 `Transfer` 등 전송 이벤트가 있으면 별도 행으로 기록. 호출 calldata와 한 줄로 합치지 않음 |
 | 확정 사실(호출·상태) | `approve`/`permit` 호출 TX·calldata·nonce, allowance 전후 상태(archive), `TransferFrom`(또는 동등) 소비 호출 TX. 이벤트 로그와 한 줄로 합치지 않음 |
 | 휴리스틱 | 피싱·탈취·피해자 여부는 판정하지 않음. fixture는 권한 소비 연결만 검증 |
-| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM`, `DS-DEX-META` |
+| 필수 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM` |
+| 보조 provenance | `DS-DEX-META` — `SwapRouter02` 공식 주소 확인용이며 권한 소비 채점의 필수 소스는 아님 |
 | 재현 절차 | Approval·approve calldata → archive allowance 전후 → 실패 TX 제외 → 성공 TX trace의 transferFrom → Transfer 로그·감소량 대조 |
 | 저작권·출처 | publicnode RPC, dRPC archive/trace, Blockscout API, Uniswap Deployments. 본문 복제 없음 |
-| 마지막 확인 | 2026-07-24 20:04 |
+| 마지막 확인 | 2026-07-24 21:30 |
 
 ---
 

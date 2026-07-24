@@ -1,6 +1,6 @@
 # Fixture: FX-EVM-AUTH-001
 > Created: 2026-07-24 19:19
-> Last Updated: 2026-07-24 20:04
+> Last Updated: 2026-07-24 21:30
 > Status: Verifying
 
 ## 1. 목적
@@ -15,20 +15,21 @@
 | 연결 문제 | `EVM-AUTH-001` |
 | 상태 | 검증 중 (`verifying`) |
 | 사례 성격 | 공개 온체인 권한 소비 통제 사례. 범죄·피싱·피해 사실은 판정하지 않음 |
-| 주소 V | `0x193070aea3df0e8e0436f6ed810fd8bbe687af59` |
+| 대상 주소 V | `0x193070aea3df0e8e0436f6ed810fd8bbe687af59` |
 | 토큰 | USDC `0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48` |
 | spender | Uniswap V3 `SwapRouter02` `0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45` |
 | 승인 TX | `0x3f7037014b8709f02bf2032d70ce4ec6854a53ed141b63d6a7ea359a9dccdabd` |
 | 소비 TX | `0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51` |
 | 소비량 | USDC `4500000` raw = 4.5 USDC |
 | allowance | `0` → `uint256.max` → 소비 후 `uint256.max - 4500000` |
-| 주요 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE`(dRPC), `DS-EXPLORER-EVM`(Blockscout API), `DS-DEX-META` |
+| 필수 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE`(dRPC), `DS-EXPLORER-EVM`(Blockscout API) |
+| 보조 provenance | `DS-DEX-META` — `SwapRouter02` 공식 주소 확인용이며 권한 소비 채점의 필수 소스는 아님 |
 
 ## 3. 파일 역할
 
 | 파일 | 역할 |
 |:---|:---|
-| `input.json` | 피해자·토큰·승인·소비 TX와 조회 블록 |
+| `input.json` | 대상 주소·토큰·승인·소비 TX와 조회 블록 |
 | `expected.json` | 승인 유형별 증거, allowance 전후와 실제 전송 기준 정답 |
 | `evidence.json` | 이벤트·calldata·상태 조회 원본과 provenance |
 
@@ -41,7 +42,7 @@
 5. 소비 직전/직후 블록 `24500504`/`24500505`의 allowance를 비교했다.
 6. allowance 감소량 `4500000` raw가 `transferFrom` 인자와 USDC `Transfer` 로그에 모두 일치함을 확인했다.
 
-이 fixture의 확정 사실은 승인과 권한 소비의 연결이다. 주소 V가 피해자라는 주장이나 피싱·탈취 판단은 오프체인 증거가 없으므로 채점 대상에 포함하지 않는다.
+이 fixture의 확정 사실은 승인과 권한 소비의 연결이다. 대상 주소 V의 피해 여부나 피싱·탈취 판단은 오프체인 증거가 없으므로 채점 대상에 포함하지 않는다.
 
 ## 5. Related Documents
 
