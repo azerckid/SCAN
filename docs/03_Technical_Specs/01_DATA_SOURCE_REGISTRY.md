@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-24 15:49
+> Last Updated: 2026-07-24 16:03
 > Status: Draft
 
 ## 1. 문서 목적
@@ -189,14 +189,14 @@
 
 | Fixture / 문제 ID | 최소 필요 소스 | 없으면 영향 |
 |:---|:---|:---|
-| FLOW-EVM-001 | DS-EVM-RPC-PUBLIC 또는 DS-EXPLORER-EVM, DS-LABEL-PUBLIC | 경로·라벨 검증 불가 |
-| SVC-DEX-001 | DS-EVM-RPC-PUBLIC/Explorer(logs), DS-DEX-META | in/out 복원 불가 |
-| SVC-BRG-001 | 다체인 RPC/Explorer, DS-BRIDGE-META | 양단 매칭 실패 |
-| EVM-AUTH-001 | logs + calldata + (선택) state | 승인·탈취 연결 불가 |
-| EVM-PROXY-001 | DS-EVM-RPC-ARCHIVE | 구현체 이력 검증 불가 |
-| EVM-FREEZE-001 | state/logs + 발행사 OSINT | 동결 여부 확정 불가 |
-| FLOW-MULTI-001 | 다주소 수집 + DS-PRICE 아카이브 | 환산 피해액 실패 |
-| SVC-MIX-001 / BTC-CJ-001 | 라벨/패턴 소스 + 해당 체인 데이터 | 불확실성 사례 구성 불가 |
+| FLOW-EVM-001 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-LABEL-PUBLIC` | 경로·라벨 검증 불가 |
+| SVC-DEX-001 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-DEX-META` | in/out 복원 불가 |
+| SVC-BRG-001 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` | 양단 매칭 실패 |
+| EVM-AUTH-001 | `DS-EXPLORER-EVM` 또는 `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE` | 승인·allowance·탈취 연결 불가 |
+| EVM-PROXY-001 | `DS-EVM-RPC-ARCHIVE` | 구현체 이력 검증 불가 |
+| EVM-FREEZE-001 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM`, `DS-OSINT-WEB` | 동결 여부 확정 불가 |
+| FLOW-MULTI-001 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-PRICE` | 환산 피해액 실패 |
+| SVC-MIX-001 / BTC-CJ-001 | `DS-LABEL-PUBLIC` + (`DS-EVM-RPC-PUBLIC`/`DS-EXPLORER-EVM` 또는 `DS-BTC-API`) | 불확실성 사례 구성 불가 |
 
 ## 7. 캐시·재시도·원본 보존 공통 규칙
 

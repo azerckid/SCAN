@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-24 15:49
+> Last Updated: 2026-07-24 16:03
 > Status: Draft
 
 ## 1. 문서 목적
@@ -49,7 +49,7 @@
 | 허용 오차 | raw 단위, 수수료, 가격 정밀도 규칙 |
 | 확정 사실 | 재조회로 고정되는 사실 |
 | 휴리스틱 | 추정으로만 둘 항목 |
-| 필요 데이터 소스 | 등록부 소스 ID |
+| 필요 데이터 소스 | 등록부 소스 ID만 사용 (`DS-...`). 설명문·데이터 종류 나열 금지 |
 | 재현 절차 | 단계 목록 |
 | 저작권·출처 | URL, 라이선스/인용 주의 |
 | 마지막 확인 | YYYY-MM-DD HH:mm |
@@ -98,7 +98,7 @@
 | 허용 오차 | 토큰/ETH raw 오차 0. 수수료는 별도 표기. 환전이 있으면 net 허용 범위를 fixture 확정 시 수치화 |
 | 확정 사실 | 각 홉의 TX·from/to·value |
 | 휴리스틱 | 미라벨 입금주소의 거래소 귀속 |
-| 필요 데이터 소스 | DS-EVM-RPC-PUBLIC 또는 DS-EXPLORER-EVM, DS-LABEL-PUBLIC |
+| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-LABEL-PUBLIC` |
 | 재현 절차 | 1) A 출금 수집 2) 시간·금액 필터 3) N홉 추적 4) 라벨 교차검증 5) 증거 표 출력 |
 | 저작권·출처 | 공개 사건 보고서 URL=TBD. 본문 복제 없이 사실 요약만 |
 | 마지막 확인 | 2026-07-24 15:49 |
@@ -118,7 +118,7 @@
 | 허용 오차 | raw 오차 0. 사람 단위는 decimals 병기 |
 | 확정 사실 | Swap/Transfer 이벤트 값 |
 | 휴리스틱 | 라우터 라벨 충돌 시 출처 비교 |
-| 필요 데이터 소스 | DS-EVM-RPC-PUBLIC/Explorer logs, DS-DEX-META |
+| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-DEX-META` |
 | 재현 절차 | 1) TX receipt/logs 2) in/out 계산 3) 라벨 조회 4) 증거 출력 |
 | 저작권·출처 | 탐색기 URL=TBD |
 | 마지막 확인 | 2026-07-24 15:49 |
@@ -138,7 +138,7 @@
 | 허용 오차 | 브리지 수수료로 인한 금액 차이를 fixture에 명시. raw 기준 허용 범위 TBD |
 | 확정 사실 | 양단 이벤트/전송 |
 | 휴리스틱 | 유사 금액 후보 중 최종 선택 근거 |
-| 필요 데이터 소스 | 다체인 RPC/Explorer, DS-BRIDGE-META |
+| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` |
 | 재현 절차 | 1) 출발 이벤트 2) destination 힌트 3) 도착 매칭 4) 교차검증 |
 | 저작권·출처 | 브리지 탐색기/문서 URL=TBD |
 | 마지막 확인 | 2026-07-24 15:49 |
@@ -154,14 +154,14 @@
 | 데이터 형태 | 공개 온체인 / 자체 테스트 |
 | 체인 | TBD (EVM) |
 | 주소·TX | 피해자 V=TBD, 토큰 T=TBD, 승인 TX=TBD, 소비 TX=TBD |
-| 기준 정답 | 승인 근거, 소비 TX, 금액, allowance 변화 요약 |
+| 기준 정답 | 승인 근거(유형별), 소비 TX, 금액, allowance 전후 스냅샷 |
 | 허용 오차 | allowance·전송량 raw 오차 0 |
-| 확정 사실 | Approval/permit 로그, TransferFrom, calldata |
+| 확정 사실 | (1) `approve` 경로: Approval 이벤트 로그 (2) `permit` 경로: permit 호출 TX·calldata·nonce 근거 (3) 소비 경로: TransferFrom(또는 동등) TX와 allowance 전후 상태. 세 유형을 섞어 한 줄로 단정하지 않음 |
 | 휴리스틱 | 피싱 UI 맥락(오프체인)은 추정 |
-| 필요 데이터 소스 | Explorer/RPC logs, calldata, (선택) state |
-| 재현 절차 | 1) 승인 이벤트/calldata 2) allowance 3) 후속 소비 TX 4) 연결 표 |
+| 필요 데이터 소스 | `DS-EXPLORER-EVM` 또는 `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE` |
+| 재현 절차 | 1) 승인 유형 판별(Approval 로그 vs permit calldata) 2) allowance 전후 상태 조회(필수) 3) TransferFrom 등 소비 TX 연결 4) 증거 유형별 표 출력 |
 | 저작권·출처 | TBD |
-| 마지막 확인 | 2026-07-24 15:49 |
+| 마지막 확인 | 2026-07-24 16:03 |
 
 ---
 
@@ -178,10 +178,10 @@
 | 허용 오차 | 해당 없음(주소·슬롯 exact match) |
 | 확정 사실 | implementation slot, Upgraded/AdminChanged 이벤트 |
 | 휴리스틱 | 비표준 프록시 패턴 해석 |
-| 필요 데이터 소스 | DS-EVM-RPC-ARCHIVE |
+| 필요 데이터 소스 | `DS-EVM-RPC-ARCHIVE` |
 | 재현 절차 | 1) 현재 구현체 조회 2) 이벤트 이력 3) 슬롯 historical 조회 4) 타임라인 |
 | 저작권·출처 | TBD |
-| 마지막 확인 | 2026-07-24 15:49 |
+| 마지막 확인 | 2026-07-24 16:03 |
 
 ---
 
@@ -198,10 +198,10 @@
 | 허용 오차 | 해당 없음(boolean/상태 exact) |
 | 확정 사실 | 블랙리스트/pause 이벤트 및 상태 값 |
 | 휴리스틱 | 공지와 온체인 불일치 시 충돌로 기록 |
-| 필요 데이터 소스 | state/logs, DS-OSINT-WEB(발행사 공지) |
+| 필요 데이터 소스 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM`, `DS-OSINT-WEB` |
 | 재현 절차 | 1) 모드 선택 2) 이벤트 검색 3) 상태 조회 4) 공지 교차검증 |
 | 저작권·출처 | 발행사 공지 URL=TBD |
-| 마지막 확인 | 2026-07-24 15:49 |
+| 마지막 확인 | 2026-07-24 16:03 |
 
 ---
 
@@ -218,10 +218,10 @@
 | 허용 오차 | 유입 raw 오차 0. 환산액은 가격 소수점 N자리와 허용 절대/상대 오차를 fixture 확정 시 수치화 |
 | 확정 사실 | 피해자별 TX와 수량 |
 | 휴리스틱 | 사건 귀속 범위(포함/제외 피해자) |
-| 필요 데이터 소스 | 다주소 수집 소스, DS-PRICE |
+| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-PRICE` |
 | 재현 절차 | 1) 유입 수집 2) 정규화 3) 가격 조회 4) 합계·환산 5) 출구 연결 |
 | 저작권·출처 | 사건 보고서·가격 API 출처=TBD |
-| 마지막 확인 | 2026-07-24 15:49 |
+| 마지막 확인 | 2026-07-24 16:03 |
 
 ---
 
@@ -238,10 +238,10 @@
 | 허용 오차 | 집합 채점. 단일 출구 단정은 실패 |
 | 확정 사실 | 유입 TX, 혼합/믹서 참여 구조 |
 | 휴리스틱 | 유출 후보 연결 강도 |
-| 필요 데이터 소스 | DS-LABEL-PUBLIC + 해당 체인 소스, (BTC면) DS-BTC-API |
+| 필요 데이터 소스 | `DS-LABEL-PUBLIC`; EVM이면 `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`; Bitcoin이면 `DS-BTC-API` |
 | 재현 절차 | 1) 유입 식별 2) 패턴/라벨 3) 후보 생성 4) 태그 부여 5) 단정 금지 확인 |
 | 저작권·출처 | TBD |
-| 마지막 확인 | 2026-07-24 15:49 |
+| 마지막 확인 | 2026-07-24 16:03 |
 
 ## 7. 승격 기준
 
