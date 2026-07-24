@@ -1,10 +1,11 @@
 {
   "$schema": "../../schemas/fixture-evidence.schema.json",
   "schema_version": "0.1",
-  "fixture_version": "0.1",
+  "fixture_version": "0.2",
   "fixture_id": "FX-EVM-AUTH-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-24T11:04:13Z",
+  "confirmed_at": "2026-07-24T18:18:36Z",
   "event_evidence": [
     {
       "evidence_id": "EV-AUTH-APPROVAL-EVENT",
@@ -219,12 +220,24 @@
     },
     {
       "source_id": "DS-DEX-META",
-      "provider": "Uniswap official deployments",
+      "provider": "Uniswap sdk-core pinned source",
       "deployments_url": "https://developers.uniswap.org/deployments",
+      "repository": "https://github.com/Uniswap/sdk-core",
+      "commit_sha": "baff6d3c78b09aa0b2f96148bc223b42a57fd28a",
+      "commit_url": "https://github.com/Uniswap/sdk-core/commit/baff6d3c78b09aa0b2f96148bc223b42a57fd28a",
+      "addresses_file_url": "https://github.com/Uniswap/sdk-core/blob/baff6d3c78b09aa0b2f96148bc223b42a57fd28a/src/addresses.ts",
+      "addresses_file_sha256": "b5d5b88b3e40303509ead72ba25f65bc9ef73101b265b805eaa720038d43b2f7",
+      "chains_file_url": "https://github.com/Uniswap/sdk-core/blob/baff6d3c78b09aa0b2f96148bc223b42a57fd28a/src/chains.ts",
+      "chains_file_sha256": "33effc57f3c05a02d042ef322a3254db24d37f45164c922db5cf99e7bfc6d867",
+      "license": "MIT",
+      "license_url": "https://github.com/Uniswap/sdk-core/blob/baff6d3c78b09aa0b2f96148bc223b42a57fd28a/LICENSE",
       "contract_key": "SwapRouter02",
+      "symbol": "SWAP_ROUTER_02_ADDRESSES",
+      "chain_id": 1,
+      "resolution": "ChainId.MAINNET is supported and resolves through the default SwapRouter02 address.",
       "address": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
       "match": true,
-      "retrieved_at": "2026-07-24T11:04:13Z"
+      "retrieved_at": "2026-07-24T18:18:36Z"
     }
   ],
   "consistency_checks": {
@@ -234,12 +247,31 @@
     "allowance_delta_matches_transfer_from": true,
     "transfer_from_matches_transfer_event": true,
     "archive_state_reproduced_twice": true,
-    "intermediate_reverted_transactions_excluded": true
+    "intermediate_reverted_transactions_excluded": true,
+    "pinned_swap_router_address_matches_spender": true,
+    "confirmation_replay_passed": true
   },
+  "verification_runs": [
+    {
+      "run_id": "AUTH-CONFIRM-20260724T181836Z",
+      "verified_at": "2026-07-24T18:18:36Z",
+      "result": "pass",
+      "checks": [
+        "approval_transaction_and_event",
+        "consumption_transfer_event",
+        "four_archive_allowance_snapshots",
+        "transfer_from_trace",
+        "blockscout_token_transfer",
+        "pinned_swap_router_address",
+        "pinned_source_license"
+      ],
+      "notes": "All replayed values matched expected.json exactly. Raw amount tolerance remains zero."
+    }
+  ],
   "uncertainty": {
     "criminal_context": "not_assessed",
     "victim_status": "not_asserted",
     "notes": "This fixture validates authorization linkage. It does not establish theft, phishing, or malicious intent."
   },
-  "provenance_notes": "Approval event, approve calldata, historical allowance state, transferFrom trace, and Transfer event are stored as separate evidence types."
+  "provenance_notes": "Approval event, approve calldata, historical allowance state, transferFrom trace, and Transfer event are stored as separate evidence types. SwapRouter02 is pinned to an official Uniswap sdk-core commit; the mutable deployments page remains a human-readable cross-check."
 }
