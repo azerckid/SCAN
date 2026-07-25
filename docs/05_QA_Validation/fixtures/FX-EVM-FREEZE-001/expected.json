@@ -1,9 +1,9 @@
 {
   "$schema": "../../schemas/fixture-expected.schema.json",
   "schema_version": "0.1",
-  "fixture_version": "0.1",
+  "fixture_version": "0.2",
   "fixture_id": "FX-EVM-FREEZE-001",
-  "status": "verifying",
+  "status": "confirmed",
   "mode": "address_blacklist_lifecycle",
   "address_freeze": {
     "target_address": "0xd96f2b1c14db8458374d9aca76e26c3d18364307",

@@ -1,10 +1,11 @@
 {
   "$schema": "../../schemas/fixture-evidence.schema.json",
   "schema_version": "0.1",
-  "fixture_version": "0.1",
+  "fixture_version": "0.2",
   "fixture_id": "FX-EVM-FREEZE-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-24T16:49:31Z",
+  "confirmed_at": "2026-07-25T06:25:50Z",
   "token": {
     "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     "symbol": "USDC",
@@ -175,10 +176,18 @@
       "source_id": "DS-OSINT-WEB",
       "provider": "Circle GitHub",
       "title": "Blacklistable.sol",
-      "commit_sha": "7acbe662898945f1a989ad74e28cfbc8897f4a4b",
-      "url": "https://github.com/circlefin/stablecoin-evm/blob/7acbe662898945f1a989ad74e28cfbc8897f4a4b/contracts/v1/Blacklistable.sol",
+      "commit_sha": "b42cf04b31639b8b05d53fea9995954d5f3659d9",
+      "commit_date": "2020-07-23T00:21:58Z",
+      "commit_url": "https://github.com/circlefin/stablecoin-evm/commit/b42cf04b31639b8b05d53fea9995954d5f3659d9",
+      "url": "https://github.com/circlefin/stablecoin-evm/blob/b42cf04b31639b8b05d53fea9995954d5f3659d9/contracts/v1/Blacklistable.sol",
+      "file_blob_sha": "c1827e8363557e24d51efa43212a9c7e32619896",
+      "file_sha256": "d1e8fe82c7e77ca626c27c4205dac994e6c0c97e18f86cb17559d952df8425eb",
+      "license": "MIT",
+      "license_url": "https://github.com/circlefin/stablecoin-evm/blob/b42cf04b31639b8b05d53fea9995954d5f3659d9/LICENSE",
+      "license_blob_sha": "702f20e7b80c94e2bfdc556fbd1e2046c3d031af",
+      "license_sha256": "ab49aea32292bcf2744f2a37bf8887feffeb124e04a76e1b99e0a1eae2a9053b",
       "role": "pinned_event_and_state_interface_definition",
-      "retrieved_at": "2026-07-24T16:49:31Z"
+      "retrieved_at": "2026-07-25T06:25:50Z"
     },
     {
       "evidence_id": "EV-FREEZE-OFAC-DESIGNATION",
@@ -244,9 +253,11 @@
       "endpoint": "https://ethereum.publicnode.com",
       "methods": [
         "eth_getTransactionByHash",
+        "eth_getTransactionReceipt",
         "eth_call(latest)"
       ],
-      "retrieved_at": "2026-07-24T16:49:31Z"
+      "retrieved_at": "2026-07-24T16:49:31Z",
+      "confirmation_retrieved_at": "2026-07-25T06:25:50Z"
     },
     {
       "source_id": "DS-EVM-RPC-ARCHIVE",
@@ -257,7 +268,9 @@
         "eth_getTransactionReceipt",
         "eth_call"
       ],
-      "retrieved_at": "2026-07-24T16:49:31Z"
+      "retrieved_at": "2026-07-24T16:49:31Z",
+      "confirmation_retrieved_at": "2026-07-25T06:25:50Z",
+      "confirmation_notes": "Four historical states matched. The free endpoint returned two transient timeout/internal errors during individual calls; retry and a three-call batch returned the missing exact values."
     },
     {
       "source_id": "DS-EXPLORER-EVM",
@@ -267,19 +280,22 @@
       "blacklist_logs_url": "https://eth.blockscout.com/api/v2/transactions/0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72/logs",
       "unblacklist_transaction_url": "https://eth.blockscout.com/api/v2/transactions/0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537",
       "unblacklist_logs_url": "https://eth.blockscout.com/api/v2/transactions/0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537/logs",
-      "retrieved_at": "2026-07-24T16:49:31Z"
+      "retrieved_at": "2026-07-24T16:49:31Z",
+      "confirmation_retrieved_at": "2026-07-25T06:25:50Z"
     },
     {
       "source_id": "DS-OSINT-WEB",
       "provider": "Circle official web and pinned GitHub source",
       "role": "issuer_context_and_contract_provenance",
-      "retrieved_at": "2026-07-24T16:49:31Z"
+      "retrieved_at": "2026-07-24T16:49:31Z",
+      "confirmation_retrieved_at": "2026-07-25T06:25:50Z"
     },
     {
       "source_id": "DS-SANCTIONS-PUBLIC",
       "provider": "U.S. Treasury OFAC",
       "role": "historical_regulatory_context",
-      "retrieved_at": "2026-07-24T16:49:31Z"
+      "retrieved_at": "2026-07-24T16:49:31Z",
+      "confirmation_retrieved_at": "2026-07-25T06:25:50Z"
     }
   ],
   "consistency_checks": {
@@ -289,12 +305,34 @@
     "unblacklist_event_matches_state_transition": true,
     "archive_state_reproduced_twice": true,
     "ofac_designation_and_removal_name_target": true,
-    "issuer_page_is_not_misrepresented_as_address_specific": true
+    "issuer_page_is_not_misrepresented_as_address_specific": true,
+    "pinned_interface_predates_blacklist_transaction": true,
+    "pinned_interface_and_license_hashes_recorded": true,
+    "confirmation_replay_passed": true
   },
+  "verification_runs": [
+    {
+      "run_id": "FREEZE-CONFIRM-20260725T062550Z",
+      "verified_at": "2026-07-25T06:25:50Z",
+      "result": "pass",
+      "checks": [
+        "blacklist_transaction_and_receipt",
+        "blacklisted_event_and_target",
+        "unblacklist_transaction_and_receipt",
+        "unblacklisted_event_and_target",
+        "four_historical_is_blacklisted_states",
+        "blockscout_decoded_calls",
+        "ofac_designation_and_removal_target",
+        "pinned_circle_interface",
+        "pinned_source_license"
+      ],
+      "notes": "All replayed onchain values matched expected.json exactly. dRPC free-tier individual calls produced transient timeout/internal errors for two snapshots; retry and a permitted three-call batch returned the missing exact values. Publicnode does not provide archive calls without a token, so it remains supporting for transaction and receipt checks."
+    }
+  ],
   "uncertainty": {
     "issuer_address_specific_notice": "not_found",
     "legal_or_criminal_attribution": "not_scored",
     "notes": "OFAC official actions enumerate the target address. Circle's public pages provide issuer policy and Tornado Cash response context but do not enumerate this address, so they are not treated as address-specific proof."
   },
-  "provenance_notes": "Onchain event/state facts, issuer context, and regulatory context are stored separately. The 2025 regulatory removal and UnBlacklisted event are recorded as separate facts and are not assumed to have identical effective timestamps."
+  "provenance_notes": "Onchain event/state facts, issuer context, and regulatory context are stored separately. The 2025 regulatory removal and UnBlacklisted event are recorded as separate facts and are not assumed to have identical effective timestamps. The Blacklistable interface is pinned to an official Circle repository commit that predates the 2022 blacklist transaction; its MIT source and repository license hashes are recorded."
 }

@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 15:13
+> Last Updated: 2026-07-25 15:25
 > Status: Draft
 
 ## 1. 문서 목적
@@ -81,7 +81,7 @@
 | FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | AUTH-DECODE, allowance 연결 |
 | FX-EVM-PROXY-001 | EVM-PROXY-001 | 2 | 후보 | PROXY, archive state |
-| FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 검증 중 | FREEZE, state/logs |
+| FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | FREEZE, state/logs |
 | FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | RECON, PRICE, 다주소 집계 |
 | FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
 
@@ -200,7 +200,7 @@
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-FREEZE-001 |
-| 상태 | 검증 중 |
+| 상태 | 확정 |
 | 패키지 | [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) |
 | 데이터 형태 | 공개 온체인 + 발행사·규제기관 공식 자료 |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -213,8 +213,8 @@
 | 필수 데이터 소스 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM`, `DS-OSINT-WEB` |
 | 보조 provenance | `DS-EVM-RPC-PUBLIC`, `DS-SANCTIONS-PUBLIC` |
 | 재현 절차 | 설정 이벤트·전후 상태 → 해제 이벤트·전후 상태 → Blockscout API → Circle·OFAC 원문 분리 검증 |
-| 저작권·출처 | Circle 공식 문서·GitHub(Apache-2.0), OFAC 공식 고시 URL. 원문 복제 없음 |
-| 마지막 확인 | 2026-07-25 01:49 |
+| 저작권·출처 | Circle 공식 문서·거래 이전 GitHub 고정 커밋(MIT), OFAC 공식 고시 URL. 원문 복제 없음 |
+| 마지막 확인 | 2026-07-25 15:25 (동일 입력 재현 통과) |
 
 ---
 
@@ -276,12 +276,11 @@
 
 ## 9. 다음 단계
 
-1. `FX-SVC-DEX-001`과 `FX-EVM-AUTH-001`은 동일 입력 재현과 고정
-   provenance를 통과해 `fixture_version: 0.2`, `confirmed`로 승격했다.
-2. `FX-EVM-FREEZE-001`을 동일 입력으로 다시 재현해 `확정` 승격 여부를
-   판단한다.
-3. 확정 fixture를 기능 우선순위 문서의 검증 입력으로 연결한다.
-4. 나머지 후보 fixture의 공개 데이터를 선정한다.
+1. `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`은 동일
+   입력 재현과 고정 provenance를 통과해 `fixture_version: 0.2`,
+   `confirmed`로 승격했다.
+2. 세 확정 fixture를 기능 우선순위 문서의 검증 입력으로 연결한다.
+3. 나머지 후보 fixture의 공개 데이터를 선정한다.
 
 ## 10. Related Documents
 
