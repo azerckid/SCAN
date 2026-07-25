@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 15:25
+> Last Updated: 2026-07-25 15:49
 > Status: Draft
 
 ## 1. 문서 목적
@@ -232,11 +232,13 @@
 1. [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) 후보 8개의 공개 데이터 확보 가능성을 소스별로 점검한다.
 2. 확보 가능한 fixture를 `검증 중`으로 올리고 필요 소스를 `검증 중`으로 승격한다.
 3. 2026-07-27 이후 공식 규정에 따라 `대회 규정` 필드를 갱신한다.
-4. 채택 소스 목록을 기능 우선순위 문서 입력으로 넘긴다.
+4. 채택 소스 목록의 능력·제약을 기능 우선순위 Draft 1에 반영했다.
+5. P0·V1 도구 요구사항에서 공급자 fallback·캐시·오류 계약을 구체화한다.
 
 ## 10. Related Documents
 
 - **Concept_Design**: [SCAN 2026 참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 준비 전략과 위험·제약
 - **Concept_Design**: [SCAN 2026 예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - Draft 2 기능·fixture 요구의 기준
+- **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - 소스 의존성·fallback을 반영한 기능 순서
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 소스 검증용 대표 사례
-- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, `../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md`
+- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, 도구 요구사항, 기술 선택 기록

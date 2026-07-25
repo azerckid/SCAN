@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 15:25
+> Last Updated: 2026-07-25 15:49
 > Status: Draft
 
 ## 1. 문서 목적
@@ -279,14 +279,16 @@
 1. `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`은 동일
    입력 재현과 고정 provenance를 통과해 `fixture_version: 0.2`,
    `confirmed`로 승격했다.
-2. 세 확정 fixture를 기능 우선순위 문서의 검증 입력으로 연결한다.
-3. 나머지 후보 fixture의 공개 데이터를 선정한다.
+2. 세 확정 fixture를 기능 우선순위 Draft 1의 V1 검증 입력으로 연결했다.
+3. P2 승격에 필요한 BRIDGE·BTC fixture의 공개 데이터를 우선 선정한다.
+4. 나머지 후보 fixture의 공개 데이터를 선정한다.
 
 ## 10. Related Documents
 
 - **Concept_Design**: [SCAN 2026 예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 문제·완료조건·대표 사례 후보의 기준
 - **Concept_Design**: [SCAN 2026 참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 준비 전략
+- **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - confirmed fixture 기반 V1 경로와 P2 승격 조건
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - fixture별 필요 소스와 제약
 - **Technical_Specs**: [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) - JSON 0.1 계약과 증거·소스 역할
 - **QA_Validation**: [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) - 우선 구축 fixture 패키지
-- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, `../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md`
+- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, 도구 요구사항, 기술 선택 기록
