@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 03:18
+> Last Updated: 2026-07-25 23:46
 > Status: Draft
 
 ## 1. 문서 목적
@@ -16,6 +16,7 @@
 
 - [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md)
 - [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md)
+- [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md)
 
 ## 2. 정보 구분 원칙
 
@@ -80,8 +81,8 @@
 | 이용약관 주의 | 공급자 ToS | 동일 |
 | 대회 규정 | 미확인 | 미확인 |
 | 상태 | 검증 중 | 검증 중 |
-| 마지막 확인 | 2026-07-25 01:49 | 2026-07-25 01:49 |
-| 비고 | `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`에 `https://ethereum.publicnode.com` 사용. receipt/logs·TX 또는 최신 상태 확인 | `FX-EVM-AUTH-001`의 allowance 4지점·trace, `FX-EVM-FREEZE-001`의 blacklist 4지점·이벤트를 `https://eth.drpc.org`에서 확인 |
+| 마지막 확인 | 2026-07-25 15:25 | 2026-07-25 15:25 |
+| 비고 | `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`에 `https://ethereum.publicnode.com` 사용. receipt/logs·TX 또는 최신 상태 확인. Publicnode archive 호출은 개인 토큰 필요 | `FX-EVM-AUTH-001`의 allowance 4지점·trace, `FX-EVM-FREEZE-001`의 blacklist 4지점·이벤트, `FX-SVC-DEX-001`의 거래 시점 Factory `getPair`를 `https://eth.drpc.org`에서 확인. FREEZE 확정 재현 중 프리티어 일시 timeout/internal error는 재시도로 복구 |
 
 ### 5.2 탐색기 API
 
@@ -101,9 +102,9 @@
 | 이용약관 주의 | 스크래핑·재배포 제한 가능 |
 | 대회 규정 | 미확인 |
 | 상태 | 검증 중 |
-| 마지막 확인 | 2026-07-25 01:49 |
+| 마지막 확인 | 2026-07-25 15:25 |
 | 관련 fixture | FLOW-EVM-001, SVC-DEX-001, EVM-AUTH-001, EVM-FREEZE-001 |
-| 비고 | `FX-SVC-DEX-001`의 internal ETH, `FX-EVM-AUTH-001`의 거래·token transfer·internal trace, `FX-EVM-FREEZE-001`의 blacklist 설정·해제 TX와 로그를 **Blockscout API**로 검증. Etherscan TX 페이지는 UI 교차확인만이며 API 검증으로 치지 않음 |
+| 비고 | `FX-SVC-DEX-001`의 internal ETH, `FX-EVM-AUTH-001`의 거래·token transfer·internal trace, `FX-EVM-FREEZE-001`의 blacklist 설정·해제 성공 호출과 대상을 **Blockscout API**로 검증. DEX 확정 재현에서는 V2 endpoint timeout 후 호환 API가 동일 내부 전송을 반환. Etherscan TX 페이지는 UI 교차확인만이며 API 검증으로 치지 않음 |
 
 ### 5.3 Bitcoin UTXO
 
@@ -144,7 +145,7 @@
 | 이용약관 주의 | 재배포 제한 가능 | 공적 자료라도 2차 라이선스 확인 |
 | 대회 규정 | 미확인 | 미확인 |
 | 상태 | 후보 | 검증 중 |
-| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 01:49 |
+| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 15:25 |
 | 관련 fixture | FLOW-EVM-001 등 | EVM-FREEZE-001 (`FX-EVM-FREEZE-001`) |
 | 비고 |  | OFAC 2022 지정·2025 해제 원문에서 대상 주소를 확인. 고시 시점의 역사적 맥락으로 사용하며 현재 제재 상태로 간주하지 않음 |
 
@@ -166,9 +167,9 @@
 | 이용약관 주의 | API ToS, SNS ToS | 스크래핑·자동화 제한 |
 | 대회 규정 | 미확인 | 미확인 |
 | 상태 | 후보 | 검증 중 |
-| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 01:49 |
+| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 15:25 |
 | 관련 fixture | OSINT-ENS-001 | EVM-FREEZE-001 (`FX-EVM-FREEZE-001`) |
-| 비고 |  | Circle 공식 블로그·USDC Terms·컨트랙트 주소 문서·고정 GitHub 커밋을 확인. 주소별 공지와 정책·대응 맥락을 구분 |
+| 비고 |  | Circle 공식 블로그·USDC Terms·컨트랙트 주소 문서와 거래 이전 공식 커밋 `b42cf04...59d9`의 `Blacklistable.sol`·MIT 라이선스·파일 해시를 확인. 주소별 공지와 정책·대응 맥락을 구분 |
 
 ### 5.6 브리지·DEX·가격
 
@@ -188,9 +189,9 @@
 | 이용약관 주의 | 각 서비스 ToS | 동일 | 재배포·지연 데이터 제한 |
 | 대회 규정 | 미확인 | 미확인 | 미확인 |
 | 상태 | 후보 | 검증 중 | 후보 |
-| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 03:18 | 2026-07-24 15:49 |
+| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 15:13 | 2026-07-24 15:49 |
 | 관련 fixture | SVC-BRG-001 | SVC-DEX-001 (`FX-SVC-DEX-001`), EVM-AUTH-001 (`FX-EVM-AUTH-001`) | FLOW-MULTI-001 |
-| 비고 |  | Universal Router: 공식 `deploy-addresses/mainnet.json`의 `UniversalRouterV1`. Factory: V2 Deployments. Pool: Pair Addresses 가이드 + 재현 가능 `eth_call getPair` 기록. AUTH `SwapRouter02`: 공식 `sdk-core` 커밋 `baff6d3c...d28a`의 `SWAP_ROUTER_02_ADDRESSES(1)`과 MIT 라이선스 고정 |  |
+| 비고 |  | DEX Universal Router: 거래 이전 공식 커밋 `d2575ff...f9f`의 `mainnet.json` `UniversalRouter` 주소·파일 해시·GPL-3.0 라이선스 고정. Factory: V2 Deployments. Pool: Pair Addresses 가이드 + 거래 시점 `eth_call getPair` 기록. AUTH `SwapRouter02`: 공식 `sdk-core` 커밋 `baff6d3c...d28a`의 `SWAP_ROUTER_02_ADDRESSES(1)`과 MIT 라이선스 고정 |  |
 
 ## 6. fixture별 최소 소스 요구
 
@@ -232,11 +233,15 @@
 1. [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) 후보 8개의 공개 데이터 확보 가능성을 소스별로 점검한다.
 2. 확보 가능한 fixture를 `검증 중`으로 올리고 필요 소스를 `검증 중`으로 승격한다.
 3. 2026-07-27 이후 공식 규정에 따라 `대회 규정` 필드를 갱신한다.
-4. 채택 소스 목록을 기능 우선순위 문서 입력으로 넘긴다.
+4. 채택 소스 목록의 능력·제약을 기능 우선순위 Draft 1에 반영했다.
+5. P0·V1 도구 요구사항 Draft 1에 공급자 fallback·캐시·오류 계약을 반영했다.
+6. 기술 선택 기록에서 공급자 adapter와 fallback 우선순위를 결정한다.
 
 ## 10. Related Documents
 
 - **Concept_Design**: [SCAN 2026 참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 준비 전략과 위험·제약
 - **Concept_Design**: [SCAN 2026 예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - Draft 2 기능·fixture 요구의 기준
+- **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - 소스 의존성·fallback을 반영한 기능 순서
+- **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - source policy·cache·fallback·오류 계약
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 소스 검증용 대표 사례
-- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, `../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md`
+- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, 기술 선택 기록

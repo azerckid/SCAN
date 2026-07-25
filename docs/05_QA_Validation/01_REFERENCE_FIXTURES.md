@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 03:18
+> Last Updated: 2026-07-25 23:46
 > Status: Draft
 
 ## 1. 문서 목적
@@ -11,6 +11,7 @@
 
 - [SCAN 2026 예상문제 은행 Draft 2](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md)
 - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md)
+- [P0·V1 분석 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md)
 
 ## 2. Rubric 정렬
 
@@ -77,11 +78,11 @@
 | Fixture ID | 문제 ID | Draft | 상태 | 핵심 검증 기능 |
 |:---|:---|:---:|:---|:---|
 | FX-FLOW-EVM-001 | FLOW-EVM-001 | 1 | 후보 | 수집, PATH, LABEL, 증거 |
-| FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 검증 중 | EVM-LOG, DECODE, RECON |
+| FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | EVM-LOG, DECODE, RECON |
 | FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | AUTH-DECODE, allowance 연결 |
 | FX-EVM-PROXY-001 | EVM-PROXY-001 | 2 | 후보 | PROXY, archive state |
-| FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 검증 중 | FREEZE, state/logs |
+| FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | FREEZE, state/logs |
 | FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | RECON, PRICE, 다주소 집계 |
 | FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
 
@@ -116,7 +117,7 @@
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | SVC-DEX-001 |
-| 상태 | 검증 중 |
+| 상태 | 확정 |
 | 패키지 | [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md) |
 | 데이터 형태 | 공개 온체인 / JSON fixture |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -127,8 +128,8 @@
 | 휴리스틱 | 해당 없음 |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-DEX-META` |
 | 재현 절차 | RPC 로그로 pool_output 계산 → Blockscout API로 user_net_output 확인 → Factory.getPair로 풀 provenance |
-| 저작권·출처 | publicnode RPC, Blockscout API, Uniswap deploy JSON/V2 Deployments/Pair Addresses, Etherscan UI(교차만). 본문 복제 없음 |
-| 마지막 확인 | 2026-07-24 19:48 |
+| 저작권·출처 | publicnode RPC, dRPC archive, Blockscout API, Uniswap 고정 deploy JSON(GPL-3.0)/V2 Deployments/Pair Addresses, Etherscan UI(교차만). 본문 복제 없음 |
+| 마지막 확인 | 2026-07-25 15:13 (동일 입력 재현 통과) |
 
 ---
 
@@ -200,7 +201,7 @@
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-FREEZE-001 |
-| 상태 | 검증 중 |
+| 상태 | 확정 |
 | 패키지 | [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) |
 | 데이터 형태 | 공개 온체인 + 발행사·규제기관 공식 자료 |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -213,8 +214,8 @@
 | 필수 데이터 소스 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM`, `DS-OSINT-WEB` |
 | 보조 provenance | `DS-EVM-RPC-PUBLIC`, `DS-SANCTIONS-PUBLIC` |
 | 재현 절차 | 설정 이벤트·전후 상태 → 해제 이벤트·전후 상태 → Blockscout API → Circle·OFAC 원문 분리 검증 |
-| 저작권·출처 | Circle 공식 문서·GitHub(Apache-2.0), OFAC 공식 고시 URL. 원문 복제 없음 |
-| 마지막 확인 | 2026-07-25 01:49 |
+| 저작권·출처 | Circle 공식 문서·거래 이전 GitHub 고정 커밋(MIT), OFAC 공식 고시 URL. 원문 복제 없음 |
+| 마지막 확인 | 2026-07-25 15:25 (동일 입력 재현 통과) |
 
 ---
 
@@ -276,18 +277,19 @@
 
 ## 9. 다음 단계
 
-1. `FX-EVM-AUTH-001`은 동일 입력 재현과 고정 provenance를 통과해
-   `fixture_version: 0.2`, `confirmed`로 승격했다.
-2. `FX-SVC-DEX-001`, `FX-EVM-FREEZE-001`을 동일 입력으로 다시 재현해
-   `확정` 승격 여부를 판단한다.
-3. 확정 fixture를 기능 우선순위 문서의 검증 입력으로 연결한다.
+1. `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`은 동일
+   입력 재현과 고정 provenance를 통과해 `fixture_version: 0.2`,
+   `confirmed`로 승격했다.
+2. 세 확정 fixture를 기능 우선순위 Draft 1의 V1 검증 입력으로 연결했다.
+3. P2 승격에 필요한 BRIDGE·BTC fixture의 공개 데이터를 우선 선정한다.
 4. 나머지 후보 fixture의 공개 데이터를 선정한다.
 
 ## 10. Related Documents
 
 - **Concept_Design**: [SCAN 2026 예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 문제·완료조건·대표 사례 후보의 기준
 - **Concept_Design**: [SCAN 2026 참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 준비 전략
+- **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - confirmed fixture 기반 V1 경로와 P2 승격 조건
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - fixture별 필요 소스와 제약
 - **Technical_Specs**: [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) - JSON 0.1 계약과 증거·소스 역할
 - **QA_Validation**: [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) - 우선 구축 fixture 패키지
-- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, `../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md`
+- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, 도구 요구사항, 기술 선택 기록

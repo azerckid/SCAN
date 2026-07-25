@@ -1,10 +1,11 @@
 {
   "$schema": "../../schemas/fixture-evidence.schema.json",
   "schema_version": "0.1",
-  "fixture_version": "0.1",
+  "fixture_version": "0.2",
   "fixture_id": "FX-SVC-DEX-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-24T10:43:17Z",
+  "confirmed_at": "2026-07-25T06:13:12Z",
   "block_number": 16642512,
   "block_timestamp": 1676565263,
   "transaction": {
@@ -93,6 +94,12 @@
       "purpose": "Internal native ETH transfer that establishes user net output"
     },
     {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "role": "supporting",
+      "required": false,
+      "purpose": "Factory getPair cross-check at the transaction block"
+    },
+    {
       "source_id": "DS-DEX-META",
       "role": "supporting",
       "required": true,
@@ -118,6 +125,8 @@
       "provider": "Blockscout",
       "api": true,
       "endpoint": "https://eth.blockscout.com/api/v2/transactions/0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5/internal-transactions",
+      "confirmation_endpoint": "https://eth.blockscout.com/api?module=account&action=txlistinternal&txhash=0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+      "confirmation_retrieved_at": "2026-07-25T06:13:12Z",
       "role": "internal_eth_transfer_verification",
       "retrieved_at": "2026-07-24T10:43:17Z"
     },
@@ -130,14 +139,34 @@
       "retrieved_at": "2026-07-24T10:31:00Z"
     },
     {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "dRPC",
+      "endpoint": "https://eth.drpc.org",
+      "methods": [
+        "eth_call"
+      ],
+      "role": "historical_get_pair_cross_check",
+      "retrieved_at": "2026-07-25T06:13:12Z"
+    },
+    {
       "source_id": "DS-DEX-META",
       "provider": "Uniswap official deployments + reproducible Factory.getPair",
       "router": {
         "address": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
         "label": "Uniswap Universal Router V1",
-        "deployment_json_url": "https://raw.githubusercontent.com/Uniswap/universal-router/main/deploy-addresses/mainnet.json",
-        "deployment_json_key": "UniversalRouterV1",
+        "repository": "https://github.com/Uniswap/universal-router",
+        "commit_sha": "d2575ff41223d2766ee17f99ae7258545405ef9f",
+        "commit_date": "2022-11-30T14:40:54Z",
+        "commit_url": "https://github.com/Uniswap/universal-router/commit/d2575ff41223d2766ee17f99ae7258545405ef9f",
+        "deployment_json_url": "https://github.com/Uniswap/universal-router/blob/d2575ff41223d2766ee17f99ae7258545405ef9f/deploy-addresses/mainnet.json",
+        "deployment_json_sha256": "2eae503941da63a8dded7f26ac43ae26a769aa64fca9c4685bd1b0fb6f62bdcf",
+        "deployment_json_key": "UniversalRouter",
         "deployment_json_value": "0xEf1c6E67703c7BD7107eed8303Fbe6EC2554BF6B",
+        "license": "GPL-3.0-only",
+        "license_url": "https://github.com/Uniswap/universal-router/blob/d2575ff41223d2766ee17f99ae7258545405ef9f/LICENSE",
+        "license_sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "current_deployment_cross_check_url": "https://raw.githubusercontent.com/Uniswap/universal-router/main/deploy-addresses/mainnet.json",
+        "current_deployment_cross_check_key": "UniversalRouterV1",
         "match": true
       },
       "factory": {
@@ -166,9 +195,20 @@
           "match": true,
           "retrieved_at": "2026-07-24T10:48:27Z"
         },
+        "confirmation_get_pair": {
+          "method": "eth_call",
+          "endpoint": "https://eth.drpc.org",
+          "source_id": "DS-EVM-RPC-ARCHIVE",
+          "block_number": 16642512,
+          "block_tag": "0xfdf1d0",
+          "result": "0x000000000000000000000000b4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+          "decoded_pair": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+          "match": true,
+          "retrieved_at": "2026-07-25T06:13:12Z"
+        },
         "etherscan_url": "https://etherscan.io/address/0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc"
       },
-      "retrieved_at": "2026-07-24T10:48:27Z"
+      "retrieved_at": "2026-07-25T06:13:12Z"
     }
   ],
   "raw_artifacts": [
@@ -187,11 +227,32 @@
     "swap_matches_transfers": true,
     "withdrawal_matches_pool_out": true,
     "internal_eth_matches_withdrawal": true,
-    "amounts_recomputed_twice": true
+    "amounts_recomputed_twice": true,
+    "historical_get_pair_matches_pool": true,
+    "pinned_router_address_matches_transaction": true,
+    "confirmation_replay_passed": true
   },
+  "verification_runs": [
+    {
+      "run_id": "DEX-CONFIRM-20260725T061312Z",
+      "verified_at": "2026-07-25T06:13:12Z",
+      "result": "pass",
+      "checks": [
+        "transaction_and_block",
+        "four_scoring_logs",
+        "asset_in_amount",
+        "pool_output_amount",
+        "internal_native_eth_transfer",
+        "historical_factory_get_pair",
+        "pinned_universal_router_address",
+        "pinned_source_license"
+      ],
+      "notes": "All replayed values matched expected.json exactly. The Blockscout V2 endpoint timed out during confirmation, so the documented Blockscout compatibility API returned the same successful internal transfer. Raw amount tolerance remains zero."
+    }
+  ],
   "uncertainty": {
     "heuristic_links": "none",
     "notes": "Pool WETH output and final native ETH output are separate deterministic facts."
   },
-  "provenance_notes": "Pool output and user net output are recorded separately. WETH pool out must not be scored as the user's final asset."
+  "provenance_notes": "Pool output and user net output are recorded separately. WETH pool out must not be scored as the user's final asset. The router address is pinned to an official Universal Router deployment commit that predates the transaction; the mutable deployment JSON remains a cross-check."
 }

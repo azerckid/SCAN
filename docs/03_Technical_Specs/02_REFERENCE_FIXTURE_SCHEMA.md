@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixture Schema
 > Created: 2026-07-25 02:49
-> Last Updated: 2026-07-25 03:04
+> Last Updated: 2026-07-25 23:46
 > Status: Confirmed 0.1
 
 ## 1. 목적
@@ -152,5 +152,6 @@ python3 docs/05_QA_Validation/scripts/validate_fixture_schemas.py
 
 - **Concept_Design**: [SCAN 2026 예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 문제별 완료·부분·실패 조건
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - `DS-...` 소스 ID와 제약
+- **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - fixture를 소비하는 도구의 입력·결과·증거 계약
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - fixture 목록과 승격 기준
 - **QA_Validation**: [DEX](../05_QA_Validation/fixtures/FX-SVC-DEX-001/README.md), [AUTH](../05_QA_Validation/fixtures/FX-EVM-AUTH-001/README.md), [FREEZE](../05_QA_Validation/fixtures/FX-EVM-FREEZE-001/README.md) - 0.1 적용 대상
