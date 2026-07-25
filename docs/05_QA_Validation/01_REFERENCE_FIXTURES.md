@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 03:18
+> Last Updated: 2026-07-25 15:13
 > Status: Draft
 
 ## 1. 문서 목적
@@ -77,7 +77,7 @@
 | Fixture ID | 문제 ID | Draft | 상태 | 핵심 검증 기능 |
 |:---|:---|:---:|:---|:---|
 | FX-FLOW-EVM-001 | FLOW-EVM-001 | 1 | 후보 | 수집, PATH, LABEL, 증거 |
-| FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 검증 중 | EVM-LOG, DECODE, RECON |
+| FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | EVM-LOG, DECODE, RECON |
 | FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | AUTH-DECODE, allowance 연결 |
 | FX-EVM-PROXY-001 | EVM-PROXY-001 | 2 | 후보 | PROXY, archive state |
@@ -116,7 +116,7 @@
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | SVC-DEX-001 |
-| 상태 | 검증 중 |
+| 상태 | 확정 |
 | 패키지 | [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md) |
 | 데이터 형태 | 공개 온체인 / JSON fixture |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -127,8 +127,8 @@
 | 휴리스틱 | 해당 없음 |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-DEX-META` |
 | 재현 절차 | RPC 로그로 pool_output 계산 → Blockscout API로 user_net_output 확인 → Factory.getPair로 풀 provenance |
-| 저작권·출처 | publicnode RPC, Blockscout API, Uniswap deploy JSON/V2 Deployments/Pair Addresses, Etherscan UI(교차만). 본문 복제 없음 |
-| 마지막 확인 | 2026-07-24 19:48 |
+| 저작권·출처 | publicnode RPC, dRPC archive, Blockscout API, Uniswap 고정 deploy JSON(GPL-3.0)/V2 Deployments/Pair Addresses, Etherscan UI(교차만). 본문 복제 없음 |
+| 마지막 확인 | 2026-07-25 15:13 (동일 입력 재현 통과) |
 
 ---
 
@@ -276,10 +276,10 @@
 
 ## 9. 다음 단계
 
-1. `FX-EVM-AUTH-001`은 동일 입력 재현과 고정 provenance를 통과해
-   `fixture_version: 0.2`, `confirmed`로 승격했다.
-2. `FX-SVC-DEX-001`, `FX-EVM-FREEZE-001`을 동일 입력으로 다시 재현해
-   `확정` 승격 여부를 판단한다.
+1. `FX-SVC-DEX-001`과 `FX-EVM-AUTH-001`은 동일 입력 재현과 고정
+   provenance를 통과해 `fixture_version: 0.2`, `confirmed`로 승격했다.
+2. `FX-EVM-FREEZE-001`을 동일 입력으로 다시 재현해 `확정` 승격 여부를
+   판단한다.
 3. 확정 fixture를 기능 우선순위 문서의 검증 입력으로 연결한다.
 4. 나머지 후보 fixture의 공개 데이터를 선정한다.
 

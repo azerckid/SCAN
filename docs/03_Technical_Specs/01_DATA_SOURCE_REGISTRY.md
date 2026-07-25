@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 03:18
+> Last Updated: 2026-07-25 15:13
 > Status: Draft
 
 ## 1. 문서 목적
@@ -80,8 +80,8 @@
 | 이용약관 주의 | 공급자 ToS | 동일 |
 | 대회 규정 | 미확인 | 미확인 |
 | 상태 | 검증 중 | 검증 중 |
-| 마지막 확인 | 2026-07-25 01:49 | 2026-07-25 01:49 |
-| 비고 | `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`에 `https://ethereum.publicnode.com` 사용. receipt/logs·TX 또는 최신 상태 확인 | `FX-EVM-AUTH-001`의 allowance 4지점·trace, `FX-EVM-FREEZE-001`의 blacklist 4지점·이벤트를 `https://eth.drpc.org`에서 확인 |
+| 마지막 확인 | 2026-07-25 15:13 | 2026-07-25 15:13 |
+| 비고 | `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`에 `https://ethereum.publicnode.com` 사용. receipt/logs·TX 또는 최신 상태 확인 | `FX-EVM-AUTH-001`의 allowance 4지점·trace, `FX-EVM-FREEZE-001`의 blacklist 4지점·이벤트, `FX-SVC-DEX-001`의 거래 시점 Factory `getPair`를 `https://eth.drpc.org`에서 확인 |
 
 ### 5.2 탐색기 API
 
@@ -101,9 +101,9 @@
 | 이용약관 주의 | 스크래핑·재배포 제한 가능 |
 | 대회 규정 | 미확인 |
 | 상태 | 검증 중 |
-| 마지막 확인 | 2026-07-25 01:49 |
+| 마지막 확인 | 2026-07-25 15:13 |
 | 관련 fixture | FLOW-EVM-001, SVC-DEX-001, EVM-AUTH-001, EVM-FREEZE-001 |
-| 비고 | `FX-SVC-DEX-001`의 internal ETH, `FX-EVM-AUTH-001`의 거래·token transfer·internal trace, `FX-EVM-FREEZE-001`의 blacklist 설정·해제 TX와 로그를 **Blockscout API**로 검증. Etherscan TX 페이지는 UI 교차확인만이며 API 검증으로 치지 않음 |
+| 비고 | `FX-SVC-DEX-001`의 internal ETH, `FX-EVM-AUTH-001`의 거래·token transfer·internal trace, `FX-EVM-FREEZE-001`의 blacklist 설정·해제 TX와 로그를 **Blockscout API**로 검증. DEX 확정 재현에서는 V2 endpoint timeout 후 호환 API가 동일 내부 전송을 반환. Etherscan TX 페이지는 UI 교차확인만이며 API 검증으로 치지 않음 |
 
 ### 5.3 Bitcoin UTXO
 
@@ -188,9 +188,9 @@
 | 이용약관 주의 | 각 서비스 ToS | 동일 | 재배포·지연 데이터 제한 |
 | 대회 규정 | 미확인 | 미확인 | 미확인 |
 | 상태 | 후보 | 검증 중 | 후보 |
-| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 03:18 | 2026-07-24 15:49 |
+| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 15:13 | 2026-07-24 15:49 |
 | 관련 fixture | SVC-BRG-001 | SVC-DEX-001 (`FX-SVC-DEX-001`), EVM-AUTH-001 (`FX-EVM-AUTH-001`) | FLOW-MULTI-001 |
-| 비고 |  | Universal Router: 공식 `deploy-addresses/mainnet.json`의 `UniversalRouterV1`. Factory: V2 Deployments. Pool: Pair Addresses 가이드 + 재현 가능 `eth_call getPair` 기록. AUTH `SwapRouter02`: 공식 `sdk-core` 커밋 `baff6d3c...d28a`의 `SWAP_ROUTER_02_ADDRESSES(1)`과 MIT 라이선스 고정 |  |
+| 비고 |  | DEX Universal Router: 거래 이전 공식 커밋 `d2575ff...f9f`의 `mainnet.json` `UniversalRouter` 주소·파일 해시·GPL-3.0 라이선스 고정. Factory: V2 Deployments. Pool: Pair Addresses 가이드 + 거래 시점 `eth_call getPair` 기록. AUTH `SwapRouter02`: 공식 `sdk-core` 커밋 `baff6d3c...d28a`의 `SWAP_ROUTER_02_ADDRESSES(1)`과 MIT 라이선스 고정 |  |
 
 ## 6. fixture별 최소 소스 요구
 

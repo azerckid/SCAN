@@ -1,7 +1,7 @@
 # Fixture: FX-SVC-DEX-001
 > Created: 2026-07-24 19:19
-> Last Updated: 2026-07-25 02:49
-> Status: Verifying
+> Last Updated: 2026-07-25 15:13
+> Status: Confirmed
 
 ## 1. 목적
 
@@ -13,7 +13,8 @@
 | 항목 | 값 |
 |:---|:---|
 | 연결 문제 | `SVC-DEX-001` |
-| 상태 | 검증 중 (`verifying`) |
+| 상태 | 확정 (`confirmed`) |
+| Fixture 버전 | `0.2` (`schema_version`은 `0.1`) |
 | 체인 | Ethereum (`chain_id` 1) |
 | TX | `0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5` |
 | 스왑 | Uniswap V2 USDC → WETH (단일 홉) 후 ETH unwrap |
@@ -23,7 +24,8 @@
 | 라우터 | `0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b` (Universal Router) |
 | 풀 | `0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc` |
 | 주요 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`(Blockscout API), `DS-DEX-META` |
-| 수동 재현 | 로그·Swap·internal ETH 수량 일치 확인 |
+| 확정 재현 | 2026-07-25 15:13, 로그·Swap·internal ETH·거래 시점 `getPair`·고정 배포 소스 일치 |
+| 고정 provenance | Uniswap `universal-router` 커밋 `d2575ff...f9f`의 `UniversalRouter` 주소와 GPL-3.0 라이선스 |
 
 ## 3. 파일 역할
 
@@ -45,6 +47,9 @@
 5. Factory `getPair(USDC,WETH)`를 `eth_call`로 재현 가능하게 기록하고, 반환 주소가 풀과 일치하는지 확인했다.
 6. Universal Router V1 주소를 공식 `deploy-addresses/mainnet.json`의 `UniversalRouterV1` 값과 대조했다.
 7. 풀 출력(WETH)과 사용자 최종 출력(ETH)을 분리해 expected에 기록했다.
+8. 같은 입력으로 거래·블록·4개 채점 로그와 Blockscout 내부 ETH 전송을 다시 조회해 raw 수량이 일치함을 확인했다.
+9. 스왑 블록 `16642512`에서 Factory `getPair(USDC,WETH)`를 archive `eth_call`로 재현해 풀 주소를 확인했다.
+10. 거래 이전 Uniswap 공식 배포 커밋 `d2575ff41223d2766ee17f99ae7258545405ef9f`의 `UniversalRouter` 주소와 GPL-3.0 라이선스를 고정했다.
 
 채점 시 `pool_output`(WETH)과 `user_net_output`(ETH)을 모두 요구한다. 풀 WETH만 사용자 최종 자산으로 제출하면 실패다.
 
@@ -56,3 +61,4 @@
 - **Concept_Design**: [예상문제 은행](../../../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - `SVC-DEX-001` 문제·완료 조건
 - **Explorer**: [Etherscan TX](https://etherscan.io/tx/0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5) (UI 교차확인)
 - **Explorer API**: [Blockscout internal txs](https://eth.blockscout.com/api/v2/transactions/0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5/internal-transactions)
+- **Official metadata**: [Uniswap Universal Router pinned deployment](https://github.com/Uniswap/universal-router/commit/d2575ff41223d2766ee17f99ae7258545405ef9f) - 거래 이전 mainnet 배포 주소의 고정 근거
