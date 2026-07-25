@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 15:49
+> Last Updated: 2026-07-25 23:46
 > Status: Draft
 
 ## 1. 문서 목적
@@ -11,6 +11,7 @@
 
 - [SCAN 2026 예상문제 은행 Draft 2](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md)
 - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md)
+- [P0·V1 분석 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md)
 
 ## 2. Rubric 정렬
 
