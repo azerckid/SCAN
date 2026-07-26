@@ -1,6 +1,6 @@
 # SCAN 2026 공식 규정 Register
 > Created: 2026-07-26 19:24
-> Last Updated: 2026-07-26 20:09
+> Last Updated: 2026-07-27 00:54
 > Status: Draft 1 · Awaiting Official Information
 
 ## 1. 문서 목적
@@ -102,6 +102,7 @@ AI·사전 제작 도구·상용 서비스·제출 형식에 관한 세부 Rules
 | `RULE-API-001` | 외부 RPC·탐색기·가격·OSINT API | unclear | unclear | 허용 공급자, 호출 제한, 유료 API |
 | `RULE-AUTO-001` | 자체 자동화 스크립트·CLI | unclear | unclear | 수집·분석·시각화 자동화 범위 |
 | `RULE-AI-001` | ChatGPT·Codex 등 생성형 AI | unclear | unclear | 질의, 코드 생성, 분석, 답안 작성 |
+| `RULE-AGENT-001` | 복수 AI agent·서브에이전트 오케스트레이션 | unclear | unclear | 문제 분배, 병렬 분석, agent 간 결과 공유 |
 | `RULE-PREBUILT-TOOL-001` | 대회 전 제작한 자체 도구 | unclear | unclear | 사전 코드·실행 파일 반입 |
 | `RULE-PRELOAD-DATA-001` | 사전 적재 fixture·cache·계산 결과 | unclear | unclear | 공개 데이터 캐시와 문제별 사전 계산 데이터 |
 | `RULE-OSS-001` | 공개 오픈소스 도구·라이브러리 | unclear | unclear | 허용 라이선스·버전·고지 의무 |
@@ -112,6 +113,7 @@ AI·사전 제작 도구·상용 서비스·제출 형식에 관한 세부 Rules
 | `RULE-AUTO-SUBMIT-001` | CTFd API·스크립트 자동 제출 | unclear | unclear | API 허용, 제출 빈도, 세션 정책 |
 | `RULE-BRUTEFORCE-001` | 정답 추측·brute force 제출 | unclear | unclear | 시도 제한, 오답 감점, 실격 조건 |
 | `RULE-DATA-001` | 문제 데이터 저장·재배포 | unclear | unclear | 로컬 저장, 팀 공유, 대회 후 공개 |
+| `RULE-PROBLEM-EXTERNAL-001` | 문제 원문·첨부·답안 후보의 외부 AI 전송 | unclear | unclear | 외부 처리, 보존 기간, 학습 사용, 국외 전송 |
 | `RULE-CREDENTIAL-001` | API 키·계정의 팀 내 공유 | unclear | unclear | 개인·팀 계정, 비밀정보 보관 |
 
 ### 5.1 임시 준비 원칙
@@ -124,6 +126,9 @@ AI·사전 제작 도구·상용 서비스·제출 형식에 관한 세부 Rules
 4. 사전 제작 도구는 대회 규정 확인 후 기능별로 켜고 끌 수 있어야 한다.
 5. 제한이 확인되면 `rule_restricted`로 외부 조회 전에 차단한다.
 6. 공개 전 문제·답안·개인정보를 저장소나 외부 AI 서비스에 전송하지 않는다.
+7. agent orchestration은 `RULE-AI-001`, `RULE-AGENT-001`,
+   `RULE-COLLAB-001`, `RULE-PROBLEM-EXTERNAL-001` 확인 후 기능별로
+   활성화한다.
 
 ## 6. 문제·제출 형식 미확정 등록부
 
@@ -151,6 +156,8 @@ AI·사전 제작 도구·상용 서비스·제출 형식에 관한 세부 Rules
 | `Q-REG-001` | 등록 마감·개인 참가·팀 변경 마감은 언제인가? | not_sent | 2026-07-27 12:00 KST 이후 |
 | `Q-TOOL-001` | 외부 API·자체 자동화·사전 제작 도구와 fixture·cache 반입이 허용되는가? | not_sent | 공개 Rules 확인 후 |
 | `Q-AI-001` | 생성형 AI를 코드·분석·답안 작성에 사용할 수 있는가? | not_sent | 공개 Rules 확인 후 |
+| `Q-AGENT-001` | 복수 AI agent가 문제를 분배·병렬 분석하고 결과를 공유하는 것이 허용되는가? | not_sent | 공개 Rules 확인 후 |
+| `Q-DATA-AI-001` | 문제 원문·첨부·답안 후보를 외부 생성형 AI에 전송할 수 있는가? | not_sent | 공개 Rules 확인 후 |
 | `Q-SVC-001` | 상용 포렌식·라벨 서비스와 팀 계정 공유가 허용되는가? | not_sent | 공개 Rules 확인 후 |
 | `Q-SUBMIT-001` | 지원 체인과 정답·증거 제출 형식은 무엇인가? | not_sent | challenge notice 확인 후 |
 | `Q-SUBMIT-AUTO-001` | CTFd API·자동 제출과 정답 추측의 허용 범위·빈도·감점은 무엇인가? | not_sent | 공개 Rules 확인 후 |
@@ -179,6 +186,7 @@ AI·사전 제작 도구·상용 서비스·제출 형식에 관한 세부 Rules
 | 2026-07-26 19:24 KST | 사전등록 전 기준선 생성 | `SRC-SCAN-SITE`, `SRC-SCAN-CTFD`, `SRC-DA-PRESS` | 일정·참가·상금 사실과 미공개 규정 분리 |
 | 2026-07-26 19:24 KST | 상금표 1~20위 합계 2.000 BTC 확인 | `SRC-SCAN-SITE` | 기존 1~18위 합계 불일치 관찰 종료 |
 | 2026-07-26 20:09 KST | 복합 규정 상태를 원자 정책으로 분리 | 내부 문서 검토 | 도구/사전 데이터, 웹 조사/외부 연락, 자동 제출/brute force 독립 갱신 |
+| 2026-07-27 00:54 KST | agent orchestration·외부 AI 문제 데이터 전송 항목 추가 | 내부 운영 설계 | `RULE-AGENT-001`, `RULE-PROBLEM-EXTERNAL-001` 확인 전 비활성 |
 
 변경 이력에는 페이지가 그대로였다는 사실이 아니라, 이전 기준선과 달라진
 규정·운영 정보만 추가한다.
@@ -201,5 +209,7 @@ AI·사전 제작 도구·상용 서비스·제출 형식에 관한 세부 Rules
 - **Concept_Design**: [기능 우선순위](./04_SCAN_2026_TOOL_PRIORITY.md) - 규정 위험 점수 갱신 대상
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - source별 대회 규정 상태 갱신 대상
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - `rule_restricted`와 규정 준수 계약
+- **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 서브에이전트·문제 데이터 전송·수동 제출 Rules Gate
+- **UI_Screens**: [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 규정 상태·비활성 worker·fallback 표시
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - DOC-M2 완료·대기 판단
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 규정 차단 회귀 기준

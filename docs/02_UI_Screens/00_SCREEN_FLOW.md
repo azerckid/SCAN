@@ -1,6 +1,6 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-26 23:51
+> Last Updated: 2026-07-27 00:54
 > Status: Draft 1 · UI-First Gate Passed
 
 ## 1. 문서 목적
@@ -289,7 +289,33 @@ flowchart LR
 기존 export 위치 확인`으로 제한한다. 웹에서 사건 생성·수정·재분석·라벨
 저장·외부 전송은 하지 않는다.
 
-## 15. 365 글로벌 평가 기준
+## 15. Rules-gated Competition Operations Board
+
+[Competition Operations Board](./04_COMPETITION_OPERATIONS_BOARD.md)는 여러
+문제·worker·검증·제출 후보를 지휘하는 별도 운영 화면이다.
+
+```mermaid
+flowchart LR
+    CTFD["사람이 문제 등록"] --> BOARD["Operations Board"]
+    BOARD --> LEAF["Python CLI leaf analysis"]
+    LEAF --> JSON["Analysis I/O 0.1"]
+    JSON --> VERIFY["Independent verification"]
+    VERIFY --> QUEUE["Submission review queue"]
+    QUEUE --> HUMAN["사람 확인·CTFd 수동 제출"]
+    JSON --> WEB["Evidence Workbench"]
+```
+
+- CLI는 leaf 분석의 규범적 실행·오류·export 계약으로 유지한다.
+- Board는 문제 간·문제 내부 병렬 실행 상태를 지휘한다.
+- Workbench는 선택한 analysis의 증거를 read-only로 검토한다.
+- AI·자동화가 제한되면 agent worker를 human·CLI worker로 교체한다.
+- 자동 제출·CTFd credential 저장·brute force는 포함하지 않는다.
+- `TASK-010`과 Operations Preview 사용자 승인을 별도 Gate로 둔다.
+
+이 트랙은 기존 CLI UI-First Gate와 `TASK-001` 착수를 되돌리지 않는다.
+실제 구현은 공식 Rules와 별도 사용자 승인 후에만 시작한다.
+
+## 16. 365 글로벌 평가 기준
 
 | 기준 | CLI 흐름의 대응 |
 |:---|:---|
@@ -300,14 +326,17 @@ flowchart LR
 | Open-source | 재현 가능한 명령·종료 코드·공개 Schema 연결 |
 | Business Plan | 대회 준비용 CLI 흐름이므로 현재 범위 N/A |
 
-## 16. Related Documents
+## 17. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위
 - **UI_Screens**: [CLI Terminal UI Design](./01_UI_DESIGN.md) - 정보 계층과 상태 표현
 - **UI_Screens**: [CLI Prototype Review](./02_CLI_PROTOTYPE_REVIEW.md) - 사용자 확인과 피드백 기록
 - **UI_Screens**: [Web Investigation Workbench](./03_WEB_INVESTIGATION_WORKBENCH.md) - 비차단 read-only 시연 UX 범위
+- **UI_Screens**: [Competition Operations Board](./04_COMPETITION_OPERATIONS_BOARD.md) - 여러 문제·worker·검증·제출 상태 흐름
 - **UI_Screens**: [HTML Terminal Preview](./previews/01_cli_terminal_preview.html) - 브라우저 확인용 화면
 - **UI_Screens**: [HTML Workbench Preview](./previews/02_investigation_workbench_preview.html) - 그래프·타임라인·증거 화면 초안
+- **UI_Screens**: [Operations Board Preview](./previews/03_competition_operations_board_preview.html) - 병렬 운영 화면 Draft
+- **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·Queue·독립 검증·수동 제출 계약
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - CLI·log·보안 경계
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 상태·오류·완료 기준
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 요청·결과·오류 계약

@@ -1,6 +1,6 @@
-# SCAN 2026 P0·V1 구현 Backlog
+# SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-26 22:38
+> Last Updated: 2026-07-27 00:54
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -11,6 +11,10 @@ CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업
 
 Backlog 승인은 구현 승인의 선행 조건이다. 현재 모든 작업은 `ToDo`이며 승인
 전에는 Python project 초기화나 application code 작성을 시작하지 않는다.
+
+`TASK-010`은 공식 Rules·Operations Board Preview·별도 구현 승인에 의존하는
+비차단 운영 트랙이다. `TASK-001`~`TASK-009`의 P0·V1 의존 순서와 완료 Gate를
+변경하지 않는다.
 
 ## 2. 범위와 작업 규칙
 
@@ -24,12 +28,13 @@ Backlog 승인은 구현 승인의 선행 조건이다. 현재 모든 작업은 
 - `analyze`, `validate`, `resume`, `show` CLI
 - DEX·AUTH·FREEZE vertical slice
 - confirmed fixture 3개 회귀와 UI·보안 Gate
+- Rules-gated 복수 문제 Queue·worker·독립 검증·수동 제출 운영
 
 ### 2.2 제외 범위
 
 - P1 PATH·LABEL·VIZ 범용 기능
 - Bitcoin·브리지·일반 OSINT·휴리스틱
-- 웹 UI·노트북·그래프 DB
+- Web Investigation Workbench 구현·노트북·그래프 DB
 - 서명·거래 전송·private key 입력
 - 새로운 fixture 정답·증거 변경
 
@@ -79,12 +84,14 @@ flowchart LR
     T6 --> T9
     T7 --> T9
     T8 --> T9
+    T9 -. "Rules·Preview·별도 승인" .-> T10["TASK-010 Parallel Operations"]
 ```
 
 TASK-002와 TASK-003은 TASK-001 뒤에 병렬 진행할 수 있다. TASK-004는
 계약 model(TASK-002)에 의존하므로 TASK-002 이후에 시작한다. TASK-005는
 TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을 재사용하되
 서로의 내부 구현에 의존하지 않는다.
+TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차단하지 않는다.
 
 ## 4. ToDo
 
@@ -526,6 +533,72 @@ TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을
   - [ ] 구현 완료 상태를 Backlog·QA·기술 문서에 동기화했다.
   - [ ] 잔여 위험·미평가·공식 규정 제한을 최종 보고서에 기록했다.
 
+### [ ] TASK-010: Rules-gated 병렬 문제풀이 Operations 구현
+
+- Status: ToDo · Rules-Gated · Separate Approval Required
+- Priority: Tournament Operations · Conditional
+- Depends On: TASK-005, TASK-009, 공식 Rules 확인, Operations Board Preview 승인
+- Requirement IDs: `REQ-OPS-IN-001`~`REQ-OPS-IN-004`,
+  `REQ-OPS-QUEUE-001`~`REQ-OPS-QUEUE-006`,
+  `REQ-OPS-VERIFY-001`~`REQ-OPS-VERIFY-006`,
+  `REQ-OPS-SUBMIT-001`~`REQ-OPS-SUBMIT-004`
+- Atomic Tasks:
+  - [ ] problem·job·analysis·verification·candidate ID와 상태 model을 정의한다.
+  - [ ] problem Queue와 dependency-aware job Queue를 분리한다.
+  - [ ] Coordinator·EVM·Tracer·OSINT·Verifier·Reporter role adapter를 정의한다.
+  - [ ] agent 없이 human·Python CLI worker로 같은 job을 실행하는 fallback을 만든다.
+  - [ ] 문제 간 workspace·result·checkpoint·candidate를 격리한다.
+  - [ ] 문제 내부 독립 leaf job을 제한된 동시성으로 실행한다.
+  - [ ] source request idempotency·dedup·provider별 concurrency budget을 구현한다.
+  - [ ] worker 실패를 해당 job·dependency에만 전파한다.
+  - [ ] conflict·missing evidence·self-check를 `review_required`로 보낸다.
+  - [ ] 독립 Verifier가 raw evidence를 재조회한 뒤에만 candidate를 승격한다.
+  - [ ] Operations Board의 problem·worker·verification·submission 상태를 연결한다.
+  - [ ] 답 전체 복사와 사람 `Mark submitted`를 분리한다.
+  - [ ] CTFd 자동 제출·credential·session·brute force 경로가 없음을 검증한다.
+  - [ ] 6개 Agentic Parallel Solve QA 시나리오를 자동화한다.
+- Related Concept Docs:
+  - [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 대회 당일 병렬 운영과 사람 제출 원칙
+  - [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - AI·agent·자동화·문제 데이터 전송·제출 Gate
+  - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - leaf 분석 기능과 단계 제한
+- Related UI Docs:
+  - [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 전체 문제·worker·검증·제출 화면
+  - [Web Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - 선택한 leaf result의 증거 검토
+  - [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - leaf 실행·partial·resume 계약
+- Related HTML Preview:
+  - [Operations Board Preview](../02_UI_Screens/previews/03_competition_operations_board_preview.html) - 구현 전 사용자 확인 화면
+  - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - evidence drill-down 경계
+- Related Technical Docs:
+  - [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·상태·Queue·검증·수동 제출 규범
+  - [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - leaf 분석 단일 source of truth
+  - [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - Python core·source·cache·evidence 계약
+- Related QA Docs:
+  - [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - 병렬성·격리·독립 검증·규정·수동 제출
+  - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - leaf 분석 24개 기존 기준선
+- Implementation Preconditions:
+  - [ ] 관련 Concept·UI·Preview·Technical·QA 문서를 다시 읽었다.
+  - [ ] Operations Board Preview를 사용자가 확인하고 피드백을 승인했다.
+  - [ ] 공식 Rules에서 AI·agent·자동화·사전 도구·외부 전송 범위를 확인했다.
+  - [ ] 활성화할 role·source와 human·CLI fallback을 승인했다.
+  - [ ] 운영 manifest·verification·candidate 최소 필드와 mutation을 승인했다.
+  - [ ] 전체 job·provider·AI worker concurrency budget을 측정·승인했다.
+  - [ ] loading·empty·partial·failed·stale·rules unavailable 상태를 확인했다.
+  - [ ] CTFd credential·자동 제출·brute force가 범위 밖임을 확인했다.
+  - [ ] `TASK-010` 구현 착수를 별도로 승인받았다.
+- Acceptance Criteria:
+  - [ ] 두 개 이상의 문제를 동시에 처리하며 상태·결과·candidate가 격리된다.
+  - [ ] 한 문제의 독립 leaf 두 개 이상이 병렬 실행되고 dependency 뒤에 정합된다.
+  - [ ] 동일 source request가 dedup되고 provider 동시성 제한을 초과하지 않는다.
+  - [ ] worker 하나의 실패가 다른 문제의 완료·제출 상태를 변경하지 않는다.
+  - [ ] 독립 검증 없는 후보와 충돌 후보가 `submission_ready`가 아니다.
+  - [ ] Operations Board와 Analysis I/O result·evidence·source 참조가 일치한다.
+  - [ ] CTFd network call·credential 저장·brute force가 0건이다.
+  - [ ] 6개 운영 QA의 구현된 범위가 통과하고 미실행 항목은 명시된다.
+- Document Sync Check:
+  - [ ] 실제 상태·필드·concurrency 기본값을 기술·UI·QA 문서와 동기화했다.
+  - [ ] Rules 변경 시 활성 role·source·fallback과 Known Issue를 갱신했다.
+  - [ ] Preview와 실제 Operations UI의 의도하지 않은 차이가 0건이다.
+
 ## 5. In Progress
 
 없음. Backlog Draft 승인 전에는 작업을 이동하지 않는다.
@@ -537,7 +610,7 @@ TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을
 ## 7. Backlog 승인 Gate
 
 - [ ] [문서 완료 Roadmap](./00_ROADMAP.md)의 `DOC-M1`~`DOC-M5` 통과
-- [ ] 9개 작업의 범위와 의존 순서 승인
+- [ ] P0·V1 9개 작업과 별도 Rules-gated `TASK-010`의 범위·의존 순서 승인
 - [ ] TASK-001을 첫 구현 작업으로 승인
 - [ ] QA 시나리오와 Acceptance Criteria 정합 확인
 - [ ] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
@@ -548,10 +621,10 @@ TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을
 
 | 기준 | Backlog 반영 |
 |:---|:---|
-| Functionality | Schema·공통 기반·3개 vertical slice·통합 Gate |
+| Functionality | Schema·공통 기반·3개 vertical slice·통합 Gate·조건부 병렬 운영 |
 | Potential Impact | source·contract·fixture 재사용 가능한 공통 구조 |
 | Novelty | evidence·context·not_assessed·partial 분리 |
-| UX | UI-First Gate·400ms 피드백·FB-001 |
+| UX | UI-First Gate·400ms 피드백·FB-001·Operations Board |
 | Open-source | 공개 Schema·fixture·adapter·재현 가능한 lock |
 | Business Plan | 대회 준비 구현 Backlog이므로 현재 범위 N/A |
 
@@ -561,10 +634,14 @@ TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을
 - **UI_Screens**: [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - 승인된 명령·상태 흐름
 - **UI_Screens**: [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) - Gate 통과·FB-001
 - **UI_Screens**: [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - 구현 전 확인 화면
+- **UI_Screens**: [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - `TASK-010` 화면·상태·사용자 흐름
+- **UI_Screens**: [Operations Board Preview](../02_UI_Screens/previews/03_competition_operations_board_preview.html) - `TASK-010` UI-First Gate
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - 구현 규칙
 - **Technical_Specs**: [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 요구사항·검증 ID
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 공개 계약
 - **Technical_Specs**: [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - 구현 전 재사용·직접 구현 결정 Gate
+- **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - `TASK-010` 역할·Queue·검증·제출 요구사항
 - **Logic_Progress**: [문서 완료 Roadmap](./00_ROADMAP.md) - 구현보다 먼저 통과할 문서 Gate
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 수용·회귀 기준
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - exact-match 입력
+- **QA_Validation**: [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 6개 QA

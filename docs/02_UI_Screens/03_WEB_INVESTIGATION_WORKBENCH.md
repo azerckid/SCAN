@@ -1,6 +1,6 @@
 # SCAN 2026 Web Investigation Workbench
 > Created: 2026-07-26 23:51
-> Last Updated: 2026-07-26 23:51
+> Last Updated: 2026-07-27 00:54
 > Status: Draft 1 · Non-Blocking UX Track · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -27,6 +27,8 @@ UX를 정의한다.
 - Analysis I/O Schema, fixture Schema와 SQLite DB Schema를 변경하지 않는다.
 - 기술 선택 기록의 “웹은 병목 확인 후” 결정을 유지한다.
 - 실제 웹 구현은 Python 엔진·CLI 출력 안정화와 별도 사용자 승인 후 검토한다.
+- 여러 문제·worker·검증·제출 상태는 Operations Board가 담당하며 이
+  Workbench는 선택한 단일 analysis의 증거 검토만 담당한다.
 
 ## 3. 사용자와 핵심 작업
 
@@ -64,6 +66,11 @@ UX를 정의한다.
 | Export strip | 기존 산출물 위치 확인 | JSON·Markdown artifact URI |
 
 별도 dashboard·로그인·설정·관리 화면은 현재 범위에 없다.
+
+여러 문제를 지휘하는 dashboard는
+[Competition Operations Board](./04_COMPETITION_OPERATIONS_BOARD.md)에
+분리한다. Board의 `Open evidence`가 이 Workspace로 이동하며, 이 화면에서
+job 우선순위·worker 배정·제출 상태를 변경하지 않는다.
 
 ## 5. 사용자 흐름
 
@@ -235,8 +242,11 @@ Analysis result JSON이 화면의 단일 source of truth다.
 - **UI_Screens**: [CLI Terminal UI Design](./01_UI_DESIGN.md) - 공유 classification·상태 시각 언어
 - **UI_Screens**: [CLI Prototype Review](./02_CLI_PROTOTYPE_REVIEW.md) - 현재 통과한 UI-First Gate와 FB-001
 - **UI_Screens**: [HTML Workbench Preview](./previews/02_investigation_workbench_preview.html) - 정적 read-only 화면 Draft
+- **UI_Screens**: [Competition Operations Board](./04_COMPETITION_OPERATIONS_BOARD.md) - 이 Workbench를 증거 화면으로 여는 상위 운영 UI
+- **UI_Screens**: [Operations Board Preview](./previews/03_competition_operations_board_preview.html) - 문제·worker·검증·수동 제출 흐름
 - **Technical_Specs**: [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 화면 데이터의 단일 source of truth
 - **Technical_Specs**: [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - Web 구현 보류 결정
+- **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - Board·leaf analysis·Verifier 관계
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - 비차단 시연 UX 트랙 상태
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - 현재 Web 작업이 없는 구현 범위
 - **QA_Validation**: [Analysis I/O 예제](../05_QA_Validation/examples/analysis/README.md) - DEX·AUTH·FREEZE Preview 값

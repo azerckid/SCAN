@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-26 23:51
+> Last Updated: 2026-07-27 00:54
 > Status: Approved 1.0
 
 ## 1. 문서 목적
@@ -23,12 +23,12 @@
 
 | 구분 | 현재 수량 | 상태 |
 |:---|---:|:---|
-| 상위 Markdown 문서 | 20 | Approved 1, Confirmed 1, UI Gate Passed 3, Draft 15 |
+| 상위 Markdown 문서 | 23 | Approved 1, Confirmed 1, UI Gate Passed 3, Draft 18 |
 | confirmed fixture 패키지 | 3 | DEX·AUTH·FREEZE `confirmed / 0.2` |
 | 후보 fixture | 5 | DOC-M3에서 Deferred, 단계별 승격 조건 기록 |
 | JSON Schema | 6 | fixture 3종·analysis 3종 |
 | 독립 검증기 | 2 | fixture `PASS 3`, analysis `PASS 3` |
-| HTML Preview | 2 | CLI 1개 확인 완료, Web Workbench 1개 비차단 Draft |
+| HTML Preview | 3 | CLI 1개 확인 완료, Workbench·Operations Board 2개 비차단 Draft |
 
 이 Roadmap, Rules Register와 QA Checklist를 포함한 수량이다.
 
@@ -63,8 +63,10 @@
 | [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) | UI-First Gate Passed | 실제 snapshot과의 차이는 구현 후 기록 |
 | [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) | UI-First Gate Passed | FB-001 구현 연결만 추적 |
 | [Web Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) | Draft 1 · Non-Blocking UX Track | 정적 Preview 사용자 검토, 구현 승격은 Python 엔진 안정화 후 별도 승인 |
+| [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) | Draft 1 · Rules-Gated UI Track | 정적 Preview 사용자 검토, Rules·별도 구현 승인 후 `TASK-010` |
 | [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) | 사용자 확인 완료 | 구현 전 기준 화면으로 동결 |
 | [HTML Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) | Draft · Review Pending | read-only 시연 UX 검토용, Document Completion Gate 비차단 |
+| [HTML Operations Board Preview](../02_UI_Screens/previews/03_competition_operations_board_preview.html) | Draft · Review Pending | 문제·worker·검증·수동 제출 UX 검토용, `TASK-010` 전용 |
 
 ### 3.3 Technical Specs
 
@@ -77,6 +79,7 @@
 | [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) | Draft 1 | LICENSE·정확한 버전·저장 세부는 구현 전/중 결정으로 분리 |
 | [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Draft 1 | 문서 계약 0.1 승인, 생성 Schema diff는 구현 후 검증 |
 | [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) | Draft 1 · Initial Survey | P0·V1 `OSS-*` 결정과 fixture bake-off 완료 |
+| [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) | Draft 1 · Rules-Gated | 역할·Queue·검증·수동 제출 승인, 구현은 `TASK-010` 별도 승인 |
 | `01_DB_SCHEMA.md` | 미작성 | TD-007의 SQLite 결정을 논리 엔티티·관계·보존 경계로 문서화; 정확한 DDL은 구현 시 결정 |
 
 ### 3.4 Logic Progress
@@ -95,6 +98,7 @@
 | [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Draft 1 · Fixture Scope Closed | 후보 5개 Deferred 결정; 단계별 승격 조건 유지 |
 | [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Draft 1 · Approval Pending | 24개 시나리오 범위 승인 |
 | [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Draft 1 · Approval Pending | 24개 시나리오 실행 시점·결과 기록 형식 승인 |
+| [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Draft 1 · Approval Pending | 기존 24개와 분리된 `TASK-010` 전용 6개 시나리오 승인 |
 | DEX·AUTH·FREEZE fixture | Confirmed | V1 기준값으로 동결, 정답 임의 변경 금지 |
 
 ## 4. 표준 문서명과 기존 문서의 대응
@@ -207,6 +211,12 @@ Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트
 구현 일정·Backlog·기술 선택은 Python 엔진과 CLI의 Analysis I/O 출력이
 안정된 뒤 별도 승인으로만 생성한다.
 
+Agentic Parallel Solve·Operations Board 문서·Preview도 위 순서와 병렬인
+Rules-gated 운영 트랙이다. 관련 구현은 `TASK-010`으로만 추적하며,
+`TASK-001`~`TASK-009`의 P0·V1 완료와 `DOC-M5`를 차단하지 않는다.
+AI·agent·자동화·외부 문제 데이터 전송 규정과 Preview 사용자 확인, 별도
+구현 승인을 모두 통과해야 시작한다.
+
 공식 등록 페이지가 열리지 않거나 세부 규정이 게시되지 않으면 `DOC-M2`를
 완료로 표시하지 않는다. 이 경우 Roadmap에는 `Blocked`가 아니라
 `Awaiting Official Information`으로 기록하고, 규정과 독립적인 M3 작업을
@@ -251,6 +261,9 @@ Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트
 | 루트 README·LICENSE 부재 | 공개 저장소 진입·재사용 불명확 | M4에서 README 작성, LICENSE 사용자 결정 |
 | 기존 오픈소스 조사 없이 직접 구현 | 시간 낭비·품질·라이선스 위험 | 기능별 `OSSR-*` 조사와 `OSS-*` 결정 Gate |
 | Web Workbench 범위가 V1을 잠식 | Python 코어·Schema·OSS 검증 지연 | 정적 read-only Preview만 허용, Backlog·Gate·기술 스택 미변경 |
+| Agentic 운영이 AI 의존 코어가 됨 | 규정 변경 시 전체 도구 사용 불가 | Python CLI 코어 분리, human·CLI fallback, `TASK-010` 비차단 |
+| 병렬 worker가 provider 제한 초과 | rate limit·ban·오분석 | 전체·provider별 concurrency budget, dedup·Queue age·fallback |
+| 자동 제출로 오답·규정 위반 | 감점·실격·credential 노출 | 제출 Queue는 복사·수동 확인만, CTFd 호출 0건 QA |
 
 ## 9. 365 글로벌 평가 기준
 
@@ -274,13 +287,17 @@ Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트
 - **UI_Screens**: [Web Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - 비차단 시연 UX와 별도 구현 승인 조건
 - **UI_Screens**: [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - 구현 전 기준 화면
 - **UI_Screens**: [HTML Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - read-only 그래프·타임라인·증거 Draft
+- **UI_Screens**: [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 병렬 문제·worker·검증·제출 운영 UX
+- **UI_Screens**: [Operations Board Preview](../02_UI_Screens/previews/03_competition_operations_board_preview.html) - `TASK-010` UI-First Gate
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - 문서 우선·구현 Gate 원칙
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - 규정·provider·rate limit 갱신 대상
 - **Technical_Specs**: [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 규범 요구사항과 미결정 사항
 - **Technical_Specs**: [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 구현 중 결정·LICENSE·dependency
 - **Technical_Specs**: [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 공개 작업 계약
 - **Technical_Specs**: [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - 기능별 재사용·직접 구현 결정 Gate
+- **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - Rules-gated 병렬 운영 계약
 - **Logic_Progress**: [P0·V1 구현 Backlog](./00_BACKLOG.md) - Document Gate 이후 실행 순서
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - confirmed 3·후보 5 상태
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 24개 수용·회귀 기준
 - **QA_Validation**: [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 문서·구현·회귀 실행 Gate
+- **QA_Validation**: [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - 별도 6개 운영 QA

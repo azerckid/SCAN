@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCAN 2026 Competition Operations Board Preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08101d;
+      --panel: #101b2b;
+      --panel-2: #152238;
+      --line: #2b3a52;
+      --text: #edf4ff;
+      --muted: #97a8c2;
+      --cyan: #5ad7ff;
+      --green: #58e3a2;
+      --amber: #ffca67;
+      --red: #ff7785;
+      --violet: #b6a0ff;
+      --shadow: 0 18px 50px rgba(0, 0, 0, .28);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 15% -10%, rgba(90, 215, 255, .12), transparent 30%),
+        radial-gradient(circle at 95% 0%, rgba(182, 160, 255, .09), transparent 26%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button { font: inherit; }
+    .app { max-width: 1800px; margin: 0 auto; padding: 18px; }
+    .topbar {
+      display: grid;
+      grid-template-columns: 1.4fr auto auto;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(16, 27, 43, .92);
+      box-shadow: var(--shadow);
+    }
+    .eyebrow {
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 4px 0 0; font-size: clamp(20px, 2.2vw, 31px); letter-spacing: -.03em; }
+    .clock { text-align: right; }
+    .clock strong { display: block; font-size: 23px; font-variant-numeric: tabular-nums; }
+    .clock span { color: var(--muted); font-size: 12px; }
+    .rules { display: flex; flex-wrap: wrap; gap: 7px; justify-content: flex-end; }
+    .pill, .status, .role {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+    .pill.warn { border-color: rgba(255, 202, 103, .45); color: var(--amber); background: rgba(255, 202, 103, .08); }
+    .pill.off { border-color: rgba(255, 119, 133, .4); color: var(--red); background: rgba(255, 119, 133, .08); }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(120px, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .metric {
+      padding: 13px 15px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(16, 27, 43, .82);
+    }
+    .metric span { display: block; color: var(--muted); font-size: 11px; }
+    .metric strong { display: block; margin-top: 5px; font-size: 21px; font-variant-numeric: tabular-nums; }
+    .metric small { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(560px, 1.65fr) minmax(300px, .8fr) minmax(330px, .9fr);
+      gap: 12px;
+      align-items: start;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(16, 27, 43, .9);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 58px;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-head h2 { margin: 0; font-size: 15px; }
+    .panel-head small { color: var(--muted); }
+    .toolbar { display: flex; gap: 6px; }
+    .filter {
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #0d1726;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .filter[aria-pressed="true"] { color: var(--text); border-color: var(--cyan); }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      padding: 9px 12px;
+      color: var(--muted);
+      font-size: 10px;
+      text-align: left;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--line);
+    }
+    td { padding: 12px; border-bottom: 1px solid rgba(43, 58, 82, .65); font-size: 12px; vertical-align: middle; }
+    tr.problem { cursor: pointer; }
+    tr.problem:hover, tr.problem.selected { background: rgba(90, 215, 255, .07); }
+    tr.problem:focus { outline: 2px solid var(--cyan); outline-offset: -2px; }
+    .problem-id { font-weight: 850; }
+    .problem-name { display: block; color: var(--muted); margin-top: 3px; }
+    .status.ready { color: var(--green); border-color: rgba(88, 227, 162, .42); }
+    .status.running { color: var(--cyan); border-color: rgba(90, 215, 255, .42); }
+    .status.verify { color: var(--violet); border-color: rgba(182, 160, 255, .42); }
+    .status.partial, .status.review { color: var(--amber); border-color: rgba(255, 202, 103, .42); }
+    .status.fail { color: var(--red); border-color: rgba(255, 119, 133, .42); }
+    .bar { width: 82px; height: 5px; border-radius: 99px; background: #26344a; overflow: hidden; margin-top: 6px; }
+    .bar i { display: block; height: 100%; background: var(--cyan); }
+    .workers { padding: 8px; display: grid; gap: 8px; }
+    .worker {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--panel-2);
+    }
+    .avatar {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: #0c1625;
+      border: 1px solid var(--line);
+      color: var(--cyan);
+      font-weight: 900;
+    }
+    .worker strong { display: block; font-size: 12px; }
+    .worker span { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; }
+    .health { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(88, 227, 162, .1); }
+    .health.wait { background: var(--amber); box-shadow: 0 0 0 4px rgba(255, 202, 103, .1); }
+    .stack { display: grid; gap: 12px; }
+    .cards { padding: 10px; display: grid; gap: 9px; }
+    .card {
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--panel-2);
+    }
+    .card.selected { border-color: var(--green); }
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .card h3 { margin: 0; font-size: 13px; }
+    .card p { margin: 8px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+    .checklist { display: grid; gap: 5px; margin-top: 10px; }
+    .check { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
+    .check b { color: var(--green); }
+    .check b.warn { color: var(--amber); }
+    .answer {
+      margin-top: 10px;
+      padding: 9px;
+      border-radius: 8px;
+      background: #091320;
+      border: 1px solid var(--line);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 10px;
+      overflow-wrap: anywhere;
+    }
+    .actions { display: flex; gap: 7px; margin-top: 10px; }
+    .action {
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #0c1727;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 750;
+    }
+    .action.primary { border-color: rgba(88, 227, 162, .5); color: var(--green); }
+    .action:focus { outline: 2px solid var(--cyan); outline-offset: 2px; }
+    .source-grid { padding: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .source {
+      padding: 10px;
+      border-radius: 10px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+    .source strong { font-size: 11px; }
+    .source span { display: block; color: var(--muted); font-size: 9px; margin-top: 5px; }
+    .activity-list { margin: 0; padding: 0; list-style: none; }
+    .activity-item {
+      display: grid;
+      grid-template-columns: 64px 110px 1fr;
+      gap: 10px;
+      padding: 11px 16px;
+      border-bottom: 1px solid rgba(43, 58, 82, .65);
+      font-size: 11px;
+    }
+    .activity-item:last-child { border-bottom: 0; }
+    .activity-time { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .activity-event { color: var(--cyan); font-weight: 800; }
+    .activity-message { color: var(--text); }
+    .detail { margin-top: 12px; }
+    .detail-body { padding: 16px; }
+    .detail-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 12px; }
+    .detail h3 { margin: 0 0 8px; font-size: 12px; color: var(--cyan); }
+    .detail ul { margin: 0; padding-left: 17px; color: var(--muted); font-size: 11px; line-height: 1.65; }
+    .notice {
+      margin-top: 12px;
+      padding: 11px 13px;
+      border: 1px solid rgba(255, 202, 103, .35);
+      border-radius: 10px;
+      background: rgba(255, 202, 103, .06);
+      color: #f8d995;
+      font-size: 11px;
+    }
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      padding: 11px 14px;
+      border: 1px solid var(--green);
+      border-radius: 10px;
+      background: #10271f;
+      color: var(--green);
+      font-size: 12px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: .2s ease;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 1250px) {
+      .layout { grid-template-columns: 1.4fr .8fr; }
+      .stack { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; }
+      .summary { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 800px) {
+      .app { padding: 10px; }
+      .topbar { grid-template-columns: 1fr; }
+      .clock, .rules { text-align: left; justify-content: flex-start; }
+      .layout, .stack, .detail-grid { grid-template-columns: 1fr; }
+      .summary { grid-template-columns: repeat(2, 1fr); }
+      .table-wrap { overflow-x: auto; }
+      table { min-width: 680px; }
+      .activity-item { grid-template-columns: 56px 1fr; }
+      .activity-message { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">SCAN 2026 Qualifier · Static UX Preview</div>
+        <h1>Competition Operations Board</h1>
+      </div>
+      <div class="clock">
+        <strong>22:41:08</strong>
+        <span>remaining · demo value</span>
+      </div>
+      <div class="rules" aria-label="Rules status">
+        <span class="pill warn">AI RULE: UNCLEAR</span>
+        <span class="pill warn">PREBUILT: UNCLEAR</span>
+        <span class="pill off">AUTO-SUBMIT: OFF</span>
+      </div>
+    </header>
+
+    <section class="summary" aria-label="Competition summary">
+      <div class="metric"><span>Problems</span><strong>12</strong><small>6 visible / 12 total</small></div>
+      <div class="metric"><span>Active</span><strong>4</strong></div>
+      <div class="metric"><span>Verifying</span><strong>2</strong></div>
+      <div class="metric"><span>Ready</span><strong style="color:var(--green)">1</strong></div>
+      <div class="metric"><span>Submitted</span><strong>3</strong></div>
+      <div class="metric"><span>Queue age</span><strong>04:12</strong></div>
+    </section>
+
+    <section class="layout">
+      <section class="panel" aria-labelledby="problem-title">
+        <div class="panel-head">
+          <div>
+            <h2 id="problem-title">Problem Board</h2>
+            <small>여러 문제를 병렬 처리하는 운영 상태</small>
+          </div>
+          <div class="toolbar" aria-label="Problem filters">
+            <button class="filter" aria-pressed="true" data-filter="all">All</button>
+            <button class="filter" aria-pressed="false" data-filter="active">Active</button>
+            <button class="filter" aria-pressed="false" data-filter="ready">Ready</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Problem</th><th>Score</th><th>Status</th><th>Role</th><th>Progress</th><th>Age</th></tr>
+            </thead>
+            <tbody>
+              <tr class="problem selected" tabindex="0" data-kind="ready" data-id="Q01">
+                <td><span class="problem-id">Q01 · DEX</span><span class="problem-name">Pool vs user output</span></td>
+                <td>150</td><td><span class="status ready">SUBMISSION READY</span></td><td>EVM + Verifier</td>
+                <td>6/6<div class="bar"><i style="width:100%"></i></div></td><td>08:21</td>
+              </tr>
+              <tr class="problem" tabindex="0" data-kind="active" data-id="Q02">
+                <td><span class="problem-id">Q02 · FLOW</span><span class="problem-name">Multi-hop destination</span></td>
+                <td>300</td><td><span class="status running">RUNNING</span></td><td>Tracer</td>
+                <td>3/7<div class="bar"><i style="width:43%"></i></div></td><td>12:08</td>
+              </tr>
+              <tr class="problem" tabindex="0" data-kind="active" data-id="Q03">
+                <td><span class="problem-id">Q03 · AUTH</span><span class="problem-name">Allowance consumption</span></td>
+                <td>200</td><td><span class="status verify">VERIFYING</span></td><td>EVM + Verifier</td>
+                <td>5/6<div class="bar"><i style="width:83%"></i></div></td><td>06:42</td>
+              </tr>
+              <tr class="problem" tabindex="0" data-kind="active" data-id="Q04">
+                <td><span class="problem-id">Q04 · BRIDGE</span><span class="problem-name">Cross-chain match</span></td>
+                <td>400</td><td><span class="status partial">PARTIAL</span></td><td>Tracer + OSINT</td>
+                <td>4/8<div class="bar"><i style="width:50%;background:var(--amber)"></i></div></td><td>18:51</td>
+              </tr>
+              <tr class="problem" tabindex="0" data-kind="active" data-id="Q05">
+                <td><span class="problem-id">Q05 · LABEL</span><span class="problem-name">Service attribution</span></td>
+                <td>250</td><td><span class="status review">REVIEW REQUIRED</span></td><td>OSINT</td>
+                <td>2/5<div class="bar"><i style="width:40%;background:var(--amber)"></i></div></td><td>09:10</td>
+              </tr>
+              <tr class="problem" tabindex="0" data-kind="other" data-id="Q06">
+                <td><span class="problem-id">Q06 · PROXY</span><span class="problem-name">Implementation history</span></td>
+                <td>350</td><td><span class="status fail">FAILED</span></td><td>EVM</td>
+                <td>1/5<div class="bar"><i style="width:20%;background:var(--red)"></i></div></td><td>03:19</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="worker-title">
+        <div class="panel-head">
+          <div><h2 id="worker-title">Worker Pool</h2><small>6 roles · 4 active</small></div>
+          <span class="pill">QUEUE 7</span>
+        </div>
+        <div class="workers">
+          <div class="worker"><div class="avatar">C</div><div><strong>Coordinator</strong><span>triage Q07 · plan 2 jobs</span></div><i class="health"></i></div>
+          <div class="worker"><div class="avatar">E</div><div><strong>EVM Analyst</strong><span>Q03 · archive state</span></div><i class="health"></i></div>
+          <div class="worker"><div class="avatar">T</div><div><strong>Flow Tracer</strong><span>Q02 · hop 12 / 40</span></div><i class="health"></i></div>
+          <div class="worker"><div class="avatar">O</div><div><strong>OSINT Analyst</strong><span>Q05 · official source check</span></div><i class="health"></i></div>
+          <div class="worker"><div class="avatar">V</div><div><strong>Verifier</strong><span>Q03 · 5 / 6 checks</span></div><i class="health"></i></div>
+          <div class="worker"><div class="avatar">R</div><div><strong>Reporter</strong><span>waiting · Rules Gate</span></div><i class="health wait"></i></div>
+        </div>
+      </section>
+
+      <div class="stack">
+        <section class="panel" aria-labelledby="verify-title">
+          <div class="panel-head"><div><h2 id="verify-title">Verification Rail</h2><small>독립 검증과 충돌</small></div></div>
+          <div class="cards">
+            <article class="card selected">
+              <div class="card-top"><h3>Q01 · CAND-Q01-001</h3><span class="status ready">6/6 PASS</span></div>
+              <p>address·TX·chain·raw amount·decimals·format을 원본 evidence로 재확인했습니다.</p>
+            </article>
+            <article class="card">
+              <div class="card-top"><h3>Q03 · CAND-Q03-002</h3><span class="status verify">5/6</span></div>
+              <p>allowance after-consumption archive state 재조회가 남았습니다.</p>
+            </article>
+            <article class="card">
+              <div class="card-top"><h3>Q05 · CAND-Q05-001</h3><span class="status review">CONFLICT</span></div>
+              <p>공식 service label과 heuristic cluster 결과가 일치하지 않습니다.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="submit-title">
+          <div class="panel-head"><div><h2 id="submit-title">Submission Queue</h2><small>CTFd 수동 제출만 허용</small></div></div>
+          <div class="cards">
+            <article class="card">
+              <div class="card-top"><h3>Q01 · Address</h3><span class="status ready">READY</span></div>
+              <div class="answer" id="answer">0x8ba1f109551bd432803012645ac136ddd64dba72</div>
+              <div class="checklist">
+                <div class="check"><span>Independent verification</span><b>PASS</b></div>
+                <div class="check"><span>Answer format</span><b>PASS</b></div>
+                <div class="check"><span>Human approval</span><b class="warn">PENDING</b></div>
+              </div>
+              <div class="actions">
+                <button class="action primary" id="copy-answer">Copy answer</button>
+                <button class="action" id="mark-submitted">Mark submitted</button>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel detail" aria-labelledby="detail-title">
+      <div class="panel-head">
+        <div><h2 id="detail-title">Q01 Detail · AN-Q01-DEX-001</h2><small>Operations view · evidence는 Workbench에서 확인</small></div>
+        <button class="action" id="open-evidence">Open evidence workspace</button>
+      </div>
+      <div class="detail-body">
+        <div class="detail-grid">
+          <div>
+            <h3>Job plan</h3>
+            <ul id="job-list"><li>receipt·log collection complete</li><li>pool/user output reconciliation complete</li><li>independent RPC replay complete</li></ul>
+          </div>
+          <div>
+            <h3>Evidence boundary</h3>
+            <ul id="evidence-list"><li>4 confirmed evidence refs</li><li>2 scoring sources</li><li>0 unresolved conflicts</li></ul>
+          </div>
+          <div>
+            <h3>Submission recommendation</h3>
+            <ul id="recommendation-list"><li>recommendation: submit</li><li>confidence: high, evidence-backed</li><li>CTFd action: human only</li></ul>
+          </div>
+        </div>
+        <div class="notice">AI·사전 제작 도구 규정은 현재 UNCLEAR demo 상태입니다. 실제 실행에서는 Rules Gate가 관련 worker를 차단하며, 이 Preview는 RPC·AI·CTFd를 호출하지 않습니다.</div>
+      </div>
+    </section>
+
+    <section class="panel detail" aria-labelledby="source-title">
+      <div class="panel-head"><div><h2 id="source-title">Source Health</h2><small>demo data · provider별 제한</small></div></div>
+      <div class="source-grid">
+        <div class="source"><strong>EVM Public RPC · HEALTHY</strong><span>2 / 4 concurrent · p95 not measured</span></div>
+        <div class="source"><strong>Archive RPC · THROTTLED</strong><span>1 / 1 concurrent · retry in 12s</span></div>
+        <div class="source"><strong>Explorer API · HEALTHY</strong><span>cache hit 18 · request dedup 4</span></div>
+        <div class="source"><strong>External AI · DISABLED</strong><span>RULE-AI-001 unclear · human fallback</span></div>
+      </div>
+    </section>
+
+    <section class="panel detail" aria-labelledby="activity-title">
+      <div class="panel-head">
+        <div><h2 id="activity-title">Activity Log</h2><small>assignment·fallback·verification · latest first</small></div>
+        <span class="pill">DEMO AUDIT</span>
+      </div>
+      <ol class="activity-list">
+        <li class="activity-item"><span class="activity-time">22:40:51</span><span class="activity-event">VERIFIED</span><span class="activity-message">Q01 candidate passed 6/6 independent checks.</span></li>
+        <li class="activity-item"><span class="activity-time">22:39:18</span><span class="activity-event">FALLBACK</span><span class="activity-message">Q04 archive request moved to an allowed provider after timeout.</span></li>
+        <li class="activity-item"><span class="activity-time">22:38:04</span><span class="activity-event">ASSIGNED</span><span class="activity-message">Q05 official-source check assigned to OSINT Analyst.</span></li>
+        <li class="activity-item"><span class="activity-time">22:36:42</span><span class="activity-event">CONFLICT</span><span class="activity-message">Q05 official label and heuristic cluster were kept separate.</span></li>
+      </ol>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite">Copied</div>
+  <script>
+    const rows = [...document.querySelectorAll(".problem")];
+    const title = document.querySelector("#detail-title");
+    const toast = document.querySelector("#toast");
+    const jobList = document.querySelector("#job-list");
+    const evidenceList = document.querySelector("#evidence-list");
+    const recommendationList = document.querySelector("#recommendation-list");
+    const problemDetails = {
+      Q01: {
+        title: "Q01 Detail · AN-Q01-DEX-001",
+        jobs: ["receipt·log collection complete", "pool/user output reconciliation complete", "independent RPC replay complete"],
+        evidence: ["4 confirmed evidence refs", "2 scoring sources", "0 unresolved conflicts"],
+        recommendation: ["recommendation: submit", "confidence: high, evidence-backed", "CTFd action: human only"]
+      },
+      Q02: {
+        title: "Q02 Detail · AN-Q02-FLOW-001",
+        jobs: ["transfer graph running", "hop 12 / 40 expanded", "destination reconciliation waiting"],
+        evidence: ["18 confirmed transfer refs", "3 branch candidates", "2 unresolved destinations"],
+        recommendation: ["recommendation: investigate", "confidence: pending path completion", "CTFd action: hold"]
+      },
+      Q03: {
+        title: "Q03 Detail · AN-Q03-AUTH-001",
+        jobs: ["Approval linked", "transferFrom consumption linked", "archive state replay running"],
+        evidence: ["5 / 6 required checks pass", "allowance after-consumption pending", "0 classification conflicts"],
+        recommendation: ["recommendation: hold", "confidence: high after final state", "CTFd action: wait for verifier"]
+      },
+      Q04: {
+        title: "Q04 Detail · AN-Q04-BRIDGE-001",
+        jobs: ["source-chain lock confirmed", "destination candidate collection partial", "fallback provider retry scheduled"],
+        evidence: ["4 confirmed source refs", "2 heuristic destination candidates", "archive source timeout preserved"],
+        recommendation: ["recommendation: investigate", "confidence: medium", "CTFd action: hold"]
+      },
+      Q05: {
+        title: "Q05 Detail · AN-Q05-LABEL-001",
+        jobs: ["official source collected", "heuristic cluster generated", "conflict review queued"],
+        evidence: ["1 official context ref", "3 heuristic cluster refs", "1 unresolved label conflict"],
+        recommendation: ["recommendation: review", "confidence: not decisive", "CTFd action: hold"]
+      },
+      Q06: {
+        title: "Q06 Detail · AN-Q06-PROXY-001",
+        jobs: ["proxy slot read failed", "implementation history unavailable", "checkpoint preserved"],
+        evidence: ["1 input transaction ref", "0 implementation-state refs", "source failure recorded"],
+        recommendation: ["recommendation: retry or defer", "confidence: unavailable", "CTFd action: do not submit"]
+      }
+    };
+    function renderList(target, items) {
+      target.replaceChildren(...items.map((item) => {
+        const entry = document.createElement("li");
+        entry.textContent = item;
+        return entry;
+      }));
+    }
+    function notify(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+    rows.forEach((row) => {
+      const select = () => {
+        rows.forEach((item) => item.classList.remove("selected"));
+        row.classList.add("selected");
+        const detail = problemDetails[row.dataset.id];
+        title.textContent = detail.title;
+        renderList(jobList, detail.jobs);
+        renderList(evidenceList, detail.evidence);
+        renderList(recommendationList, detail.recommendation);
+      };
+      row.addEventListener("click", select);
+      row.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          select();
+        }
+      });
+    });
+    document.querySelectorAll(".filter").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".filter").forEach((item) => item.setAttribute("aria-pressed", "false"));
+        button.setAttribute("aria-pressed", "true");
+        const filter = button.dataset.filter;
+        rows.forEach((row) => {
+          row.hidden = filter !== "all" && row.dataset.kind !== filter;
+        });
+      });
+    });
+    document.querySelector("#copy-answer").addEventListener("click", async () => {
+      const value = document.querySelector("#answer").textContent.trim();
+      try {
+        await navigator.clipboard.writeText(value);
+        notify("Answer copied. CTFd submission remains manual.");
+      } catch {
+        notify("Clipboard unavailable in this preview.");
+      }
+    });
+    document.querySelector("#mark-submitted").addEventListener("click", () => {
+      notify("Demo only: human submission confirmation would be required.");
+    });
+    document.querySelector("#open-evidence").addEventListener("click", () => {
+      notify("Demo only: this opens the read-only Investigation Workbench.");
+    });
+  </script>
+</body>
+</html>
