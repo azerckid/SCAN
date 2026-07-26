@@ -1,6 +1,6 @@
 # SCAN 2026 참가·분석 도구 준비 전략
 > Created: 2026-07-24 01:14
-> Last Updated: 2026-07-25 15:49
+> Last Updated: 2026-07-26 00:01
 > Status: Draft
 
 ## 1. 문서 목적
@@ -440,11 +440,11 @@ Python은 데이터 수집, 테이블 처리, 그래프 분석, 자동화와 실
 
 ### 15.3 예상문제 분석 후
 
-1. 기능 우선순위 Draft 1의 P0·V1을 도구 요구사항으로 전환한다.
-2. 입력·출력·캐시·provenance 인터페이스를 명세한다.
-3. 기술 후보를 요구사항별로 비교하고 기술 스택을 선정한다.
+1. 기능 우선순위 Draft 1의 P0·V1을 도구 요구사항으로 전환했다.
+2. 입력·출력·캐시·provenance 인터페이스를 명세했다.
+3. 기술 후보 비교와 기술 선택 기록 Draft 1을 작성했다.
 4. P2 승격에 필요한 검증용 문제와 성공 기준을 추가한다.
-5. 요구사항·기술 선택 후 구현 계획을 별도 문서로 작성한다.
+5. 출력 JSON Schema·개발 원칙·UI gate 승인 후 구현 계획을 별도 문서로 작성한다.
 
 ## 16. 출처
 
@@ -459,5 +459,7 @@ Python은 데이터 수집, 테이블 처리, 그래프 분석, 자동화와 실
 - **Concept_Design**: [SCAN 2026 예상문제 은행](./02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - Draft 2 확정본(30문항, 완료·부분·실패 조건, 기능 행렬)
 - **Concept_Design**: [분석 도구 기능 우선순위](./04_SCAN_2026_TOOL_PRIORITY.md) - 기능 점수, P0·V1·P1 구현 순서
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - 분석 데이터 소스 비교·제약
+- **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 공통 계약과 vertical slice 완료 조건
+- **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 런타임·adapter·저장·검증 기술 선택
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 대표 검증 사례 후보
-- 후속 문서 후보: 공식 규정 변경 기록, 도구 요구사항, 기술 선택 기록.
+- 후속 문서 후보: 공식 규정 변경 기록, 공통 작업·결과 JSON Schema, 개발 원칙.
