@@ -1,6 +1,6 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-26 18:28
+> Last Updated: 2026-07-26 22:38
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -347,10 +347,11 @@ python3 docs/05_QA_Validation/scripts/validate_analysis_schemas.py
 새 dependency를 추가하기 전에 다음을 기록한다.
 
 1. 해결할 승인 요구사항
-2. 표준 라이브러리와 기존 dependency로 해결할 수 없는 이유
-3. 공식 배포 package와 유지보수 상태
-4. 직접·간접 license와 알려진 취약점
-5. lockfile과 cold install 재현 결과
+2. 관련 기능의 오픈소스 `OSSR-*` 조사와 `OSS-*` 결정
+3. 표준 라이브러리와 기존 dependency로 해결할 수 없는 이유
+4. 공식 배포 package와 유지보수 상태
+5. 직접·간접 license와 알려진 취약점
+6. lockfile과 cold install 재현 결과
 
 사용하지 않는 dependency는 즉시 제거한다. `uv.lock`은 재현성 산출물이므로
 Git에 포함하고 수동 편집하지 않는다.
@@ -430,8 +431,9 @@ dist/
 2. CLI command flow와 terminal HTML Preview Draft를 작성했다.
 3. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
 4. 승인된 문서와 preview를 원자적 backlog·QA 시나리오 Draft로 전환했다.
-5. 문서 완료 Roadmap에서 공식 규정·QA·Draft 승인 상태를 먼저 닫는다.
-6. Document Completion Gate와 별도 구현 승인을 받은 뒤 Python project를 초기화한다.
+5. 기능별 오픈소스 후보를 조사하고 P0·V1 `OSS-*` 결정을 fixture로 검증한다.
+6. 문서 완료 Roadmap에서 공식 규정·QA·Draft 승인 상태를 먼저 닫는다.
+7. Document Completion Gate와 별도 구현 승인을 받은 뒤 Python project를 초기화한다.
 
 ## 22. Related Documents
 
@@ -443,6 +445,7 @@ dist/
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 구현이 만족해야 할 규범
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - Python·adapter·저장·도구 결정
 - **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - 모델·오류·증거 공개 계약
+- **Technical_Specs**: [오픈소스 포렌식 사전조사](./06_OPEN_SOURCE_FORENSICS_REVIEW.md) - dependency·재사용·직접 구현 결정 Gate
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - Python 초기화 전에 통과할 문서 Gate
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - 구현 순서·전제조건·완료 기준
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - DEX·AUTH·FREEZE 회귀 기준

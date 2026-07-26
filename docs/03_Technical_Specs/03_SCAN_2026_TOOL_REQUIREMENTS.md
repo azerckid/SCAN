@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 분석 도구 요구사항
 > Created: 2026-07-25 23:46
-> Last Updated: 2026-07-26 16:46
+> Last Updated: 2026-07-26 22:38
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -38,6 +38,16 @@ FREEZE V1에서 허용하는 OSINT 범위는 **입력으로 주어진 발행사�
 출처의 원문, URL, 조회 시각과 주소 명시 여부를 보존하고 온체인 사실과
 분리하는 것**뿐이다. 검색엔진·SNS·ENS·도메인에서 새로운 단서를 찾는 일반
 OSINT 탐색은 P2이며 V1 완료 조건이 아니다.
+
+### 2.3 오픈소스 사전조사 Gate
+
+P0·V1 요구사항을 직접 구현하기 전에 기능별 공개 repository와 공식 package를
+검색하고 [오픈소스 포렌식 사전조사](./06_OPEN_SOURCE_FORENSICS_REVIEW.md)의
+`ADOPT / WRAP / BORROW / BUILD / REJECT` 결정을 기록한다.
+
+후보가 요구사항 일부를 충족하더라도 evidence·source·partial·failed 계약을
+깨뜨리면 core에 직접 결합하지 않는다. port 뒤에서 격리하거나 해당 부분만
+직접 구현한다.
 
 ## 3. 요구사항 표기와 우선순위
 
@@ -303,8 +313,9 @@ fixture schema 개정을 제안한다.
 4. CLI command flow와 terminal HTML Preview Draft를 작성했다.
 5. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
 6. 승인된 Schema·UI 경계를 구현 backlog와 회귀 QA 시나리오 Draft로 분해했다.
-7. backlog·QA 시나리오 승인 후 Python project 초기화를 시작한다.
-8. 2026-07-27 이후 공식 규정에 따라 `REQ-NFR-008`과 소스 정책을 갱신한다.
+7. P0·V1 오픈소스 후보를 fixture로 비교하고 관련 `OSS-*` 결정을 확정한다.
+8. backlog·QA 시나리오 승인 후 Python project 초기화를 시작한다.
+9. 2026-07-27 이후 공식 규정에 따라 `REQ-NFR-008`과 소스 정책을 갱신한다.
 
 ## 17. Related Documents
 
@@ -317,6 +328,7 @@ fixture schema 개정을 제안한다.
 - **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - 이 요구사항을 구현할 구조·품질·보안 기준
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - 요구사항을 구현할 런타임·adapter·저장·검증 결정
 - **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - 이 문서의 입력·결과·오류 요구사항을 고정한 JSON 계약
+- **Technical_Specs**: [오픈소스 포렌식 사전조사](./06_OPEN_SOURCE_FORENSICS_REVIEW.md) - 요구사항별 재사용·직접 구현 결정 Gate
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - 요구사항별 구현 책임과 승인 Gate
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - fixture 목록과 승격 기준
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 요구사항별 실행·오류 주입·통과 기준

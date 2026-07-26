@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-26 20:28
+> Last Updated: 2026-07-26 22:38
 > Status: Approved 1.0
 
 ## 1. 문서 목적
@@ -23,9 +23,9 @@
 
 | 구분 | 현재 수량 | 상태 |
 |:---|---:|:---|
-| 상위 Markdown 문서 | 18 | Approved 1, Confirmed 1, UI Gate Passed 3, Draft 13 |
+| 상위 Markdown 문서 | 19 | Approved 1, Confirmed 1, UI Gate Passed 3, Draft 14 |
 | confirmed fixture 패키지 | 3 | DEX·AUTH·FREEZE `confirmed / 0.2` |
-| 후보 fixture | 5 | 공개 사례·정답·출처 TBD |
+| 후보 fixture | 5 | DOC-M3에서 Deferred, 단계별 승격 조건 기록 |
 | JSON Schema | 6 | fixture 3종·analysis 3종 |
 | 독립 검증기 | 2 | fixture `PASS 3`, analysis `PASS 3` |
 | HTML Preview | 1 | 사용자 확인·FB-001 반영 완료 |
@@ -74,6 +74,7 @@
 | [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) | Draft 1 | 공식 규정과 source policy 반영 후 승인 |
 | [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) | Draft 1 | LICENSE·정확한 버전·저장 세부는 구현 전/중 결정으로 분리 |
 | [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Draft 1 | 문서 계약 0.1 승인, 생성 Schema diff는 구현 후 검증 |
+| [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) | Draft 1 · Initial Survey | P0·V1 `OSS-*` 결정과 fixture bake-off 완료 |
 | `01_DB_SCHEMA.md` | 미작성 | TD-007의 SQLite 결정을 논리 엔티티·관계·보존 경계로 문서화; 정확한 DDL은 구현 시 결정 |
 
 ### 3.4 Logic Progress
@@ -105,7 +106,7 @@ solmate Gate가 요구하는 표준 문서와 이 저장소의 도메인 문서�
 | `02_LEAN_CANVAS.md` | 없음 | 공식 평가에 Business Plan이 포함될 때 작성 |
 | `03_PRODUCT_SPECS.md` | 예상문제 은행 + P0·V1 요구사항 | 대체 승인 필요 |
 | `00_ROADMAP.md` | 이 문서 | 충족 |
-| `02_QA_CHECKLIST.md` | 없음 | 필수 작성 |
+| `02_QA_CHECKLIST.md` | P0·V1 QA Checklist | 충족, 범위 승인 대기 |
 | `01_DB_SCHEMA.md` | 미작성 | 필수 작성 — SQLite 논리 Schema는 Document Gate 전, 정확한 DDL·migration은 `TASK-004`에서 확정 |
 | `02_API_SPECS.md` | 데이터 소스 등록부·Analysis I/O Schema | 외부 제공 API가 생길 때 별도 작성 |
 
@@ -162,6 +163,7 @@ solmate Gate가 요구하는 표준 문서와 이 저장소의 도메인 문서�
 - [ ] Concept 문서의 Draft 상태와 미결정 사항을 검토한다.
 - [ ] Technical 문서의 규범 부분과 구현 중 결정 부분을 분리한다.
 - [ ] Backlog와 QA 시나리오의 문서 범위를 승인한다.
+- [ ] P0·V1 오픈소스 사전조사의 `OSS-*` 결정과 구현 전 Gate를 확정한다.
 - [ ] `01_DB_SCHEMA.md`에 SQLite 논리 엔티티·관계·보존·mutation 경계를 기록한다.
 - [ ] 프로젝트 루트 `README.md`에 목적·문서 지도·검증 명령을 작성한다.
 - [ ] Project LICENSE를 코드 공개 전에 결정한다.
@@ -178,6 +180,7 @@ Roadmap에 명시되어 있다.
 - [ ] HTML UI Preview Gate와 UI-First Gate가 계속 통과 상태다.
 - [ ] Pre-Code Technical Brief의 데이터·API·상태·acceptance 기준이 유효하다.
 - [ ] 공식 규정 제한이 Backlog·QA·source policy에 반영되었다.
+- [ ] P0·V1 오픈소스 `OSS-*` 결정과 fixture 검증 계획이 구현 전에 확정되었다.
 - [ ] 문서·Schema·fixture 검증이 모두 통과한다.
 - [ ] Backlog의 `TASK-001`~`TASK-009`가 모두 `ToDo` 상태로 유지된다.
 
@@ -239,6 +242,7 @@ Roadmap에 명시되어 있다.
 | 표준 문서 중복 작성 | 서로 다른 진실 원본 발생 | 섹션 4 대응표와 대체 승인 |
 | 문서 완료와 구현 승인 혼동 | 사용자의 우선순위 이탈 | M5에서 별도 승인 강제 |
 | 루트 README·LICENSE 부재 | 공개 저장소 진입·재사용 불명확 | M4에서 README 작성, LICENSE 사용자 결정 |
+| 기존 오픈소스 조사 없이 직접 구현 | 시간 낭비·품질·라이선스 위험 | 기능별 `OSSR-*` 조사와 `OSS-*` 결정 Gate |
 
 ## 9. 365 글로벌 평가 기준
 
@@ -265,6 +269,7 @@ Roadmap에 명시되어 있다.
 - **Technical_Specs**: [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 규범 요구사항과 미결정 사항
 - **Technical_Specs**: [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 구현 중 결정·LICENSE·dependency
 - **Technical_Specs**: [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 공개 작업 계약
+- **Technical_Specs**: [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - 기능별 재사용·직접 구현 결정 Gate
 - **Logic_Progress**: [P0·V1 구현 Backlog](./00_BACKLOG.md) - Document Gate 이후 실행 순서
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - confirmed 3·후보 5 상태
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 24개 수용·회귀 기준
