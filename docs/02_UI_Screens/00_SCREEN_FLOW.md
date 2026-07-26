@@ -1,6 +1,6 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-26 16:46
+> Last Updated: 2026-07-26 23:51
 > Status: Draft 1 · UI-First Gate Passed
 
 ## 1. 문서 목적
@@ -262,7 +262,34 @@ UI-First Gate는 통과했다. Python package 초기화는 backlog 승인 후 �
 구현 시 AUTH partial 최종 stdout의 retry 이력 압축은
 [Prototype Review FB-001](./02_CLI_PROTOTYPE_REVIEW.md)을 따른다.
 
-## 14. 365 글로벌 평가 기준
+## 14. 비차단 Web Workbench 문서 트랙
+
+[Web Investigation Workbench](./03_WEB_INVESTIGATION_WORKBENCH.md)는
+Analysis I/O `0.1` 결과를 그래프·타임라인·증거 Inspector로 읽는 선택적
+시연 UX다. 현재 CLI V1의 진입·실행·저장 계약을 대체하거나 확장하지 않는다.
+
+```mermaid
+flowchart LR
+    CLI["Python engine + CLI"] --> JSON["Analysis I/O 0.1 JSON"]
+    JSON --> REPORT["Markdown evidence"]
+    JSON -. "별도 승인 후 read-only" .-> WEB["Web Workbench"]
+```
+
+문서 트랙의 범위 잠금:
+
+- HTML Preview는 정적 검토 산출물이며 실제 RPC·API·DB에 연결하지 않는다.
+- DEX·AUTH·FREEZE와 `CHAL-FLOW-SCALE-001` 시연만 다룬다.
+- 웹은 Analysis I/O JSON의 read-only viewer이며 별도 계산 결과를 만들지 않는다.
+- Preview에서 발견된 데이터 공백은 피드백으로만 기록하고 Schema를 즉시 바꾸지 않는다.
+- 웹 구현 작업은 현재 Backlog에 추가하지 않는다.
+- 이 문서 트랙은 `DOC-M5`, `TASK-001`, Python 엔진·CLI 구현의 선행 조건이 아니다.
+- 실제 웹 구현은 Python 엔진 결과 안정화와 별도 사용자 승인 뒤에만 검토한다.
+
+사용자 흐름은 `사건 선택 → 그래프 탐색 → 타임라인 확인 → 증거 Inspector →
+기존 export 위치 확인`으로 제한한다. 웹에서 사건 생성·수정·재분석·라벨
+저장·외부 전송은 하지 않는다.
+
+## 15. 365 글로벌 평가 기준
 
 | 기준 | CLI 흐름의 대응 |
 |:---|:---|
@@ -273,12 +300,14 @@ UI-First Gate는 통과했다. Python package 초기화는 backlog 승인 후 �
 | Open-source | 재현 가능한 명령·종료 코드·공개 Schema 연결 |
 | Business Plan | 대회 준비용 CLI 흐름이므로 현재 범위 N/A |
 
-## 15. Related Documents
+## 16. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위
 - **UI_Screens**: [CLI Terminal UI Design](./01_UI_DESIGN.md) - 정보 계층과 상태 표현
 - **UI_Screens**: [CLI Prototype Review](./02_CLI_PROTOTYPE_REVIEW.md) - 사용자 확인과 피드백 기록
+- **UI_Screens**: [Web Investigation Workbench](./03_WEB_INVESTIGATION_WORKBENCH.md) - 비차단 read-only 시연 UX 범위
 - **UI_Screens**: [HTML Terminal Preview](./previews/01_cli_terminal_preview.html) - 브라우저 확인용 화면
+- **UI_Screens**: [HTML Workbench Preview](./previews/02_investigation_workbench_preview.html) - 그래프·타임라인·증거 화면 초안
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - CLI·log·보안 경계
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 상태·오류·완료 기준
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 요청·결과·오류 계약
