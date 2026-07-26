@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 분석 도구 요구사항
 > Created: 2026-07-25 23:46
-> Last Updated: 2026-07-26 16:34
+> Last Updated: 2026-07-26 16:46
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -302,8 +302,9 @@ fixture schema 개정을 제안한다.
 3. Python package 초기화 전에 Python 개발 원칙 Draft 1을 작성했다.
 4. CLI command flow와 terminal HTML Preview Draft를 작성했다.
 5. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
-6. 승인된 Schema·UI 경계를 구현 backlog와 회귀 테스트로 분해한다.
-7. 2026-07-27 이후 공식 규정에 따라 `REQ-NFR-008`과 소스 정책을 갱신한다.
+6. 승인된 Schema·UI 경계를 구현 backlog와 회귀 QA 시나리오 Draft로 분해했다.
+7. backlog·QA 시나리오 승인 후 Python project 초기화를 시작한다.
+8. 2026-07-27 이후 공식 규정에 따라 `REQ-NFR-008`과 소스 정책을 갱신한다.
 
 ## 17. Related Documents
 
@@ -316,7 +317,9 @@ fixture schema 개정을 제안한다.
 - **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - 이 요구사항을 구현할 구조·품질·보안 기준
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - 요구사항을 구현할 런타임·adapter·저장·검증 결정
 - **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - 이 문서의 입력·결과·오류 요구사항을 고정한 JSON 계약
+- **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - 요구사항별 구현 책임과 승인 Gate
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - fixture 목록과 승격 기준
+- **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 요구사항별 실행·오류 주입·통과 기준
 - **QA_Validation**: [DEX fixture](../05_QA_Validation/fixtures/FX-SVC-DEX-001/README.md) - DEX exact-match 기준
 - **QA_Validation**: [AUTH fixture](../05_QA_Validation/fixtures/FX-EVM-AUTH-001/README.md) - AUTH exact-match 기준
 - **QA_Validation**: [FREEZE fixture](../05_QA_Validation/fixtures/FX-EVM-FREEZE-001/README.md) - FREEZE exact-match 기준

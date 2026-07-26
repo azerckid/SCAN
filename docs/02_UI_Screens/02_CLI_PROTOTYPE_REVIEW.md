@@ -1,6 +1,6 @@
 # SCAN 2026 CLI Prototype Review
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-26 16:34
+> Last Updated: 2026-07-26 16:46
 > Status: Draft 1 · UI-First Gate Passed
 
 ## 1. HTML UI Preview
@@ -174,9 +174,9 @@ Draft Preview HTML은 Gate 확인용으로 변경하지 않는다. FB-001은 Pyt
 - [x] 오류·규정 차단·resume 정의
 - [x] 사용자 확인 기록
 
-현재 판정은 **UI-First Gate 통과**이다. 다음 단계는 승인된 Schema·CLI
-경계를 원자적 backlog와 QA 시나리오로 전환하는 것이다. Python project 초기화는
-backlog 승인 후 시작한다.
+현재 판정은 **UI-First Gate 통과**이다. 승인된 Schema·CLI 경계를 원자적
+backlog와 QA 시나리오 Draft로 전환했다. Python project 초기화는 두 Draft 승인
+후 시작한다.
 
 ## 10. 365 글로벌 평가 기준
 
@@ -197,4 +197,6 @@ backlog 승인 후 시작한다.
 - **UI_Screens**: [HTML Terminal Preview](./previews/01_cli_terminal_preview.html) - 사용자 확인 대상
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - CLI 구현 경계
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 화면 데이터 계약
+- **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - Preview를 구현으로 전환하는 작업 목록
+- **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - UI-First Gate 회귀 기준
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - confirmed 기준값

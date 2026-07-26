@@ -1,6 +1,6 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-26 16:34
+> Last Updated: 2026-07-26 16:46
 > Status: Draft 1
 > Schema Version: 0.1
 
@@ -256,8 +256,9 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
    정리했다.
 3. CLI command flow와 terminal HTML Preview Draft를 작성했다.
 4. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
-5. 승인된 Schema·UI 경계를 원자적 backlog와 QA 시나리오로 전환한다.
-6. Python 프로젝트를 초기화하고 생성 Schema diff 검사를 연결한다.
+5. 승인된 Schema·UI 경계를 원자적 backlog와 QA 시나리오 Draft로 전환했다.
+6. backlog·QA 시나리오 승인 후 Python 프로젝트를 초기화하고 생성 Schema
+   diff 검사를 연결한다.
 
 ## 12. Related Documents
 
@@ -269,5 +270,7 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - 회귀 fixture의 독립 JSON 계약
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 공통 입출력·오류 규범
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - Pydantic·artifact·adapter 결정
+- **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - model·Schema 구현 작업과 완료 기준
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 변환 대상 confirmed fixture
+- **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - round-trip·무효 입력·참조 무결성 기준
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - DEX·AUTH·FREEZE 요청·결과 예

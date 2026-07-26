@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-26 12:26
+> Last Updated: 2026-07-26 16:46
 > Status: Draft
 
 ## 1. 문서 목적
@@ -282,8 +282,10 @@
    `confirmed`로 승격했다.
 2. 세 확정 fixture를 기능 우선순위 Draft 1의 V1 검증 입력으로 연결했다.
 3. 세 fixture의 공통 분석 요청·결과 Schema 0.1 변환 예제를 작성했다.
-4. P2 승격에 필요한 BRIDGE·BTC fixture의 공개 데이터를 우선 선정한다.
-5. 나머지 후보 fixture의 공개 데이터를 선정한다.
+4. 세 confirmed fixture를 소비하는 P0·V1 QA 시나리오 Draft를 작성했다.
+5. Backlog·QA 시나리오 승인 후 구현 회귀 테스트로 자동화한다.
+6. P2 승격에 필요한 BRIDGE·BTC fixture의 공개 데이터를 우선 선정한다.
+7. 나머지 후보 fixture의 공개 데이터를 선정한다.
 
 ## 10. Related Documents
 
@@ -295,6 +297,8 @@
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - fixture를 소비하는 분석 계약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 회귀 실행 기술과 저장·검증 경계
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - fixture 입력·정답·증거의 실행 계약 매핑
+- **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - fixture별 구현 작업과 완료 기준
+- **QA_Validation**: [P0·V1 QA 시나리오](./01_TEST_SCENARIOS.md) - confirmed fixture exact-match·오류 주입 기준
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - confirmed fixture 3개의 요청·결과 변환 예
 - **QA_Validation**: [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) - 우선 구축 fixture 패키지
 - 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`

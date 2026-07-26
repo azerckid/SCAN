@@ -1,6 +1,6 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-26 16:34
+> Last Updated: 2026-07-26 16:46
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -429,8 +429,8 @@ dist/
 1. 이 Draft의 Python 구조·오류·저장·테스트 원칙을 검토한다.
 2. CLI command flow와 terminal HTML Preview Draft를 작성했다.
 3. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
-4. 승인된 문서와 preview를 원자적 backlog·QA 시나리오로 전환한다.
-5. backlog 승인 후 Python project를 초기화한다.
+4. 승인된 문서와 preview를 원자적 backlog·QA 시나리오 Draft로 전환했다.
+5. backlog·QA 시나리오 승인 후 Python project를 초기화한다.
 6. 공식 규정 공개 후 source policy와 규정 Gate를 갱신한다.
 
 ## 22. Related Documents
@@ -443,6 +443,7 @@ dist/
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 구현이 만족해야 할 규범
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - Python·adapter·저장·도구 결정
 - **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - 모델·오류·증거 공개 계약
-- **Logic_Progress**: N/A - backlog·실행 계획은 Schema와 CLI preview 승인 후 작성
+- **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - 구현 순서·전제조건·완료 기준
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - DEX·AUTH·FREEZE 회귀 기준
+- **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 구현 전 승인할 자동·수동 검증 기준
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - 모델·증거·source 참조 예
