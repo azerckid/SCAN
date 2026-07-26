@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-26 20:09
+> Last Updated: 2026-07-26 20:28
 > Status: Approved 1.0
 
 ## 1. 문서 목적
@@ -23,14 +23,14 @@
 
 | 구분 | 현재 수량 | 상태 |
 |:---|---:|:---|
-| 상위 Markdown 문서 | 17 | Approved 1, Confirmed 1, UI Gate Passed 3, Draft 12 |
+| 상위 Markdown 문서 | 18 | Approved 1, Confirmed 1, UI Gate Passed 3, Draft 13 |
 | confirmed fixture 패키지 | 3 | DEX·AUTH·FREEZE `confirmed / 0.2` |
 | 후보 fixture | 5 | 공개 사례·정답·출처 TBD |
 | JSON Schema | 6 | fixture 3종·analysis 3종 |
 | 독립 검증기 | 2 | fixture `PASS 3`, analysis `PASS 3` |
 | HTML Preview | 1 | 사용자 확인·FB-001 반영 완료 |
 
-이 Roadmap과 Rules Register를 포함한 수량이다.
+이 Roadmap, Rules Register와 QA Checklist를 포함한 수량이다.
 
 ### 2.2 진행률 해석
 
@@ -89,9 +89,9 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Draft | 후보 5개를 확정 또는 Deferred로 결정 |
+| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Draft 1 · Fixture Scope Closed | 후보 5개 Deferred 결정; 단계별 승격 조건 유지 |
 | [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Draft 1 · Approval Pending | 24개 시나리오 범위 승인 |
-| `02_QA_CHECKLIST.md` | 미작성 | 문서·규정·Schema·fixture·제출 전 실행 체크리스트 작성 |
+| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Draft 1 · Approval Pending | 24개 시나리오 실행 시점·결과 기록 형식 승인 |
 | DEX·AUTH·FREEZE fixture | Confirmed | V1 기준값으로 동결, 정답 임의 변경 금지 |
 
 ## 4. 표준 문서명과 기존 문서의 대응
@@ -141,17 +141,21 @@ solmate Gate가 요구하는 표준 문서와 이 저장소의 도메인 문서�
 완료 조건: 규정상 사용할 수 있는 데이터·도구·팀·제출 범위를 문서만으로
 설명할 수 있고, 미확정 항목에는 담당 확인 경로가 있다.
 
-### [ ] DOC-M3 — QA·fixture 범위 마감
+### [x] DOC-M3 — QA·fixture 범위 마감
 
-- [ ] `02_QA_CHECKLIST.md`를 작성한다.
-- [ ] QA 시나리오 24개의 승인 상태와 구현 전/후 실행 시점을 구분한다.
-- [ ] confirmed fixture 3개가 V1 필수 범위를 충족함을 재확인한다.
-- [ ] 후보 fixture 5개 각각을 `Confirm Now / Deferred / Drop`으로 결정한다.
-- [ ] Deferred fixture에 승격 조건·필요 소스·재검토 시점을 기록한다.
-- [ ] fixture·analysis 검증기의 `PASS 3`을 재확인한다.
+- [x] `02_QA_CHECKLIST.md`를 작성한다.
+- [x] QA 시나리오 24개의 승인 상태와 구현 전/후 실행 시점을 구분한다.
+- [x] confirmed fixture 3개가 V1 필수 범위를 충족함을 재확인한다.
+- [x] 후보 fixture 5개 각각을 `Confirm Now / Deferred / Drop`으로 결정한다.
+- [x] Deferred fixture에 승격 조건·필요 소스·재검토 시점을 기록한다.
+- [x] fixture·analysis 검증기의 `PASS 3`을 재확인한다.
 
 완료 조건: 후보 fixture의 TBD가 “미처리”가 아니라 명시적인 확정 또는 보류
 결정으로 바뀌고, 실행용 QA checklist가 존재한다.
+
+완료 기록: confirmed fixture 3개는 V1 기준선으로 유지하고 후보 5개는 모두
+`Deferred`로 결정했다. 24개 QA 시나리오는 `Approval Pending / Not Executed`로
+기록하고 작업별 실행 시점을 분리했다.
 
 ### [ ] DOC-M4 — Draft 승인·문서 패키지 마감
 
@@ -188,7 +192,7 @@ Roadmap에 명시되어 있다.
 | 1 | 완료 (2026-07-26) | `DOC-M1` Roadmap 승인 | 이후 문서 순서의 기준 |
 | 2 | 2026-07-27 등록 시작 후 | `DOC-M2` 공식 규정 Register | 규정 정보 접근 필요 |
 | 3 | 규정 1차 확인 직후 | 준비 전략·우선순위·소스·요구사항 동기화 | DOC-M2 의존 |
-| 4 | 규정 확인과 병행 | `DOC-M3` QA checklist·fixture 방침 | 일부 독립 진행 가능 |
+| 4 | 완료 (2026-07-26) | `DOC-M3` QA checklist·fixture 방침 | DOC-M2와 독립 완료 |
 | 5 | M2·M3 이후 | `DOC-M4` Draft 승인·README·LICENSE | 규정·fixture 결정 의존 |
 | 6 | 모든 문서 검증 후 | `DOC-M5` Document Completion Gate | M1~M4 의존 |
 | 7 | 별도 승인 후 | Backlog `TASK-001` | Document Gate 의존 |
@@ -205,13 +209,13 @@ Roadmap에 명시되어 있다.
 - [ ] 공식 규정·등록·팀·제출 정보가 출처와 함께 기록됨
 - [ ] API·자동화·AI·사전 제작 도구 허용 범위가 상태별로 기록됨
 - [ ] 핵심 Concept·Technical 문서 승인 또는 Draft 유지 사유 기록
-- [ ] Roadmap·Backlog·QA checklist·QA scenarios 연결
-- [ ] confirmed fixture 3개와 후보 5개의 처리 방침 확정
+- [x] Roadmap·Backlog·QA checklist·QA scenarios 연결
+- [x] confirmed fixture 3개와 후보 5개의 처리 방침 확정
 - [ ] `01_DB_SCHEMA.md`에 SQLite 논리 엔티티·관계·보존·mutation 경계 기록
 - [ ] 프로젝트 README 존재
 - [ ] Project LICENSE 결정 시점 확정
 - [ ] metadata·Related Documents·상대 링크 검증 통과
-- [ ] fixture·analysis Schema 검증 `PASS 3`
+- [x] fixture·analysis Schema 검증 `PASS 3`
 - [ ] 잔여 TODO·Known Issue·구현 중 결정 항목 분리
 
 ### 7.2 구현 전까지 보류 가능
@@ -264,3 +268,4 @@ Roadmap에 명시되어 있다.
 - **Logic_Progress**: [P0·V1 구현 Backlog](./00_BACKLOG.md) - Document Gate 이후 실행 순서
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - confirmed 3·후보 5 상태
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 24개 수용·회귀 기준
+- **QA_Validation**: [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 문서·구현·회귀 실행 Gate

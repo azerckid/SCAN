@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-26 18:28
+> Last Updated: 2026-07-26 20:59
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -11,6 +11,10 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 
 현재는 구현 전 Draft다. 모든 시나리오는 backlog의 Acceptance Criteria를
 구체화하지만 Python project나 테스트 코드를 생성하지 않는다.
+
+현재 정의된 시나리오는 24개이며 승인 상태는 `Approval Pending`, 실행 상태는
+`Not Executed`다. 구현 전·작업별·통합 실행 시점은
+[QA Checklist](./02_QA_CHECKLIST.md)에서 관리한다.
 
 ## 2. QA 원칙
 
@@ -263,13 +267,13 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 ### QA-SEC-001 — secret·로컬 경로 비노출
 
 - **Mode**: fault-injection
-- **Backlog**: `TASK-001`, `TASK-003`, `TASK-004`, `TASK-009`
+- **Backlog**: `TASK-001`, `TASK-003`, `TASK-004`, `TASK-005`, `TASK-009`
 - **Requirements**: `REQ-NFR-005`
 - **Preconditions**: canary API key, Authorization header, 사용자 절대 경로 포함 입력
-- **Steps**: 성공·retry·fallback·failed 실행 후 log·DB·cache·error·export를 검색한다.
+- **Steps**: 성공·retry·fallback·failed 실행 후 CLI stdout·stderr와 log·DB·cache·error·export를 검색한다.
 - **Expected**:
-  - canary secret과 Authorization 값은 0건이다.
-  - 사용자 이름이 포함된 로컬 절대 경로는 export에서 0건이다.
+  - canary secret과 Authorization 값은 모든 검색 대상에서 0건이다.
+  - 사용자 이름이 포함된 로컬 절대 경로는 stdout·stderr·error·export에서 0건이다.
   - endpoint query secret은 redacted 형태로만 남는다.
   - 테스트는 사용자 실제 `.scan/`을 읽거나 변경하지 않는다.
 
@@ -461,5 +465,6 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - QA checklist·fixture 방침·문서 승인 순서
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - QA별 구현 책임
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed 사례와 승격 기준
+- **QA_Validation**: [QA Checklist](./02_QA_CHECKLIST.md) - 24개 시나리오의 승인·실행 시점과 결과 기록
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - request·result 기준
 - **QA_Validation**: [DEX fixture](./fixtures/FX-SVC-DEX-001/README.md), [AUTH fixture](./fixtures/FX-EVM-AUTH-001/README.md), [FREEZE fixture](./fixtures/FX-EVM-FREEZE-001/README.md) - exact-match 원본

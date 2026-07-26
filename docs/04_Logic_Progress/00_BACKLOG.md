@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 구현 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-26 18:28
+> Last Updated: 2026-07-26 20:59
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -298,7 +298,7 @@ TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을
   - [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - Typer·command surface
   - [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - renderer 입력 model
 - Related QA Docs:
-  - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-CLI-001`~`QA-CLI-004`
+  - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-CLI-001`~`QA-CLI-004`, `QA-SEC-001`의 CLI 범위
 - Implementation Preconditions:
   - [ ] 관련 UI 문서·Preview·사용자 피드백을 다시 확인했다.
   - [ ] 진입·전환·이탈과 complete·partial·failed 상태를 확인했다.
@@ -311,6 +311,7 @@ TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을
   - [ ] command 실행 후 400ms 이내 `STARTING`이 stderr에 나타난다.
   - [ ] 최종 stdout에는 retry·fallback count와 첫 오류 code만 요약된다.
   - [ ] detailed attempt는 stderr와 JSON run·sources에 보존된다.
+  - [ ] canary secret·Authorization 값과 사용자 이름을 포함한 로컬 절대 경로가 stdout·stderr·오류 출력에 노출되지 않는다.
   - [ ] 종료 코드 `0`, `2`, `3`, `4`, `5`, `130`이 문서와 일치한다.
   - [ ] `NO_COLOR`·non-TTY·80 columns에서 상태 의미와 핵심 값이 유지된다.
 - Document Sync Check:
