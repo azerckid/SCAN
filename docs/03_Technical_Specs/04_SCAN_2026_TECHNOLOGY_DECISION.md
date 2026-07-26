@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-26 12:26
+> Last Updated: 2026-07-26 13:20
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -381,7 +381,7 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 
 1. 이 Draft의 `TD-001`~`TD-022`를 검토하고 채택 범위를 확정했다.
 2. 공통 작업 입력·결과·오류 JSON Schema 0.1과 fixture 변환 예제를 작성했다.
-3. Python package 초기화 전 `00_DEVELOPMENT_PRINCIPLES.md`를 작성한다.
+3. Python package 초기화 전 `00_DEVELOPMENT_PRINCIPLES.md` Draft 1을 작성했다.
 4. CLI 화면을 구현 대상으로 확정하면 command flow와 terminal preview를
    UI 문서로 작성하고 사용자 확인을 받는다.
 5. schema·UI 경계 승인 후 원자적 backlog와 QA 시나리오를 작성한다.
@@ -392,6 +392,7 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **Concept_Design**: [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 문제 우선·fixture 우선 기술 선택 원칙
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위와 단계 제한
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - source capability·공급자 제약
+- **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - 기술 결정을 코드 구조·품질·보안 규칙으로 전환
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - 기존 fixture JSON 계약
 - **Technical_Specs**: [P0·V1 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 기술 선택의 규범적 요구사항
 - **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - `TD-019`의 요청·결과·오류 공개 계약

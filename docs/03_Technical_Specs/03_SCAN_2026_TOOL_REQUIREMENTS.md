@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 분석 도구 요구사항
 > Created: 2026-07-25 23:46
-> Last Updated: 2026-07-26 12:26
+> Last Updated: 2026-07-26 13:20
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -299,9 +299,10 @@ fixture schema 개정을 제안한다.
 
 1. 요구사항별 기술 후보와 공급자 adapter 전략을 기술 선택 기록 Draft 1에서 비교했다.
 2. 공통 작업 입력·결과·오류 JSON Schema 0.1과 fixture 변환 예제를 작성했다.
-3. Python package 초기화 전에 개발 원칙과 CLI·UI gate 범위를 확정한다.
-4. 승인된 Schema·UI 경계를 구현 backlog와 회귀 테스트로 분해한다.
-5. 2026-07-27 이후 공식 규정에 따라 `REQ-NFR-008`과 소스 정책을 갱신한다.
+3. Python package 초기화 전에 Python 개발 원칙 Draft 1을 작성했다.
+4. CLI command flow와 terminal preview를 작성해 UI gate를 확인한다.
+5. 승인된 Schema·UI 경계를 구현 backlog와 회귀 테스트로 분해한다.
+6. 2026-07-27 이후 공식 규정에 따라 `REQ-NFR-008`과 소스 정책을 갱신한다.
 
 ## 17. Related Documents
 
@@ -309,6 +310,7 @@ fixture schema 개정을 제안한다.
 - **Concept_Design**: [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 30문항과 완료·부분·실패 조건
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - `DS-...` 소스 능력·제약
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - fixture JSON·증거 분리 계약
+- **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - 이 요구사항을 구현할 구조·품질·보안 기준
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - 요구사항을 구현할 런타임·adapter·저장·검증 결정
 - **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - 이 문서의 입력·결과·오류 요구사항을 고정한 JSON 계약
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - fixture 목록과 승격 기준
