@@ -1,6 +1,6 @@
 # SCAN 2026 분석 도구 기능 우선순위
 > Created: 2026-07-25 15:49
-> Last Updated: 2026-07-26 16:46
+> Last Updated: 2026-07-26 18:28
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -210,9 +210,9 @@ LABEL과 VIZ는 증거가 아니라 판단 지원 화면이다. 원본 TX·출�
 1. P0·V1 도구 요구사항 Draft 1을 작성했다.
 2. P0·V1 기술 후보 비교와 선택 기록 Draft 1을 작성했다.
 3. 기술 선택·공통 작업 I/O Schema·개발 원칙·CLI UI-First Gate를 확정했다.
-4. P0·V1 구현 Backlog와 QA 시나리오 Draft를 검토·승인한다.
-5. 승인 후 Python project 초기화를 시작한다.
-6. 2026-07-27 등록 시작 후 규정 변경 기록을 작성하고 점수를 보정한다.
+4. P0·V1 구현 Backlog와 QA 시나리오 Draft를 작성했다.
+5. 문서 완료 Roadmap의 공식 규정·QA·Draft 승인 Gate를 통과한다.
+6. Document Completion Gate 승인 후 Python project 초기화를 별도로 승인한다.
 7. P2 승격에 필요한 BRIDGE·BTC fixture 공개 사례를 선정한다.
 
 ## 11. Related Documents
@@ -223,6 +223,7 @@ LABEL과 VIZ는 증거가 아니라 판단 지원 화면이다. 원본 TX·출�
 - **Technical_Specs**: [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) - fixture JSON·증거 연결 계약
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 입력·출력·오류·캐시·vertical slice 계약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 런타임·adapter·저장·검증 기술 결정
+- **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - 공식 규정·문서 승인·구현 분리 Gate
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - P0·V1 원자 작업과 의존 순서
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - confirmed fixture와 승격 기준
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 기능별 통과·부분·실패 검증

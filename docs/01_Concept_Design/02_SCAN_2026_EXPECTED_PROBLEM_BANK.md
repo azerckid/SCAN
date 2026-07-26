@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 은행
 > Created: 2026-07-24 01:20
-> Last Updated: 2026-07-26 00:01
+> Last Updated: 2026-07-26 18:28
 > Status: Draft 2
 
 ## 1. 문서 목적
@@ -2560,5 +2560,6 @@ N홉 이후 어느 주소로 이동했는지 추적하라.
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - fixture·도구가 의존할 소스 능력과 제약
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 30문항에서 도출한 구현 계약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 요구사항 기반 기술 후보 비교
+- **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - 후보 fixture 5개의 확정·보류 결정 Gate
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 대표 문제 검증 사례 후보
 - 후속 문서 후보: `./03_SCAN_2026_RULES_REGISTER.md`, 공통 작업·결과 JSON Schema

@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 구현 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-26 17:09
+> Last Updated: 2026-07-26 18:28
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -525,6 +525,7 @@ TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을
 
 ## 7. Backlog 승인 Gate
 
+- [ ] [문서 완료 Roadmap](./00_ROADMAP.md)의 `DOC-M1`~`DOC-M5` 통과
 - [ ] 9개 작업의 범위와 의존 순서 승인
 - [ ] TASK-001을 첫 구현 작업으로 승인
 - [ ] QA 시나리오와 Acceptance Criteria 정합 확인
@@ -551,5 +552,6 @@ TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - 구현 규칙
 - **Technical_Specs**: [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 요구사항·검증 ID
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 공개 계약
+- **Logic_Progress**: [문서 완료 Roadmap](./00_ROADMAP.md) - 구현보다 먼저 통과할 문서 Gate
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 수용·회귀 기준
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - exact-match 입력

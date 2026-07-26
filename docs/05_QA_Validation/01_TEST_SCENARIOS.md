@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-26 17:09
+> Last Updated: 2026-07-26 18:28
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -439,10 +439,12 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 ## 13. 승인 Gate와 실행 순서
 
 1. 이 문서와 [Backlog](../04_Logic_Progress/00_BACKLOG.md)의 범위·ID를 함께 승인한다.
-2. `TASK-001`부터 구현하며 각 작업의 Preconditions를 다시 확인한다.
-3. unit → integration → regression 순서로 관련 QA ID를 자동화한다.
-4. `live` 검증은 명시적으로 분리하고 offline 결과를 필수 Gate로 유지한다.
-5. `TASK-009`에서 전 시나리오와 문서 동기화를 통과해야 P0·V1 완료로 판정한다.
+2. [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md)의 QA checklist·fixture
+   방침·Draft 승인 Gate를 통과한다.
+3. 별도 구현 승인 후 `TASK-001`부터 각 작업의 Preconditions를 다시 확인한다.
+4. unit → integration → regression 순서로 관련 QA ID를 자동화한다.
+5. `live` 검증은 명시적으로 분리하고 offline 결과를 필수 Gate로 유지한다.
+6. `TASK-009`에서 전 시나리오와 문서 동기화를 통과해야 P0·V1 완료로 판정한다.
 
 ## 14. Related Documents
 
@@ -456,6 +458,7 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - 구현·테스트 원칙
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 공개 JSON 계약
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - source 능력·제약
+- **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - QA checklist·fixture 방침·문서 승인 순서
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - QA별 구현 책임
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed 사례와 승격 기준
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - request·result 기준
