@@ -1,6 +1,6 @@
 # SCAN 2026 오픈소스 포렌식 사전조사
 > Created: 2026-07-26 22:38
-> Last Updated: 2026-07-26 22:38
+> Last Updated: 2026-07-26 22:54
 > Status: Draft 1 · Initial Survey
 
 ## 1. 문서 목적
@@ -102,6 +102,22 @@
 
 별 개수는 발견 보조 정보일 뿐 채택 기준이 아니다.
 
+### 4.3 AI·ML 추가 조사 범위
+
+GitHub repository 조사와 별도로 Hugging Face의 Models, Datasets, Spaces를
+검색한다. “crypto”라는 이름만으로 포렌식 후보로 분류하지 않고 다음 세
+유형을 구분한다.
+
+| 유형 | 후보 ID 접두사 | 조사 대상 |
+|:---|:---|:---|
+| 실행 모델 | `HF-MODEL-*` | 텍스트·거래·주소·그래프 분류 모델과 model card |
+| 학습·검증 데이터 | `HF-DATASET-*` | 거래 그래프, 불법 라벨, 주소 주석, 공격 사례 |
+| 응용 데모 | `HF-SPACE-*` | AML·사기 탐지·포렌식 UI와 공개 source |
+
+모델·Space의 출력은 온체인 사실과 동일하게 취급하지 않는다. 후보 순위,
+이상 점수, 군집·라벨 제안처럼 오탐 가능성이 있는 값은 `heuristic`으로
+분류하고, RPC·log·state·trace와 공식 출처로 다시 확인할 수 있어야 한다.
+
 ## 5. 평가 기준
 
 후보는 100점 척도로 비교한다. 점수만으로 결정하지 않으며, 라이선스·규정·
@@ -127,6 +143,29 @@
 - 사전 제작 도구·API·상용 데이터 규정에 위반
 - 유지보수 중단 상태인데 호환성·보안 위험을 격리할 수 없음
 - 설치·인덱싱 시간이 대회 준비 또는 복구 시간 안에 들어오지 않음
+
+### 5.2 AI·데이터셋 Screening Gate
+
+AI·ML 후보는 공통 평가에 더해 아래 항목을 모두 기록한다.
+
+- model card·dataset card의 의도된 사용·한계·학습 데이터 공개 수준
+- repository license와 원천 데이터의 재배포·상업·파생 사용 조건
+- 라벨 생성 주체·근거·시점과 `licit / illicit / unknown` 의미
+- 주소·거래·시간이 train과 test에 중복되는 데이터 누출 가능성
+- 무작위 분할이 아닌 시간 분할 또는 미래 데이터 holdout 가능성
+- 클래스 불균형, precision·recall·PR-AUC와 false positive·negative
+- 모델·토크나이저·특성 목록·고정 revision·파일 hash
+- offline inference 가능 여부, 외부 전송·secret·GPU·메모리 요구
+- 같은 입력의 재현성과 출력 score·threshold·모델 버전 보존 여부
+
+다음 조건에서는 정확도 수치와 관계없이 SCAN의 확정 증거 생성에 사용할 수
+없다.
+
+- 데이터·라벨 출처를 설명할 수 없음
+- license가 없거나 원천 데이터 조건과 충돌
+- 평가 분할·표본 수·오탐·미탐 정보를 확인할 수 없음
+- 모델 판단에서 원본 거래·주소·근거로 역추적할 수 없음
+- 범죄·탈취·제재 여부를 단일 score만으로 확정
 
 ## 6. 초기 후보 기준선
 
@@ -165,6 +204,43 @@ commit 날짜는 GitHub API가 반환한 기본 branch commit 기준이다. repo
 기본 branch는 GraphSense 2개·BlockSci·Bitcoin ETL·Blockscout가 `master`,
 Ethereum ETL이 `develop`, Dune Spellbook이 `main`이다. 채택 검증에서는
 branch 이름이 아니라 표의 commit SHA를 사용한다.
+
+### 6.3 Hugging Face 검색 기록
+
+조회 시각은 2026-07-26 22:42~22:52 KST다. Hugging Face 검색과 공개 API,
+model·dataset card, Space source tree를 확인했다. 다운로드·like·runtime은
+변동 값이므로 후보 성숙도의 보조 정보로만 사용한다.
+
+| 검색어 | 대상 | 확인 결과 |
+|:---|:---|:---|
+| `blockchain forensics`, `crypto AML` | Models·Spaces | 완성형 모델은 드물고 소규모 AML API·정적 데모가 노출됨 |
+| `ethereum fraud`, `wallet fraud` | Models·Datasets·Spaces | 주소 활동 데이터와 CSV 학습 데모 중심 |
+| `bitcoin money laundering`, `elliptic bitcoin` | Models·Datasets | Elliptic 계열 graph dataset이 핵심 후보 |
+| `illicit transaction`, `transaction graph fraud` | Models·Datasets | 배포 모델보다 multigraph 학습 데이터가 많음 |
+| `crypto scam` | Models·Spaces | Discord·URL·문장 분류가 많아 온체인 추적과 분리 필요 |
+| `DeFi hack`, `smart contract vulnerability` | Datasets | 공격 사례·contract audit 데이터이며 자금 흐름 포렌식과 인접 영역 |
+
+검색 결과에서 바로 사용할 수 있는 성숙한 온체인 포렌식 foundation model은
+확인하지 못했다. 현재 가치가 큰 자산은 실행 모델보다 benchmark·학습용
+데이터셋과 설계 참고용 source다.
+
+### 6.4 Hugging Face 후보 등록부
+
+| 후보 ID | 공개 자산·확인 기준 | license·운영 관찰 | 관련 기능 | 초기 상태 |
+|:---|:---|:---|:---|:---|
+| `HF-SPACE-AML-001` | [Crypto AML Investigator API](https://huggingface.co/spaces/uzairsaleemdev/crypto-aml-api), revision `8a73402939bf791e846dab7bdfb2bfee422f64c7` | card license 미표기·LICENSE 파일 미확인, 조회 시 runtime error, Supabase·Neo4j secret 요구 | Elliptic++ ingest, entity resolution, clustering, logistic·GraphSAGE | screened |
+| `HF-DATASET-BTC-001` | [Elliptic Bitcoin Dataset](https://huggingface.co/datasets/yhoma/elliptic-bitcoin-dataset) | card metadata MIT, 원천 데이터 조건·라벨 provenance 재확인 필요 | `BTC-UTXO`, `HEUR`, graph classification | discovered |
+| `HF-DATASET-EVM-001` | [Ethereum Fraud Dataset by Activity](https://huggingface.co/datasets/fesevu/ethereum_fraud_dataset_by_activity) | CC-BY-4.0, 대규모 거래 활동과 별도 fraud label pipeline | `EVM-TX`, `PATH`, `HEUR`, `LABEL` | discovered |
+| `HF-DATASET-LABEL-001` | [Crypto Address Annotation 10K](https://huggingface.co/datasets/Humanbased-AI/Crypto-Address-Annotation-10K) | OpenRAIL 계열 metadata, 주소별 근거·시점·오탐 검증 필요 | `LABEL`, `OSINT` | discovered |
+| `HF-DATASET-GRAPH-001` | [Crypto Illicit Account Detection Multigraphs](https://huggingface.co/datasets/Tommy-DING/crypto-illicit-account-detection-multigraphs) | license metadata `other`, 사용 조건 확인 전 재사용 금지 | `PATH`, `HEUR`, `BTC-UTXO` | discovered |
+| `HF-DATASET-DEFI-001` | [DeFiHackLabs Dataset](https://huggingface.co/datasets/akshaynexus/DeFiHackLabs-Dataset) | MIT metadata, 사건·코드·정답 연결 품질 검증 필요 | `DEFI-LEND`, `PRICE`, `LP-RUG` | deferred |
+| `HF-MODEL-TEXT-001` | [Discord Crypto Scam Detector](https://huggingface.co/rzeydelis/discord-crypto-scam-detector) | Apache-2.0, self-reported accuracy 0.6667, intended use·training data 설명 미비 | Discord 문장 `OSINT` 보조 | rejected |
+| `HF-SPACE-EVM-001` | [Ethereum Fraud Detection](https://huggingface.co/spaces/SujalPatidar24/Ethereum_Fraud_Detection), revision `a20de62016c27dc9e32959335c1c504c0a8a9aee` | license 미표기, CSV upload·SMOTE·Random Forest 교육형 흐름 | tabular `HEUR` 실험 | rejected |
+| `HF-SPACE-VIZ-001` | [ChainSleuth Pro](https://huggingface.co/spaces/sirbrentmichaelskoda/chainsleuth-pro-blockchain-forensics), revision `56b7a1f57fd1d938a69142c565b6b1def801a45e` | 정적 DeepSite 프로젝트, 검증된 backend·model card 없음 | 포렌식 화면·`VIZ` 참고 | rejected |
+
+표의 license는 Hugging Face card metadata 또는 공개 source tree의 1차 관찰이다.
+dependency·학습·재배포 결정 전 원천 repository와 데이터 제공자의 실제 조건을
+별도로 확인한다.
 
 ## 7. 초기 기능 분석
 
@@ -230,6 +306,40 @@ Dune Spellbook은 protocol SQL과 라벨 taxonomy 참고 가치가 있지만 Dun
 
 두 후보 모두 현재 V1 dependency가 아니다.
 
+### 7.6 Hugging Face AI·데이터셋
+
+`HF-SPACE-AML-001`은 이번 조사에서 SCAN 구상과 가장 가까운 공개 사례다.
+FastAPI, Elliptic++ loader, 지갑 군집·entity resolution, hand-aggregated
+feature baseline과 PyTorch Geometric GraphSAGE source가 공개되어 있다.
+시간 기준 train·test 분할을 고려한 점도 참고 가치가 있다.
+
+그러나 조회 시 Space runtime이 오류 상태였고 card에 license가 표시되지
+않았으며, 전체 실행에는 Supabase·Neo4j 설정이 필요하다. 따라서 source
+복사나 dependency 채택은 금지하고 다음만 `BORROW` 후보로 둔다.
+
+- transaction graph와 wallet graph를 분리하는 model boundary
+- 시간 분할·unknown label 제외·class imbalance 처리 점검 항목
+- offline train artifact와 online score 단계를 분리하는 구조
+- entity resolution·cluster·risk score를 확정 사실과 분리하는 API 개념
+
+`HF-DATASET-BTC-001`과 `HF-DATASET-EVM-001`은 모델을 가져오기보다 후보
+알고리즘의 비교시험과 예상문제 확장에 유용하다. 다만 라벨이 수집 시점 이후의
+정보를 포함하거나 같은 주소가 train·test에 함께 들어가면 성능이 과대평가될
+수 있다. 시간 분할과 주소·거래 중복 검사를 통과하기 전에는 정확도 수치를
+채택 근거로 사용하지 않는다.
+
+`HF-MODEL-TEXT-001`은 Discord 문장 분류기이므로 온체인 path·allowance·freeze
+사실을 판정할 수 없다. 공개 성능과 설명 수준도 낮아 V1에서 제외한다.
+`HF-SPACE-EVM-001`과 `HF-SPACE-VIZ-001`도 교육·화면 참고 범위를 넘는
+증거가 없어 runtime이나 dependency로 사용하지 않는다.
+
+초기 단계별 판단:
+
+- P0·V1 DEX·AUTH·FREEZE: AI dependency 없음, RPC·log·state·공식 출처 우선
+- P1 `PATH`·`LABEL`: deterministic graph와 출처 라벨 구현 후 ML 비교 가능
+- P2 `HEUR`·`BTC-UTXO`: Elliptic 계열 dataset으로 benchmark 후보
+- P3 DeFi 전문 기능: DeFiHackLabs 사건을 fixture 후보 발굴에만 우선 사용
+
 ## 8. Fixture Bake-off 규칙
 
 ### 8.1 공통 절차
@@ -255,6 +365,23 @@ Dune Spellbook은 protocol SQL과 라벨 taxonomy 참고 가치가 있지만 Dun
 fixture에 적용할 수 없는 후보는 기능별 공개 사례와 예상 출력 계약을 먼저
 만들고 `verified`가 아닌 `deferred`로 유지한다.
 
+### 8.3 AI·ML Bake-off 추가 조건
+
+AI 후보는 공통 절차에 다음을 추가한다.
+
+1. 결정적 규칙 또는 단순 통계 baseline을 먼저 만든다.
+2. 주소·거래·시간 중복을 제거한 temporal holdout을 고정한다.
+3. precision·recall·PR-AUC와 false positive·negative 사례를 함께 기록한다.
+4. 같은 model revision·feature schema·threshold로 재실행한다.
+5. 결과에 `classification: heuristic`, score, threshold, model revision,
+   feature version과 source dataset revision을 기록한다.
+6. 상위 후보에서 원본 transaction·address·evidence로 drill-down 가능한지
+   확인한다.
+7. AI를 끄거나 사용할 수 없어도 결정적 포렌식 경로가 동작하는지 확인한다.
+
+ML 후보는 baseline 대비 재현 가능한 개선이 있을 때만 `ADOPT / WRAP` 후보가
+된다. 개선이 없거나 설명·근거를 보존할 수 없으면 `BORROW / REJECT`로 둔다.
+
 ## 9. 초기 결정과 남은 조사
 
 | 결정 ID | 기능 | 현재 결정 | 다음 증거 |
@@ -267,6 +394,9 @@ fixture에 적용할 수 없는 후보는 기능별 공개 사례와 예상 출�
 | `OSS-BTC-001` | BTC UTXO | Bitcoin ETL 검증, BlockSci runtime 제외 | BTC fixture confirmed 승격 |
 | `OSS-XCHAIN-001` | 브리지·크로스체인 | 후보 미조사 | bridge 양단 fixture와 후보 3개 |
 | `OSS-DECODE-001` | ABI·프로토콜 해석 | 현재 utility 외 전문 후보 미조사 | DEX·AUTH·FREEZE decoder 비교 |
+| `OSS-ML-HEUR-001` | 주소·거래 위험 점수 | P0·V1 제외, HF dataset 비교만 허용 | temporal holdout·baseline·오탐/미탐 |
+| `OSS-ML-LABEL-001` | AI 라벨 후보 | 확정 라벨과 분리한 `BORROW` 후보 | 주소별 출처·시점·confidence audit |
+| `OSS-ML-DEFI-001` | DeFi 사건·공격 분류 | P3 `DEFER` | 문제은행 사건 mapping과 fixture 후보 |
 
 초기 조사는 후보 발견과 1차 screening이다. 이 표의 “비교 필요”와 “미조사”가
 닫히기 전 해당 기능을 직접 구현하지 않는다.
@@ -277,7 +407,9 @@ fixture에 적용할 수 없는 후보는 기능별 공개 사례와 예상 출�
 
 - [x] 범용 포렌식 오픈소스 검토 공백을 문서화했다.
 - [x] 초기 후보 7개의 repository·commit·활동·license 기준선을 기록했다.
+- [x] Hugging Face 모델·데이터셋·Space 9개의 초기 후보를 분리 기록했다.
 - [x] 결정 상태와 `ADOPT / WRAP / BORROW / BUILD / REJECT` 의미를 정의했다.
+- [x] AI 결과를 확정 증거와 분리하고 ML Screening Gate를 정의했다.
 - [ ] P0·V1 관련 `OSS-*` 결정을 fixture 증거와 함께 확정한다.
 - [ ] 공식 규정에서 OSS·사전 제작 도구·외부 API 사용 범위를 확인한다.
 - [ ] 채택 dependency의 고정 버전·license notice·설치 명령을 확정한다.
