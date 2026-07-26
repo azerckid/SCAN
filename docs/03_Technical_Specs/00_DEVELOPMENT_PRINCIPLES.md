@@ -1,6 +1,6 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-26 13:20
+> Last Updated: 2026-07-26 15:11
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -111,7 +111,7 @@ tests/
 ### 5.2 의존 규칙
 
 ```text
-CLI --------> application
+CLI (composition root) -> application + adapters
 application -> slices + domain + ports
 slices -----> domain + ports
 adapters ---> ports + domain
@@ -121,7 +121,10 @@ export -----> domain
 - `domain`은 HTTPX, SQLite, Typer, 환경변수를 import하지 않는다.
 - `application`은 구체 adapter가 아니라 port를 받는다.
 - adapter는 외부 응답을 domain 입력으로 변환하고 raw provenance를 보존한다.
-- CLI는 입력 검증·use case 호출·표시만 담당하고 분석 계산을 포함하지 않는다.
+- CLI는 composition root로서 구체 adapter를 생성해 application port에 주입할
+  수 있다.
+- CLI는 이 조립과 입력 검증·use case 호출·표시만 담당하고 분석 계산을
+  포함하지 않는다.
 - fixture adapter는 회귀 테스트 경계이며 production domain model을 fixture
   구조에 직접 결합하지 않는다.
 - cross-package import는 `scan_tool...` 절대 import를 사용한다. 한 package
