@@ -1,6 +1,6 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-26 15:11
+> Last Updated: 2026-07-26 16:34
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -407,7 +407,7 @@ dist/
 | High | `.gitignore` 보강 | `.scan/`, `.env*`, test·build cache 제외와 `.env.example` 예외 확인 |
 | High | Python project 초기화 | Python 범위 검증, `pyproject.toml`, `uv.lock`, src layout 생성 |
 | High | Schema 생성·diff 명령 | Pydantic 모델 생성본과 승인 Schema `0.1` 의미상 diff 자동 검사 |
-| High | CLI flow·terminal preview | 시작·진행·부분·오류·완료 상태를 사용자 확인 |
+| High | CLI flow·terminal preview | UI-First Gate 통과. 구현 시 FB-001(최종 stdout retry 압축) 반영 |
 | Medium | 정적 타입 검사 채택 여부 | pytest·Ruff만으로 부족한 실제 사례가 있으면 도구 비교 후 결정 |
 | Medium | SQLite DDL·backup 절차 | command 경계 승인 후 테이블·migration·복구 테스트 정의 |
 | Medium | 공급자별 rate limit | 공식 규정·계정·plan 확인 후 source policy에 수치 반영 |
@@ -427,15 +427,18 @@ dist/
 ## 21. 다음 단계
 
 1. 이 Draft의 Python 구조·오류·저장·테스트 원칙을 검토한다.
-2. CLI command flow와 terminal preview를 작성해 사용자에게 보여준다.
-3. 공식 규정 공개 후 source policy와 규정 Gate를 갱신한다.
+2. CLI command flow와 terminal HTML Preview Draft를 작성했다.
+3. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
 4. 승인된 문서와 preview를 원자적 backlog·QA 시나리오로 전환한다.
 5. backlog 승인 후 Python project를 초기화한다.
+6. 공식 규정 공개 후 source policy와 규정 Gate를 갱신한다.
 
 ## 22. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - 구현 범위와 단계 제한
-- **UI_Screens**: N/A - CLI command flow와 terminal preview는 다음 단계에서 작성
+- **UI_Screens**: [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - 명령·상태·종료 흐름
+- **UI_Screens**: [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) - 정보 계층·상태 표현·접근성
+- **UI_Screens**: [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - 구현 전 사용자 확인 화면
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - source ID·rate limit·규정 제약
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 구현이 만족해야 할 규범
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - Python·adapter·저장·도구 결정
