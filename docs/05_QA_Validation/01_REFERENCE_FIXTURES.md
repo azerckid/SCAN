@@ -1,11 +1,13 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-26 18:28
-> Status: Draft
+> Last Updated: 2026-07-26 20:28
+> Status: Draft 1 · Fixture Scope Closed
 
 ## 1. 문서 목적
 
-이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수 있는 reference fixture를 관리한다. 현재 단계는 **후보 8개 골격**을 고정하고, 공개 데이터 확보 후 `검증 중` → `확정`으로 승격한다.
+이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
+있는 reference fixture를 관리한다. 현재 8개 중 3개는 `확정`, 5개는
+DOC-M3 결정에 따라 `Deferred` 후보로 관리한다.
 
 입력 문서:
 
@@ -47,6 +49,7 @@
 | Fixture Version | 개별 사례 데이터 개정 버전. 현재 `0.1` |
 | 연결 문제 ID | 예상문제 은행 ID |
 | 상태 | 후보 / 검증 중 / 확정 / 폐기 |
+| DOC-M3 결정 | `Confirm Now` / `Deferred` / `Drop`. fixture 생명주기 상태와 분리 |
 | 데이터 형태 | 공개 사건 / 공개 온체인 / 자체 테스트 / JSON fixture |
 | 체인 | 대상 체인 |
 | 주소·TX | 시드 주소, TX 해시, 블록 |
@@ -75,16 +78,16 @@
 
 ## 5. 대표 Fixture 목록
 
-| Fixture ID | 문제 ID | Draft | 상태 | 핵심 검증 기능 |
-|:---|:---|:---:|:---|:---|
-| FX-FLOW-EVM-001 | FLOW-EVM-001 | 1 | 후보 | 수집, PATH, LABEL, 증거 |
-| FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | EVM-LOG, DECODE, RECON |
-| FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | XCHAIN, BRIDGE, RECON |
-| FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | AUTH-DECODE, allowance 연결 |
-| FX-EVM-PROXY-001 | EVM-PROXY-001 | 2 | 후보 | PROXY, archive state |
-| FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | FREEZE, state/logs |
-| FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | RECON, PRICE, 다주소 집계 |
-| FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
+| Fixture ID | 문제 ID | Draft | 상태 | DOC-M3 결정 | 핵심 검증 기능 |
+|:---|:---|:---:|:---|:---|:---|
+| FX-FLOW-EVM-001 | FLOW-EVM-001 | 1 | 후보 | Deferred | 수집, PATH, LABEL, 증거 |
+| FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
+| FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | Deferred | XCHAIN, BRIDGE, RECON |
+| FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | V1 기준선 | AUTH-DECODE, allowance 연결 |
+| FX-EVM-PROXY-001 | EVM-PROXY-001 | 2 | 후보 | Deferred | PROXY, archive state |
+| FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | V1 기준선 | FREEZE, state/logs |
+| FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | Deferred | RECON, PRICE, 다주소 집계 |
+| FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | Deferred | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
 
 ## 6. Fixture 상세
 
@@ -98,6 +101,7 @@
 |:---|:---|
 | 연결 문제 ID | FLOW-EVM-001 |
 | 상태 | 후보 |
+| DOC-M3 결정 | Deferred — P1 PATH·LABEL 요구사항 승인 전 재검토 |
 | 데이터 형태 | 공개 사건 + 공개 온체인 |
 | 체인 | TBD (EVM) |
 | 주소·TX | 피해 주소 A=TBD, 피해 시각 창=TBD, 근거 TX 목록=TBD |
@@ -118,6 +122,7 @@
 |:---|:---|
 | 연결 문제 ID | SVC-DEX-001 |
 | 상태 | 확정 |
+| DOC-M3 결정 | V1 기준선 |
 | 패키지 | [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md) |
 | 데이터 형태 | 공개 온체인 / JSON fixture |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -139,6 +144,7 @@
 |:---|:---|
 | 연결 문제 ID | SVC-BRG-001 |
 | 상태 | 후보 |
+| DOC-M3 결정 | Deferred — P2 XCHAIN·BRIDGE 승격 전 재검토 |
 | 데이터 형태 | 공개 온체인 |
 | 체인 | 출발 TBD, 도착 TBD |
 | 주소·TX | 출발 TX=TBD, 도착 TX=TBD, 브리지=TBD |
@@ -159,6 +165,7 @@
 |:---|:---|
 | 연결 문제 ID | EVM-AUTH-001 |
 | 상태 | 확정 |
+| DOC-M3 결정 | V1 기준선 |
 | 패키지 | [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md) |
 | 데이터 형태 | 공개 온체인 |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -182,6 +189,7 @@
 |:---|:---|
 | 연결 문제 ID | EVM-PROXY-001 |
 | 상태 | 후보 |
+| DOC-M3 결정 | Deferred — P3 PROXY 승격 검토 시 재검토 |
 | 데이터 형태 | 공개 온체인 |
 | 체인 | TBD (EVM) |
 | 주소·TX | 프록시 P=TBD, upgrade TX 목록=TBD |
@@ -202,6 +210,7 @@
 |:---|:---|
 | 연결 문제 ID | EVM-FREEZE-001 |
 | 상태 | 확정 |
+| DOC-M3 결정 | V1 기준선 |
 | 패키지 | [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) |
 | 데이터 형태 | 공개 온체인 + 발행사·규제기관 공식 자료 |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -225,6 +234,7 @@
 |:---|:---|
 | 연결 문제 ID | FLOW-MULTI-001 |
 | 상태 | 후보 |
+| DOC-M3 결정 | Deferred — P3 PRICE·다주소 집계 요구사항 작성 전 재검토 |
 | 데이터 형태 | 공개 사건 또는 합성 집계 세트 |
 | 체인 | TBD |
 | 주소·TX | 출구/시드=TBD, 피해자 목록=TBD, 가격 기준 시각=TBD |
@@ -245,6 +255,7 @@
 |:---|:---|
 | 연결 문제 ID | `SVC-MIX-001` 또는 `BTC-CJ-001` (fixture 확정 시 하나로 고정. 둘을 한 카드의 동일 확정 사실로 쓰지 않음) |
 | 상태 | 후보 |
+| DOC-M3 결정 | Deferred — P2 HEUR 또는 P3 MIXER 검토 전에 한 분기로 고정 |
 | 데이터 형태 | 공개 사례 |
 | 체인 | `SVC-MIX-001`이면 EVM, `BTC-CJ-001`이면 Bitcoin |
 | 주소·TX | 유입 TX=TBD, 유출/후속 후보=TBD |
@@ -268,12 +279,37 @@
 | 확정 | 기준 정답·허용 오차 수치 고정, 동일 입력 재현 성공, 출처·저작권 기록 완료 |
 | 폐기 | 데이터 삭제·비공개 전환·중복·규정 위반 위험 |
 
-## 8. 미결정 사항
+## 8. DOC-M3 후보 처리 결정
 
-- 8개 후보의 실제 공개 사건/TX 선정
-- `FX-UNCERTAIN-001`을 믹서와 CoinJoin 중 무엇으로 고정할지
-- 가격 아카이브 공급자 확정
-- 저작권상 보고서를 어느 수준까지 인용할지
+### 8.1 결정 기준
+
+| 결정 | 적용 기준 |
+|:---|:---|
+| `Confirm Now` | P0·V1 필수이며 공개 입력·정답·출처를 현재 범위에서 고정 가능 |
+| `Deferred` | 후속 단계 기능이며 고유 검증 가치가 있으나 source·사례·허용 오차가 미확정 |
+| `Drop` | 중복, 공개 재현 불가, 규정 위반 또는 검증 가치 부족이 확정 |
+
+P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된다.
+후보 5개는 모두 후속 단계의 고유 기능을 다루지만 주소·TX·정답 또는
+공급자가 미확정이므로 `Deferred`로 결정한다. 현재 `Confirm Now`와 `Drop`은
+각각 0개다.
+
+### 8.2 Deferred 승격 조건
+
+| Fixture ID | 단계 | 필요 소스 | 승격 조건 | 재검토 시점 |
+|:---|:---:|:---|:---|:---|
+| `FX-FLOW-EVM-001` | P1 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-LABEL-PUBLIC` | 공개 사건 시드·N홉 TX·종착 후보를 확보하고 라벨을 확정 사실과 분리해 1회 재현 | P1 PATH·LABEL 요구사항 승인 전 |
+| `FX-SVC-BRG-001` | P2 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` | 브리지 양단 TX·공식 이벤트 매칭 키·수수료 허용 범위를 고정하고 1회 재현 | P2 XCHAIN·BRIDGE 승격 전 |
+| `FX-EVM-PROXY-001` | P3 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM` | 표준 프록시의 upgrade TX·구현체 슬롯 이력·admin 변경을 exact match로 재현 | P3 PROXY가 공식 범위 또는 구현 후보가 될 때 |
+| `FX-FLOW-MULTI-001` | P3 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-PRICE` | 피해자 포함 기준·유입 TX·시점 가격 공급자·환산 허용 오차를 고정 | P3 PRICE·다주소 집계 요구사항 작성 전 |
+| `FX-UNCERTAIN-001` | P2/P3 | BTC 분기 `DS-BTC-API`; 믹서 분기 `DS-LABEL-PUBLIC`과 EVM source | P2에서는 `BTC-CJ-001` 우선 여부를 결정하고, 한 문제 ID만 선택해 확정 사실·휴리스틱·반례 집합을 분리 | P2 HEUR 시작 전 또는 P3 MIXER 후보 검토 시 |
+
+### 8.3 남은 미결정 사항
+
+- `FX-UNCERTAIN-001`의 최종 문제 ID와 필요하면 별도 fixture ID로 분리할지
+- 가격 아카이브 공급자와 재배포 조건
+- 공개 사건 보고서의 허용 인용 범위
+- 공식 대회 규정상 사전 fixture·cache 반입 가능 여부
 
 ## 9. 다음 단계
 
@@ -283,7 +319,8 @@
 2. 세 확정 fixture를 기능 우선순위 Draft 1의 V1 검증 입력으로 연결했다.
 3. 세 fixture의 공통 분석 요청·결과 Schema 0.1 변환 예제를 작성했다.
 4. 세 confirmed fixture를 소비하는 P0·V1 QA 시나리오 Draft를 작성했다.
-5. 문서 완료 Roadmap에서 후보 5개를 Confirm Now·Deferred·Drop으로 결정한다.
+5. 후보 5개는 DOC-M3에서 모두 `Deferred`로 결정하고 승격 조건·소스·시점을
+   기록했다.
 6. Document Completion Gate 이후 구현 회귀 테스트 자동화 여부를 승인한다.
 7. P2 승격에 필요한 BRIDGE·BTC fixture는 Deferred 승격 조건에 따라 선정한다.
 
@@ -300,6 +337,7 @@
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - confirmed 3·후보 5 처리 방침 Gate
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - fixture별 구현 작업과 완료 기준
 - **QA_Validation**: [P0·V1 QA 시나리오](./01_TEST_SCENARIOS.md) - confirmed fixture exact-match·오류 주입 기준
+- **QA_Validation**: [QA Checklist](./02_QA_CHECKLIST.md) - 문서·구현·회귀 실행 Gate
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - confirmed fixture 3개의 요청·결과 변환 예
 - **QA_Validation**: [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) - 우선 구축 fixture 패키지
-- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`
+- **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 사전 fixture·cache와 source 허용 범위
