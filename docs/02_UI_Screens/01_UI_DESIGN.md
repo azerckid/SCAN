@@ -1,6 +1,6 @@
 # SCAN 2026 CLI Terminal UI Design
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-26 16:34
+> Last Updated: 2026-07-26 16:46
 > Status: Draft 1 · UI-First Gate Passed
 
 ## 1. 문서 목적
@@ -334,4 +334,6 @@ Preview의 버튼은 구현 API가 아니라 검토 편의를 위한 상태 전�
 - **UI_Screens**: [HTML Terminal Preview](./previews/01_cli_terminal_preview.html) - 상태별 화면
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - stdout·stderr·보안 원칙
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 화면 데이터의 source of truth
+- **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - renderer·CLI 구현 책임
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - exact-match 기준
+- **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - terminal·접근성·출력 채널 기준
