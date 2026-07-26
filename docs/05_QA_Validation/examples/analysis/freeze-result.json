@@ -1,0 +1,342 @@
+{
+  "$schema": "../../schemas/analysis-result.schema.json",
+  "schema_version": "0.1",
+  "analysis_id": "AN-FX-EVM-FREEZE-001",
+  "analysis_type": "address_freeze",
+  "chain_id": 1,
+  "status": "complete",
+  "results": [
+    {
+      "result_id": "RES-FREEZE-BLACKLIST",
+      "result_type": "blacklist_transition",
+      "classification": "confirmed_fact",
+      "value": {
+        "target_address": "0xd96f2b1c14db8458374d9aca76e26c3d18364307",
+        "before": false,
+        "after": true,
+        "before_block": 15302548,
+        "after_block": 15302549
+      },
+      "tool_requirement_ids": ["REQ-V1-FREEZE-001", "REQ-V1-FREEZE-003"],
+      "fixture_requirement_ids": ["REQ-FREEZE-BLACKLIST"],
+      "evidence_refs": [
+        "EV-FREEZE-BLACKLIST-CALL",
+        "EV-FREEZE-BLACKLIST-EVENT",
+        "EV-FREEZE-STATE-BEFORE-BLACKLIST",
+        "EV-FREEZE-STATE-AFTER-BLACKLIST"
+      ]
+    },
+    {
+      "result_id": "RES-FREEZE-UNBLACKLIST",
+      "result_type": "unblacklist_transition",
+      "classification": "confirmed_fact",
+      "value": {
+        "target_address": "0xd96f2b1c14db8458374d9aca76e26c3d18364307",
+        "before": true,
+        "after": false,
+        "before_block": 22099071,
+        "after_block": 22099072
+      },
+      "tool_requirement_ids": ["REQ-V1-FREEZE-002", "REQ-V1-FREEZE-003"],
+      "fixture_requirement_ids": ["REQ-FREEZE-UNBLACKLIST"],
+      "evidence_refs": [
+        "EV-FREEZE-UNBLACKLIST-CALL",
+        "EV-FREEZE-UNBLACKLIST-EVENT",
+        "EV-FREEZE-STATE-BEFORE-UNBLACKLIST",
+        "EV-FREEZE-STATE-AFTER-UNBLACKLIST"
+      ]
+    },
+    {
+      "result_id": "RES-FREEZE-CONTEXT",
+      "result_type": "official_context_scope",
+      "classification": "external_context",
+      "value": {
+        "circle_address_specific": false,
+        "ofac_address_specific": true,
+        "current_sanctions_status": "not_assessed",
+        "criminal_intent": "not_assessed"
+      },
+      "tool_requirement_ids": [
+        "REQ-V1-FREEZE-005",
+        "REQ-V1-FREEZE-006",
+        "REQ-V1-FREEZE-007",
+        "REQ-V1-FREEZE-008"
+      ],
+      "fixture_requirement_ids": ["REQ-FREEZE-CONTEXT-SEPARATION"],
+      "evidence_refs": [
+        "EV-FREEZE-CIRCLE-RESPONSE",
+        "EV-FREEZE-OFAC-DESIGNATION"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-FREEZE-BLACKLIST-CALL",
+      "evidence_type": "call",
+      "source_id": "DS-EXPLORER-EVM",
+      "source_record_ref": "SRC-FREEZE-BLOCKSCOUT",
+      "method": "get_transaction",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 15302549,
+        "transaction_hash": "0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72"
+      },
+      "decoded": {
+        "method": "blacklist(address)",
+        "target": "0xd96f2b1c14db8458374d9aca76e26c3d18364307"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#EV-FREEZE-BLACKLIST-CALL",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-FREEZE-BLACKLIST-EVENT",
+      "evidence_type": "event",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_record_ref": "SRC-FREEZE-DRPC",
+      "method": "eth_getTransactionReceipt",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 15302549,
+        "transaction_hash": "0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72",
+        "log_index": 85
+      },
+      "decoded": {
+        "event": "Blacklisted",
+        "target": "0xd96f2b1c14db8458374d9aca76e26c3d18364307"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#EV-FREEZE-BLACKLIST-EVENT",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-FREEZE-STATE-BEFORE-BLACKLIST",
+      "evidence_type": "state",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_record_ref": "SRC-FREEZE-DRPC",
+      "method": "eth_call",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 15302548
+      },
+      "decoded": {
+        "method": "isBlacklisted(address)",
+        "value": false
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#EV-FREEZE-STATE-BEFORE-BLACKLIST",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-FREEZE-STATE-AFTER-BLACKLIST",
+      "evidence_type": "state",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_record_ref": "SRC-FREEZE-DRPC",
+      "method": "eth_call",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 15302549
+      },
+      "decoded": {
+        "method": "isBlacklisted(address)",
+        "value": true
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#EV-FREEZE-STATE-AFTER-BLACKLIST",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-FREEZE-UNBLACKLIST-CALL",
+      "evidence_type": "call",
+      "source_id": "DS-EXPLORER-EVM",
+      "source_record_ref": "SRC-FREEZE-BLOCKSCOUT",
+      "method": "get_transaction",
+      "retrieved_at": "2026-07-26T12:26:02+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 22099072,
+        "transaction_hash": "0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537"
+      },
+      "decoded": {
+        "method": "unBlacklist(address)",
+        "target": "0xd96f2b1c14db8458374d9aca76e26c3d18364307"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#EV-FREEZE-UNBLACKLIST-CALL",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-FREEZE-UNBLACKLIST-EVENT",
+      "evidence_type": "event",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_record_ref": "SRC-FREEZE-DRPC",
+      "method": "eth_getTransactionReceipt",
+      "retrieved_at": "2026-07-26T12:26:02+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 22099072,
+        "transaction_hash": "0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537",
+        "log_index": 7
+      },
+      "decoded": {
+        "event": "UnBlacklisted",
+        "target": "0xd96f2b1c14db8458374d9aca76e26c3d18364307"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#EV-FREEZE-UNBLACKLIST-EVENT",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-FREEZE-STATE-BEFORE-UNBLACKLIST",
+      "evidence_type": "state",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_record_ref": "SRC-FREEZE-DRPC",
+      "method": "eth_call",
+      "retrieved_at": "2026-07-26T12:26:02+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 22099071
+      },
+      "decoded": {
+        "method": "isBlacklisted(address)",
+        "value": true
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#EV-FREEZE-STATE-BEFORE-UNBLACKLIST",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-FREEZE-STATE-AFTER-UNBLACKLIST",
+      "evidence_type": "state",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_record_ref": "SRC-FREEZE-DRPC",
+      "method": "eth_call",
+      "retrieved_at": "2026-07-26T12:26:02+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 22099072
+      },
+      "decoded": {
+        "method": "isBlacklisted(address)",
+        "value": false
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#EV-FREEZE-STATE-AFTER-UNBLACKLIST",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-FREEZE-CIRCLE-RESPONSE",
+      "evidence_type": "context",
+      "source_id": "DS-OSINT-WEB",
+      "source_record_ref": "SRC-FREEZE-CIRCLE",
+      "method": "GET",
+      "retrieved_at": "2026-07-26T12:26:03+09:00",
+      "locator": {
+        "url": "https://www.circle.com/blog/the-responsibility-of-trust"
+      },
+      "decoded": {
+        "issuer": "Circle",
+        "address_specific": false
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#EV-FREEZE-CIRCLE-RESPONSE",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-FREEZE-OFAC-DESIGNATION",
+      "evidence_type": "context",
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "source_record_ref": "SRC-FREEZE-OFAC",
+      "method": "GET",
+      "retrieved_at": "2026-07-26T12:26:03+09:00",
+      "locator": {
+        "url": "https://ofac.treasury.gov/recent-actions/20220808"
+      },
+      "decoded": {
+        "agency": "OFAC",
+        "address_specific": true,
+        "current_status": "not_assessed"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#EV-FREEZE-OFAC-DESIGNATION",
+        "media_type": "application/json"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "source_record_id": "SRC-FREEZE-DRPC",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "drpc",
+      "role": "scoring",
+      "required": true,
+      "capability": "transaction_receipt_and_historical_state",
+      "endpoint_host": "lb.drpc.org",
+      "retrieved_at": "2026-07-26T12:26:02+09:00"
+    },
+    {
+      "source_record_id": "SRC-FREEZE-BLOCKSCOUT",
+      "source_id": "DS-EXPLORER-EVM",
+      "provider_id": "blockscout",
+      "role": "scoring",
+      "required": true,
+      "capability": "transaction_calldata",
+      "endpoint_host": "eth.blockscout.com",
+      "retrieved_at": "2026-07-26T12:26:02+09:00"
+    },
+    {
+      "source_record_id": "SRC-FREEZE-CIRCLE",
+      "source_id": "DS-OSINT-WEB",
+      "provider_id": "circle",
+      "role": "context",
+      "required": true,
+      "capability": "official_issuer_context",
+      "endpoint_host": "www.circle.com",
+      "retrieved_at": "2026-07-26T12:26:03+09:00"
+    },
+    {
+      "source_record_id": "SRC-FREEZE-OFAC",
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "provider_id": "ofac",
+      "role": "context",
+      "required": false,
+      "capability": "historical_sanctions_context",
+      "endpoint_host": "ofac.treasury.gov",
+      "retrieved_at": "2026-07-26T12:26:03+09:00"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "run": {
+    "tool_version": "schema-example-0.1",
+    "execution_mode": "fixture_example",
+    "started_at": "2026-07-26T12:26:00+09:00",
+    "finished_at": "2026-07-26T12:26:04+09:00",
+    "cache_hits": 10,
+    "cache_misses": 0,
+    "retry_count": 0,
+    "fallback_count": 0,
+    "resumed": false
+  },
+  "exports": {
+    "json": {
+      "artifact_uri": "example://AN-FX-EVM-FREEZE-001/result.json"
+    },
+    "markdown": {
+      "artifact_uri": "example://AN-FX-EVM-FREEZE-001/evidence.md"
+    }
+  }
+}

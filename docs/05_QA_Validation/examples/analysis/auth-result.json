@@ -1,0 +1,314 @@
+{
+  "$schema": "../../schemas/analysis-result.schema.json",
+  "schema_version": "0.1",
+  "analysis_id": "AN-FX-EVM-AUTH-001",
+  "analysis_type": "auth_consumption",
+  "chain_id": 1,
+  "status": "complete",
+  "results": [
+    {
+      "result_id": "RES-AUTH-APPROVAL",
+      "result_type": "approval",
+      "classification": "confirmed_fact",
+      "value": {
+        "type": "approve",
+        "owner": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+        "spender": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+        "amount_raw": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+      },
+      "tool_requirement_ids": ["REQ-V1-AUTH-001"],
+      "fixture_requirement_ids": ["REQ-AUTH-APPROVAL"],
+      "evidence_refs": ["EV-AUTH-APPROVAL-EVENT", "EV-AUTH-APPROVE-CALL"]
+    },
+    {
+      "result_id": "RES-AUTH-ALLOWANCE",
+      "result_type": "allowance_lifecycle",
+      "classification": "confirmed_fact",
+      "value": {
+        "before_approval_raw": "0",
+        "after_approval_raw": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+        "before_consumption_raw": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+        "after_consumption_raw": "115792089237316195423570985008687907853269984665640564039457584007913125139935",
+        "consumed_delta_raw": "4500000"
+      },
+      "tool_requirement_ids": ["REQ-V1-AUTH-002", "REQ-V1-AUTH-004"],
+      "fixture_requirement_ids": ["REQ-AUTH-ALLOWANCE"],
+      "evidence_refs": [
+        "EV-AUTH-STATE-BEFORE-APPROVAL",
+        "EV-AUTH-STATE-AFTER-APPROVAL",
+        "EV-AUTH-STATE-BEFORE-CONSUMPTION",
+        "EV-AUTH-STATE-AFTER-CONSUMPTION"
+      ]
+    },
+    {
+      "result_id": "RES-AUTH-CONSUMPTION",
+      "result_type": "authorization_consumption",
+      "classification": "confirmed_fact",
+      "value": {
+        "method": "transferFrom(address,address,uint256)",
+        "from": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+        "to": "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
+        "amount_raw": "4500000",
+        "excluded_failed_transaction_count": 3
+      },
+      "tool_requirement_ids": [
+        "REQ-V1-AUTH-003",
+        "REQ-V1-AUTH-004",
+        "REQ-V1-AUTH-005",
+        "REQ-V1-AUTH-006"
+      ],
+      "fixture_requirement_ids": ["REQ-AUTH-CONSUMPTION"],
+      "evidence_refs": [
+        "EV-AUTH-OUTER-CALL",
+        "EV-AUTH-TRANSFER-FROM",
+        "EV-AUTH-TRANSFER-EVENT"
+      ]
+    },
+    {
+      "result_id": "RES-AUTH-ATTRIBUTION-SCOPE",
+      "result_type": "theft_or_phishing_attribution",
+      "classification": "not_assessed",
+      "value": {
+        "theft_or_phishing_claim": false,
+        "reason": "The onchain fixture proves authorization consumption only."
+      },
+      "tool_requirement_ids": ["REQ-V1-AUTH-007"],
+      "fixture_requirement_ids": [],
+      "evidence_refs": ["EV-AUTH-TRANSFER-FROM", "EV-AUTH-TRANSFER-EVENT"]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-AUTH-APPROVAL-EVENT",
+      "evidence_type": "event",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "source_record_ref": "SRC-AUTH-PUBLICNODE",
+      "method": "eth_getTransactionReceipt",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 24500453,
+        "transaction_hash": "0x3f7037014b8709f02bf2032d70ce4ec6854a53ed141b63d6a7ea359a9dccdabd",
+        "log_index": 307
+      },
+      "decoded": {
+        "event": "Approval",
+        "amount_raw": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-AUTH-001/evidence.json#EV-AUTH-APPROVAL-EVENT",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-AUTH-APPROVE-CALL",
+      "evidence_type": "call",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "source_record_ref": "SRC-AUTH-PUBLICNODE",
+      "method": "eth_getTransactionByHash",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 24500453,
+        "transaction_hash": "0x3f7037014b8709f02bf2032d70ce4ec6854a53ed141b63d6a7ea359a9dccdabd"
+      },
+      "decoded": {
+        "method": "approve(address,uint256)",
+        "spender": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+        "amount_raw": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-AUTH-001/evidence.json#EV-AUTH-APPROVE-CALL",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-AUTH-STATE-BEFORE-APPROVAL",
+      "evidence_type": "state",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_record_ref": "SRC-AUTH-DRPC",
+      "method": "eth_call",
+      "retrieved_at": "2026-07-26T12:26:02+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 24500452
+      },
+      "decoded": {
+        "method": "allowance(address,address)",
+        "amount_raw": "0"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-AUTH-001/evidence.json#EV-AUTH-STATE-BEFORE-APPROVAL",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-AUTH-STATE-AFTER-APPROVAL",
+      "evidence_type": "state",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_record_ref": "SRC-AUTH-DRPC",
+      "method": "eth_call",
+      "retrieved_at": "2026-07-26T12:26:02+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 24500453
+      },
+      "decoded": {
+        "method": "allowance(address,address)",
+        "amount_raw": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-AUTH-001/evidence.json#EV-AUTH-STATE-AFTER-APPROVAL",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-AUTH-STATE-BEFORE-CONSUMPTION",
+      "evidence_type": "state",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_record_ref": "SRC-AUTH-DRPC",
+      "method": "eth_call",
+      "retrieved_at": "2026-07-26T12:26:02+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 24500504
+      },
+      "decoded": {
+        "method": "allowance(address,address)",
+        "amount_raw": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-AUTH-001/evidence.json#EV-AUTH-STATE-BEFORE-CONSUMPTION",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-AUTH-STATE-AFTER-CONSUMPTION",
+      "evidence_type": "state",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_record_ref": "SRC-AUTH-DRPC",
+      "method": "eth_call",
+      "retrieved_at": "2026-07-26T12:26:02+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 24500505
+      },
+      "decoded": {
+        "method": "allowance(address,address)",
+        "amount_raw": "115792089237316195423570985008687907853269984665640564039457584007913125139935"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-AUTH-001/evidence.json#EV-AUTH-STATE-AFTER-CONSUMPTION",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-AUTH-OUTER-CALL",
+      "evidence_type": "call",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "source_record_ref": "SRC-AUTH-PUBLICNODE",
+      "method": "eth_getTransactionByHash",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 24500505,
+        "transaction_hash": "0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51"
+      },
+      "decoded": {
+        "method": "multicall(uint256,bytes[])",
+        "status": "0x1"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-AUTH-001/evidence.json#EV-AUTH-OUTER-CALL",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-AUTH-TRANSFER-FROM",
+      "evidence_type": "call",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_record_ref": "SRC-AUTH-DRPC",
+      "method": "trace_replayTransaction",
+      "retrieved_at": "2026-07-26T12:26:02+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 24500505,
+        "transaction_hash": "0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51",
+        "trace_address": [0, 0, 2, 0]
+      },
+      "decoded": {
+        "method": "transferFrom(address,address,uint256)",
+        "amount_raw": "4500000"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-AUTH-001/evidence.json#EV-AUTH-TRANSFER-FROM",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-AUTH-TRANSFER-EVENT",
+      "evidence_type": "event",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "source_record_ref": "SRC-AUTH-PUBLICNODE",
+      "method": "eth_getTransactionReceipt",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 24500505,
+        "transaction_hash": "0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51",
+        "log_index": 363
+      },
+      "decoded": {
+        "event": "Transfer",
+        "amount_raw": "4500000"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-EVM-AUTH-001/evidence.json#EV-AUTH-TRANSFER-EVENT",
+        "media_type": "application/json"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "source_record_id": "SRC-AUTH-PUBLICNODE",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider_id": "ethereum.publicnode.com",
+      "role": "scoring",
+      "required": true,
+      "capability": "transaction_and_receipt",
+      "endpoint_host": "ethereum-rpc.publicnode.com",
+      "retrieved_at": "2026-07-26T12:26:01+09:00"
+    },
+    {
+      "source_record_id": "SRC-AUTH-DRPC",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "drpc",
+      "role": "scoring",
+      "required": true,
+      "capability": "historical_state_and_trace",
+      "endpoint_host": "lb.drpc.org",
+      "retrieved_at": "2026-07-26T12:26:02+09:00"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "run": {
+    "tool_version": "schema-example-0.1",
+    "execution_mode": "fixture_example",
+    "started_at": "2026-07-26T12:26:00+09:00",
+    "finished_at": "2026-07-26T12:26:03+09:00",
+    "cache_hits": 5,
+    "cache_misses": 0,
+    "retry_count": 0,
+    "fallback_count": 0,
+    "resumed": false
+  },
+  "exports": {
+    "json": {
+      "artifact_uri": "example://AN-FX-EVM-AUTH-001/result.json"
+    },
+    "markdown": {
+      "artifact_uri": "example://AN-FX-EVM-AUTH-001/evidence.md"
+    }
+  }
+}

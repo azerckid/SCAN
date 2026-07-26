@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-26 00:01
+> Last Updated: 2026-07-26 12:26
 > Status: Draft
 
 ## 1. 문서 목적
@@ -281,8 +281,9 @@
    입력 재현과 고정 provenance를 통과해 `fixture_version: 0.2`,
    `confirmed`로 승격했다.
 2. 세 확정 fixture를 기능 우선순위 Draft 1의 V1 검증 입력으로 연결했다.
-3. P2 승격에 필요한 BRIDGE·BTC fixture의 공개 데이터를 우선 선정한다.
-4. 나머지 후보 fixture의 공개 데이터를 선정한다.
+3. 세 fixture의 공통 분석 요청·결과 Schema 0.1 변환 예제를 작성했다.
+4. P2 승격에 필요한 BRIDGE·BTC fixture의 공개 데이터를 우선 선정한다.
+5. 나머지 후보 fixture의 공개 데이터를 선정한다.
 
 ## 10. Related Documents
 
@@ -293,5 +294,7 @@
 - **Technical_Specs**: [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) - JSON 0.1 계약과 증거·소스 역할
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - fixture를 소비하는 분석 계약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 회귀 실행 기술과 저장·검증 경계
+- **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - fixture 입력·정답·증거의 실행 계약 매핑
+- **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - confirmed fixture 3개의 요청·결과 변환 예
 - **QA_Validation**: [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) - 우선 구축 fixture 패키지
-- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, 공통 작업·결과 JSON Schema
+- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`
