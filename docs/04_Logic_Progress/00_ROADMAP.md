@@ -51,7 +51,7 @@
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
 | [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) | Draft | 공식 규정·등록·팀·제출 사실 반영 후 승인 |
-| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 | 미결정 사항과 후보 fixture 방침 확정 |
+| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 · Challenge Pack Candidate 1 | 기본 30문항 유지, Challenge 10문항 중 대표 3~4개 fixture 승격 시점 결정 |
 | [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) | Draft 1 · Awaiting Official Information | 2026-07-27 등록 페이지 공개 후 세부 규정 재확인 |
 | [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) | Draft 1 | 규정 위험 점수와 구현 전제 갱신 후 승인 |
 

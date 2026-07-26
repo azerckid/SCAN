@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 은행
 > Created: 2026-07-24 01:20
-> Last Updated: 2026-07-26 18:28
-> Status: Draft 2
+> Last Updated: 2026-07-26 23:18
+> Status: Draft 2 · Challenge Pack Candidate 1
 
 ## 1. 문서 목적
 
@@ -13,6 +13,7 @@
 2. 문제마다 수동 풀이 단계, 필요 데이터, 완료·부분·실패 조건을 정의한다.
 3. 반복 작업과 자동화·사람 판단 영역을 분리한다.
 4. 기능-문제 행렬을 도구 우선순위 산정의 입력으로 사용한다.
+5. 기본 30문항보다 어려운 실전 스트레스 문제를 별도 Challenge Pack으로 관리한다.
 
 이 문서의 문제는 공식 출제 범위가 아니다. 대부분 **예상**이며, SCAN 2024 문제 성격과 일반적인 온체인 포렌식 과제를 **과거 근거**로 참고한다.
 
@@ -34,6 +35,7 @@
 |:---|:---|
 | Draft 1 | 18문항 (하4 / 중8 / 상6) |
 | Draft 2 | 30문항 (하4 / 중14 / 상12) |
+| Challenge Pack Candidate 1 | 10문항. Draft 2 난이도·기능 빈도에는 미합산 |
 | 난이도 정책 | 기능 공백 우선. 하 비율(약 13%) 확대를 하지 않음 |
 | 선정 원칙 | 분류 균형보다 행렬에 없는 기능 공백을 드러내는 문항 우선 |
 
@@ -2511,6 +2513,7 @@ N홉 이후 어느 주소로 이동했는지 추적하라.
 - 데이터 소스 등록부의 1차 등재 범위와 공급자 선정
 - 공식 규정·실제 구현 시간 확보 후 기능 우선순위 점수식 가중치 보정
 - Draft 2 이후 보류 문항(`CRIME-RANSOM-001`, `BTC-BATCH-001`, `FLOW-PRICE-001`) 편입 여부
+- Challenge Pack 10문항의 실제 데이터·시간 제한·reference answer와 승격 우선순위
 
 ## 9. 다음 단계
 
@@ -2519,6 +2522,7 @@ N홉 이후 어느 주소로 이동했는지 추적하라.
 3. 2026-07-27 등록 시작 후 공식 규정 변경 기록을 시작한다. (`./03_SCAN_2026_RULES_REGISTER.md`)
 4. 기능 우선순위 Draft 1과 P0·V1 도구 요구사항을 작성했다. ([우선순위](./04_SCAN_2026_TOOL_PRIORITY.md))
 5. 요구사항 기반 기술 선택 기록 Draft 1을 작성했으며, 다음은 출력 JSON Schema다.
+6. Challenge Pack 후보 중 대표 3~4개를 실제 데이터 fixture로 승격한다.
 
 ## 10. Draft 2 채택 기록
 
@@ -2552,6 +2556,82 @@ N홉 이후 어느 주소로 이동했는지 추적하라.
 | 6 | EVM-FREEZE-001 | 2 | 동결 이벤트, 발행사 공지 |
 | 7 | FLOW-MULTI-001 | 2 | 다주소 수집, 가격 아카이브 |
 | 8 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 믹서/CoinJoin 공개 사례 |
+
+### 10.4 Challenge Pack Candidate 1
+
+#### 10.4.1 목적과 적용 규칙
+
+Challenge Pack은 기본 30문항의 기능 범위를 바꾸지 않고, 실제 대회에서
+발생할 수 있는 규모·불완전 단서·추적 회피·데이터 장애·시간 압박을 검증하는
+상급 스트레스 문제군이다.
+
+- 기본 30문항의 하4/중14/상12 통계와 원자적 기능 빈도에는 합산하지 않는다.
+- `candidate` 상태에서는 도구 우선순위 점수를 올리는 근거로 사용하지 않는다.
+- 실제 공개 데이터, reference answer, 완료·부분·실패 조건을 확보한 뒤
+  `challenge fixture`로 승격한다.
+- fixture 승격 전에는 합성 데이터로 정답 정확도를 주장하지 않는다.
+- AI·휴리스틱 결과는 후보 순위에만 사용하고 확정 사실과 분리한다.
+- 대회 규정에서 API·자동화·AI가 제한되면 동일 문제의 수동·offline 경로를
+  함께 검증한다.
+
+#### 10.4.2 스트레스 난이도 기준
+
+각 차원은 `0`(없음), `1`(부분), `2`(핵심 장애)로 평가한다.
+
+| 코드 | 난도 차원 | 판단 기준 |
+|:---|:---|:---|
+| `S` | Scale | 주소·거래·로그 수와 페이지네이션·성능 부담 |
+| `A` | Ambiguity | 불완전 단서·복수 후보·정답 경계의 불확실성 |
+| `O` | Obfuscation | 분산·재병합·미끼·믹서·CoinJoin 등 추적 회피 |
+| `D` | Data failure | archive·trace·API·라벨 누락과 공급자 장애 |
+| `I` | Integration | 복수 체인·프로토콜·데이터 유형 결합 |
+| `T` | Time pressure | 제한 시간 내 부분 성공·증거 제출 필요 |
+
+총점 8점 이상이고 최소 네 차원이 `1` 이상인 문제만 Challenge Pack에
+유지한다. 이 점수는 공식 난이도가 아니라 내부 stress coverage 지표다.
+
+#### 10.4.3 후보 문제 10개
+
+| Challenge ID | 기반 문항 | 실전형 문제 조건 | 필수 산출물 | 스트레스 기능 |
+|:---|:---|:---|:---|:---|
+| `CHAL-FLOW-SCALE-001` | `FLOW-EVM-002` | 수백 주소·수천 TX의 분산·재병합 경로에 무관 자금과 dust를 혼합 | 피해금 보존 경로, 제외 경로, raw 금액 정합, 처리 시간 | `PATH`, `RECON`, `BASE-CACHE`, `VIZ` |
+| `CHAL-MULTI-VICTIM-001` | `FLOW-MULTI-001` | 여러 피해자 자금이 시간차를 두고 합쳐지고 일부는 정상 자금과 혼합 | 피해자별 기여액, 공통 집금점, 시점 가격, 미확인 잔액 | `PATH`, `RECON`, `PRICE`, `LABEL` |
+| `CHAL-XCHAIN-EXIT-001` | `MIXED-XCHAIN-001` | DEX 스왑 후 브리지 두 개를 거쳐 다른 체인의 CEX 후보로 이동 | 체인별 TX 연결, 브리지 양단, 자산 변환, 최종 후보와 불확실성 | `XCHAIN`, `BRIDGE`, `DECODE`, `PATH` |
+| `CHAL-PROXY-EXP-001` | `EVM-PROXY-001`, `CRIME-EXP-001` | 공격 직전 구현체가 변경되고 delegatecall·실패 trace·정상 호출이 혼재 | 구현체 시점, 성공 공격 trace, 실패 경로 제외, 자산 유출 | `PROXY`, `EVM-STATE`, `EVM-TRACE`, `DECODE` |
+| `CHAL-MIXER-CJ-001` | `SVC-MIX-001`, `BTC-CJ-001` | EVM mixer 또는 Bitcoin CoinJoin 뒤 복수 출구와 시간·금액 미끼 제공 | 후보 집합, 연결 점수, 반례, 추적 불가 경계 | `MIXER`, `BTC-UTXO`, `HEUR`, `LABEL` |
+| `CHAL-DEFI-COMBO-001` | `SVC-LEND-001`, `CRIME-EXP-001` | flash loan·가격 조작·청산·멀티홉 스왑·상환이 한 TX에 결합 | 단계별 호출, 대출 상환, 순이익, 피해 자산, 후속 출구 | `DEFI-LEND`, `PRICE`, `DECODE`, `RECON` |
+| `CHAL-OSINT-CONFLICT-001` | `OSINT-SAN-001`, `ACTOR-REL-002` | 탐색기·보고서·SNS의 주소 라벨이 서로 충돌하고 하나는 오래된 오보 | 출처별 주장, 주소 명시 여부, 시점, 채택·기각 근거 | `OSINT`, `LABEL`, `HEUR`, `BASE-PROVENANCE` |
+| `CHAL-DATA-FAIL-001` | 전 EVM 상급 | archive RPC 일부 블록 실패, trace 미지원, explorer 429와 불완전 로그 발생 | fallback 기록, cache 사용, 부분 결과, 미확인 필드, 재개 지점 | `BASE-CACHE`, `BASE-PROVENANCE`, `EVM-STATE`, `EVM-TRACE` |
+| `CHAL-ACCOUNTING-001` | `SVC-DEX-001`, `FLOW-MULTI-001` | native·wrapped·rebasing·fee-on-transfer 자산과 수수료가 동시에 존재 | raw·표시 단위, 수수료별 순자산, 반올림 오차, 가격 기준 | `RECON`, `DECODE`, `PRICE`, `EVM-LOG` |
+| `CHAL-CASE-OPEN-001` | `MIXED-CASE-001` | 사건 설명·부분 주소·시간대만 제공하고 시드 TX와 프로토콜은 미제공 | 가설 목록, 탐색 과정, 핵심 경로, 반증, 제출용 증거 보고서 | 전 기능 후보, 특히 `PATH`, `OSINT`, `LABEL`, `VIZ` |
+
+#### 10.4.4 스트레스 점수
+
+| Challenge ID | S | A | O | D | I | T | 합계 |
+|:---|---:|---:|---:|---:|---:|---:|---:|
+| `CHAL-FLOW-SCALE-001` | 2 | 1 | 2 | 1 | 1 | 1 | 8 |
+| `CHAL-MULTI-VICTIM-001` | 2 | 1 | 2 | 0 | 2 | 1 | 8 |
+| `CHAL-XCHAIN-EXIT-001` | 1 | 1 | 2 | 1 | 2 | 1 | 8 |
+| `CHAL-PROXY-EXP-001` | 1 | 1 | 2 | 1 | 2 | 1 | 8 |
+| `CHAL-MIXER-CJ-001` | 1 | 2 | 2 | 0 | 2 | 1 | 8 |
+| `CHAL-DEFI-COMBO-001` | 1 | 1 | 2 | 1 | 2 | 1 | 8 |
+| `CHAL-OSINT-CONFLICT-001` | 0 | 2 | 1 | 1 | 2 | 2 | 8 |
+| `CHAL-DATA-FAIL-001` | 1 | 1 | 0 | 2 | 2 | 2 | 8 |
+| `CHAL-ACCOUNTING-001` | 2 | 1 | 1 | 1 | 2 | 1 | 8 |
+| `CHAL-CASE-OPEN-001` | 1 | 2 | 2 | 1 | 2 | 2 | 10 |
+
+#### 10.4.5 대표 fixture 승격 순서
+
+| 순서 | Challenge ID | 우선 이유 | 현재 상태 |
+|:---:|:---|:---|:---|
+| 1 | `CHAL-FLOW-SCALE-001` | 가장 많이 쓰이는 `PATH`·`RECON`의 규모·노이즈 검증 | candidate |
+| 2 | `CHAL-DATA-FAIL-001` | 모든 문제에 공통인 fallback·partial·resume 검증 | candidate |
+| 3 | `CHAL-XCHAIN-EXIT-001` | 현재 confirmed fixture에 없는 브리지·복수 체인 공백 | candidate |
+| 4 | `CHAL-CASE-OPEN-001` | 도구 조합과 사람 판단을 제한 시간 안에 종합 검증 | candidate |
+
+대표 사례를 승격할 때는 기존 fixture schema를 임의 변경하지 않는다.
+challenge 전용 규모·시간·부분 성공 필드가 필요하면 별도 schema version
+제안과 검토를 먼저 수행한다.
 
 ## 11. Related Documents
 
