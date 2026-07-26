@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-26 16:46
+> Last Updated: 2026-07-26 17:09
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -86,15 +86,17 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 
 - **Mode**: fault-injection
 - **Backlog**: `TASK-002`
-- **Requirements**: `REQ-NFR-004`, `schema_invalid`
+- **Requirements**: `REQ-NFR-004`, `invalid_input`, `schema_invalid`
 - **Preconditions**: 유효 예제의 독립 복사본
 - **Steps**:
-  1. extra field, 잘못된 주소·TX hash, naive datetime을 각각 주입한다.
-  2. raw amount를 float로 바꾸고 uint256 경계를 넘긴다.
+  1. 잘못된 주소·TX hash·블록·분석 유형을 각각 주입한다.
+  2. extra field, naive datetime, float raw amount, uint256 경계 초과를
+     각각 주입한다.
   3. 중복 ID와 존재하지 않는 evidence·source 참조를 주입한다.
   4. `complete`+error와 `failed`+error 없음 조합을 주입한다.
 - **Expected**:
-  - 모든 변형은 `schema_invalid`, 상태 `failed`, 종료 코드 `2`로 거부된다.
+  - 1의 변형은 `invalid_input`, 상태 `failed`, 종료 코드 `2`로 거부된다.
+  - 2·3·4의 변형은 `schema_invalid`, 상태 `failed`, 종료 코드 `2`로 거부된다.
   - `uint256.max`는 문자열로 손실 없이 왕복한다.
   - 오류에 secret·원본 provider credential이 포함되지 않는다.
 
@@ -144,7 +146,7 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   2. 첫 CLI 피드백까지 시간을 측정한다.
   3. stdout과 stderr의 attempt 표현을 비교한다.
 - **Expected**:
-  - 첫 피드백은 local validation 시작 후 목표 `400ms` 이내다.
+  - 첫 피드백은 명령 실행 시점부터 목표 `400ms` 이내다.
   - stdout은 retry를 한 줄 요약하고 stderr는 attempt별 상세를 보존한다.
   - 색상 없이 상태·경고·실패를 텍스트로 구분할 수 있다.
   - non-TTY에는 animation·carriage return이 남지 않는다.
@@ -156,7 +158,7 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 - **Requirements**: `REQ-P0-CACHE-006`, `REQ-P0-CACHE-007`
 - **Preconditions**: DEX 실행을 pool output 이후 중단하도록 설정
 - **Steps**:
-  1. `scan analyze REQUEST`를 중단한다.
+  1. `scan analyze --request REQUEST`를 중단한다.
   2. 생성된 analysis ID로 `scan resume ID`를 실행한다.
   3. 완료 후 `scan show ID`를 실행한다.
 - **Expected**:

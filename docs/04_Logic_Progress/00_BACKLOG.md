@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 구현 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-26 16:46
+> Last Updated: 2026-07-26 17:09
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -52,7 +52,10 @@ flowchart LR
     T1["TASK-001 Project"] --> T2["TASK-002 Contract Models"]
     T1 --> T3["TASK-003 Source Orchestration"]
     T1 --> T4["TASK-004 Storage and Export"]
+    T2 --> T4
     T2 --> T5["TASK-005 CLI"]
+    T3 --> T5
+    T4 --> T5
     T3 --> T6["TASK-006 DEX"]
     T4 --> T6
     T2 --> T6
@@ -68,8 +71,10 @@ flowchart LR
     T8 --> T9
 ```
 
-TASK-002·003·004는 TASK-001 뒤에 병렬 진행할 수 있다. DEX·AUTH·FREEZE는
-공통 계약을 재사용하되 서로의 내부 구현에 의존하지 않는다.
+TASK-002와 TASK-003은 TASK-001 뒤에 병렬 진행할 수 있다. TASK-004는
+계약 model(TASK-002)에 의존하므로 TASK-002 이후에 시작한다. TASK-005는
+TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을 재사용하되
+서로의 내부 구현에 의존하지 않는다.
 
 ## 4. ToDo
 
@@ -149,6 +154,7 @@ TASK-002·003·004는 TASK-001 뒤에 병렬 진행할 수 있다. DEX·AUTH·FR
   - [Analysis I/O 예제](../05_QA_Validation/examples/analysis/README.md) - round-trip 기준
 - Implementation Preconditions:
   - [ ] 관련 문서와 승인 Schema 3종을 다시 확인했다.
+  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
   - [ ] HTML Preview의 complete·partial·failed 표현을 확인했다.
   - [ ] 입력·출력 최소 필드와 상태 변화를 확인했다.
   - [ ] 외부 mutation 없음과 local model validation 경계를 확인했다.
@@ -156,7 +162,9 @@ TASK-002·003·004는 TASK-001 뒤에 병렬 진행할 수 있다. DEX·AUTH·FR
   - [ ] 구현 범위가 공개 계약 `0.1`을 임의 변경하지 않는다.
 - Acceptance Criteria:
   - [ ] 유효한 요청·결과 예제 3쌍이 round-trip 후 의미상 동일하다.
-  - [ ] extra field·잘못된 주소·float raw amount·naive datetime을 거부한다.
+  - [ ] 잘못된 주소·TX hash·블록·유형은 `invalid_input`으로 거부한다.
+  - [ ] extra field·float raw amount·naive datetime·깨진 참조는
+        `schema_invalid`로 거부한다.
   - [ ] 깨진 result→evidence→source 참조를 거부한다.
   - [ ] 저장 Schema와 생성 Schema의 의미상 diff가 0이다.
   - [ ] `complete`+error, `failed`+no error 조합을 거부한다.
@@ -196,6 +204,7 @@ TASK-002·003·004는 TASK-001 뒤에 병렬 진행할 수 있다. DEX·AUTH·FR
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-SOURCE-*`, `QA-RETRY-*`, `QA-RULE-*`
 - Implementation Preconditions:
   - [ ] 등록부와 source policy·오류 계약을 다시 확인했다.
+  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
   - [ ] HTML Preview의 retry·fallback·rule blocked 상태를 확인했다.
   - [ ] source 입력·응답·attempt 최소 필드를 확인했다.
   - [ ] 외부 mutation 없이 read-only 호출만 수행함을 확인했다.
@@ -244,6 +253,7 @@ TASK-002·003·004는 TASK-001 뒤에 병렬 진행할 수 있다. DEX·AUTH·FR
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-CACHE-*`, `QA-EXPORT-*`, `QA-SEC-*`
 - Implementation Preconditions:
   - [ ] 저장·복구·export 관련 문서를 다시 확인했다.
+  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
   - [ ] HTML Preview의 cache·resume·export 상태를 확인했다.
   - [ ] DB 최소 필드·artifact metadata·checkpoint 상태를 확인했다.
   - [ ] local mutation 범위가 `.scan/` 아래임을 확인했다.
@@ -338,6 +348,7 @@ TASK-002·003·004는 TASK-001 뒤에 병렬 진행할 수 있다. DEX·AUTH·FR
   - [DEX fixture](../05_QA_Validation/fixtures/FX-SVC-DEX-001/README.md) - confirmed 정답·증거
 - Implementation Preconditions:
   - [ ] DEX 요구사항·fixture·source 문서를 다시 확인했다.
+  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
   - [ ] HTML Preview에서 pool output과 user output 분리를 확인했다.
   - [ ] TX·event·call·metadata 최소 필드를 확인했다.
   - [ ] 외부 mutation 없이 read-only 수집만 수행한다.
@@ -387,6 +398,7 @@ TASK-002·003·004는 TASK-001 뒤에 병렬 진행할 수 있다. DEX·AUTH·FR
   - [AUTH fixture](../05_QA_Validation/fixtures/FX-EVM-AUTH-001/README.md) - confirmed 정답·증거
 - Implementation Preconditions:
   - [ ] AUTH 요구사항·fixture·source 문서를 다시 확인했다.
+  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
   - [ ] HTML Preview의 partial·retry·resume와 FB-001을 확인했다.
   - [ ] event·call·state·failed TX 최소 필드를 확인했다.
   - [ ] external mutation 없이 historical read만 수행한다.
@@ -436,6 +448,7 @@ TASK-002·003·004는 TASK-001 뒤에 병렬 진행할 수 있다. DEX·AUTH·FR
   - [FREEZE fixture](../05_QA_Validation/fixtures/FX-EVM-FREEZE-001/README.md) - confirmed 정답·증거
 - Implementation Preconditions:
   - [ ] FREEZE 요구사항·fixture·source 문서를 다시 확인했다.
+  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
   - [ ] HTML Preview의 rule blocked와 not assessed 표현을 확인했다.
   - [ ] event·call·state·context 최소 필드를 확인했다.
   - [ ] 입력 URL 수집 외 일반 OSINT 탐색을 하지 않는다.
