@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-25 23:46
+> Last Updated: 2026-07-26 00:01
 > Status: Draft
 
 ## 1. 문서 목적
@@ -17,6 +17,7 @@
 - [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md)
 - [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md)
 - [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md)
+- [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md)
 
 ## 2. 정보 구분 원칙
 
@@ -235,7 +236,8 @@
 3. 2026-07-27 이후 공식 규정에 따라 `대회 규정` 필드를 갱신한다.
 4. 채택 소스 목록의 능력·제약을 기능 우선순위 Draft 1에 반영했다.
 5. P0·V1 도구 요구사항 Draft 1에 공급자 fallback·캐시·오류 계약을 반영했다.
-6. 기술 선택 기록에서 공급자 adapter와 fallback 우선순위를 결정한다.
+6. 기술 선택 기록 Draft 1에서 HTTPX source adapter와 orchestration fallback 경계를 제안했다.
+7. 공식 규정·공급자 플랜 확인 후 source별 adapter 우선순위와 rate limit을 확정한다.
 
 ## 10. Related Documents
 
@@ -243,5 +245,6 @@
 - **Concept_Design**: [SCAN 2026 예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - Draft 2 기능·fixture 요구의 기준
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - 소스 의존성·fallback을 반영한 기능 순서
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - source policy·cache·fallback·오류 계약
+- **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - HTTP transport·source adapter·저장 경계
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 소스 검증용 대표 사례
-- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, 기술 선택 기록
+- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, 공통 작업·결과 JSON Schema

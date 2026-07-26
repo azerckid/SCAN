@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 은행
 > Created: 2026-07-24 01:20
-> Last Updated: 2026-07-25 15:49
+> Last Updated: 2026-07-26 00:01
 > Status: Draft 2
 
 ## 1. 문서 목적
@@ -2517,8 +2517,8 @@ N홉 이후 어느 주소로 이동했는지 추적하라.
 1. 데이터 소스 등록부의 후보 소스를 공식 문서로 재확인하고 필요 시 `검증 중`으로 승격한다. ([등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md))
 2. Reference fixture 8개의 공개 데이터를 확보해 `검증 중`/`확정`으로 올린다. ([Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md))
 3. 2026-07-27 등록 시작 후 공식 규정 변경 기록을 시작한다. (`./03_SCAN_2026_RULES_REGISTER.md`)
-4. 기능 우선순위 Draft 1의 P0·V1을 도구 요구사항으로 전환한다. ([우선순위](./04_SCAN_2026_TOOL_PRIORITY.md))
-5. 요구사항을 기준으로 기술 후보를 비교하고 기술 스택을 결정한다.
+4. 기능 우선순위 Draft 1과 P0·V1 도구 요구사항을 작성했다. ([우선순위](./04_SCAN_2026_TOOL_PRIORITY.md))
+5. 요구사항 기반 기술 선택 기록 Draft 1을 작성했으며, 다음은 출력 JSON Schema다.
 
 ## 10. Draft 2 채택 기록
 
@@ -2558,5 +2558,7 @@ N홉 이후 어느 주소로 이동했는지 추적하라.
 - **Concept_Design**: [SCAN 2026 참가·분석 도구 준비 전략](./01_SCAN_2026_PREPARATION_STRATEGY.md) - 분류 체계, 표준 양식, 도구 도출 방법의 기준 문서
 - **Concept_Design**: [SCAN 2026 분석 도구 기능 우선순위](./04_SCAN_2026_TOOL_PRIORITY.md) - 원자적 기능 점수와 구현 단계
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - fixture·도구가 의존할 소스 능력과 제약
+- **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 30문항에서 도출한 구현 계약
+- **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 요구사항 기반 기술 후보 비교
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 대표 문제 검증 사례 후보
-- 후속 문서 후보: `./03_SCAN_2026_RULES_REGISTER.md`, 도구 요구사항, 기술 선택 기록
+- 후속 문서 후보: `./03_SCAN_2026_RULES_REGISTER.md`, 공통 작업·결과 JSON Schema

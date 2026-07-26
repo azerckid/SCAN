@@ -1,6 +1,6 @@
 # SCAN 2026 분석 도구 기능 우선순위
 > Created: 2026-07-25 15:49
-> Last Updated: 2026-07-25 23:46
+> Last Updated: 2026-07-26 00:01
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -208,8 +208,8 @@ LABEL과 VIZ는 증거가 아니라 판단 지원 화면이다. 원본 TX·출�
 ## 10. 다음 단계
 
 1. P0·V1 도구 요구사항 Draft 1을 작성했다.
-2. 기술 후보를 요구사항별로 비교하고 선택 기록을 작성한다.
-3. 공통 작업 입력·결과 JSON Schema와 error enum을 작성한다.
+2. P0·V1 기술 후보 비교와 선택 기록 Draft 1을 작성했다.
+3. 기술 선택 Draft를 확정하고 공통 작업 입력·결과 JSON Schema와 error enum을 작성한다.
 4. 2026-07-27 등록 시작 후 규정 변경 기록을 작성하고 점수를 보정한다.
 5. P2 승격에 필요한 BRIDGE·BTC fixture 공개 사례를 선정한다.
 
@@ -220,6 +220,7 @@ LABEL과 VIZ는 증거가 아니라 판단 지원 화면이다. 원본 TX·출�
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - 공급자 능력·제약·최소 소스
 - **Technical_Specs**: [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) - fixture JSON·증거 연결 계약
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 입력·출력·오류·캐시·vertical slice 계약
+- **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 런타임·adapter·저장·검증 기술 결정
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - confirmed fixture와 승격 기준
 - **QA_Validation**: [DEX fixture](../05_QA_Validation/fixtures/FX-SVC-DEX-001/README.md) - DEX vertical slice
 - **QA_Validation**: [AUTH fixture](../05_QA_Validation/fixtures/FX-EVM-AUTH-001/README.md) - AUTH vertical slice
