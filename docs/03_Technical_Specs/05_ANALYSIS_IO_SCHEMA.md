@@ -1,6 +1,6 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-26 12:26
+> Last Updated: 2026-07-26 12:59
 > Status: Draft 1
 > Schema Version: 0.1
 

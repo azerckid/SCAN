@@ -63,16 +63,19 @@
         "REQ-V1-FREEZE-008"
       ],
       "fixture_requirement_ids": ["REQ-FREEZE-CONTEXT-SEPARATION"],
-      "evidence_refs": ["EV-FREEZE-CIRCLE-CONTEXT", "EV-FREEZE-OFAC-CONTEXT"]
+      "evidence_refs": [
+        "EV-FREEZE-CIRCLE-RESPONSE",
+        "EV-FREEZE-OFAC-DESIGNATION"
+      ]
     }
   ],
   "evidence": [
     {
       "evidence_id": "EV-FREEZE-BLACKLIST-CALL",
       "evidence_type": "call",
-      "source_id": "DS-EVM-RPC-ARCHIVE",
-      "source_record_ref": "SRC-FREEZE-DRPC",
-      "method": "eth_getTransactionByHash",
+      "source_id": "DS-EXPLORER-EVM",
+      "source_record_ref": "SRC-FREEZE-BLOCKSCOUT",
+      "method": "get_transaction",
       "retrieved_at": "2026-07-26T12:26:01+09:00",
       "locator": {
         "chain_id": 1,
@@ -153,9 +156,9 @@
     {
       "evidence_id": "EV-FREEZE-UNBLACKLIST-CALL",
       "evidence_type": "call",
-      "source_id": "DS-EVM-RPC-ARCHIVE",
-      "source_record_ref": "SRC-FREEZE-DRPC",
-      "method": "eth_getTransactionByHash",
+      "source_id": "DS-EXPLORER-EVM",
+      "source_record_ref": "SRC-FREEZE-BLOCKSCOUT",
+      "method": "get_transaction",
       "retrieved_at": "2026-07-26T12:26:02+09:00",
       "locator": {
         "chain_id": 1,
@@ -234,7 +237,7 @@
       }
     },
     {
-      "evidence_id": "EV-FREEZE-CIRCLE-CONTEXT",
+      "evidence_id": "EV-FREEZE-CIRCLE-RESPONSE",
       "evidence_type": "context",
       "source_id": "DS-OSINT-WEB",
       "source_record_ref": "SRC-FREEZE-CIRCLE",
@@ -253,7 +256,7 @@
       }
     },
     {
-      "evidence_id": "EV-FREEZE-OFAC-CONTEXT",
+      "evidence_id": "EV-FREEZE-OFAC-DESIGNATION",
       "evidence_type": "context",
       "source_id": "DS-SANCTIONS-PUBLIC",
       "source_record_ref": "SRC-FREEZE-OFAC",
@@ -268,7 +271,7 @@
         "current_status": "not_assessed"
       },
       "raw_artifact": {
-        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#ofac_context",
+        "artifact_uri": "fixture://FX-EVM-FREEZE-001/evidence.json#EV-FREEZE-OFAC-DESIGNATION",
         "media_type": "application/json"
       }
     }
@@ -282,6 +285,16 @@
       "required": true,
       "capability": "transaction_receipt_and_historical_state",
       "endpoint_host": "lb.drpc.org",
+      "retrieved_at": "2026-07-26T12:26:02+09:00"
+    },
+    {
+      "source_record_id": "SRC-FREEZE-BLOCKSCOUT",
+      "source_id": "DS-EXPLORER-EVM",
+      "provider_id": "blockscout",
+      "role": "scoring",
+      "required": true,
+      "capability": "transaction_calldata",
+      "endpoint_host": "eth.blockscout.com",
       "retrieved_at": "2026-07-26T12:26:02+09:00"
     },
     {

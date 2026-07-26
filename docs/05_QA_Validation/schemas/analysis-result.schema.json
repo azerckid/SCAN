@@ -113,7 +113,13 @@
       },
       "then": {
         "properties": {
+          "results": {
+            "minItems": 1
+          },
           "evidence": {
+            "minItems": 1
+          },
+          "sources": {
             "minItems": 1
           },
           "errors": {

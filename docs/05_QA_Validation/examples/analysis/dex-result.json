@@ -40,6 +40,7 @@
       "classification": "confirmed_fact",
       "value": {
         "asset_type": "native",
+        "token_address": null,
         "symbol": "ETH",
         "decimals": 18,
         "amount_raw": "14449515027026387018",
