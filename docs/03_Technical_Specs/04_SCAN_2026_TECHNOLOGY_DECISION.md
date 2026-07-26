@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-26 13:20
+> Last Updated: 2026-07-26 16:34
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -244,13 +244,16 @@ fixture 구조에 직접 결합하지 않는다. fixture adapter가 공통 작�
 Draft command surface:
 
 ```text
-scan analyze dex --input <json>
-scan analyze auth --input <json>
-scan analyze freeze --input <json>
-scan fixture verify <fixture-dir>
-scan run show <analysis-id>
-scan cache inspect <cache-key>
+scan analyze --request <json>
+scan validate <json>
+scan resume <analysis-id>
+scan show <analysis-id>
 ```
+
+Analysis Request Schema의 `analysis_type`이 DEX·AUTH·FREEZE를 dispatch한다.
+유형별 별칭과 fixture·cache 관리 명령은 V1 사용자 흐름에서 실제 필요가
+확인될 때 추가한다. 이 command surface는 terminal HTML Preview 사용자 확인을
+거쳐 V1 기준으로 채택했다.
 
 | UX 상태 | V1 동작 |
 |:---|:---|
@@ -382,15 +385,18 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 1. 이 Draft의 `TD-001`~`TD-022`를 검토하고 채택 범위를 확정했다.
 2. 공통 작업 입력·결과·오류 JSON Schema 0.1과 fixture 변환 예제를 작성했다.
 3. Python package 초기화 전 `00_DEVELOPMENT_PRINCIPLES.md` Draft 1을 작성했다.
-4. CLI 화면을 구현 대상으로 확정하면 command flow와 terminal preview를
-   UI 문서로 작성하고 사용자 확인을 받는다.
-5. schema·UI 경계 승인 후 원자적 backlog와 QA 시나리오를 작성한다.
-6. 2026-07-27 이후 공식 규정을 source policy와 기술 결정에 반영한다.
+4. CLI command flow와 terminal HTML Preview Draft를 작성했다.
+5. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
+6. schema·UI 경계 승인 후 원자적 backlog와 QA 시나리오를 작성한다.
+7. 2026-07-27 이후 공식 규정을 source policy와 기술 결정에 반영한다.
 
 ## 18. Related Documents
 
 - **Concept_Design**: [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 문제 우선·fixture 우선 기술 선택 원칙
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위와 단계 제한
+- **UI_Screens**: [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - `TD-018`의 명령·상태 흐름
+- **UI_Screens**: [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) - terminal 정보 계층과 접근성
+- **UI_Screens**: [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - 구현 전 사용자 확인 화면
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - source capability·공급자 제약
 - **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - 기술 결정을 코드 구조·품질·보안 규칙으로 전환
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - 기존 fixture JSON 계약

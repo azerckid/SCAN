@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCAN CLI Terminal Preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page: #080b11;
+      --panel: #0e131d;
+      --terminal: #090d14;
+      --raised: #141b27;
+      --border: #293449;
+      --border-strong: #3a4964;
+      --fg: #d8dee9;
+      --muted: #8390a5;
+      --accent: #6ea8fe;
+      --accent-soft: #172944;
+      --success: #54d19a;
+      --success-soft: #122b25;
+      --warning: #f2c14e;
+      --warning-soft: #302714;
+      --danger: #ff6b7a;
+      --danger-soft: #321821;
+      --context: #b69cff;
+      --context-soft: #251d3a;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Noto Sans Mono CJK KR", monospace;
+      --sans: Inter, Pretendard, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(61, 105, 164, 0.18), transparent 32rem),
+        radial-gradient(circle at 100% 30%, rgba(90, 59, 140, 0.13), transparent 28rem),
+        var(--page);
+      color: var(--fg);
+      font-family: var(--sans);
+    }
+
+    button,
+    code {
+      font-family: var(--mono);
+    }
+
+    .page {
+      width: min(1440px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 44px 0 64px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 26px;
+    }
+
+    .eyebrow {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 20px;
+      height: 1px;
+      background: currentColor;
+      content: "";
+    }
+
+    h1 {
+      margin: 0;
+      color: #f5f7fa;
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 650;
+      letter-spacing: -0.045em;
+    }
+
+    .lede {
+      max-width: 740px;
+      margin: 13px 0 0;
+      color: #a7b1c2;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .gate {
+      display: grid;
+      gap: 4px;
+      min-width: 220px;
+      padding: 13px 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(14, 19, 29, 0.82);
+      box-shadow: var(--shadow);
+    }
+
+    .gate-label {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .gate strong {
+      color: var(--warning);
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      overflow: hidden;
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar {
+      padding: 18px;
+      border-right: 1px solid var(--border);
+      background: #0b1018;
+    }
+
+    .sidebar-title {
+      margin: 0 0 5px;
+      color: #f2f5f9;
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+
+    .sidebar-copy {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .scenario-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .scenario {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      color: #aeb8c8;
+      cursor: pointer;
+      text-align: left;
+      transition: 140ms ease;
+    }
+
+    .scenario:hover {
+      border-color: var(--border);
+      background: var(--raised);
+      color: #f2f5f9;
+    }
+
+    .scenario[aria-selected="true"] {
+      border-color: #385887;
+      background: var(--accent-soft);
+      color: #eff5ff;
+    }
+
+    .scenario-name {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .scenario-state {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .dot.success {
+      color: var(--success);
+    }
+
+    .dot.warning {
+      color: var(--warning);
+    }
+
+    .dot.danger {
+      color: var(--danger);
+    }
+
+    .dot.accent {
+      color: var(--accent);
+    }
+
+    .sidebar-rule {
+      height: 1px;
+      margin: 20px 0;
+      border: 0;
+      background: var(--border);
+    }
+
+    .legend {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 8px;
+    }
+
+    .legend-row b {
+      color: #c6cfdb;
+      font-weight: 600;
+    }
+
+    .stage {
+      min-width: 0;
+      padding: 20px;
+    }
+
+    .commandbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 11px 13px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #0a0f17;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .prompt {
+      flex: 0 0 auto;
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    #command {
+      min-width: 0;
+      overflow: hidden;
+      color: #eef3f9;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .copy-button {
+      margin-left: auto;
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--raised);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 10px;
+    }
+
+    .copy-button:hover {
+      border-color: var(--border-strong);
+      color: var(--fg);
+    }
+
+    .terminal {
+      min-height: 660px;
+      overflow: auto;
+      border: 1px solid #202a3b;
+      border-radius: 10px;
+      background: var(--terminal);
+      font-family: var(--mono);
+    }
+
+    .terminal-chrome {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      height: 39px;
+      padding: 0 14px;
+      border-bottom: 1px solid #202a3b;
+      background: rgba(14, 19, 29, 0.96);
+      backdrop-filter: blur(10px);
+    }
+
+    .lights {
+      display: flex;
+      gap: 7px;
+    }
+
+    .light {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #344055;
+    }
+
+    .terminal-title {
+      color: #8793a5;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+    }
+
+    .terminal-width {
+      justify-self: end;
+      color: #657185;
+      font-size: 9px;
+    }
+
+    .terminal-body {
+      padding: 23px 25px 30px;
+      color: #cbd3df;
+      font-size: 12px;
+      line-height: 1.64;
+    }
+
+    .view[hidden] {
+      display: none;
+    }
+
+    .line {
+      min-height: 20px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .blank {
+      height: 13px;
+    }
+
+    .scan-mark {
+      color: #f2f6fb;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .accent {
+      color: var(--accent);
+    }
+
+    .success {
+      color: var(--success);
+    }
+
+    .warning {
+      color: var(--warning);
+    }
+
+    .danger {
+      color: var(--danger);
+    }
+
+    .context {
+      color: var(--context);
+    }
+
+    .strong {
+      color: #f1f4f8;
+      font-weight: 700;
+    }
+
+    .section {
+      margin-top: 14px;
+      color: #78859a;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 19ch minmax(0, 1fr);
+      column-gap: 2ch;
+      min-height: 20px;
+    }
+
+    .key {
+      color: #8794a8;
+    }
+
+    .value {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .statusline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      align-items: baseline;
+      padding-bottom: 11px;
+      border-bottom: 1px solid #1c2533;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 23px;
+      padding: 2px 8px;
+      border: 1px solid currentColor;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .badge.success {
+      background: var(--success-soft);
+    }
+
+    .badge.warning {
+      background: var(--warning-soft);
+    }
+
+    .badge.danger {
+      background: var(--danger-soft);
+    }
+
+    .badge.accent {
+      background: var(--accent-soft);
+    }
+
+    .rule {
+      height: 1px;
+      margin: 15px 0;
+      border: 0;
+      background: #1b2432;
+    }
+
+    .note {
+      display: grid;
+      grid-template-columns: 3px 1fr;
+      gap: 10px;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #101722;
+    }
+
+    .note::before {
+      border-radius: 4px;
+      background: var(--context);
+      content: "";
+    }
+
+    .reviewbar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .review-item {
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(14, 19, 29, 0.72);
+    }
+
+    .review-item span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .review-item strong {
+      color: #dfe5ed;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 18px;
+      color: #667286;
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+
+    @media (max-width: 920px) {
+      .page {
+        width: min(100% - 24px, 760px);
+        padding-top: 26px;
+      }
+
+      .topbar,
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .gate {
+        min-width: 0;
+      }
+
+      .sidebar {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .scenario-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .legend,
+      .sidebar-rule {
+        display: none;
+      }
+
+      .terminal {
+        min-height: 600px;
+      }
+
+      .reviewbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .scenario-list,
+      .reviewbar {
+        grid-template-columns: 1fr;
+      }
+
+      .stage {
+        padding: 12px;
+      }
+
+      .terminal-body {
+        padding: 18px 15px 24px;
+        font-size: 11px;
+      }
+
+      .kv {
+        grid-template-columns: 1fr;
+        margin-bottom: 6px;
+      }
+
+      .key {
+        font-size: 9px;
+        text-transform: uppercase;
+      }
+
+      .terminal-width,
+      .copy-button {
+        display: none;
+      }
+
+      .footer {
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">SCAN 2026 · UI-First Gate</div>
+        <h1>CLI terminal preview</h1>
+        <p class="lede">
+          구현 전 DEX·AUTH·FREEZE의 완료, 부분 성공, 규정 차단, 재개 화면을
+          검토합니다. 왼쪽 시나리오를 선택해 상태와 다음 행동이 충분히 명확한지
+          확인하세요.
+        </p>
+      </div>
+      <div class="gate" aria-label="현재 게이트 상태">
+        <span class="gate-label">Gate status</span>
+        <strong style="color: var(--success)">사용자 확인 완료</strong>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="CLI 상태별 프로토타입">
+      <aside class="sidebar">
+        <h2 class="sidebar-title">Scenarios</h2>
+        <p class="sidebar-copy">상태를 선택하면 같은 CLI 골격에서 출력만 전환됩니다.</p>
+
+        <div class="scenario-list" role="tablist" aria-label="CLI 시나리오">
+          <button class="scenario" role="tab" aria-selected="true" data-view="dex">
+            <span class="scenario-name">DEX analysis</span>
+            <span class="scenario-state"><i class="dot success"></i>COMPLETE</span>
+          </button>
+          <button class="scenario" role="tab" aria-selected="false" data-view="auth">
+            <span class="scenario-name">AUTH analysis</span>
+            <span class="scenario-state"><i class="dot warning"></i>PARTIAL + RETRY</span>
+          </button>
+          <button class="scenario" role="tab" aria-selected="false" data-view="freeze">
+            <span class="scenario-name">FREEZE analysis</span>
+            <span class="scenario-state"><i class="dot danger"></i>RULE BLOCKED</span>
+          </button>
+          <button class="scenario" role="tab" aria-selected="false" data-view="resume">
+            <span class="scenario-name">Resume analysis</span>
+            <span class="scenario-state"><i class="dot accent"></i>RESUMED</span>
+          </button>
+          <button class="scenario" role="tab" aria-selected="false" data-view="help">
+            <span class="scenario-name">Entry / help</span>
+            <span class="scenario-state"><i class="dot accent"></i>EMPTY STATE</span>
+          </button>
+        </div>
+
+        <hr class="sidebar-rule">
+
+        <div class="legend" aria-label="출력 채널 범례">
+          <div class="legend-row"><b>stderr</b><span>진행·retry·warning</span></div>
+          <div class="legend-row"><b>stdout</b><span>상태·결과·export</span></div>
+          <div class="legend-row"><b>JSON</b><span>single source of truth</span></div>
+          <div class="legend-row"><b>Markdown</b><span>사람용 evidence</span></div>
+        </div>
+      </aside>
+
+      <div class="stage">
+        <div class="commandbar" aria-label="현재 명령">
+          <span class="prompt">$</span>
+          <code id="command">scan analyze --request requests/dex.json</code>
+          <button class="copy-button" type="button" id="copy-command">COPY</button>
+        </div>
+
+        <div class="terminal" aria-live="polite">
+          <div class="terminal-chrome">
+            <div class="lights" aria-hidden="true">
+              <i class="light"></i><i class="light"></i><i class="light"></i>
+            </div>
+            <span class="terminal-title">scan · terminal preview</span>
+            <span class="terminal-width">100 columns</span>
+          </div>
+
+          <div class="terminal-body">
+            <section class="view" id="view-dex" role="tabpanel">
+              <div class="line"><span class="scan-mark">SCAN / ANALYZE</span></div>
+              <div class="statusline">
+                <span class="badge success">OK COMPLETE</span>
+                <span class="accent">AN-FX-SVC-DEX-001</span>
+                <span class="muted">dex_swap · chain 1</span>
+              </div>
+
+              <div class="section">INPUT</div>
+              <div class="kv"><span class="key">request</span><span class="value">requests/dex.json</span></div>
+              <div class="kv"><span class="key">mode</span><span class="value">offline · fixture FX-SVC-DEX-001</span></div>
+              <div class="kv"><span class="key">rule</span><span class="value warning">unconfirmed · network disabled</span></div>
+
+              <div class="section">PROGRESS</div>
+              <div class="line"><span class="accent">&gt; STARTING</span>  schema 0.1 validated · feedback 34ms</div>
+              <div class="line"><span class="muted">= CACHE HIT</span> DS-EVM-RPC-PUBLIC · receipt</div>
+              <div class="line"><span class="muted">= CACHE HIT</span> DS-EXPLORER-EVM · internal call</div>
+              <div class="line"><span class="success">OK RECONCILED</span> 4 evidence groups · exact raw match</div>
+
+              <div class="section">CONFIRMED RESULTS</div>
+              <div class="kv"><span class="key">asset_in</span><span class="value"><span class="strong">USDC</span> 25000000000 raw · 25,000 display</span></div>
+              <div class="kv"><span class="key">pool_output</span><span class="value"><span class="strong">WETH</span> 14449515027026387018 raw</span></div>
+              <div class="kv"><span class="key">user_net_output</span><span class="value"><span class="strong">ETH native</span> 14449515027026387018 raw</span></div>
+              <div class="kv"><span class="key">evidence</span><span class="value">event 3 · call 1 · sources 3</span></div>
+
+              <div class="note">
+                <div>
+                  <span class="context strong">ASSET SCOPE</span><br>
+                  pool_output WETH and user_net_output native ETH remain separate.
+                </div>
+              </div>
+
+              <div class="section">RUN</div>
+              <div class="kv"><span class="key">cache</span><span class="value">2 hit · 0 miss</span></div>
+              <div class="kv"><span class="key">network</span><span class="value">0 calls · retry 0 · fallback 0</span></div>
+              <div class="kv"><span class="key">resumed</span><span class="value">no</span></div>
+
+              <div class="section">EXPORTS</div>
+              <div class="kv"><span class="key">JSON</span><span class="value accent">.scan/runs/AN-FX-SVC-DEX-001/result.json</span></div>
+              <div class="kv"><span class="key">Markdown</span><span class="value accent">.scan/runs/AN-FX-SVC-DEX-001/evidence.md</span></div>
+            </section>
+
+            <section class="view" id="view-auth" role="tabpanel" hidden>
+              <div class="line"><span class="scan-mark">SCAN / ANALYZE</span></div>
+              <div class="statusline">
+                <span class="badge warning">! PARTIAL</span>
+                <span class="accent">AN-FX-EVM-AUTH-001</span>
+                <span class="muted">auth_consumption · chain 1</span>
+              </div>
+
+              <div class="section">INPUT</div>
+              <div class="kv"><span class="key">subject</span><span class="value">0x193070ae…be687af59</span></div>
+              <div class="kv"><span class="key">token / spender</span><span class="value">USDC · 0x68b34658…665fc45</span></div>
+              <div class="kv"><span class="key">mode</span><span class="value">live · fallback allowed</span></div>
+
+              <div class="section">PROGRESS</div>
+              <div class="line"><span class="accent">&gt; STARTING</span>  schema 0.1 validated · feedback 41ms</div>
+              <div class="line"><span class="success">OK COLLECTED</span> Approval event + approve call</div>
+              <div class="line"><span class="warning">~ RETRY 1/2</span> DS-EVM-RPC-ARCHIVE · timeout · next 0.8s</div>
+              <div class="line"><span class="warning">~ RETRY 2/2</span> DS-EVM-RPC-ARCHIVE · timeout · exhausted</div>
+              <div class="line"><span class="warning">&gt; FALLBACK</span> archive-primary -&gt; archive-secondary</div>
+              <div class="line"><span class="danger">X UNAVAILABLE</span> historical state at block 24500505</div>
+
+              <div class="section">CONFIRMED RESULTS</div>
+              <div class="kv"><span class="key">approval</span><span class="value"><span class="strong">approve</span> · owner/spender matched · uint256.max</span></div>
+              <div class="kv"><span class="key">evidence</span><span class="value">event 1 · call 1 · failed TX facts 3</span></div>
+
+              <div class="section">MISSING</div>
+              <div class="kv"><span class="key">allowance</span><span class="value warning">before/after consumption state</span></div>
+              <div class="kv"><span class="key">consumption</span><span class="value warning">delta reconciliation cannot complete</span></div>
+
+              <div class="section">ERROR</div>
+              <div class="kv"><span class="key">code</span><span class="value danger">archive_required</span></div>
+              <div class="kv"><span class="key">stage</span><span class="value">collect.state · attempts 2 · retryable yes</span></div>
+              <div class="kv"><span class="key">impact</span><span class="value">REQ-V1-AUTH-002 and REQ-V1-AUTH-004 incomplete</span></div>
+
+              <div class="note">
+                <div>
+                  <span class="context strong">NOT ASSESSED</span><br>
+                  Theft or phishing attribution is outside this onchain result.
+                </div>
+              </div>
+
+              <div class="section">EXPORTS</div>
+              <div class="kv"><span class="key">JSON</span><span class="value accent">.scan/runs/AN-FX-EVM-AUTH-001/result.partial.json</span></div>
+              <div class="kv"><span class="key">Markdown</span><span class="value accent">.scan/runs/AN-FX-EVM-AUTH-001/evidence.partial.md</span></div>
+
+              <div class="section">NEXT</div>
+              <div class="line strong">scan resume AN-FX-EVM-AUTH-001</div>
+            </section>
+
+            <section class="view" id="view-freeze" role="tabpanel" hidden>
+              <div class="line"><span class="scan-mark">SCAN / ANALYZE</span></div>
+              <div class="statusline">
+                <span class="badge danger">X FAILED</span>
+                <span class="accent">AN-20260726-FREEZE-002</span>
+                <span class="muted">address_freeze · chain 1</span>
+              </div>
+
+              <div class="section">INPUT</div>
+              <div class="kv"><span class="key">request</span><span class="value">requests/freeze-live.json</span></div>
+              <div class="kv"><span class="key">target</span><span class="value">0xd96f2b1c…18364307</span></div>
+              <div class="kv"><span class="key">rule</span><span class="value danger">restricted</span></div>
+
+              <div class="section">POLICY GATE</div>
+              <div class="line"><span class="accent">&gt; STARTING</span>  schema 0.1 validated · feedback 29ms</div>
+              <div class="line"><span class="danger">X BLOCKED</span> source_policy.rule_status is restricted</div>
+              <div class="line muted">Network calls were not started. No provider credentials were used.</div>
+
+              <div class="section">ERROR</div>
+              <div class="kv"><span class="key">code</span><span class="value danger">rule_restricted</span></div>
+              <div class="kv"><span class="key">stage</span><span class="value">policy · attempts 0 · retryable no</span></div>
+              <div class="kv"><span class="key">results</span><span class="value">0 · evidence 0 · source attempts 0</span></div>
+
+              <div class="note">
+                <div>
+                  <span class="context strong">SCOPE</span><br>
+                  The tool did not infer current sanctions status or criminal intent.
+                </div>
+              </div>
+
+              <div class="section">NEXT</div>
+              <div class="line strong">Confirm the official rule before changing source_policy.rule_status.</div>
+              <div class="line muted">Request file was not modified automatically.</div>
+            </section>
+
+            <section class="view" id="view-resume" role="tabpanel" hidden>
+              <div class="line"><span class="scan-mark">SCAN / RESUME</span></div>
+              <div class="statusline">
+                <span class="badge success">OK COMPLETE</span>
+                <span class="accent">AN-FX-EVM-AUTH-001</span>
+                <span class="muted">auth_consumption · resumed</span>
+              </div>
+
+              <div class="section">CHECKPOINT</div>
+              <div class="kv"><span class="key">completed</span><span class="value">input.validate · approval.collect · failed_tx.exclude</span></div>
+              <div class="kv"><span class="key">resume from</span><span class="value accent">collect.state.after_consumption</span></div>
+              <div class="kv"><span class="key">reused evidence</span><span class="value">5 IDs · immutable cache</span></div>
+
+              <div class="section">PROGRESS</div>
+              <div class="line"><span class="accent">&gt; RESUMED</span> checkpoint integrity verified</div>
+              <div class="line"><span class="muted">= CACHE HIT</span> 5 completed reads · external calls skipped</div>
+              <div class="line"><span class="success">OK COLLECTED</span> allowance state at block 24500505</div>
+              <div class="line"><span class="success">OK RECONCILED</span> consumed delta 4500000 raw</div>
+
+              <div class="section">CONFIRMED RESULTS</div>
+              <div class="kv"><span class="key">approval</span><span class="value">approve · uint256.max</span></div>
+              <div class="kv"><span class="key">allowance delta</span><span class="value"><span class="strong">4500000 raw</span> · exact match</span></div>
+              <div class="kv"><span class="key">consumption</span><span class="value">transferFrom · 4500000 raw</span></div>
+              <div class="kv"><span class="key">failed excluded</span><span class="value">3 transactions</span></div>
+
+              <div class="note">
+                <div>
+                  <span class="context strong">NOT ASSESSED</span><br>
+                  Authorization consumption confirmed. Theft or phishing not assessed.
+                </div>
+              </div>
+
+              <div class="section">RUN</div>
+              <div class="kv"><span class="key">cache</span><span class="value">5 hit · 1 miss</span></div>
+              <div class="kv"><span class="key">retry / fallback</span><span class="value">0 / 0</span></div>
+              <div class="kv"><span class="key">resumed</span><span class="value success">yes</span></div>
+
+              <div class="section">EXPORTS</div>
+              <div class="kv"><span class="key">JSON</span><span class="value accent">.scan/runs/AN-FX-EVM-AUTH-001/result.json</span></div>
+              <div class="kv"><span class="key">Markdown</span><span class="value accent">.scan/runs/AN-FX-EVM-AUTH-001/evidence.md</span></div>
+            </section>
+
+            <section class="view" id="view-help" role="tabpanel" hidden>
+              <div class="line"><span class="scan-mark">SCAN</span> <span class="muted">evidence-first onchain analysis CLI</span></div>
+              <div class="blank"></div>
+              <div class="line">Usage: <span class="strong">scan [COMMAND] [OPTIONS]</span></div>
+
+              <div class="section">COMMANDS</div>
+              <div class="kv"><span class="key">analyze</span><span class="value">Run a Schema 0.1 request.</span></div>
+              <div class="kv"><span class="key">validate</span><span class="value">Validate a request or result before use.</span></div>
+              <div class="kv"><span class="key">resume</span><span class="value">Continue from a stored checkpoint.</span></div>
+              <div class="kv"><span class="key">show</span><span class="value">Show a stored result and export paths.</span></div>
+
+              <div class="section">CANONICAL FLOW</div>
+              <div class="line"><span class="muted">$</span> scan validate requests/dex.json</div>
+              <div class="line"><span class="success">OK VALID</span> analysis request · schema 0.1</div>
+              <div class="line"><span class="muted">$</span> scan analyze --request requests/dex.json</div>
+
+              <div class="section">SUPPORTED ANALYSIS TYPES</div>
+              <div class="kv"><span class="key">dex_swap</span><span class="value">pool output and user net output</span></div>
+              <div class="kv"><span class="key">auth_consumption</span><span class="value">approval, allowance, successful consumption</span></div>
+              <div class="kv"><span class="key">address_freeze</span><span class="value">blacklist lifecycle and separated context</span></div>
+
+              <div class="note">
+                <div>
+                  <span class="context strong">READ ONLY</span><br>
+                  V1 never requests a private key and never signs or submits a transaction.
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <div class="reviewbar" aria-label="프로토타입 검토 항목">
+          <div class="review-item"><span>First feedback</span><strong>400ms 이내 목표</strong></div>
+          <div class="review-item"><span>State coverage</span><strong>5 scenarios</strong></div>
+          <div class="review-item"><span>Machine contract</span><strong>Schema 0.1</strong></div>
+          <div class="review-item"><span>Implementation</span><strong>아직 시작 안 함</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>Preview only · no external requests · no secrets</span>
+      <span>SCAN 2026 · Draft 1</span>
+    </footer>
+  </main>
+
+  <script>
+    const commands = {
+      dex: "scan analyze --request requests/dex.json",
+      auth: "scan analyze --request requests/auth-live.json",
+      freeze: "scan analyze --request requests/freeze-live.json",
+      resume: "scan resume AN-FX-EVM-AUTH-001",
+      help: "scan --help"
+    };
+
+    const tabs = [...document.querySelectorAll(".scenario")];
+    const views = [...document.querySelectorAll(".view")];
+    const command = document.querySelector("#command");
+    const copyButton = document.querySelector("#copy-command");
+
+    function selectView(name) {
+      tabs.forEach((tab) => {
+        const selected = tab.dataset.view === name;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+
+      views.forEach((view) => {
+        view.hidden = view.id !== `view-${name}`;
+      });
+
+      command.textContent = commands[name];
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => selectView(tab.dataset.view));
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft"].includes(event.key)) {
+          return;
+        }
+        event.preventDefault();
+        const direction = ["ArrowDown", "ArrowRight"].includes(event.key) ? 1 : -1;
+        const next = (index + direction + tabs.length) % tabs.length;
+        tabs[next].focus();
+        selectView(tabs[next].dataset.view);
+      });
+    });
+
+    copyButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(command.textContent);
+        copyButton.textContent = "COPIED";
+      } catch {
+        copyButton.textContent = "SELECT";
+      }
+      window.setTimeout(() => {
+        copyButton.textContent = "COPY";
+      }, 1200);
+    });
+  </script>
+</body>
+</html>

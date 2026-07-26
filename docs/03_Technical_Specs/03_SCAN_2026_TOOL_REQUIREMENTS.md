@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 분석 도구 요구사항
 > Created: 2026-07-25 23:46
-> Last Updated: 2026-07-26 13:20
+> Last Updated: 2026-07-26 16:34
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -286,8 +286,8 @@ fixture schema 개정을 제안한다.
 
 ## 15. 미결정 사항
 
-- CLI·노트북·웹 UI의 1차 사용 형태
-- Python·TypeScript·DuckDB 등 기술 조합
+- 노트북·웹 UI를 V1 이후 어떤 조건에서 추가할지
+- Python dependency의 실제 버전과 lock 결과
 - 공급자별 adapter와 fallback 우선순위
 - raw artifact 저장 형식·경로·보존 기간·용량
 - 구체 retry 횟수·backoff 상한·`latest` TTL
@@ -300,14 +300,17 @@ fixture schema 개정을 제안한다.
 1. 요구사항별 기술 후보와 공급자 adapter 전략을 기술 선택 기록 Draft 1에서 비교했다.
 2. 공통 작업 입력·결과·오류 JSON Schema 0.1과 fixture 변환 예제를 작성했다.
 3. Python package 초기화 전에 Python 개발 원칙 Draft 1을 작성했다.
-4. CLI command flow와 terminal preview를 작성해 UI gate를 확인한다.
-5. 승인된 Schema·UI 경계를 구현 backlog와 회귀 테스트로 분해한다.
-6. 2026-07-27 이후 공식 규정에 따라 `REQ-NFR-008`과 소스 정책을 갱신한다.
+4. CLI command flow와 terminal HTML Preview Draft를 작성했다.
+5. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
+6. 승인된 Schema·UI 경계를 구현 backlog와 회귀 테스트로 분해한다.
+7. 2026-07-27 이후 공식 규정에 따라 `REQ-NFR-008`과 소스 정책을 갱신한다.
 
 ## 17. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위와 단계 제한
 - **Concept_Design**: [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 30문항과 완료·부분·실패 조건
+- **UI_Screens**: [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - 요구사항을 실행하는 명령·상태 흐름
+- **UI_Screens**: [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - complete·partial·failed 화면
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - `DS-...` 소스 능력·제약
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - fixture JSON·증거 분리 계약
 - **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - 이 요구사항을 구현할 구조·품질·보안 기준

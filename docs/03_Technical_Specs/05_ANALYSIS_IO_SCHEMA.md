@@ -1,6 +1,6 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-26 13:20
+> Last Updated: 2026-07-26 16:34
 > Status: Draft 1
 > Schema Version: 0.1
 
@@ -246,7 +246,6 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
 - Pydantic 모델의 실제 module 경로와 schema 생성 명령
 - artifact URI scheme과 로컬 보존 기간
 - Markdown evidence export의 렌더링 형식
-- CLI command별 입력 파일 위치와 terminal 표시
 - `partial` 상태에서 오류와 경고를 나누는 slice별 세부 기준
 - 2026 공식 규정 확인 후 `rule_status` 기본값
 
@@ -255,13 +254,16 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
 1. Schema 0.1과 세 fixture 예제의 자동 검증을 통과시킨다.
 2. Python 개발 원칙 Draft 1에서 Pydantic 모델·adapter·artifact·secret 규칙을
    정리했다.
-3. CLI command flow와 terminal preview를 사용자에게 확인한다.
-4. 승인된 Schema·UI 경계를 원자적 backlog와 QA 시나리오로 전환한다.
-5. Python 프로젝트를 초기화하고 생성 Schema diff 검사를 연결한다.
+3. CLI command flow와 terminal HTML Preview Draft를 작성했다.
+4. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
+5. 승인된 Schema·UI 경계를 원자적 backlog와 QA 시나리오로 전환한다.
+6. Python 프로젝트를 초기화하고 생성 Schema diff 검사를 연결한다.
 
 ## 12. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위와 vertical slice
+- **UI_Screens**: [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - Schema 요청·결과·오류의 terminal 흐름
+- **UI_Screens**: [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - Schema 데이터의 상태별 표시
 - **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - Schema를 구현하는 Pydantic·검증·오류 원칙
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - `DS-...` ID와 공급자 제약
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - 회귀 fixture의 독립 JSON 계약
