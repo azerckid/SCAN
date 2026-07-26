@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-26 18:28
+> Last Updated: 2026-07-26 18:54
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -74,6 +74,7 @@
 | [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) | Draft 1 | 공식 규정과 source policy 반영 후 승인 |
 | [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) | Draft 1 | LICENSE·정확한 버전·저장 세부는 구현 전/중 결정으로 분리 |
 | [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Draft 1 | 문서 계약 0.1 승인, 생성 Schema diff는 구현 후 검증 |
+| `01_DB_SCHEMA.md` | 미작성 | TD-007의 SQLite 결정을 논리 엔티티·관계·보존 경계로 문서화; 정확한 DDL은 구현 시 결정 |
 
 ### 3.4 Logic Progress
 
@@ -105,7 +106,7 @@ solmate Gate가 요구하는 표준 문서와 이 저장소의 도메인 문서�
 | `03_PRODUCT_SPECS.md` | 예상문제 은행 + P0·V1 요구사항 | 대체 승인 필요 |
 | `00_ROADMAP.md` | 이 문서 | 충족 |
 | `02_QA_CHECKLIST.md` | 없음 | 필수 작성 |
-| `01_DB_SCHEMA.md` | Analysis I/O Schema·향후 SQLite DDL | DB 사용 확정 시 작성 |
+| `01_DB_SCHEMA.md` | 미작성 | 필수 작성 — SQLite 논리 Schema는 Document Gate 전, 정확한 DDL·migration은 `TASK-004`에서 확정 |
 | `02_API_SPECS.md` | 데이터 소스 등록부·Analysis I/O Schema | 외부 제공 API가 생길 때 별도 작성 |
 
 `VISION_CORE`·`PRODUCT_SPECS`는 이름만 맞추기 위해 중복 생성하지 않는다.
@@ -154,6 +155,7 @@ solmate Gate가 요구하는 표준 문서와 이 저장소의 도메인 문서�
 - [ ] Concept 문서의 Draft 상태와 미결정 사항을 검토한다.
 - [ ] Technical 문서의 규범 부분과 구현 중 결정 부분을 분리한다.
 - [ ] Backlog와 QA 시나리오의 문서 범위를 승인한다.
+- [ ] `01_DB_SCHEMA.md`에 SQLite 논리 엔티티·관계·보존·mutation 경계를 기록한다.
 - [ ] 프로젝트 루트 `README.md`에 목적·문서 지도·검증 명령을 작성한다.
 - [ ] Project LICENSE를 코드 공개 전에 결정한다.
 - [ ] 모든 Markdown 메타데이터·Related Documents·상대 링크를 검증한다.
@@ -170,10 +172,11 @@ Roadmap에 명시되어 있다.
 - [ ] Pre-Code Technical Brief의 데이터·API·상태·acceptance 기준이 유효하다.
 - [ ] 공식 규정 제한이 Backlog·QA·source policy에 반영되었다.
 - [ ] 문서·Schema·fixture 검증이 모두 통과한다.
-- [ ] `TASK-001` 시작에 필요한 사용자 승인을 별도로 받는다.
+- [ ] Backlog의 `TASK-001`~`TASK-009`가 모두 `ToDo` 상태로 유지된다.
 
-완료 조건: 문서 작업 종료와 구현 시작이 같은 승인으로 간주되지 않으며,
-사용자가 문서 완료와 `TASK-001` 시작을 각각 승인한다.
+완료 조건: 사용자가 문서 완료를 승인하면 이 Gate는 닫힌다. `TASK-001`
+시작은 이 Gate와 별개의 후속 승인으로만 진행하며, 구현 보류는 문서 완료를
+막지 않는다.
 
 ## 6. 일정 전략
 
@@ -201,6 +204,7 @@ Roadmap에 명시되어 있다.
 - [ ] 핵심 Concept·Technical 문서 승인 또는 Draft 유지 사유 기록
 - [ ] Roadmap·Backlog·QA checklist·QA scenarios 연결
 - [ ] confirmed fixture 3개와 후보 5개의 처리 방침 확정
+- [ ] `01_DB_SCHEMA.md`에 SQLite 논리 엔티티·관계·보존·mutation 경계 기록
 - [ ] 프로젝트 README 존재
 - [ ] Project LICENSE 결정 시점 확정
 - [ ] metadata·Related Documents·상대 링크 검증 통과
@@ -210,7 +214,7 @@ Roadmap에 명시되어 있다.
 ### 7.2 구현 전까지 보류 가능
 
 - [ ] 정확한 dependency patch version과 `uv.lock`
-- [ ] 실제 SQLite DDL·migration·backup 명령
+- [ ] 논리 Schema를 구현한 정확한 SQLite DDL·migration·backup 명령
 - [ ] provider별 실측 성능·rate limit
 - [ ] 실제 CLI snapshot과 HTML Preview 차이
 - [ ] P1·P2 기능용 추가 adapter와 전체 후보 fixture 자동화
