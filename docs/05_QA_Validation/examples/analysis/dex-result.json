@@ -1,0 +1,210 @@
+{
+  "$schema": "../../schemas/analysis-result.schema.json",
+  "schema_version": "0.1",
+  "analysis_id": "AN-FX-SVC-DEX-001",
+  "analysis_type": "dex_swap",
+  "chain_id": 1,
+  "status": "complete",
+  "results": [
+    {
+      "result_id": "RES-DEX-ASSET-IN",
+      "result_type": "asset_in",
+      "classification": "confirmed_fact",
+      "value": {
+        "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "symbol": "USDC",
+        "decimals": 6,
+        "amount_raw": "25000000000"
+      },
+      "tool_requirement_ids": ["REQ-V1-DEX-001"],
+      "fixture_requirement_ids": ["REQ-DEX-ASSET-IN"],
+      "evidence_refs": ["EV-DEX-TRANSFER-IN", "EV-DEX-SWAP"]
+    },
+    {
+      "result_id": "RES-DEX-POOL-OUTPUT",
+      "result_type": "pool_output",
+      "classification": "confirmed_fact",
+      "value": {
+        "token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "symbol": "WETH",
+        "decimals": 18,
+        "amount_raw": "14449515027026387018"
+      },
+      "tool_requirement_ids": ["REQ-V1-DEX-002", "REQ-V1-DEX-004"],
+      "fixture_requirement_ids": ["REQ-DEX-POOL-OUTPUT"],
+      "evidence_refs": ["EV-DEX-TRANSFER-OUT", "EV-DEX-SWAP"]
+    },
+    {
+      "result_id": "RES-DEX-USER-NET-OUTPUT",
+      "result_type": "user_net_output",
+      "classification": "confirmed_fact",
+      "value": {
+        "asset_type": "native",
+        "symbol": "ETH",
+        "decimals": 18,
+        "amount_raw": "14449515027026387018",
+        "from": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+        "to": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf"
+      },
+      "tool_requirement_ids": ["REQ-V1-DEX-003", "REQ-V1-DEX-004"],
+      "fixture_requirement_ids": ["REQ-DEX-USER-NET-OUTPUT"],
+      "evidence_refs": ["EV-DEX-WITHDRAWAL", "EV-DEX-INTERNAL-ETH"]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-DEX-TRANSFER-IN",
+      "evidence_type": "event",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "source_record_ref": "SRC-DEX-PUBLICNODE",
+      "method": "eth_getTransactionReceipt",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 16642512,
+        "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+        "log_index": 275
+      },
+      "decoded": {
+        "event": "Transfer",
+        "amount_raw": "25000000000"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-SVC-DEX-001/evidence.json#EV-DEX-TRANSFER-IN",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-DEX-TRANSFER-OUT",
+      "evidence_type": "event",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "source_record_ref": "SRC-DEX-PUBLICNODE",
+      "method": "eth_getTransactionReceipt",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 16642512,
+        "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+        "log_index": 276
+      },
+      "decoded": {
+        "event": "Transfer",
+        "amount_raw": "14449515027026387018"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-SVC-DEX-001/evidence.json#EV-DEX-TRANSFER-OUT",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-DEX-SWAP",
+      "evidence_type": "event",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "source_record_ref": "SRC-DEX-PUBLICNODE",
+      "method": "eth_getTransactionReceipt",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 16642512,
+        "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+        "log_index": 278
+      },
+      "decoded": {
+        "event": "Swap",
+        "amount0_in_raw": "25000000000",
+        "amount1_out_raw": "14449515027026387018"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-SVC-DEX-001/evidence.json#EV-DEX-SWAP",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-DEX-WITHDRAWAL",
+      "evidence_type": "event",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "source_record_ref": "SRC-DEX-PUBLICNODE",
+      "method": "eth_getTransactionReceipt",
+      "retrieved_at": "2026-07-26T12:26:01+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 16642512,
+        "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+        "log_index": 279
+      },
+      "decoded": {
+        "event": "Withdrawal",
+        "amount_raw": "14449515027026387018"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-SVC-DEX-001/evidence.json#EV-DEX-WITHDRAWAL",
+        "media_type": "application/json"
+      }
+    },
+    {
+      "evidence_id": "EV-DEX-INTERNAL-ETH",
+      "evidence_type": "call",
+      "source_id": "DS-EXPLORER-EVM",
+      "source_record_ref": "SRC-DEX-BLOCKSCOUT",
+      "method": "get_internal_transactions",
+      "retrieved_at": "2026-07-26T12:26:02+09:00",
+      "locator": {
+        "chain_id": 1,
+        "block_number": 16642512,
+        "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+        "trace_address": [1]
+      },
+      "decoded": {
+        "asset_type": "native",
+        "amount_raw": "14449515027026387018"
+      },
+      "raw_artifact": {
+        "artifact_uri": "fixture://FX-SVC-DEX-001/evidence.json#EV-DEX-INTERNAL-ETH",
+        "media_type": "application/json"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "source_record_id": "SRC-DEX-PUBLICNODE",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider_id": "ethereum.publicnode.com",
+      "role": "scoring",
+      "required": true,
+      "capability": "transaction_receipt",
+      "endpoint_host": "ethereum-rpc.publicnode.com",
+      "retrieved_at": "2026-07-26T12:26:01+09:00"
+    },
+    {
+      "source_record_id": "SRC-DEX-BLOCKSCOUT",
+      "source_id": "DS-EXPLORER-EVM",
+      "provider_id": "blockscout",
+      "role": "scoring",
+      "required": true,
+      "capability": "internal_transactions",
+      "endpoint_host": "eth.blockscout.com",
+      "retrieved_at": "2026-07-26T12:26:02+09:00"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "run": {
+    "tool_version": "schema-example-0.1",
+    "execution_mode": "fixture_example",
+    "started_at": "2026-07-26T12:26:00+09:00",
+    "finished_at": "2026-07-26T12:26:03+09:00",
+    "cache_hits": 2,
+    "cache_misses": 0,
+    "retry_count": 0,
+    "fallback_count": 0,
+    "resumed": false
+  },
+  "exports": {
+    "json": {
+      "artifact_uri": "example://AN-FX-SVC-DEX-001/result.json"
+    },
+    "markdown": {
+      "artifact_uri": "example://AN-FX-SVC-DEX-001/evidence.md"
+    }
+  }
+}

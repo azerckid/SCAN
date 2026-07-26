@@ -1,0 +1,45 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.1",
+  "analysis_id": "AN-FX-EVM-AUTH-001",
+  "analysis_type": "auth_consumption",
+  "chain_id": 1,
+  "fixture_id": "FX-EVM-AUTH-001",
+  "requested_at": "2026-07-26T12:26:00+09:00",
+  "inputs": {
+    "subject_address": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+    "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "spender_address": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45",
+    "approval_type": "approve",
+    "approval_transaction_hash": "0x3f7037014b8709f02bf2032d70ce4ec6854a53ed141b63d6a7ea359a9dccdabd",
+    "consumption_transaction_hash": "0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51",
+    "state_blocks": {
+      "before_approval": 24500452,
+      "after_approval": 24500453,
+      "before_consumption": 24500504,
+      "after_consumption": 24500505
+    },
+    "excluded_transaction_hashes": [
+      "0x35e89b0cbd4ba35cfd77d281bba9a0b16c027e686fe81d8059e922aec5cafd61",
+      "0xd35b4dd2fb4a8b719247f4f45742e99eb71f07a3668cd15f4b17060f00f93715",
+      "0x6759edc572968feaaddf99eac55893e84eee5a3bddf0d216b55b61636173875b"
+    ]
+  },
+  "source_policy": {
+    "rule_status": "unconfirmed",
+    "allowed_source_ids": [
+      "DS-EVM-RPC-PUBLIC",
+      "DS-EVM-RPC-ARCHIVE",
+      "DS-EXPLORER-EVM",
+      "DS-DEX-META"
+    ],
+    "source_order": [
+      "DS-EVM-RPC-PUBLIC",
+      "DS-EVM-RPC-ARCHIVE",
+      "DS-EXPLORER-EVM",
+      "DS-DEX-META"
+    ],
+    "allow_fallback": true,
+    "offline_mode": true
+  }
+}

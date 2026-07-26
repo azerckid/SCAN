@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 분석 도구 요구사항
 > Created: 2026-07-25 23:46
-> Last Updated: 2026-07-26 00:01
+> Last Updated: 2026-07-26 12:26
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -83,8 +83,9 @@ OSINT 탐색은 P2이며 V1 완료 조건이 아니다.
 
 ### 5.1 결과 봉투
 
-모든 분석 유형은 최소한 아래 논리 구조를 출력해야 한다. 실제 JSON Schema는
-기술 선택 기록 이후 별도 파일로 고정한다.
+모든 분석 유형은 최소한 아래 논리 구조를 출력해야 한다. 실제 JSON 계약은
+[공통 분석 I/O Schema 0.1](./05_ANALYSIS_IO_SCHEMA.md)과 세 JSON Schema
+파일로 분리해 정의한다.
 
 | 필드 | 형식 | 규칙 |
 |:---|:---|:---|
@@ -290,16 +291,16 @@ fixture schema 개정을 제안한다.
 - 공급자별 adapter와 fallback 우선순위
 - raw artifact 저장 형식·경로·보존 기간·용량
 - 구체 retry 횟수·backoff 상한·`latest` TTL
-- 도구 출력 JSON Schema의 파일 구조와 버전
+- Pydantic 모델에서 Schema 0.1을 생성·대조하는 명령과 module 경로
 - 실제 네트워크·캐시 성능 기준
 - 2026년 공식 규정에 따른 자동화·API 허용 범위
 
 ## 16. 다음 단계
 
 1. 요구사항별 기술 후보와 공급자 adapter 전략을 기술 선택 기록 Draft 1에서 비교했다.
-2. 기술 선택 Draft를 확정하고 공통 작업 입력·결과 JSON Schema와 error enum을 작성한다.
+2. 공통 작업 입력·결과·오류 JSON Schema 0.1과 fixture 변환 예제를 작성했다.
 3. Python package 초기화 전에 개발 원칙과 CLI·UI gate 범위를 확정한다.
-4. P0 기반을 구현 backlog와 회귀 테스트로 분해한다.
+4. 승인된 Schema·UI 경계를 구현 backlog와 회귀 테스트로 분해한다.
 5. 2026-07-27 이후 공식 규정에 따라 `REQ-NFR-008`과 소스 정책을 갱신한다.
 
 ## 17. Related Documents
@@ -309,6 +310,7 @@ fixture schema 개정을 제안한다.
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - `DS-...` 소스 능력·제약
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - fixture JSON·증거 분리 계약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - 요구사항을 구현할 런타임·adapter·저장·검증 결정
+- **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - 이 문서의 입력·결과·오류 요구사항을 고정한 JSON 계약
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - fixture 목록과 승격 기준
 - **QA_Validation**: [DEX fixture](../05_QA_Validation/fixtures/FX-SVC-DEX-001/README.md) - DEX exact-match 기준
 - **QA_Validation**: [AUTH fixture](../05_QA_Validation/fixtures/FX-EVM-AUTH-001/README.md) - AUTH exact-match 기준

@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-26 11:33
+> Last Updated: 2026-07-26 12:26
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -369,7 +369,7 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 |:---|:---|:---|
 | exact Python·dependency 버전 | 미결정 | `pyproject.toml`·`uv.lock` 생성 |
 | Project LICENSE | 미결정 | 첫 공개 코드 PR 전 사용자 승인 |
-| 출력 JSON Schema 0.1 | 후속 | 기술 선택 Draft 승인 후 |
+| 출력 JSON Schema 0.1 | Draft 작성 | 공통 계약 검토·승인 후 Pydantic 생성본과 대조 |
 | SQLite DDL | 후속 | 출력 schema와 command ID 확정 후 |
 | 웹 UI | 보류 | CLI evidence 검토의 실제 병목 또는 공식 제출 요건 확인 |
 | DuckDB | 보류 | P1 대규모 집계 benchmark에서 SQLite 한계 확인 |
@@ -379,8 +379,8 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 
 ## 17. 다음 단계
 
-1. 이 Draft의 `TD-001`~`TD-022`를 검토하고 채택 범위를 확정한다.
-2. 공통 작업 입력·결과·오류 JSON Schema 0.1을 작성한다.
+1. 이 Draft의 `TD-001`~`TD-022`를 검토하고 채택 범위를 확정했다.
+2. 공통 작업 입력·결과·오류 JSON Schema 0.1과 fixture 변환 예제를 작성했다.
 3. Python package 초기화 전 `00_DEVELOPMENT_PRINCIPLES.md`를 작성한다.
 4. CLI 화면을 구현 대상으로 확정하면 command flow와 terminal preview를
    UI 문서로 작성하고 사용자 확인을 받는다.
@@ -394,4 +394,5 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - source capability·공급자 제약
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - 기존 fixture JSON 계약
 - **Technical_Specs**: [P0·V1 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 기술 선택의 규범적 요구사항
+- **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - `TD-019`의 요청·결과·오류 공개 계약
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - DEX·AUTH·FREEZE 회귀 입력

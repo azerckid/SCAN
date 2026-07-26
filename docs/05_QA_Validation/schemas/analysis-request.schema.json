@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://azerckid.github.io/SCAN/schemas/analysis-request.schema.json",
+  "title": "SCAN Analysis Request 0.1",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "analysis_id",
+    "analysis_type",
+    "chain_id",
+    "inputs",
+    "source_policy",
+    "requested_at"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "pattern": "analysis-request\\.schema\\.json$"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "analysis_id": {
+      "$ref": "#/$defs/analysisId"
+    },
+    "analysis_type": {
+      "$ref": "#/$defs/analysisType"
+    },
+    "chain_id": {
+      "const": 1
+    },
+    "fixture_id": {
+      "type": "string",
+      "pattern": "^FX-[A-Z0-9-]+$"
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "inputs": {
+      "type": "object"
+    },
+    "source_policy": {
+      "$ref": "#/$defs/sourcePolicy"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "analysis_type": {
+            "const": "dex_swap"
+          }
+        },
+        "required": ["analysis_type"]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/dexInputs"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "analysis_type": {
+            "const": "auth_consumption"
+          }
+        },
+        "required": ["analysis_type"]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/authInputs"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "analysis_type": {
+            "const": "address_freeze"
+          }
+        },
+        "required": ["analysis_type"]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/freezeInputs"
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "analysisId": {
+      "type": "string",
+      "pattern": "^AN-[A-Z0-9][A-Z0-9-]{2,63}$"
+    },
+    "analysisType": {
+      "enum": ["dex_swap", "auth_consumption", "address_freeze"]
+    },
+    "address": {
+      "type": "string",
+      "pattern": "^0x[a-f0-9]{40}$"
+    },
+    "transactionHash": {
+      "type": "string",
+      "pattern": "^0x[a-f0-9]{64}$"
+    },
+    "sourceId": {
+      "type": "string",
+      "pattern": "^DS-[A-Z0-9-]+$"
+    },
+    "authStateBlocks": {
+      "type": "object",
+      "required": [
+        "before_approval",
+        "after_approval",
+        "before_consumption",
+        "after_consumption"
+      ],
+      "properties": {
+        "before_approval": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "after_approval": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "before_consumption": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "after_consumption": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "freezeStateBlocks": {
+      "type": "object",
+      "required": [
+        "before_blacklist",
+        "after_blacklist",
+        "before_unblacklist",
+        "after_unblacklist"
+      ],
+      "properties": {
+        "before_blacklist": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "after_blacklist": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "before_unblacklist": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "after_unblacklist": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "dexInputs": {
+      "type": "object",
+      "required": ["transaction_hash"],
+      "properties": {
+        "transaction_hash": {
+          "$ref": "#/$defs/transactionHash"
+        }
+      },
+      "additionalProperties": false
+    },
+    "authInputs": {
+      "type": "object",
+      "required": [
+        "subject_address",
+        "token_address",
+        "spender_address",
+        "approval_transaction_hash",
+        "consumption_transaction_hash",
+        "state_blocks"
+      ],
+      "properties": {
+        "subject_address": {
+          "$ref": "#/$defs/address"
+        },
+        "token_address": {
+          "$ref": "#/$defs/address"
+        },
+        "spender_address": {
+          "$ref": "#/$defs/address"
+        },
+        "approval_type": {
+          "enum": ["approve", "permit", "permit2"]
+        },
+        "approval_transaction_hash": {
+          "$ref": "#/$defs/transactionHash"
+        },
+        "consumption_transaction_hash": {
+          "$ref": "#/$defs/transactionHash"
+        },
+        "state_blocks": {
+          "$ref": "#/$defs/authStateBlocks"
+        },
+        "excluded_transaction_hashes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/transactionHash"
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "freezeInputs": {
+      "type": "object",
+      "required": [
+        "token_address",
+        "target_address",
+        "mode",
+        "event_transaction_hashes",
+        "state_blocks"
+      ],
+      "properties": {
+        "token_address": {
+          "$ref": "#/$defs/address"
+        },
+        "target_address": {
+          "$ref": "#/$defs/address"
+        },
+        "mode": {
+          "const": "address_blacklist_lifecycle"
+        },
+        "event_transaction_hashes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/transactionHash"
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "state_blocks": {
+          "$ref": "#/$defs/freezeStateBlocks"
+        },
+        "context_urls": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "sourcePolicy": {
+      "type": "object",
+      "required": [
+        "rule_status",
+        "allowed_source_ids",
+        "source_order",
+        "allow_fallback",
+        "offline_mode"
+      ],
+      "properties": {
+        "rule_status": {
+          "enum": ["unconfirmed", "allowed", "restricted"]
+        },
+        "allowed_source_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "source_order": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "allow_fallback": {
+          "type": "boolean"
+        },
+        "offline_mode": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
