@@ -1,6 +1,6 @@
 # SCAN 2026 CLI Terminal UI Design
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-26 16:46
+> Last Updated: 2026-07-26 23:51
 > Status: Draft 1 · UI-First Gate Passed
 
 ## 1. 문서 목적
@@ -326,12 +326,40 @@ Preview의 버튼은 구현 API가 아니라 검토 편의를 위한 상태 전�
 - [x] 사용자 preview 확인
 - [x] 피드백 반영
 
-## 14. Related Documents
+이 Gate는 CLI V1에만 적용된다. 별도
+[Web Workbench Preview](./previews/02_investigation_workbench_preview.html)는
+시연 UX 탐색용 Draft이며 현재 Gate의 통과 상태나 Backlog 선행 조건을 바꾸지
+않는다.
+
+## 14. Web Workbench 시각 언어 경계
+
+Web Workbench는 CLI와 같은 Analysis I/O 값을 다른 의미로 표현하지 않는다.
+화면 공간이 넓어져도 확정 사실·외부 맥락·휴리스틱·미평가를 합치지 않는다.
+
+| 분류 | 화면 label | 시각 표현 | 금지 |
+|:---|:---|:---|:---|
+| `confirmed_fact` | `CONFIRMED` | 실선·명시적 근거 수 | 범죄·귀속 의미 추가 |
+| `external_context` | `CONTEXT` | 보라 계열·출처명 | 온체인 사실로 병합 |
+| `heuristic` | `HEURISTIC` | 점선·score·반례 | 확정 경로처럼 표시 |
+| `not_assessed` | `NOT ASSESSED` | 중립색·범위 설명 | 정상·무관으로 오해 |
+| partial missing | `MISSING` | 경고색·영향·다음 행동 | 빈 값으로 숨김 |
+
+그래프 edge를 선택하면 Evidence Inspector가 `evidence_id`, `source_id`,
+method, block, TX·log·trace locator와 raw artifact 위치를 표시한다. 화면에서
+계산한 별도 금액이나 라벨을 Analysis I/O 결과처럼 보여주지 않는다.
+
+Challenge Preview의 노드 수는 UI 검토를 위한 축약 표현이다. “수백 주소·수천
+TX 처리 완료”라는 성능 주장을 하지 않으며 실제 fixture·측정 전에는 규모
+수치를 제품 성능으로 표시하지 않는다.
+
+## 15. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - V1 사용자 가치
 - **UI_Screens**: [CLI Screen Flow](./00_SCREEN_FLOW.md) - 명령과 상태 전환
 - **UI_Screens**: [CLI Prototype Review](./02_CLI_PROTOTYPE_REVIEW.md) - 확인 결과와 피드백
+- **UI_Screens**: [Web Investigation Workbench](./03_WEB_INVESTIGATION_WORKBENCH.md) - 선택적 시연 UX 구조와 승격 조건
 - **UI_Screens**: [HTML Terminal Preview](./previews/01_cli_terminal_preview.html) - 상태별 화면
+- **UI_Screens**: [HTML Workbench Preview](./previews/02_investigation_workbench_preview.html) - read-only 조사 화면 Draft
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - stdout·stderr·보안 원칙
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 화면 데이터의 source of truth
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - renderer·CLI 구현 책임

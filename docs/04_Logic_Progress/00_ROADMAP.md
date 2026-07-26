@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-26 23:18
+> Last Updated: 2026-07-26 23:51
 > Status: Approved 1.0
 
 ## 1. 문서 목적
@@ -23,12 +23,12 @@
 
 | 구분 | 현재 수량 | 상태 |
 |:---|---:|:---|
-| 상위 Markdown 문서 | 19 | Approved 1, Confirmed 1, UI Gate Passed 3, Draft 14 |
+| 상위 Markdown 문서 | 20 | Approved 1, Confirmed 1, UI Gate Passed 3, Draft 15 |
 | confirmed fixture 패키지 | 3 | DEX·AUTH·FREEZE `confirmed / 0.2` |
 | 후보 fixture | 5 | DOC-M3에서 Deferred, 단계별 승격 조건 기록 |
 | JSON Schema | 6 | fixture 3종·analysis 3종 |
 | 독립 검증기 | 2 | fixture `PASS 3`, analysis `PASS 3` |
-| HTML Preview | 1 | 사용자 확인·FB-001 반영 완료 |
+| HTML Preview | 2 | CLI 1개 확인 완료, Web Workbench 1개 비차단 Draft |
 
 이 Roadmap, Rules Register와 QA Checklist를 포함한 수량이다.
 
@@ -62,7 +62,9 @@
 | [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) | UI-First Gate Passed | 실제 CLI 구현 전에는 현 상태 유지 |
 | [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) | UI-First Gate Passed | 실제 snapshot과의 차이는 구현 후 기록 |
 | [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) | UI-First Gate Passed | FB-001 구현 연결만 추적 |
+| [Web Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) | Draft 1 · Non-Blocking UX Track | 정적 Preview 사용자 검토, 구현 승격은 Python 엔진 안정화 후 별도 승인 |
 | [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) | 사용자 확인 완료 | 구현 전 기준 화면으로 동결 |
+| [HTML Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) | Draft · Review Pending | read-only 시연 UX 검토용, Document Completion Gate 비차단 |
 
 ### 3.3 Technical Specs
 
@@ -200,6 +202,11 @@ Roadmap에 명시되어 있다.
 | 6 | 모든 문서 검증 후 | `DOC-M5` Document Completion Gate | M1~M4 의존 |
 | 7 | 별도 승인 후 | Backlog `TASK-001` | Document Gate 의존 |
 
+Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.
+`DOC-M2`~`DOC-M5`나 `TASK-001`의 선행 조건으로 추가하지 않는다. 실제 웹
+구현 일정·Backlog·기술 선택은 Python 엔진과 CLI의 Analysis I/O 출력이
+안정된 뒤 별도 승인으로만 생성한다.
+
 공식 등록 페이지가 열리지 않거나 세부 규정이 게시되지 않으면 `DOC-M2`를
 완료로 표시하지 않는다. 이 경우 Roadmap에는 `Blocked`가 아니라
 `Awaiting Official Information`으로 기록하고, 규정과 독립적인 M3 작업을
@@ -243,6 +250,7 @@ Roadmap에 명시되어 있다.
 | 문서 완료와 구현 승인 혼동 | 사용자의 우선순위 이탈 | M5에서 별도 승인 강제 |
 | 루트 README·LICENSE 부재 | 공개 저장소 진입·재사용 불명확 | M4에서 README 작성, LICENSE 사용자 결정 |
 | 기존 오픈소스 조사 없이 직접 구현 | 시간 낭비·품질·라이선스 위험 | 기능별 `OSSR-*` 조사와 `OSS-*` 결정 Gate |
+| Web Workbench 범위가 V1을 잠식 | Python 코어·Schema·OSS 검증 지연 | 정적 read-only Preview만 허용, Backlog·Gate·기술 스택 미변경 |
 
 ## 9. 365 글로벌 평가 기준
 
@@ -263,7 +271,9 @@ Roadmap에 명시되어 있다.
 - **Concept_Design**: [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1과 규정 위험 점수
 - **UI_Screens**: [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - UI-First Gate·명령 흐름
 - **UI_Screens**: [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) - 사용자 확인·FB-001
+- **UI_Screens**: [Web Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - 비차단 시연 UX와 별도 구현 승인 조건
 - **UI_Screens**: [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - 구현 전 기준 화면
+- **UI_Screens**: [HTML Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - read-only 그래프·타임라인·증거 Draft
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - 문서 우선·구현 Gate 원칙
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - 규정·provider·rate limit 갱신 대상
 - **Technical_Specs**: [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 규범 요구사항과 미결정 사항

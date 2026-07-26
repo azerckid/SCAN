@@ -1,0 +1,1475 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCAN Investigation Workbench Preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --canvas: #090d14;
+      --surface: #101722;
+      --surface-2: #151e2b;
+      --surface-3: #1a2534;
+      --line: #2b394b;
+      --line-strong: #40536b;
+      --text: #e8edf4;
+      --muted: #8fa0b4;
+      --faint: #68798d;
+      --cyan: #55c2d9;
+      --cyan-soft: #14313b;
+      --green: #61d39b;
+      --green-soft: #153429;
+      --amber: #efc368;
+      --amber-soft: #392d16;
+      --violet: #b7a0f8;
+      --violet-soft: #2b2546;
+      --red: #ff7a87;
+      --red-soft: #3d2027;
+      --white: #ffffff;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --shadow: 0 18px 60px rgba(0, 0, 0, .26);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+      background: var(--canvas);
+      color: var(--text);
+      font-family: var(--sans);
+    }
+
+    body {
+      padding: 18px;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    .app {
+      min-height: calc(100vh - 36px);
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 280px) 1fr auto;
+      min-height: 72px;
+      border-bottom: 1px solid var(--line);
+      background: #0c121b;
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 18px;
+      border-right: 1px solid var(--line);
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border: 1px solid #347286;
+      border-radius: 10px;
+      background: var(--cyan-soft);
+      color: #8be3f2;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .brand h1,
+    .case-heading h2 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -.015em;
+    }
+
+    .case-heading {
+      min-width: 0;
+      padding: 14px 20px;
+    }
+
+    .case-line {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .case-heading h2 {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .schema {
+      margin-top: 7px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding: 14px 18px;
+    }
+
+    .button {
+      min-height: 36px;
+      padding: 0 13px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: var(--surface-2);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .button:hover {
+      border-color: #58708e;
+      background: var(--surface-3);
+    }
+
+    .button:focus-visible,
+    .case-button:focus-visible,
+    .filter:focus-within,
+    .graph-item:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 2px;
+    }
+
+    .button.primary {
+      border-color: #3e8396;
+      background: var(--cyan-soft);
+      color: #b8f1fb;
+    }
+
+    .scope-banner {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      min-height: 40px;
+      padding: 9px 18px;
+      border-bottom: 1px solid #6b5522;
+      background: #211b0f;
+      color: #e9d19b;
+      font-size: 12px;
+    }
+
+    .scope-banner strong {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 240px minmax(520px, 1fr) 320px;
+      min-height: calc(100vh - 150px);
+    }
+
+    .rail {
+      padding: 16px;
+      border-right: 1px solid var(--line);
+      background: #0c121b;
+    }
+
+    .section-label {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .case-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .case-button {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .case-button:hover {
+      border-color: var(--line);
+      background: var(--surface-2);
+    }
+
+    .case-button[aria-selected="true"] {
+      border-color: #3b7789;
+      background: var(--cyan-soft);
+    }
+
+    .case-button strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+
+    .case-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+
+    .rail-block {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .legend {
+      display: grid;
+      gap: 9px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 12px 82px 1fr;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .swatch {
+      width: 10px;
+      height: 10px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+    }
+
+    .swatch.confirmed {
+      color: var(--green);
+    }
+
+    .swatch.context {
+      color: var(--violet);
+    }
+
+    .swatch.heuristic {
+      border-style: dashed;
+      color: var(--amber);
+    }
+
+    .swatch.missing {
+      border-radius: 2px;
+      color: var(--red);
+    }
+
+    .filters {
+      display: grid;
+      gap: 8px;
+    }
+
+    .filter {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: #bdc7d5;
+      font-size: 11px;
+    }
+
+    .filter input {
+      accent-color: var(--cyan);
+    }
+
+    .main {
+      min-width: 0;
+      background: #0d141e;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .metric {
+      min-width: 0;
+      padding: 13px 16px;
+      border-right: 1px solid var(--line);
+    }
+
+    .metric:last-child {
+      border-right: 0;
+    }
+
+    .metric dt {
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .metric dd {
+      margin: 0;
+      overflow: hidden;
+      color: #f0f4f8;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .graph-head,
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .graph-head h3,
+    .panel-head h3 {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .graph-head p,
+    .panel-head p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .graph-tools {
+      display: flex;
+      gap: 6px;
+    }
+
+    .chip {
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+    }
+
+    .graph-wrap {
+      position: relative;
+      height: 390px;
+      min-height: 320px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background-color: #0b111a;
+      background-image:
+        linear-gradient(#172231 1px, transparent 1px),
+        linear-gradient(90deg, #172231 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    #graph {
+      width: 100%;
+      height: 100%;
+    }
+
+    .edge {
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 2;
+      marker-end: url("#arrowConfirmed");
+    }
+
+    .edge.context {
+      stroke: var(--violet);
+      marker-end: url("#arrowContext");
+    }
+
+    .edge.heuristic {
+      stroke: var(--amber);
+      stroke-dasharray: 7 5;
+      marker-end: url("#arrowHeuristic");
+    }
+
+    .edge.missing {
+      stroke: var(--red);
+      stroke-dasharray: 3 6;
+      marker-end: url("#arrowMissing");
+    }
+
+    .edge-hit {
+      fill: none;
+      stroke: transparent;
+      stroke-width: 16;
+      cursor: pointer;
+    }
+
+    .edge-label {
+      fill: #aeb9c8;
+      font-family: var(--mono);
+      font-size: 9px;
+      pointer-events: none;
+    }
+
+    .node {
+      cursor: pointer;
+    }
+
+    .node rect {
+      fill: #14202d;
+      stroke: #4b6179;
+      stroke-width: 1.5;
+    }
+
+    .node.confirmed rect {
+      fill: var(--green-soft);
+      stroke: var(--green);
+    }
+
+    .node.context rect {
+      fill: var(--violet-soft);
+      stroke: var(--violet);
+    }
+
+    .node.heuristic rect {
+      fill: var(--amber-soft);
+      stroke: var(--amber);
+      stroke-dasharray: 5 3;
+    }
+
+    .node.missing rect {
+      fill: var(--red-soft);
+      stroke: var(--red);
+      stroke-dasharray: 3 3;
+    }
+
+    .node-title {
+      fill: #edf2f8;
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 700;
+      pointer-events: none;
+    }
+
+    .node-meta {
+      fill: #9aabba;
+      font-family: var(--mono);
+      font-size: 8px;
+      pointer-events: none;
+    }
+
+    .lower-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      min-height: 230px;
+    }
+
+    .timeline-panel {
+      border-right: 1px solid var(--line);
+    }
+
+    .timeline,
+    .source-list {
+      max-height: 240px;
+      overflow: auto;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 74px 12px 1fr;
+      gap: 9px;
+      padding: 10px 14px;
+      border-bottom: 1px solid #1d2937;
+      font-size: 11px;
+    }
+
+    .timeline-time {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+    }
+
+    .timeline-dot {
+      width: 9px;
+      height: 9px;
+      margin-top: 2px;
+      border: 2px solid var(--green);
+      border-radius: 50%;
+    }
+
+    .timeline-dot.context {
+      border-color: var(--violet);
+    }
+
+    .timeline-dot.heuristic {
+      border-style: dashed;
+      border-color: var(--amber);
+    }
+
+    .timeline-dot.missing {
+      border-color: var(--red);
+      border-radius: 2px;
+    }
+
+    .timeline-copy strong {
+      display: block;
+      margin-bottom: 3px;
+      color: #dce4ed;
+      font-size: 10px;
+    }
+
+    .timeline-copy span {
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .source-row {
+      display: grid;
+      grid-template-columns: 10px 1fr auto;
+      gap: 9px;
+      align-items: start;
+      padding: 11px 14px;
+      border-bottom: 1px solid #1d2937;
+    }
+
+    .health {
+      width: 8px;
+      height: 8px;
+      margin-top: 3px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .health.warning {
+      background: var(--amber);
+    }
+
+    .health.danger {
+      background: var(--red);
+    }
+
+    .source-name {
+      color: #dce4ed;
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+
+    .source-copy {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .source-state {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+    }
+
+    .inspector {
+      min-width: 0;
+      border-left: 1px solid var(--line);
+      background: #0c121b;
+    }
+
+    .status-badge,
+    .class-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 0 8px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .06em;
+    }
+
+    .status-badge.complete,
+    .class-badge.confirmed {
+      color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .status-badge.partial,
+    .class-badge.heuristic {
+      color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    .status-badge.failed,
+    .class-badge.missing {
+      color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .class-badge.context {
+      color: var(--violet);
+      background: var(--violet-soft);
+    }
+
+    .inspector-body {
+      padding: 15px;
+    }
+
+    .selected-title {
+      margin: 10px 0 5px;
+      font-size: 15px;
+    }
+
+    .selected-copy {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .kv-list {
+      display: grid;
+      gap: 0;
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      overflow: hidden;
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 8px;
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .kv:last-child {
+      border-bottom: 0;
+    }
+
+    .kv dt {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+    }
+
+    .kv dd {
+      margin: 0;
+      overflow-wrap: anywhere;
+      color: #dce4ed;
+      font-family: var(--mono);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+
+    .findings {
+      margin-top: 18px;
+    }
+
+    .finding {
+      margin-bottom: 9px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--green);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    .finding.context {
+      border-left-color: var(--violet);
+    }
+
+    .finding.heuristic {
+      border-left-color: var(--amber);
+    }
+
+    .finding.missing {
+      border-left-color: var(--red);
+    }
+
+    .finding-top {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .finding strong {
+      font-size: 10px;
+    }
+
+    .finding p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .export-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .export {
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    .export b {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 8px;
+    }
+
+    .export span {
+      display: block;
+      overflow: hidden;
+      color: #c8d3df;
+      font-family: var(--mono);
+      font-size: 9px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    dialog {
+      width: min(760px, calc(100vw - 36px));
+      max-height: 78vh;
+      padding: 0;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    dialog::backdrop {
+      background: rgba(2, 5, 9, .76);
+    }
+
+    .dialog-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 13px 15px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dialog-head h3 {
+      margin: 0;
+      font-size: 13px;
+    }
+
+    pre {
+      max-height: 60vh;
+      margin: 0;
+      overflow: auto;
+      padding: 16px;
+      color: #cbd7e4;
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1180px) {
+      body {
+        padding: 0;
+      }
+
+      .app {
+        min-height: 100vh;
+        border: 0;
+        border-radius: 0;
+      }
+
+      .workspace {
+        grid-template-columns: 210px minmax(480px, 1fr);
+      }
+
+      .inspector {
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--line);
+        border-left: 0;
+      }
+
+      .inspector-body {
+        display: grid;
+        grid-template-columns: minmax(260px, .8fr) minmax(320px, 1.2fr);
+        gap: 18px;
+      }
+
+      .findings {
+        margin-top: 0;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .topbar {
+        grid-template-columns: 1fr auto;
+      }
+
+      .brand {
+        border-right: 0;
+      }
+
+      .case-heading {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        border-top: 1px solid var(--line);
+      }
+
+      .top-actions {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .workspace {
+        display: block;
+      }
+
+      .rail {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .case-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .rail-block {
+        display: none;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .metric:nth-child(2) {
+        border-right: 0;
+      }
+
+      .metric:nth-child(-n+2) {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .lower-grid,
+      .inspector-body {
+        display: block;
+      }
+
+      .timeline-panel {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .graph-wrap {
+        height: 340px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">SC</div>
+        <div>
+          <p class="eyebrow">Evidence-first viewer</p>
+          <h1>Investigation Workbench</h1>
+        </div>
+      </div>
+      <div class="case-heading">
+        <div class="case-line">
+          <span id="statusBadge" class="status-badge complete">COMPLETE</span>
+          <h2 id="caseTitle">DEX swap reconstruction</h2>
+        </div>
+        <div id="schemaLine" class="schema">AN-FX-SVC-DEX-001 · chain 1 · schema 0.1</div>
+      </div>
+      <div class="top-actions">
+        <button id="showJson" class="button" type="button">View JSON</button>
+        <button class="button primary" type="button" disabled title="Implementation is not approved">Read-only Preview</button>
+      </div>
+    </header>
+
+    <div class="scope-banner">
+      <strong>STATIC DEMO</strong>
+      <span>No RPC, API, database, mutation, or analysis runs. Challenge data is an explicit UI mock.</span>
+    </div>
+
+    <div class="workspace">
+      <aside class="rail" aria-label="Case navigation and filters">
+        <p class="section-label">Cases</p>
+        <nav id="caseList" class="case-list" aria-label="Preview cases"></nav>
+
+        <div class="rail-block">
+          <p class="section-label">Classification</p>
+          <div class="filters">
+            <label class="filter"><input type="checkbox" data-filter="confirmed" checked> Confirmed facts</label>
+            <label class="filter"><input type="checkbox" data-filter="context" checked> External context</label>
+            <label class="filter"><input type="checkbox" data-filter="heuristic" checked> Heuristic</label>
+            <label class="filter"><input type="checkbox" data-filter="missing" checked> Missing / unavailable</label>
+          </div>
+        </div>
+
+        <div class="rail-block">
+          <p class="section-label">Legend</p>
+          <div class="legend">
+            <div class="legend-row"><span class="swatch confirmed"></span><b>CONFIRMED</b><span>solid evidence</span></div>
+            <div class="legend-row"><span class="swatch context"></span><b>CONTEXT</b><span>external source</span></div>
+            <div class="legend-row"><span class="swatch heuristic"></span><b>HEURISTIC</b><span>candidate only</span></div>
+            <div class="legend-row"><span class="swatch missing"></span><b>MISSING</b><span>partial scope</span></div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <dl class="metrics">
+          <div class="metric"><dt>Analysis type</dt><dd id="metricType">dex_swap</dd></div>
+          <div class="metric"><dt>Evidence</dt><dd id="metricEvidence">5 linked records</dd></div>
+          <div class="metric"><dt>Sources</dt><dd id="metricSources">2 required · healthy</dd></div>
+          <div class="metric"><dt>Run</dt><dd id="metricRun">cache 2 · retry 0</dd></div>
+        </dl>
+
+        <section aria-labelledby="graphTitle">
+          <div class="graph-head">
+            <div>
+              <h3 id="graphTitle">Evidence graph</h3>
+              <p id="graphHint">Select a node or edge to inspect its evidence locator.</p>
+            </div>
+            <div class="graph-tools" aria-hidden="true">
+              <span class="chip">READ ONLY</span>
+              <span id="graphScope" class="chip">4 nodes · 3 edges</span>
+            </div>
+          </div>
+          <div class="graph-wrap">
+            <svg id="graph" viewBox="0 0 780 390" role="img" aria-label="Case evidence graph"></svg>
+          </div>
+        </section>
+
+        <div class="lower-grid">
+          <section class="timeline-panel" aria-labelledby="timelineTitle">
+            <div class="panel-head">
+              <div>
+                <h3 id="timelineTitle">Timeline</h3>
+                <p>Block, event, state, and investigation order</p>
+              </div>
+            </div>
+            <div id="timeline" class="timeline"></div>
+          </section>
+
+          <section aria-labelledby="sourceTitle">
+            <div class="panel-head">
+              <div>
+                <h3 id="sourceTitle">Source health</h3>
+                <p>Required source, cache, retry, and missing state</p>
+              </div>
+            </div>
+            <div id="sourceList" class="source-list"></div>
+          </section>
+        </div>
+      </main>
+
+      <aside class="inspector" aria-label="Evidence inspector">
+        <div class="panel-head">
+          <div>
+            <h3>Evidence Inspector</h3>
+            <p>Analysis I/O fields only</p>
+          </div>
+        </div>
+        <div class="inspector-body">
+          <div>
+            <span id="selectedBadge" class="class-badge confirmed">CONFIRMED</span>
+            <h3 id="selectedTitle" class="selected-title">USDC input transfer</h3>
+            <p id="selectedCopy" class="selected-copy">Select graph evidence to view its source and locator.</p>
+            <dl id="kvList" class="kv-list"></dl>
+            <div class="export-strip">
+              <div class="export"><b>JSON</b><span id="jsonExport">example://.../result.json</span></div>
+              <div class="export"><b>MARKDOWN</b><span id="mdExport">example://.../evidence.md</span></div>
+            </div>
+          </div>
+          <div class="findings">
+            <p class="section-label">Findings and scope</p>
+            <div id="findings"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <dialog id="jsonDialog">
+    <div class="dialog-head">
+      <h3>Preview Analysis I/O summary</h3>
+      <button id="closeJson" class="button" type="button">Close</button>
+    </div>
+    <pre id="jsonPreview"></pre>
+  </dialog>
+
+  <script>
+    const cases = {
+      dex: {
+        name: "DEX",
+        title: "DEX swap reconstruction",
+        id: "AN-FX-SVC-DEX-001",
+        type: "dex_swap",
+        status: "complete",
+        chain: 1,
+        evidenceCount: 5,
+        sourceSummary: "2 required · healthy",
+        run: "cache 2 · retry 0",
+        scope: "4 nodes · 3 edges",
+        graphHint: "Pool output and user net output remain separate.",
+        exports: ["example://AN-FX-SVC-DEX-001/result.json", "example://AN-FX-SVC-DEX-001/evidence.md"],
+        nodes: [
+          {id:"user", x:70, y:160, w:128, title:"User", meta:"0xa406…7fdf", class:"confirmed", copy:"Final recipient of native ETH.", kv:{result_id:"RES-DEX-USER-NET-OUTPUT", classification:"confirmed_fact", address:"0xa406…7fdf"}},
+          {id:"router", x:255, y:70, w:140, title:"Universal Router", meta:"0xef1c…f6b", class:"confirmed", copy:"Router receives USDC and unwraps WETH.", kv:{source_id:"DS-EVM-RPC-PUBLIC", evidence:"EV-DEX-TRANSFER-IN", method:"eth_getTransactionReceipt"}},
+          {id:"pool", x:255, y:245, w:140, title:"USDC / WETH Pool", meta:"block 16642512", class:"confirmed", copy:"Pool emits the Swap and WETH output evidence.", kv:{evidence_id:"EV-DEX-SWAP", log_index:"278", amount0_in_raw:"25000000000", amount1_out_raw:"14449515027026387018"}},
+          {id:"unwrap", x:515, y:155, w:150, title:"WETH withdrawal", meta:"WETH → native ETH", class:"confirmed", copy:"Withdrawal and internal call establish the user's native output.", kv:{evidence_id:"EV-DEX-WITHDRAWAL", source_id:"DS-EVM-RPC-PUBLIC", log_index:"279"}}
+        ],
+        edges: [
+          {from:"user", to:"router", label:"25,000 USDC", class:"confirmed", title:"USDC input transfer", copy:"The input asset is proven by Transfer and Swap logs.", kv:{evidence_id:"EV-DEX-TRANSFER-IN", source_id:"DS-EVM-RPC-PUBLIC", block:"16642512", log_index:"275", amount_raw:"25000000000"}},
+          {from:"pool", to:"unwrap", label:"14.4495 WETH", class:"confirmed", title:"Pool WETH output", copy:"Pool output is not merged with the user's native output.", kv:{evidence_id:"EV-DEX-TRANSFER-OUT", source_id:"DS-EVM-RPC-PUBLIC", log_index:"276", amount_raw:"14449515027026387018"}},
+          {from:"unwrap", to:"user", label:"14.4495 ETH", class:"confirmed", title:"User net native output", copy:"Internal ETH transfer confirms the final user output.", kv:{evidence_id:"EV-DEX-INTERNAL-ETH", source_id:"DS-EXPLORER-EVM", trace_address:"[1]", amount_raw:"14449515027026387018"}}
+        ],
+        timeline: [
+          {time:"block 16642512", class:"confirmed", title:"Transfer in", copy:"USDC 25000000000 raw · log 275"},
+          {time:"same block", class:"confirmed", title:"Pool output", copy:"WETH 14449515027026387018 raw · logs 276/278"},
+          {time:"same block", class:"confirmed", title:"Withdrawal", copy:"WETH unwrap · log 279"},
+          {time:"trace [1]", class:"confirmed", title:"Native transfer", copy:"Router → user · exact raw match"}
+        ],
+        sources: [
+          {name:"DS-EVM-RPC-PUBLIC", state:"HEALTHY", health:"ok", copy:"receipt · scoring · cache hit"},
+          {name:"DS-EXPLORER-EVM", state:"HEALTHY", health:"ok", copy:"internal transactions · scoring"}
+        ],
+        findings: [
+          {class:"confirmed", label:"CONFIRMED", title:"Pool output", copy:"WETH 14449515027026387018 raw"},
+          {class:"confirmed", label:"CONFIRMED", title:"User output", copy:"Native ETH, same raw value, separate evidence"}
+        ]
+      },
+      auth: {
+        name: "AUTH",
+        title: "Authorization consumption",
+        id: "AN-FX-EVM-AUTH-001",
+        type: "auth_consumption",
+        status: "complete",
+        chain: 1,
+        evidenceCount: 9,
+        sourceSummary: "2 required · healthy",
+        run: "cache 4 · retry 0",
+        scope: "4 nodes · 3 edges",
+        graphHint: "Authorization consumption is confirmed; theft remains not assessed.",
+        exports: ["example://AN-FX-EVM-AUTH-001/result.json", "example://AN-FX-EVM-AUTH-001/evidence.md"],
+        nodes: [
+          {id:"owner", x:60, y:150, w:136, title:"Owner", meta:"0x1930…af59", class:"confirmed", copy:"Approval owner and transferFrom source.", kv:{result_id:"RES-AUTH-APPROVAL", owner:"0x1930…af59", classification:"confirmed_fact"}},
+          {id:"spender", x:280, y:60, w:145, title:"SwapRouter02", meta:"0x68b3…fc45", class:"confirmed", copy:"Approved spender.", kv:{evidence_id:"EV-AUTH-APPROVE-CALL", method:"approve(address,uint256)", source_id:"DS-EVM-RPC-PUBLIC"}},
+          {id:"pool", x:520, y:145, w:142, title:"USDC / WETH Pool", meta:"0x88e6…5640", class:"confirmed", copy:"Successful transferFrom destination.", kv:{evidence_id:"EV-AUTH-TRANSFER-FROM", trace_address:"[0,0,2,0]", amount_raw:"4500000"}},
+          {id:"claim", x:270, y:255, w:158, title:"Theft attribution", meta:"not assessed", class:"missing", copy:"The fixture proves consumption only, not theft or phishing.", kv:{result_id:"RES-AUTH-ATTRIBUTION-SCOPE", classification:"not_assessed", theft_or_phishing_claim:"false"}}
+        ],
+        edges: [
+          {from:"owner", to:"spender", label:"approve max", class:"confirmed", title:"Approval", copy:"Approval event and calldata establish the allowance grant.", kv:{evidence_id:"EV-AUTH-APPROVAL-EVENT", block:"24500453", log_index:"307", amount_raw:"uint256.max"}},
+          {from:"spender", to:"pool", label:"transferFrom 4.5 USDC", class:"confirmed", title:"Authorization consumption", copy:"Successful internal call and Transfer event establish consumption.", kv:{evidence_id:"EV-AUTH-TRANSFER-FROM", block:"24500505", amount_raw:"4500000", excluded_failed_transactions:"3"}},
+          {from:"owner", to:"claim", label:"not assessed", class:"missing", title:"Attribution boundary", copy:"No off-chain attribution was assessed.", kv:{classification:"not_assessed", reason:"On-chain fixture proves authorization consumption only."}}
+        ],
+        timeline: [
+          {time:"block 24500452", class:"confirmed", title:"Before approval", copy:"allowance 0"},
+          {time:"block 24500453", class:"confirmed", title:"Approval", copy:"allowance becomes uint256.max"},
+          {time:"nonce 327–329", class:"missing", title:"Failed attempts excluded", copy:"receipt status 0x0"},
+          {time:"block 24500505", class:"confirmed", title:"Consumption", copy:"transferFrom 4500000 raw"}
+        ],
+        sources: [
+          {name:"DS-EVM-RPC-PUBLIC", state:"HEALTHY", health:"ok", copy:"receipt and transaction calls"},
+          {name:"DS-EVM-RPC-ARCHIVE", state:"HEALTHY", health:"ok", copy:"four historical allowance states"}
+        ],
+        findings: [
+          {class:"confirmed", label:"CONFIRMED", title:"Allowance lifecycle", copy:"0 → max → max → max−4500000"},
+          {class:"confirmed", label:"CONFIRMED", title:"Successful consumption", copy:"transferFrom 4500000 raw"},
+          {class:"missing", label:"NOT ASSESSED", title:"Theft or phishing", copy:"Requires separate attribution evidence"}
+        ]
+      },
+      freeze: {
+        name: "FREEZE",
+        title: "Address freeze transitions",
+        id: "AN-FX-EVM-FREEZE-001",
+        type: "address_freeze",
+        status: "complete",
+        chain: 1,
+        evidenceCount: 10,
+        sourceSummary: "4 records · healthy",
+        run: "cache 4 · retry 1",
+        scope: "4 nodes · 3 edges",
+        graphHint: "On-chain transitions and external context remain distinct.",
+        exports: ["example://AN-FX-EVM-FREEZE-001/result.json", "example://AN-FX-EVM-FREEZE-001/evidence.md"],
+        nodes: [
+          {id:"issuer", x:75, y:145, w:132, title:"USDC contract", meta:"0xa0b8…eb48", class:"confirmed", copy:"Contract call and event source.", kv:{source_id:"DS-EXPLORER-EVM", method:"blacklist / unBlacklist", classification:"confirmed_fact"}},
+          {id:"target", x:325, y:145, w:140, title:"Target address", meta:"0xd96f…4307", class:"confirmed", copy:"Subject of both state transitions.", kv:{result_id:"RES-FREEZE-BLACKLIST", target:"0xd96f…4307", state:"false → true → true → false"}},
+          {id:"ofac", x:545, y:60, w:140, title:"OFAC context", meta:"address specific", class:"context", copy:"External designation text contains the address.", kv:{evidence_id:"EV-FREEZE-OFAC-DESIGNATION", classification:"external_context", address_specific:"true"}},
+          {id:"circle", x:545, y:245, w:140, title:"Circle context", meta:"not address specific", class:"context", copy:"Issuer context does not independently name the address.", kv:{evidence_id:"EV-FREEZE-CIRCLE-RESPONSE", classification:"external_context", address_specific:"false"}}
+        ],
+        edges: [
+          {from:"issuer", to:"target", label:"false → true", class:"confirmed", title:"Blacklist transition", copy:"Call, event, and historical state agree.", kv:{evidence_id:"EV-FREEZE-BLACKLIST-EVENT", block:"15302549", log_index:"85", before:"false", after:"true"}},
+          {from:"target", to:"ofac", label:"official context", class:"context", title:"OFAC context", copy:"External context is not merged with contract state.", kv:{classification:"external_context", evidence_id:"EV-FREEZE-OFAC-DESIGNATION", current_sanctions_status:"not_assessed"}},
+          {from:"target", to:"circle", label:"issuer context", class:"context", title:"Circle context", copy:"The source is not address-specific.", kv:{classification:"external_context", evidence_id:"EV-FREEZE-CIRCLE-RESPONSE", address_specific:"false"}}
+        ],
+        timeline: [
+          {time:"block 15302548", class:"confirmed", title:"Before blacklist", copy:"isBlacklisted false"},
+          {time:"block 15302549", class:"confirmed", title:"Blacklisted", copy:"event log 85 · state true"},
+          {time:"block 22099071", class:"confirmed", title:"Before unblacklist", copy:"state true"},
+          {time:"block 22099072", class:"confirmed", title:"UnBlacklisted", copy:"event log 7 · state false"}
+        ],
+        sources: [
+          {name:"DS-EVM-RPC-ARCHIVE", state:"HEALTHY", health:"ok", copy:"events and four state points"},
+          {name:"DS-EXPLORER-EVM", state:"HEALTHY", health:"ok", copy:"decoded contract calls"},
+          {name:"DS-SANCTIONS-PUBLIC", state:"CONTEXT", health:"ok", copy:"official address-specific source"},
+          {name:"DS-OSINT-WEB", state:"CONTEXT", health:"ok", copy:"issuer response · not address-specific"}
+        ],
+        findings: [
+          {class:"confirmed", label:"CONFIRMED", title:"Blacklist transition", copy:"false → true at block 15302549"},
+          {class:"confirmed", label:"CONFIRMED", title:"Unblacklist transition", copy:"true → false at block 22099072"},
+          {class:"context", label:"CONTEXT", title:"Official sources", copy:"Address specificity is preserved"}
+        ]
+      },
+      challenge: {
+        name: "CHALLENGE",
+        title: "Scale path triage with source failure",
+        id: "DEMO-CHAL-FLOW-SCALE-001",
+        type: "challenge_demo",
+        status: "partial",
+        chain: 1,
+        evidenceCount: 6,
+        sourceSummary: "1 healthy · 2 degraded",
+        run: "cache 17 · retry 3",
+        scope: "7 visible nodes · demo subset",
+        graphHint: "UI mock only: a reduced graph tests path focus, ambiguity, and missing sources.",
+        exports: ["demo://CHAL-FLOW-SCALE-001/result.json", "demo://CHAL-FLOW-SCALE-001/evidence.md"],
+        nodes: [
+          {id:"victim", x:45, y:155, w:120, title:"Victim seed", meta:"confirmed", class:"confirmed", copy:"Known incident seed for the reduced demo.", kv:{classification:"confirmed_fact", demo_scope:"UI mock", evidence_id:"DEMO-EV-SEED"}},
+          {id:"split1", x:225, y:70, w:118, title:"Branch A", meta:"12.5 ETH", class:"confirmed", copy:"Confirmed split from the victim seed.", kv:{classification:"confirmed_fact", amount_raw:"12500000000000000000", evidence_id:"DEMO-EV-A"}},
+          {id:"split2", x:225, y:245, w:118, title:"Branch B", meta:"candidate", class:"heuristic", copy:"Amount and time match; ownership remains uncertain.", kv:{classification:"heuristic", score:"0.71", counterexample:"shared deposit pattern"}},
+          {id:"dust", x:410, y:300, w:112, title:"Dust noise", meta:"excluded", class:"heuristic", copy:"Small unrelated transfers are shown as excluded candidates.", kv:{classification:"heuristic", reason:"below materiality threshold", status:"excluded candidate"}},
+          {id:"merge", x:430, y:145, w:126, title:"Merge point", meta:"partial", class:"confirmed", copy:"Two visible branches converge; one archive state is missing.", kv:{classification:"confirmed_fact", evidence_count:"2", missing_requirement:"archive state"}},
+          {id:"cex", x:635, y:75, w:118, title:"CEX candidate", meta:"heuristic", class:"heuristic", copy:"Label candidate has not been independently confirmed.", kv:{classification:"heuristic", score:"0.63", label_source:"demo only"}},
+          {id:"missing", x:625, y:245, w:130, title:"Unknown exit", meta:"source unavailable", class:"missing", copy:"Explorer 429 and archive timeout prevent completion.", kv:{classification:"not_assessed", error_code:"source_unavailable", stage:"collect.trace"}}
+        ],
+        edges: [
+          {from:"victim", to:"split1", label:"confirmed split", class:"confirmed", title:"Confirmed branch A", copy:"The edge is backed by a demo evidence record.", kv:{classification:"confirmed_fact", evidence_id:"DEMO-EV-A", source_id:"DS-EVM-RPC-PUBLIC"}},
+          {from:"victim", to:"split2", label:"candidate split", class:"heuristic", title:"Candidate branch B", copy:"Timing and amount support a candidate, not a fact.", kv:{classification:"heuristic", score:"0.71", counterexample:"shared service address"}},
+          {from:"split1", to:"merge", label:"12.5 ETH", class:"confirmed", title:"Merge contribution", copy:"Raw amount is preserved in the demo record.", kv:{classification:"confirmed_fact", amount_raw:"12500000000000000000"}},
+          {from:"split2", to:"merge", label:"candidate", class:"heuristic", title:"Uncertain merge contribution", copy:"This path must not be shown as confirmed.", kv:{classification:"heuristic", score:"0.58"}},
+          {from:"split2", to:"dust", label:"dust", class:"heuristic", title:"Dust branch", copy:"Excluded candidate remains visible for review.", kv:{classification:"heuristic", disposition:"excluded candidate"}},
+          {from:"merge", to:"cex", label:"label candidate", class:"heuristic", title:"CEX exit candidate", copy:"Attribution source is insufficient for confirmation.", kv:{classification:"heuristic", score:"0.63"}},
+          {from:"merge", to:"missing", label:"trace missing", class:"missing", title:"Unavailable exit path", copy:"The current result is partial because required source data is unavailable.", kv:{classification:"not_assessed", error_code:"source_unavailable", retryable:"true"}}
+        ],
+        timeline: [
+          {time:"T+00:00", class:"confirmed", title:"Seed outflow", copy:"Incident seed · confirmed"},
+          {time:"T+00:47", class:"confirmed", title:"Branch A", copy:"Material split preserved"},
+          {time:"T+01:12", class:"heuristic", title:"Branch B candidate", copy:"Amount/time match · ownership uncertain"},
+          {time:"T+03:28", class:"confirmed", title:"Merge observed", copy:"One contribution confirmed"},
+          {time:"T+03:31", class:"missing", title:"Trace unavailable", copy:"Archive timeout · explorer 429"}
+        ],
+        sources: [
+          {name:"DS-EVM-RPC-PUBLIC", state:"HEALTHY", health:"ok", copy:"17 cache hits · seed and branch A"},
+          {name:"DS-EVM-RPC-ARCHIVE", state:"TIMEOUT", health:"warning", copy:"retry 2/2 · missing state"},
+          {name:"DS-EXPLORER-EVM", state:"HTTP 429", health:"danger", copy:"retry-after recorded · trace unavailable"}
+        ],
+        findings: [
+          {class:"confirmed", label:"CONFIRMED", title:"Material path", copy:"Victim → Branch A → Merge"},
+          {class:"heuristic", label:"HEURISTIC", title:"Possible branch and exit", copy:"Scores and counterexamples remain visible"},
+          {class:"missing", label:"MISSING", title:"Exit trace", copy:"Source failure prevents a complete conclusion"}
+        ]
+      }
+    };
+
+    const graph = document.getElementById("graph");
+    const caseList = document.getElementById("caseList");
+    const filters = new Set(["confirmed", "context", "heuristic", "missing"]);
+    let activeKey = "dex";
+    let activeSelection = null;
+
+    function esc(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function statusLabel(status) {
+      return status.toUpperCase();
+    }
+
+    function classLabel(value) {
+      const labels = {
+        confirmed: "CONFIRMED",
+        context: "CONTEXT",
+        heuristic: "HEURISTIC",
+        missing: "NOT ASSESSED"
+      };
+      return labels[value] || value.toUpperCase();
+    }
+
+    function renderCaseList() {
+      caseList.innerHTML = Object.entries(cases).map(([key, item]) => `
+        <button class="case-button" type="button" data-case="${key}" aria-selected="${key === activeKey}">
+          <strong>${esc(item.name)} · ${esc(item.title)}</strong>
+          <span class="case-meta"><span>${esc(item.type)}</span><span>${esc(statusLabel(item.status))}</span></span>
+        </button>
+      `).join("");
+
+      caseList.querySelectorAll("[data-case]").forEach(button => {
+        button.addEventListener("click", () => {
+          activeKey = button.dataset.case;
+          activeSelection = null;
+          render();
+        });
+      });
+    }
+
+    function edgePoints(from, to) {
+      const a = cases[activeKey].nodes.find(node => node.id === from);
+      const b = cases[activeKey].nodes.find(node => node.id === to);
+      return {
+        x1: a.x + a.w / 2,
+        y1: a.y + 27,
+        x2: b.x + b.w / 2,
+        y2: b.y + 27
+      };
+    }
+
+    function renderGraph(item) {
+      const defs = `
+        <defs>
+          <marker id="arrowConfirmed" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#61d39b"></path></marker>
+          <marker id="arrowContext" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#b7a0f8"></path></marker>
+          <marker id="arrowHeuristic" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#efc368"></path></marker>
+          <marker id="arrowMissing" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#ff7a87"></path></marker>
+        </defs>`;
+
+      const edgeSvg = item.edges.filter(edge => filters.has(edge.class)).map((edge, index) => {
+        const p = edgePoints(edge.from, edge.to);
+        const mx = (p.x1 + p.x2) / 2;
+        const my = (p.y1 + p.y2) / 2 - 7;
+        return `
+          <g class="graph-item" tabindex="0" role="button" aria-label="${esc(edge.title)}" data-kind="edge" data-index="${index}">
+            <line class="edge ${esc(edge.class)}" x1="${p.x1}" y1="${p.y1}" x2="${p.x2}" y2="${p.y2}"></line>
+            <line class="edge-hit" x1="${p.x1}" y1="${p.y1}" x2="${p.x2}" y2="${p.y2}"></line>
+            <text class="edge-label" x="${mx}" y="${my}" text-anchor="middle">${esc(edge.label)}</text>
+          </g>`;
+      }).join("");
+
+      const nodeSvg = item.nodes.filter(node => filters.has(node.class)).map((node, index) => `
+        <g class="node ${esc(node.class)} graph-item" transform="translate(${node.x} ${node.y})" tabindex="0" role="button" aria-label="${esc(node.title)}" data-kind="node" data-node-id="${esc(node.id)}">
+          <rect width="${node.w}" height="54" rx="9"></rect>
+          <text class="node-title" x="12" y="22">${esc(node.title)}</text>
+          <text class="node-meta" x="12" y="39">${esc(node.meta)}</text>
+        </g>
+      `).join("");
+
+      graph.innerHTML = defs + edgeSvg + nodeSvg;
+      graph.querySelectorAll(".graph-item").forEach(target => {
+        const select = () => {
+          if (target.dataset.kind === "edge") {
+            activeSelection = {type:"edge", index:Number(target.dataset.index)};
+          } else {
+            activeSelection = {type:"node", id:target.dataset.nodeId};
+          }
+          renderInspector(item);
+        };
+        target.addEventListener("click", select);
+        target.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            select();
+          }
+        });
+      });
+    }
+
+    function selectionData(item) {
+      if (!activeSelection) {
+        return item.edges.find(edge => filters.has(edge.class)) || item.nodes.find(node => filters.has(node.class));
+      }
+      if (activeSelection.type === "edge") {
+        return item.edges[activeSelection.index];
+      }
+      return item.nodes.find(node => node.id === activeSelection.id);
+    }
+
+    function renderInspector(item) {
+      const selected = selectionData(item) || {
+        class:"missing",
+        title:"No visible evidence",
+        copy:"Enable a classification filter to inspect evidence.",
+        kv:{status:"empty"}
+      };
+      const badge = document.getElementById("selectedBadge");
+      badge.className = `class-badge ${selected.class}`;
+      badge.textContent = classLabel(selected.class);
+      document.getElementById("selectedTitle").textContent = selected.title;
+      document.getElementById("selectedCopy").textContent = selected.copy;
+      document.getElementById("kvList").innerHTML = Object.entries(selected.kv || {}).map(([key, value]) => `
+        <div class="kv"><dt>${esc(key)}</dt><dd>${esc(value)}</dd></div>
+      `).join("");
+      document.getElementById("findings").innerHTML = item.findings.map(finding => `
+        <article class="finding ${esc(finding.class)}">
+          <div class="finding-top"><span class="class-badge ${esc(finding.class)}">${esc(finding.label)}</span><strong>${esc(finding.title)}</strong></div>
+          <p>${esc(finding.copy)}</p>
+        </article>
+      `).join("");
+      document.getElementById("jsonExport").textContent = item.exports[0];
+      document.getElementById("mdExport").textContent = item.exports[1];
+    }
+
+    function renderTimeline(item) {
+      document.getElementById("timeline").innerHTML = item.timeline.map(row => `
+        <div class="timeline-row">
+          <div class="timeline-time">${esc(row.time)}</div>
+          <div class="timeline-dot ${esc(row.class)}" aria-hidden="true"></div>
+          <div class="timeline-copy"><strong>${esc(row.title)}</strong><span>${esc(row.copy)}</span></div>
+        </div>
+      `).join("");
+    }
+
+    function renderSources(item) {
+      document.getElementById("sourceList").innerHTML = item.sources.map(source => `
+        <div class="source-row">
+          <span class="health ${source.health === "warning" ? "warning" : source.health === "danger" ? "danger" : ""}" aria-hidden="true"></span>
+          <div><div class="source-name">${esc(source.name)}</div><div class="source-copy">${esc(source.copy)}</div></div>
+          <div class="source-state">${esc(source.state)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderHeader(item) {
+      const badge = document.getElementById("statusBadge");
+      badge.className = `status-badge ${item.status}`;
+      badge.textContent = statusLabel(item.status);
+      document.getElementById("caseTitle").textContent = item.title;
+      document.getElementById("schemaLine").textContent = `${item.id} · chain ${item.chain} · schema 0.1`;
+      document.getElementById("metricType").textContent = item.type;
+      document.getElementById("metricEvidence").textContent = `${item.evidenceCount} linked records`;
+      document.getElementById("metricSources").textContent = item.sourceSummary;
+      document.getElementById("metricRun").textContent = item.run;
+      document.getElementById("graphScope").textContent = item.scope;
+      document.getElementById("graphHint").textContent = item.graphHint;
+    }
+
+    function previewJson(item) {
+      return {
+        schema_version: "0.1",
+        analysis_id: item.id,
+        analysis_type: item.type,
+        chain_id: item.chain,
+        status: item.status,
+        preview_only: activeKey === "challenge",
+        visible_results: item.findings.map(finding => ({
+          classification: finding.class === "confirmed" ? "confirmed_fact" :
+            finding.class === "context" ? "external_context" :
+            finding.class === "heuristic" ? "heuristic" : "not_assessed",
+          title: finding.title,
+          summary: finding.copy
+        })),
+        run_summary: item.run,
+        exports: {json: item.exports[0], markdown: item.exports[1]}
+      };
+    }
+
+    function render() {
+      const item = cases[activeKey];
+      renderCaseList();
+      renderHeader(item);
+      renderGraph(item);
+      renderTimeline(item);
+      renderSources(item);
+      renderInspector(item);
+      document.getElementById("jsonPreview").textContent = JSON.stringify(previewJson(item), null, 2);
+    }
+
+    document.querySelectorAll("[data-filter]").forEach(control => {
+      control.addEventListener("change", () => {
+        if (control.checked) filters.add(control.dataset.filter);
+        else filters.delete(control.dataset.filter);
+        activeSelection = null;
+        renderGraph(cases[activeKey]);
+        renderInspector(cases[activeKey]);
+      });
+    });
+
+    const dialog = document.getElementById("jsonDialog");
+    document.getElementById("showJson").addEventListener("click", () => dialog.showModal());
+    document.getElementById("closeJson").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) dialog.close();
+    });
+
+    render();
+  </script>
+</body>
+</html>
