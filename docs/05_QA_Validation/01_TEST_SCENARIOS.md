@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-26 20:28
+> Last Updated: 2026-07-26 20:59
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -267,13 +267,13 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 ### QA-SEC-001 — secret·로컬 경로 비노출
 
 - **Mode**: fault-injection
-- **Backlog**: `TASK-001`, `TASK-003`, `TASK-004`, `TASK-009`
+- **Backlog**: `TASK-001`, `TASK-003`, `TASK-004`, `TASK-005`, `TASK-009`
 - **Requirements**: `REQ-NFR-005`
 - **Preconditions**: canary API key, Authorization header, 사용자 절대 경로 포함 입력
-- **Steps**: 성공·retry·fallback·failed 실행 후 log·DB·cache·error·export를 검색한다.
+- **Steps**: 성공·retry·fallback·failed 실행 후 CLI stdout·stderr와 log·DB·cache·error·export를 검색한다.
 - **Expected**:
-  - canary secret과 Authorization 값은 0건이다.
-  - 사용자 이름이 포함된 로컬 절대 경로는 export에서 0건이다.
+  - canary secret과 Authorization 값은 모든 검색 대상에서 0건이다.
+  - 사용자 이름이 포함된 로컬 절대 경로는 stdout·stderr·error·export에서 0건이다.
   - endpoint query secret은 redacted 형태로만 남는다.
   - 테스트는 사용자 실제 `.scan/`을 읽거나 변경하지 않는다.
 

@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-26 20:28
+> Last Updated: 2026-07-26 20:59
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -73,7 +73,7 @@
 
 | Gate | 실행 시점 | QA ID | 현재 상태 |
 |:---|:---|:---|:---|
-| Document Gate | 구현 전과 모든 문서 PR | `QA-REG-003`의 문서·Schema·fixture 부분 | partial: 문서 부분만 실행 가능 |
+| Document Gate | 구현 전과 모든 문서 PR | `QA-REG-003`의 문서·Schema·fixture 부분 | not_executed: 문서 부분은 구현 전 실행 가능하나 실행 기록 없음 |
 | Project Gate | `TASK-001` 완료 후 | `QA-BOOT-001` | not_executed |
 | Contract Gate | `TASK-002` 완료 후 | `QA-SCHEMA-001`, `QA-SCHEMA-002` | not_executed |
 | Source Gate | `TASK-003` 완료 후 | `QA-RULE-001`, `QA-SOURCE-001`, `QA-RETRY-001`, `QA-FALLBACK-001` | not_executed |
