@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-26 18:54
-> Status: Draft 1 · Approval Pending
+> Last Updated: 2026-07-26 20:09
+> Status: Approved 1.0
 
 ## 1. 문서 목적
 
@@ -23,14 +23,14 @@
 
 | 구분 | 현재 수량 | 상태 |
 |:---|---:|:---|
-| 상위 Markdown 문서 | 15 | Confirmed 1, UI Gate Passed 3, Draft 11 |
+| 상위 Markdown 문서 | 17 | Approved 1, Confirmed 1, UI Gate Passed 3, Draft 12 |
 | confirmed fixture 패키지 | 3 | DEX·AUTH·FREEZE `confirmed / 0.2` |
 | 후보 fixture | 5 | 공개 사례·정답·출처 TBD |
 | JSON Schema | 6 | fixture 3종·analysis 3종 |
 | 독립 검증기 | 2 | fixture `PASS 3`, analysis `PASS 3` |
 | HTML Preview | 1 | 사용자 확인·FB-001 반영 완료 |
 
-이 Roadmap을 포함하면 상위 Markdown 문서는 16개다.
+이 Roadmap과 Rules Register를 포함한 수량이다.
 
 ### 2.2 진행률 해석
 
@@ -52,7 +52,7 @@
 |:---|:---|:---|
 | [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) | Draft | 공식 규정·등록·팀·제출 사실 반영 후 승인 |
 | [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 | 미결정 사항과 후보 fixture 방침 확정 |
-| `03_SCAN_2026_RULES_REGISTER.md` | 미작성 | 공식 규정·변경 이력·허용/금지/불명확 분리 |
+| [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) | Draft 1 · Awaiting Official Information | 2026-07-27 등록 페이지 공개 후 세부 규정 재확인 |
 | [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) | Draft 1 | 규정 위험 점수와 구현 전제 갱신 후 승인 |
 
 ### 3.2 UI Screens
@@ -81,7 +81,7 @@
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
 | [P0·V1 구현 Backlog](./00_BACKLOG.md) | Draft 1 · Approval Pending | 문서 Gate 통과 후 범위 승인; 구현은 별도 승인 |
-| 이 문서 | Draft 1 · Approval Pending | 문서 범위·순서·대체 문서 판단 승인 |
+| 이 문서 | Approved 1.0 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
 | `01_EXECUTION_PLAN.md` | 조건부 미작성 | 구현 일정이 필요할 때 Backlog를 날짜·담당자로 전환 |
 | `02_ROADMAP_BACKLOG_SYNC.md` | 조건부 미작성 | 구현 시작 전 Roadmap↔Backlog 상태 동기화 규칙 작성 |
 
@@ -115,24 +115,27 @@ solmate Gate가 요구하는 표준 문서와 이 저장소의 도메인 문서�
 
 ## 5. 문서 완료 Milestone
 
-### [ ] DOC-M1 — Roadmap 기준선 승인
+### [x] DOC-M1 — Roadmap 기준선 승인
 
-- [ ] 현재 문서 15개와 이 Roadmap의 상태를 확인한다.
-- [ ] 작성률·확정률·전체 준비율의 해석을 승인한다.
-- [ ] 표준 문서 대체와 조건부 문서 방침을 승인한다.
-- [ ] 구현보다 문서 완료를 우선한다는 순서를 고정한다.
+- [x] PR #9 승인 당시 기존 상위 Markdown 문서 15개와 이 Roadmap의 상태를 확인한다.
+- [x] 작성률·확정률·전체 준비율의 해석을 승인한다.
+- [x] 표준 문서 대체와 조건부 문서 방침을 승인한다.
+- [x] 구현보다 문서 완료를 우선한다는 순서를 고정한다.
 
 완료 조건: 이 Roadmap의 상태가 `Confirmed 1.0` 또는 `Approved`로 변경된다.
 
+완료 기록: 사용자 승인과 PR #9 병합(`c115f7d`, 2026-07-26)을 기준으로
+`Approved 1.0` 상태를 확정했다.
+
 ### [ ] DOC-M2 — 공식 규정·참가 운영 확정
 
-- [ ] `03_SCAN_2026_RULES_REGISTER.md`를 작성한다.
-- [ ] 공식 원문 URL·게시 시각·조회 시각·변경 이력을 기록한다.
-- [ ] API·자동화·AI·사전 제작 도구·상용 서비스 규정을
+- [x] `03_SCAN_2026_RULES_REGISTER.md`를 작성한다.
+- [x] 공식 원문 URL·게시 시각·조회 시각·변경 이력을 기록한다.
+- [x] API·자동화·AI·사전 제작 도구·상용 서비스 규정을
       `allowed / restricted / unclear`로 분리한다.
 - [ ] 등록 마감·팀 구성·본인 확인·예선·본선 일정을 기록한다.
 - [ ] 지원 체인·제공 데이터·정답 제출 형식·증거 제출 형식을 기록한다.
-- [ ] 불명확한 항목은 추정하지 않고 문의 대상·회신 상태를 기록한다.
+- [x] 불명확한 항목은 추정하지 않고 문의 대상·회신 상태를 기록한다.
 - [ ] 규정 결과를 준비 전략·문제은행·우선순위·소스 등록부·요구사항에 역반영한다.
 
 완료 조건: 규정상 사용할 수 있는 데이터·도구·팀·제출 범위를 문서만으로
@@ -182,7 +185,7 @@ Roadmap에 명시되어 있다.
 
 | 순서 | 시점 | 작업 | 차단 관계 |
 |:---:|:---|:---|:---|
-| 1 | 현재 | `DOC-M1` Roadmap 승인 | 이후 문서 순서의 기준 |
+| 1 | 완료 (2026-07-26) | `DOC-M1` Roadmap 승인 | 이후 문서 순서의 기준 |
 | 2 | 2026-07-27 등록 시작 후 | `DOC-M2` 공식 규정 Register | 규정 정보 접근 필요 |
 | 3 | 규정 1차 확인 직후 | 준비 전략·우선순위·소스·요구사항 동기화 | DOC-M2 의존 |
 | 4 | 규정 확인과 병행 | `DOC-M3` QA checklist·fixture 방침 | 일부 독립 진행 가능 |
@@ -247,6 +250,7 @@ Roadmap에 명시되어 있다.
 ## 10. Related Documents
 
 - **Concept_Design**: [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 공식 규정 전후 준비 순서
+- **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 확인 사실·규정 상태·문의·변경 이력
 - **Concept_Design**: [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 30문항·후보 fixture·미결정 사항
 - **Concept_Design**: [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1과 규정 위험 점수
 - **UI_Screens**: [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - UI-First Gate·명령 흐름

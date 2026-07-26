@@ -1,6 +1,6 @@
 # SCAN 2026 참가·분석 도구 준비 전략
 > Created: 2026-07-24 01:14
-> Last Updated: 2026-07-26 18:28
+> Last Updated: 2026-07-26 19:24
 > Status: Draft
 
 ## 1. 문서 목적
@@ -40,6 +40,7 @@
 - 예선 상위 20개 팀이 2026년 9월 28일 서울 모나코스페이스에서 열리는 본선에 진출한다.
 - 컨퍼런스와 시상식은 2026년 10월 1일 서울 워커힐호텔 워커홀에서 열린다.
 - 총상금은 2 BTC로 안내되어 있다.
+- 공식 상금표는 1위부터 20위까지 합계 2.000 BTC로 총상금과 일치한다.
 - 주최사는 디애셋이며 CTF 파트너는 Chainalysis다.
 
 ### 3.2 확인이 필요한 사항
@@ -53,7 +54,6 @@
 - 본선 진출자의 현장 참석 의무와 신원 확인 방식
 - 지원 언어 및 정답 제출 형식
 - 분석 대상 체인과 사전 제공 데이터
-- 공식 상금표의 1~18위 합계 1.979 BTC와 총상금 2 BTC 간 차이
 
 세부 규정이 공개되면 이 문서를 갱신하고, 준비 중인 도구가 규정을 위반하지 않는지 다시 확인해야 한다.
 
@@ -459,10 +459,11 @@ Python은 데이터 수집, 테이블 처리, 그래프 분석, 자동화와 실
 ## 17. Related Documents
 
 - **Concept_Design**: [SCAN 2026 예상문제 은행](./02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - Draft 2 확정본(30문항, 완료·부분·실패 조건, 기능 행렬)
+- **Concept_Design**: [SCAN 2026 공식 규정 Register](./03_SCAN_2026_RULES_REGISTER.md) - 확인 사실·미공개 규정·공식 문의 추적
 - **Concept_Design**: [분석 도구 기능 우선순위](./04_SCAN_2026_TOOL_PRIORITY.md) - 기능 점수, P0·V1·P1 구현 순서
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - 분석 데이터 소스 비교·제약
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 공통 계약과 vertical slice 완료 조건
 - **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 런타임·adapter·저장·검증 기술 선택
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - 공식 규정부터 문서 확정까지의 마감 순서
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 대표 검증 사례 후보
-- 후속 문서: 공식 규정 Register와 QA checklist는 문서 완료 Roadmap에서 추적한다.
+- 후속 문서: QA checklist는 문서 완료 Roadmap에서 추적한다.
