@@ -1,6 +1,6 @@
 # SCAN 2026 공식 규정 Register
 > Created: 2026-07-26 19:24
-> Last Updated: 2026-07-26 19:24
+> Last Updated: 2026-07-26 20:09
 > Status: Draft 1 · Awaiting Official Information
 
 ## 1. 문서 목적
@@ -102,12 +102,15 @@ AI·사전 제작 도구·상용 서비스·제출 형식에 관한 세부 Rules
 | `RULE-API-001` | 외부 RPC·탐색기·가격·OSINT API | unclear | unclear | 허용 공급자, 호출 제한, 유료 API |
 | `RULE-AUTO-001` | 자체 자동화 스크립트·CLI | unclear | unclear | 수집·분석·시각화 자동화 범위 |
 | `RULE-AI-001` | ChatGPT·Codex 등 생성형 AI | unclear | unclear | 질의, 코드 생성, 분석, 답안 작성 |
-| `RULE-PREBUILT-001` | 대회 전 제작한 자체 도구 | unclear | unclear | 사전 코드·fixture·캐시 반입 |
+| `RULE-PREBUILT-TOOL-001` | 대회 전 제작한 자체 도구 | unclear | unclear | 사전 코드·실행 파일 반입 |
+| `RULE-PRELOAD-DATA-001` | 사전 적재 fixture·cache·계산 결과 | unclear | unclear | 공개 데이터 캐시와 문제별 사전 계산 데이터 |
 | `RULE-OSS-001` | 공개 오픈소스 도구·라이브러리 | unclear | unclear | 허용 라이선스·버전·고지 의무 |
 | `RULE-COMMERCIAL-001` | 상용 라벨·포렌식 서비스 | unclear | unclear | 팀 계정 공유, trial, 결과 인용 |
-| `RULE-WEB-001` | 검색엔진·웹·SNS 조사 | unclear | unclear | OSINT 검색과 외부 연락 범위 |
+| `RULE-WEB-OSINT-001` | 검색엔진·웹·SNS 수동 조사 | unclear | unclear | 공개 정보 검색·열람·인용 범위 |
+| `RULE-EXTERNAL-CONTACT-001` | 외부 개인·기관에 직접 연락 | unclear | unclear | 단서 확인 연락과 답안·도움 요청의 경계 |
 | `RULE-COLLAB-001` | 팀 외부 인원과의 협업 | unclear | unclear | 코칭·답안 공유·외부 분석 의뢰 |
-| `RULE-SUBMIT-001` | 자동 제출·brute force | unclear | unclear | API 제출, 빈도 제한, 오답 감점 |
+| `RULE-AUTO-SUBMIT-001` | CTFd API·스크립트 자동 제출 | unclear | unclear | API 허용, 제출 빈도, 세션 정책 |
+| `RULE-BRUTEFORCE-001` | 정답 추측·brute force 제출 | unclear | unclear | 시도 제한, 오답 감점, 실격 조건 |
 | `RULE-DATA-001` | 문제 데이터 저장·재배포 | unclear | unclear | 로컬 저장, 팀 공유, 대회 후 공개 |
 | `RULE-CREDENTIAL-001` | API 키·계정의 팀 내 공유 | unclear | unclear | 개인·팀 계정, 비밀정보 보관 |
 
@@ -146,10 +149,12 @@ AI·사전 제작 도구·상용 서비스·제출 형식에 관한 세부 Rules
 | 문의 ID | 질문 | 상태 | 재확인 시점 |
 |:---|:---|:---|:---|
 | `Q-REG-001` | 등록 마감·개인 참가·팀 변경 마감은 언제인가? | not_sent | 2026-07-27 12:00 KST 이후 |
-| `Q-TOOL-001` | 외부 API·자체 자동화·사전 제작 도구가 허용되는가? | not_sent | 공개 Rules 확인 후 |
+| `Q-TOOL-001` | 외부 API·자체 자동화·사전 제작 도구와 fixture·cache 반입이 허용되는가? | not_sent | 공개 Rules 확인 후 |
 | `Q-AI-001` | 생성형 AI를 코드·분석·답안 작성에 사용할 수 있는가? | not_sent | 공개 Rules 확인 후 |
 | `Q-SVC-001` | 상용 포렌식·라벨 서비스와 팀 계정 공유가 허용되는가? | not_sent | 공개 Rules 확인 후 |
 | `Q-SUBMIT-001` | 지원 체인과 정답·증거 제출 형식은 무엇인가? | not_sent | challenge notice 확인 후 |
+| `Q-SUBMIT-AUTO-001` | CTFd API·자동 제출과 정답 추측의 허용 범위·빈도·감점은 무엇인가? | not_sent | 공개 Rules 확인 후 |
+| `Q-OSINT-001` | 웹·SNS OSINT와 외부 개인·기관에 직접 연락하는 행위가 허용되는가? | not_sent | 공개 Rules 확인 후 |
 | `Q-FINAL-001` | 본선 참석·신원 확인·장비·인터넷 조건은 무엇인가? | not_sent | 본선 안내 공개 후 |
 
 문의 발송과 외부 상태 변경은 별도 사용자 승인 후에만 수행한다.
@@ -173,6 +178,7 @@ AI·사전 제작 도구·상용 서비스·제출 형식에 관한 세부 Rules
 |:---|:---|:---|:---|
 | 2026-07-26 19:24 KST | 사전등록 전 기준선 생성 | `SRC-SCAN-SITE`, `SRC-SCAN-CTFD`, `SRC-DA-PRESS` | 일정·참가·상금 사실과 미공개 규정 분리 |
 | 2026-07-26 19:24 KST | 상금표 1~20위 합계 2.000 BTC 확인 | `SRC-SCAN-SITE` | 기존 1~18위 합계 불일치 관찰 종료 |
+| 2026-07-26 20:09 KST | 복합 규정 상태를 원자 정책으로 분리 | 내부 문서 검토 | 도구/사전 데이터, 웹 조사/외부 연락, 자동 제출/brute force 독립 갱신 |
 
 변경 이력에는 페이지가 그대로였다는 사실이 아니라, 이전 기준선과 달라진
 규정·운영 정보만 추가한다.
