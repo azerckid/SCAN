@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-26 16:34
+> Last Updated: 2026-07-26 22:38
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -29,6 +29,7 @@
 | CLI·노트북·웹 UI 미결정 | V1 core와 사용자 인터페이스를 분리 |
 | 2026 공식 규정 미확인 | 자동화·API 실행 전 source policy gate 필요 |
 | 짧은 대회 대응 시간 | 설치·변경·디버깅 비용이 낮은 단일 런타임 우선 |
+| 오픈소스 포렌식 사전조사 | 기존 포렌식·ETL·탐색기 기능을 비교한 뒤 직접 구현 여부 재검증 |
 
 ## 3. 평가 기준
 
@@ -379,6 +380,7 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 | web3.py | 선택 보조 | 직접 adapter보다 contract 호출·ABI 조립 비용이 큰 기능 발생 |
 | 성능 수치 | 미결정 | V1 fixture cold·warm benchmark 후 |
 | 공급자별 rate limit | 미결정 | 공식 규정·계정·플랜 확정 후 |
+| 기능별 오픈소스 결정 | Initial Survey | 관련 기능 구현 전 `OSS-*` fixture bake-off |
 
 ## 17. 다음 단계
 
@@ -387,8 +389,9 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 3. Python package 초기화 전 `00_DEVELOPMENT_PRINCIPLES.md` Draft 1을 작성했다.
 4. CLI command flow와 terminal HTML Preview Draft를 작성했다.
 5. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
-6. schema·UI 경계 승인 후 원자적 backlog와 QA 시나리오를 작성한다.
-7. 2026-07-27 이후 공식 규정을 source policy와 기술 결정에 반영한다.
+6. schema·UI 경계 승인 후 원자적 backlog와 QA 시나리오를 작성했다.
+7. P0·V1 오픈소스 후보를 fixture로 검증하고 기존 TD 결정을 재확인한다.
+8. 2026-07-27 이후 공식 규정을 source policy와 기술 결정에 반영한다.
 
 ## 18. Related Documents
 
@@ -402,4 +405,5 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - 기존 fixture JSON 계약
 - **Technical_Specs**: [P0·V1 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 기술 선택의 규범적 요구사항
 - **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - `TD-019`의 요청·결과·오류 공개 계약
+- **Technical_Specs**: [오픈소스 포렌식 사전조사](./06_OPEN_SOURCE_FORENSICS_REVIEW.md) - 기존 TD의 재사용·직접 구현 재검증 Gate
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - DEX·AUTH·FREEZE 회귀 입력

@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-26 20:59
+> Last Updated: 2026-07-26 22:38
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -93,6 +93,8 @@ ID는 24개 집계에서 한 번만 센다.
 - [ ] `TASK-001` 시작을 별도로 승인받았다.
 - [ ] Backlog의 관련 Concept·UI·HTML Preview·Technical·QA 링크를 다시 읽었다.
 - [ ] Rules Register의 API·자동화·AI·사전 도구 상태를 확인했다.
+- [ ] P0·V1 관련 오픈소스 후보의 고정 commit·license·`OSS-*` 결정을 확인했다.
+- [ ] 채택 후보가 applicable confirmed fixture 또는 공개 사례 검증을 통과했다.
 - [ ] 제한된 source와 동작이 실행 전 차단되는지 요구사항으로 확인했다.
 - [ ] 실제 dependency·license·Python 범위를 결정했다.
 - [ ] secret·private key·서명·거래 전송이 범위 밖임을 확인했다.
@@ -162,6 +164,7 @@ ID는 24개 집계에서 한 번만 센다.
 - [ ] 새 오류·source·결과 필드가 승인 계약과 연결된다.
 - [ ] mock·fixture 변경이 정답을 편의상 바꾸지 않는다.
 - [ ] dependency 추가 시 라이선스·공식 배포·보안 근거를 기록한다.
+- [ ] 직접 구현 기능에 대응하는 오픈소스 조사·제외 이유가 `OSS-*` 결정에 있다.
 - [ ] secret scan과 로컬 경로 비노출을 확인한다.
 - [ ] UI 동작 변경 시 HTML Preview·UI 문서·피드백을 동기화한다.
 
@@ -265,6 +268,7 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - source 능력·제약
 - **Technical_Specs**: [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - acceptance·오류·source 계약
 - **Technical_Specs**: [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - request·result·error 계약
+- **Technical_Specs**: [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - dependency·재사용·직접 구현 검증 Gate
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - DOC-M3와 구현 분리 Gate
 - **Logic_Progress**: [P0·V1 Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK별 책임과 Preconditions
 - **QA_Validation**: [P0·V1 QA 시나리오](./01_TEST_SCENARIOS.md) - 24개 상세 검증 절차

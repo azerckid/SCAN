@@ -1,6 +1,6 @@
 # SCAN 2026 분석 도구 기능 우선순위
 > Created: 2026-07-25 15:49
-> Last Updated: 2026-07-26 18:28
+> Last Updated: 2026-07-26 22:38
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -19,6 +19,7 @@
 | 예상문제 은행 | Draft 2, 30문항 | 필수·조건부 기능 적용 범위 |
 | 데이터 소스 등록부 | Draft, EVM 핵심 소스 검증 중 | 외부 의존성과 재시도 위험 |
 | 공통 fixture 스키마 | Confirmed 0.1 | 검증 입력·정답·증거 연결 계약 |
+| 오픈소스 포렌식 사전조사 | Draft 1 · Initial Survey | 기능별 재사용·직접 구현 Gate |
 | `FX-SVC-DEX-001` | confirmed / 0.2 | 로그·DEX 해석·정합 검증 |
 | `FX-EVM-AUTH-001` | confirmed / 0.2 | 권한 승인·소비·과거 상태 검증 |
 | `FX-EVM-FREEZE-001` | confirmed / 0.2 | 동결 이벤트·상태·공식 맥락 검증 |
@@ -204,6 +205,7 @@ LABEL과 VIZ는 증거가 아니라 판단 지원 화면이다. 원본 TX·출�
 - Python·TypeScript·DuckDB 등 기술 조합
 - 성능 목표와 로컬 캐시 용량
 - 라벨 데이터의 무료·유료 소스 범위
+- 기능별 오픈소스 `ADOPT / WRAP / BORROW / BUILD / REJECT` 결정
 
 ## 10. 다음 단계
 
@@ -211,9 +213,10 @@ LABEL과 VIZ는 증거가 아니라 판단 지원 화면이다. 원본 TX·출�
 2. P0·V1 기술 후보 비교와 선택 기록 Draft 1을 작성했다.
 3. 기술 선택·공통 작업 I/O Schema·개발 원칙·CLI UI-First Gate를 확정했다.
 4. P0·V1 구현 Backlog와 QA 시나리오 Draft를 작성했다.
-5. 문서 완료 Roadmap의 공식 규정·QA·Draft 승인 Gate를 통과한다.
-6. Document Completion Gate 승인 후 Python project 초기화를 별도로 승인한다.
-7. P2 승격에 필요한 BRIDGE·BTC fixture 공개 사례를 선정한다.
+5. 기능별 오픈소스 후보를 조사하고 P0·V1 `OSS-*` 결정을 fixture로 검증한다.
+6. 문서 완료 Roadmap의 공식 규정·QA·Draft 승인 Gate를 통과한다.
+7. Document Completion Gate 승인 후 Python project 초기화를 별도로 승인한다.
+8. P2 승격에 필요한 BRIDGE·BTC fixture 공개 사례를 선정한다.
 
 ## 11. Related Documents
 
@@ -223,6 +226,7 @@ LABEL과 VIZ는 증거가 아니라 판단 지원 화면이다. 원본 TX·출�
 - **Technical_Specs**: [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) - fixture JSON·증거 연결 계약
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 입력·출력·오류·캐시·vertical slice 계약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 런타임·adapter·저장·검증 기술 결정
+- **Technical_Specs**: [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - 기능별 재사용·직접 구현 결정 Gate
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - 공식 규정·문서 승인·구현 분리 Gate
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - P0·V1 원자 작업과 의존 순서
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - confirmed fixture와 승격 기준

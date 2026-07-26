@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 구현 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-26 20:59
+> Last Updated: 2026-07-26 22:38
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -44,6 +44,16 @@ Backlog 승인은 구현 승인의 선행 조건이다. 현재 모든 작업은 
 작업을 `In Progress`로 옮길 때 구현자는 해당 항목의 모든 관련 문서를 실제로
 다시 읽고 Preconditions를 체크한다. 코드만 완료하고 문서·QA가 남으면 `Done`으로
 이동할 수 없다.
+
+### 2.4 오픈소스 사전조사 Gate
+
+모든 구현 작업은 [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md)의
+관련 `OSSR-*` 조사와 `OSS-*` 결정을 입력으로 사용한다. 적합한 기존 기능을
+검색하지 않았거나 결정 근거가 없으면 해당 작업을 `In Progress`로 이동하지
+않는다.
+
+P2·P3 조사는 해당 단계 승격 전까지 보류할 수 있지만, P0·V1 구현에는 관련
+P0·V1 조사 결정이 필수다.
 
 ## 3. 의존 순서
 
@@ -530,6 +540,7 @@ TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을
 - [ ] 9개 작업의 범위와 의존 순서 승인
 - [ ] TASK-001을 첫 구현 작업으로 승인
 - [ ] QA 시나리오와 Acceptance Criteria 정합 확인
+- [ ] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
 - [ ] Backlog 승인 후 별도 구현 branch 사용
 
@@ -553,6 +564,7 @@ TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - 구현 규칙
 - **Technical_Specs**: [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 요구사항·검증 ID
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 공개 계약
+- **Technical_Specs**: [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - 구현 전 재사용·직접 구현 결정 Gate
 - **Logic_Progress**: [문서 완료 Roadmap](./00_ROADMAP.md) - 구현보다 먼저 통과할 문서 Gate
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 수용·회귀 기준
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - exact-match 입력
