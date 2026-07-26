@@ -1,6 +1,6 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-26 16:46
+> Last Updated: 2026-07-27 00:54
 > Status: Draft 1
 > Schema Version: 0.1
 
@@ -218,6 +218,22 @@ JSON Schema 검사 외에 검증기는 다음을 확인한다.
 
 ## 8. 호환성과 버전
 
+### 8.1 Agentic orchestration과의 경계
+
+Analysis I/O `0.1`은 병렬 문제풀이에서도 하나의 leaf 분석 요청·결과 계약으로
+유지한다.
+
+- 한 CTFd 문제는 여러 `analysis_id`를 가질 수 있다.
+- `problem_id`, worker assignment, verification, submission candidate는
+  별도 운영 manifest가 관리한다.
+- Operations Board는 `analysis-result`의 result·evidence·source를 읽지만
+  새로운 온체인 사실을 계산하지 않는다.
+- 운영 필드를 이 Schema의 공통 필수 필드로 추가하지 않는다.
+- 운영 manifest의 영구 JSON Schema는 `TASK-010` 구현 전 별도 승인한다.
+
+따라서 Agentic Parallel Solve Flow 문서화만으로 Analysis I/O
+`schema_version`을 올리지 않는다.
+
 | 변경 | 버전 처리 |
 |:---|:---|
 | 설명·예제·검증 오류 문구 수정 | `0.1` 유지 |
@@ -270,6 +286,8 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - 회귀 fixture의 독립 JSON 계약
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 공통 입출력·오류 규범
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - Pydantic·artifact·adapter 결정
+- **Technical_Specs**: [Agentic Parallel Solve Flow](./07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - leaf analysis와 운영 manifest의 경계
+- **UI_Screens**: [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 여러 leaf result의 운영 상태 표시
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - model·Schema 구현 작업과 완료 기준
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 변환 대상 confirmed fixture
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - round-trip·무효 입력·참조 무결성 기준

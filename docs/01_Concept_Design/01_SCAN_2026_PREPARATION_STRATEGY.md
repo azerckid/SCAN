@@ -1,6 +1,6 @@
 # SCAN 2026 참가·분석 도구 준비 전략
 > Created: 2026-07-24 01:14
-> Last Updated: 2026-07-26 19:24
+> Last Updated: 2026-07-27 00:54
 > Status: Draft
 
 ## 1. 문서 목적
@@ -420,9 +420,39 @@ Python은 데이터 수집, 테이블 처리, 그래프 분석, 자동화와 실
 | 구현에 시간 과다 사용 | 문제풀이 연습 부족 | 문제 적용 빈도에 따른 기능 우선순위 |
 | 자동화 과신 | 맥락을 놓치거나 잘못된 결론 | 사람이 검증하는 반자동 구조 유지 |
 
-## 15. 다음 단계
+## 15. 대회 당일 병렬 문제풀이 운영
 
-### 15.1 세부 규정 공개 전
+여러 문항이 동시에 공개되는 CTF형 예선에서는 문제별 프로그램을 새로 만드는
+것보다 공통 Python 기능을 재사용하고 문제·분석 단위를 병렬 실행하는 것이
+유리하다.
+
+운영 흐름은 다음을 기준으로 한다.
+
+1. 사람이 CTFd 문제와 요구 답 형식을 등록한다.
+2. Coordinator가 체인·유형·난이도·필요 도구를 가설로 분류한다.
+3. EVM·자금 추적·OSINT 등 독립 작업을 여러 worker에 배정한다.
+4. Python 포렌식 엔진이 결정적 수집·계산·정합을 수행한다.
+5. Verifier가 원본 TX·log·call·state·공식 출처로 독립 재검증한다.
+6. 사람에게 정답 후보·근거·불확실성·제출 권고를 제시한다.
+7. 사람이 CTFd에 직접 제출한다.
+
+문제 간 병렬성과 한 문제 내부의 독립 leaf 분석 병렬성을 모두 사용한다.
+서브에이전트는 사람 팀의 역할을 보조할 수 있지만 Python 코어를 대체하지
+않는다. AI가 제한되면 같은 역할을 사람과 CLI worker가 수행한다.
+
+CTFd 자동 제출·brute force·credential 저장은 준비 범위에서 제외한다.
+AI·자동화·사전 제작 도구·외부 문제 데이터 전송은 공식 규정 확인 후 허용된
+범위만 활성화한다.
+
+상세 역할·Queue·검증·제출 계약은
+[Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md),
+운영 화면은
+[Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md)를
+따른다.
+
+## 16. 다음 단계
+
+### 16.1 세부 규정 공개 전
 
 1. 예상문제 은행의 목표 개수와 난이도 구성을 정한다.
 2. 문제 분류별 예상문제를 작성한다.
@@ -430,7 +460,7 @@ Python은 데이터 수집, 테이블 처리, 그래프 분석, 자동화와 실
 4. 기능-문제 행렬을 만든다.
 5. 기능별 우선순위 산정 방법을 확정한다.
 
-### 15.2 2026년 7월 27일 등록 시작 후
+### 16.2 2026년 7월 27일 등록 시작 후
 
 1. 공식 참가 규정을 확보한다.
 2. 외부 API, 자동화 도구, AI 및 상용 서비스 사용 규정을 확인한다.
@@ -438,7 +468,7 @@ Python은 데이터 수집, 테이블 처리, 그래프 분석, 자동화와 실
 4. 지원 체인과 제출 형식을 확인한다.
 5. 이 문서의 확정 사실과 제약 사항을 갱신한다.
 
-### 15.3 예상문제 분석 후
+### 16.3 예상문제 분석 후
 
 1. 기능 우선순위 Draft 1의 P0·V1을 도구 요구사항으로 전환했다.
 2. 입력·출력·캐시·provenance 인터페이스를 명세했다.
@@ -448,7 +478,7 @@ Python은 데이터 수집, 테이블 처리, 그래프 분석, 자동화와 실
 6. 문서 완료 Roadmap의 공식 규정·QA·Draft 승인 Gate를 통과한 뒤 구현 여부를
    별도로 승인한다.
 
-## 16. 출처
+## 17. 출처
 
 - [SCAN 2026 공식 사이트](https://scan.sx/) - 일정, 등록 시작, 장소, 주최·파트너 및 상금
 - [SCAN 2026 공식 보도자료](https://www.digitalasset.works/news/articleView.html?idxno=42082) - 대회 목적, 참가 조건, 예선·본선 진행 방식
@@ -456,7 +486,7 @@ Python은 데이터 수집, 테이블 처리, 그래프 분석, 자동화와 실
 
 외부 기사는 저작권이 있는 자료이므로 본 문서에는 필요한 사실만 요약하며 본문을 복제하지 않는다.
 
-## 17. Related Documents
+## 18. Related Documents
 
 - **Concept_Design**: [SCAN 2026 예상문제 은행](./02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - Draft 2 확정본(30문항, 완료·부분·실패 조건, 기능 행렬)
 - **Concept_Design**: [SCAN 2026 공식 규정 Register](./03_SCAN_2026_RULES_REGISTER.md) - 확인 사실·미공개 규정·공식 문의 추적
@@ -464,6 +494,9 @@ Python은 데이터 수집, 테이블 처리, 그래프 분석, 자동화와 실
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - 분석 데이터 소스 비교·제약
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 공통 계약과 vertical slice 완료 조건
 - **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 런타임·adapter·저장·검증 기술 선택
+- **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 병렬 문제풀이 역할·Queue·검증·수동 제출 계약
+- **UI_Screens**: [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 여러 문제·worker·검증·제출 상태 운영 화면
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - 공식 규정부터 문서 확정까지의 마감 순서
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 대표 검증 사례 후보
-- 후속 문서: QA checklist는 문서 완료 Roadmap에서 추적한다.
+- **QA_Validation**: [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 문서·구현·대회 전 Gate
+- **QA_Validation**: [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - 병렬성·격리·독립 검증·수동 제출 기준

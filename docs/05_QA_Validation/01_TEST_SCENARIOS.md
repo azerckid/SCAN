@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-26 20:59
+> Last Updated: 2026-07-27 00:54
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -15,6 +15,10 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 현재 정의된 시나리오는 24개이며 승인 상태는 `Approval Pending`, 실행 상태는
 `Not Executed`다. 구현 전·작업별·통합 실행 시점은
 [QA Checklist](./02_QA_CHECKLIST.md)에서 관리한다.
+
+병렬 문제풀이 `TASK-010`의 6개 시나리오는
+[Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md)에 별도로
+정의하며 이 문서의 24개 P0·V1 기준선에 합산하지 않는다.
 
 ## 2. QA 원칙
 
@@ -466,5 +470,6 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - QA별 구현 책임
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed 사례와 승격 기준
 - **QA_Validation**: [QA Checklist](./02_QA_CHECKLIST.md) - 24개 시나리오의 승인·실행 시점과 결과 기록
+- **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 병렬성·격리·독립 검증·수동 제출 QA
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - request·result 기준
 - **QA_Validation**: [DEX fixture](./fixtures/FX-SVC-DEX-001/README.md), [AUTH fixture](./fixtures/FX-EVM-AUTH-001/README.md), [FREEZE fixture](./fixtures/FX-EVM-FREEZE-001/README.md) - exact-match 원본

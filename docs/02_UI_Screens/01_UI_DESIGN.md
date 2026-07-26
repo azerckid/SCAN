@@ -1,6 +1,6 @@
 # SCAN 2026 CLI Terminal UI Design
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-26 23:51
+> Last Updated: 2026-07-27 00:54
 > Status: Draft 1 · UI-First Gate Passed
 
 ## 1. 문서 목적
@@ -352,14 +352,37 @@ Challenge Preview의 노드 수는 UI 검토를 위한 축약 표현이다. “�
 TX 처리 완료”라는 성능 주장을 하지 않으며 실제 fixture·측정 전에는 규모
 수치를 제품 성능으로 표시하지 않는다.
 
-## 15. Related Documents
+## 15. Competition Operations Board 시각 언어
+
+Operations Board는 여러 문제의 진행 상태와 worker 부하를 보여주지만,
+Workbench와 CLI의 사실 분류 의미를 변경하지 않는다.
+
+| 운영 객체 | 첫 표시 | 두 번째 표시 | 금지 |
+|:---|:---|:---|:---|
+| Problem | ID·score·status | role·progress·age | confidence만으로 ready |
+| Worker | role·job·stage | source·runtime·queue | AI 여부 숨김 |
+| Verification | pass·missing·conflict | evidence refs·다음 행동 | self-check를 independent로 표시 |
+| Candidate | 전체 answer·format | uncertainty·recommendation | 자동 제출처럼 보이는 CTA |
+| Rules | allowed·restricted·unclear | rule ID·fallback | unclear를 enabled로 표시 |
+| Source | health·limit | retry·cache·fallback | 실패를 조용히 숨김 |
+
+`SUBMISSION READY`는 독립 검증을 통과한 운영 상태이고 `SUBMITTED`는 사람이
+CTFd 제출을 완료했다고 기록한 상태다. 두 상태를 색상만으로 구분하지 않는다.
+
+Operations Board Preview의 처리량·남은 시간·confidence는 UX 검토용 demo
+data다. 실제 측정이나 대회 상태로 주장하지 않는다.
+
+## 16. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - V1 사용자 가치
 - **UI_Screens**: [CLI Screen Flow](./00_SCREEN_FLOW.md) - 명령과 상태 전환
 - **UI_Screens**: [CLI Prototype Review](./02_CLI_PROTOTYPE_REVIEW.md) - 확인 결과와 피드백
 - **UI_Screens**: [Web Investigation Workbench](./03_WEB_INVESTIGATION_WORKBENCH.md) - 선택적 시연 UX 구조와 승격 조건
+- **UI_Screens**: [Competition Operations Board](./04_COMPETITION_OPERATIONS_BOARD.md) - 문제·worker·검증·제출 Queue 화면
 - **UI_Screens**: [HTML Terminal Preview](./previews/01_cli_terminal_preview.html) - 상태별 화면
 - **UI_Screens**: [HTML Workbench Preview](./previews/02_investigation_workbench_preview.html) - read-only 조사 화면 Draft
+- **UI_Screens**: [Operations Board Preview](./previews/03_competition_operations_board_preview.html) - 병렬 운영 UI Draft
+- **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 운영 상태와 역할 규범
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - stdout·stderr·보안 원칙
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 화면 데이터의 source of truth
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - renderer·CLI 구현 책임

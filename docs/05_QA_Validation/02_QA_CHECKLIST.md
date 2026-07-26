@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-26 22:38
+> Last Updated: 2026-07-27 00:54
 > Status: Draft 1 · Approval Pending
 
 ## 1. 문서 목적
@@ -13,6 +13,10 @@
 현재 Python application code는 없으며 QA 시나리오 24개는
 `Approval Pending / Not Executed` 상태다. 문서 검증 통과와 구현 테스트
 통과를 같은 의미로 사용하지 않는다.
+
+`TASK-010`의 Agentic Parallel Solve QA 6개는 별도
+`Approval Pending / Not Executed` 상태이며 기존 24개 P0·V1 집계를 변경하지
+않는다.
 
 ## 2. 상태와 판정
 
@@ -148,6 +152,19 @@ ID는 24개 집계에서 한 번만 센다.
 - [ ] 문서·Backlog·Schema·fixture·구현 경로가 동기화된다.
 - [ ] `live` 실패가 offline 회귀 정답을 변경하지 않는다.
 
+### 6.6 TASK-010 병렬 문제풀이 운영
+
+- [ ] 공식 Rules에서 AI·agent·자동화·외부 문제 데이터 전송 범위를 확인한다.
+- [ ] Operations Board Preview를 사용자가 확인하고 피드백을 기록한다.
+- [ ] 문제 간 상태·result·checkpoint·candidate가 격리된다.
+- [ ] 문제 내부 leaf job dependency와 source request dedup이 일치한다.
+- [ ] provider·worker별 동시성 제한과 Queue age가 표시된다.
+- [ ] worker 하나의 실패가 다른 문제 상태로 전파되지 않는다.
+- [ ] 독립 검증 없는 후보와 충돌 후보가 `submission_ready`가 아니다.
+- [ ] AI 제한 시 human·Python CLI fallback이 동작한다.
+- [ ] CTFd 자동 제출·credential·session·brute force가 0건이다.
+- [ ] Agentic Parallel Solve QA 6개의 구현된 범위를 실행·기록한다.
+
 ## 7. PR·릴리스·대회 전 Gate
 
 ### 7.1 모든 문서 PR
@@ -177,6 +194,9 @@ ID는 24개 집계에서 한 번만 센다.
 - [ ] 정답·증거 제출 형식에 export를 맞춘다.
 - [ ] 팀 장비에서 clean install과 confirmed fixture 회귀를 실행한다.
 - [ ] CTFd 계정·팀·시간대·본인 확인 상태를 점검한다.
+- [ ] Operations Board의 problem·worker·verification·submission Queue를 모의 실행한다.
+- [ ] 사람 제출자와 `Mark submitted` 운영 책임을 확인한다.
+- [ ] AI·agent가 비활성화되어도 Python CLI로 핵심 문제를 풀 수 있다.
 
 ## 8. Fixture 처리 Gate
 
@@ -264,12 +284,16 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **UI_Screens**: [CLI UI Design](../02_UI_Screens/01_UI_DESIGN.md) - 상태·오류·접근성 표시
 - **UI_Screens**: [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) - UI-First Gate와 FB-001
 - **UI_Screens**: [CLI HTML Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - 구현 전 사용자 확인 화면
+- **UI_Screens**: [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - `TASK-010` 화면·상태·수동 제출 기준
+- **UI_Screens**: [Operations Board Preview](../02_UI_Screens/previews/03_competition_operations_board_preview.html) - `TASK-010` UI-First Gate
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - 구현·테스트·보안 기준
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - source 능력·제약
 - **Technical_Specs**: [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - acceptance·오류·source 계약
 - **Technical_Specs**: [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - request·result·error 계약
 - **Technical_Specs**: [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - dependency·재사용·직접 구현 검증 Gate
+- **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·Queue·격리·독립 검증·수동 제출 요구사항
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - DOC-M3와 구현 분리 Gate
 - **Logic_Progress**: [P0·V1 Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK별 책임과 Preconditions
 - **QA_Validation**: [P0·V1 QA 시나리오](./01_TEST_SCENARIOS.md) - 24개 상세 검증 절차
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed 3·Deferred 5 처리 방침
+- **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - 기존 24개와 분리된 `TASK-010` 6개 QA
