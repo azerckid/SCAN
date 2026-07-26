@@ -1,6 +1,6 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-26 12:59
+> Last Updated: 2026-07-26 13:20
 > Status: Draft 1
 > Schema Version: 0.1
 
@@ -253,7 +253,8 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
 ## 11. 다음 단계
 
 1. Schema 0.1과 세 fixture 예제의 자동 검증을 통과시킨다.
-2. 개발 원칙 문서에서 Pydantic 모델·adapter·artifact·secret 규칙을 고정한다.
+2. Python 개발 원칙 Draft 1에서 Pydantic 모델·adapter·artifact·secret 규칙을
+   정리했다.
 3. CLI command flow와 terminal preview를 사용자에게 확인한다.
 4. 승인된 Schema·UI 경계를 원자적 backlog와 QA 시나리오로 전환한다.
 5. Python 프로젝트를 초기화하고 생성 Schema diff 검사를 연결한다.
@@ -261,6 +262,7 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
 ## 12. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위와 vertical slice
+- **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - Schema를 구현하는 Pydantic·검증·오류 원칙
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - `DS-...` ID와 공급자 제약
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - 회귀 fixture의 독립 JSON 계약
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 공통 입출력·오류 규범
