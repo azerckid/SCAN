@@ -1,6 +1,6 @@
 # SCAN Analysis I/O Schema 0.1 Examples
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-28 00:58
+> Last Updated: 2026-07-28 01:34
 
 ## 1. 목적
 
@@ -22,6 +22,11 @@
 TASK-006 실제 DEX analyzer는 이 예제의 세 result ID·raw 값을 유지하면서
 `EV-DEX-METADATA` supporting provenance를 추가한다. 예제와 runtime의 증거
 개수가 달라도 공개 Schema와 채점 결과의 의미는 바뀌지 않는다.
+
+TASK-007 실제 AUTH analyzer는 예제의 네 result ID와 값을 유지하면서
+실패 거래 3개, Blockscout 교차 확인과 pinned metadata context evidence를
+추가한다. theft/phishing attribution은 결과에서 제거하지 않고
+`not_assessed`와 claim `false`로 명시한다.
 
 ## 3. 검증
 
@@ -53,3 +58,4 @@ Schema의 35개 probe 수락 결과를 비교한다.
 - **QA_Validation**: [Reference Fixtures](../../01_REFERENCE_FIXTURES.md) - 예제 원본 fixture 목록
 - **QA_Validation**: [DEX](../../fixtures/FX-SVC-DEX-001/README.md), [AUTH](../../fixtures/FX-EVM-AUTH-001/README.md), [FREEZE](../../fixtures/FX-EVM-FREEZE-001/README.md) - 기준 패키지
 - **QA_Validation**: [TASK-006 DEX 보고서](../../10_TASK_006_DEX_REPORT.md) - 예제와 실제 raw replay 결과 대조
+- **QA_Validation**: [TASK-007 AUTH 보고서](../../11_TASK_007_AUTH_REPORT.md) - AUTH 예제와 실제 raw replay 결과 대조

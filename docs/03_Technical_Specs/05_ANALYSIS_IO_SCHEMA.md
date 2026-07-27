@@ -1,7 +1,7 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-28 00:58
-> Status: Contract Approved 0.1 · TASK-002·005·006 Applied
+> Last Updated: 2026-07-28 01:34
+> Status: Contract Approved 0.1 · TASK-002·005·006·007 Applied
 > Schema Version: 0.1
 
 ## 1. 문서 목적
@@ -314,7 +314,9 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
     complete·partial·failed 결과를 생성한다.
 13. CLI `--evidence`는 reviewed source artifact를 adapter에 주입하는 실행
     옵션이며 Analysis Request Schema 필드가 아니므로 버전은 `0.1`을 유지한다.
-14. 다음 구현은 별도 승인 후 `TASK-007` AUTH analyzer로 진행한다.
+14. `TASK-007` AUTH analyzer가 Schema 변경 없이 approval·allowance lifecycle·
+    authorization consumption·`not_assessed` attribution 결과를 생성한다.
+15. 다음 구현은 별도 승인 후 `TASK-008` FREEZE analyzer로 진행한다.
 
 ## 12. Related Documents
 
@@ -338,3 +340,4 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - 저장·export·checkpoint 증거
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - Schema 기반 validate·renderer·exit code 증거
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - Schema 0.1 DEX runtime 결과·참조 무결성
+- **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - Schema 0.1 AUTH runtime 결과·참조 무결성

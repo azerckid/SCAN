@@ -15,12 +15,19 @@ from scan_tool.domain import (
     validate_analysis_request,
     validate_analysis_result,
 )
-from scan_tool.domain.analysis_request import AnalysisRequest, DexAnalysisRequest
+from scan_tool.domain.analysis_request import (
+    AnalysisRequest,
+    AuthAnalysisRequest,
+    DexAnalysisRequest,
+)
 from scan_tool.domain.analysis_result import AnalysisResult
+from scan_tool.domain.auth import AuthReplay
 from scan_tool.domain.dex import DexReplay
+from scan_tool.slices.auth import analyze_auth_replay
 from scan_tool.slices.dex import analyze_dex_replay
 
 DEX_REPLAY_STAGE = "dex_replay_loaded"
+AUTH_REPLAY_STAGE = "auth_replay_loaded"
 
 
 class AnalysisUnavailable(RuntimeError):
@@ -106,28 +113,48 @@ class CliRuntime:
         replay_path: Path | None = None,
     ) -> AnalysisResult:
         document = request.root
-        if not isinstance(document, DexAnalysisRequest):
-            raise AnalysisUnavailable(
-                "The selected vertical analyzer is not implemented; continue with "
-                "TASK-007 or TASK-008."
+        if isinstance(document, DexAnalysisRequest):
+            replay_body, checkpoint_id, resumed = self._load_replay(
+                document.analysis_id,
+                replay_path,
+                stage=DEX_REPLAY_STAGE,
+                replay_model=DexReplay,
+                analysis_label="DEX",
             )
-        replay_body, checkpoint_id, resumed = self._load_dex_replay(
-            document.analysis_id,
-            replay_path,
-        )
-        return analyze_dex_replay(
-            document,
-            replay_body,
-            resumed=resumed,
-            checkpoint_id=checkpoint_id,
+            return analyze_dex_replay(
+                document,
+                replay_body,
+                resumed=resumed,
+                checkpoint_id=checkpoint_id,
+            )
+        if isinstance(document, AuthAnalysisRequest):
+            replay_body, checkpoint_id, resumed = self._load_replay(
+                document.analysis_id,
+                replay_path,
+                stage=AUTH_REPLAY_STAGE,
+                replay_model=AuthReplay,
+                analysis_label="AUTH",
+            )
+            return analyze_auth_replay(
+                document,
+                replay_body,
+                resumed=resumed,
+                checkpoint_id=checkpoint_id,
+            )
+        raise AnalysisUnavailable(
+            "The selected vertical analyzer is not implemented; continue with TASK-008."
         )
 
-    def _load_dex_replay(
+    def _load_replay(
         self,
         analysis_id: str,
         replay_path: Path | None,
+        *,
+        stage: str,
+        replay_model: type[DexReplay] | type[AuthReplay],
+        analysis_label: str,
     ) -> tuple[bytes, str | None, bool]:
-        checkpoint = self.storage.latest_checkpoint(analysis_id, DEX_REPLAY_STAGE)
+        checkpoint = self.storage.latest_checkpoint(analysis_id, stage)
         if checkpoint is not None:
             raw_sha256 = checkpoint.cursor.get("raw_artifact_sha256")
             if not isinstance(raw_sha256, str):
@@ -139,27 +166,29 @@ class CliRuntime:
 
         if replay_path is None:
             raise AnalysisUnavailable(
-                "DEX analysis requires --evidence RAW_REPLAY.json in offline mode."
+                f"{analysis_label} analysis requires --evidence RAW_REPLAY.json in offline mode."
             )
         try:
             replay_body = replay_path.read_bytes()
         except OSError as error:
-            raise AnalysisUnavailable("The DEX replay evidence file is unavailable.") from error
+            raise AnalysisUnavailable(
+                f"The {analysis_label} replay evidence file is unavailable."
+            ) from error
         try:
-            DexReplay.model_validate_json(replay_body)
+            replay_model.model_validate_json(replay_body)
         except ValidationError:
             return replay_body, None, False
         artifact = self.artifacts.write(
             replay_body,
             media_type="application/json",
-            artifact_kind="dex_replay",
+            artifact_kind=f"{analysis_label.lower()}_replay",
             redaction_status="reviewed",
             license_status="reviewed",
         )
         self.storage.record_artifact(artifact)
         checkpoint = self.storage.save_checkpoint(
             analysis_id,
-            DEX_REPLAY_STAGE,
+            stage,
             {"raw_artifact_sha256": artifact.sha256},
             (),
         )

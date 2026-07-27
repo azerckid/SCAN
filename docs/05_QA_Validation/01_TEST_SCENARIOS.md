@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 00:58
-> Status: Approved 1.6 · TASK-006 DEX Scope Passed
+> Last Updated: 2026-07-28 01:34
+> Status: Approved 1.7 · TASK-007 AUTH Scope Passed
 
 ## 1. 문서 목적
 
@@ -19,10 +19,10 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 `QA-RULE-001`은 통과했고 `QA-CLI-004`, `QA-SOURCE-001`,
 `QA-SEC-001`은 vertical·통합 범위가 남아 `partial`이다. `TASK-006`으로
 `QA-DEX-001`, `QA-DEX-002`, 실제 DEX checkpoint를 포함한 `QA-CLI-004`가
-통과했다.
+통과했다. `TASK-007`로 `QA-AUTH-001`, `QA-AUTH-002`가 통과했다.
 
 현재 정의된 시나리오는 24개이며 승인 상태는 `Scope Approved`, 실행 상태는
-`15 pass / 2 partial / 7 not_executed`다. 작업별·통합 실행 시점은
+`17 pass / 2 partial / 5 not_executed`다. 작업별·통합 실행 시점은
 [QA Checklist](./02_QA_CHECKLIST.md)에서 관리한다.
 
 병렬 문제풀이 `TASK-010`의 6개 시나리오는
@@ -83,7 +83,7 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - package import와 `scan --help`가 성공한다.
   - Git 추적 파일에 `.scan/`, DB, cache, secret이 없다.
 - **Result**: `pass` — TASK-001 이후 모든 PR에서 공통 offline Gate를
-  재실행했고 TASK-006 기준 Ruff·88 tests·세 Schema 검증이 통과했다.
+  재실행했고 TASK-007 기준 Ruff·101 tests·세 Schema 검증이 통과했다.
 
 ### QA-SCHEMA-001 — 유효한 request·result round-trip
 
@@ -388,6 +388,10 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - event·call·state evidence가 분리된다.
   - `offchain_attribution=not_assessed`, `theft_or_phishing_claim=false`다.
   - 상태 `complete`, 종료 코드 `0`이다.
+- **Result**: `pass` — Approval event·approve calldata·allowance 네 지점,
+  trace address `[0,0,2,0]`의 `transferFrom`, Transfer `4500000` raw와
+  allowance delta가 일치했다. 공개 RPC로 nonce 327~329를 재확인한 reverted
+  거래 3개는 소비 결과에서 제외하고 context evidence로 보존했다.
 
 ### QA-AUTH-002 — archive 누락·resume·탈취 단정 방지
 
@@ -401,9 +405,14 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   2. checkpoint 이후 state를 복구해 resume한다.
   3. 근거 없이 theft classification을 true로 주입한다.
 - **Expected**:
-  - 1은 승인·소비 사실만 `partial`, 종료 코드 `3`이다.
+  - 1은 확보한 승인 사실과 event·call 증거를 보존한 `partial`, 종료 코드 `3`이다.
   - 2는 기존 event·call source를 재호출하지 않고 complete로 복구한다.
   - 3은 classification 계약 위반으로 거부된다.
+- **Result**: `pass` — allowance state 두 지점 누락은 승인 결과를 보존한
+  `archive_required` partial이었고, 저장된 raw artifact resume은 네트워크
+  호출 없이 complete가 됐다. trace 누락은 소비를 확정하지 않는
+  `trace_unavailable` partial이며 theft/phishing은 항상
+  `not_assessed`·`false`로 출력됐다.
 
 ## 9. FREEZE Vertical Slice
 
@@ -533,6 +542,7 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 - **QA_Validation**: [TASK-004 Storage 보고서](./08_TASK_004_STORAGE_REPORT.md) - SQLite·cache·checkpoint·artifact·export 증거
 - **QA_Validation**: [TASK-005 CLI 보고서](./09_TASK_005_CLI_REPORT.md) - command·renderer·exit code·CLI security 증거
 - **QA_Validation**: [TASK-006 DEX 보고서](./10_TASK_006_DEX_REPORT.md) - raw decode·정합·partial·resume 증거
+- **QA_Validation**: [TASK-007 AUTH 보고서](./11_TASK_007_AUTH_REPORT.md) - Approval·allowance·transferFrom·scope·resume 증거
 - **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 병렬성·격리·독립 검증·수동 제출 QA
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - request·result 기준
 - **QA_Validation**: [DEX fixture](./fixtures/FX-SVC-DEX-001/README.md), [AUTH fixture](./fixtures/FX-EVM-AUTH-001/README.md), [FREEZE fixture](./fixtures/FX-EVM-FREEZE-001/README.md) - exact-match 원본

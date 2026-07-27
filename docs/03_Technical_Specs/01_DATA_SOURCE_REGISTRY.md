@@ -1,7 +1,7 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-28 00:58
-> Status: Draft · TASK-006 DEX Offline Replay Applied · Rules Unclear
+> Last Updated: 2026-07-28 01:34
+> Status: Draft · TASK-007 AUTH Offline Replay Applied · Rules Unclear
 
 ## 1. 문서 목적
 
@@ -275,6 +275,19 @@
 - internal call이 없으면 `partial/trace_unavailable`, Transfer·Swap·Withdrawal
   정합이 깨지면 `failed/reconciliation_failed`로 증거를 보존한다.
 
+## 8.4 TASK-007 AUTH source 기준선
+
+- `DS-EVM-RPC-PUBLIC`은 Approval·Transfer raw transaction·receipt와 nonce
+  327~329의 reverted transaction identity를 제공하는 scoring source다.
+- `DS-EVM-RPC-ARCHIVE`는 allowance 네 지점과 성공 `transferFrom` trace를
+  제공하는 scoring source다.
+- `DS-EXPLORER-EVM`은 승인·소비 transaction과 Transfer log의 독립
+  cross-check source이며 `DS-DEX-META`는 pinned SwapRouter02 provenance다.
+- reviewed `raw-replay.json`은 source ID, 조회 시각, raw calldata·log·state·
+  trace를 보존하며 analyzer는 endpoint나 API key를 갖지 않는다.
+- state 또는 trace 누락은 `partial`, raw 정합 위반은 `failed`로 처리하고,
+  source가 제공하지 않는 theft/phishing 귀속은 `not_assessed`로 유지한다.
+
 ## 9. 다음 단계
 
 1. confirmed fixture 3개의 source 기준선을 유지한다.
@@ -282,8 +295,8 @@
 3. live provider 구성 전 공식 plan·rate limit·fallback을 재확인한다.
 4. TASK-004 cache·attempt 저장 기준선을 TASK-005 CLI composition root에 주입했다.
 5. live source가 제한되면 offline fixture·cache·human fallback을 사용한다.
-6. TASK-006 DEX offline replay 기준선을 유지하고 다음은 TASK-007 AUTH source
-   경계를 별도 승인 후 연결한다.
+6. TASK-006 DEX와 TASK-007 AUTH offline replay 기준선을 유지한다.
+7. 다음은 별도 승인 후 TASK-008 FREEZE source 경계를 연결한다.
 
 ## 10. Related Documents
 
@@ -299,3 +312,4 @@
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - source attempt·cache·artifact 저장 검증
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - source policy 차단·CLI 오류·exit code 검증
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - reviewed raw source·재조회·정합 검증
+- **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - public/archive/trace/explorer raw source·재조회·정합 검증
