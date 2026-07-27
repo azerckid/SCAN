@@ -1,6 +1,6 @@
 # SCAN Analysis I/O Schema 0.1 Examples
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-26 12:59
+> Last Updated: 2026-07-27 21:22
 
 ## 1. 목적
 
@@ -22,11 +22,14 @@
 ## 3. 검증
 
 ```bash
-python3 docs/05_QA_Validation/scripts/validate_analysis_schemas.py
+uv run python docs/05_QA_Validation/scripts/validate_analysis_schemas.py
+uv run python scripts/check_analysis_schema.py
 ```
 
 검증기는 세 요청·결과 쌍의 JSON Schema, ID 유일성, 결과→증거→소스 참조,
-요청 source policy와 실제 사용 소스의 일관성을 검사한다.
+요청 source policy와 실제 사용 소스의 일관성을 검사한다. Pydantic 모델은
+세 쌍을 의미 변경 없이 round-trip하며 두 번째 명령은 생성 Schema와 승인
+Schema의 35개 probe 수락 결과를 비교한다.
 
 ## 4. 글로벌 평가 기준
 

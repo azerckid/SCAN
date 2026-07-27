@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-27 20:57
-> Status: Approved 1.1 · TASK-001 Project Gate Passed
+> Last Updated: 2026-07-27 21:22
+> Status: Approved 1.2 · TASK-002 Contract Gate Passed
 
 ## 1. 문서 목적
 
@@ -10,9 +10,11 @@
 결과는 [P0·V1 QA 시나리오](./01_TEST_SCENARIOS.md)가 규범이며, 이 문서는
 언제 무엇을 실행하고 어떤 증거를 남겨야 하는지 정의한다.
 
-최소 Python package와 offline 품질 Gate가 생성됐다. QA 시나리오 24개 중
-`QA-BOOT-001`은 `pass`, 나머지 23개는 `not_executed`다. Project Gate
-통과를 분석 기능이나 통합 Gate 통과와 같은 의미로 사용하지 않는다.
+최소 Python package와 offline 품질 Gate, Analysis I/O runtime 계약이
+구현됐다. QA 시나리오 24개 중 `QA-BOOT-001`, `QA-SCHEMA-001`,
+`QA-SCHEMA-002`는 `pass`, 나머지 21개는 `not_executed`다. Project·Contract
+Gate 통과를 source·storage·CLI·분석 기능이나 통합 Gate 통과와 같은 의미로
+사용하지 않는다.
 
 `TASK-010`의 Agentic Parallel Solve QA 6개는 별도
 `Scope Approved / Not Executed` 상태이며 기존 24개 P0·V1 집계를 변경하지
@@ -65,7 +67,7 @@
 |:---|:---|
 | 정의 수 | 24 |
 | 승인 상태 | Scope Approved |
-| 실행 상태 | Not Executed |
+| 실행 상태 | 3 pass / 21 not_executed |
 | 구현 전 허용 실행 | 문서 링크·ID·Schema·fixture 정합 검사만 |
 | 전체 실행 Gate | `TASK-009` 통합 회귀 |
 
@@ -79,7 +81,7 @@
 |:---|:---|:---|:---|
 | Document Gate | 구현 전과 모든 문서 PR | `QA-REG-003`의 문서·Schema·fixture 부분 | pass: 2026-07-27 문서 완료 보고서 |
 | Project Gate | `TASK-001` 완료 후 | `QA-BOOT-001` | pass: 2026-07-27 |
-| Contract Gate | `TASK-002` 완료 후 | `QA-SCHEMA-001`, `QA-SCHEMA-002` | not_executed |
+| Contract Gate | `TASK-002` 완료 후 | `QA-SCHEMA-001`, `QA-SCHEMA-002` | pass: 2026-07-27 |
 | Source Gate | `TASK-003` 완료 후 | `QA-RULE-001`, `QA-SOURCE-001`, `QA-RETRY-001`, `QA-FALLBACK-001` | not_executed |
 | Storage Gate | `TASK-004` 완료 후 | `QA-CACHE-001`, `QA-EXPORT-001`, `QA-ARTIFACT-001`, `QA-SEC-001`의 storage 범위 | not_executed |
 | CLI Gate | `TASK-005` 완료 후 | `QA-CLI-001`, `QA-CLI-002`, `QA-CLI-003`, `QA-CLI-004`, `QA-SEC-001`의 CLI 범위 | not_executed |
@@ -113,7 +115,7 @@ ID는 24개 집계에서 한 번만 센다.
 
 - [x] TASK-001 범위에서 독립 임시 환경과 잠금 파일로 설치를 재현했다.
 - [x] TASK-001 범위에서 Ruff·format·pytest와 두 Schema 검증기를 실행했다.
-- [ ] Analysis I/O 모델과 승인 Schema의 의미상 diff가 0이다.
+- [x] Analysis I/O 모델과 승인 Schema의 35개 의미 probe가 모두 일치한다.
 - [ ] offline cache miss에서 네트워크 호출이 0건이다.
 - [ ] timeout·429·일시적 5xx만 제한적으로 재시도한다.
 - [ ] fallback 전후 source와 모든 attempt를 보존한다.
@@ -183,9 +185,12 @@ ID는 24개 집계에서 한 번만 센다.
 - [x] TASK-001의 unit·integration·regression을 실행했다.
 - [ ] 새 오류·source·결과 필드가 승인 계약과 연결된다.
 - [ ] mock·fixture 변경이 정답을 편의상 바꾸지 않는다.
+- [x] TASK-002 범위의 오류·source·결과 필드를 승인 계약과 연결했다.
+- [x] TASK-002는 fixture 정답을 변경하지 않고 example을 round-trip했다.
 - [x] TASK-001 dependency의 라이선스·공식 배포·취약점 점검 근거를 기록했다.
+- [x] TASK-002 Pydantic dependency의 라이선스·취약점 점검 근거를 기록했다.
 - [x] TASK-001 직접 구현 범위가 `OSS-*` 결정과 일치한다.
-- [x] TASK-001 추적 파일에서 secret·`.scan/`·로컬 DB가 0건임을 확인했다.
+- [x] TASK-001~002 추적 파일에서 secret·`.scan/`·로컬 DB가 0건임을 확인했다.
 - [ ] UI 동작 변경 시 HTML Preview·UI 문서·피드백을 동기화한다.
 
 ### 7.3 대회 직전
@@ -246,6 +251,8 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 
 `TASK-001`의 실행 환경·dependency·명령·결과는
 [Bootstrap 검증 보고서](./05_TASK_001_BOOTSTRAP_REPORT.md)에 기록한다.
+`TASK-002`의 model·runtime 불변조건·Schema 의미 probe·dependency 결과는
+[Contract 검증 보고서](./06_TASK_002_CONTRACT_REPORT.md)에 기록한다.
 
 ## 10. 365 글로벌 평가 기준
 
@@ -305,3 +312,5 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed 3·Deferred 5 처리 방침
 - **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - 기존 24개와 분리된 `TASK-010` 6개 QA
 - **QA_Validation**: [Document Completion Report](./04_DOCUMENT_COMPLETION_REPORT.md) - DOC-M5 문서 검증 결과
+- **QA_Validation**: [TASK-001 Bootstrap 보고서](./05_TASK_001_BOOTSTRAP_REPORT.md) - Python project·dependency·Project Gate 증거
+- **QA_Validation**: [TASK-002 Contract 보고서](./06_TASK_002_CONTRACT_REPORT.md) - Pydantic model·runtime 불변조건·Contract Gate 증거

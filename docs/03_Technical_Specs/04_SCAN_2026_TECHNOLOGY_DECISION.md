@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-27 20:57
-> Status: Approved 1.1 · TASK-001 Applied
+> Last Updated: 2026-07-27 21:22
+> Status: Approved 1.2 · TASK-001~002 Applied
 
 ## 1. 문서 목적
 
@@ -93,11 +93,13 @@ dependency의 exact 버전은 이 문서에 고정하지 않는다. 프로젝트
 lockfile 변경 없이 실행한다.
 
 `TASK-001` 적용 결과 Python 재현 기준은 `3.13.7`이며 직접 dependency의
-현재 lock 결과는 Typer `0.27.0`, jsonschema `4.26.0`, pytest `9.1.1`,
-Ruff `0.16.0`이다. build backend는 Hatchling `1.31.0`으로 고정했다.
-HTTPX·Pydantic·eth-abi·eth-utils는 후속 작업에서 실제 사용 코드와 함께
-추가한다. 전체 간접 dependency·license·취약점 점검은
+현재 lock 결과는 Typer `0.27.0`, Pydantic `2.13.4`, jsonschema `4.26.0`,
+pytest `9.1.1`, Ruff `0.16.0`이다. build backend는 Hatchling `1.31.0`으로
+고정했다. HTTPX·eth-abi·eth-utils는 후속 작업에서 실제 사용 코드와 함께
+추가한다. TASK-001 전체 간접 dependency 점검은
 [TASK-001 검증 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md)에
+기록하며, Pydantic 추가 점검은
+[TASK-002 검증 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md)에
 기록한다.
 
 ## 6. HTTP·EVM adapter 결정
@@ -402,7 +404,8 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 8. SQLite 논리 DB Schema와 MIT License를 문서 기준선에 반영했다.
 9. 새 공식 규정은 Rules Register Notification Intake를 통해 source policy에 반영한다.
 10. `TASK-001`에서 Python 3.13.7 재현 기준과 exact dependency lockfile을 확정했다.
-11. 다음 구현은 별도 승인 후 `TASK-002` 또는 `TASK-003`에서 시작한다.
+11. `TASK-002`에서 Pydantic 2.13.4와 Analysis I/O runtime 계약을 확정했다.
+12. 다음 구현은 별도 승인 후 `TASK-003`에서 시작한다.
 
 ## 18. Related Documents
 
@@ -420,3 +423,4 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **Technical_Specs**: [오픈소스 포렌식 사전조사](./06_OPEN_SOURCE_FORENSICS_REVIEW.md) - 기존 TD의 재사용·직접 구현 재검증 Gate
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - DEX·AUTH·FREEZE 회귀 입력
 - **QA_Validation**: [TASK-001 Bootstrap 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md) - 실제 Python·lock·license·품질 Gate
+- **QA_Validation**: [TASK-002 Contract 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) - Pydantic·Schema·참조 불변조건 검증

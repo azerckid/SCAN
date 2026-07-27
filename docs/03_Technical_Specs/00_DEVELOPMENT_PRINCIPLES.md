@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-27 20:57
-> Status: Approved 1.1 · TASK-001 Applied
+> Last Updated: 2026-07-27 21:22
+> Status: Approved 1.2 · TASK-001~002 Applied
 
 ## 1. 문서 목적
 
@@ -32,7 +32,7 @@ slice는 아직 없으므로 승인된 기술 결정과 공개 계약을 후속 
 | Runtime | Python 단일 core + CLI |
 | Package | `src/scan_tool/` src layout |
 | Project·lock | `uv`, `pyproject.toml`, `uv.lock` |
-| Model | Pydantic v2 |
+| Model | Pydantic `2.13.4` |
 | Transport | `httpx.AsyncClient` 기반 직접 adapter |
 | EVM | `eth-abi`, `eth-utils` |
 | Storage | 표준 `sqlite3` WAL + SHA-256 artifact |
@@ -408,7 +408,7 @@ dist/
 |:---:|:---|:---|
 | Done | `.gitignore` 보강 | `.scan/`, `.env*`, test·build cache, 로컬 DB 제외 완료 |
 | Done | Python project 초기화 | Python 3.13.7, `pyproject.toml`, `uv.lock`, src layout, offline Gate 완료 |
-| High | Schema 생성·diff 명령 | Pydantic 모델 생성본과 승인 Schema `0.1` 의미상 diff 자동 검사 |
+| Done | Schema 생성·diff 명령 | Pydantic 생성본과 승인 Schema `0.1`의 35개 의미 probe diff 0 |
 | High | CLI flow·terminal preview | UI-First Gate 통과. 구현 시 FB-001(최종 stdout retry 압축) 반영 |
 | Medium | 정적 타입 검사 채택 여부 | pytest·Ruff만으로 부족한 실제 사례가 있으면 도구 비교 후 결정 |
 | Medium | SQLite DDL·backup 절차 | command 경계 승인 후 테이블·migration·복구 테스트 정의 |
@@ -436,7 +436,8 @@ dist/
 6. SQLite 논리 DB Schema·README·MIT License와 Document Completion Gate를 닫았다.
 7. 공식 규정은 Active Watch로 유지하며 제한 기능을 기본 비활성화한다.
 8. 별도 구현 승인에 따라 Python project와 offline 품질 Gate를 초기화했다.
-9. 다음 구현은 별도 승인 후 `TASK-002` 또는 `TASK-003`에서 시작한다.
+9. `TASK-002`에서 Analysis I/O Pydantic model과 Schema 의미 검사를 구현했다.
+10. 다음 구현은 별도 승인 후 `TASK-003`에서 시작한다.
 
 ## 22. Related Documents
 
@@ -456,3 +457,4 @@ dist/
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 구현 전 승인할 자동·수동 검증 기준
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - 모델·증거·source 참조 예
 - **QA_Validation**: [TASK-001 Bootstrap 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md) - 실제 Python·lock·dependency·품질 Gate
+- **QA_Validation**: [TASK-002 Contract 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) - model·runtime 불변조건·Schema 의미 검사

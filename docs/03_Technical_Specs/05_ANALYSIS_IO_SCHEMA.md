@@ -1,7 +1,7 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-27 15:52
-> Status: Contract Approved 0.1 · Implementation Pending
+> Last Updated: 2026-07-27 21:22
+> Status: Contract Approved 0.1 · TASK-002 Applied
 > Schema Version: 0.1
 
 ## 1. 문서 목적
@@ -25,11 +25,26 @@
 | 요청 스키마 | `../05_QA_Validation/schemas/analysis-request.schema.json` | 공통 봉투, 유형별 입력, source policy |
 | 결과 스키마 | `../05_QA_Validation/schemas/analysis-result.schema.json` | 결과, 증거, 소스, 경고, 오류, 실행, export |
 | 오류 스키마 | `../05_QA_Validation/schemas/analysis-error.schema.json` | 11개 오류 코드와 retry·source·attempt |
+| 요청 모델 | `../../src/scan_tool/domain/analysis_request.py` | 분석 유형별 discriminated request와 source policy |
+| 결과 모델 | `../../src/scan_tool/domain/analysis_result.py` | 상태·결과·증거·source·run·export와 참조 불변조건 |
+| 오류 모델 | `../../src/scan_tool/domain/analysis_error.py` | 구조화 오류와 11개 오류 코드 |
+| 검증 API | `../../src/scan_tool/domain/validation.py` | `invalid_input`·`schema_invalid` 분류와 pair 검증 |
 | 예제 | `../05_QA_Validation/examples/analysis/` | confirmed fixture 3개의 요청·결과 변환 예 |
 | 검증기 | `../05_QA_Validation/scripts/validate_analysis_schemas.py` | Schema와 ID·참조·요청↔결과 불변조건 검증 |
+| Schema 의미 비교 | `../../scripts/check_analysis_schema.py` | 생성·승인 Schema의 35개 양성·음성 probe 비교 |
 
 공개 계약은 JSON Schema Draft 2020-12를 사용한다. 구현 단계에서는 Pydantic
-v2 모델에서 생성한 스키마와 저장된 파일의 차이를 CI에서 검사한다.
+v2 모델에서 생성한 스키마와 저장된 파일의 의미 차이를 offline Gate에서
+검사한다.
+
+```bash
+uv run python scripts/check_analysis_schema.py
+```
+
+Pydantic의 discriminated `oneOf`와 승인 Schema의 `if/then`은 문법 표현이
+다르므로 JSON 텍스트를 동일하다고 가정하지 않는다. 세 유효 예제와 계약
+경계의 35개 음성·양성 probe를 두 Schema에 모두 적용하고 수락 결과가 다르면
+실패한다.
 
 ## 3. 요청 계약
 
@@ -216,6 +231,11 @@ JSON Schema 검사 외에 검증기는 다음을 확인한다.
 참조 무결성은 JSON Schema 단독으로 보장되지 않으므로 이 검증기가 공통 계약의
 일부다.
 
+`AwareDatetime`, source 순서 부분집합, run 시각 순서, ID 유일성·참조,
+중첩 `*_raw` uint256 검증은 JSON Schema가 전부 표현하지 못하는 runtime
+불변조건이다. `validate_analysis_request`, `validate_analysis_result`,
+`validate_analysis_pair`가 이를 검증한다.
+
 ## 8. 호환성과 버전
 
 ### 8.1 Agentic orchestration과의 경계
@@ -242,9 +262,9 @@ Analysis I/O `0.1`은 병렬 문제풀이에서도 하나의 leaf 분석 요청�
 | 기존 필드 의미·자료형 변경 | minor version 증가 |
 | fixture 정답·증거 변경 | analysis schema와 무관, fixture version만 검토 |
 
-Schema `0.1`은 Python 모델 구현 전에 승인하는 설계 계약이다. Draft 승인 후
-Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코드가 아니라 승인된
-공개 계약을 기준으로 결정한다.
+Schema `0.1`은 Python 모델 구현 전에 승인한 설계 계약이다. `TASK-002`에서
+Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. 차이가 생기면
+코드가 아니라 승인된 공개 계약을 기준으로 결정한다.
 
 ## 9. 365 글로벌 평가 기준 연결
 
@@ -259,7 +279,6 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
 
 ## 10. 미결정 사항
 
-- Pydantic 모델의 실제 module 경로와 schema 생성 명령
 - artifact URI scheme과 로컬 보존 기간
 - Markdown evidence export의 렌더링 형식
 - `partial` 상태에서 오류와 경고를 나누는 slice별 세부 기준
@@ -274,7 +293,9 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
 4. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
 5. 승인된 Schema·UI 경계를 원자적 backlog와 QA 시나리오 Draft로 전환했다.
 6. SQLite 논리 DB Schema와 Document Completion Gate를 확정했다.
-7. 별도 구현 승인 후 Python 프로젝트를 초기화하고 생성 Schema diff 검사를 연결한다.
+7. `TASK-001`에서 Python 프로젝트를 초기화했다.
+8. `TASK-002`에서 Pydantic model·runtime 불변조건·생성 Schema 의미 검사를 연결했다.
+9. 다음 구현은 별도 승인 후 `TASK-003` source orchestration으로 진행한다.
 
 ## 12. Related Documents
 
@@ -293,3 +314,4 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 변환 대상 confirmed fixture
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - round-trip·무효 입력·참조 무결성 기준
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - DEX·AUTH·FREEZE 요청·결과 예
+- **QA_Validation**: [TASK-002 Contract 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) - round-trip·오류·참조·Schema probe 증거
