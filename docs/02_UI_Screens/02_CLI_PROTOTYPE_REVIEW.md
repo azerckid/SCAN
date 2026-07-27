@@ -1,14 +1,14 @@
 # SCAN 2026 CLI Prototype Review
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-26 16:46
-> Status: Draft 1 · UI-First Gate Passed
+> Last Updated: 2026-07-27 23:32
+> Status: Approved 1.1 · UI-First Gate Passed · TASK-005 Compared
 
 ## 1. HTML UI Preview
 
 - Preview: [CLI Terminal Preview](./previews/01_cli_terminal_preview.html)
 - 확인 방식: 브라우저에서 로컬 HTML 파일 열람
 - 확인 목적: 명령 구조, 정보 계층, 상태별 화면, 다음 행동의 명확성 확인
-- 구현 상태: Preview only, Python package와 CLI 코드는 아직 없음
+- 구현 상태: TASK-005 CLI command·renderer 구현 및 Preview 대조 완료
 
 Preview 왼쪽의 시나리오 버튼으로 다음 다섯 화면을 전환할 수 있다.
 
@@ -153,8 +153,15 @@ Preview의 `feedback 29ms·34ms·41ms`는 배치 위치와 형식을 확인하�
 | ID | 우선순위 | 피드백 | 결정 | 반영 위치 |
 |:---|:---:|:---|:---|:---|
 | FB-001 | Medium | AUTH partial Preview가 실행 중 retry·fallback 이력과 최종 요약을 한 프레임에 합쳐 빽빽해 보인다. Draft 화면은 유지하되, 구현 시 상세 retry는 stderr에만 남기고 최종 stdout RUN 요약은 `retry N · fallback N`으로 압축한다. | 채택 | [CLI Terminal UI Design](./01_UI_DESIGN.md) §7.6, 이후 backlog |
+| FB-002 | Low | 실제 Typer `--help`는 TTY에서 frame을 사용하지만 Preview의 help는 plain text다. 명령·설명·종료 의미가 같고 non-TTY·무색상에서도 텍스트가 유지되므로 의도된 표현 차이로 수용한다. | 채택 | TASK-005 CLI snapshot·QA |
 
-Draft Preview HTML은 Gate 확인용으로 변경하지 않는다. FB-001은 Python CLI 구현 backlog에서 다룬다.
+Draft Preview HTML은 Gate 확인용으로 변경하지 않는다. FB-001의 실제 구현
+결과는 아래와 같이 별도 기록한다.
+
+TASK-005에서 FB-001을 반영했다. 상세 retry·fallback event는 stderr에 남고
+최종 stdout은 count와 첫 오류 code만 표시한다. 실제 vertical 분석 수치는
+TASK-006~008 전까지 생성하지 않으며, analyzer 미구현 요청은 종료 코드 `4`로
+명시한다.
 
 ## 9. Gate 판정
 
@@ -200,3 +207,4 @@ backlog와 QA 시나리오 Draft로 전환했다. Python project 초기화는 �
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - Preview를 구현으로 전환하는 작업 목록
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - UI-First Gate 회귀 기준
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - confirmed 기준값
+- **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - 실제 help·출력·exit code 대조

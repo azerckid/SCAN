@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-27 23:02
-> Status: Approved 1.1 · Document Completion Gate Passed
+> Last Updated: 2026-07-27 23:32
+> Status: Approved 1.2 · Document Completion Gate Passed · TASK-005 Done
 
 ## 1. 문서 목적
 
@@ -59,9 +59,9 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) | UI-First Gate Passed | 실제 CLI 구현 전에는 현 상태 유지 |
-| [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) | UI-First Gate Passed | 실제 snapshot과의 차이는 구현 후 기록 |
-| [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) | UI-First Gate Passed | FB-001 구현 연결만 추적 |
+| [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) | UI-First Gate Passed · TASK-005 Applied | vertical 결과는 TASK-006~008에서 연결 |
+| [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) | UI-First Gate Passed · TASK-005 Applied | 실제 snapshot·FB-001 반영 |
+| [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) | TASK-005 Compared | FB-001 완료·FB-002 의도된 차이 기록 |
 | [Web Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) | Draft 1 · Non-Blocking UX Track | 정적 Preview 사용자 검토, 구현 승격은 Python 엔진 안정화 후 별도 승인 |
 | [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) | Draft 1 · Rules-Gated UI Track | 정적 Preview 사용자 검토, Rules·별도 구현 승인 후 `TASK-010` |
 | [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) | 사용자 확인 완료 | 구현 전 기준 화면으로 동결 |
@@ -72,13 +72,13 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Draft 1 · Approved Baseline | 실제 dependency·명령은 `TASK-001`에서 동기화 |
-| [SQLite 논리 DB Schema](../03_Technical_Specs/01_DB_SCHEMA.md) | Approved 1.0 · DDL Deferred | 정확한 DDL·migration·backup은 `TASK-004` |
+| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Approved 1.5 · TASK-001~005 Applied | vertical analyzer 원칙은 TASK-006~008에서 적용 |
+| [SQLite 논리 DB Schema](../03_Technical_Specs/01_DB_SCHEMA.md) | Approved 1.2 · Schema v1 Applied | CLI composition·artifact 조회 적용 |
 | [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) | Draft · Approved Baseline | 규정·provider plan·rate limit은 live 사용 전 갱신 |
 | [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) | Confirmed 0.1 | fixture schema 변경 요구가 생길 때만 개정 |
 | [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) | Draft 1 · Approved Baseline | 공식 규정 변경은 source policy로 역반영 |
-| [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) | Draft 1 · Approved Baseline | 정확한 버전은 구현 중 결정 |
-| [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Draft 1 · Contract Approved 0.1 | 생성 Schema diff는 구현 후 검증 |
+| [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) | Approved 1.5 · TASK-001~005 Applied | 다음 DEX 기술 적용은 TASK-006 |
+| [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Contract Approved 0.1 · TASK-002·005 Applied | Schema probe PASS 3 유지 |
 | [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) | Approved 1.0 · P0/V1 Closed | 이후 단계 그룹은 Deferred |
 | [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) | Draft 1 · Rules-Gated | 역할·Queue·검증·수동 제출 승인, 구현은 `TASK-010` 별도 승인 |
 
@@ -86,7 +86,7 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [P0·V1 구현 Backlog](./00_BACKLOG.md) | Draft 1 · Scope Approved | 구현은 별도 승인, 모든 작업 ToDo 유지 |
+| [P0·V1 구현 Backlog](./00_BACKLOG.md) | Approved 1.5 · TASK-001~005 Done | TASK-006은 별도 승인 |
 | 이 문서 | Approved 1.1 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
 | `01_EXECUTION_PLAN.md` | 조건부 미작성 | 구현 일정이 필요할 때 Backlog를 날짜·담당자로 전환 |
 | `02_ROADMAP_BACKLOG_SYNC.md` | 조건부 미작성 | 구현 시작 전 Roadmap↔Backlog 상태 동기화 규칙 작성 |
@@ -96,8 +96,8 @@
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
 | [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.0 · Fixture Scope Closed | 후보 5개 Deferred 결정; 단계별 승격 조건 유지 |
-| [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Draft 1 · Scope Approved | 구현 후 실제 실행 결과 기록 |
-| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved Baseline | 문서 Gate 통과, 구현 QA는 미실행 유지 |
+| [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Approved 1.5 · CLI Scope Passed | 12 pass·3 partial·9 not_executed |
+| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 1.5 · CLI Scope Passed | vertical·통합 Gate 유지 |
 | [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Draft 1 · Scope Approved | `TASK-010` 별도 구현 승인과 Rules 필요 |
 | [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | Pass | 문서 검증 증거·Known Issue·승인 경계 |
 | DEX·AUTH·FREEZE fixture | Confirmed | V1 기준값으로 동결, 정답 임의 변경 금지 |
@@ -202,7 +202,7 @@ Backlog로 분리했다.
 - [x] Backlog의 `TASK-001`~`TASK-010` 10개가 모두 `ToDo` 상태로 유지된다.
 
 위 항목은 Document Completion Gate가 닫힌 시점의 기준선이다. Gate 이후 별도
-구현 승인으로 `TASK-001`~`TASK-004`가 완료됐으며 현재 상태는
+구현 승인으로 `TASK-001`~`TASK-005`가 완료됐으며 현재 상태는
 [Backlog](./00_BACKLOG.md)가 관리한다.
 
 완료 조건: 사용자가 문서 완료를 승인하면 이 Gate는 닫힌다. `TASK-001`
@@ -223,8 +223,8 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 4 | 완료 (2026-07-26) | `DOC-M3` QA checklist·fixture 방침 | DOC-M2와 독립 완료 |
 | 5 | 완료 (2026-07-27) | `DOC-M4` DB·OSS·README·LICENSE·Draft 승인 | M2 기준선·M3 완료 |
 | 6 | 완료 (2026-07-27) | `DOC-M5` Document Completion Gate | M1~M4 완료 |
-| 7 | 완료 (2026-07-27) | Backlog `TASK-001`~`TASK-004` | 별도 구현 승인·Project/Contract/Source/Storage Scope |
-| 8 | 별도 승인 후 | Backlog `TASK-005` | TASK-002·003·004 의존 |
+| 7 | 완료 (2026-07-27) | Backlog `TASK-001`~`TASK-005` | 별도 구현 승인·Project/Contract/Source/Storage/CLI Scope |
+| 8 | 별도 승인 후 | Backlog `TASK-006` | TASK-002·003·004 의존 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.
 `DOC-M2`~`DOC-M5`나 `TASK-001`의 선행 조건으로 추가하지 않는다. 실제 웹

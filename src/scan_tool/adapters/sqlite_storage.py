@@ -332,6 +332,64 @@ class SQLiteStorage:
             created_at=_parse_datetime(row["created_at"]),
         )
 
+    def get_run_artifact(
+        self,
+        analysis_id: str,
+        artifact_kind: str,
+    ) -> ArtifactRecord | None:
+        if artifact_kind == "request":
+            row = self._connection.execute(
+                """
+                SELECT request_artifact_sha256 AS sha256
+                FROM analysis_runs
+                WHERE analysis_id = ?
+                """,
+                (analysis_id,),
+            ).fetchone()
+        elif artifact_kind in {"result_json", "evidence_markdown"}:
+            row = self._connection.execute(
+                """
+                SELECT artifact_sha256 AS sha256
+                FROM exports
+                WHERE analysis_id = ? AND export_type = ?
+                """,
+                (analysis_id, artifact_kind),
+            ).fetchone()
+        else:
+            raise ValueError("unsupported run artifact kind")
+        if row is None:
+            return None
+        return self.get_artifact(str(row["sha256"]))
+
+    def finish_run(
+        self,
+        analysis_id: str,
+        status: str,
+        *,
+        now: datetime | None = None,
+    ) -> None:
+        if status not in {"failed", "interrupted", "restricted"}:
+            raise ValueError("finish_run only accepts non-result terminal statuses")
+        timestamp = now or datetime.now(UTC)
+        with self._connection:
+            cursor = self._connection.execute(
+                """
+                UPDATE analysis_runs
+                SET status = ?, started_at = COALESCE(started_at, ?),
+                    finished_at = ?, updated_at = ?
+                WHERE analysis_id = ?
+                """,
+                (
+                    status,
+                    _datetime_text(timestamp),
+                    _datetime_text(timestamp),
+                    _datetime_text(timestamp),
+                    analysis_id,
+                ),
+            )
+        if cursor.rowcount != 1:
+            raise KeyError("analysis run not found")
+
     def create_run(
         self,
         request: AnalysisRequest,

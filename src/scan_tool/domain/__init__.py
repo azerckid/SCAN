@@ -11,6 +11,7 @@ from scan_tool.domain.analysis_result import (
 from scan_tool.domain.validation import (
     ContractViolation,
     validate_analysis_error,
+    validate_analysis_id,
     validate_analysis_pair,
     validate_analysis_request,
     validate_analysis_result,
@@ -27,6 +28,7 @@ __all__ = [
     "ErrorCode",
     "EvidenceType",
     "validate_analysis_error",
+    "validate_analysis_id",
     "validate_analysis_pair",
     "validate_analysis_request",
     "validate_analysis_result",

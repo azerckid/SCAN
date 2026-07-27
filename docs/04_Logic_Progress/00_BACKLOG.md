@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 23:02
-> Status: Approved 1.4 · TASK-001~004 Done
+> Last Updated: 2026-07-27 23:32
+> Status: Approved 1.5 · TASK-001~005 Done
 
 ## 1. 문서 목적
 
@@ -9,7 +9,7 @@
 CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업으로
 전환한다.
 
-Backlog 범위와 `TASK-001`~`TASK-004` 구현은 별도로 승인되었다. 네 작업은
+Backlog 범위와 `TASK-001`~`TASK-005` 구현은 별도로 승인되었다. 다섯 작업은
 완료됐고 나머지 작업은 `ToDo`다. 후속 작업은 각각 별도 승인 전에는
 `In Progress`로 이동하지 않는다.
 
@@ -295,21 +295,21 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] SQLite DDL·backup·artifact URI를 기술 문서에 기록했다.
   - [x] export 형식과 Analysis I/O `0.1` 비변경을 Schema·UI·QA에 동기화했다.
 
-### [ ] TASK-005: CLI command surface와 terminal renderer 구현
+### [x] TASK-005: CLI command surface와 terminal renderer 구현
 
-- Status: ToDo
+- Status: Done
 - Priority: V1 · High
 - Depends On: TASK-002, TASK-003, TASK-004
 - Requirement IDs: `TD-009`, `TD-018`, `REQ-COM-*`, `REQ-NFR-005`
 - Atomic Tasks:
-  - [ ] Typer app과 `analyze`, `validate`, `resume`, `show` 명령을 정의한다.
-  - [ ] CLI composition root에서 구체 adapter를 생성·주입한다.
-  - [ ] 시작 400ms 이내 첫 피드백을 측정 가능한 시각으로 기록한다.
-  - [ ] progress·cache·retry·fallback·warning을 stderr로 출력한다.
-  - [ ] 최종 상태·결과·export 경로를 stdout으로 출력한다.
-  - [ ] complete·partial·failed·restricted·interrupted 종료 코드를 적용한다.
-  - [ ] `NO_COLOR`, non-TTY, 80 columns와 주소·TX 축약을 지원한다.
-  - [ ] FB-001에 따라 최종 stdout retry 이력을 압축한다.
+  - [x] Typer app과 `analyze`, `validate`, `resume`, `show` 명령을 정의한다.
+  - [x] CLI composition root에서 SQLite·artifact·export adapter를 생성·주입한다.
+  - [x] 시작 400ms 이내 첫 피드백을 측정 가능한 시각으로 기록한다.
+  - [x] progress·cache·retry·fallback·warning을 stderr로 출력한다.
+  - [x] 최종 상태·결과·export 경로를 stdout으로 출력한다.
+  - [x] complete·partial·failed·restricted·interrupted 종료 코드를 적용한다.
+  - [x] `NO_COLOR`, non-TTY, 80 columns와 주소·TX 축약을 지원한다.
+  - [x] FB-001에 따라 최종 stdout retry 이력을 압축한다.
 - Related Concept Docs:
   - [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 빠른 문제 풀이와 재현성 목적
 - Related UI Docs:
@@ -324,24 +324,25 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - renderer 입력 model
 - Related QA Docs:
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-CLI-001`~`QA-CLI-004`, `QA-SEC-001`의 CLI 범위
+  - [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - 명령·renderer·exit code·보안·UI 대조 증거
 - Implementation Preconditions:
-  - [ ] 관련 UI 문서·Preview·사용자 피드백을 다시 확인했다.
-  - [ ] 진입·전환·이탈과 complete·partial·failed 상태를 확인했다.
-  - [ ] renderer가 받는 최소 result·run·error 필드를 확인했다.
-  - [ ] CLI local mutation은 요청 파일 읽기와 export·checkpoint 쓰기로 제한된다.
-  - [ ] core calculation을 CLI에 두지 않는 경계를 확인했다.
-  - [ ] FB-001을 Acceptance Criteria와 테스트에 연결했다.
+  - [x] 관련 UI 문서·Preview·사용자 피드백을 다시 확인했다.
+  - [x] 진입·전환·이탈과 complete·partial·failed 상태를 확인했다.
+  - [x] renderer가 받는 최소 result·run·error 필드를 확인했다.
+  - [x] CLI local mutation은 요청·run·export·checkpoint 저장으로 제한된다.
+  - [x] core calculation을 CLI에 두지 않는 경계를 확인했다.
+  - [x] FB-001을 Acceptance Criteria와 테스트에 연결했다.
 - Acceptance Criteria:
-  - [ ] 네 명령의 `--help`와 잘못된 인자 동작이 명확하다.
-  - [ ] command 실행 후 400ms 이내 `STARTING`이 stderr에 나타난다.
-  - [ ] 최종 stdout에는 retry·fallback count와 첫 오류 code만 요약된다.
-  - [ ] detailed attempt는 stderr와 JSON run·sources에 보존된다.
-  - [ ] canary secret·Authorization 값과 사용자 이름을 포함한 로컬 절대 경로가 stdout·stderr·오류 출력에 노출되지 않는다.
-  - [ ] 종료 코드 `0`, `2`, `3`, `4`, `5`, `130`이 문서와 일치한다.
-  - [ ] `NO_COLOR`·non-TTY·80 columns에서 상태 의미와 핵심 값이 유지된다.
+  - [x] 네 명령의 `--help`와 잘못된 인자 동작이 명확하다.
+  - [x] command 실행 후 400ms 이내 `STARTING`이 stderr에 나타난다.
+  - [x] 최종 stdout에는 retry·fallback count와 첫 오류 code만 요약된다.
+  - [x] detailed attempt는 stderr와 SQLite에, JSON에는 run 집계·source provenance로 보존된다.
+  - [x] canary secret·Authorization 값과 사용자 이름을 포함한 로컬 절대 경로가 stdout·stderr·오류 출력에 노출되지 않는다.
+  - [x] 종료 코드 `0`, `2`, `3`, `4`, `5`, `130`이 문서와 일치한다.
+  - [x] `NO_COLOR`·non-TTY·80 columns에서 상태 의미와 핵심 값이 유지된다.
 - Document Sync Check:
-  - [ ] 실제 `--help`·snapshot을 UI 문서·Preview와 대조했다.
-  - [ ] 의도된 차이가 있으면 FB 또는 문서 변경으로 기록했다.
+  - [x] 실제 `--help`·snapshot을 UI 문서·Preview와 대조했다.
+  - [x] Typer help frame과 analyzer 미구현 경계를 의도된 차이로 기록했다.
 
 ### [ ] TASK-006: DEX vertical slice 구현
 
@@ -621,6 +622,8 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   ([검증 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md))
 - `TASK-004` — SQLite WAL, immutable cache, checkpoint, artifact, export
   ([검증 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md))
+- `TASK-005` — Typer 네 명령, composition root, terminal renderer, exit code
+  ([검증 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md))
 
 ## 7. Backlog 승인 Gate
 
@@ -630,6 +633,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-002 Analysis I/O 계약 구현을 별도로 승인
 - [x] TASK-003 source orchestration 구현을 별도로 승인
 - [x] TASK-004 storage·artifact·export 구현을 별도로 승인
+- [x] TASK-005 CLI command·renderer·exit code 구현을 별도로 승인
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
@@ -637,6 +641,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-002 승인 후 `codex/task-002-analysis-contract-models` branch 사용
 - [x] TASK-003 승인 후 `codex/task-003-source-orchestration` branch 사용
 - [x] TASK-004 승인 후 `codex/task-004-storage-artifacts` branch 사용
+- [x] TASK-005 승인 후 `codex/task-005-cli-analyze` branch 사용
 
 ## 8. 365 글로벌 평가 기준
 

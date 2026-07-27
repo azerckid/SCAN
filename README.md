@@ -11,7 +11,9 @@ the Analysis I/O 0.1 Pydantic models and semantic Schema check. `TASK-003`
 implemented the rules-gated HTTP source port, retry, and fallback orchestration.
 `TASK-004` implemented SQLite WAL storage, immutable cache, checkpoints,
 content-addressed artifacts, backup verification, and JSON/Markdown exports.
-The CLI renderer and DEX/AUTH/FREEZE analyzers are not implemented yet.
+`TASK-005` implemented the four-command CLI, terminal renderer, stable exit codes,
+local `.scan/` composition root, and persisted-result display. The
+DEX/AUTH/FREEZE analyzers are not implemented yet.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`; related features stay disabled until an authoritative
 notice is recorded.
@@ -45,6 +47,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-002 evidence | [`06_TASK_002_CONTRACT_REPORT.md`](docs/05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) | Analysis I/O models, invariants, dependencies, and Contract Gate evidence |
 | TASK-003 evidence | [`07_TASK_003_SOURCE_REPORT.md`](docs/05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) | source policy, retry, fallback, dependency, and TASK-003 scope evidence |
 | TASK-004 evidence | [`08_TASK_004_STORAGE_REPORT.md`](docs/05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) | SQLite, cache, checkpoint, artifact, export, backup, and storage-security evidence |
+| TASK-005 evidence | [`09_TASK_005_CLI_REPORT.md`](docs/05_QA_Validation/09_TASK_005_CLI_REPORT.md) | CLI commands, renderer, exit codes, UI comparison, and CLI-security evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -61,18 +64,26 @@ validators, followed by the generated-Pydantic-Schema compatibility check.
 Expected final outputs include:
 
 ```text
-57 passed
+77 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
 ```
 
-The installed package currently exposes only the approved bootstrap surface:
+The installed package exposes the approved TASK-005 command surface:
 
 ```bash
 uv run scan --help
 uv run scan --version
+uv run scan validate REQUEST.json
+uv run scan analyze --request REQUEST.json
+uv run scan resume ANALYSIS_ID
+uv run scan show ANALYSIS_ID
 ```
+
+Until TASK-006 through TASK-008 add the vertical analyzers, a valid analysis
+request stops explicitly with `source_unavailable` and exit code `4`; it does not
+make a hidden live request or claim a forensic result.
 
 ## Rules and safe defaults
 
@@ -84,9 +95,9 @@ uv run scan --version
 
 ## Implementation boundary
 
-`TASK-001` through `TASK-004` are complete. The next eligible task is `TASK-005`
-(CLI command surface and terminal renderer) and still requires separate
-implementation approval. No live provider configuration exists; live transport also
+`TASK-001` through `TASK-005` are complete. The next eligible task is `TASK-006`
+(DEX vertical slice) and still requires separate implementation approval. No live
+provider configuration exists; live transport also
 requires `rule_status: allowed`. AI/agent execution and CTFd automation remain
 unimplemented.
 

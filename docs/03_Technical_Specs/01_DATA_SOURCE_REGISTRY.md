@@ -1,7 +1,7 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-27 23:02
-> Status: Draft · TASK-004 Storage Baseline Applied · Rules Unclear
+> Last Updated: 2026-07-27 23:32
+> Status: Draft · TASK-005 CLI Baseline Applied · Rules Unclear
 
 ## 1. 문서 목적
 
@@ -258,14 +258,15 @@
 - raw body는 SQLite가 아니라 content-addressed artifact에 저장한다.
 - 같은 cache key에 다른 artifact·source provenance가 들어오면 덮어쓰지 않고
   conflict로 거부한다.
-- 실제 사용자 `.scan/` composition root는 TASK-005 전까지 만들지 않는다.
+- 실제 사용자 `.scan/` composition root는 TASK-005에서 만들었지만 vertical
+  analyzer와 live provider 설정은 TASK-006~008·Rules Gate 전까지 활성화하지 않는다.
 
 ## 9. 다음 단계
 
 1. confirmed fixture 3개의 source 기준선을 유지한다.
 2. 공식 규정은 `미확인`으로 유지하고 Notification Intake 결과가 있을 때 갱신한다.
 3. live provider 구성 전 공식 plan·rate limit·fallback을 재확인한다.
-4. TASK-004 cache·attempt 저장 기준선을 유지하고 TASK-005 CLI에 주입한다.
+4. TASK-004 cache·attempt 저장 기준선을 TASK-005 CLI composition root에 주입했다.
 5. live source가 제한되면 offline fixture·cache·human fallback을 사용한다.
 
 ## 10. Related Documents
@@ -280,3 +281,4 @@
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 소스 검증용 대표 사례
 - **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - source transport·policy·retry·fallback 검증
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - source attempt·cache·artifact 저장 검증
+- **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - source policy 차단·CLI 오류·exit code 검증

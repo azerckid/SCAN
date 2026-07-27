@@ -1,7 +1,7 @@
 # SCAN 2026 SQLite 논리 DB Schema
 > Created: 2026-07-27 15:52
-> Last Updated: 2026-07-27 23:02
-> Status: Approved 1.1 · SQLite Schema Version 1 Applied
+> Last Updated: 2026-07-27 23:32
+> Status: Approved 1.2 · SQLite Schema Version 1 · CLI Composition Applied
 
 ## 1. 문서 목적
 
@@ -374,8 +374,9 @@ event evidence에는 calldata를 섞지 않고 call evidence로 분리한다. co
 | Atomic write | 같은 filesystem 임시 파일 `fsync` 후 hard-link create-if-absent |
 | Cache | 고정 block tag만 immutable 자동 저장, `latest`·`pending`은 미저장 |
 
-실제 사용자 `.scan/`을 사용하는 composition root는 `TASK-005` 범위다.
-TASK-004 자동 검증은 모두 pytest 임시 디렉터리에서 실행했으며 기존 DB의
+실제 사용자 `.scan/`을 사용하는 composition root와 request/result artifact
+조회는 `TASK-005`에서 구현했다. 자동 검증은 모두 pytest 임시 디렉터리에서
+실행했으며 기존 DB의
 삭제·reset·migration은 수행하지 않았다.
 
 ## 11. 365 글로벌 평가 기준 연결
@@ -401,3 +402,4 @@ TASK-004 자동 검증은 모두 pytest 임시 디렉터리에서 실행했으�
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - `TASK-004` DDL·migration 구현
 - **QA_Validation**: [P0·V1 QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 저장·복구·보안 Gate
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - DDL·cache·checkpoint·artifact·export 검증
+- **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - `.scan/` composition·show 조회·종료 상태 검증
