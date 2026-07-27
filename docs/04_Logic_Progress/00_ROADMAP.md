@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-27 15:52
+> Last Updated: 2026-07-27 20:46
 > Status: Approved 1.1 · Document Completion Gate Passed
 
 ## 1. 문서 목적
@@ -199,7 +199,7 @@ Backlog로 분리했다.
 - [x] 공식 규정 미확정 상태가 Backlog·QA·source policy에 반영되었다.
 - [x] P0·V1 오픈소스 `OSS-*` 결정과 fixture 검증 계획이 구현 전에 확정되었다.
 - [x] 문서·Schema·fixture 검증이 모두 통과한다.
-- [x] Backlog의 `TASK-001`~`TASK-009`가 모두 `ToDo` 상태로 유지된다.
+- [x] Backlog의 `TASK-001`~`TASK-010` 10개가 모두 `ToDo` 상태로 유지된다.
 
 완료 조건: 사용자가 문서 완료를 승인하면 이 Gate는 닫힌다. `TASK-001`
 시작은 이 Gate와 별개의 후속 승인으로만 진행하며, 구현 보류는 문서 완료를

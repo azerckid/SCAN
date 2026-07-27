@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 15:52
+> Last Updated: 2026-07-27 20:46
 > Status: Draft 1 · Scope Approved · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -603,7 +603,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 
 ## 5. In Progress
 
-없음. Backlog Draft 승인 전에는 작업을 이동하지 않는다.
+없음. 별도 구현 승인 전에는 어떤 작업도 `In Progress`로 이동하지 않는다.
 
 ## 6. Done
 
