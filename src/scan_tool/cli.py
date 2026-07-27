@@ -13,7 +13,6 @@ from scan_tool import __version__
 from scan_tool.application.cli_runtime import (
     AnalysisUnavailable,
     CliRuntime,
-    execute_analysis,
 )
 from scan_tool.application.terminal import (
     EXIT_FAILED,
@@ -85,6 +84,13 @@ def analyze(
         Path,
         typer.Option("--request", help="Analysis Request 0.1 JSON file."),
     ],
+    evidence: Annotated[
+        Path | None,
+        typer.Option(
+            "--evidence",
+            help="Reviewed offline replay evidence JSON for a supported vertical slice.",
+        ),
+    ] = None,
 ) -> None:
     """Validate and dispatch a forensic analysis request."""
     started = monotonic()
@@ -97,6 +103,8 @@ def analyze(
         f"{document.analysis_id} · {document.analysis_type} · "
         f"{'offline' if document.source_policy.offline_mode else 'live'}",
     )
+    if evidence is not None:
+        _progress("REPLAY", f"evidence={safe_path_label(evidence)}")
     try:
         with CliRuntime.open(DATA_ROOT) as runtime:
             try:
@@ -111,7 +119,7 @@ def analyze(
                 raise typer.Exit(EXIT_RESTRICTED)
 
             try:
-                result = execute_analysis(model)
+                result = runtime.execute_analysis(model, replay_path=evidence)
             except AnalysisUnavailable as error:
                 runtime.storage.finish_run(document.analysis_id, "failed")
                 _progress("ERROR", f"source_unavailable stage=analysis_dispatch · {error}")
@@ -160,7 +168,7 @@ def resume(analysis_id: Annotated[str, typer.Argument(help="Existing analysis ID
             if request is None:
                 _not_found(analysis_id)
             try:
-                result = execute_analysis(request)
+                result = runtime.execute_analysis(request)
             except AnalysisUnavailable as error:
                 _progress("ERROR", f"source_unavailable stage=analysis_dispatch · {error}")
                 typer.echo(f"FAILED {analysis_id} · first_error source_unavailable")

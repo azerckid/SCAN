@@ -13,8 +13,13 @@ from scan_tool.application.cli_runtime import CliRuntime
 from scan_tool.application.terminal import ProgressEvent, render_progress, render_result
 from scan_tool.cli import app
 from scan_tool.domain import validate_analysis_result
+from scan_tool.slices.dex import analyze_dex_replay
 
 EXAMPLES = Path(__file__).resolve().parents[2] / "docs/05_QA_Validation/examples/analysis"
+DEX_FIXTURE = (
+    Path(__file__).resolve().parents[2]
+    / "docs/05_QA_Validation/fixtures/FX-SVC-DEX-001/raw-replay.json"
+)
 runner = CliRunner()
 
 
@@ -205,29 +210,146 @@ def test_analyze_reports_unavailable_vertical_slice_without_live_calls(
 
     assert result.exit_code == 4
     assert "source_unavailable" in result.stdout + result.stderr
-    assert "TASK-006" in result.stderr
+    assert "--evidence" in result.stderr
 
 
-def test_analyze_persists_and_show_renders_the_same_result(
+def test_dex_analyze_persists_and_show_renders_the_same_result(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.chdir(tmp_path)
     request_path = tmp_path / "request.json"
     write_json(request_path, load_document("dex", "request"))
-    expected = validate_analysis_result(load_document("dex", "result"))
-    monkeypatch.setattr("scan_tool.cli.execute_analysis", lambda _: expected)
 
-    analyzed = runner.invoke(app, ["analyze", "--request", str(request_path)])
+    analyzed = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(DEX_FIXTURE),
+        ],
+    )
     shown = runner.invoke(app, ["show", "AN-FX-SVC-DEX-001"])
 
     assert analyzed.exit_code == 0
     assert shown.exit_code == 0
     for output in (analyzed.stdout, shown.stdout):
         assert "COMPLETE AN-FX-SVC-DEX-001" in output
+        assert "asset_in" in output and "amount_raw=25000000000" in output
         assert "pool_output" in output
+        assert "amount_raw=14449515027026387018" in output
+        assert "user_net_output" in output
         assert "artifact://sha256/" in output
     assert ".scan/" not in analyzed.stdout + shown.stdout
+    assert "ethereum.publicnode.com" not in analyzed.stdout + analyzed.stderr
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        stored = runtime.load_result("AN-FX-SVC-DEX-001")
+        assert stored is not None
+        assert [item.result_type for item in stored.result.root.results] == [
+            "asset_in",
+            "pool_output",
+            "user_net_output",
+        ]
+        markdown = runtime.storage.get_run_artifact("AN-FX-SVC-DEX-001", "evidence_markdown")
+        assert markdown is not None
+        markdown_text = runtime.artifacts.read(markdown).decode()
+        assert "25000000000" in markdown_text
+        assert markdown_text.count("14449515027026387018") >= 2
+        assert runtime.storage.count("checkpoints") == 1
+
+
+def test_dex_missing_internal_call_is_partial_and_preserves_pool_output(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    evidence_path = tmp_path / "missing-call.json"
+    write_json(request_path, load_document("dex", "request"))
+    replay = json.loads(DEX_FIXTURE.read_text())
+    replay["internal_calls"] = []
+    write_json(evidence_path, replay)
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(evidence_path),
+        ],
+    )
+
+    assert result.exit_code == 3
+    assert "PARTIAL AN-FX-SVC-DEX-001" in result.stdout
+    assert "pool_output" in result.stdout
+    assert "user_net_output" not in result.stdout
+    assert "trace_unavailable" in result.stderr
+
+
+def test_dex_reconciliation_failure_is_structured_failed_result(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    evidence_path = tmp_path / "mismatch.json"
+    write_json(request_path, load_document("dex", "request"))
+    replay = json.loads(DEX_FIXTURE.read_text())
+    swap = replay["receipt"]["logs"][2]
+    swap["data"] = f"{swap['data'][:-1]}b"
+    write_json(evidence_path, replay)
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(evidence_path),
+        ],
+    )
+
+    assert result.exit_code == 4
+    assert "FAILED AN-FX-SVC-DEX-001" in result.stdout
+    assert "reconciliation_failed" in result.stderr
+    assert "source_unavailable" not in result.stdout + result.stderr
+
+
+def test_invalid_dex_replay_does_not_persist_or_echo_local_path(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    evidence_path = tmp_path / "unsafe.json"
+    write_json(request_path, load_document("dex", "request"))
+    replay = json.loads(DEX_FIXTURE.read_text())
+    replay["local_path"] = "/Users/private-evidence/source.json"
+    write_json(evidence_path, replay)
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(evidence_path),
+        ],
+    )
+    combined = result.stdout + result.stderr
+
+    assert result.exit_code == 4
+    assert "decode_failed" in combined
+    assert "/Users/private-evidence/" not in combined
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        assert runtime.storage.count("checkpoints") == 0
+        assert runtime.storage.count("artifacts") == 3
 
 
 def test_show_unknown_id_has_no_empty_table_or_absolute_path(
@@ -258,7 +380,7 @@ def test_resume_unknown_id_is_explicit_failure(
     assert "analysis not found" in result.stderr
 
 
-def test_keyboard_interrupt_maps_to_130_and_preserves_run(
+def test_dex_keyboard_interrupt_resumes_from_saved_replay(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -266,16 +388,35 @@ def test_keyboard_interrupt_maps_to_130_and_preserves_run(
     request_path = tmp_path / "request.json"
     write_json(request_path, load_document("dex", "request"))
 
-    def interrupt(_: object) -> None:
+    def interrupt(*_: object, **__: object) -> None:
         raise KeyboardInterrupt
 
-    monkeypatch.setattr("scan_tool.cli.execute_analysis", interrupt)
-    result = runner.invoke(app, ["analyze", "--request", str(request_path)])
+    monkeypatch.setattr("scan_tool.application.cli_runtime.analyze_dex_replay", interrupt)
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(DEX_FIXTURE),
+        ],
+    )
 
     assert result.exit_code == 130
     assert "INTERRUPTED AN-FX-SVC-DEX-001" in result.stdout
     with CliRuntime.open(tmp_path / ".scan") as runtime:
         assert runtime.load_request("AN-FX-SVC-DEX-001") is not None
+        assert runtime.storage.count("checkpoints") == 1
+
+    monkeypatch.setattr(
+        "scan_tool.application.cli_runtime.analyze_dex_replay",
+        analyze_dex_replay,
+    )
+    resumed = runner.invoke(app, ["resume", "AN-FX-SVC-DEX-001"])
+    assert resumed.exit_code == 0
+    assert "COMPLETE AN-FX-SVC-DEX-001" in resumed.stdout
+    assert "resumed yes" in resumed.stdout
 
 
 def test_unexpected_runtime_error_is_redacted(
@@ -287,11 +428,20 @@ def test_unexpected_runtime_error_is_redacted(
     write_json(request_path, load_document("dex", "request"))
     canary = "SCAN_CANARY_SECRET_RUNTIME"
 
-    def fail(_: object) -> None:
+    def fail(*_: object, **__: object) -> None:
         raise RuntimeError(f"{canary} /Users/private-user/provider.json")
 
-    monkeypatch.setattr("scan_tool.cli.execute_analysis", fail)
-    result = runner.invoke(app, ["analyze", "--request", str(request_path)])
+    monkeypatch.setattr("scan_tool.application.cli_runtime.analyze_dex_replay", fail)
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(DEX_FIXTURE),
+        ],
+    )
     combined = result.stdout + result.stderr
 
     assert result.exit_code == 4

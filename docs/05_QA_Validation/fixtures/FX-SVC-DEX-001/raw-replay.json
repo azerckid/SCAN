@@ -1,0 +1,159 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-SVC-DEX-001",
+  "chain_id": 1,
+  "captured_at": "2026-07-24T10:43:17Z",
+  "reverified_at": "2026-07-27T15:15:26Z",
+  "transaction": {
+    "hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+    "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+    "block_number": "0xfdf1d0",
+    "from": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+    "to": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+    "value": "0x0",
+    "input": "0x3593564c000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000063ee61b70000000000000000000000000000000000000000000000000000000000000002080c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000005d21dba00000000000000000000000000000000000000000000000000c876797e09ffc73100000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000002000000000000000000000000a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc200000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000c876797e09ffc731",
+    "nonce": "0x36",
+    "transaction_index": "0x68"
+  },
+  "receipt": {
+    "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+    "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+    "block_number": "0xfdf1d0",
+    "from": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+    "to": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+    "status": "0x1",
+    "transaction_index": "0x68",
+    "logs": [
+      {
+        "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "topics": [
+          "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+          "0x000000000000000000000000a406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+          "0x000000000000000000000000b4e16d0168e52d35cacd2c6185b44281ec28c9dc"
+        ],
+        "data": "0x00000000000000000000000000000000000000000000000000000005d21dba00",
+        "block_number": "0xfdf1d0",
+        "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+        "transaction_index": "0x68",
+        "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+        "block_timestamp": "0x63ee5b0f",
+        "log_index": "0x113",
+        "removed": false
+      },
+      {
+        "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "topics": [
+          "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+          "0x000000000000000000000000b4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+          "0x000000000000000000000000ef1c6e67703c7bd7107eed8303fbe6ec2554bf6b"
+        ],
+        "data": "0x000000000000000000000000000000000000000000000000c886fd5c3a93a04a",
+        "block_number": "0xfdf1d0",
+        "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+        "transaction_index": "0x68",
+        "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+        "block_timestamp": "0x63ee5b0f",
+        "log_index": "0x114",
+        "removed": false
+      },
+      {
+        "address": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+        "topics": [
+          "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
+          "0x000000000000000000000000ef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+          "0x000000000000000000000000ef1c6e67703c7bd7107eed8303fbe6ec2554bf6b"
+        ],
+        "data": "0x00000000000000000000000000000000000000000000000000000005d21dba0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c886fd5c3a93a04a",
+        "block_number": "0xfdf1d0",
+        "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+        "transaction_index": "0x68",
+        "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+        "block_timestamp": "0x63ee5b0f",
+        "log_index": "0x116",
+        "removed": false
+      },
+      {
+        "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "topics": [
+          "0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65",
+          "0x000000000000000000000000ef1c6e67703c7bd7107eed8303fbe6ec2554bf6b"
+        ],
+        "data": "0x000000000000000000000000000000000000000000000000c886fd5c3a93a04a",
+        "block_number": "0xfdf1d0",
+        "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+        "transaction_index": "0x68",
+        "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+        "block_timestamp": "0x63ee5b0f",
+        "log_index": "0x117",
+        "removed": false
+      }
+    ]
+  },
+  "internal_calls": [
+    {
+      "block_number": "16642512",
+      "call_type": "call",
+      "from": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "to": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "value": "14449515027026387018",
+      "index": "17",
+      "input": "0x",
+      "is_error": "0",
+      "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5"
+    }
+  ],
+  "metadata": {
+    "router": {
+      "address": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "label": "Uniswap Universal Router V1",
+      "deployment_commit": "d2575ff41223d2766ee17f99ae7258545405ef9f",
+      "deployment_json_sha256": "2eae503941da63a8dded7f26ac43ae26a769aa64fca9c4685bd1b0fb6f62bdcf",
+      "license": "GPL-3.0-only"
+    },
+    "factory": {
+      "address": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+      "label": "Uniswap V2 Factory"
+    },
+    "pair": {
+      "address": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+      "label": "Uniswap V2 USDC/WETH",
+      "historical_get_pair_result": "0x000000000000000000000000b4e16d0168e52d35cacd2c6185b44281ec28c9dc"
+    },
+    "tokens": {
+      "asset_in": {
+        "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "symbol": "USDC",
+        "decimals": 6
+      },
+      "pool_output": {
+        "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "symbol": "WETH",
+        "decimals": 18
+      },
+      "user_output": {
+        "symbol": "ETH",
+        "decimals": 18
+      }
+    }
+  },
+  "sources": {
+    "receipt": {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider_id": "ethereum.publicnode.com",
+      "endpoint_host": "ethereum.publicnode.com",
+      "retrieved_at": "2026-07-27T15:15:26Z"
+    },
+    "internal_calls": {
+      "source_id": "DS-EXPLORER-EVM",
+      "provider_id": "blockscout",
+      "endpoint_host": "eth.blockscout.com",
+      "retrieved_at": "2026-07-27T15:15:26Z"
+    },
+    "metadata": {
+      "source_id": "DS-DEX-META",
+      "provider_id": "uniswap-official",
+      "endpoint_host": "github.com",
+      "retrieved_at": "2026-07-25T06:13:12Z"
+    }
+  }
+}
