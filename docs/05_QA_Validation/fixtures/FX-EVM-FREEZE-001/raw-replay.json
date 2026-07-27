@@ -1,0 +1,243 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-EVM-FREEZE-001",
+  "chain_id": 1,
+  "captured_at": "2026-07-24T16:49:31Z",
+  "reverified_at": "2026-07-27T16:59:42Z",
+  "target_address": "0xd96f2b1c14db8458374d9aca76e26c3d18364307",
+  "mode": "address_blacklist_lifecycle",
+  "token": {
+    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "symbol": "USDC",
+    "decimals": 6
+  },
+  "blacklist": {
+    "transaction": {
+      "hash": "0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72",
+      "block_hash": "0x444cd71ecce469797343bb2d07c99d4344b3911bb786fcc047ff71c0a3a69ded",
+      "block_number": "0xe97f95",
+      "from": "0x5db0115f3b72d19cea34dd697cf412ff86dc7e1b",
+      "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "value": "0x0",
+      "input": "0xf9f92be4000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307",
+      "nonce": "0x31",
+      "transaction_index": "0x4a"
+    },
+    "receipt": {
+      "transaction_hash": "0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72",
+      "block_hash": "0x444cd71ecce469797343bb2d07c99d4344b3911bb786fcc047ff71c0a3a69ded",
+      "block_number": "0xe97f95",
+      "from": "0x5db0115f3b72d19cea34dd697cf412ff86dc7e1b",
+      "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "status": "0x1",
+      "transaction_index": "0x4a",
+      "selected_logs": [
+        {
+          "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "topics": [
+            "0xffa4e6181777692565cf28528fc88fd1516ea86b56da075235fa575af6a4b855",
+            "0x000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307"
+          ],
+          "data": "0x",
+          "block_number": "0xe97f95",
+          "transaction_hash": "0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72",
+          "transaction_index": "0x4a",
+          "block_hash": "0x444cd71ecce469797343bb2d07c99d4344b3911bb786fcc047ff71c0a3a69ded",
+          "block_timestamp": "0x62f13685",
+          "log_index": "0x55",
+          "removed": false
+        }
+      ]
+    }
+  },
+  "unblacklist": {
+    "transaction": {
+      "hash": "0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537",
+      "block_hash": "0x1c834af7eff856ea37009f6dffd47470e418b10257b664a3216e62de3e13a31b",
+      "block_number": "0x1513480",
+      "from": "0x10df6b6fe66dd319b1f82bab2d054cbb61cdad2e",
+      "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "value": "0x0",
+      "input": "0x1a895266000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307",
+      "nonce": "0x6e",
+      "transaction_index": "0x1"
+    },
+    "receipt": {
+      "transaction_hash": "0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537",
+      "block_hash": "0x1c834af7eff856ea37009f6dffd47470e418b10257b664a3216e62de3e13a31b",
+      "block_number": "0x1513480",
+      "from": "0x10df6b6fe66dd319b1f82bab2d054cbb61cdad2e",
+      "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "status": "0x1",
+      "transaction_index": "0x1",
+      "selected_logs": [
+        {
+          "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "topics": [
+            "0x117e3210bb9aa7d9baff172026820255c6f6c30ba8999d1c2fd88e2848137c4e",
+            "0x000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307"
+          ],
+          "data": "0x",
+          "block_number": "0x1513480",
+          "transaction_hash": "0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537",
+          "transaction_index": "0x1",
+          "block_hash": "0x1c834af7eff856ea37009f6dffd47470e418b10257b664a3216e62de3e13a31b",
+          "block_timestamp": "0x67de0f37",
+          "log_index": "0x7",
+          "removed": false
+        }
+      ]
+    }
+  },
+  "state_query": {
+    "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "data": "0xfe575a87000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307",
+    "snapshots": [
+      {
+        "label": "before_blacklist",
+        "block_number": 15302548,
+        "block_tag": "0xe97f94",
+        "result": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "label": "after_blacklist",
+        "block_number": 15302549,
+        "block_tag": "0xe97f95",
+        "result": "0x0000000000000000000000000000000000000000000000000000000000000001"
+      },
+      {
+        "label": "before_unblacklist",
+        "block_number": 22099071,
+        "block_tag": "0x151347f",
+        "result": "0x0000000000000000000000000000000000000000000000000000000000000001"
+      },
+      {
+        "label": "after_unblacklist",
+        "block_number": 22099072,
+        "block_tag": "0x1513480",
+        "result": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    ]
+  },
+  "explorer_cross_check": [
+    {
+      "transaction_hash": "0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72",
+      "status": "ok",
+      "method": "blacklist",
+      "from": "0x5db0115f3b72d19cea34dd697cf412ff86dc7e1b",
+      "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "raw_input": "0xf9f92be4000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307",
+      "log_index": 85
+    },
+    {
+      "transaction_hash": "0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537",
+      "status": "ok",
+      "method": "unBlacklist",
+      "from": "0x10df6b6fe66dd319b1f82bab2d054cbb61cdad2e",
+      "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "raw_input": "0x1a895266000000000000000000000000d96f2b1c14db8458374d9aca76e26c3d18364307",
+      "log_index": 7
+    }
+  ],
+  "official_context": [
+    {
+      "context_id": "circle_response",
+      "source_id": "DS-OSINT-WEB",
+      "provider": "Circle",
+      "title": "The Responsibility of Trust",
+      "url": "https://www.circle.com/blog/the-responsibility-of-trust",
+      "address_specific": false,
+      "target_address_listed": null,
+      "role": "issuer_context_for_tornado_cash_response",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    },
+    {
+      "context_id": "circle_terms",
+      "source_id": "DS-OSINT-WEB",
+      "provider": "Circle",
+      "title": "USDC Terms",
+      "url": "https://www.circle.com/legal/usdc-terms",
+      "address_specific": false,
+      "target_address_listed": null,
+      "role": "issuer_blocklisting_policy",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    },
+    {
+      "context_id": "circle_contract",
+      "source_id": "DS-OSINT-WEB",
+      "provider": "Circle Developers",
+      "title": "USDC Contract Addresses",
+      "url": "https://developers.circle.com/stablecoins/usdc-contract-addresses",
+      "address_specific": false,
+      "target_address_listed": null,
+      "role": "issuer_contract_address",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    },
+    {
+      "context_id": "ofac_designation",
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "provider": "U.S. Treasury OFAC",
+      "title": "Cyber-related Designation",
+      "url": "https://ofac.treasury.gov/recent-actions/20220808",
+      "address_specific": true,
+      "target_address_listed": true,
+      "role": "historical_designation_context",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    },
+    {
+      "context_id": "ofac_removal",
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "provider": "U.S. Treasury OFAC",
+      "title": "Cyber-related Designation Removal",
+      "url": "https://ofac.treasury.gov/recent-actions/20250321",
+      "address_specific": true,
+      "target_address_listed": true,
+      "role": "historical_designation_removal_context",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    }
+  ],
+  "interface_metadata": {
+    "source_id": "DS-OSINT-WEB",
+    "provider": "Circle GitHub",
+    "url": "https://github.com/circlefin/stablecoin-evm/blob/b42cf04b31639b8b05d53fea9995954d5f3659d9/contracts/v1/Blacklistable.sol",
+    "commit_sha": "b42cf04b31639b8b05d53fea9995954d5f3659d9",
+    "commit_date": "2020-07-23T00:21:58Z",
+    "file_sha256": "d1e8fe82c7e77ca626c27c4205dac994e6c0c97e18f86cb17559d952df8425eb",
+    "license": "MIT",
+    "license_sha256": "ab49aea32292bcf2744f2a37bf8887feffeb124e04a76e1b99e0a1eae2a9053b",
+    "retrieved_at": "2026-07-25T06:25:50Z"
+  },
+  "global_pause_applicable": false,
+  "sources": {
+    "public_rpc": {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider_id": "publicnode",
+      "endpoint_host": "ethereum-rpc.publicnode.com",
+      "retrieved_at": "2026-07-27T16:59:42Z"
+    },
+    "archive_rpc": {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "drpc",
+      "endpoint_host": "eth.drpc.org",
+      "retrieved_at": "2026-07-27T16:59:42Z"
+    },
+    "explorer": {
+      "source_id": "DS-EXPLORER-EVM",
+      "provider_id": "blockscout",
+      "endpoint_host": "eth.blockscout.com",
+      "retrieved_at": "2026-07-27T16:59:42Z"
+    },
+    "issuer": {
+      "source_id": "DS-OSINT-WEB",
+      "provider_id": "circle",
+      "endpoint_host": "www.circle.com",
+      "retrieved_at": "2026-07-25T06:25:50Z"
+    },
+    "sanctions": {
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "provider_id": "ofac",
+      "endpoint_host": "ofac.treasury.gov",
+      "retrieved_at": "2026-07-24T16:49:31Z"
+    }
+  }
+}
