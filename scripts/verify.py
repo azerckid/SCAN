@@ -18,6 +18,10 @@ COMMANDS = (
         sys.executable,
         "docs/05_QA_Validation/scripts/validate_analysis_schemas.py",
     ),
+    (
+        sys.executable,
+        "scripts/check_analysis_schema.py",
+    ),
 )
 
 

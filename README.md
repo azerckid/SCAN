@@ -5,9 +5,10 @@ SCAN 2026.
 
 ## Current status
 
-The repository is documentation-complete for the approved baseline, and `TASK-001`
-has initialized the Python project and offline quality gate. Analysis models,
-source adapters, storage, and DEX/AUTH/FREEZE analyzers are not implemented yet.
+The repository is documentation-complete for the approved baseline. `TASK-001`
+initialized the Python project and offline quality gate, and `TASK-002` implemented
+the Analysis I/O 0.1 Pydantic models and semantic Schema check. Source adapters,
+storage, and DEX/AUTH/FREEZE analyzers are not implemented yet.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`; related features stay disabled until an authoritative
 notice is recorded.
@@ -38,6 +39,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | Backlog | [`00_BACKLOG.md`](docs/04_Logic_Progress/00_BACKLOG.md) | atomic implementation tasks |
 | QA | [`02_QA_CHECKLIST.md`](docs/05_QA_Validation/02_QA_CHECKLIST.md) | pre-code, PR, regression, competition gates |
 | TASK-001 evidence | [`05_TASK_001_BOOTSTRAP_REPORT.md`](docs/05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md) | Python, lock, dependency, and quality-gate evidence |
+| TASK-002 evidence | [`06_TASK_002_CONTRACT_REPORT.md`](docs/05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) | Analysis I/O models, invariants, dependencies, and Contract Gate evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -50,12 +52,14 @@ uv run python scripts/verify.py
 ```
 
 The gate runs Ruff lint and format checks, pytest, and both existing Schema
-validators. Expected final outputs include:
+validators, followed by the generated-Pydantic-Schema compatibility check.
+Expected final outputs include:
 
 ```text
-5 passed
+31 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
+PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
 ```
 
 The installed package currently exposes only the approved bootstrap surface:
@@ -75,10 +79,10 @@ uv run scan --version
 
 ## Implementation boundary
 
-`TASK-001` is complete. The next eligible tasks are `TASK-002` (Analysis I/O
-models) and `TASK-003` (source orchestration); each still requires its own
-implementation approval. SQLite DDL, live APIs, AI/agent execution, and CTFd
-automation remain unimplemented.
+`TASK-001` and `TASK-002` are complete. The next eligible task is `TASK-003`
+(source orchestration) and still requires separate implementation approval.
+SQLite DDL, live APIs, AI/agent execution, and CTFd automation remain
+unimplemented.
 
 ## License
 

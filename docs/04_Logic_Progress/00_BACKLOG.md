@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 20:57
-> Status: Approved 1.1 · TASK-001 Done
+> Last Updated: 2026-07-27 21:22
+> Status: Approved 1.2 · TASK-001~002 Done
 
 ## 1. 문서 목적
 
@@ -9,9 +9,9 @@
 CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업으로
 전환한다.
 
-Backlog 범위와 `TASK-001` 구현은 별도로 승인되었다. `TASK-001`은 완료됐고
-나머지 작업은 `ToDo`다. 후속 작업은 각각 별도 승인 전에는 `In Progress`로
-이동하지 않는다.
+Backlog 범위와 `TASK-001`·`TASK-002` 구현은 별도로 승인되었다. 두 작업은
+완료됐고 나머지 작업은 `ToDo`다. 후속 작업은 각각 별도 승인 전에는
+`In Progress`로 이동하지 않는다.
 
 `TASK-010`은 공식 Rules·Operations Board Preview·별도 구현 승인에 의존하는
 비차단 운영 트랙이다. `TASK-001`~`TASK-009`의 P0·V1 의존 순서와 완료 Gate를
@@ -143,22 +143,22 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] 실제 Python·dependency version과 명령을 개발 원칙·기술 선택 기록에 반영했다.
   - [x] 구현과 문서 차이를 검토하고 TASK-001 결과 보고서에 기록했다.
 
-### [ ] TASK-002: Analysis I/O 계약 model과 Schema diff 구현
+### [x] TASK-002: Analysis I/O 계약 model과 Schema diff 구현
 
-- Status: ToDo
+- Status: Done
 - Priority: P0 · High
 - Depends On: TASK-001
 - Requirement IDs: `REQ-COM-IN-*`, `REQ-COM-OUT-*`, `REQ-NFR-001`,
-  `REQ-NFR-004`, `TD-003`, `TD-004`, `TD-019`
+  `REQ-NFR-004`, `TD-003`, `TD-006`, `TD-019`
 - Atomic Tasks:
-  - [ ] request·result·error Pydantic v2 model을 분리한다.
-  - [ ] 공통 model에 `extra="forbid"`를 적용한다.
-  - [ ] analysis type·status·classification·evidence type·error code enum을 정의한다.
-  - [ ] 주소·TX hash·RFC 3339·raw decimal string validator를 구현한다.
-  - [ ] complete·partial·failed 불변조건과 ID 유일성을 검증한다.
-  - [ ] result→evidence→source 참조 무결성을 검증한다.
-  - [ ] Pydantic 생성 Schema와 승인 Schema `0.1`의 의미상 diff 명령을 만든다.
-  - [ ] confirmed request/result 예제 3쌍을 model round-trip한다.
+  - [x] request·result·error Pydantic v2 model을 분리한다.
+  - [x] 공통 model에 `extra="forbid"`를 적용한다.
+  - [x] analysis type·status·classification·evidence type·error code enum을 정의한다.
+  - [x] 주소·TX hash·RFC 3339·raw decimal string validator를 구현한다.
+  - [x] complete·partial·failed 불변조건과 ID 유일성을 검증한다.
+  - [x] result→evidence→source 참조 무결성을 검증한다.
+  - [x] Pydantic 생성 Schema와 승인 Schema `0.1`의 의미상 diff 명령을 만든다.
+  - [x] confirmed request/result 예제 3쌍을 model round-trip한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 완료·부분·실패와 증거 필드
 - Related UI Docs:
@@ -173,25 +173,26 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - Related QA Docs:
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-SCHEMA-001`, `QA-SCHEMA-002`
   - [Analysis I/O 예제](../05_QA_Validation/examples/analysis/README.md) - round-trip 기준
+  - [TASK-002 Contract 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) - model·불변조건·Schema 의미 검사 증거
 - Implementation Preconditions:
-  - [ ] 관련 문서와 승인 Schema 3종을 다시 확인했다.
-  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
-  - [ ] HTML Preview의 complete·partial·failed 표현을 확인했다.
-  - [ ] 입력·출력 최소 필드와 상태 변화를 확인했다.
-  - [ ] 외부 mutation 없음과 local model validation 경계를 확인했다.
-  - [ ] fixture schema와 analysis schema의 독립 버전을 확인했다.
-  - [ ] 구현 범위가 공개 계약 `0.1`을 임의 변경하지 않는다.
+  - [x] 관련 문서와 승인 Schema 3종을 다시 확인했다.
+  - [x] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
+  - [x] HTML Preview의 complete·partial·failed 표현을 확인했다.
+  - [x] 입력·출력 최소 필드와 상태 변화를 확인했다.
+  - [x] 외부 mutation 없음과 local model validation 경계를 확인했다.
+  - [x] fixture schema와 analysis schema의 독립 버전을 확인했다.
+  - [x] 구현 범위가 공개 계약 `0.1`을 임의 변경하지 않는다.
 - Acceptance Criteria:
-  - [ ] 유효한 요청·결과 예제 3쌍이 round-trip 후 의미상 동일하다.
-  - [ ] 잘못된 주소·TX hash·블록·유형은 `invalid_input`으로 거부한다.
-  - [ ] extra field·float raw amount·naive datetime·깨진 참조는
+  - [x] 유효한 요청·결과 예제 3쌍이 round-trip 후 의미상 동일하다.
+  - [x] 잘못된 주소·TX hash·블록·유형은 `invalid_input`으로 거부한다.
+  - [x] extra field·float raw amount·naive datetime·깨진 참조는
         `schema_invalid`로 거부한다.
-  - [ ] 깨진 result→evidence→source 참조를 거부한다.
-  - [ ] 저장 Schema와 생성 Schema의 의미상 diff가 0이다.
-  - [ ] `complete`+error, `failed`+no error 조합을 거부한다.
+  - [x] 깨진 result→evidence→source 참조를 거부한다.
+  - [x] 저장 Schema와 생성 Schema의 의미상 probe diff가 0이다.
+  - [x] `complete`+error, `failed`+no error 조합을 거부한다.
 - Document Sync Check:
-  - [ ] model 경로와 Schema 생성·diff 명령을 Schema 문서에 기록했다.
-  - [ ] 호환되지 않는 변경이 있으면 version 정책과 문서를 먼저 갱신했다.
+  - [x] model 경로와 Schema 생성·diff 명령을 Schema 문서에 기록했다.
+  - [x] 공개 Schema 변경 없이 계약 `0.1`을 구현했다.
 
 ### [ ] TASK-003: Source port·policy·retry·fallback orchestration 구현
 
@@ -612,16 +613,20 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 
 - `TASK-001` — Python 3.13.7, uv lock, 최소 CLI package, offline 품질 Gate
   ([검증 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md))
+- `TASK-002` — Analysis I/O Pydantic model, 참조·uint256 불변조건, Schema probe
+  ([검증 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md))
 
 ## 7. Backlog 승인 Gate
 
 - [x] [문서 완료 Roadmap](./00_ROADMAP.md)의 `DOC-M1`~`DOC-M5` 통과
 - [x] P0·V1 9개 작업과 별도 Rules-gated `TASK-010`의 범위·의존 순서 승인
 - [x] TASK-001을 첫 구현 작업으로 승인
+- [x] TASK-002 Analysis I/O 계약 구현을 별도로 승인
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
 - [x] Backlog 승인 후 `codex/task-001-python-bootstrap` branch 사용
+- [x] TASK-002 승인 후 `codex/task-002-analysis-contract-models` branch 사용
 
 ## 8. 365 글로벌 평가 기준
 

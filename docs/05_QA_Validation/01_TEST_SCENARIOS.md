@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 20:57
-> Status: Approved 1.1 · QA-BOOT-001 Passed
+> Last Updated: 2026-07-27 21:22
+> Status: Approved 1.2 · QA-BOOT-001·QA-SCHEMA-001~002 Passed
 
 ## 1. 문서 목적
 
@@ -10,10 +10,12 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 실행 가능한 QA 기준을 정의한다.
 
 시나리오는 backlog의 Acceptance Criteria를 구체화한다. `TASK-001` 완료로
-`QA-BOOT-001`은 실행·통과했으며 나머지 구현 시나리오는 아직 실행하지 않았다.
+`QA-BOOT-001`, `TASK-002` 완료로 `QA-SCHEMA-001`과
+`QA-SCHEMA-002`를 실행·통과했다. 나머지 구현 시나리오는 아직 실행하지
+않았다.
 
 현재 정의된 시나리오는 24개이며 승인 상태는 `Scope Approved`, 실행 상태는
-`1 pass / 23 not_executed`다. 작업별·통합 실행 시점은
+`3 pass / 21 not_executed`다. 작업별·통합 실행 시점은
 [QA Checklist](./02_QA_CHECKLIST.md)에서 관리한다.
 
 병렬 문제풀이 `TASK-010`의 6개 시나리오는
@@ -89,6 +91,8 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 세 예제 모두 유효하고 round-trip 전후 의미가 같다.
   - `analysis_id`, result→evidence→source 참조가 보존된다.
   - 승인 Schema `0.1`과 호환되지 않는 diff가 0이다.
+- **Result**: `pass` — 세 예제 round-trip과 승인·생성 Schema 간 35개
+  의미 probe가 모두 일치했다.
 
 ### QA-SCHEMA-002 — 잘못된 계약과 참조 거부
 
@@ -107,6 +111,8 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 2·3·4의 변형은 `schema_invalid`, 상태 `failed`, 종료 코드 `2`로 거부된다.
   - `uint256.max`는 문자열로 손실 없이 왕복한다.
   - 오류에 secret·원본 provider credential이 포함되지 않는다.
+- **Result**: `pass` — 주소·hash·block·type 오류와 계약·참조·상태 오류를
+  분리했고, 31개 전체 test에서 경계값·비노출 조건을 확인했다.
 
 ## 4. CLI·Terminal Gate
 
@@ -470,6 +476,7 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - QA별 구현 책임
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed 사례와 승격 기준
 - **QA_Validation**: [QA Checklist](./02_QA_CHECKLIST.md) - 24개 시나리오의 승인·실행 시점과 결과 기록
+- **QA_Validation**: [TASK-002 Contract 보고서](./06_TASK_002_CONTRACT_REPORT.md) - round-trip·오류 분류·참조·Schema probe 증거
 - **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 병렬성·격리·독립 검증·수동 제출 QA
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - request·result 기준
 - **QA_Validation**: [DEX fixture](./fixtures/FX-SVC-DEX-001/README.md), [AUTH fixture](./fixtures/FX-EVM-AUTH-001/README.md), [FREEZE fixture](./fixtures/FX-EVM-FREEZE-001/README.md) - exact-match 원본
