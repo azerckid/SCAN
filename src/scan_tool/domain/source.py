@@ -101,6 +101,7 @@ class SourceResponse:
 class SourceExecutionError:
     code: ErrorCode
     message: str
+    stage: str
     source_id: str | None
     provider_id: str | None
     retryable: bool

@@ -126,6 +126,7 @@ class SourceOrchestrator:
             error=SourceExecutionError(
                 code=error_code,
                 message=_safe_final_message(error_code),
+                stage="source_transport",
                 source_id=last_adapter.source_id if last_adapter else None,
                 provider_id=last_adapter.provider_id if last_adapter else None,
                 retryable=False,
@@ -138,6 +139,7 @@ class SourceOrchestrator:
             return SourceExecutionError(
                 code=ErrorCode.RULE_RESTRICTED,
                 message="source execution is restricted by the active rules policy",
+                stage="source_policy",
                 source_id=None,
                 provider_id=None,
                 retryable=False,
@@ -147,6 +149,7 @@ class SourceOrchestrator:
             return SourceExecutionError(
                 code=ErrorCode.SOURCE_UNAVAILABLE,
                 message="offline mode has no source transport; use stored cache or fixture data",
+                stage="source_transport",
                 source_id=None,
                 provider_id=None,
                 retryable=False,
@@ -156,6 +159,7 @@ class SourceOrchestrator:
             return SourceExecutionError(
                 code=ErrorCode.RULE_RESTRICTED,
                 message="live source execution requires an explicitly allowed rules policy",
+                stage="source_policy",
                 source_id=None,
                 provider_id=None,
                 retryable=False,

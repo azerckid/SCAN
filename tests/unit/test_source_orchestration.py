@@ -89,8 +89,10 @@ def test_policy_blocks_restricted_offline_and_unconfirmed_live_before_adapter_ca
 
     assert restricted.error is not None
     assert restricted.error.code is ErrorCode.RULE_RESTRICTED
+    assert restricted.error.stage == "source_policy"
     assert offline.error is not None
     assert offline.error.code is ErrorCode.SOURCE_UNAVAILABLE
+    assert offline.error.stage == "source_transport"
     assert unconfirmed.error is not None
     assert unconfirmed.error.code is ErrorCode.RULE_RESTRICTED
     assert restricted.attempts == offline.attempts == unconfirmed.attempts == ()
@@ -281,6 +283,7 @@ def test_exhausted_rate_limit_uses_structured_error() -> None:
 
     assert execution.error is not None
     assert execution.error.code is ErrorCode.RATE_LIMITED
+    assert execution.error.stage == "source_transport"
     assert execution.error.retryable is False
     assert execution.error.attempt_count == 1
 
