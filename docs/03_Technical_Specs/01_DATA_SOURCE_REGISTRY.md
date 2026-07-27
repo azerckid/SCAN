@@ -1,7 +1,7 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-26 00:01
-> Status: Draft
+> Last Updated: 2026-07-27 15:52
+> Status: Draft · Approved Baseline · Rules Unclear
 
 ## 1. 문서 목적
 
@@ -231,20 +231,18 @@
 
 ## 9. 다음 단계
 
-1. [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) 후보 8개의 공개 데이터 확보 가능성을 소스별로 점검한다.
-2. 확보 가능한 fixture를 `검증 중`으로 올리고 필요 소스를 `검증 중`으로 승격한다.
-3. 2026-07-27 이후 공식 규정에 따라 `대회 규정` 필드를 갱신한다.
-4. 채택 소스 목록의 능력·제약을 기능 우선순위 Draft 1에 반영했다.
-5. P0·V1 도구 요구사항 Draft 1에 공급자 fallback·캐시·오류 계약을 반영했다.
-6. 기술 선택 기록 Draft 1에서 HTTPX source adapter와 orchestration fallback 경계를 제안했다.
-7. 공식 규정·공급자 플랜 확인 후 source별 adapter 우선순위와 rate limit을 확정한다.
+1. confirmed fixture 3개의 source 기준선을 유지한다.
+2. 공식 규정은 `미확인`으로 유지하고 Notification Intake 결과가 있을 때 갱신한다.
+3. `TASK-003` 시작 전 provider별 공식 plan·rate limit·fallback을 재확인한다.
+4. live source가 제한되면 offline fixture·cache·human fallback을 사용한다.
 
 ## 10. Related Documents
 
 - **Concept_Design**: [SCAN 2026 참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 준비 전략과 위험·제약
 - **Concept_Design**: [SCAN 2026 예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - Draft 2 기능·fixture 요구의 기준
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - 소스 의존성·fallback을 반영한 기능 순서
+- **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - source별 대회 허용 상태와 Notification Intake
+- **Technical_Specs**: [SQLite 논리 DB Schema](./01_DB_SCHEMA.md) - source attempt·cache·artifact 보존 구조
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - source policy·cache·fallback·오류 계약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - HTTP transport·source adapter·저장 경계
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 소스 검증용 대표 사례
-- 후속 문서 후보: `../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md`, 공통 작업·결과 JSON Schema

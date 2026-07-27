@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-27 00:54
-> Status: Draft 1 · Approval Pending
+> Last Updated: 2026-07-27 15:52
+> Status: Approved 1.0 · Document Gate Passed · Implementation Not Executed
 
 ## 1. 문서 목적
 
@@ -11,11 +11,11 @@
 언제 무엇을 실행하고 어떤 증거를 남겨야 하는지 정의한다.
 
 현재 Python application code는 없으며 QA 시나리오 24개는
-`Approval Pending / Not Executed` 상태다. 문서 검증 통과와 구현 테스트
+`Scope Approved / Not Executed` 상태다. 문서 검증 통과와 구현 테스트
 통과를 같은 의미로 사용하지 않는다.
 
 `TASK-010`의 Agentic Parallel Solve QA 6개는 별도
-`Approval Pending / Not Executed` 상태이며 기존 24개 P0·V1 집계를 변경하지
+`Scope Approved / Not Executed` 상태이며 기존 24개 P0·V1 집계를 변경하지
 않는다.
 
 ## 2. 상태와 판정
@@ -51,11 +51,11 @@
 - [x] analysis Schema 검증기가 `PASS 3`이다.
 - [x] Backlog `TASK-001`~`TASK-009`는 모두 `ToDo`다.
 - [x] HTML UI Preview Gate와 UI-First Gate 통과 기록이 존재한다.
-- [ ] 이 Checklist와 QA 시나리오 범위를 사용자가 승인한다.
-- [ ] DOC-M2의 공식 규정·등록·제출 정보가 확정된다.
+- [x] 이 Checklist와 QA 시나리오 범위를 사용자가 승인했다.
+- [x] DOC-M2가 확인 사실·`unclear`·Notification Intake 기준선으로 완료되었다.
 
-마지막 두 항목은 각각 DOC-M4 승인과 DOC-M2에 속하며 DOC-M3 fixture 범위
-결정을 되돌리지 않는다.
+미공개 규정은 `allowed`로 확정한 것이 아니다. Active Watch와 보수적
+비활성화로 처리하며 DOC-M3 fixture 범위 결정을 되돌리지 않는다.
 
 ## 4. 24개 QA 시나리오 승인·실행 시점
 
@@ -64,7 +64,7 @@
 | 항목 | 값 |
 |:---|:---|
 | 정의 수 | 24 |
-| 승인 상태 | Approval Pending |
+| 승인 상태 | Scope Approved |
 | 실행 상태 | Not Executed |
 | 구현 전 허용 실행 | 문서 링크·ID·Schema·fixture 정합 검사만 |
 | 전체 실행 Gate | `TASK-009` 통합 회귀 |
@@ -77,7 +77,7 @@
 
 | Gate | 실행 시점 | QA ID | 현재 상태 |
 |:---|:---|:---|:---|
-| Document Gate | 구현 전과 모든 문서 PR | `QA-REG-003`의 문서·Schema·fixture 부분 | not_executed: 문서 부분은 구현 전 실행 가능하나 실행 기록 없음 |
+| Document Gate | 구현 전과 모든 문서 PR | `QA-REG-003`의 문서·Schema·fixture 부분 | pass: 2026-07-27 문서 완료 보고서 |
 | Project Gate | `TASK-001` 완료 후 | `QA-BOOT-001` | not_executed |
 | Contract Gate | `TASK-002` 완료 후 | `QA-SCHEMA-001`, `QA-SCHEMA-002` | not_executed |
 | Source Gate | `TASK-003` 완료 후 | `QA-RULE-001`, `QA-SOURCE-001`, `QA-RETRY-001`, `QA-FALLBACK-001` | not_executed |
@@ -93,7 +93,7 @@ ID는 24개 집계에서 한 번만 센다.
 
 ## 5. 구현 착수 전 Gate
 
-- [ ] Document Completion Gate가 사용자 승인으로 닫혔다.
+- [x] Document Completion Gate가 사용자 승인으로 닫혔다.
 - [ ] `TASK-001` 시작을 별도로 승인받았다.
 - [ ] Backlog의 관련 Concept·UI·HTML Preview·Technical·QA 링크를 다시 읽었다.
 - [ ] Rules Register의 API·자동화·AI·사전 도구 상태를 확인했다.
@@ -169,11 +169,14 @@ ID는 24개 집계에서 한 번만 센다.
 
 ### 7.1 모든 문서 PR
 
-- [ ] `git diff --check`가 통과한다.
-- [ ] 변경 문서의 metadata와 Related Documents를 확인한다.
-- [ ] 상대 링크와 ID 유일성을 확인한다.
-- [ ] fixture·analysis Schema 검증이 각각 `PASS 3`이다.
-- [ ] 완료·승인·실행 상태를 혼용하지 않는다.
+- [x] `git diff --check`가 통과한다.
+- [x] 변경 문서의 metadata와 Related Documents를 확인한다.
+- [x] 상대 링크와 ID 유일성을 확인한다.
+- [x] fixture·analysis Schema 검증이 각각 `PASS 3`이다.
+- [x] 완료·승인·실행 상태를 혼용하지 않는다.
+
+문서 완료 통과는 application unit·integration·live test 통과를 뜻하지 않는다.
+해당 결과는 `TASK-001` 이후에만 기록한다.
 
 ### 7.2 모든 구현 PR
 
@@ -265,8 +268,8 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 
 이 Checklist의 승인과 테스트 실행은 별개다.
 
-- [ ] 사용자가 Checklist와 24개 QA 시나리오 범위를 승인한다.
-- [ ] Document Completion Gate 승인 후 구현 착수 여부를 별도로 결정한다.
+- [x] 사용자가 Checklist와 24개 QA 시나리오 범위를 승인했다.
+- [x] Document Completion Gate를 닫고 구현 착수는 별도 승인으로 분리했다.
 - [ ] 구현된 QA만 `pass / partial / fail / blocked`로 기록한다.
 - [ ] `TASK-009` 종료 전 24개 시나리오의 최종 상태와 증거를 기록한다.
 - [ ] 구현하지 않은 범위는 `not_executed`로 남기고 통과로 계산하지 않는다.
@@ -288,6 +291,7 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **UI_Screens**: [Operations Board Preview](../02_UI_Screens/previews/03_competition_operations_board_preview.html) - `TASK-010` UI-First Gate
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - 구현·테스트·보안 기준
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - source 능력·제약
+- **Technical_Specs**: [SQLite 논리 DB Schema](../03_Technical_Specs/01_DB_SCHEMA.md) - 저장·artifact·mutation 논리 계약
 - **Technical_Specs**: [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - acceptance·오류·source 계약
 - **Technical_Specs**: [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - request·result·error 계약
 - **Technical_Specs**: [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - dependency·재사용·직접 구현 검증 Gate
@@ -297,3 +301,4 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **QA_Validation**: [P0·V1 QA 시나리오](./01_TEST_SCENARIOS.md) - 24개 상세 검증 절차
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed 3·Deferred 5 처리 방침
 - **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - 기존 24개와 분리된 `TASK-010` 6개 QA
+- **QA_Validation**: [Document Completion Report](./04_DOCUMENT_COMPLETION_REPORT.md) - DOC-M5 문서 검증 결과

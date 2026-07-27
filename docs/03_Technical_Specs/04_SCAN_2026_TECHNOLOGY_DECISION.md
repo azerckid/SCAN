@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-26 22:38
+> Last Updated: 2026-07-27 15:52
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -314,7 +314,7 @@ HTTPX는 connect·read·write·pool timeout과 connection limit를 개별 설정
 | 규정 gate | source policy가 `rule_restricted`이면 네트워크 호출 전에 중단 |
 | Raw 공개 | 개인정보·ToS·라이선스 검토 전 fixture나 Git에 승격하지 않음 |
 | Dependency | 허용 SPDX와 고정 버전을 dependency manifest에 기록 |
-| Project license | 사용자 승인 전 미결정. 공개 배포·제출 전 LICENSE 필수 |
+| Project license | MIT. 제3자 데이터·문서·fixture 원본은 원 권리와 약관 유지 |
 
 `TD-021` — dependency는 공식 배포 패키지와 lockfile로 고정하며, 초기화 시
 직접·간접 dependency의 라이선스와 알려진 취약점을 확인한다.
@@ -372,7 +372,7 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 | 항목 | 현재 상태 | 결정 시점 |
 |:---|:---|:---|
 | exact Python·dependency 버전 | 미결정 | `pyproject.toml`·`uv.lock` 생성 |
-| Project LICENSE | 미결정 | 첫 공개 코드 PR 전 사용자 승인 |
+| Project LICENSE | MIT 확정 | 제3자 데이터·공식 문서·fixture 원본은 원 권리·약관 유지 |
 | 출력 JSON Schema 0.1 | Draft 작성 | 공통 계약 검토·승인 후 Pydantic 생성본과 대조 |
 | SQLite DDL | 후속 | 출력 schema와 command ID 확정 후 |
 | 웹 UI | 보류 | CLI evidence 검토의 실제 병목 또는 공식 제출 요건 확인 |
@@ -380,7 +380,7 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 | web3.py | 선택 보조 | 직접 adapter보다 contract 호출·ABI 조립 비용이 큰 기능 발생 |
 | 성능 수치 | 미결정 | V1 fixture cold·warm benchmark 후 |
 | 공급자별 rate limit | 미결정 | 공식 규정·계정·플랜 확정 후 |
-| 기능별 오픈소스 결정 | Initial Survey | 관련 기능 구현 전 `OSS-*` fixture bake-off |
+| 기능별 오픈소스 결정 | P0/V1 경계 확정 | exact dependency·adapter 검증은 담당 Task |
 
 ## 17. 다음 단계
 
@@ -390,8 +390,10 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 4. CLI command flow와 terminal HTML Preview Draft를 작성했다.
 5. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
 6. schema·UI 경계 승인 후 원자적 backlog와 QA 시나리오를 작성했다.
-7. P0·V1 오픈소스 후보를 fixture로 검증하고 기존 TD 결정을 재확인한다.
-8. 2026-07-27 이후 공식 규정을 source policy와 기술 결정에 반영한다.
+7. P0·V1 오픈소스 결정은 `BUILD/WRAP/ADOPT/BORROW/REJECT` 경계로 확정했다.
+8. SQLite 논리 DB Schema와 MIT License를 문서 기준선에 반영했다.
+9. 새 공식 규정은 Rules Register Notification Intake를 통해 source policy에 반영한다.
+10. 별도 구현 승인 후 `TASK-001`에서 exact dependency와 lockfile을 확정한다.
 
 ## 18. Related Documents
 
@@ -401,6 +403,7 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **UI_Screens**: [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) - terminal 정보 계층과 접근성
 - **UI_Screens**: [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - 구현 전 사용자 확인 화면
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - source capability·공급자 제약
+- **Technical_Specs**: [SQLite 논리 DB Schema](./01_DB_SCHEMA.md) - SQLite·artifact·checkpoint 논리 계약
 - **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - 기술 결정을 코드 구조·품질·보안 규칙으로 전환
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - 기존 fixture JSON 계약
 - **Technical_Specs**: [P0·V1 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 기술 선택의 규범적 요구사항

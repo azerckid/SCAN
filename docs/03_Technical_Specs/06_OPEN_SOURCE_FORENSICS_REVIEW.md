@@ -1,7 +1,7 @@
 # SCAN 2026 오픈소스 포렌식 사전조사
 > Created: 2026-07-26 22:38
-> Last Updated: 2026-07-26 22:54
-> Status: Draft 1 · Initial Survey
+> Last Updated: 2026-07-27 15:52
+> Status: Approved 1.0 · P0/V1 Decisions Closed · Later Phases Deferred
 
 ## 1. 문서 목적
 
@@ -13,9 +13,11 @@
 라벨·시각화 기능을 불필요하게 다시 만들지 않고, SCAN에서 직접 만들어야 할
 문제별 분석·증거 연결·빠른 CLI·재현 가능한 보고서에 시간을 집중하는 것이다.
 
-이 문서는 코드 채택이나 dependency 추가를 승인하지 않는다. 공식 대회 규정,
-라이선스, 고정 commit, 설치 재현과 fixture 검증을 통과한 결정만 구현 입력이
-된다.
+이 문서는 dependency 설치 자체를 승인하지 않는다. P0/V1의 재사용·직접
+구현 경계는 확정하되 exact package version·lockfile·cold install은
+`TASK-001`, 정확한 adapter bake-off는 해당 구현 작업에서 검증한다.
+공식 대회 규정이 계속 `unclear`이므로 live 사용은 source policy Gate를
+따른다.
 
 ## 2. 현재 판단
 
@@ -382,12 +384,15 @@ AI 후보는 공통 절차에 다음을 추가한다.
 ML 후보는 baseline 대비 재현 가능한 개선이 있을 때만 `ADOPT / WRAP` 후보가
 된다. 개선이 없거나 설명·근거를 보존할 수 없으면 `BORROW / REJECT`로 둔다.
 
-## 9. 초기 결정과 남은 조사
+## 9. P0·V1 결정과 남은 조사
 
 | 결정 ID | 기능 | 현재 결정 | 다음 증거 |
 |:---|:---|:---|:---|
-| `OSS-EVM-COLLECT-001` | EVM 수집·정규화 | HTTPX 직접 adapter와 Ethereum ETL 비교 필요 | DEX·AUTH·FREEZE 수집 bake-off |
-| `OSS-EVM-EXPLORER-001` | explorer 보조 | Blockscout 공개 API `WRAP` 유지 | 공식 API 약관·rate limit·provider fallback |
+| `OSS-EVM-COLLECT-001` | EVM 수집·정규화 | `BUILD`: HTTPX source port; Ethereum ETL은 field·batch·trace model만 `BORROW`, runtime dependency는 V1 `REJECT` | 세 confirmed fixture adapter 회귀 |
+| `OSS-EVM-EXPLORER-001` | explorer 보조 | Blockscout 공개 API `WRAP`; 전체 self-host와 server source 결합은 V1 `REJECT` | provider별 약관·rate limit·fallback |
+| `OSS-P0-CORE-001` | cache·provenance·export | `BUILD`: 승인 Analysis I/O와 SQLite 논리 Schema에 맞춘 작은 core; GraphSense 전체 stack은 V1 `REJECT` | `TASK-004` 임시 DB·artifact·resume 회귀 |
+| `OSS-EVM-UTIL-001` | ABI·주소 utility | `ADOPT`: `eth-abi`, `eth-utils`; exact version과 간접 license는 `TASK-001`에서 lock | DEX·AUTH·FREEZE decode 회귀 |
+| `OSS-V1-ANALYZER-001` | DEX·AUTH·FREEZE 분석 | `BUILD`: 세 fixture에 한정한 evidence-first analyzer; 공식 ABI·배포 자료는 provenance와 함께 `BORROW` | 세 fixture exact-match와 오류 주입 |
 | `OSS-PATH-001` | 다단계 경로 | GraphSense model·API 우선 조사 | 작은 공개 주소 graph와 PATH fixture |
 | `OSS-LABEL-001` | 라벨·클러스터 | GraphSense TagStore·Spellbook 비교 | 출처·신뢰도·주소 명시 fixture |
 | `OSS-VIZ-001` | 그래프·타임라인 | GraphSense Dashboard 설계 조사 | 80-column CLI와 graph export 경계 |
@@ -398,8 +403,30 @@ ML 후보는 baseline 대비 재현 가능한 개선이 있을 때만 `ADOPT / W
 | `OSS-ML-LABEL-001` | AI 라벨 후보 | 확정 라벨과 분리한 `BORROW` 후보 | 주소별 출처·시점·confidence audit |
 | `OSS-ML-DEFI-001` | DeFi 사건·공격 분류 | P3 `DEFER` | 문제은행 사건 mapping과 fixture 후보 |
 
-초기 조사는 후보 발견과 1차 screening이다. 이 표의 “비교 필요”와 “미조사”가
-닫히기 전 해당 기능을 직접 구현하지 않는다.
+P0/V1 구현에 필요한 첫 다섯 결정은 문서 기준선으로 닫혔다. 이는 live API
+허용이나 dependency 설치 승인이 아니다. PATH·LABEL·VIZ·BTC·XCHAIN·ML·
+전문 기능은 해당 단계 승격 전까지 `deferred`이며 직접 구현하지 않는다.
+
+### 9.1 결정 근거
+
+| 그룹 | 확정 판단 | 이유 |
+|:---|:---|:---|
+| `OSSR-P0-COLLECT` | 완료 | 세 fixture가 요구하는 raw request hash·fallback·historical state는 작은 HTTPX port가 가장 직접적이며 Ethereum ETL 전체 dependency가 필요하지 않음 |
+| `OSSR-P0-CORE` | 완료 | 공개 Analysis I/O·SQLite Schema·artifact 계약이 SCAN 고유 경계이고 GraphSense 전체 backend는 V1 운영 범위를 초과함 |
+| `OSSR-P1-DECODE` 중 V1 | 완료 | 범용 ABI primitive는 채택하되 DEX·AUTH·FREEZE 판정은 fixture와 evidence ID에 맞춰 좁게 구현 |
+| PATH·LABEL·VIZ | deferred | 현재 V1 세 vertical slice의 완료를 차단하지 않으며 별도 confirmed fixture가 없음 |
+| BTC·XCHAIN·JUDGMENT·SPECIAL | deferred | P2/P3 승격 조건과 fixture가 아직 충족되지 않음 |
+
+### 9.2 라이선스·고정 경계
+
+- 프로젝트 작성물은 MIT License를 사용한다.
+- MIT는 제3자 repository·API 응답·공식 문서·fixture 원본을 재허가하지 않는다.
+- `OSS-BLOCKSCOUT` server source는 custom license이므로 복사·결합하지 않는다.
+- BlockSci runtime과 GPL code 결합은 V1에서 제외한다.
+- `eth-abi`, `eth-utils`의 실제 선택 version과 transitive license는
+  `uv.lock` 생성 전에 다시 확인한다.
+- 고정 commit이 있는 후보도 `BORROW` 참고 범위를 넘어 사용하면 별도
+  dependency·license Gate를 다시 통과한다.
 
 ## 10. 구현 전 Gate
 
@@ -410,17 +437,17 @@ ML 후보는 baseline 대비 재현 가능한 개선이 있을 때만 `ADOPT / W
 - [x] Hugging Face 모델·데이터셋·Space 9개의 초기 후보를 분리 기록했다.
 - [x] 결정 상태와 `ADOPT / WRAP / BORROW / BUILD / REJECT` 의미를 정의했다.
 - [x] AI 결과를 확정 증거와 분리하고 ML Screening Gate를 정의했다.
-- [ ] P0·V1 관련 `OSS-*` 결정을 fixture 증거와 함께 확정한다.
+- [x] P0·V1 관련 `OSS-*` 재사용·구현 결정을 confirmed fixture 기준으로 확정한다.
 - [ ] 공식 규정에서 OSS·사전 제작 도구·외부 API 사용 범위를 확인한다.
 - [ ] 채택 dependency의 고정 버전·license notice·설치 명령을 확정한다.
-- [ ] Backlog 각 구현 작업의 관련 `OSS-*` 결정을 연결한다.
+- [x] Backlog 구현 작업이 이 문서의 기능별 `OSS-*` Gate를 참조한다.
 
 ### 10.2 기능별 완료
 
-- [ ] `OSSR-P0-COLLECT`
-- [ ] `OSSR-P0-CORE`
+- [x] `OSSR-P0-COLLECT`
+- [x] `OSSR-P0-CORE`
 - [ ] `OSSR-P1-PATH`
-- [ ] `OSSR-P1-DECODE`
+- [x] `OSSR-P1-DECODE`의 V1 DEX·AUTH·FREEZE 범위
 - [ ] `OSSR-P1-LABEL`
 - [ ] `OSSR-P1-VIZ`
 - [ ] `OSSR-P2-BTC`
@@ -428,8 +455,10 @@ ML 후보는 baseline 대비 재현 가능한 개선이 있을 때만 `ADOPT / W
 - [ ] `OSSR-P2-JUDGMENT`
 - [ ] `OSSR-P3-SPECIAL`
 
-P0·V1 구현 시작에는 P0·V1 관련 조사만 필수다. P2·P3 조사는 해당 단계
-승격 전까지 `deferred`로 둘 수 있다.
+P0·V1 구현 시작에는 위 세 완료 그룹만 필수다. exact dependency version과
+설치 재현은 `TASK-001`, 실제 adapter·decoder 정확성은 `TASK-003`과
+`TASK-006`~`TASK-008`에서 검증한다. 나머지 그룹은 해당 단계 승격 전까지
+`deferred`다.
 
 ## 11. 365 글로벌 평가 기준
 
@@ -451,6 +480,7 @@ P0·V1 구현 시작에는 P0·V1 관련 조사만 필수다. P2·P3 조사는 �
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - API·provider 제약과 provenance
 - **Technical_Specs**: [P0·V1 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 후보가 충족해야 할 규범 계약
 - **Technical_Specs**: [기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - 채택·보류 기술 재검토 대상
+- **Technical_Specs**: [SQLite 논리 DB Schema](./01_DB_SCHEMA.md) - `OSS-P0-CORE-001`의 저장·artifact 경계
 - **Technical_Specs**: [Analysis I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - wrapper 출력·증거 참조 계약
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - 구현 전 OSSR Gate
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - 문서 완료·구현 승인 분리

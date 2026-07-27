@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-27 00:54
-> Status: Approved 1.0
+> Last Updated: 2026-07-27 15:52
+> Status: Approved 1.1 · Document Completion Gate Passed
 
 ## 1. 문서 목적
 
@@ -19,11 +19,11 @@
 
 ## 2. 기준선과 진행률
 
-### 2.1 2026-07-26 기준 산출물
+### 2.1 2026-07-27 문서 완료 기준 산출물
 
 | 구분 | 현재 수량 | 상태 |
 |:---|---:|:---|
-| 상위 Markdown 문서 | 23 | Approved 1, Confirmed 1, UI Gate Passed 3, Draft 18 |
+| 상위 Markdown 문서 | 25 | 승인·확정 기준선과 목적이 명시된 Draft를 포함 |
 | confirmed fixture 패키지 | 3 | DEX·AUTH·FREEZE `confirmed / 0.2` |
 | 후보 fixture | 5 | DOC-M3에서 Deferred, 단계별 승격 조건 기록 |
 | JSON Schema | 6 | fixture 3종·analysis 3종 |
@@ -36,10 +36,10 @@
 
 | 관점 | 가안 | 근거 |
 |:---|---:|:---|
-| 문서 구조·연결 | 95% | 5개 Layer, 메타데이터, Related Documents, 상대 링크 정합 |
-| P0·V1 핵심 설계 내용 | 85% | 문제·우선순위·요구사항·Schema·UI·기술·Backlog·QA 작성 |
-| 문서 승인·확정 | 40% | 핵심 문서 다수가 Draft 또는 Approval Pending |
-| 전체 대회 준비 문서 | 65% | 공식 규정·운영·제출·QA checklist·잔여 fixture 방침 미완 |
+| 문서 구조·연결 | 100% | 5개 Layer, 메타데이터, Related Documents, 상대 링크 검증 |
+| P0·V1 핵심 설계 내용 | 100% | 문제·우선순위·요구사항·Schema·UI·기술·DB·Backlog·QA 작성 |
+| 문서 승인·확정 | 100% | Draft 유지 사유와 구현 중 결정 항목을 포함해 사용자 승인 |
+| 공식 정보 충족 | 진행 중 | 미공개 규정은 `unclear`·Active Watch로 유지 |
 
 백분율은 작업량 예측을 위한 가안이며 문서 상태를 대신하지 않는다. 완료 판정은
 섹션 7의 체크박스로만 한다.
@@ -50,10 +50,10 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) | Draft | 공식 규정·등록·팀·제출 사실 반영 후 승인 |
-| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 · Challenge Pack Candidate 1 | 기본 30문항 유지, Challenge 10문항 중 대표 3~4개 fixture 승격 시점 결정 |
-| [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) | Draft 1 · Awaiting Official Information | 2026-07-27 등록 페이지 공개 후 세부 규정 재확인 |
-| [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) | Draft 1 | 규정 위험 점수와 구현 전제 갱신 후 승인 |
+| [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) | Draft · Approved Baseline | 공식 규정 변경 시에만 영향 항목 갱신 |
+| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 · Approved Baseline | 기본 30문항 유지, 추가 fixture는 단계별 Deferred |
+| [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) | Baseline Confirmed 1.0 · Active Watch | Notification·이메일·공식 Rules 공개 시 Intake 실행 |
+| [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) | Draft 1 · Approved Baseline | 공식 규정 변경 시 위험 점수 갱신 |
 
 ### 3.2 UI Screens
 
@@ -72,22 +72,22 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Draft 1 | 공식 규정·LICENSE·실제 dependency 반영 시점 분리 후 승인 |
-| [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) | Draft | 규정·provider plan·rate limit·최종 adapter 우선순위 갱신 |
+| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Draft 1 · Approved Baseline | 실제 dependency·명령은 `TASK-001`에서 동기화 |
+| [SQLite 논리 DB Schema](../03_Technical_Specs/01_DB_SCHEMA.md) | Approved 1.0 · DDL Deferred | 정확한 DDL·migration·backup은 `TASK-004` |
+| [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) | Draft · Approved Baseline | 규정·provider plan·rate limit은 live 사용 전 갱신 |
 | [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) | Confirmed 0.1 | fixture schema 변경 요구가 생길 때만 개정 |
-| [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) | Draft 1 | 공식 규정과 source policy 반영 후 승인 |
-| [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) | Draft 1 | LICENSE·정확한 버전·저장 세부는 구현 전/중 결정으로 분리 |
-| [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Draft 1 | 문서 계약 0.1 승인, 생성 Schema diff는 구현 후 검증 |
-| [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) | Draft 1 · Initial Survey | P0·V1 `OSS-*` 결정과 fixture bake-off 완료 |
+| [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) | Draft 1 · Approved Baseline | 공식 규정 변경은 source policy로 역반영 |
+| [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) | Draft 1 · Approved Baseline | 정확한 버전은 구현 중 결정 |
+| [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Draft 1 · Contract Approved 0.1 | 생성 Schema diff는 구현 후 검증 |
+| [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) | Approved 1.0 · P0/V1 Closed | 이후 단계 그룹은 Deferred |
 | [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) | Draft 1 · Rules-Gated | 역할·Queue·검증·수동 제출 승인, 구현은 `TASK-010` 별도 승인 |
-| `01_DB_SCHEMA.md` | 미작성 | TD-007의 SQLite 결정을 논리 엔티티·관계·보존 경계로 문서화; 정확한 DDL은 구현 시 결정 |
 
 ### 3.4 Logic Progress
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [P0·V1 구현 Backlog](./00_BACKLOG.md) | Draft 1 · Approval Pending | 문서 Gate 통과 후 범위 승인; 구현은 별도 승인 |
-| 이 문서 | Approved 1.0 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
+| [P0·V1 구현 Backlog](./00_BACKLOG.md) | Draft 1 · Scope Approved | 구현은 별도 승인, 모든 작업 ToDo 유지 |
+| 이 문서 | Approved 1.1 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
 | `01_EXECUTION_PLAN.md` | 조건부 미작성 | 구현 일정이 필요할 때 Backlog를 날짜·담당자로 전환 |
 | `02_ROADMAP_BACKLOG_SYNC.md` | 조건부 미작성 | 구현 시작 전 Roadmap↔Backlog 상태 동기화 규칙 작성 |
 
@@ -95,10 +95,11 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Draft 1 · Fixture Scope Closed | 후보 5개 Deferred 결정; 단계별 승격 조건 유지 |
-| [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Draft 1 · Approval Pending | 24개 시나리오 범위 승인 |
-| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Draft 1 · Approval Pending | 24개 시나리오 실행 시점·결과 기록 형식 승인 |
-| [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Draft 1 · Approval Pending | 기존 24개와 분리된 `TASK-010` 전용 6개 시나리오 승인 |
+| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.0 · Fixture Scope Closed | 후보 5개 Deferred 결정; 단계별 승격 조건 유지 |
+| [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Draft 1 · Scope Approved | 구현 후 실제 실행 결과 기록 |
+| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved Baseline | 문서 Gate 통과, 구현 QA는 미실행 유지 |
+| [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Draft 1 · Scope Approved | `TASK-010` 별도 구현 승인과 Rules 필요 |
+| [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | Pass | 문서 검증 증거·Known Issue·승인 경계 |
 | DEX·AUTH·FREEZE fixture | Confirmed | V1 기준값으로 동결, 정답 임의 변경 금지 |
 
 ## 4. 표준 문서명과 기존 문서의 대응
@@ -108,17 +109,17 @@ solmate Gate가 요구하는 표준 문서와 이 저장소의 도메인 문서�
 
 | 표준 문서 | 현재 대응 문서 | 판단 |
 |:---|:---|:---|
-| `01_VISION_CORE.md` | 참가·분석 도구 준비 전략 | 대체 승인 필요 |
-| `02_LEAN_CANVAS.md` | 없음 | 공식 평가에 Business Plan이 포함될 때 작성 |
-| `03_PRODUCT_SPECS.md` | 예상문제 은행 + P0·V1 요구사항 | 대체 승인 필요 |
+| `01_VISION_CORE.md` | 참가·분석 도구 준비 전략 | 도메인 문서 대체 승인 |
+| `02_LEAN_CANVAS.md` | 없음 | N/A 승인 — 현재 목표는 대회 분석 도구 준비; 공식 제출 요건 또는 사업화 트랙에서 작성 |
+| `03_PRODUCT_SPECS.md` | 예상문제 은행 + P0·V1 요구사항 | 도메인 문서 조합 대체 승인 |
 | `00_ROADMAP.md` | 이 문서 | 충족 |
-| `02_QA_CHECKLIST.md` | P0·V1 QA Checklist | 충족, 범위 승인 대기 |
-| `01_DB_SCHEMA.md` | 미작성 | 필수 작성 — SQLite 논리 Schema는 Document Gate 전, 정확한 DDL·migration은 `TASK-004`에서 확정 |
+| `02_QA_CHECKLIST.md` | P0·V1 QA Checklist | 충족, 범위 승인 완료 |
+| `01_DB_SCHEMA.md` | SQLite 논리 DB Schema | 충족 — 정확한 DDL·migration은 `TASK-004`에서 확정 |
 | `02_API_SPECS.md` | 데이터 소스 등록부·Analysis I/O Schema | 외부 제공 API가 생길 때 별도 작성 |
 
 `VISION_CORE`·`PRODUCT_SPECS`는 이름만 맞추기 위해 중복 생성하지 않는다.
-기존 문서 대체 여부를 사용자가 승인하지 않거나 공식 제출에서 해당 파일이
-필요하면 표준 문서로 분리한다.
+사용자는 기존 도메인 문서의 대체를 문서 완료 기준선으로 승인했다. 공식
+제출에서 정확한 파일명이 필요해질 때만 표준 파일로 분리한다.
 
 ## 5. 문서 완료 Milestone
 
@@ -134,19 +135,25 @@ solmate Gate가 요구하는 표준 문서와 이 저장소의 도메인 문서�
 완료 기록: 사용자 승인과 PR #9 병합(`c115f7d`, 2026-07-26)을 기준으로
 `Approved 1.0` 상태를 확정했다.
 
-### [ ] DOC-M2 — 공식 규정·참가 운영 확정
+### [x] DOC-M2 — 공식 규정·참가 운영 기준선 확정
 
 - [x] `03_SCAN_2026_RULES_REGISTER.md`를 작성한다.
 - [x] 공식 원문 URL·게시 시각·조회 시각·변경 이력을 기록한다.
 - [x] API·자동화·AI·사전 제작 도구·상용 서비스 규정을
       `allowed / restricted / unclear`로 분리한다.
-- [ ] 등록 마감·팀 구성·본인 확인·예선·본선 일정을 기록한다.
-- [ ] 지원 체인·제공 데이터·정답 제출 형식·증거 제출 형식을 기록한다.
+- [x] 등록·팀·본인 확인·예선·본선 항목을 확인값 또는 `unclear`로 기록한다.
+- [x] 지원 체인·제공 데이터·정답·증거 제출 형식을 확인값 또는 `unclear`로 기록한다.
 - [x] 불명확한 항목은 추정하지 않고 문의 대상·회신 상태를 기록한다.
-- [ ] 규정 결과를 준비 전략·문제은행·우선순위·소스 등록부·요구사항에 역반영한다.
+- [x] 미공개 규정은 기존 문서의 `unclear`·비활성 Gate와 일치함을 확인한다.
+- [x] Notification Intake와 공식 정보 Active Watch 절차를 기록한다.
 
 완료 조건: 규정상 사용할 수 있는 데이터·도구·팀·제출 범위를 문서만으로
 설명할 수 있고, 미확정 항목에는 담당 확인 경로가 있다.
+
+완료 기록: 2026-07-27 등록·팀 생성 작동과 Challenge 잠금, Notification·
+세부 Rules 부재를 기록했다. 규정 내용을 임의 확정하지 않고 `unclear`와
+기능 비활성화를 유지한다. 이후 공지는 DOC-M2를 다시 여는 것이 아니라 Active
+Watch 변경으로 처리한다.
 
 ### [x] DOC-M3 — QA·fixture 범위 마감
 
@@ -161,49 +168,57 @@ solmate Gate가 요구하는 표준 문서와 이 저장소의 도메인 문서�
 결정으로 바뀌고, 실행용 QA checklist가 존재한다.
 
 완료 기록: confirmed fixture 3개는 V1 기준선으로 유지하고 후보 5개는 모두
-`Deferred`로 결정했다. 24개 QA 시나리오는 `Approval Pending / Not Executed`로
+`Deferred`로 결정했다. 24개 QA 시나리오는 `Scope Approved / Not Executed`로
 기록하고 작업별 실행 시점을 분리했다.
 
-### [ ] DOC-M4 — Draft 승인·문서 패키지 마감
+### [x] DOC-M4 — Draft 승인·문서 패키지 마감
 
-- [ ] Concept 문서의 Draft 상태와 미결정 사항을 검토한다.
-- [ ] Technical 문서의 규범 부분과 구현 중 결정 부분을 분리한다.
-- [ ] Backlog와 QA 시나리오의 문서 범위를 승인한다.
-- [ ] P0·V1 오픈소스 사전조사의 `OSS-*` 결정과 구현 전 Gate를 확정한다.
-- [ ] `01_DB_SCHEMA.md`에 SQLite 논리 엔티티·관계·보존·mutation 경계를 기록한다.
-- [ ] 프로젝트 루트 `README.md`에 목적·문서 지도·검증 명령을 작성한다.
-- [ ] Project LICENSE를 코드 공개 전에 결정한다.
-- [ ] 모든 Markdown 메타데이터·Related Documents·상대 링크를 검증한다.
-- [ ] 중복되거나 이미 완료된 “다음 단계” 문구를 현재 상태로 갱신한다.
-- [ ] 문서 변경 이력과 잔여 Known Issue를 기록한다.
+- [x] Concept 문서의 Draft 상태와 미결정 사항을 승인 기준선으로 검토한다.
+- [x] Technical 문서의 규범 부분과 구현 중 결정 부분을 분리한다.
+- [x] Backlog와 QA 시나리오의 문서 범위를 승인한다.
+- [x] P0·V1 오픈소스 사전조사의 `OSS-*` 결정과 구현 전 Gate를 확정한다.
+- [x] `01_DB_SCHEMA.md`에 SQLite 논리 엔티티·관계·보존·mutation 경계를 기록한다.
+- [x] 프로젝트 루트 `README.md`에 목적·문서 지도·검증 명령을 작성한다.
+- [x] Project LICENSE를 MIT로 결정하고 제3자 자료 경계를 기록한다.
+- [x] 모든 Markdown 메타데이터·Related Documents·상대 링크를 검증한다.
+- [x] 중복되거나 이미 완료된 “다음 단계” 문구를 현재 상태로 갱신한다.
+- [x] 문서 변경 이력과 잔여 Known Issue를 기록한다.
 
 완료 조건: 핵심 문서가 승인 상태이거나, Draft 유지 사유와 결정 시점이
 Roadmap에 명시되어 있다.
 
-### [ ] DOC-M5 — Document Completion Gate
+완료 기록: Draft는 구현 결과를 거짓으로 확정하지 않기 위해 유지하되 문서
+입력 기준선으로 승인했다. 정확한 dependency version·DDL·실측값은 담당
+Backlog로 분리했다.
 
-- [ ] `DOC-M1`~`DOC-M4`가 완료되었다.
-- [ ] HTML UI Preview Gate와 UI-First Gate가 계속 통과 상태다.
-- [ ] Pre-Code Technical Brief의 데이터·API·상태·acceptance 기준이 유효하다.
-- [ ] 공식 규정 제한이 Backlog·QA·source policy에 반영되었다.
-- [ ] P0·V1 오픈소스 `OSS-*` 결정과 fixture 검증 계획이 구현 전에 확정되었다.
-- [ ] 문서·Schema·fixture 검증이 모두 통과한다.
-- [ ] Backlog의 `TASK-001`~`TASK-009`가 모두 `ToDo` 상태로 유지된다.
+### [x] DOC-M5 — Document Completion Gate
+
+- [x] `DOC-M1`~`DOC-M4`가 완료되었다.
+- [x] HTML UI Preview Gate와 UI-First Gate가 계속 통과 상태다.
+- [x] Pre-Code Technical Brief의 데이터·API·상태·acceptance 기준이 유효하다.
+- [x] 공식 규정 미확정 상태가 Backlog·QA·source policy에 반영되었다.
+- [x] P0·V1 오픈소스 `OSS-*` 결정과 fixture 검증 계획이 구현 전에 확정되었다.
+- [x] 문서·Schema·fixture 검증이 모두 통과한다.
+- [x] Backlog의 `TASK-001`~`TASK-009`가 모두 `ToDo` 상태로 유지된다.
 
 완료 조건: 사용자가 문서 완료를 승인하면 이 Gate는 닫힌다. `TASK-001`
 시작은 이 Gate와 별개의 후속 승인으로만 진행하며, 구현 보류는 문서 완료를
 막지 않는다.
+
+완료 기록: 사용자는 2026-07-27에 권장 순서 1~8의 별도 승인 없는 진행을
+승인했다. 이 승인은 문서 완료만 닫으며 `TASK-001` 구현 시작이나 live
+API·AI·agent 활성화를 승인하지 않는다.
 
 ## 6. 일정 전략
 
 | 순서 | 시점 | 작업 | 차단 관계 |
 |:---:|:---|:---|:---|
 | 1 | 완료 (2026-07-26) | `DOC-M1` Roadmap 승인 | 이후 문서 순서의 기준 |
-| 2 | 2026-07-27 등록 시작 후 | `DOC-M2` 공식 규정 Register | 규정 정보 접근 필요 |
-| 3 | 규정 1차 확인 직후 | 준비 전략·우선순위·소스·요구사항 동기화 | DOC-M2 의존 |
+| 2 | 완료 (2026-07-27) | `DOC-M2` 공식 규정 기준선·Active Watch | 미공개 항목은 `unclear` 유지 |
+| 3 | 상시 | Notification Intake·영향 문서 동기화 | 새 공식 정보가 있을 때만 실행 |
 | 4 | 완료 (2026-07-26) | `DOC-M3` QA checklist·fixture 방침 | DOC-M2와 독립 완료 |
-| 5 | M2·M3 이후 | `DOC-M4` Draft 승인·README·LICENSE | 규정·fixture 결정 의존 |
-| 6 | 모든 문서 검증 후 | `DOC-M5` Document Completion Gate | M1~M4 의존 |
+| 5 | 완료 (2026-07-27) | `DOC-M4` DB·OSS·README·LICENSE·Draft 승인 | M2 기준선·M3 완료 |
+| 6 | 완료 (2026-07-27) | `DOC-M5` Document Completion Gate | M1~M4 완료 |
 | 7 | 별도 승인 후 | Backlog `TASK-001` | Document Gate 의존 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.
@@ -217,26 +232,26 @@ Rules-gated 운영 트랙이다. 관련 구현은 `TASK-010`으로만 추적하�
 AI·agent·자동화·외부 문제 데이터 전송 규정과 Preview 사용자 확인, 별도
 구현 승인을 모두 통과해야 시작한다.
 
-공식 등록 페이지가 열리지 않거나 세부 규정이 게시되지 않으면 `DOC-M2`를
-완료로 표시하지 않는다. 이 경우 Roadmap에는 `Blocked`가 아니라
-`Awaiting Official Information`으로 기록하고, 규정과 독립적인 M3 작업을
-진행한다.
+세부 규정이 게시되지 않아도 “미확정 상태·확인 경로·기능 비활성화”가
+문서화되면 DOC-M2 기준선은 완료할 수 있다. 이후 상태는 `Blocked`가 아니라
+Rules Register의 `Active Official-Information Watch`로 관리하며 DB·README·
+offline 검증 같은 독립 작업을 막지 않는다.
 
 ## 7. Document Completion Gate
 
 ### 7.1 필수 통과
 
-- [ ] 공식 규정·등록·팀·제출 정보가 출처와 함께 기록됨
-- [ ] API·자동화·AI·사전 제작 도구 허용 범위가 상태별로 기록됨
-- [ ] 핵심 Concept·Technical 문서 승인 또는 Draft 유지 사유 기록
+- [x] 공식 규정·등록·팀·제출 정보가 확인값 또는 `unclear`와 출처로 기록됨
+- [x] API·자동화·AI·사전 제작 도구 허용 범위가 상태별로 기록됨
+- [x] 핵심 Concept·Technical 문서 승인 또는 Draft 유지 사유 기록
 - [x] Roadmap·Backlog·QA checklist·QA scenarios 연결
 - [x] confirmed fixture 3개와 후보 5개의 처리 방침 확정
-- [ ] `01_DB_SCHEMA.md`에 SQLite 논리 엔티티·관계·보존·mutation 경계 기록
-- [ ] 프로젝트 README 존재
-- [ ] Project LICENSE 결정 시점 확정
-- [ ] metadata·Related Documents·상대 링크 검증 통과
+- [x] `01_DB_SCHEMA.md`에 SQLite 논리 엔티티·관계·보존·mutation 경계 기록
+- [x] 프로젝트 README 존재
+- [x] Project LICENSE를 MIT로 확정, 제3자 자료 제외 경계 기록
+- [x] metadata·Related Documents·상대 링크 검증 통과
 - [x] fixture·analysis Schema 검증 `PASS 3`
-- [ ] 잔여 TODO·Known Issue·구현 중 결정 항목 분리
+- [x] 잔여 TODO·Known Issue·구현 중 결정 항목 분리
 
 ### 7.2 구현 전까지 보류 가능
 
@@ -258,7 +273,7 @@ AI·agent·자동화·외부 문제 데이터 전송 규정과 Preview 사용자
 | 후보 fixture 무기한 TBD | 준비 범위와 완료율 왜곡 | M3에서 Confirm/Deferred/Drop 강제 |
 | 표준 문서 중복 작성 | 서로 다른 진실 원본 발생 | 섹션 4 대응표와 대체 승인 |
 | 문서 완료와 구현 승인 혼동 | 사용자의 우선순위 이탈 | M5에서 별도 승인 강제 |
-| 루트 README·LICENSE 부재 | 공개 저장소 진입·재사용 불명확 | M4에서 README 작성, LICENSE 사용자 결정 |
+| 루트 README·LICENSE 부재 | 해소 | README와 MIT License 추가, 제3자 자료 권리 분리 |
 | 기존 오픈소스 조사 없이 직접 구현 | 시간 낭비·품질·라이선스 위험 | 기능별 `OSSR-*` 조사와 `OSS-*` 결정 Gate |
 | Web Workbench 범위가 V1을 잠식 | Python 코어·Schema·OSS 검증 지연 | 정적 read-only Preview만 허용, Backlog·Gate·기술 스택 미변경 |
 | Agentic 운영이 AI 의존 코어가 됨 | 규정 변경 시 전체 도구 사용 불가 | Python CLI 코어 분리, human·CLI fallback, `TASK-010` 비차단 |
@@ -301,3 +316,4 @@ AI·agent·자동화·외부 문제 데이터 전송 규정과 Preview 사용자
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 24개 수용·회귀 기준
 - **QA_Validation**: [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 문서·구현·회귀 실행 Gate
 - **QA_Validation**: [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - 별도 6개 운영 QA
+- **QA_Validation**: [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) - DOC-M5 검증 결과와 후속 경계
