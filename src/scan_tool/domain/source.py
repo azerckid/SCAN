@@ -94,7 +94,7 @@ class SourceResponse:
     payload: SourcePayload
     attempts: tuple[SourceAttempt, ...]
     fallback_from: tuple[str, ...]
-    cache_status: Literal["not_checked"] = "not_checked"
+    cache_status: Literal["not_checked", "hit", "miss"] = "not_checked"
 
 
 @dataclass(frozen=True, slots=True)
