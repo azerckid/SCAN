@@ -1,7 +1,7 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-28 01:34
-> Status: Draft · TASK-007 AUTH Offline Replay Applied · Rules Unclear
+> Last Updated: 2026-07-28 01:59
+> Status: Draft · TASK-008 FREEZE Offline Replay Applied · Rules Unclear
 
 ## 1. 문서 목적
 
@@ -288,6 +288,22 @@
 - state 또는 trace 누락은 `partial`, raw 정합 위반은 `failed`로 처리하고,
   source가 제공하지 않는 theft/phishing 귀속은 `not_assessed`로 유지한다.
 
+## 8.5 TASK-008 FREEZE source 기준선
+
+- `DS-EVM-RPC-ARCHIVE`는 blacklist·unblacklist event와 네 historical
+  `isBlacklisted` state를 제공하는 scoring source다.
+- `DS-EXPLORER-EVM`은 두 transaction의 method·대상 주소를 확인하는
+  cross-check source다.
+- `DS-OSINT-WEB`은 Circle의 주소 비특정 정책·대응 맥락,
+  `DS-SANCTIONS-PUBLIC`은 OFAC의 주소 특정 지정·해제 맥락을 보존한다.
+  어느 쪽도 현재 제재나 범죄 의도의 자동 판정 source가 아니다.
+- `DS-EVM-RPC-PUBLIC`은 transaction·receipt 재확인에 사용하는 supporting
+  source이며 archive state를 대체하지 않는다.
+- reviewed `raw-replay.json`은 source·provider·조회 시각·raw hex·고정
+  인터페이스 provenance를 보존한다. analyzer는 live endpoint를 호출하지 않는다.
+- historical state나 한 전이가 없으면 `partial`, call·event·state가
+  충돌하면 `failed`다. global pause는 해당 fixture에서 `applicable=false`다.
+
 ## 9. 다음 단계
 
 1. confirmed fixture 3개의 source 기준선을 유지한다.
@@ -295,8 +311,8 @@
 3. live provider 구성 전 공식 plan·rate limit·fallback을 재확인한다.
 4. TASK-004 cache·attempt 저장 기준선을 TASK-005 CLI composition root에 주입했다.
 5. live source가 제한되면 offline fixture·cache·human fallback을 사용한다.
-6. TASK-006 DEX와 TASK-007 AUTH offline replay 기준선을 유지한다.
-7. 다음은 별도 승인 후 TASK-008 FREEZE source 경계를 연결한다.
+6. TASK-006~008 세 offline replay source 기준선을 유지한다.
+7. 다음은 TASK-009에서 세 source 경계와 failure matrix를 통합 회귀한다.
 
 ## 10. Related Documents
 
@@ -313,3 +329,4 @@
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - source policy 차단·CLI 오류·exit code 검증
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - reviewed raw source·재조회·정합 검증
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - public/archive/trace/explorer raw source·재조회·정합 검증
+- **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - public/archive/explorer/issuer/OFAC source·재조회·정합 검증

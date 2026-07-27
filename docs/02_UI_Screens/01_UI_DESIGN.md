@@ -1,7 +1,7 @@
 # SCAN 2026 CLI Terminal UI Design
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-28 01:34
-> Status: Approved 1.3 · UI-First Gate Passed · TASK-007 AUTH Applied
+> Last Updated: 2026-07-28 01:59
+> Status: Approved 1.4 · UI-First Gate Passed · TASK-008 FREEZE Applied
 
 ## 1. 문서 목적
 
@@ -199,6 +199,9 @@ TASK-006 DEX replay는 Preview의 세 raw 값을 실제 confirmed fixture에서
 TASK-007 AUTH는 확정 결과와 조사 범위를 분리해 `SCOPE`에
 `NOT ASSESSED theft_or_phishing_attribution`을 표시한다. `false` claim과
 uint256 raw 값은 축약으로 의미가 사라지지 않게 유지한다.
+TASK-008 FREEZE는 두 온체인 전이를 confirmed로 표시하고, 발행사·규제 맥락과
+현재 상태 미평가를 `EXTERNAL CONTEXT`로 분리한다. 주소 blacklist를 global
+pause로 보이게 하지 않는다.
 
 ### 7.6 Partial
 
@@ -398,3 +401,4 @@ data다. 실제 측정이나 대회 상태로 주장하지 않는다.
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - terminal·접근성·출력 채널 기준
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - DEX renderer·partial·resume 대조
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - AUTH renderer·scope·partial·resume 대조
+- **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - FREEZE renderer·context·partial·resume 대조

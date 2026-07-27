@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 01:34
-> Status: Approved 1.7 · TASK-001~007 Done
+> Last Updated: 2026-07-28 01:59
+> Status: Approved 1.8 · TASK-001~008 Done
 
 ## 1. 문서 목적
 
@@ -9,7 +9,7 @@
 CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업으로
 전환한다.
 
-Backlog 범위와 `TASK-001`~`TASK-007` 구현은 별도로 승인되었다. 일곱 작업은
+Backlog 범위와 `TASK-001`~`TASK-008` 구현은 별도로 승인되었다. 여덟 작업은
 완료됐고 나머지 작업은 `ToDo`다. 후속 작업은 각각 별도 승인 전에는
 `In Progress`로 이동하지 않는다.
 
@@ -444,22 +444,22 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] FB-001을 CLI `SCOPE`·QA에 반영했다.
   - [x] 실제 AUTH 결과를 fixture·Schema 예제·문제은행 표현과 대조했다.
 
-### [ ] TASK-008: FREEZE vertical slice 구현
+### [x] TASK-008: FREEZE vertical slice 구현
 
-- Status: ToDo
+- Status: Done
 - Priority: V1 · High
 - Depends On: TASK-002, TASK-003, TASK-004
 - Requirement IDs: `REQ-P0-EVM-001`~`REQ-P0-EVM-008`,
   `REQ-V1-FREEZE-001`~`REQ-V1-FREEZE-008`
 - Atomic Tasks:
-  - [ ] blacklist·unBlacklist calldata와 event를 분리 수집한다.
-  - [ ] 네 historical block의 `isBlacklisted` 상태를 조회한다.
-  - [ ] false→true와 true→false 전이를 exact 정합한다.
-  - [ ] 주소 blacklist와 global pause를 구분한다.
-  - [ ] Circle·OFAC 공식 URL의 원문·주소 명시 여부를 context로 보존한다.
-  - [ ] 온체인 상태와 공식 맥락·현재 제재·범죄 의도를 분리한다.
-  - [ ] restricted 정책에서 네트워크 전 차단한다.
-  - [ ] `FX-EVM-FREEZE-001` regression을 자동화한다.
+  - [x] blacklist·unBlacklist calldata와 event를 분리 수집한다.
+  - [x] 네 historical block의 `isBlacklisted` 상태를 조회한다.
+  - [x] false→true와 true→false 전이를 exact 정합한다.
+  - [x] 주소 blacklist와 global pause를 구분한다.
+  - [x] Circle·OFAC 공식 URL의 원문·주소 명시 여부를 context로 보존한다.
+  - [x] 온체인 상태와 공식 맥락·현재 제재·범죄 의도를 분리한다.
+  - [x] restricted 정책에서 네트워크 전 차단한다.
+  - [x] `FX-EVM-FREEZE-001` regression을 자동화한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - FREEZE 문제 조건
   - [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - FREEZE vertical slice 선정
@@ -475,24 +475,25 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - Related QA Docs:
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-FREEZE-*`, `QA-RULE-*`
   - [FREEZE fixture](../05_QA_Validation/fixtures/FX-EVM-FREEZE-001/README.md) - confirmed 정답·증거
+  - [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - raw replay·상태 전이·context·partial·resume 증거
 - Implementation Preconditions:
-  - [ ] FREEZE 요구사항·fixture·source 문서를 다시 확인했다.
-  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
-  - [ ] HTML Preview의 rule blocked와 not assessed 표현을 확인했다.
-  - [ ] event·call·state·context 최소 필드를 확인했다.
-  - [ ] 입력 URL 수집 외 일반 OSINT 탐색을 하지 않는다.
-  - [ ] 규정 상태와 source policy를 실행 전에 확인한다.
-  - [ ] 현재 제재·범죄 의도를 자동 판정하지 않는다.
+  - [x] FREEZE 요구사항·fixture·source 문서를 다시 확인했다.
+  - [x] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
+  - [x] HTML Preview의 rule blocked와 not assessed 표현을 확인했다.
+  - [x] event·call·state·context 최소 필드를 확인했다.
+  - [x] 입력 URL 수집 외 일반 OSINT 탐색을 하지 않는다.
+  - [x] 규정 상태와 source policy를 실행 전에 확인한다.
+  - [x] 현재 제재·범죄 의도를 자동 판정하지 않는다.
 - Acceptance Criteria:
-  - [ ] false→true와 true→false 전이·네 state가 exact match한다.
-  - [ ] event·call·state·context가 서로 다른 evidence type이다.
-  - [ ] Circle과 OFAC의 주소 명시 여부가 각각 보존된다.
-  - [ ] current sanctions와 criminal intent가 `not_assessed`다.
-  - [ ] restricted 정책에서 source attempt와 network call이 0건이다.
-  - [ ] 한 전이만 확보하면 complete가 아니라 partial이다.
+  - [x] false→true와 true→false 전이·네 state가 exact match한다.
+  - [x] event·call·state·context가 서로 다른 evidence type이다.
+  - [x] Circle과 OFAC의 주소 명시 여부가 각각 보존된다.
+  - [x] current sanctions와 criminal intent가 `not_assessed`다.
+  - [x] restricted 정책에서 source attempt와 network call이 0건이다.
+  - [x] 한 전이만 확보하면 complete가 아니라 partial이다.
 - Document Sync Check:
-  - [ ] 실제 context source와 라이선스·조회 시각을 등록부와 대조했다.
-  - [ ] FREEZE 결과를 fixture·Schema 예제·UI와 동기화했다.
+  - [x] 실제 context source와 라이선스·조회 시각을 등록부와 대조했다.
+  - [x] FREEZE 결과를 fixture·Schema 예제·UI와 동기화했다.
 
 ### [ ] TASK-009: 통합 회귀·보안·문서 동기화 Gate
 
@@ -630,6 +631,8 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   ([검증 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md))
 - `TASK-007` — Approval·allowance·transferFrom 정합, 실패 거래·귀속 범위 분리
   ([검증 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md))
+- `TASK-008` — blacklist lifecycle 정합, global pause·공식 맥락·현재 상태 분리
+  ([검증 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md))
 
 ## 7. Backlog 승인 Gate
 
@@ -642,6 +645,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-005 CLI command·renderer·exit code 구현을 별도로 승인
 - [x] TASK-006 DEX vertical slice 구현을 별도로 승인
 - [x] TASK-007 AUTH vertical slice 구현을 별도로 승인
+- [x] TASK-008 FREEZE vertical slice 구현을 별도로 승인
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
@@ -652,6 +656,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-005 승인 후 `codex/task-005-cli-analyze` branch 사용
 - [x] TASK-006 승인 후 `codex/task-006-dex-vertical-slice` branch 사용
 - [x] TASK-007 승인 후 `codex/task-007-auth-vertical-slice` branch 사용
+- [x] TASK-008 승인 후 `codex/task-008-freeze-vertical-slice` branch 사용
 
 ## 8. 365 글로벌 평가 기준
 

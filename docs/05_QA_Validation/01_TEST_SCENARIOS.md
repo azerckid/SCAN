@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-28 01:34
-> Status: Approved 1.7 · TASK-007 AUTH Scope Passed
+> Status: Approved 1.8 · TASK-008 FREEZE Scope Passed
 
 ## 1. 문서 목적
 
@@ -19,10 +19,11 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 `QA-RULE-001`은 통과했고 `QA-CLI-004`, `QA-SOURCE-001`,
 `QA-SEC-001`은 vertical·통합 범위가 남아 `partial`이다. `TASK-006`으로
 `QA-DEX-001`, `QA-DEX-002`, 실제 DEX checkpoint를 포함한 `QA-CLI-004`가
-통과했다. `TASK-007`로 `QA-AUTH-001`, `QA-AUTH-002`가 통과했다.
+통과했다. `TASK-007`로 `QA-AUTH-001`, `QA-AUTH-002`가 통과했고,
+`TASK-008`로 `QA-FREEZE-001`, `QA-FREEZE-002`가 통과했다.
 
 현재 정의된 시나리오는 24개이며 승인 상태는 `Scope Approved`, 실행 상태는
-`17 pass / 2 partial / 5 not_executed`다. 작업별·통합 실행 시점은
+`19 pass / 2 partial / 3 not_executed`다. 작업별·통합 실행 시점은
 [QA Checklist](./02_QA_CHECKLIST.md)에서 관리한다.
 
 병렬 문제풀이 `TASK-010`의 6개 시나리오는
@@ -83,7 +84,7 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - package import와 `scan --help`가 성공한다.
   - Git 추적 파일에 `.scan/`, DB, cache, secret이 없다.
 - **Result**: `pass` — TASK-001 이후 모든 PR에서 공통 offline Gate를
-  재실행했고 TASK-007 기준 Ruff·101 tests·세 Schema 검증이 통과했다.
+  재실행했고 TASK-008 기준 Ruff·115 tests·세 Schema 검증이 통과했다.
 
 ### QA-SCHEMA-001 — 유효한 request·result round-trip
 
@@ -229,8 +230,9 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 - **Result**: `partial` — offline cache hit는 source 재호출 0건으로 통과했고,
   빈 cache의 offline transport도 attempt 0건과 `source_unavailable`, stage,
   `retryable=false`를 반환했다. TASK-005 CLI의 unavailable 경로는 exit code
-  `4`지만 실제 vertical analyzer의 failed/partial Result 연결은
-  `TASK-006`~`009`에서 재검증한다.
+  `4`다. DEX·AUTH·FREEZE의 offline complete·partial Result 연결은
+  통과했으며 세 vertical과 cache miss를 함께 묶는 최종 행렬은
+  `TASK-009`에서 재검증한다.
 
 ### QA-RETRY-001 — 제한 재시도
 
@@ -431,6 +433,10 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - current sanctions·범죄 의도는 `not_assessed` 또는 `not_scored`다.
   - global pause는 `applicable=false`다.
   - 상태 `complete`, 종료 코드 `0`이다.
+- **Result**: `pass` — reviewed raw replay에서 두 call·event와 네 archive
+  state를 독립 디코딩해 `false→true`, `true→false`를 재현했다. Circle
+  문서는 주소 비특정, OFAC action은 주소 특정 맥락으로 분리했고 현재 제재와
+  범죄 의도는 `not_assessed`, global pause는 `applicable=false`로 유지했다.
 
 ### QA-FREEZE-002 — 한 전이 누락과 restricted context
 
@@ -446,6 +452,10 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 1은 한 전이를 입증한 `partial`, 종료 코드 `3`이다.
   - 2는 네트워크 호출 0건이며 규정 차단이면 종료 코드 `5`다.
   - context 누락을 온체인 상태 누락이나 현재 제재 판정으로 바꾸지 않는다.
+- **Result**: `pass` — unblacklist transaction 제거는 blacklist 결과를
+  보존한 `partial/evidence_incomplete`, archive state 제거는
+  `partial/archive_required`였다. restricted source policy는 raw decode 전
+  `failed/rule_restricted`로 차단됐고 외부 호출은 0건이었다.
 
 ## 10. 통합·회귀 Gate
 
@@ -543,6 +553,7 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 - **QA_Validation**: [TASK-005 CLI 보고서](./09_TASK_005_CLI_REPORT.md) - command·renderer·exit code·CLI security 증거
 - **QA_Validation**: [TASK-006 DEX 보고서](./10_TASK_006_DEX_REPORT.md) - raw decode·정합·partial·resume 증거
 - **QA_Validation**: [TASK-007 AUTH 보고서](./11_TASK_007_AUTH_REPORT.md) - Approval·allowance·transferFrom·scope·resume 증거
+- **QA_Validation**: [TASK-008 FREEZE 보고서](./12_TASK_008_FREEZE_REPORT.md) - blacklist 생명주기·공식 맥락·partial·resume 증거
 - **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 병렬성·격리·독립 검증·수동 제출 QA
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - request·result 기준
 - **QA_Validation**: [DEX fixture](./fixtures/FX-SVC-DEX-001/README.md), [AUTH fixture](./fixtures/FX-EVM-AUTH-001/README.md), [FREEZE fixture](./fixtures/FX-EVM-FREEZE-001/README.md) - exact-match 원본
