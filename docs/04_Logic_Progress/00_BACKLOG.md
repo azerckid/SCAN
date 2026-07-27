@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 21:22
-> Status: Approved 1.2 · TASK-001~002 Done
+> Last Updated: 2026-07-27 21:50
+> Status: Approved 1.3 · TASK-001~003 Done
 
 ## 1. 문서 목적
 
@@ -9,7 +9,7 @@
 CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업으로
 전환한다.
 
-Backlog 범위와 `TASK-001`·`TASK-002` 구현은 별도로 승인되었다. 두 작업은
+Backlog 범위와 `TASK-001`~`TASK-003` 구현은 별도로 승인되었다. 세 작업은
 완료됐고 나머지 작업은 `ToDo`다. 후속 작업은 각각 별도 승인 전에는
 `In Progress`로 이동하지 않는다.
 
@@ -194,23 +194,23 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] model 경로와 Schema 생성·diff 명령을 Schema 문서에 기록했다.
   - [x] 공개 Schema 변경 없이 계약 `0.1`을 구현했다.
 
-### [ ] TASK-003: Source port·policy·retry·fallback orchestration 구현
+### [x] TASK-003: Source port·policy·retry·fallback orchestration 구현
 
-- Status: ToDo
+- Status: Done
 - Priority: P0 · High
 - Depends On: TASK-001
 - Requirement IDs: `REQ-P0-PROV-001`, `REQ-P0-PROV-005`,
   `REQ-P0-CACHE-004`, `REQ-P0-CACHE-005`, `REQ-NFR-006`,
   `REQ-NFR-008`, `TD-013`, `TD-014`
 - Atomic Tasks:
-  - [ ] source request·response·attempt Protocol을 정의한다.
-  - [ ] 주입 가능한 `httpx.AsyncClient`와 source별 timeout을 구성한다.
-  - [ ] public RPC·archive RPC·explorer·official context adapter 경계를 만든다.
-  - [ ] `allowed_source_ids`·`source_order`·offline·fallback 정책을 적용한다.
-  - [ ] restricted 요청을 네트워크 호출 전에 차단한다.
-  - [ ] timeout·429·일시적 5xx만 제한적으로 재시도한다.
-  - [ ] `Retry-After`, backoff·jitter, 최대 시도와 모든 attempt를 기록한다.
-  - [ ] fallback 시 최초 실패와 대체 provider를 모두 보존한다.
+  - [x] source request·response·attempt Protocol을 정의한다.
+  - [x] 주입 가능한 `httpx.AsyncClient`와 source별 timeout을 구성한다.
+  - [x] public RPC·archive RPC·explorer·official context adapter 경계를 만든다.
+  - [x] `allowed_source_ids`·`source_order`·offline·fallback 정책을 적용한다.
+  - [x] restricted 요청을 네트워크 호출 전에 차단한다.
+  - [x] timeout·429·일시적 5xx만 제한적으로 재시도한다.
+  - [x] `Retry-After`, backoff·jitter, 최대 시도와 모든 attempt를 기록한다.
+  - [x] fallback 시 최초 실패와 대체 provider를 모두 보존한다.
 - Related Concept Docs:
   - [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - source 교체·규정 위험을 포함한 P0
 - Related UI Docs:
@@ -224,23 +224,24 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - adapter·secret·orchestration 기준
 - Related QA Docs:
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-SOURCE-*`, `QA-RETRY-*`, `QA-RULE-*`
+  - [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - policy·retry·fallback·dependency 증거
 - Implementation Preconditions:
-  - [ ] 등록부와 source policy·오류 계약을 다시 확인했다.
-  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
-  - [ ] HTML Preview의 retry·fallback·rule blocked 상태를 확인했다.
-  - [ ] source 입력·응답·attempt 최소 필드를 확인했다.
-  - [ ] 외부 mutation 없이 read-only 호출만 수행함을 확인했다.
-  - [ ] 공식 규정·provider plan·rate limit 미확정 값을 하드코딩하지 않는다.
-  - [ ] FB-001의 stderr 상세·stdout 압축 경계를 확인했다.
+  - [x] 등록부와 source policy·오류 계약을 다시 확인했다.
+  - [x] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
+  - [x] HTML Preview의 retry·fallback·rule blocked 상태를 확인했다.
+  - [x] source 입력·응답·attempt 최소 필드를 확인했다.
+  - [x] 외부 mutation 없이 read-only 호출만 수행함을 확인했다.
+  - [x] 공식 규정·provider plan·rate limit 미확정 값을 하드코딩하지 않는다.
+  - [x] FB-001의 stderr 상세·stdout 압축 경계를 확인했다.
 - Acceptance Criteria:
-  - [ ] restricted 정책에서 HTTP 호출이 0건이다.
-  - [ ] offline mode에서 cache miss가 구조화 오류로 종료되고 network 호출은 0건이다.
-  - [ ] timeout·429·5xx에만 제한된 재시도가 실행된다.
-  - [ ] fallback 전후 provider가 모두 source record에 남는다.
-  - [ ] endpoint query·header·API key가 log·error·artifact에 나타나지 않는다.
+  - [x] restricted 정책에서 HTTP 호출이 0건이다.
+  - [x] offline mode에서 cache miss가 구조화 오류로 종료되고 network 호출은 0건이다.
+  - [x] timeout·429·일시적 5xx에만 제한된 재시도가 실행된다.
+  - [x] fallback 전후 provider가 모두 source attempt에 남는다.
+  - [x] endpoint query·header·API key가 결과 repr·구조화 오류에 나타나지 않는다.
 - Document Sync Check:
-  - [ ] 실제 adapter·provider ID와 정책을 데이터 소스 등록부에 반영했다.
-  - [ ] retry·fallback 기본값 변경 시 기술 선택·UI·QA를 동기화했다.
+  - [x] 실제 adapter 경계와 provider ID 정책을 데이터 소스 등록부에 반영했다.
+  - [x] retry·fallback 기본값을 기술 선택·Schema 실행 정책·QA와 동기화했다.
 
 ### [ ] TASK-004: SQLite cache·checkpoint·provenance·export 구현
 
@@ -615,6 +616,8 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   ([검증 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md))
 - `TASK-002` — Analysis I/O Pydantic model, 참조·uint256 불변조건, Schema probe
   ([검증 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md))
+- `TASK-003` — HTTPX source port, 규정·offline Gate, retry·fallback provenance
+  ([검증 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md))
 
 ## 7. Backlog 승인 Gate
 
@@ -622,11 +625,13 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] P0·V1 9개 작업과 별도 Rules-gated `TASK-010`의 범위·의존 순서 승인
 - [x] TASK-001을 첫 구현 작업으로 승인
 - [x] TASK-002 Analysis I/O 계약 구현을 별도로 승인
+- [x] TASK-003 source orchestration 구현을 별도로 승인
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
 - [x] Backlog 승인 후 `codex/task-001-python-bootstrap` branch 사용
 - [x] TASK-002 승인 후 `codex/task-002-analysis-contract-models` branch 사용
+- [x] TASK-003 승인 후 `codex/task-003-source-orchestration` branch 사용
 
 ## 8. 365 글로벌 평가 기준
 

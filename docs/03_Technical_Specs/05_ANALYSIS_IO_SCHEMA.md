@@ -1,6 +1,6 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-27 21:22
+> Last Updated: 2026-07-27 21:50
 > Status: Contract Approved 0.1 · TASK-002 Applied
 > Schema Version: 0.1
 
@@ -92,6 +92,12 @@ AUTH의 `excluded_transaction_hashes`와 FREEZE의 `context_urls`는 선택 필�
 배열 간 포함 관계를 표현하지 못하므로 검증기가 확인한다. `rule_status:
 restricted`는 유효한 요청 문서일 수 있으나 실행기는 네트워크 호출 전에
 `rule_restricted` 오류로 중단해야 한다.
+
+`TASK-003` 실행 정책은 보수적 기본값을 적용한다. `unconfirmed`는 저장·검증
+가능한 계약 값이지만 live transport 권한은 아니며, `offline_mode: false`에서
+실제 HTTP 호출을 하려면 `rule_status: allowed`가 명시되어야 한다.
+`offline_mode: true`는 source transport를 호출하지 않고 TASK-004의 cache 또는
+fixture 경계로 넘긴다. 이 실행 정책은 Schema 필드나 버전을 변경하지 않는다.
 
 ## 4. 결과 계약
 
@@ -295,7 +301,8 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
 6. SQLite 논리 DB Schema와 Document Completion Gate를 확정했다.
 7. `TASK-001`에서 Python 프로젝트를 초기화했다.
 8. `TASK-002`에서 Pydantic model·runtime 불변조건·생성 Schema 의미 검사를 연결했다.
-9. 다음 구현은 별도 승인 후 `TASK-003` source orchestration으로 진행한다.
+9. `TASK-003`에서 source policy·retry·fallback 실행 경계를 연결했다.
+10. 다음 구현은 별도 승인 후 `TASK-004` storage로 진행한다.
 
 ## 12. Related Documents
 
@@ -315,3 +322,4 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - round-trip·무효 입력·참조 무결성 기준
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - DEX·AUTH·FREEZE 요청·결과 예
 - **QA_Validation**: [TASK-002 Contract 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) - round-trip·오류·참조·Schema probe 증거
+- **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - source policy·attempt·fallback 증거

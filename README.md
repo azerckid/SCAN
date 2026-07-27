@@ -7,8 +7,9 @@ SCAN 2026.
 
 The repository is documentation-complete for the approved baseline. `TASK-001`
 initialized the Python project and offline quality gate, and `TASK-002` implemented
-the Analysis I/O 0.1 Pydantic models and semantic Schema check. Source adapters,
-storage, and DEX/AUTH/FREEZE analyzers are not implemented yet.
+the Analysis I/O 0.1 Pydantic models and semantic Schema check. `TASK-003`
+implemented the rules-gated HTTP source port, retry, and fallback orchestration.
+Storage and DEX/AUTH/FREEZE analyzers are not implemented yet.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`; related features stay disabled until an authoritative
 notice is recorded.
@@ -40,6 +41,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | QA | [`02_QA_CHECKLIST.md`](docs/05_QA_Validation/02_QA_CHECKLIST.md) | pre-code, PR, regression, competition gates |
 | TASK-001 evidence | [`05_TASK_001_BOOTSTRAP_REPORT.md`](docs/05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md) | Python, lock, dependency, and quality-gate evidence |
 | TASK-002 evidence | [`06_TASK_002_CONTRACT_REPORT.md`](docs/05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) | Analysis I/O models, invariants, dependencies, and Contract Gate evidence |
+| TASK-003 evidence | [`07_TASK_003_SOURCE_REPORT.md`](docs/05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) | source policy, retry, fallback, dependency, and TASK-003 scope evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -56,7 +58,7 @@ validators, followed by the generated-Pydantic-Schema compatibility check.
 Expected final outputs include:
 
 ```text
-31 passed
+47 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
@@ -79,9 +81,10 @@ uv run scan --version
 
 ## Implementation boundary
 
-`TASK-001` and `TASK-002` are complete. The next eligible task is `TASK-003`
-(source orchestration) and still requires separate implementation approval.
-SQLite DDL, live APIs, AI/agent execution, and CTFd automation remain
+`TASK-001` through `TASK-003` are complete. The next eligible task is `TASK-004`
+(SQLite cache, checkpoint, artifact, and export) and still requires separate
+implementation approval. No live provider configuration exists; live transport
+also requires `rule_status: allowed`. AI/agent execution and CTFd automation remain
 unimplemented.
 
 ## License
