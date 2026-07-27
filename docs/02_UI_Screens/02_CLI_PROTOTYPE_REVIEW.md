@@ -1,7 +1,7 @@
 # SCAN 2026 CLI Prototype Review
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-27 23:32
-> Status: Approved 1.1 · UI-First Gate Passed · TASK-005 Compared
+> Last Updated: 2026-07-28 00:58
+> Status: Approved 1.2 · UI-First Gate Passed · TASK-006 DEX Compared
 
 ## 1. HTML UI Preview
 
@@ -159,9 +159,10 @@ Draft Preview HTML은 Gate 확인용으로 변경하지 않는다. FB-001의 실
 결과는 아래와 같이 별도 기록한다.
 
 TASK-005에서 FB-001을 반영했다. 상세 retry·fallback event는 stderr에 남고
-최종 stdout은 count와 첫 오류 code만 표시한다. 실제 vertical 분석 수치는
-TASK-006~008 전까지 생성하지 않으며, analyzer 미구현 요청은 종료 코드 `4`로
-명시한다.
+최종 stdout은 count와 첫 오류 code만 표시한다. TASK-006은 DEX confirmed
+fixture의 세 raw 값을 실제 decoder 결과로 생성하고 complete·partial·failed·
+resume 출력을 Preview와 대조했다. AUTH·FREEZE analyzer 미구현 요청은
+TASK-007·008 전까지 종료 코드 `4`로 명시한다.
 
 ## 9. Gate 판정
 
@@ -208,3 +209,4 @@ backlog와 QA 시나리오 Draft로 전환했다. Python project 초기화는 �
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - UI-First Gate 회귀 기준
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - confirmed 기준값
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - 실제 help·출력·exit code 대조
+- **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - Preview 세 값·partial·resume 실제 대조

@@ -4,6 +4,8 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
+from pydantic import ValidationError
+
 from scan_tool import __version__
 from scan_tool.adapters.artifacts import ArtifactStore
 from scan_tool.adapters.sqlite_storage import SQLiteStorage, canonical_json
@@ -13,12 +15,16 @@ from scan_tool.domain import (
     validate_analysis_request,
     validate_analysis_result,
 )
-from scan_tool.domain.analysis_request import AnalysisRequest
+from scan_tool.domain.analysis_request import AnalysisRequest, DexAnalysisRequest
 from scan_tool.domain.analysis_result import AnalysisResult
+from scan_tool.domain.dex import DexReplay
+from scan_tool.slices.dex import analyze_dex_replay
+
+DEX_REPLAY_STAGE = "dex_replay_loaded"
 
 
 class AnalysisUnavailable(RuntimeError):
-    """Raised while vertical analyzers remain outside TASK-005."""
+    """Raised when the selected vertical slice lacks an approved execution input."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -93,9 +99,68 @@ class CliRuntime:
             export_uris=(json_artifact.uri, markdown_artifact.uri),
         )
 
+    def execute_analysis(
+        self,
+        request: AnalysisRequest,
+        *,
+        replay_path: Path | None = None,
+    ) -> AnalysisResult:
+        document = request.root
+        if not isinstance(document, DexAnalysisRequest):
+            raise AnalysisUnavailable(
+                "The selected vertical analyzer is not implemented; continue with "
+                "TASK-007 or TASK-008."
+            )
+        replay_body, checkpoint_id, resumed = self._load_dex_replay(
+            document.analysis_id,
+            replay_path,
+        )
+        return analyze_dex_replay(
+            document,
+            replay_body,
+            resumed=resumed,
+            checkpoint_id=checkpoint_id,
+        )
 
-def execute_analysis(_: AnalysisRequest) -> AnalysisResult:
-    raise AnalysisUnavailable(
-        "The selected vertical analyzer is not implemented; continue with TASK-006, "
-        "TASK-007, or TASK-008."
-    )
+    def _load_dex_replay(
+        self,
+        analysis_id: str,
+        replay_path: Path | None,
+    ) -> tuple[bytes, str | None, bool]:
+        checkpoint = self.storage.latest_checkpoint(analysis_id, DEX_REPLAY_STAGE)
+        if checkpoint is not None:
+            raw_sha256 = checkpoint.cursor.get("raw_artifact_sha256")
+            if not isinstance(raw_sha256, str):
+                raise AnalysisUnavailable("The saved DEX replay checkpoint is invalid.")
+            artifact = self.storage.get_artifact(raw_sha256)
+            if artifact is None:
+                raise AnalysisUnavailable("The saved DEX replay artifact is unavailable.")
+            return self.artifacts.read(artifact), checkpoint.checkpoint_id, True
+
+        if replay_path is None:
+            raise AnalysisUnavailable(
+                "DEX analysis requires --evidence RAW_REPLAY.json in offline mode."
+            )
+        try:
+            replay_body = replay_path.read_bytes()
+        except OSError as error:
+            raise AnalysisUnavailable("The DEX replay evidence file is unavailable.") from error
+        try:
+            DexReplay.model_validate_json(replay_body)
+        except ValidationError:
+            return replay_body, None, False
+        artifact = self.artifacts.write(
+            replay_body,
+            media_type="application/json",
+            artifact_kind="dex_replay",
+            redaction_status="reviewed",
+            license_status="reviewed",
+        )
+        self.storage.record_artifact(artifact)
+        checkpoint = self.storage.save_checkpoint(
+            analysis_id,
+            DEX_REPLAY_STAGE,
+            {"raw_artifact_sha256": artifact.sha256},
+            (),
+        )
+        return replay_body, checkpoint.checkpoint_id, False

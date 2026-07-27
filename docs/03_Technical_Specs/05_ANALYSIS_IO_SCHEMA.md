@@ -1,7 +1,7 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-27 23:32
-> Status: Contract Approved 0.1 · TASK-002·005 Applied
+> Last Updated: 2026-07-28 00:58
+> Status: Contract Approved 0.1 · TASK-002·005·006 Applied
 > Schema Version: 0.1
 
 ## 1. 문서 목적
@@ -310,7 +310,11 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
 9. `TASK-003`에서 source policy·retry·fallback 실행 경계를 연결했다.
 10. `TASK-004`에서 SQLite·artifact·동일 모델 export 저장 경계를 연결했다.
 11. `TASK-005`에서 Schema 변경 없이 CLI validate·renderer·exit code를 연결했다.
-12. 다음 구현은 별도 승인 후 `TASK-006` DEX analyzer로 진행한다.
+12. `TASK-006` DEX analyzer가 Schema 변경 없이 세 confirmed result와
+    complete·partial·failed 결과를 생성한다.
+13. CLI `--evidence`는 reviewed source artifact를 adapter에 주입하는 실행
+    옵션이며 Analysis Request Schema 필드가 아니므로 버전은 `0.1`을 유지한다.
+14. 다음 구현은 별도 승인 후 `TASK-007` AUTH analyzer로 진행한다.
 
 ## 12. Related Documents
 
@@ -333,3 +337,4 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
 - **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - source policy·attempt·fallback 증거
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - 저장·export·checkpoint 증거
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - Schema 기반 validate·renderer·exit code 증거
+- **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - Schema 0.1 DEX runtime 결과·참조 무결성

@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 23:32
-> Status: Approved 1.5 · TASK-001~005 Done
+> Last Updated: 2026-07-28 00:58
+> Status: Approved 1.6 · TASK-001~006 Done
 
 ## 1. 문서 목적
 
@@ -9,7 +9,7 @@
 CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업으로
 전환한다.
 
-Backlog 범위와 `TASK-001`~`TASK-005` 구현은 별도로 승인되었다. 다섯 작업은
+Backlog 범위와 `TASK-001`~`TASK-006` 구현은 별도로 승인되었다. 여섯 작업은
 완료됐고 나머지 작업은 `ToDo`다. 후속 작업은 각각 별도 승인 전에는
 `In Progress`로 이동하지 않는다.
 
@@ -344,21 +344,21 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] 실제 `--help`·snapshot을 UI 문서·Preview와 대조했다.
   - [x] Typer help frame과 analyzer 미구현 경계를 의도된 차이로 기록했다.
 
-### [ ] TASK-006: DEX vertical slice 구현
+### [x] TASK-006: DEX vertical slice 구현
 
-- Status: ToDo
+- Status: Done
 - Priority: V1 · High
 - Depends On: TASK-002, TASK-003, TASK-004
 - Requirement IDs: `REQ-P0-EVM-001`~`REQ-P0-EVM-008`,
   `REQ-V1-DEX-001`~`REQ-V1-DEX-006`
 - Atomic Tasks:
-  - [ ] TX·receipt·Transfer·Swap·Withdrawal raw 증거를 수집한다.
-  - [ ] internal native ETH call을 별도 call evidence로 정규화한다.
-  - [ ] USDC input과 WETH pool output을 exact raw로 복원한다.
-  - [ ] WETH pool output과 native ETH user output을 분리한다.
-  - [ ] router·factory·pair metadata를 supporting provenance로 분리한다.
-  - [ ] partial·failed에서 확보 증거와 누락 요구사항을 보존한다.
-  - [ ] `FX-SVC-DEX-001` regression을 자동화한다.
+  - [x] TX·receipt·Transfer·Swap·Withdrawal raw 증거를 수집한다.
+  - [x] internal native ETH call을 별도 call evidence로 정규화한다.
+  - [x] USDC input과 WETH pool output을 exact raw로 복원한다.
+  - [x] WETH pool output과 native ETH user output을 분리한다.
+  - [x] router·factory·pair metadata를 supporting provenance로 분리한다.
+  - [x] partial·failed에서 확보 증거와 누락 요구사항을 보존한다.
+  - [x] `FX-SVC-DEX-001` regression을 자동화한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - SVC-DEX 문제 조건
   - [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - DEX vertical slice 선정
@@ -373,24 +373,25 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - Related QA Docs:
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-DEX-*`
   - [DEX fixture](../05_QA_Validation/fixtures/FX-SVC-DEX-001/README.md) - confirmed 정답·증거
+  - [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - raw decode·정합·partial·resume·보안 증거
 - Implementation Preconditions:
-  - [ ] DEX 요구사항·fixture·source 문서를 다시 확인했다.
-  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
-  - [ ] HTML Preview에서 pool output과 user output 분리를 확인했다.
-  - [ ] TX·event·call·metadata 최소 필드를 확인했다.
-  - [ ] 외부 mutation 없이 read-only 수집만 수행한다.
-  - [ ] raw amount에 float를 사용하지 않는다.
-  - [ ] 일반 N-hop·가격·범용 DEX 지원을 범위에 넣지 않는다.
+  - [x] DEX 요구사항·fixture·source 문서를 다시 확인했다.
+  - [x] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
+  - [x] HTML Preview에서 pool output과 user output 분리를 확인했다.
+  - [x] TX·event·call·metadata 최소 필드를 확인했다.
+  - [x] 외부 mutation 없이 read-only 수집만 수행한다.
+  - [x] raw amount에 float를 사용하지 않는다.
+  - [x] 일반 N-hop·가격·범용 DEX 지원을 범위에 넣지 않는다.
 - Acceptance Criteria:
-  - [ ] USDC `25000000000` raw input이 exact match한다.
-  - [ ] WETH `14449515027026387018` raw pool output이 exact match한다.
-  - [ ] native ETH `14449515027026387018` raw user output이 exact match한다.
-  - [ ] pool WETH와 user native ETH가 별도 result·evidence로 출력된다.
-  - [ ] JSON·Markdown과 terminal summary가 같은 세 결과를 표시한다.
-  - [ ] 한 필수 증거 누락 주입 시 complete가 아니라 partial이다.
+  - [x] USDC `25000000000` raw input이 exact match한다.
+  - [x] WETH `14449515027026387018` raw pool output이 exact match한다.
+  - [x] native ETH `14449515027026387018` raw user output이 exact match한다.
+  - [x] pool WETH와 user native ETH가 별도 result·evidence로 출력된다.
+  - [x] JSON·Markdown과 terminal summary가 같은 세 결과를 표시한다.
+  - [x] 한 필수 증거 누락 주입 시 complete가 아니라 partial이다.
 - Document Sync Check:
-  - [ ] 실제 DEX result·evidence ID를 Schema 예제·QA와 대조했다.
-  - [ ] fixture 정답 변경 없이 구현 차이를 해결했다.
+  - [x] 실제 DEX result·evidence ID를 Schema 예제·QA와 대조했다.
+  - [x] fixture 정답 변경 없이 raw replay adapter로 구현 차이를 해결했다.
 
 ### [ ] TASK-007: AUTH vertical slice 구현
 
@@ -624,6 +625,8 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   ([검증 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md))
 - `TASK-005` — Typer 네 명령, composition root, terminal renderer, exit code
   ([검증 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md))
+- `TASK-006` — raw DEX log decode, WETH/native 분리, partial·reconciliation
+  ([검증 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md))
 
 ## 7. Backlog 승인 Gate
 
@@ -634,6 +637,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-003 source orchestration 구현을 별도로 승인
 - [x] TASK-004 storage·artifact·export 구현을 별도로 승인
 - [x] TASK-005 CLI command·renderer·exit code 구현을 별도로 승인
+- [x] TASK-006 DEX vertical slice 구현을 별도로 승인
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
@@ -642,6 +646,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-003 승인 후 `codex/task-003-source-orchestration` branch 사용
 - [x] TASK-004 승인 후 `codex/task-004-storage-artifacts` branch 사용
 - [x] TASK-005 승인 후 `codex/task-005-cli-analyze` branch 사용
+- [x] TASK-006 승인 후 `codex/task-006-dex-vertical-slice` branch 사용
 
 ## 8. 365 글로벌 평가 기준
 

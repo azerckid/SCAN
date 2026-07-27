@@ -1,6 +1,6 @@
 # Fixture: FX-SVC-DEX-001
 > Created: 2026-07-24 19:19
-> Last Updated: 2026-07-25 15:13
+> Last Updated: 2026-07-28 00:58
 > Status: Confirmed
 
 ## 1. 목적
@@ -34,6 +34,7 @@
 | `input.json` | 체인 ID와 스왑 TX |
 | `expected.json` | `asset_in` / `pool_output` / `user_net_output` 분리 기준 정답 |
 | `evidence.json` | 이벤트·internal call·출처·조회 시각 |
+| `raw-replay.json` | TASK-006 raw TX·receipt logs·internal call·고정 metadata 재생 입력 |
 
 세 JSON은 공통 `schema_version: 0.1`을 따르며, 채점 요구사항은 증거 ID로
 이벤트와 internal call을 참조한다.
@@ -50,6 +51,7 @@
 8. 같은 입력으로 거래·블록·4개 채점 로그와 Blockscout 내부 ETH 전송을 다시 조회해 raw 수량이 일치함을 확인했다.
 9. 스왑 블록 `16642512`에서 Factory `getPair(USDC,WETH)`를 archive `eth_call`로 재현해 풀 주소를 확인했다.
 10. 거래 이전 Uniswap 공식 배포 커밋 `d2575ff41223d2766ee17f99ae7258545405ef9f`의 `UniversalRouter` 주소와 GPL-3.0 라이선스를 고정했다.
+11. 2026-07-28에 공개 RPC의 TX·receipt 원시 필드와 Blockscout internal call을 다시 조회해 `raw-replay.json`으로 고정하고 TASK-006 decoder로 회귀 검증했다.
 
 채점 시 `pool_output`(WETH)과 `user_net_output`(ETH)을 모두 요구한다. 풀 WETH만 사용자 최종 자산으로 제출하면 실패다.
 

@@ -1,7 +1,7 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-27 23:32
-> Status: Approved 1.1 · UI-First Gate Passed · TASK-005 Applied
+> Last Updated: 2026-07-28 00:58
+> Status: Approved 1.2 · UI-First Gate Passed · TASK-006 DEX Applied
 
 ## 1. 문서 목적
 
@@ -32,13 +32,16 @@ I/O Schema `0.1` 요청 파일을 공통 진입점으로 사용하고 `analysis_
 
 | 명령 | 목적 | 주요 입력 | 종료 결과 |
 |:---|:---|:---|:---|
-| `scan analyze --request PATH` | 공통 분석 실행 | Schema `0.1` 요청 JSON | complete·partial·failed |
+| `scan analyze --request PATH --evidence PATH` | 공통 분석 실행 | Schema `0.1` 요청 JSON + 유형별 검토 증거 | complete·partial·failed |
 | `scan validate PATH` | 요청·결과 계약 사전 검증 | JSON 파일 | valid·invalid |
 | `scan resume ANALYSIS_ID` | checkpoint에서 중단 작업 재개 | 기존 analysis ID | complete·partial·failed |
 | `scan show ANALYSIS_ID` | 저장 결과와 증거 경로 재표시 | 기존 analysis ID | summary·not found |
 | `scan --help` | 명령과 다음 행동 확인 | 없음 | 도움말 |
 
-V1의 canonical 실행은 `scan analyze --request PATH`다. `analysis_type`별
+V1의 canonical 실행은 `scan analyze --request PATH`이며, TASK-006 DEX
+offline replay는 `--evidence`로 검토한 raw replay JSON을 함께 받는다. 이
+옵션은 source adapter 입력이지 Analysis Request Schema 필드가 아니다.
+`analysis_type`별
 `scan dex`, `scan auth`, `scan freeze` 별칭은 같은 정보를 두 경로에서
 관리하게 하므로 현재 범위에서 제외한다.
 
@@ -75,7 +78,8 @@ flowchart TD
 ### 5.1 명령
 
 ```bash
-scan analyze --request requests/dex.json
+scan analyze --request requests/dex.json \
+  --evidence docs/05_QA_Validation/fixtures/FX-SVC-DEX-001/raw-replay.json
 ```
 
 ### 5.2 단계
@@ -217,6 +221,10 @@ TASK-005는 위 여섯 종료 코드를 renderer와 CLI fault-injection test로
 검증했다. vertical analyzer 미구현 상태의 유효 요청은 결과를 꾸미지 않고
 `source_unavailable`, 종료 코드 `4`로 명시적으로 종료한다.
 
+TASK-006은 DEX offline replay에서 complete `0`, internal call 누락 partial
+`3`, 로그 정합 실패 `4`, 규정 차단 `5`를 실제 분석 결과로 검증했다. AUTH와
+FREEZE는 TASK-007·008 전까지 계속 `source_unavailable`로 종료한다.
+
 ## 11. 도움말과 빈 상태
 
 ### 11.1 인자 없이 실행
@@ -330,6 +338,17 @@ flowchart LR
 | Open-source | 재현 가능한 명령·종료 코드·공개 Schema 연결 |
 | Business Plan | 대회 준비용 CLI 흐름이므로 현재 범위 N/A |
 
+## 16.1 TASK-006 화면 대조
+
+- confirmed DEX fixture의 USDC input, WETH pool output, native ETH user output이
+  Preview의 세 행과 동일하게 출력된다.
+- internal native call을 제거하면 확보한 두 결과를 먼저 보존하고
+  `PARTIAL`·`trace_unavailable`·resume 명령을 표시한다.
+- checkpoint 재개는 저장한 raw replay artifact를 읽고 `resumed yes`를
+  표시하며 네트워크를 호출하지 않는다.
+- progress에는 evidence 파일 basename만 표시하고 전체 로컬 경로·provider
+  URL·secret을 출력하지 않는다.
+
 ## 17. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위
@@ -347,3 +366,4 @@ flowchart LR
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - CLI·vertical slice 구현 순서
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 명령·상태·종료 코드 검증
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - preview 기준값
+- **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - 실제 complete·partial·resume 화면 대조

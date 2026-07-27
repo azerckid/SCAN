@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-27 23:32
-> Status: Approved 1.5 · TASK-001~005 Applied
+> Last Updated: 2026-07-28 00:58
+> Status: Approved 1.6 · TASK-001~006 Applied
 
 ## 1. 문서 목적
 
@@ -34,7 +34,7 @@ JSON/Markdown export와 Typer CLI renderer가 있다. vertical slice는 아직 �
 | Project·lock | `uv`, `pyproject.toml`, `uv.lock` |
 | Model | Pydantic `2.13.4` |
 | Transport | HTTPX `0.28.1`, 주입된 `httpx.AsyncClient` 기반 직접 adapter |
-| EVM | TASK-006 이후 `eth-abi`, `eth-utils` 계획, 현재 미설치 |
+| EVM | `eth-abi 5.2.0`, `eth-utils 5.3.1` · TASK-006 DEX strict decode·주소 정규화 |
 | Storage | 표준 `sqlite3` WAL + SHA-256 content-addressed artifact |
 | CLI | Typer |
 | Test | pytest + 기존 jsonschema 검증기 |
@@ -411,7 +411,7 @@ dist/
 | Done | Schema 생성·diff 명령 | Pydantic 생성본과 승인 Schema `0.1`의 35개 의미 probe diff 0 |
 | Done | Source port·policy·retry·fallback | HTTPX one-attempt adapter와 rules-gated orchestration, fault injection 통과 |
 | Done | SQLite·artifact·export | schema v1, WAL, immutable cache, checkpoint, backup·restore, JSON/Markdown 통과 |
-| High | CLI flow·terminal preview | UI-First Gate 통과. 구현 시 FB-001(최종 stdout retry 압축) 반영 |
+| Done | CLI flow·terminal preview | UI-First Gate 및 TASK-005 renderer·TASK-006 DEX 실제 출력 대조 완료 |
 | Medium | 정적 타입 검사 채택 여부 | pytest·Ruff만으로 부족한 실제 사례가 있으면 도구 비교 후 결정 |
 | Done | SQLite DDL·backup 절차 | schema v1·11 tables, 새 대상 backup, integrity restore rehearsal |
 | Medium | 공급자별 rate limit | 공식 규정·계정·plan 확인 후 source policy에 수치 반영 |
@@ -442,7 +442,9 @@ dist/
 10. `TASK-003`에서 HTTPX source port·policy·retry·fallback을 구현했다.
 11. `TASK-004`에서 SQLite·cache·checkpoint·artifact·export를 구현했다.
 12. `TASK-005`에서 CLI composition root·네 명령·renderer·exit code를 구현했다.
-13. 다음 구현은 별도 승인 후 `TASK-006`에서 시작한다.
+13. `TASK-006`에서 raw receipt·transaction·internal call을 엄격히
+    디코딩하고 DEX 세 결과를 재조정하는 offline vertical slice를 구현했다.
+14. 다음 구현은 별도 승인 후 `TASK-007` AUTH vertical slice로 진행한다.
 
 ## 22. Related Documents
 
@@ -466,3 +468,4 @@ dist/
 - **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - policy·retry·fallback·secret 비노출 검증
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - SQLite·cache·checkpoint·artifact·export 검증
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - command·renderer·exit code·보안 검증
+- **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - raw replay·정합·partial·checkpoint·dependency 검증
