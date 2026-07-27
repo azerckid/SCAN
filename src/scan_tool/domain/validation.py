@@ -2,8 +2,9 @@
 
 from collections.abc import Mapping
 
-from pydantic import ValidationError
+from pydantic import TypeAdapter, ValidationError
 
+from scan_tool.domain._types import AnalysisId
 from scan_tool.domain.analysis_error import AnalysisError, ErrorCode
 from scan_tool.domain.analysis_request import AnalysisRequest
 from scan_tool.domain.analysis_result import AnalysisResult
@@ -16,6 +17,19 @@ class ContractViolation(ValueError):
         self.code = code
         self.issues = issues
         super().__init__(f"{code.value}: {'; '.join(issues)}")
+
+
+_ANALYSIS_ID_ADAPTER = TypeAdapter(AnalysisId)
+
+
+def validate_analysis_id(value: str) -> str:
+    try:
+        return _ANALYSIS_ID_ADAPTER.validate_python(value)
+    except ValidationError:
+        raise ContractViolation(
+            ErrorCode.INVALID_INPUT,
+            ("analysis_id:string_pattern_mismatch:invalid analysis ID",),
+        ) from None
 
 
 def validate_analysis_request(data: object) -> AnalysisRequest:

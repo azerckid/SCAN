@@ -1,15 +1,46 @@
 """Command-line entry point for the SCAN tool."""
 
-from typing import Annotated
+import json
+import sqlite3
+import sys
+from pathlib import Path
+from time import monotonic
+from typing import Annotated, NoReturn
 
 import typer
 
 from scan_tool import __version__
+from scan_tool.application.cli_runtime import (
+    AnalysisUnavailable,
+    CliRuntime,
+    execute_analysis,
+)
+from scan_tool.application.terminal import (
+    EXIT_FAILED,
+    EXIT_INPUT,
+    EXIT_INTERRUPTED,
+    EXIT_RESTRICTED,
+    ProgressEvent,
+    render_progress,
+    render_result,
+    safe_path_label,
+)
+from scan_tool.domain import (
+    ContractViolation,
+    validate_analysis_error,
+    validate_analysis_id,
+    validate_analysis_request,
+    validate_analysis_result,
+)
+from scan_tool.domain.analysis_request import AnalysisRequest, RuleStatus
+
+DATA_ROOT = Path(".scan")
 
 app = typer.Typer(
     help="Evidence-first blockchain forensic tools for SCAN 2026.",
     invoke_without_command=True,
     no_args_is_help=True,
+    pretty_exceptions_enable=False,
 )
 
 
@@ -24,3 +55,205 @@ def main(
     if version:
         typer.echo(__version__)
         raise typer.Exit
+
+
+@app.command()
+def validate(path: Annotated[Path, typer.Argument(help="Analysis I/O JSON file.")]) -> None:
+    """Validate an Analysis I/O 0.1 request, result, or error document."""
+    document = _read_json(path)
+    schema = str(document.get("$schema", ""))
+    try:
+        if schema.endswith("analysis-request.schema.json"):
+            model = validate_analysis_request(document)
+            kind = f"request · {model.root.analysis_type}"
+        elif schema.endswith("analysis-result.schema.json"):
+            model = validate_analysis_result(document)
+            kind = f"result · {model.root.status}"
+        elif schema.endswith("analysis-error.schema.json"):
+            model = validate_analysis_error(document)
+            kind = f"error · {model.code}"
+        else:
+            _fail_input("schema_invalid", "unknown Analysis I/O schema")
+    except ContractViolation as error:
+        _fail_input(error.code.value, "; ".join(error.issues))
+    typer.echo(f"VALID {safe_path_label(path)} · {kind}")
+
+
+@app.command()
+def analyze(
+    request: Annotated[
+        Path,
+        typer.Option("--request", help="Analysis Request 0.1 JSON file."),
+    ],
+) -> None:
+    """Validate and dispatch a forensic analysis request."""
+    started = monotonic()
+    _progress("STARTING", f"request={safe_path_label(request)}")
+    _progress("FEEDBACK", f"{(monotonic() - started) * 1000:.1f}ms")
+    model = _validate_request_file(request)
+    document = model.root
+    _progress(
+        "VALIDATED",
+        f"{document.analysis_id} · {document.analysis_type} · "
+        f"{'offline' if document.source_policy.offline_mode else 'live'}",
+    )
+    try:
+        with CliRuntime.open(DATA_ROOT) as runtime:
+            try:
+                runtime.register_request(model)
+            except sqlite3.IntegrityError:
+                _fail_input("invalid_input", "analysis_id already exists")
+
+            if document.source_policy.rule_status == RuleStatus.RESTRICTED:
+                runtime.storage.finish_run(document.analysis_id, "restricted")
+                _progress("ERROR", "rule_restricted stage=source_policy attempts=0")
+                typer.echo(f"FAILED {document.analysis_id} · first_error rule_restricted")
+                raise typer.Exit(EXIT_RESTRICTED)
+
+            try:
+                result = execute_analysis(model)
+            except AnalysisUnavailable as error:
+                runtime.storage.finish_run(document.analysis_id, "failed")
+                _progress("ERROR", f"source_unavailable stage=analysis_dispatch · {error}")
+                typer.echo(f"FAILED {document.analysis_id} · first_error source_unavailable")
+                raise typer.Exit(EXIT_FAILED) from None
+            except KeyboardInterrupt:
+                runtime.storage.finish_run(document.analysis_id, "interrupted")
+                _progress(
+                    "INTERRUPTED",
+                    f"{document.analysis_id} · checkpoint preservation attempted",
+                )
+                typer.echo(f"INTERRUPTED {document.analysis_id}")
+                raise typer.Exit(EXIT_INTERRUPTED) from None
+            except Exception:
+                runtime.storage.finish_run(document.analysis_id, "failed")
+                _fail_runtime(document.analysis_id, "analysis_dispatch")
+            try:
+                stored = runtime.save_result(model, result)
+            except Exception:
+                runtime.storage.finish_run(document.analysis_id, "failed")
+                _fail_runtime(document.analysis_id, "result_persistence")
+    except typer.Exit:
+        raise
+    except Exception:
+        _fail_runtime(document.analysis_id, "cli_runtime")
+    raise typer.Exit(
+        render_result(
+            stored.result,
+            sys.stdout,
+            sys.stderr,
+            export_uris=stored.export_uris,
+        )
+    )
+
+
+@app.command()
+def resume(analysis_id: Annotated[str, typer.Argument(help="Existing analysis ID.")]) -> None:
+    """Resume an existing analysis from its saved request and checkpoints."""
+    analysis_id = _validated_analysis_id(analysis_id)
+    _progress("STARTING", f"{analysis_id} · resume")
+    if not (DATA_ROOT / "scan.sqlite3").exists():
+        _not_found(analysis_id)
+    try:
+        with CliRuntime.open(DATA_ROOT) as runtime:
+            request = runtime.load_request(analysis_id)
+            if request is None:
+                _not_found(analysis_id)
+            try:
+                result = execute_analysis(request)
+            except AnalysisUnavailable as error:
+                _progress("ERROR", f"source_unavailable stage=analysis_dispatch · {error}")
+                typer.echo(f"FAILED {analysis_id} · first_error source_unavailable")
+                raise typer.Exit(EXIT_FAILED) from None
+            except Exception:
+                runtime.storage.finish_run(analysis_id, "failed")
+                _fail_runtime(analysis_id, "analysis_dispatch")
+            try:
+                stored = runtime.save_result(request, result)
+            except Exception:
+                runtime.storage.finish_run(analysis_id, "failed")
+                _fail_runtime(analysis_id, "result_persistence")
+    except typer.Exit:
+        raise
+    except KeyboardInterrupt:
+        _progress("INTERRUPTED", f"{analysis_id} · checkpoint preservation attempted")
+        typer.echo(f"INTERRUPTED {analysis_id}")
+        raise typer.Exit(EXIT_INTERRUPTED) from None
+    except Exception:
+        _fail_runtime(analysis_id, "cli_runtime")
+    raise typer.Exit(
+        render_result(
+            stored.result,
+            sys.stdout,
+            sys.stderr,
+            export_uris=stored.export_uris,
+        )
+    )
+
+
+@app.command()
+def show(analysis_id: Annotated[str, typer.Argument(help="Existing analysis ID.")]) -> None:
+    """Show a persisted Analysis Result summary."""
+    analysis_id = _validated_analysis_id(analysis_id)
+    if not (DATA_ROOT / "scan.sqlite3").exists():
+        _not_found(analysis_id)
+    try:
+        with CliRuntime.open(DATA_ROOT) as runtime:
+            result = runtime.load_result(analysis_id)
+    except Exception:
+        _fail_runtime(analysis_id, "result_load")
+    if result is None:
+        _not_found(analysis_id)
+    raise typer.Exit(
+        render_result(
+            result.result,
+            sys.stdout,
+            sys.stderr,
+            export_uris=result.export_uris,
+        )
+    )
+
+
+def _validate_request_file(path: Path) -> AnalysisRequest:
+    try:
+        return validate_analysis_request(_read_json(path))
+    except ContractViolation as error:
+        _fail_input(error.code.value, "; ".join(error.issues))
+
+
+def _validated_analysis_id(value: str) -> str:
+    try:
+        return validate_analysis_id(value)
+    except ContractViolation as error:
+        _fail_input(error.code.value, "; ".join(error.issues))
+
+
+def _read_json(path: Path) -> dict[str, object]:
+    try:
+        value = json.loads(path.read_text())
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        _fail_input("invalid_input", f"cannot read valid JSON from {safe_path_label(path)}")
+    if not isinstance(value, dict):
+        _fail_input("schema_invalid", "top-level JSON value must be an object")
+    return value
+
+
+def _progress(status: str, detail: str) -> None:
+    render_progress((ProgressEvent(status, detail),), sys.stderr)
+
+
+def _fail_input(code: str, message: str) -> NoReturn:
+    _progress("ERROR", f"{code} · {message}")
+    raise typer.Exit(EXIT_INPUT)
+
+
+def _not_found(analysis_id: str) -> NoReturn:
+    _progress("ERROR", f"source_unavailable · analysis not found: {analysis_id}")
+    typer.echo("Next: check the analysis ID and local data directory.")
+    raise typer.Exit(EXIT_FAILED)
+
+
+def _fail_runtime(analysis_id: str, stage: str) -> NoReturn:
+    _progress("ERROR", f"source_unavailable stage={stage} attempts=0")
+    typer.echo(f"FAILED {analysis_id} · first_error source_unavailable")
+    raise typer.Exit(EXIT_FAILED)
