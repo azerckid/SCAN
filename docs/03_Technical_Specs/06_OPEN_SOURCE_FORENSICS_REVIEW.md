@@ -1,6 +1,6 @@
 # SCAN 2026 오픈소스 포렌식 사전조사
 > Created: 2026-07-26 22:38
-> Last Updated: 2026-07-27 15:52
+> Last Updated: 2026-07-27 20:57
 > Status: Approved 1.0 · P0/V1 Decisions Closed · Later Phases Deferred
 
 ## 1. 문서 목적
@@ -439,7 +439,7 @@ P0/V1 구현에 필요한 첫 다섯 결정은 문서 기준선으로 닫혔다.
 - [x] AI 결과를 확정 증거와 분리하고 ML Screening Gate를 정의했다.
 - [x] P0·V1 관련 `OSS-*` 재사용·구현 결정을 confirmed fixture 기준으로 확정한다.
 - [ ] 공식 규정에서 OSS·사전 제작 도구·외부 API 사용 범위를 확인한다.
-- [ ] 채택 dependency의 고정 버전·license notice·설치 명령을 확정한다.
+- [x] `TASK-001` 채택 dependency의 고정 버전·license·설치 명령을 확정했다.
 - [x] Backlog 구현 작업이 이 문서의 기능별 `OSS-*` Gate를 참조한다.
 
 ### 10.2 기능별 완료

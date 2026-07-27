@@ -1,0 +1,31 @@
+"""Run the TASK-001 offline quality gate."""
+
+import subprocess
+import sys
+from pathlib import Path
+
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+
+COMMANDS = (
+    (sys.executable, "-m", "ruff", "check", "."),
+    (sys.executable, "-m", "ruff", "format", "--check", "."),
+    (sys.executable, "-m", "pytest"),
+    (
+        sys.executable,
+        "docs/05_QA_Validation/scripts/validate_fixture_schemas.py",
+    ),
+    (
+        sys.executable,
+        "docs/05_QA_Validation/scripts/validate_analysis_schemas.py",
+    ),
+)
+
+
+def main() -> None:
+    """Run each quality command and stop at the first failure."""
+    for command in COMMANDS:
+        subprocess.run(command, cwd=REPOSITORY_ROOT, check=True)
+
+
+if __name__ == "__main__":
+    main()

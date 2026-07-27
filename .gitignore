@@ -1,3 +1,36 @@
 .venv/
 __pycache__/
 *.py[cod]
+
+# Local runtime data and credentials
+.scan/
+.env
+.env.*
+!.env.example
+
+# Test, lint, coverage, and type-check caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Packaging outputs
+build/
+dist/
+*.egg-info/
+
+# Local databases and SQLite sidecars
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+
+# Editor and operating-system artifacts
+.DS_Store
