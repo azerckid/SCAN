@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-27 23:02
-> Status: Approved 1.4 · TASK-001~004 Applied
+> Last Updated: 2026-07-27 23:32
+> Status: Approved 1.5 · TASK-001~005 Applied
 
 ## 1. 문서 목적
 
@@ -412,7 +412,8 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 11. `TASK-002`에서 Pydantic 2.13.4와 Analysis I/O runtime 계약을 확정했다.
 12. `TASK-003`에서 HTTPX 0.28.1과 source port·policy·retry·fallback을 구현했다.
 13. `TASK-004`에서 SQLite schema v1·WAL·artifact·export 결정을 구현했다.
-14. 다음 구현은 별도 승인 후 `TASK-005`에서 시작한다.
+14. `TASK-005`에서 Typer command surface·terminal renderer·exit code를 구현했다.
+15. 다음 구현은 별도 승인 후 `TASK-006`에서 시작한다.
 
 ## 18. Related Documents
 
@@ -433,3 +434,4 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **QA_Validation**: [TASK-002 Contract 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) - Pydantic·Schema·참조 불변조건 검증
 - **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - HTTPX·policy·retry·fallback 검증
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - sqlite3·artifact·export·backup 검증
+- **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - Typer·stdout/stderr·exit code 검증

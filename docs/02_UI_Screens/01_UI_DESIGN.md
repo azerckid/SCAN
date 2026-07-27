@@ -1,7 +1,7 @@
 # SCAN 2026 CLI Terminal UI Design
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-27 00:54
-> Status: Draft 1 · UI-First Gate Passed
+> Last Updated: 2026-07-27 23:32
+> Status: Approved 1.1 · UI-First Gate Passed · TASK-005 Applied
 
 ## 1. 문서 목적
 
@@ -191,6 +191,9 @@ Markdown         .scan/runs/AN-FX-SVC-DEX-001/evidence.md
 ```
 
 `pool_output`과 `user_net_output`은 같은 raw 값이어도 합치지 않는다.
+
+TASK-005 renderer는 주소·TX만 축약하고 uint256 raw 문자열은 자릿수를
+보존한다. 색상 없이도 대문자 상태 label과 고정 섹션으로 의미가 유지된다.
 
 ### 7.6 Partial
 

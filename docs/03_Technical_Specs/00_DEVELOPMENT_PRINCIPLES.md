@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-27 23:02
-> Status: Approved 1.4 · TASK-001~004 Applied
+> Last Updated: 2026-07-27 23:32
+> Status: Approved 1.5 · TASK-001~005 Applied
 
 ## 1. 문서 목적
 
@@ -25,9 +25,9 @@
 저장소에는 최소 application package와 offline 품질 Gate, Analysis I/O
 runtime model, source port·HTTP adapter·policy·retry·fallback orchestration,
 SQLite WAL 저장·immutable cache·checkpoint·content-addressed artifact·
-JSON/Markdown export가 있다. CLI renderer·vertical slice는 아직 없다.
+JSON/Markdown export와 Typer CLI renderer가 있다. vertical slice는 아직 없다.
 
-| 영역 | TASK-001~004 기준 |
+| 영역 | TASK-001~005 기준 |
 |:---|:---|
 | Runtime | Python 단일 core + CLI |
 | Package | `src/scan_tool/` src layout |
@@ -441,7 +441,8 @@ dist/
 9. `TASK-002`에서 Analysis I/O Pydantic model과 Schema 의미 검사를 구현했다.
 10. `TASK-003`에서 HTTPX source port·policy·retry·fallback을 구현했다.
 11. `TASK-004`에서 SQLite·cache·checkpoint·artifact·export를 구현했다.
-12. 다음 구현은 별도 승인 후 `TASK-005`에서 시작한다.
+12. `TASK-005`에서 CLI composition root·네 명령·renderer·exit code를 구현했다.
+13. 다음 구현은 별도 승인 후 `TASK-006`에서 시작한다.
 
 ## 22. Related Documents
 
@@ -464,3 +465,4 @@ dist/
 - **QA_Validation**: [TASK-002 Contract 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) - model·runtime 불변조건·Schema 의미 검사
 - **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - policy·retry·fallback·secret 비노출 검증
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - SQLite·cache·checkpoint·artifact·export 검증
+- **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - command·renderer·exit code·보안 검증

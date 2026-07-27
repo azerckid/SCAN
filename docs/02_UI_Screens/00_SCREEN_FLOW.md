@@ -1,7 +1,7 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-27 00:54
-> Status: Draft 1 · UI-First Gate Passed
+> Last Updated: 2026-07-27 23:32
+> Status: Approved 1.1 · UI-First Gate Passed · TASK-005 Applied
 
 ## 1. 문서 목적
 
@@ -212,6 +212,10 @@ V1에서 stdout에 JSON 전체를 출력하는 별도 계약은 만들지 않는
 
 오류 코드의 세부 의미는 Analysis Error Schema의 11개 코드를 사용한다. 프로세스
 종료 코드는 자동화에서 큰 상태를 구분하기 위한 별도 계층이다.
+
+TASK-005는 위 여섯 종료 코드를 renderer와 CLI fault-injection test로
+검증했다. vertical analyzer 미구현 상태의 유효 요청은 결과를 꾸미지 않고
+`source_unavailable`, 종료 코드 `4`로 명시적으로 종료한다.
 
 ## 11. 도움말과 빈 상태
 
