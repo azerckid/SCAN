@@ -12,7 +12,6 @@ from typing import Any
 from jsonschema import Draft202012Validator, FormatChecker
 from referencing import Registry, Resource
 
-
 QA_ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS_ROOT = QA_ROOT / "schemas"
 EXAMPLES_ROOT = QA_ROOT / "examples" / "analysis"
@@ -58,10 +57,7 @@ def duplicate_values(values: list[str]) -> set[str]:
 
 
 def schema_registry(schemas: dict[str, dict[str, Any]]) -> Registry:
-    resources = [
-        (schema["$id"], Resource.from_contents(schema))
-        for schema in schemas.values()
-    ]
+    resources = [(schema["$id"], Resource.from_contents(schema)) for schema in schemas.values()]
     return Registry().with_resources(resources)
 
 
@@ -77,8 +73,7 @@ def validate_document(
         format_checker=FormatChecker(),
     )
     return [
-        f"{label}:{'.'.join(str(part) for part in error.path) or '<root>'}: "
-        f"{error.message}"
+        f"{label}:{'.'.join(str(part) for part in error.path) or '<root>'}: {error.message}"
         for error in sorted(
             validator.iter_errors(document),
             key=lambda item: list(item.path),
@@ -106,8 +101,7 @@ def compare_fields(
     for key in keys:
         if actual.get(key) != expected.get(key):
             errors.append(
-                f"{label}.{key} differs: "
-                f"expected {expected.get(key)!r}, got {actual.get(key)!r}"
+                f"{label}.{key} differs: expected {expected.get(key)!r}, got {actual.get(key)!r}"
             )
 
 
@@ -142,8 +136,7 @@ def validate_evidence_mapping(
         expected_entry = expected_by_id.get(evidence_id)
         if expected_entry is None:
             errors.append(
-                f"{fixture_id}: analysis evidence {evidence_id} "
-                "does not exist in fixture evidence"
+                f"{fixture_id}: analysis evidence {evidence_id} does not exist in fixture evidence"
             )
             continue
 
@@ -159,9 +152,7 @@ def validate_evidence_mapping(
                 f"expected {expected['source_id']}, got {actual['source_id']}"
             )
 
-        expected_artifact_uri = (
-            f"fixture://{fixture_id}/evidence.json#{evidence_id}"
-        )
+        expected_artifact_uri = f"fixture://{fixture_id}/evidence.json#{evidence_id}"
         actual_artifact_uri = actual["raw_artifact"]["artifact_uri"]
         if actual_artifact_uri != expected_artifact_uri:
             errors.append(
@@ -219,9 +210,7 @@ def validate_evidence_mapping(
 
     context_urls = set(fixture_input.get("context_urls", []))
     fixture_context_urls = {
-        item["url"]
-        for item in fixture_evidence["context_evidence"]
-        if item.get("url")
+        item["url"] for item in fixture_evidence["context_evidence"] if item.get("url")
     }
     if not context_urls <= fixture_context_urls:
         errors.append(
@@ -260,16 +249,11 @@ def validate_fixture_mapping(
     if fixture_id == "FX-SVC-DEX-001":
         if inputs["transaction_hash"] != fixture_input["transaction_hash"]:
             errors.append(f"{fixture_id}: DEX transaction hash mapping differs")
-        result_values = {
-            item["result_type"]: item["value"] for item in result["results"]
-        }
+        result_values = {item["result_type"]: item["value"] for item in result["results"]}
         for result_type in ("asset_in", "pool_output", "user_net_output"):
             expected_value = fixture_expected[result_type]
             actual_value = result_values.get(result_type, {})
-            keys = tuple(
-                key for key in expected_value
-                if key != "evidence"
-            )
+            keys = tuple(key for key in expected_value if key != "evidence")
             compare_fields(
                 actual_value,
                 expected_value,
@@ -290,24 +274,19 @@ def validate_fixture_mapping(
         for request_key, fixture_key in mappings.items():
             if inputs[request_key] != fixture_input[fixture_key]:
                 errors.append(f"{fixture_id}: AUTH {request_key} mapping differs")
-        if inputs.get("excluded_transaction_hashes") != fixture_input[
-            "excluded_intermediate_transactions"
-        ]:
+        if (
+            inputs.get("excluded_transaction_hashes")
+            != fixture_input["excluded_intermediate_transactions"]
+        ):
             errors.append(f"{fixture_id}: AUTH excluded transaction mapping differs")
-        result_values = {
-            item["result_type"]: item["value"] for item in result["results"]
-        }
+        result_values = {item["result_type"]: item["value"] for item in result["results"]}
         allowance = result_values.get("allowance_lifecycle", {})
         expected_allowance = fixture_expected["allowance"]
         expected_allowance_flat = {
             "before_approval_raw": expected_allowance["before_approval"]["amount_raw"],
             "after_approval_raw": expected_allowance["after_approval"]["amount_raw"],
-            "before_consumption_raw": expected_allowance[
-                "before_consumption"
-            ]["amount_raw"],
-            "after_consumption_raw": expected_allowance[
-                "after_consumption"
-            ]["amount_raw"],
+            "before_consumption_raw": expected_allowance["before_consumption"]["amount_raw"],
+            "after_consumption_raw": expected_allowance["after_consumption"]["amount_raw"],
             "consumed_delta_raw": expected_allowance["consumed_delta_raw"],
         }
         compare_fields(
@@ -333,15 +312,9 @@ def validate_fixture_mapping(
             f"{fixture_id}: authorization_consumption",
             errors,
         )
-        expected_excluded_count = len(
-            fixture_input["excluded_intermediate_transactions"]
-        )
-        if consumption.get("excluded_failed_transaction_count") != (
-            expected_excluded_count
-        ):
-            errors.append(
-                f"{fixture_id}: excluded failed transaction count differs"
-            )
+        expected_excluded_count = len(fixture_input["excluded_intermediate_transactions"])
+        if consumption.get("excluded_failed_transaction_count") != (expected_excluded_count):
+            errors.append(f"{fixture_id}: excluded failed transaction count differs")
 
     if fixture_id == "FX-EVM-FREEZE-001":
         for key in (
@@ -353,27 +326,20 @@ def validate_fixture_mapping(
         ):
             if inputs[key] != fixture_input[key]:
                 errors.append(f"{fixture_id}: FREEZE {key} mapping differs")
-        transitions = {
-            item["result_type"]: item["value"] for item in result["results"]
-        }
+        transitions = {item["result_type"]: item["value"] for item in result["results"]}
         expected_transitions = fixture_expected["address_freeze"]["transitions"]
         for result_type, expected_transition in zip(
             ("blacklist_transition", "unblacklist_transition"),
             expected_transitions,
+            strict=True,
         ):
             actual = transitions.get(result_type, {})
             expected_value = {
-                "target_address": fixture_expected["address_freeze"][
-                    "target_address"
-                ],
+                "target_address": fixture_expected["address_freeze"]["target_address"],
                 "before": expected_transition["state_before"],
                 "after": expected_transition["state_after"],
-                "before_block": inputs["state_blocks"][
-                    f"before_{expected_transition['type']}"
-                ],
-                "after_block": inputs["state_blocks"][
-                    f"after_{expected_transition['type']}"
-                ],
+                "before_block": inputs["state_blocks"][f"before_{expected_transition['type']}"],
+                "after_block": inputs["state_blocks"][f"after_{expected_transition['type']}"],
             }
             compare_fields(
                 actual,
@@ -384,9 +350,7 @@ def validate_fixture_mapping(
             )
         context = transitions.get("official_context_scope", {})
         expected_context = {
-            "circle_address_specific": fixture_expected["issuer_context"][
-                "address_specific"
-            ],
+            "circle_address_specific": fixture_expected["issuer_context"]["address_specific"],
             "ofac_address_specific": fixture_expected["regulatory_context"][
                 "address_present_in_both_official_actions"
             ],
@@ -424,10 +388,7 @@ def validate_fixture_mapping(
     }
     for item in result["results"]:
         for requirement_id in item["fixture_requirement_ids"]:
-            missing_refs = (
-                fixture_requirements[requirement_id]
-                - set(item["evidence_refs"])
-            )
+            missing_refs = fixture_requirements[requirement_id] - set(item["evidence_refs"])
             if missing_refs:
                 errors.append(
                     f"{fixture_id}: {item['result_id']} claims {requirement_id} "
@@ -502,21 +463,16 @@ def validate_pair(
         missing = set(item["evidence_refs"]) - evidence_id_set
         if missing:
             errors.append(
-                f"{prefix}: {item['result_id']} references missing evidence "
-                f"{sorted(missing)}"
+                f"{prefix}: {item['result_id']} references missing evidence {sorted(missing)}"
             )
         referenced_evidence.update(item["evidence_refs"])
 
     for item in evidence:
         source = source_by_record.get(item["source_record_ref"])
         if source is None:
-            errors.append(
-                f"{prefix}: {item['evidence_id']} references missing source record"
-            )
+            errors.append(f"{prefix}: {item['evidence_id']} references missing source record")
         elif source["source_id"] != item["source_id"]:
-            errors.append(
-                f"{prefix}: {item['evidence_id']} source_id differs from source record"
-            )
+            errors.append(f"{prefix}: {item['evidence_id']} source_id differs from source record")
 
     actual_source_ids = {item["source_id"] for item in sources}
     if not actual_source_ids <= allowed_sources:
@@ -542,9 +498,7 @@ def validate_pair(
     referenced_source_records = {item["source_record_ref"] for item in evidence}
     orphan_sources = set(source_record_ids) - referenced_source_records
     if orphan_sources:
-        errors.append(
-            f"{prefix}: unreferenced source records: {sorted(orphan_sources)}"
-        )
+        errors.append(f"{prefix}: unreferenced source records: {sorted(orphan_sources)}")
 
     started_at = datetime.fromisoformat(result["run"]["started_at"])
     finished_at = datetime.fromisoformat(result["run"]["finished_at"])
@@ -556,10 +510,7 @@ def validate_pair(
 
 
 def main() -> int:
-    schemas = {
-        name: load_json(SCHEMAS_ROOT / name)
-        for name in ANALYSIS_SCHEMAS
-    }
+    schemas = {name: load_json(SCHEMAS_ROOT / name) for name in ANALYSIS_SCHEMAS}
     errors: list[str] = []
     for name, schema in schemas.items():
         try:
@@ -567,13 +518,9 @@ def main() -> int:
         except Exception as error:
             errors.append(f"{name}: invalid schema: {error}")
 
-    error_codes = set(
-        schemas["analysis-error.schema.json"]["properties"]["code"]["enum"]
-    )
+    error_codes = set(schemas["analysis-error.schema.json"]["properties"]["code"]["enum"])
     if error_codes != EXPECTED_ERROR_CODES:
-        errors.append(
-            "analysis-error.schema.json: error code set differs from requirements"
-        )
+        errors.append("analysis-error.schema.json: error code set differs from requirements")
 
     registry = schema_registry(schemas)
     for prefix, fixture_id in EXAMPLE_PAIRS.items():
@@ -585,8 +532,7 @@ def main() -> int:
         return 1
 
     print(
-        "PASS 3 analysis request/result pairs validated against schema 0.1 "
-        "with reference integrity"
+        "PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity"
     )
     return 0
 

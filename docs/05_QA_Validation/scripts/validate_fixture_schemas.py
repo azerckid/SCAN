@@ -9,7 +9,6 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator, FormatChecker
 
-
 QA_ROOT = Path(__file__).resolve().parents[1]
 FIXTURES_ROOT = QA_ROOT / "fixtures"
 SCHEMAS_ROOT = QA_ROOT / "schemas"
@@ -71,23 +70,18 @@ def validate_package(package: Path) -> list[str]:
     evidence = documents["evidence.json"]
     expected = documents["expected.json"]
     evidence_ids = [
-        item["evidence_id"]
-        for array_name in EVIDENCE_ARRAYS
-        for item in evidence[array_name]
+        item["evidence_id"] for array_name in EVIDENCE_ARRAYS for item in evidence[array_name]
     ]
     duplicate_evidence_ids = duplicate_values(evidence_ids)
     if duplicate_evidence_ids:
-        errors.append(
-            f"{package.name}: duplicate evidence IDs: {sorted(duplicate_evidence_ids)}"
-        )
+        errors.append(f"{package.name}: duplicate evidence IDs: {sorted(duplicate_evidence_ids)}")
 
     requirements = expected["scoring"]["requirements"]
     requirement_ids = [item["requirement_id"] for item in requirements]
     duplicate_requirement_ids = duplicate_values(requirement_ids)
     if duplicate_requirement_ids:
         errors.append(
-            f"{package.name}: duplicate requirement IDs: "
-            f"{sorted(duplicate_requirement_ids)}"
+            f"{package.name}: duplicate requirement IDs: {sorted(duplicate_requirement_ids)}"
         )
 
     evidence_id_set = set(evidence_ids)
@@ -101,9 +95,7 @@ def validate_package(package: Path) -> list[str]:
 
     source_ids = {source["source_id"] for source in evidence["sources"]}
     evidence_source_ids = {
-        item["source_id"]
-        for array_name in EVIDENCE_ARRAYS
-        for item in evidence[array_name]
+        item["source_id"] for array_name in EVIDENCE_ARRAYS for item in evidence[array_name]
     }
     missing_evidence_sources = evidence_source_ids - source_ids
     if missing_evidence_sources:
@@ -131,11 +123,7 @@ def main() -> int:
             schema_errors.append(f"{schema_path.name}: invalid schema: {error}")
 
     packages = sorted(path for path in FIXTURES_ROOT.iterdir() if path.is_dir())
-    errors = schema_errors + [
-        error
-        for package in packages
-        for error in validate_package(package)
-    ]
+    errors = schema_errors + [error for package in packages for error in validate_package(package)]
     if errors:
         for error in errors:
             print(f"FAIL {error}")

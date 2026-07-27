@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling==1.31.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "scan-forensics-tool"
+version = "0.1.0"
+description = "Evidence-first blockchain forensic tools for SCAN 2026"
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+license = "MIT"
+authors = [{ name = "SCAN contributors" }]
+dependencies = [
+    "typer>=0.21.0,<1.0",
+]
+
+[project.scripts]
+scan = "scan_tool.cli:app"
+
+[dependency-groups]
+dev = [
+    "jsonschema>=4.25.1,<5",
+    "pytest>=9.0.2,<10",
+    "ruff>=0.14.14,<1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/scan_tool"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.ruff]
+extend-exclude = [".agent"]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "SIM"]
