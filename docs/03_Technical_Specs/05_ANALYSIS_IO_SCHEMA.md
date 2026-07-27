@@ -1,7 +1,7 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-27 00:54
-> Status: Draft 1
+> Last Updated: 2026-07-27 15:52
+> Status: Contract Approved 0.1 · Implementation Pending
 > Schema Version: 0.1
 
 ## 1. 문서 목적
@@ -267,14 +267,14 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
 
 ## 11. 다음 단계
 
-1. Schema 0.1과 세 fixture 예제의 자동 검증을 통과시킨다.
+1. Schema 0.1과 세 fixture 예제의 자동 검증 `PASS 3`을 유지한다.
 2. Python 개발 원칙 Draft 1에서 Pydantic 모델·adapter·artifact·secret 규칙을
    정리했다.
 3. CLI command flow와 terminal HTML Preview Draft를 작성했다.
 4. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
 5. 승인된 Schema·UI 경계를 원자적 backlog와 QA 시나리오 Draft로 전환했다.
-6. backlog·QA 시나리오 승인 후 Python 프로젝트를 초기화하고 생성 Schema
-   diff 검사를 연결한다.
+6. SQLite 논리 DB Schema와 Document Completion Gate를 확정했다.
+7. 별도 구현 승인 후 Python 프로젝트를 초기화하고 생성 Schema diff 검사를 연결한다.
 
 ## 12. Related Documents
 
@@ -283,6 +283,7 @@ Pydantic 생성본과 수기 스키마를 대조하며, 차이가 있으면 코�
 - **UI_Screens**: [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - Schema 데이터의 상태별 표시
 - **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - Schema를 구현하는 Pydantic·검증·오류 원칙
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - `DS-...` ID와 공급자 제약
+- **Technical_Specs**: [SQLite 논리 DB Schema](./01_DB_SCHEMA.md) - run·result·evidence·source·artifact 저장 매핑
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - 회귀 fixture의 독립 JSON 계약
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 공통 입출력·오류 규범
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - Pydantic·artifact·adapter 결정

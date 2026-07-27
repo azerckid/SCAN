@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 00:54
-> Status: Draft 1 · Approval Pending
+> Last Updated: 2026-07-27 15:52
+> Status: Draft 1 · Scope Approved · Not Executed
 
 ## 1. 문서 목적
 
@@ -12,7 +12,7 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 현재는 구현 전 Draft다. 모든 시나리오는 backlog의 Acceptance Criteria를
 구체화하지만 Python project나 테스트 코드를 생성하지 않는다.
 
-현재 정의된 시나리오는 24개이며 승인 상태는 `Approval Pending`, 실행 상태는
+현재 정의된 시나리오는 24개이며 승인 상태는 `Scope Approved`, 실행 상태는
 `Not Executed`다. 구현 전·작업별·통합 실행 시점은
 [QA Checklist](./02_QA_CHECKLIST.md)에서 관리한다.
 

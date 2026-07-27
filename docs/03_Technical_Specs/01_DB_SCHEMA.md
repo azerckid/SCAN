@@ -1,0 +1,348 @@
+# SCAN 2026 SQLite 논리 DB Schema
+> Created: 2026-07-27 15:52
+> Last Updated: 2026-07-27 15:52
+> Status: Approved 1.0 · Logical Schema · DDL Deferred
+
+## 1. 문서 목적
+
+이 문서는 SCAN 분석 코어가 로컬 SQLite에 보존할 실행·소스 조회·캐시·
+증거·결과·재개 상태의 논리 구조를 고정한다. 구현용 SQL DDL, migration,
+정확한 SQLite pragma와 backup 명령은 `TASK-004`에서 이 논리 계약을
+벗어나지 않는 범위로 확정한다.
+
+SQLite는 검색과 정합에 필요한 메타데이터만 저장한다. 원본 응답과 export는
+SHA-256 content-addressed artifact로 분리하며 JSON Analysis Result를 결과의
+단일 source of truth로 유지한다.
+
+## 2. 범위와 비범위
+
+### 2.1 포함
+
+- Analysis I/O `0.1` 요청·실행·결과 식별자
+- 공급자별 요청 attempt와 fallback 이력
+- canonical cache key와 artifact 무결성
+- result·evidence·source·artifact 참조
+- checkpoint와 재개 cursor
+- JSON·Markdown export 위치와 hash
+- 규정 판단 당시의 source policy snapshot
+
+### 2.2 제외
+
+- 개인 키·seed phrase·서명 payload·CTFd credential
+- 원본 응답 body와 첨부 파일 blob
+- 범용 주소 그래프·전체 체인 warehouse
+- 팀 공유 서버와 다중 사용자 권한 모델
+- 정확한 SQL type·index 구문·migration 번호
+- CTFd 자동 제출 상태
+
+## 3. 설계 원칙
+
+1. 모든 실행은 `analysis_id`로 격리한다.
+2. 외부 조회 한 번은 공급자별 `source_attempt` 한 행으로 남긴다.
+3. raw byte는 먼저 SHA-256으로 식별하고 artifact 파일에 원자적으로 쓴다.
+4. DB에는 secret, 전체 인증 endpoint, raw body를 저장하지 않는다.
+5. result와 evidence는 다대다 연결이며 모든 confirmed result는 하나 이상의
+   evidence를 가진다.
+6. historical immutable cache와 `latest`·TTL cache를 구분한다.
+7. checkpoint는 완료된 stage만 기록하고 덮어쓰기 대신 revision을 증가시킨다.
+8. 삭제·migration·backup은 명시적 사용자 승인과 복구 검증을 요구한다.
+
+## 4. 관계 개요
+
+```mermaid
+erDiagram
+    ANALYSIS_RUNS ||--|| RUN_SOURCE_POLICIES : snapshots
+    ANALYSIS_RUNS ||--o{ SOURCE_ATTEMPTS : performs
+    ANALYSIS_RUNS ||--o{ RESULTS : produces
+    ANALYSIS_RUNS ||--o{ EVIDENCE_RECORDS : preserves
+    ANALYSIS_RUNS ||--o{ CHECKPOINTS : resumes
+    ANALYSIS_RUNS ||--o{ EXPORTS : emits
+    SOURCE_ATTEMPTS }o--o| ARTIFACTS : stores_raw
+    CACHE_ENTRIES }o--|| ARTIFACTS : points_to
+    EVIDENCE_RECORDS }o--o| SOURCE_ATTEMPTS : observed_by
+    EVIDENCE_RECORDS }o--o| ARTIFACTS : backed_by
+    RESULTS ||--o{ RESULT_EVIDENCE_LINKS : supported_by
+    EVIDENCE_RECORDS ||--o{ RESULT_EVIDENCE_LINKS : supports
+    EXPORTS }o--|| ARTIFACTS : materializes
+```
+
+## 5. 엔티티 정의
+
+### 5.1 `analysis_runs`
+
+한 Analysis I/O 요청과 실행 생명주기를 나타낸다.
+
+| 필드 | 필수 | 의미 |
+|:---|:---:|:---|
+| `analysis_id` | 예 | PK, 공개 `AN-...` ID |
+| `analysis_type` | 예 | `dex_swap`, `auth_consumption`, `address_freeze` |
+| `chain_id` | 예 | V1은 `1` |
+| `fixture_id` | 아니요 | 회귀 실행의 `FX-...` |
+| `status` | 예 | queued/running/complete/partial/failed/interrupted/restricted |
+| `schema_version` | 예 | Analysis I/O schema version |
+| `tool_version` | 예 | 실행 코드 version 또는 commit |
+| `request_artifact_sha256` | 예 | 정규화 요청 JSON artifact |
+| `started_at` | 아니요 | UTC RFC 3339 |
+| `finished_at` | 아니요 | UTC RFC 3339 |
+| `created_at` | 예 | 행 생성 시각 |
+| `updated_at` | 예 | 마지막 상태 변경 시각 |
+
+불변조건:
+
+- `complete`, `partial`, `failed`, `interrupted`, `restricted`만 종료 상태다.
+- `finished_at`은 종료 상태에서만 필수다.
+- 요청 JSON의 `analysis_id`, `analysis_type`, `chain_id`와 행 값이 일치한다.
+
+### 5.2 `run_source_policies`
+
+실행 판단 당시 규정과 허용 source를 canonical JSON으로 보존한다.
+
+| 필드 | 필수 | 의미 |
+|:---|:---:|:---|
+| `analysis_id` | 예 | PK·FK → `analysis_runs` |
+| `rule_status` | 예 | unconfirmed/allowed/restricted |
+| `allowed_source_ids_json` | 예 | 정렬된 source ID 배열 |
+| `source_order_json` | 예 | 실제 우선순위 배열 |
+| `allow_fallback` | 예 | boolean |
+| `offline_mode` | 예 | boolean |
+| `rules_snapshot_ref` | 아니요 | 적용한 Rules Register 변경 기록 |
+| `canonical_sha256` | 예 | policy canonical JSON hash |
+
+`restricted`이면 live `source_attempts`를 생성하기 전에 실행을 종료한다.
+
+### 5.3 `source_attempts`
+
+RPC·REST·공식 URL 조회의 개별 공급자 시도를 기록한다.
+
+| 필드 | 필수 | 의미 |
+|:---|:---:|:---|
+| `source_attempt_id` | 예 | PK, 내부 불투명 ID |
+| `analysis_id` | 예 | FK → `analysis_runs` |
+| `source_record_id` | 예 | Analysis Result의 공급자 레코드 ID |
+| `source_id` | 예 | `DS-...` 등록부 ID |
+| `provider_id` | 예 | 동일 source의 실제 공급자 |
+| `capability` | 예 | rpc_tx, receipt, logs, state, trace, context 등 |
+| `method` | 예 | secret이 제거된 method |
+| `request_fingerprint` | 예 | 정규화 요청 hash |
+| `block_tag` | 아니요 | 명시적 block number/hash |
+| `attempt_number` | 예 | 동일 요청 내 1부터 증가 |
+| `status` | 예 | success/timeout/rate_limited/http_error/rpc_error/invalid |
+| `http_status` | 아니요 | 안전한 경우의 HTTP status |
+| `error_code` | 아니요 | Analysis Error code |
+| `retryable` | 예 | boolean |
+| `started_at` | 예 | 시도 시작 |
+| `finished_at` | 예 | 시도 종료 |
+| `artifact_sha256` | 아니요 | 성공 또는 진단 raw artifact FK |
+
+`analysis_id + request_fingerprint + provider_id + attempt_number`는 유일하다.
+endpoint query·header·API key는 저장하지 않는다.
+
+### 5.4 `artifacts`
+
+content-addressed 파일의 무결성·보존 메타데이터다.
+
+| 필드 | 필수 | 의미 |
+|:---|:---:|:---|
+| `sha256` | 예 | PK, lowercase 64 hex |
+| `byte_length` | 예 | 원본 byte 길이 |
+| `media_type` | 예 | JSON, text, binary 등 |
+| `relative_path` | 예 | `.scan/` 기준 상대 경로 |
+| `artifact_kind` | 예 | request/raw_response/result/export/context |
+| `redaction_status` | 예 | not_required/redacted/rejected/pending |
+| `license_status` | 예 | owned/public_reference/restricted/unknown |
+| `created_at` | 예 | 최초 저장 시각 |
+| `verified_at` | 아니요 | hash 재검증 시각 |
+
+같은 SHA-256 파일은 덮어쓰지 않는다. `relative_path`에는 사용자 홈 절대
+경로를 저장하지 않는다.
+
+### 5.5 `cache_entries`
+
+정규화 source 요청을 raw artifact와 연결한다.
+
+| 필드 | 필수 | 의미 |
+|:---|:---:|:---|
+| `cache_key` | 예 | PK, canonical request hash |
+| `source_id` | 예 | `DS-...` |
+| `provider_id` | 예 | 실제 공급자 |
+| `capability` | 예 | 조회 기능 |
+| `block_tag` | 아니요 | 명시적 block |
+| `artifact_sha256` | 예 | FK → `artifacts` |
+| `immutability` | 예 | immutable/ttl/negative |
+| `created_at` | 예 | 저장 시각 |
+| `expires_at` | 아니요 | TTL/negative에 필수 |
+| `last_verified_at` | 아니요 | 원본과 재대조 시각 |
+
+`latest`는 기본 cache 대상이 아니다. 확정 block hash 기반 historical 응답만
+`immutable`로 승격할 수 있다.
+
+### 5.6 `results`
+
+Analysis Result의 결정적 결과 항목이다.
+
+| 필드 | 필수 | 의미 |
+|:---|:---:|:---|
+| `result_id` | 예 | PK, 공개 result ID |
+| `analysis_id` | 예 | FK → `analysis_runs` |
+| `result_type` | 예 | 분석기 확장 결과 유형 |
+| `classification` | 예 | confirmed_fact/external_context/heuristic/not_assessed |
+| `requirement_ids_json` | 예 | `REQ-*` 배열 |
+| `value_json` | 예 | canonical result value |
+| `value_sha256` | 예 | `value_json` hash |
+| `created_at` | 예 | 생성 시각 |
+
+float를 raw token·wei 값에 사용하지 않는다. 동일 `analysis_id` 내 result ID도
+유일해야 한다.
+
+### 5.7 `evidence_records`
+
+event·call·state·context 증거를 정규화한다.
+
+| 필드 | 필수 | 의미 |
+|:---|:---:|:---|
+| `evidence_id` | 예 | PK, 공개 evidence ID |
+| `analysis_id` | 예 | FK → `analysis_runs` |
+| `evidence_type` | 예 | event/call/state/context |
+| `source_id` | 예 | `DS-...` |
+| `source_record_id` | 예 | Analysis Result source 레코드 |
+| `source_attempt_id` | 아니요 | FK → `source_attempts` |
+| `method` | 예 | RPC/API/문서 확인 방법 |
+| `locator_json` | 예 | block·TX·log/trace index 또는 URL |
+| `decoded_json` | 예 | 정규화된 해석 |
+| `artifact_sha256` | 아니요 | FK → `artifacts` |
+| `retrieved_at` | 예 | 실제 조회 시각 |
+
+event evidence에는 calldata를 섞지 않고 call evidence로 분리한다. context는
+온체인 사실을 대신하지 않는다.
+
+### 5.8 `result_evidence_links`
+
+결과와 근거의 다대다 관계다.
+
+| 필드 | 필수 | 의미 |
+|:---|:---:|:---|
+| `result_id` | 예 | PK 일부·FK → `results` |
+| `evidence_id` | 예 | PK 일부·FK → `evidence_records` |
+| `role` | 예 | scoring/supporting/context/counterevidence |
+| `created_at` | 예 | 연결 생성 시각 |
+
+다른 `analysis_id`에 속한 result와 evidence를 연결할 수 없다.
+
+### 5.9 `checkpoints`
+
+중단 후 재개 가능한 완료 stage를 보존한다.
+
+| 필드 | 필수 | 의미 |
+|:---|:---:|:---|
+| `checkpoint_id` | 예 | PK |
+| `analysis_id` | 예 | FK → `analysis_runs` |
+| `stage` | 예 | 완료된 pipeline stage |
+| `revision` | 예 | stage별 1부터 증가 |
+| `cursor_json` | 예 | secret이 제거된 재개 cursor |
+| `completed_evidence_ids_json` | 예 | 재수집하지 않을 evidence |
+| `state_sha256` | 예 | canonical checkpoint hash |
+| `created_at` | 예 | 생성 시각 |
+
+미완료 stage는 checkpoint로 기록하지 않는다.
+
+### 5.10 `exports`
+
+동일 result model에서 생성된 사용자 산출물을 기록한다.
+
+| 필드 | 필수 | 의미 |
+|:---|:---:|:---|
+| `export_id` | 예 | PK |
+| `analysis_id` | 예 | FK → `analysis_runs` |
+| `export_type` | 예 | result_json/evidence_markdown |
+| `artifact_sha256` | 예 | FK → `artifacts` |
+| `schema_version` | 예 | 출력 계약 version |
+| `created_at` | 예 | 생성 시각 |
+
+한 run의 JSON과 Markdown은 같은 result·evidence ID와 값을 사용해야 한다.
+
+## 6. 관계·삭제·mutation 경계
+
+| 동작 | 허용 범위 |
+|:---|:---|
+| run 생성 | 요청 검증 후 `analysis_runs`와 policy를 한 transaction으로 생성 |
+| 상태 변경 | 유효한 상태 전이만 허용하고 `updated_at` 갱신 |
+| attempt 추가 | append-only, 기존 실패를 성공으로 덮어쓰지 않음 |
+| artifact 추가 | hash 검증 후 insert-or-verify |
+| result/evidence 저장 | 한 transaction에서 ID·참조 무결성 확인 |
+| checkpoint 추가 | append-only revision |
+| cache 만료 | 행 삭제보다 expired 판정 우선 |
+| 전체 삭제·reset | 기본 CLI에서 제외, 별도 사용자 승인 필요 |
+
+분석 run 삭제가 필요해도 공유 artifact와 cache를 즉시 연쇄 삭제하지 않는다.
+참조 수와 보존 정책을 확인한 garbage collection은 V1 이후 별도 결정이다.
+
+## 7. 인덱스와 조회 계약
+
+정확한 SQL 문법은 `TASK-004`에서 정하지만 다음 조회는 인덱스로 지원해야 한다.
+
+- run status·analysis type·created time
+- source ID·provider ID·request fingerprint
+- cache key와 expiry
+- artifact SHA-256
+- result/evidence의 analysis ID
+- evidence의 TX·block·log/trace locator
+- checkpoint의 analysis ID·stage·최신 revision
+
+## 8. Transaction·WAL·복구
+
+- run 생성, policy 저장은 단일 transaction이다.
+- result·evidence·link 승격도 단일 transaction이다.
+- artifact 파일은 임시 파일에 쓴 뒤 hash 확인과 atomic rename을 수행하고,
+  DB transaction에서 참조한다.
+- WAL 사용 중 DB 파일만 복사하지 않는다.
+- migration 전 일관된 backup과 restore rehearsal을 수행한다.
+- 비정상 종료 후 orphan artifact는 삭제하지 않고 무결성 검사 대상으로 둔다.
+
+## 9. 보존·보안·라이선스
+
+| 데이터 | 기본 방침 |
+|:---|:---|
+| confirmed fixture | 저장소 정책에 따라 영구 보존 |
+| run metadata | 사용자가 삭제를 승인할 때까지 로컬 보존 |
+| raw artifact | source ToS·규정·민감성에 따라 보존 또는 참조만 유지 |
+| API secret | 저장 금지 |
+| CTFd session·credential | 저장 금지 |
+| 공개 전 문제 원문 | 외부 전송 금지, 규정 미확정 시 로컬 최소 보존 |
+
+프로젝트 MIT License는 제3자 원본 데이터·공식 문서·fixture provenance의
+권리를 재허가하지 않는다. 각 artifact의 `license_status`와 source URL을
+별도로 유지한다.
+
+## 10. 구현 승격 Gate
+
+- [x] 논리 엔티티·관계가 정의되었다.
+- [x] raw artifact와 SQLite 책임이 분리되었다.
+- [x] 보존·mutation·삭제 경계가 정의되었다.
+- [x] Analysis I/O result→evidence→source 참조가 매핑되었다.
+- [ ] 정확한 DDL과 migration을 `TASK-004`에서 작성한다.
+- [ ] WAL backup·restore를 임시 DB로 검증한다.
+- [ ] DB constraint와 Pydantic 불변조건의 의미상 차이를 검사한다.
+- [ ] fixture 3개를 저장·재개·export하는 integration test를 통과한다.
+
+## 11. 365 글로벌 평가 기준 연결
+
+| 기준 | DB Schema 기여 |
+|:---|:---|
+| Functionality | 실행·cache·증거·결과·resume의 참조 무결성 |
+| Potential Impact | 새 체인·분석기를 같은 provenance 구조에 추가 가능 |
+| Novelty | 결론보다 원본 증거 연결을 우선하는 evidence-first 저장 |
+| UX | cache·resume·partial 상태를 빠르게 조회 |
+| Open-source | SQLite·공개 JSON Schema 기반 재현 가능한 구조 |
+| Business Plan | 상용 DB 없이 로컬 우선 운영, 규모 확인 후 확장 |
+
+## 12. Related Documents
+
+- **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - BASE-CACHE·PROVENANCE·EXPORT 우선순위
+- **UI_Screens**: [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - run·resume·show·export 사용자 흐름
+- **UI_Screens**: [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) - cache·run·evidence 표시 계약
+- **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - SQLite·artifact·보안 규칙
+- **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - source·provider ID와 보존 제약
+- **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - SQLite·WAL·artifact 결정
+- **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - request·result·evidence·source 공개 계약
+- **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - `TASK-004` DDL·migration 구현
+- **QA_Validation**: [P0·V1 QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 저장·복구·보안 Gate

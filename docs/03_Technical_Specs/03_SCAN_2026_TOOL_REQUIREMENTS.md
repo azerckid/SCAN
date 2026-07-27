@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 분석 도구 요구사항
 > Created: 2026-07-25 23:46
-> Last Updated: 2026-07-27 00:54
-> Status: Draft 1
+> Last Updated: 2026-07-27 15:52
+> Status: Draft 1 · Approved Baseline
 
 ## 1. 문서 목적
 
@@ -320,9 +320,10 @@ fixture schema 개정을 제안한다.
 4. CLI command flow와 terminal HTML Preview Draft를 작성했다.
 5. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
 6. 승인된 Schema·UI 경계를 구현 backlog와 회귀 QA 시나리오 Draft로 분해했다.
-7. P0·V1 오픈소스 후보를 fixture로 비교하고 관련 `OSS-*` 결정을 확정한다.
-8. backlog·QA 시나리오 승인 후 Python project 초기화를 시작한다.
-9. 2026-07-27 이후 공식 규정에 따라 `REQ-NFR-008`과 소스 정책을 갱신한다.
+7. P0·V1 오픈소스 `OSS-*` 결정과 SQLite 논리 DB Schema를 확정했다.
+8. Document Completion Gate를 통과했다.
+9. 공식 규정은 Active Watch로 유지하며 변경 시 `REQ-NFR-008`과 source policy를 갱신한다.
+10. 별도 구현 승인 후 Python project 초기화를 시작한다.
 
 ## 17. Related Documents
 
@@ -331,6 +332,7 @@ fixture schema 개정을 제안한다.
 - **UI_Screens**: [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - 요구사항을 실행하는 명령·상태 흐름
 - **UI_Screens**: [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - complete·partial·failed 화면
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - `DS-...` 소스 능력·제약
+- **Technical_Specs**: [SQLite 논리 DB Schema](./01_DB_SCHEMA.md) - cache·artifact·result·evidence 저장 계약
 - **Technical_Specs**: [Reference Fixture Schema](./02_REFERENCE_FIXTURE_SCHEMA.md) - fixture JSON·증거 분리 계약
 - **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - 이 요구사항을 구현할 구조·품질·보안 기준
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - 요구사항을 구현할 런타임·adapter·저장·검증 결정

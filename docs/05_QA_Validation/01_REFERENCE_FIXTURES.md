@@ -1,7 +1,7 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-26 20:28
-> Status: Draft 1 · Fixture Scope Closed
+> Last Updated: 2026-07-27 15:52
+> Status: Approved 1.0 · Fixture Scope Closed
 
 ## 1. 문서 목적
 
@@ -321,7 +321,7 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 4. 세 confirmed fixture를 소비하는 P0·V1 QA 시나리오 Draft를 작성했다.
 5. 후보 5개는 DOC-M3에서 모두 `Deferred`로 결정하고 승격 조건·소스·시점을
    기록했다.
-6. Document Completion Gate 이후 구현 회귀 테스트 자동화 여부를 승인한다.
+6. Document Completion Gate를 통과했으며 구현 회귀 자동화는 별도 구현 승인 후 진행한다.
 7. P2 승격에 필요한 BRIDGE·BTC fixture는 Deferred 승격 조건에 따라 선정한다.
 
 ## 10. Related Documents

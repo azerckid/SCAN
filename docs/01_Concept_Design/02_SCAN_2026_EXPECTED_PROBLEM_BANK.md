@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 은행
 > Created: 2026-07-24 01:20
-> Last Updated: 2026-07-26 23:18
-> Status: Draft 2 · Challenge Pack Candidate 1
+> Last Updated: 2026-07-27 15:52
+> Status: Draft 2 Approved · Challenge Pack Deferred
 
 ## 1. 문서 목적
 
@@ -2517,12 +2517,10 @@ N홉 이후 어느 주소로 이동했는지 추적하라.
 
 ## 9. 다음 단계
 
-1. 데이터 소스 등록부의 후보 소스를 공식 문서로 재확인하고 필요 시 `검증 중`으로 승격한다. ([등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md))
-2. Reference fixture 8개의 공개 데이터를 확보해 `검증 중`/`확정`으로 올린다. ([Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md))
-3. 2026-07-27 등록 시작 후 공식 규정 변경 기록을 시작한다. (`./03_SCAN_2026_RULES_REGISTER.md`)
-4. 기능 우선순위 Draft 1과 P0·V1 도구 요구사항을 작성했다. ([우선순위](./04_SCAN_2026_TOOL_PRIORITY.md))
-5. 요구사항 기반 기술 선택 기록 Draft 1을 작성했으며, 다음은 출력 JSON Schema다.
-6. Challenge Pack 후보 중 대표 3~4개를 실제 데이터 fixture로 승격한다.
+1. confirmed fixture 3개를 V1 구현 회귀 입력으로 유지한다.
+2. 후보 fixture 5개와 Challenge Pack 추가 사례는 해당 기능 승격 전까지 Deferred다.
+3. 공식 규정 변경 시 지원 체인·정답·증거 형식과 기능 허용 범위를 갱신한다.
+4. 별도 구현 승인 후 P0·V1 analyzer가 문제별 완료·부분·실패 조건을 충족하는지 검증한다.
 
 ## 10. Draft 2 채택 기록
 

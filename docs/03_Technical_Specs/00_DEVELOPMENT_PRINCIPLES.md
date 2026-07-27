@@ -1,6 +1,6 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-26 22:38
+> Last Updated: 2026-07-27 15:52
 > Status: Draft 1
 
 ## 1. 문서 목적
@@ -431,9 +431,10 @@ dist/
 2. CLI command flow와 terminal HTML Preview Draft를 작성했다.
 3. 사용자가 Preview를 확인하고 UI-First Gate를 통과시켰다.
 4. 승인된 문서와 preview를 원자적 backlog·QA 시나리오 Draft로 전환했다.
-5. 기능별 오픈소스 후보를 조사하고 P0·V1 `OSS-*` 결정을 fixture로 검증한다.
-6. 문서 완료 Roadmap에서 공식 규정·QA·Draft 승인 상태를 먼저 닫는다.
-7. Document Completion Gate와 별도 구현 승인을 받은 뒤 Python project를 초기화한다.
+5. P0·V1 `OSS-*` 재사용·직접 구현 경계를 확정했다.
+6. SQLite 논리 DB Schema·README·MIT License와 Document Completion Gate를 닫았다.
+7. 공식 규정은 Active Watch로 유지하며 제한 기능을 기본 비활성화한다.
+8. 별도 구현 승인을 받은 뒤 Python project를 초기화한다.
 
 ## 22. Related Documents
 
@@ -442,6 +443,7 @@ dist/
 - **UI_Screens**: [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) - 정보 계층·상태 표현·접근성
 - **UI_Screens**: [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - 구현 전 사용자 확인 화면
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - source ID·rate limit·규정 제약
+- **Technical_Specs**: [SQLite 논리 DB Schema](./01_DB_SCHEMA.md) - run·cache·artifact·evidence·checkpoint 저장 경계
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 구현이 만족해야 할 규범
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - Python·adapter·저장·도구 결정
 - **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - 모델·오류·증거 공개 계약
