@@ -1,4 +1,4 @@
-"""Run the TASK-001 offline quality gate."""
+"""Run the repository-wide offline quality gate."""
 
 import subprocess
 import sys
