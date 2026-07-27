@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-27 21:22
-> Status: Approved 1.2 · TASK-002 Contract Gate Passed
+> Last Updated: 2026-07-27 21:50
+> Status: Approved 1.3 · TASK-003 Source Scope Passed
 
 ## 1. 문서 목적
 
@@ -11,9 +11,10 @@
 언제 무엇을 실행하고 어떤 증거를 남겨야 하는지 정의한다.
 
 최소 Python package와 offline 품질 Gate, Analysis I/O runtime 계약이
-구현됐다. QA 시나리오 24개 중 `QA-BOOT-001`, `QA-SCHEMA-001`,
-`QA-SCHEMA-002`는 `pass`, 나머지 21개는 `not_executed`다. Project·Contract
-Gate 통과를 source·storage·CLI·분석 기능이나 통합 Gate 통과와 같은 의미로
+구현됐고 source policy·retry·fallback 계층이 추가됐다. QA 시나리오 24개 중
+Project·Contract와 Source retry/fallback 5개는 `pass`, source policy/offline
+교차 시나리오 2개는 `partial`, 나머지 17개는 `not_executed`다. TASK-003
+source 범위 통과를 storage·CLI·분석 기능이나 통합 Gate 통과와 같은 의미로
 사용하지 않는다.
 
 `TASK-010`의 Agentic Parallel Solve QA 6개는 별도
@@ -67,7 +68,7 @@ Gate 통과를 source·storage·CLI·분석 기능이나 통합 Gate 통과와 �
 |:---|:---|
 | 정의 수 | 24 |
 | 승인 상태 | Scope Approved |
-| 실행 상태 | 3 pass / 21 not_executed |
+| 실행 상태 | 5 pass / 2 partial / 17 not_executed |
 | 구현 전 허용 실행 | 문서 링크·ID·Schema·fixture 정합 검사만 |
 | 전체 실행 Gate | `TASK-009` 통합 회귀 |
 
@@ -82,7 +83,7 @@ Gate 통과를 source·storage·CLI·분석 기능이나 통합 Gate 통과와 �
 | Document Gate | 구현 전과 모든 문서 PR | `QA-REG-003`의 문서·Schema·fixture 부분 | pass: 2026-07-27 문서 완료 보고서 |
 | Project Gate | `TASK-001` 완료 후 | `QA-BOOT-001` | pass: 2026-07-27 |
 | Contract Gate | `TASK-002` 완료 후 | `QA-SCHEMA-001`, `QA-SCHEMA-002` | pass: 2026-07-27 |
-| Source Gate | `TASK-003` 완료 후 | `QA-RULE-001`, `QA-SOURCE-001`, `QA-RETRY-001`, `QA-FALLBACK-001` | not_executed |
+| Source Gate | `TASK-003` 완료 후 | `QA-RULE-001`, `QA-SOURCE-001`, `QA-RETRY-001`, `QA-FALLBACK-001` | TASK-003 scope pass: retry/fallback pass, rule/source partial |
 | Storage Gate | `TASK-004` 완료 후 | `QA-CACHE-001`, `QA-EXPORT-001`, `QA-ARTIFACT-001`, `QA-SEC-001`의 storage 범위 | not_executed |
 | CLI Gate | `TASK-005` 완료 후 | `QA-CLI-001`, `QA-CLI-002`, `QA-CLI-003`, `QA-CLI-004`, `QA-SEC-001`의 CLI 범위 | not_executed |
 | DEX Gate | `TASK-006` 완료 후 | `QA-DEX-001`, `QA-DEX-002` | not_executed |
@@ -116,13 +117,14 @@ ID는 24개 집계에서 한 번만 센다.
 - [x] TASK-001 범위에서 독립 임시 환경과 잠금 파일로 설치를 재현했다.
 - [x] TASK-001 범위에서 Ruff·format·pytest와 두 Schema 검증기를 실행했다.
 - [x] Analysis I/O 모델과 승인 Schema의 35개 의미 probe가 모두 일치한다.
-- [ ] offline cache miss에서 네트워크 호출이 0건이다.
-- [ ] timeout·429·일시적 5xx만 제한적으로 재시도한다.
-- [ ] fallback 전후 source와 모든 attempt를 보존한다.
+- [x] TASK-003 transport 범위의 offline cache miss에서 네트워크 호출이 0건이다.
+- [x] timeout·429·HTTP 500·502·503·504만 제한적으로 재시도한다.
+- [x] fallback 전후 source·provider와 모든 attempt를 보존한다.
 - [ ] SQLite cache·checkpoint와 SHA-256 artifact를 임시 경로에서 검증한다.
 - [ ] JSON·Markdown이 같은 result model에서 생성된다.
 - [ ] CLI stdout·stderr·exit code가 UI 문서와 일치한다.
 - [ ] secret canary와 사용자 절대 경로가 log·DB·artifact·export에 0건이다.
+- [x] TASK-003 source payload repr·오류·attempt에는 query·header secret이 0건이다.
 
 ### 6.2 TASK-006 DEX
 
@@ -187,11 +189,16 @@ ID는 24개 집계에서 한 번만 센다.
 - [ ] mock·fixture 변경이 정답을 편의상 바꾸지 않는다.
 - [x] TASK-002 범위의 오류·source·결과 필드를 승인 계약과 연결했다.
 - [x] TASK-002는 fixture 정답을 변경하지 않고 example을 round-trip했다.
+- [x] TASK-003 source·provider·attempt·오류 필드를 승인 요구사항과 연결했다.
+- [x] TASK-003 test double은 fixture 정답을 변경하지 않았다.
 - [x] TASK-001 dependency의 라이선스·공식 배포·취약점 점검 근거를 기록했다.
 - [x] TASK-002 Pydantic dependency의 라이선스·취약점 점검 근거를 기록했다.
+- [x] TASK-003 HTTPX dependency의 라이선스·취약점 점검 근거를 기록했다.
 - [x] TASK-001 직접 구현 범위가 `OSS-*` 결정과 일치한다.
-- [x] TASK-001~002 추적 파일에서 secret·`.scan/`·로컬 DB가 0건임을 확인했다.
+- [x] TASK-003 구현이 `TD-013`·`TD-014`의 adapter/orchestration 분리와 일치한다.
+- [x] TASK-001~003 추적 파일에서 secret·`.scan/`·로컬 DB가 0건임을 확인했다.
 - [ ] UI 동작 변경 시 HTML Preview·UI 문서·피드백을 동기화한다.
+- [x] TASK-003은 UI 동작을 변경하지 않고 기존 retry/fallback 표시 계약을 유지했다.
 
 ### 7.3 대회 직전
 
@@ -253,6 +260,8 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 [Bootstrap 검증 보고서](./05_TASK_001_BOOTSTRAP_REPORT.md)에 기록한다.
 `TASK-002`의 model·runtime 불변조건·Schema 의미 probe·dependency 결과는
 [Contract 검증 보고서](./06_TASK_002_CONTRACT_REPORT.md)에 기록한다.
+`TASK-003`의 HTTPX dependency·policy·retry·fallback·secret 결과는
+[Source 검증 보고서](./07_TASK_003_SOURCE_REPORT.md)에 기록한다.
 
 ## 10. 365 글로벌 평가 기준
 
@@ -314,3 +323,4 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **QA_Validation**: [Document Completion Report](./04_DOCUMENT_COMPLETION_REPORT.md) - DOC-M5 문서 검증 결과
 - **QA_Validation**: [TASK-001 Bootstrap 보고서](./05_TASK_001_BOOTSTRAP_REPORT.md) - Python project·dependency·Project Gate 증거
 - **QA_Validation**: [TASK-002 Contract 보고서](./06_TASK_002_CONTRACT_REPORT.md) - Pydantic model·runtime 불변조건·Contract Gate 증거
+- **QA_Validation**: [TASK-003 Source 보고서](./07_TASK_003_SOURCE_REPORT.md) - HTTPX·policy·retry·fallback·TASK-003 source 범위 증거

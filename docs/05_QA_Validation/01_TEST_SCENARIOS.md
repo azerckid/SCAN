@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 21:22
-> Status: Approved 1.2 · QA-BOOT-001·QA-SCHEMA-001~002 Passed
+> Last Updated: 2026-07-27 21:50
+> Status: Approved 1.3 · TASK-003 Source Scope Passed
 
 ## 1. 문서 목적
 
@@ -11,11 +11,12 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 
 시나리오는 backlog의 Acceptance Criteria를 구체화한다. `TASK-001` 완료로
 `QA-BOOT-001`, `TASK-002` 완료로 `QA-SCHEMA-001`과
-`QA-SCHEMA-002`를 실행·통과했다. 나머지 구현 시나리오는 아직 실행하지
-않았다.
+`QA-SCHEMA-002`를 실행·통과했다. `TASK-003` 완료로 `QA-RETRY-001`,
+`QA-FALLBACK-001`은 통과했고, `QA-RULE-001`과 `QA-SOURCE-001`은 source
+범위만 통과해 `partial`이다. 나머지 구현 시나리오는 아직 실행하지 않았다.
 
 현재 정의된 시나리오는 24개이며 승인 상태는 `Scope Approved`, 실행 상태는
-`3 pass / 21 not_executed`다. 작업별·통합 실행 시점은
+`5 pass / 2 partial / 17 not_executed`다. 작업별·통합 실행 시점은
 [QA Checklist](./02_QA_CHECKLIST.md)에서 관리한다.
 
 병렬 문제풀이 `TASK-010`의 6개 시나리오는
@@ -193,6 +194,9 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 네트워크 호출은 0건이다.
   - 상태 `failed`, 종료 코드 `5`, 오류 `rule_restricted`다.
   - 차단 규칙과 stage는 남지만 credential은 남지 않는다.
+- **Result**: `partial` — restricted와 unconfirmed live 정책은 adapter 호출
+  전에 `rule_restricted`로 종료되고 scripted adapter call count는 0이었다.
+  process exit code 5는 TASK-005에서 재검증한다.
 
 ### QA-SOURCE-001 — offline cache miss
 
@@ -205,6 +209,9 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 외부 호출은 0건이다.
   - 필수 결과가 없으면 `failed`, 일부 저장 결과가 있으면 `partial`이다.
   - 오류에 `source_unavailable`, stage, retryable=false가 기록된다.
+- **Result**: `partial` — TASK-003 transport 범위에서 offline mode는 attempt
+  0건과 `source_unavailable`, stage, `retryable=false`를 반환했다. TASK-004
+  cache와 저장 결과의 partial 분기를 연결한 뒤 재검증한다.
 
 ### QA-RETRY-001 — 제한 재시도
 
@@ -218,6 +225,9 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 400과 schema 오류는 재시도하지 않는다.
   - backoff·jitter·`Retry-After` 적용과 모든 attempt가 provenance에 남는다.
   - 무한 재시도가 없다.
+- **Result**: `pass` — timeout·429·HTTP 500·502·503·504만 최대 3회 안에서
+  재시도하고, 400·501·malformed JSON은 1회로 종료했다. 숫자
+  `Retry-After`와 비정상 값의 backoff fallback을 확인했다.
 
 ### QA-FALLBACK-001 — provider fallback provenance
 
@@ -230,6 +240,8 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 최초 실패 source·attempt와 대체 source 성공이 모두 기록된다.
   - 결과 계약과 evidence ID는 provider 이름에 종속되지 않는다.
   - 허용 목록 밖 provider는 호출하지 않는다.
+- **Result**: `pass` — primary permanent 실패와 secondary 성공 attempt가
+  모두 남고, `allow_fallback: false`에서는 secondary call count가 0이었다.
 
 ## 6. Cache·Artifact·Export·Security Gate
 
@@ -477,6 +489,7 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed 사례와 승격 기준
 - **QA_Validation**: [QA Checklist](./02_QA_CHECKLIST.md) - 24개 시나리오의 승인·실행 시점과 결과 기록
 - **QA_Validation**: [TASK-002 Contract 보고서](./06_TASK_002_CONTRACT_REPORT.md) - round-trip·오류 분류·참조·Schema probe 증거
+- **QA_Validation**: [TASK-003 Source 보고서](./07_TASK_003_SOURCE_REPORT.md) - 규정·offline·retry·fallback·secret 비노출 증거
 - **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 병렬성·격리·독립 검증·수동 제출 QA
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - request·result 기준
 - **QA_Validation**: [DEX fixture](./fixtures/FX-SVC-DEX-001/README.md), [AUTH fixture](./fixtures/FX-EVM-AUTH-001/README.md), [FREEZE fixture](./fixtures/FX-EVM-FREEZE-001/README.md) - exact-match 원본

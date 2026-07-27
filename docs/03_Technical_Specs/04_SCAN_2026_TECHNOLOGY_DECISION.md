@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-27 21:22
-> Status: Approved 1.2 · TASK-001~002 Applied
+> Last Updated: 2026-07-27 21:50
+> Status: Approved 1.3 · TASK-001~003 Applied
 
 ## 1. 문서 목적
 
@@ -93,13 +93,15 @@ dependency의 exact 버전은 이 문서에 고정하지 않는다. 프로젝트
 lockfile 변경 없이 실행한다.
 
 `TASK-001` 적용 결과 Python 재현 기준은 `3.13.7`이며 직접 dependency의
-현재 lock 결과는 Typer `0.27.0`, Pydantic `2.13.4`, jsonschema `4.26.0`,
-pytest `9.1.1`, Ruff `0.16.0`이다. build backend는 Hatchling `1.31.0`으로
-고정했다. HTTPX·eth-abi·eth-utils는 후속 작업에서 실제 사용 코드와 함께
-추가한다. TASK-001 전체 간접 dependency 점검은
+현재 lock 결과는 Typer `0.27.0`, Pydantic `2.13.4`, HTTPX `0.28.1`,
+jsonschema `4.26.0`, pytest `9.1.1`, Ruff `0.16.0`이다. build backend는
+Hatchling `1.31.0`으로 고정했다. eth-abi·eth-utils는 후속 EVM 작업에서 실제
+사용 코드와 함께 추가한다. TASK-001 전체 간접 dependency 점검은
 [TASK-001 검증 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md)에
 기록하며, Pydantic 추가 점검은
 [TASK-002 검증 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md)에
+기록한다. HTTPX와 source 계층 점검은
+[TASK-003 검증 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md)에
 기록한다.
 
 ## 6. HTTP·EVM adapter 결정
@@ -301,7 +303,7 @@ UX 기준을 적용한다. 실제 p95 목표는 V1 benchmark 후 확정한다.
 | 항목 | Draft 1 값 |
 |:---|:---|
 | Idempotent read 최대 시도 | 최초 1회 + retry 2회 |
-| Retry 대상 | timeout, 429, 일시적 5xx와 명시된 provider transient error |
+| Retry 대상 | timeout, 429, HTTP 500·502·503·504. provider 고유 transient error는 공식 정의 후 추가 |
 | Backoff | `base 0.5s × 2^attempt + jitter`, `Retry-After`가 있으면 우선 |
 | Connect timeout | 5초 |
 | Read timeout | 일반 20초, trace 60초 가안 |
@@ -405,7 +407,8 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 9. 새 공식 규정은 Rules Register Notification Intake를 통해 source policy에 반영한다.
 10. `TASK-001`에서 Python 3.13.7 재현 기준과 exact dependency lockfile을 확정했다.
 11. `TASK-002`에서 Pydantic 2.13.4와 Analysis I/O runtime 계약을 확정했다.
-12. 다음 구현은 별도 승인 후 `TASK-003`에서 시작한다.
+12. `TASK-003`에서 HTTPX 0.28.1과 source port·policy·retry·fallback을 구현했다.
+13. 다음 구현은 별도 승인 후 `TASK-004`에서 시작한다.
 
 ## 18. Related Documents
 
@@ -424,3 +427,4 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - DEX·AUTH·FREEZE 회귀 입력
 - **QA_Validation**: [TASK-001 Bootstrap 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md) - 실제 Python·lock·license·품질 Gate
 - **QA_Validation**: [TASK-002 Contract 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) - Pydantic·Schema·참조 불변조건 검증
+- **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - HTTPX·policy·retry·fallback 검증

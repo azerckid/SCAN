@@ -1,7 +1,7 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-27 15:52
-> Status: Draft · Approved Baseline · Rules Unclear
+> Last Updated: 2026-07-27 21:50
+> Status: Draft · TASK-003 Source Baseline Applied · Rules Unclear
 
 ## 1. 문서 목적
 
@@ -229,12 +229,30 @@
 - API 키 보관 방식과 팀 공유 범위
 - 각 소스의 정확한 rate limit 수치 (공식 문서 재확인 필요)
 
+## 8.1 TASK-003 구현 기준선
+
+- `DS-...`는 정책·provenance의 논리 source ID이고 `provider_id`는 실제
+  공급자 식별자다.
+- JSON-RPC와 REST adapter는 주입된 HTTPX client로 한 번의 read만 수행한다.
+- retry·backoff·fallback은 adapter가 아니라 application orchestration이
+  관리한다.
+- timeout·429·HTTP 500·502·503·504만 자동 재시도한다. 400·501·malformed
+  JSON은 재시도하지 않는다.
+- 최초 1회와 retry 2회, base 0.5초 지수 backoff·jitter,
+  `Retry-After` 우선을 구현 기준선으로 둔다.
+- 규정이 `restricted`이거나 live 실행이 `unconfirmed`이면 호출 전에
+  `rule_restricted`로 차단한다. offline mode도 transport 호출을 0건으로
+  유지한다.
+- 실제 endpoint·API key·provider별 rate limit은 코드에 내장하지 않았으며
+  공식 규정·계정·plan 확인 전 live provider 구성을 만들지 않는다.
+
 ## 9. 다음 단계
 
 1. confirmed fixture 3개의 source 기준선을 유지한다.
 2. 공식 규정은 `미확인`으로 유지하고 Notification Intake 결과가 있을 때 갱신한다.
-3. `TASK-003` 시작 전 provider별 공식 plan·rate limit·fallback을 재확인한다.
-4. live source가 제한되면 offline fixture·cache·human fallback을 사용한다.
+3. live provider 구성 전 공식 plan·rate limit·fallback을 재확인한다.
+4. `TASK-004`에서 offline cache miss와 source attempt 저장을 연결한다.
+5. live source가 제한되면 offline fixture·cache·human fallback을 사용한다.
 
 ## 10. Related Documents
 
@@ -246,3 +264,4 @@
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - source policy·cache·fallback·오류 계약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - HTTP transport·source adapter·저장 경계
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 소스 검증용 대표 사례
+- **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - source transport·policy·retry·fallback 검증
