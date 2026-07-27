@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 21:50
-> Status: Approved 1.3 · TASK-001~003 Done
+> Last Updated: 2026-07-27 23:02
+> Status: Approved 1.4 · TASK-001~004 Done
 
 ## 1. 문서 목적
 
@@ -9,7 +9,7 @@
 CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업으로
 전환한다.
 
-Backlog 범위와 `TASK-001`~`TASK-003` 구현은 별도로 승인되었다. 세 작업은
+Backlog 범위와 `TASK-001`~`TASK-004` 구현은 별도로 승인되었다. 네 작업은
 완료됐고 나머지 작업은 `ToDo`다. 후속 작업은 각각 별도 승인 전에는
 `In Progress`로 이동하지 않는다.
 
@@ -243,9 +243,9 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] 실제 adapter 경계와 provider ID 정책을 데이터 소스 등록부에 반영했다.
   - [x] retry·fallback 기본값을 기술 선택·Schema 실행 정책·QA와 동기화했다.
 
-### [ ] TASK-004: SQLite cache·checkpoint·provenance·export 구현
+### [x] TASK-004: SQLite cache·checkpoint·provenance·export 구현
 
-- Status: ToDo
+- Status: Done
 - Priority: P0 · High
 - Depends On: TASK-001, TASK-002
 - Requirement IDs: `REQ-P0-PROV-*`, `REQ-P0-EXPORT-*`,
@@ -253,14 +253,14 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   `REQ-P0-CACHE-006`, `REQ-P0-CACHE-007`, `TD-015`, `TD-016`,
   `TD-020`, `TD-021`
 - Atomic Tasks:
-  - [ ] run·source attempt·cache·checkpoint·artifact 최소 SQLite DDL을 정의한다.
-  - [ ] WAL과 transaction 경계·parameter binding을 적용한다.
-  - [ ] canonical cache key와 immutable historical 응답 정책을 구현한다.
-  - [ ] raw body를 SHA-256 content-addressed artifact로 원자적 저장한다.
-  - [ ] checkpoint에 완료 stage와 evidence ID를 기록한다.
-  - [ ] JSON result를 단일 source of truth로 export한다.
-  - [ ] 같은 result model에서 Markdown evidence를 렌더링한다.
-  - [ ] export·DB·artifact·checkpoint의 secret redaction을 검사한다.
+  - [x] run·source attempt·cache·checkpoint·artifact 최소 SQLite DDL을 정의한다.
+  - [x] WAL과 transaction 경계·parameter binding을 적용한다.
+  - [x] canonical cache key와 immutable historical 응답 정책을 구현한다.
+  - [x] raw body를 SHA-256 content-addressed artifact로 원자적 저장한다.
+  - [x] checkpoint에 완료 stage와 evidence ID를 기록한다.
+  - [x] JSON result를 단일 source of truth로 export한다.
+  - [x] 같은 result model에서 Markdown evidence를 렌더링한다.
+  - [x] export·DB·artifact·checkpoint의 secret redaction을 검사한다.
 - Related Concept Docs:
   - [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - BASE-CACHE·PROVENANCE·EXPORT 최우선 근거
 - Related UI Docs:
@@ -275,24 +275,25 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - cache·export 완료 조건
 - Related QA Docs:
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-CACHE-*`, `QA-EXPORT-*`, `QA-SEC-*`
+  - [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - DDL·cache·checkpoint·artifact·export 증거
 - Implementation Preconditions:
-  - [ ] 저장·복구·export 관련 문서를 다시 확인했다.
-  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
-  - [ ] HTML Preview의 cache·resume·export 상태를 확인했다.
-  - [ ] DB 최소 필드·artifact metadata·checkpoint 상태를 확인했다.
-  - [ ] local mutation 범위가 `.scan/` 아래임을 확인했다.
-  - [ ] WAL backup·migration·삭제에 사용자 승인 원칙을 확인했다.
-  - [ ] JSON·Markdown ID·값 일치 기준을 확인했다.
+  - [x] 저장·복구·export 관련 문서를 다시 확인했다.
+  - [x] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
+  - [x] HTML Preview의 cache·resume·export 상태를 확인했다.
+  - [x] DB 최소 필드·artifact metadata·checkpoint 상태를 확인했다.
+  - [x] local mutation 범위가 `.scan/` 아래임을 확인했다.
+  - [x] WAL backup·migration·삭제에 사용자 승인 원칙을 확인했다.
+  - [x] JSON·Markdown ID·값 일치 기준을 확인했다.
 - Acceptance Criteria:
-  - [ ] 동일 immutable 요청 2회째 외부 호출이 0건이고 결과가 같다.
-  - [ ] 중단 후 완료 stage를 재호출하지 않고 `resumed: true`로 완료한다.
-  - [ ] artifact hash·byte length·source·retrieved time이 연결된다.
-  - [ ] JSON·Markdown의 analysis·result·evidence ID와 값이 일치한다.
-  - [ ] secret과 로컬 사용자 절대 경로가 export에서 0건이다.
-  - [ ] 임시 DB·디렉터리 기반 integration test가 사용자 `.scan/`을 건드리지 않는다.
+  - [x] 동일 immutable 요청 2회째 외부 호출이 0건이고 결과가 같다.
+  - [x] 중단 후 완료 stage를 재호출하지 않고 `resumed: true`로 완료한다.
+  - [x] artifact hash·byte length·source·retrieved time이 연결된다.
+  - [x] JSON·Markdown의 analysis·result·evidence ID와 값이 일치한다.
+  - [x] secret과 로컬 사용자 절대 경로가 export에서 0건이다.
+  - [x] 임시 DB·디렉터리 기반 integration test가 사용자 `.scan/`을 건드리지 않는다.
 - Document Sync Check:
-  - [ ] SQLite DDL·backup·artifact URI를 기술 문서에 기록했다.
-  - [ ] export 형식 변경 시 Schema·UI·QA를 동기화했다.
+  - [x] SQLite DDL·backup·artifact URI를 기술 문서에 기록했다.
+  - [x] export 형식과 Analysis I/O `0.1` 비변경을 Schema·UI·QA에 동기화했다.
 
 ### [ ] TASK-005: CLI command surface와 terminal renderer 구현
 
@@ -618,6 +619,8 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   ([검증 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md))
 - `TASK-003` — HTTPX source port, 규정·offline Gate, retry·fallback provenance
   ([검증 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md))
+- `TASK-004` — SQLite WAL, immutable cache, checkpoint, artifact, export
+  ([검증 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md))
 
 ## 7. Backlog 승인 Gate
 
@@ -626,12 +629,14 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-001을 첫 구현 작업으로 승인
 - [x] TASK-002 Analysis I/O 계약 구현을 별도로 승인
 - [x] TASK-003 source orchestration 구현을 별도로 승인
+- [x] TASK-004 storage·artifact·export 구현을 별도로 승인
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
 - [x] Backlog 승인 후 `codex/task-001-python-bootstrap` branch 사용
 - [x] TASK-002 승인 후 `codex/task-002-analysis-contract-models` branch 사용
 - [x] TASK-003 승인 후 `codex/task-003-source-orchestration` branch 사용
+- [x] TASK-004 승인 후 `codex/task-004-storage-artifacts` branch 사용
 
 ## 8. 365 글로벌 평가 기준
 
