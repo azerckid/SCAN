@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-27 21:50
-> Status: Approved 1.3 · TASK-001~003 Applied
+> Last Updated: 2026-07-27 23:02
+> Status: Approved 1.4 · TASK-001~004 Applied
 
 ## 1. 문서 목적
 
@@ -102,6 +102,9 @@ Hatchling `1.31.0`으로 고정했다. eth-abi·eth-utils는 후속 EVM 작업�
 [TASK-002 검증 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md)에
 기록한다. HTTPX와 source 계층 점검은
 [TASK-003 검증 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md)에
+기록한다. TASK-004 storage는 Python 표준 `sqlite3`·`hashlib`·`json`·파일
+API만 사용해 직접 dependency와 lockfile을 변경하지 않았으며 결과는
+[TASK-004 검증 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md)에
 기록한다.
 
 ## 6. HTTP·EVM adapter 결정
@@ -408,7 +411,8 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 10. `TASK-001`에서 Python 3.13.7 재현 기준과 exact dependency lockfile을 확정했다.
 11. `TASK-002`에서 Pydantic 2.13.4와 Analysis I/O runtime 계약을 확정했다.
 12. `TASK-003`에서 HTTPX 0.28.1과 source port·policy·retry·fallback을 구현했다.
-13. 다음 구현은 별도 승인 후 `TASK-004`에서 시작한다.
+13. `TASK-004`에서 SQLite schema v1·WAL·artifact·export 결정을 구현했다.
+14. 다음 구현은 별도 승인 후 `TASK-005`에서 시작한다.
 
 ## 18. Related Documents
 
@@ -428,3 +432,4 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **QA_Validation**: [TASK-001 Bootstrap 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md) - 실제 Python·lock·license·품질 Gate
 - **QA_Validation**: [TASK-002 Contract 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) - Pydantic·Schema·참조 불변조건 검증
 - **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - HTTPX·policy·retry·fallback 검증
+- **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - sqlite3·artifact·export·backup 검증

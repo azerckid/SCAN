@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-27 21:50
+> Last Updated: 2026-07-27 23:02
 > Status: Approved 1.1 · Document Completion Gate Passed
 
 ## 1. 문서 목적
@@ -202,7 +202,7 @@ Backlog로 분리했다.
 - [x] Backlog의 `TASK-001`~`TASK-010` 10개가 모두 `ToDo` 상태로 유지된다.
 
 위 항목은 Document Completion Gate가 닫힌 시점의 기준선이다. Gate 이후 별도
-구현 승인으로 `TASK-001`~`TASK-003`이 완료됐으며 현재 상태는
+구현 승인으로 `TASK-001`~`TASK-004`가 완료됐으며 현재 상태는
 [Backlog](./00_BACKLOG.md)가 관리한다.
 
 완료 조건: 사용자가 문서 완료를 승인하면 이 Gate는 닫힌다. `TASK-001`
@@ -223,8 +223,8 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 4 | 완료 (2026-07-26) | `DOC-M3` QA checklist·fixture 방침 | DOC-M2와 독립 완료 |
 | 5 | 완료 (2026-07-27) | `DOC-M4` DB·OSS·README·LICENSE·Draft 승인 | M2 기준선·M3 완료 |
 | 6 | 완료 (2026-07-27) | `DOC-M5` Document Completion Gate | M1~M4 완료 |
-| 7 | 완료 (2026-07-27) | Backlog `TASK-001`~`TASK-003` | 별도 구현 승인·Project/Contract/Source Scope |
-| 8 | 별도 승인 후 | Backlog `TASK-004` | TASK-001·002 의존 |
+| 7 | 완료 (2026-07-27) | Backlog `TASK-001`~`TASK-004` | 별도 구현 승인·Project/Contract/Source/Storage Scope |
+| 8 | 별도 승인 후 | Backlog `TASK-005` | TASK-002·003·004 의존 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.
 `DOC-M2`~`DOC-M5`나 `TASK-001`의 선행 조건으로 추가하지 않는다. 실제 웹

@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 21:50
-> Status: Approved 1.3 · TASK-003 Source Scope Passed
+> Last Updated: 2026-07-27 23:02
+> Status: Approved 1.4 · TASK-004 Storage Scope Passed
 
 ## 1. 문서 목적
 
@@ -13,10 +13,12 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 `QA-BOOT-001`, `TASK-002` 완료로 `QA-SCHEMA-001`과
 `QA-SCHEMA-002`를 실행·통과했다. `TASK-003` 완료로 `QA-RETRY-001`,
 `QA-FALLBACK-001`은 통과했고, `QA-RULE-001`과 `QA-SOURCE-001`은 source
+범위만 통과해 `partial`이다. `TASK-004` 완료로 `QA-CACHE-001`,
+`QA-EXPORT-001`, `QA-ARTIFACT-001`은 통과했고 `QA-SEC-001`은 storage
 범위만 통과해 `partial`이다. 나머지 구현 시나리오는 아직 실행하지 않았다.
 
 현재 정의된 시나리오는 24개이며 승인 상태는 `Scope Approved`, 실행 상태는
-`5 pass / 2 partial / 17 not_executed`다. 작업별·통합 실행 시점은
+`8 pass / 3 partial / 13 not_executed`다. 작업별·통합 실행 시점은
 [QA Checklist](./02_QA_CHECKLIST.md)에서 관리한다.
 
 병렬 문제풀이 `TASK-010`의 6개 시나리오는
@@ -76,6 +78,8 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 기존 검증기는 각각 `PASS 3`을 출력한다.
   - package import와 `scan --help`가 성공한다.
   - Git 추적 파일에 `.scan/`, DB, cache, secret이 없다.
+- **Result**: `pass` — TASK-001 이후 모든 PR에서 공통 offline Gate를
+  재실행했고 TASK-004 기준 Ruff·57 tests·세 Schema 검증이 통과했다.
 
 ### QA-SCHEMA-001 — 유효한 request·result round-trip
 
@@ -209,9 +213,10 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 외부 호출은 0건이다.
   - 필수 결과가 없으면 `failed`, 일부 저장 결과가 있으면 `partial`이다.
   - 오류에 `source_unavailable`, stage, retryable=false가 기록된다.
-- **Result**: `partial` — TASK-003 transport 범위에서 offline mode는 attempt
-  0건과 `source_unavailable`, stage, `retryable=false`를 반환했다. TASK-004
-  cache와 저장 결과의 partial 분기를 연결한 뒤 재검증한다.
+- **Result**: `partial` — offline cache hit는 source 재호출 0건으로 통과했고,
+  빈 cache의 offline transport도 attempt 0건과 `source_unavailable`, stage,
+  `retryable=false`를 반환했다. 최종 failed/partial Analysis Result와 CLI
+  exit code 연결은 TASK-005·009에서 재검증한다.
 
 ### QA-RETRY-001 — 제한 재시도
 
@@ -258,6 +263,9 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 두 번째 실행의 외부 호출은 0건이다.
   - 채점 raw 값·boolean·evidence 참조가 첫 실행과 같다.
   - `cache_hit: true`와 원본 source provenance를 모두 보존한다.
+- **Result**: `pass` — 고정 block tag 요청의 첫 실행은 `miss`, 두 번째
+  offline 실행은 `hit`였고 adapter call count는 1에서 증가하지 않았다.
+  raw body·source·provider·request fingerprint가 일치했다.
 
 ### QA-EXPORT-001 — JSON·Markdown 동일성
 
@@ -272,6 +280,9 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 모든 ID·값·classification·warning이 의미상 동일하다.
   - JSON이 단일 source of truth이고 Markdown의 독립 계산이 없다.
   - export만으로 입력·source·block·evidence·tool version을 역추적할 수 있다.
+- **Result**: `pass` — DEX·AUTH·FREEZE 세 Analysis Result를 JSON과
+  Markdown으로 두 번 export해 동일 artifact hash를 재사용했다. Markdown의
+  canonical JSON을 역파싱한 결과 원 result dict와 일치했다.
 
 ### QA-ARTIFACT-001 — content-addressed raw artifact
 
@@ -285,6 +296,9 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 다른 body는 다른 hash를 가진다.
   - hash, byte length, media type, source, retrieved time이 연결된다.
   - 부분 파일이 최종 artifact 경로에 남지 않는다.
+- **Result**: `pass` — 동일 body는 같은 경로·hash, 1-byte 차이는 다른 hash를
+  만들었고 임시 파일은 남지 않았다. 변조 파일 읽기는 integrity error로
+  중단했다.
 
 ### QA-SEC-001 — secret·로컬 경로 비노출
 
@@ -298,6 +312,10 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 사용자 이름이 포함된 로컬 절대 경로는 stdout·stderr·error·export에서 0건이다.
   - endpoint query secret은 redacted 형태로만 남는다.
   - 테스트는 사용자 실제 `.scan/`을 읽거나 변경하지 않는다.
+- **Result**: `partial` — TASK-004 storage 범위에서 canary secret과
+  macOS/Linux/Windows 사용자 홈 절대 경로를 DB·cache·checkpoint·artifact·
+  export 전에 차단했고 Markdown 외부 문자열 escape를 확인했다. CLI
+  stdout·stderr·log는 TASK-005, 전체 통합 검색은 TASK-009에서 재검증한다.
 
 ## 7. DEX Vertical Slice
 
@@ -490,6 +508,7 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 - **QA_Validation**: [QA Checklist](./02_QA_CHECKLIST.md) - 24개 시나리오의 승인·실행 시점과 결과 기록
 - **QA_Validation**: [TASK-002 Contract 보고서](./06_TASK_002_CONTRACT_REPORT.md) - round-trip·오류 분류·참조·Schema probe 증거
 - **QA_Validation**: [TASK-003 Source 보고서](./07_TASK_003_SOURCE_REPORT.md) - 규정·offline·retry·fallback·secret 비노출 증거
+- **QA_Validation**: [TASK-004 Storage 보고서](./08_TASK_004_STORAGE_REPORT.md) - SQLite·cache·checkpoint·artifact·export 증거
 - **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 병렬성·격리·독립 검증·수동 제출 QA
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - request·result 기준
 - **QA_Validation**: [DEX fixture](./fixtures/FX-SVC-DEX-001/README.md), [AUTH fixture](./fixtures/FX-EVM-AUTH-001/README.md), [FREEZE fixture](./fixtures/FX-EVM-FREEZE-001/README.md) - exact-match 원본

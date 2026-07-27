@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-27 21:50
-> Status: Approved 1.3 · TASK-001~003 Applied
+> Last Updated: 2026-07-27 23:02
+> Status: Approved 1.4 · TASK-001~004 Applied
 
 ## 1. 문서 목적
 
@@ -23,11 +23,11 @@
 ## 2. 현재 기준선
 
 저장소에는 최소 application package와 offline 품질 Gate, Analysis I/O
-runtime model, source port·HTTP adapter·policy·retry·fallback orchestration이
-있다. storage·vertical slice는 아직 없으므로 승인된 기술 결정과 공개 계약을
-후속 구현의 기준으로 삼는다.
+runtime model, source port·HTTP adapter·policy·retry·fallback orchestration,
+SQLite WAL 저장·immutable cache·checkpoint·content-addressed artifact·
+JSON/Markdown export가 있다. CLI renderer·vertical slice는 아직 없다.
 
-| 영역 | TASK-001~003 기준 |
+| 영역 | TASK-001~004 기준 |
 |:---|:---|
 | Runtime | Python 단일 core + CLI |
 | Package | `src/scan_tool/` src layout |
@@ -35,7 +35,7 @@ runtime model, source port·HTTP adapter·policy·retry·fallback orchestration�
 | Model | Pydantic `2.13.4` |
 | Transport | HTTPX `0.28.1`, 주입된 `httpx.AsyncClient` 기반 직접 adapter |
 | EVM | TASK-006 이후 `eth-abi`, `eth-utils` 계획, 현재 미설치 |
-| Storage | TASK-004 표준 `sqlite3` WAL + SHA-256 artifact 계획 |
+| Storage | 표준 `sqlite3` WAL + SHA-256 content-addressed artifact |
 | CLI | Typer |
 | Test | pytest + 기존 jsonschema 검증기 |
 | Lint·format | Ruff |
@@ -410,9 +410,10 @@ dist/
 | Done | Python project 초기화 | Python 3.13.7, `pyproject.toml`, `uv.lock`, src layout, offline Gate 완료 |
 | Done | Schema 생성·diff 명령 | Pydantic 생성본과 승인 Schema `0.1`의 35개 의미 probe diff 0 |
 | Done | Source port·policy·retry·fallback | HTTPX one-attempt adapter와 rules-gated orchestration, fault injection 통과 |
+| Done | SQLite·artifact·export | schema v1, WAL, immutable cache, checkpoint, backup·restore, JSON/Markdown 통과 |
 | High | CLI flow·terminal preview | UI-First Gate 통과. 구현 시 FB-001(최종 stdout retry 압축) 반영 |
 | Medium | 정적 타입 검사 채택 여부 | pytest·Ruff만으로 부족한 실제 사례가 있으면 도구 비교 후 결정 |
-| Medium | SQLite DDL·backup 절차 | command 경계 승인 후 테이블·migration·복구 테스트 정의 |
+| Done | SQLite DDL·backup 절차 | schema v1·11 tables, 새 대상 backup, integrity restore rehearsal |
 | Medium | 공급자별 rate limit | 공식 규정·계정·plan 확인 후 source policy에 수치 반영 |
 | Low | 웹 UI | CLI 검토 병목 또는 공식 제출 필요가 확인될 때 재검토 |
 
@@ -439,7 +440,8 @@ dist/
 8. 별도 구현 승인에 따라 Python project와 offline 품질 Gate를 초기화했다.
 9. `TASK-002`에서 Analysis I/O Pydantic model과 Schema 의미 검사를 구현했다.
 10. `TASK-003`에서 HTTPX source port·policy·retry·fallback을 구현했다.
-11. 다음 구현은 별도 승인 후 `TASK-004`에서 시작한다.
+11. `TASK-004`에서 SQLite·cache·checkpoint·artifact·export를 구현했다.
+12. 다음 구현은 별도 승인 후 `TASK-005`에서 시작한다.
 
 ## 22. Related Documents
 
@@ -461,3 +463,4 @@ dist/
 - **QA_Validation**: [TASK-001 Bootstrap 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md) - 실제 Python·lock·dependency·품질 Gate
 - **QA_Validation**: [TASK-002 Contract 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md) - model·runtime 불변조건·Schema 의미 검사
 - **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - policy·retry·fallback·secret 비노출 검증
+- **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - SQLite·cache·checkpoint·artifact·export 검증
