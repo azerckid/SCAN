@@ -1,6 +1,6 @@
 # Fixture: FX-EVM-FREEZE-001
 > Created: 2026-07-24 19:19
-> Last Updated: 2026-07-25 15:25
+> Last Updated: 2026-07-28 02:22
 > Status: Confirmed
 
 ## 1. 목적
@@ -34,6 +34,7 @@ USDC 주소별 블랙리스트의 설정·해제 생명주기를 이벤트, 과�
 | `input.json` | 토큰, 모드, 대상 주소, 설정·해제 TX와 상태 블록 |
 | `expected.json` | 두 상태 전이와 이벤트·공식 맥락 기준 정답 |
 | `evidence.json` | 이벤트·호출·상태·맥락을 분리한 증거와 provenance |
+| `raw-replay.json` | TASK-008 offline decoder가 읽는 reviewed transaction·receipt·Public RPC cross-check·state·공식 맥락 |
 
 세 JSON은 공통 `schema_version: 0.1`을 따른다. calldata는
 `call_evidence`, 발행사·OFAC 자료는 `context_evidence`에 두며, 채점
@@ -58,6 +59,11 @@ USDC 주소별 블랙리스트의 설정·해제 생명주기를 이벤트, 과�
 11. 거래 이전 Circle 공식 커밋
     `b42cf04b31639b8b05d53fea9995954d5f3659d9`의 인터페이스와 MIT
     라이선스를 파일 해시로 고정했다.
+12. 2026-07-28 read-only 재확인에서 public RPC의 두 TX·receipt,
+    dRPC archive의 네 상태와 Blockscout 메서드·대상 주소가 기존 기준값과
+    일치했다.
+13. TASK-008 analyzer가 `raw-replay.json`만 읽어 call·event·state·context를
+    독립 디코딩하고 complete·partial·failed·restricted 경로를 재현했다.
 
 채점 대상은 이벤트와 상태 전이다. OFAC 지정·해제는 공개 사건 맥락이며,
 범죄 의도나 현재 제재 상태를 온체인 사실로 간주하지 않는다. 설정 직전과
@@ -67,6 +73,7 @@ USDC 주소별 블랙리스트의 설정·해제 생명주기를 이벤트, 과�
 ## 5. Related Documents
 
 - **QA_Validation**: [Reference Fixtures](../../01_REFERENCE_FIXTURES.md) - FREEZE 모드·허용 오차·승격 기준
+- **QA_Validation**: [TASK-008 FREEZE 보고서](../../12_TASK_008_FREEZE_REPORT.md) - offline raw replay·정합·scope·security 검증
 - **Technical_Specs**: [데이터 소스 등록부](../../../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - 상태·로그·OSINT 소스
 - **Technical_Specs**: [Reference Fixture Schema](../../../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) - JSON 0.1 계약과 증거 분리
 - **Concept_Design**: [예상문제 은행](../../../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - `EVM-FREEZE-001` 문제·완료 조건

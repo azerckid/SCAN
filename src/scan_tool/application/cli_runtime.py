@@ -19,15 +19,19 @@ from scan_tool.domain.analysis_request import (
     AnalysisRequest,
     AuthAnalysisRequest,
     DexAnalysisRequest,
+    FreezeAnalysisRequest,
 )
 from scan_tool.domain.analysis_result import AnalysisResult
 from scan_tool.domain.auth import AuthReplay
 from scan_tool.domain.dex import DexReplay
+from scan_tool.domain.freeze import FreezeReplay
 from scan_tool.slices.auth import analyze_auth_replay
 from scan_tool.slices.dex import analyze_dex_replay
+from scan_tool.slices.freeze import analyze_freeze_replay
 
 DEX_REPLAY_STAGE = "dex_replay_loaded"
 AUTH_REPLAY_STAGE = "auth_replay_loaded"
+FREEZE_REPLAY_STAGE = "freeze_replay_loaded"
 
 
 class AnalysisUnavailable(RuntimeError):
@@ -141,9 +145,21 @@ class CliRuntime:
                 resumed=resumed,
                 checkpoint_id=checkpoint_id,
             )
-        raise AnalysisUnavailable(
-            "The selected vertical analyzer is not implemented; continue with TASK-008."
-        )
+        if isinstance(document, FreezeAnalysisRequest):
+            replay_body, checkpoint_id, resumed = self._load_replay(
+                document.analysis_id,
+                replay_path,
+                stage=FREEZE_REPLAY_STAGE,
+                replay_model=FreezeReplay,
+                analysis_label="FREEZE",
+            )
+            return analyze_freeze_replay(
+                document,
+                replay_body,
+                resumed=resumed,
+                checkpoint_id=checkpoint_id,
+            )
+        raise AnalysisUnavailable("The selected vertical analyzer is not implemented.")
 
     def _load_replay(
         self,
@@ -151,17 +167,17 @@ class CliRuntime:
         replay_path: Path | None,
         *,
         stage: str,
-        replay_model: type[DexReplay] | type[AuthReplay],
+        replay_model: type[DexReplay] | type[AuthReplay] | type[FreezeReplay],
         analysis_label: str,
     ) -> tuple[bytes, str | None, bool]:
         checkpoint = self.storage.latest_checkpoint(analysis_id, stage)
         if checkpoint is not None:
             raw_sha256 = checkpoint.cursor.get("raw_artifact_sha256")
             if not isinstance(raw_sha256, str):
-                raise AnalysisUnavailable("The saved DEX replay checkpoint is invalid.")
+                raise AnalysisUnavailable("The saved replay checkpoint is invalid.")
             artifact = self.storage.get_artifact(raw_sha256)
             if artifact is None:
-                raise AnalysisUnavailable("The saved DEX replay artifact is unavailable.")
+                raise AnalysisUnavailable("The saved replay artifact is unavailable.")
             return self.artifacts.read(artifact), checkpoint.checkpoint_id, True
 
         if replay_path is None:

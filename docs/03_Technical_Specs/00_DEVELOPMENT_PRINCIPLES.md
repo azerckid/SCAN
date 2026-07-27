@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-28 01:34
-> Status: Approved 1.7 · TASK-001~007 Applied
+> Last Updated: 2026-07-28 01:59
+> Status: Approved 1.8 · TASK-001~008 Applied
 
 ## 1. 문서 목적
 
@@ -25,7 +25,8 @@
 저장소에는 최소 application package와 offline 품질 Gate, Analysis I/O
 runtime model, source port·HTTP adapter·policy·retry·fallback orchestration,
 SQLite WAL 저장·immutable cache·checkpoint·content-addressed artifact·
-JSON/Markdown export와 Typer CLI renderer, DEX·AUTH offline vertical slice가 있다.
+JSON/Markdown export와 Typer CLI renderer, DEX·AUTH·FREEZE offline vertical
+slice가 있다.
 
 | 영역 | TASK-001~005 기준 |
 |:---|:---|
@@ -411,7 +412,7 @@ dist/
 | Done | Schema 생성·diff 명령 | Pydantic 생성본과 승인 Schema `0.1`의 35개 의미 probe diff 0 |
 | Done | Source port·policy·retry·fallback | HTTPX one-attempt adapter와 rules-gated orchestration, fault injection 통과 |
 | Done | SQLite·artifact·export | schema v1, WAL, immutable cache, checkpoint, backup·restore, JSON/Markdown 통과 |
-| Done | CLI flow·terminal preview | UI-First Gate 및 TASK-005 renderer·TASK-006 DEX·TASK-007 AUTH 실제 출력 대조 완료 |
+| Done | CLI flow·terminal preview | UI-First Gate 및 TASK-005 renderer·TASK-006~008 세 slice 실제 출력 대조 완료 |
 | Medium | 정적 타입 검사 채택 여부 | pytest·Ruff만으로 부족한 실제 사례가 있으면 도구 비교 후 결정 |
 | Done | SQLite DDL·backup 절차 | schema v1·11 tables, 새 대상 backup, integrity restore rehearsal |
 | Medium | 공급자별 rate limit | 공식 규정·계정·plan 확인 후 source policy에 수치 반영 |
@@ -446,7 +447,9 @@ dist/
     디코딩하고 DEX 세 결과를 재조정하는 offline vertical slice를 구현했다.
 14. `TASK-007`에서 Approval·allowance·transferFrom·Transfer·실패 거래를
     엄격히 정합하고 attribution을 `not_assessed`로 분리했다.
-15. 다음 구현은 별도 승인 후 `TASK-008` FREEZE vertical slice로 진행한다.
+15. `TASK-008`에서 blacklist·unBlacklist call/event와 네 state를 정합하고
+    issuer·OFAC context, global pause, 현재 상태 미평가를 분리했다.
+16. 다음 구현은 별도 승인 후 `TASK-009` 통합 Gate로 진행한다.
 
 ## 22. Related Documents
 
@@ -472,3 +475,4 @@ dist/
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - command·renderer·exit code·보안 검증
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - raw replay·정합·partial·checkpoint·dependency 검증
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - allowance·trace·scope·partial·checkpoint·보안 검증
+- **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - 상태 전이·context·partial·checkpoint·보안 검증

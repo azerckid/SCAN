@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-28 01:34
-> Status: Approved 1.7 · TASK-001~007 Applied
+> Last Updated: 2026-07-28 01:59
+> Status: Approved 1.8 · TASK-001~008 Applied
 
 ## 1. 문서 목적
 
@@ -419,7 +419,9 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
     채택하고 web3.py 없이 confirmed raw replay를 재현했다.
 16. `TASK-007` AUTH는 같은 `eth-abi`·`eth-utils`와 Pydantic 계약을
     재사용해 dependency와 lockfile을 변경하지 않았다.
-17. 다음 구현은 별도 승인 후 `TASK-008` FREEZE vertical slice로 진행한다.
+17. `TASK-008` FREEZE도 기존 Pydantic·eth-abi·eth-utils·storage를 재사용해
+    dependency와 lockfile을 변경하지 않았다.
+18. 다음 구현은 별도 승인 후 `TASK-009` 통합 Gate로 진행한다.
 
 ## 18. Related Documents
 
@@ -443,3 +445,4 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - Typer·stdout/stderr·exit code 검증
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - ABI decoder·dependency·정합 검증
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - ABI decoder 재사용·dependency·정합 검증
+- **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - ABI decoder 재사용·dependency·context 정합 검증

@@ -15,6 +15,7 @@ from scan_tool.cli import app
 from scan_tool.domain import validate_analysis_result
 from scan_tool.slices.auth import analyze_auth_replay
 from scan_tool.slices.dex import analyze_dex_replay
+from scan_tool.slices.freeze import analyze_freeze_replay
 
 EXAMPLES = Path(__file__).resolve().parents[2] / "docs/05_QA_Validation/examples/analysis"
 DEX_FIXTURE = (
@@ -24,6 +25,10 @@ DEX_FIXTURE = (
 AUTH_FIXTURE = (
     Path(__file__).resolve().parents[2]
     / "docs/05_QA_Validation/fixtures/FX-EVM-AUTH-001/raw-replay.json"
+)
+FREEZE_FIXTURE = (
+    Path(__file__).resolve().parents[2]
+    / "docs/05_QA_Validation/fixtures/FX-EVM-FREEZE-001/raw-replay.json"
 )
 runner = CliRunner()
 
@@ -496,6 +501,183 @@ def test_invalid_auth_replay_is_not_persisted_or_echoed(
     assert result.exit_code == 4
     assert "decode_failed" in combined
     assert "/Users/private-auth/" not in combined
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        assert runtime.storage.count("checkpoints") == 0
+        assert runtime.storage.count("artifacts") == 3
+
+
+def test_freeze_analyze_persists_and_show_renders_transitions_and_scope(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    write_json(request_path, load_document("freeze", "request"))
+
+    analyzed = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(FREEZE_FIXTURE),
+        ],
+    )
+    shown = runner.invoke(app, ["show", "AN-FX-EVM-FREEZE-001"])
+
+    assert analyzed.exit_code == 0
+    assert shown.exit_code == 0
+    for output in (analyzed.stdout, shown.stdout):
+        assert "COMPLETE AN-FX-EVM-FREEZE-001" in output
+        assert "blacklist_transition" in output
+        assert "before=False" in output
+        assert "after=True" in output
+        assert "unblacklist_transition" in output
+        assert "before=True" in output
+        assert "after=False" in output
+        assert "official_context_scope" in output
+        assert "current_sanctions_status=not_assessed" in output
+        assert "criminal_intent=not_assessed" in output
+        assert "artifact://sha256/" in output
+    assert "eth.drpc.org" not in analyzed.stdout + analyzed.stderr
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        stored = runtime.load_result("AN-FX-EVM-FREEZE-001")
+        assert stored is not None
+        assert [item.result_type for item in stored.result.root.results] == [
+            "blacklist_transition",
+            "unblacklist_transition",
+            "official_context_scope",
+        ]
+        assert runtime.storage.count("checkpoints") == 1
+
+
+def test_freeze_missing_unblacklist_is_partial_and_preserves_blacklist(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    evidence_path = tmp_path / "missing-unblacklist.json"
+    write_json(request_path, load_document("freeze", "request"))
+    replay = json.loads(FREEZE_FIXTURE.read_text())
+    replay["unblacklist"] = None
+    replay["state_query"]["snapshots"] = replay["state_query"]["snapshots"][:2]
+    replay["explorer_cross_check"] = replay["explorer_cross_check"][:1]
+    replay["public_rpc_cross_check"] = replay["public_rpc_cross_check"][:1]
+    write_json(evidence_path, replay)
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(evidence_path),
+        ],
+    )
+
+    assert result.exit_code == 3
+    assert "PARTIAL AN-FX-EVM-FREEZE-001" in result.stdout
+    assert "blacklist_transition" in result.stdout
+    assert "unblacklist_transition" not in result.stdout
+    assert "evidence_incomplete" in result.stderr
+
+
+def test_freeze_restricted_policy_returns_exit_five_before_replay(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request = load_document("freeze", "request")
+    request["source_policy"]["rule_status"] = "restricted"  # type: ignore[index]
+    request_path = tmp_path / "restricted-freeze.json"
+    write_json(request_path, request)
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(FREEZE_FIXTURE),
+        ],
+    )
+
+    assert result.exit_code == 5
+    assert "FAILED AN-FX-EVM-FREEZE-001" in result.stdout
+    assert "rule_restricted" in result.stdout + result.stderr
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        assert runtime.storage.count("checkpoints") == 0
+
+
+def test_freeze_keyboard_interrupt_resumes_from_saved_replay(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    write_json(request_path, load_document("freeze", "request"))
+
+    def interrupt(*_: object, **__: object) -> None:
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr("scan_tool.application.cli_runtime.analyze_freeze_replay", interrupt)
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(FREEZE_FIXTURE),
+        ],
+    )
+
+    assert result.exit_code == 130
+    assert "INTERRUPTED AN-FX-EVM-FREEZE-001" in result.stdout
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        assert runtime.storage.count("checkpoints") == 1
+
+    monkeypatch.setattr(
+        "scan_tool.application.cli_runtime.analyze_freeze_replay",
+        analyze_freeze_replay,
+    )
+    resumed = runner.invoke(app, ["resume", "AN-FX-EVM-FREEZE-001"])
+    assert resumed.exit_code == 0
+    assert "COMPLETE AN-FX-EVM-FREEZE-001" in resumed.stdout
+    assert "resumed yes" in resumed.stdout
+
+
+def test_invalid_freeze_replay_is_not_persisted_or_echoed(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    evidence_path = tmp_path / "unsafe.json"
+    write_json(request_path, load_document("freeze", "request"))
+    replay = json.loads(FREEZE_FIXTURE.read_text())
+    replay["local_path"] = "/Users/private-freeze/source.json"
+    write_json(evidence_path, replay)
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(evidence_path),
+        ],
+    )
+    combined = result.stdout + result.stderr
+
+    assert result.exit_code == 4
+    assert "decode_failed" in combined
+    assert "/Users/private-freeze/" not in combined
     with CliRuntime.open(tmp_path / ".scan") as runtime:
         assert runtime.storage.count("checkpoints") == 0
         assert runtime.storage.count("artifacts") == 3

@@ -1,7 +1,7 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-28 01:34
-> Status: Approved 1.3 · UI-First Gate Passed · TASK-007 AUTH Applied
+> Last Updated: 2026-07-28 01:59
+> Status: Approved 1.4 · UI-First Gate Passed · TASK-008 FREEZE Applied
 
 ## 1. 문서 목적
 
@@ -224,8 +224,9 @@ TASK-005는 위 여섯 종료 코드를 renderer와 CLI fault-injection test로
 TASK-006은 DEX offline replay에서 complete `0`, internal call 누락 partial
 `3`, 로그 정합 실패 `4`, 규정 차단 `5`를 실제 분석 결과로 검증했다.
 TASK-007 AUTH는 complete `0`, state·trace 누락 partial `3`, 정합 실패 `4`,
-규정 차단 `5`와 checkpoint resume을 검증했다. FREEZE만 TASK-008 전까지
-`source_unavailable`로 종료한다.
+규정 차단 `5`와 checkpoint resume을 검증했다. TASK-008 FREEZE도 두 전이
+complete `0`, state·전이 누락 partial `3`, 정합 실패 `4`, 규정 차단 `5`와
+checkpoint resume을 검증했다.
 
 ## 11. 도움말과 빈 상태
 
@@ -360,6 +361,15 @@ flowchart LR
 - state 또는 trace가 없으면 확보한 증거·결론만 보존한 `PARTIAL`과 resume
   명령을 출력하며 소비를 완전 결과로 승격하지 않는다.
 
+## 16.3 TASK-008 화면 대조
+
+- blacklist `false→true`와 unblacklist `true→false`를 `CONFIRMED RESULTS`에
+  별도 표시하고 대상 주소·before·after를 보존한다.
+- Circle·OFAC 주소 명시 여부, current sanctions·criminal intent 미평가와
+  global pause 비적용은 `SCOPE / EXTERNAL CONTEXT`에 둔다.
+- unblacklist 또는 historical state가 없으면 blacklist 전이와 공식 맥락을
+  보존한 `PARTIAL`을 출력하며 누락 전이를 확정하지 않는다.
+
 ## 17. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위
@@ -379,3 +389,4 @@ flowchart LR
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - preview 기준값
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - 실제 complete·partial·resume 화면 대조
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - AUTH complete·partial·scope·resume 화면 대조
+- **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - FREEZE transition·context·partial·resume 화면 대조

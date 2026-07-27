@@ -112,6 +112,11 @@ def _compact_value(value: dict[str, object]) -> str:
         "after",
         "target_address",
         "theft_or_phishing_claim",
+        "circle_address_specific",
+        "ofac_address_specific",
+        "current_sanctions_status",
+        "criminal_intent",
+        "global_pause",
     )
     parts = []
     for key in value:

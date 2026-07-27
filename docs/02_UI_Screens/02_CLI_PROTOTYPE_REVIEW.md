@@ -1,7 +1,7 @@
 # SCAN 2026 CLI Prototype Review
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-28 01:34
-> Status: Approved 1.3 · UI-First Gate Passed · TASK-007 AUTH Compared
+> Last Updated: 2026-07-28 01:59
+> Status: Approved 1.4 · UI-First Gate Passed · TASK-008 FREEZE Compared
 
 ## 1. HTML UI Preview
 
@@ -165,8 +165,11 @@ resume 출력을 Preview와 대조했다.
 
 TASK-007에서 AUTH partial·resume을 실제 raw replay로 대조했다. 최종 stdout은
 confirmed 결과와 `SCOPE / NOT ASSESSED`를 분리하고, 상세 retry는 progress
-채널에 남겨 FB-001의 정보 밀도 기준을 충족한다. 이제 미구현 FREEZE만
-TASK-008 전까지 종료 코드 `4`로 명시한다.
+채널에 남겨 FB-001의 정보 밀도 기준을 충족한다.
+
+TASK-008에서 FREEZE rule block Preview와 실제 restricted exit `5`, 두 전이
+complete, unblacklist 누락 partial, checkpoint resume을 대조했다. 실제
+complete 화면은 온체인 전이와 `SCOPE / EXTERNAL CONTEXT`를 분리한다.
 
 ## 9. Gate 판정
 
@@ -215,3 +218,4 @@ backlog와 QA 시나리오 Draft로 전환했다. Python project 초기화는 �
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - 실제 help·출력·exit code 대조
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - Preview 세 값·partial·resume 실제 대조
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - Preview AUTH partial·resume·scope 실제 대조
+- **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - Preview FREEZE rule block·partial·scope 실제 대조
