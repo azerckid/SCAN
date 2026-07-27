@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS run_source_policies (
 CREATE TABLE IF NOT EXISTS source_attempts (
     source_attempt_id TEXT PRIMARY KEY,
     analysis_id TEXT NOT NULL REFERENCES analysis_runs(analysis_id),
-    source_record_id TEXT NOT NULL,
+    source_record_id TEXT,
     source_id TEXT NOT NULL,
     provider_id TEXT NOT NULL,
     capability TEXT NOT NULL,
@@ -437,7 +437,7 @@ class SQLiteStorage:
                 (
                     f"ATT-{stable_id}",
                     analysis_id,
-                    f"SRC-{stable_id}",
+                    None,
                     attempt.source_id,
                     attempt.provider_id,
                     request.capability,
@@ -473,7 +473,7 @@ class SQLiteStorage:
     def list_source_attempts(self, analysis_id: str) -> tuple[dict[str, object], ...]:
         rows = self._connection.execute(
             """
-            SELECT source_attempt_id, source_id, provider_id, capability, method,
+            SELECT source_attempt_id, source_record_id, source_id, provider_id, capability, method,
                    request_fingerprint, block_tag, attempt_number, outcome,
                    failure_kind, http_status, retryable, wait_seconds, raw_sha256,
                    started_at, finished_at, artifact_sha256

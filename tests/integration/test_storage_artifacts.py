@@ -141,6 +141,7 @@ def test_immutable_cache_replays_without_second_source_call(tmp_path: Path) -> N
     assert storage.count("cache_entries") == 1
     assert storage.count("source_attempts") == 1
     stored_attempt = storage.list_source_attempts(request_model.root.analysis_id)[0]
+    assert stored_attempt["source_record_id"] is None
     assert stored_attempt["raw_sha256"] == first.response.payload.raw_sha256
     assert stored_attempt["artifact_sha256"] == first.response.payload.raw_sha256
     cache_key = build_cache_key(1, request)
