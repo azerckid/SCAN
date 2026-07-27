@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-27 15:52
-> Status: Draft 1
+> Last Updated: 2026-07-27 20:57
+> Status: Approved 1.1 · TASK-001 Applied
 
 ## 1. 문서 목적
 
@@ -91,6 +91,14 @@ TypeScript로 중복 구현하지 않는다.
 dependency의 exact 버전은 이 문서에 고정하지 않는다. 프로젝트 초기화 시
 호환 범위를 `pyproject.toml`, 실제 해석 결과를 `uv.lock`에 기록하고 CI에서는
 lockfile 변경 없이 실행한다.
+
+`TASK-001` 적용 결과 Python 재현 기준은 `3.13.7`이며 직접 dependency의
+현재 lock 결과는 Typer `0.27.0`, jsonschema `4.26.0`, pytest `9.1.1`,
+Ruff `0.16.0`이다. build backend는 Hatchling `1.31.0`으로 고정했다.
+HTTPX·Pydantic·eth-abi·eth-utils는 후속 작업에서 실제 사용 코드와 함께
+추가한다. 전체 간접 dependency·license·취약점 점검은
+[TASK-001 검증 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md)에
+기록한다.
 
 ## 6. HTTP·EVM adapter 결정
 
@@ -371,7 +379,7 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 
 | 항목 | 현재 상태 | 결정 시점 |
 |:---|:---|:---|
-| exact Python·dependency 버전 | 미결정 | `pyproject.toml`·`uv.lock` 생성 |
+| exact Python·dependency 버전 | Python 3.13.7 재현 기준, 실제 해석은 `uv.lock` | lock 변경 PR에서 재검증 |
 | Project LICENSE | MIT 확정 | 제3자 데이터·공식 문서·fixture 원본은 원 권리·약관 유지 |
 | 출력 JSON Schema 0.1 | Draft 작성 | 공통 계약 검토·승인 후 Pydantic 생성본과 대조 |
 | SQLite DDL | 후속 | 출력 schema와 command ID 확정 후 |
@@ -393,7 +401,8 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 7. P0·V1 오픈소스 결정은 `BUILD/WRAP/ADOPT/BORROW/REJECT` 경계로 확정했다.
 8. SQLite 논리 DB Schema와 MIT License를 문서 기준선에 반영했다.
 9. 새 공식 규정은 Rules Register Notification Intake를 통해 source policy에 반영한다.
-10. 별도 구현 승인 후 `TASK-001`에서 exact dependency와 lockfile을 확정한다.
+10. `TASK-001`에서 Python 3.13.7 재현 기준과 exact dependency lockfile을 확정했다.
+11. 다음 구현은 별도 승인 후 `TASK-002` 또는 `TASK-003`에서 시작한다.
 
 ## 18. Related Documents
 
@@ -410,3 +419,4 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - `TD-019`의 요청·결과·오류 공개 계약
 - **Technical_Specs**: [오픈소스 포렌식 사전조사](./06_OPEN_SOURCE_FORENSICS_REVIEW.md) - 기존 TD의 재사용·직접 구현 재검증 Gate
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - DEX·AUTH·FREEZE 회귀 입력
+- **QA_Validation**: [TASK-001 Bootstrap 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md) - 실제 Python·lock·license·품질 Gate

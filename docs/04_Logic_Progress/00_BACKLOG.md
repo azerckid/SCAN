@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 20:46
-> Status: Draft 1 · Scope Approved · Implementation Not Approved
+> Last Updated: 2026-07-27 20:57
+> Status: Approved 1.1 · TASK-001 Done
 
 ## 1. 문서 목적
 
@@ -9,9 +9,9 @@
 CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업으로
 전환한다.
 
-Backlog 범위는 승인되었지만 구현 승인은 별개다. 현재 모든 작업은 `ToDo`이며
-별도 승인 전에는 Python project 초기화나 application code 작성을 시작하지
-않는다.
+Backlog 범위와 `TASK-001` 구현은 별도로 승인되었다. `TASK-001`은 완료됐고
+나머지 작업은 `ToDo`다. 후속 작업은 각각 별도 승인 전에는 `In Progress`로
+이동하지 않는다.
 
 `TASK-010`은 공식 Rules·Operations Board Preview·별도 구현 승인에 의존하는
 비차단 운영 트랙이다. `TASK-001`~`TASK-009`의 P0·V1 의존 순서와 완료 Gate를
@@ -94,23 +94,26 @@ TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을
 서로의 내부 구현에 의존하지 않는다.
 TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차단하지 않는다.
 
-## 4. ToDo
+## 4. Task Register
 
-### [ ] TASK-001: Python project와 기본 품질 Gate 초기화
+작업은 의존 순서를 보존하기 위해 ID 순으로 둔다. 실제 상태는 각 카드와
+§5·§6에서 관리한다.
 
-- Status: ToDo
+### [x] TASK-001: Python project와 기본 품질 Gate 초기화
+
+- Status: Done
 - Priority: P0 · High
 - Depends On: 없음
 - Requirement IDs: `TD-001`, `TD-002`, `TD-003`, `TD-008`, `TD-009`,
   `TD-010`, `TD-011`, `TD-012`
 - Atomic Tasks:
-  - [ ] `.gitignore`에 `.scan/`, `.env*`, pytest·Ruff·coverage·build 산출물을 추가한다.
-  - [ ] 빈 값만 가진 `.env.example` 필요 여부를 결정하고 secret을 포함하지 않는다.
-  - [ ] `pyproject.toml`에 Python `>=3.12,<3.15`, src layout과 package metadata를 정의한다.
-  - [ ] 최소 runtime dependency와 dev dependency를 Dependency Gate로 검토한다.
-  - [ ] `uv.lock`을 생성하고 cold install을 재현한다.
-  - [ ] `src/scan_tool/`과 `tests/unit`, `tests/integration`, `tests/regression`를 만든다.
-  - [ ] Ruff·pytest 기본 명령과 기존 두 Schema 검증 명령을 한 번에 실행한다.
+  - [x] `.gitignore`에 `.scan/`, `.env*`, pytest·Ruff·coverage·build 산출물을 추가한다.
+  - [x] 현재 환경변수가 없어 `.env.example`을 생성하지 않기로 결정했다.
+  - [x] `pyproject.toml`에 Python `>=3.12,<3.15`, src layout과 package metadata를 정의한다.
+  - [x] 최소 runtime dependency와 dev dependency를 Dependency Gate로 검토한다.
+  - [x] `uv.lock`을 생성하고 독립 임시 환경 cold install을 재현한다.
+  - [x] `src/scan_tool/`과 `tests/unit`, `tests/integration`, `tests/regression`를 만든다.
+  - [x] `scripts/verify.py`로 Ruff·pytest와 기존 두 Schema 검증을 한 번에 실행한다.
 - Related Concept Docs:
   - [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0 공통 기반 선행 원칙
 - Related UI Docs:
@@ -124,21 +127,21 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - Related QA Docs:
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-BOOT-*`, `QA-SEC-*`
 - Implementation Preconditions:
-  - [ ] 관련 Concept·UI·Technical·QA 문서를 다시 확인했다.
-  - [ ] HTML Preview 사용자 확인과 FB-001 기록을 확인했다.
-  - [ ] CLI 진입·전환·이탈과 loading·empty·error 상태를 확인했다.
-  - [ ] 데이터 소스·최소 필드·local mutation·상태 저장 경계를 확인했다.
-  - [ ] dependency license·취약점·공식 package를 확인했다.
-  - [ ] 구현 범위가 P0·V1과 충돌하지 않는다.
+  - [x] 관련 Concept·UI·Technical·QA 문서를 다시 확인했다.
+  - [x] HTML Preview 사용자 확인과 FB-001 기록을 확인했다.
+  - [x] CLI 진입·전환·이탈과 loading·empty·error 상태를 확인했다.
+  - [x] 데이터 소스·최소 필드·local mutation·상태 저장 경계를 확인했다.
+  - [x] dependency license·취약점·공식 package를 확인했다.
+  - [x] 구현 범위가 P0·V1과 충돌하지 않는다.
 - Acceptance Criteria:
-  - [ ] clean checkout에서 `uv sync --locked`가 성공한다.
-  - [ ] `uv run ruff check .`, `uv run ruff format --check .`, `uv run pytest`가 성공한다.
-  - [ ] 기존 fixture·analysis Schema 검증이 모두 `PASS 3`이다.
-  - [ ] Git 추적 파일에서 secret·`.scan/`·로컬 DB가 0건이다.
-  - [ ] package import가 src layout에서 성공한다.
+  - [x] 독립 임시 환경에서 `uv sync --locked`가 성공한다.
+  - [x] `uv run ruff check .`, `uv run ruff format --check .`, `uv run pytest`가 성공한다.
+  - [x] 기존 fixture·analysis Schema 검증이 모두 `PASS 3`이다.
+  - [x] Git 추적 파일에서 secret·`.scan/`·로컬 DB가 0건이다.
+  - [x] package import와 `scan --help`가 src layout 설치에서 성공한다.
 - Document Sync Check:
-  - [ ] 실제 Python·dependency version과 명령을 개발 원칙·기술 선택 기록에 반영했다.
-  - [ ] 구현과 문서가 다르면 코드 임의 기준이 아니라 문서 변경을 검토했다.
+  - [x] 실제 Python·dependency version과 명령을 개발 원칙·기술 선택 기록에 반영했다.
+  - [x] 구현과 문서 차이를 검토하고 TASK-001 결과 보고서에 기록했다.
 
 ### [ ] TASK-002: Analysis I/O 계약 model과 Schema diff 구현
 
@@ -603,21 +606,22 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 
 ## 5. In Progress
 
-없음. 별도 구현 승인 전에는 어떤 작업도 `In Progress`로 이동하지 않는다.
+없음. 후속 작업은 별도 구현 승인 전에는 `In Progress`로 이동하지 않는다.
 
 ## 6. Done
 
-없음.
+- `TASK-001` — Python 3.13.7, uv lock, 최소 CLI package, offline 품질 Gate
+  ([검증 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md))
 
 ## 7. Backlog 승인 Gate
 
 - [x] [문서 완료 Roadmap](./00_ROADMAP.md)의 `DOC-M1`~`DOC-M5` 통과
 - [x] P0·V1 9개 작업과 별도 Rules-gated `TASK-010`의 범위·의존 순서 승인
-- [ ] TASK-001을 첫 구현 작업으로 승인
+- [x] TASK-001을 첫 구현 작업으로 승인
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
-- [ ] Backlog 승인 후 별도 구현 branch 사용
+- [x] Backlog 승인 후 `codex/task-001-python-bootstrap` branch 사용
 
 ## 8. 365 글로벌 평가 기준
 

@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-27 15:52
-> Status: Draft 1
+> Last Updated: 2026-07-27 20:57
+> Status: Approved 1.1 · TASK-001 Applied
 
 ## 1. 문서 목적
 
@@ -22,11 +22,12 @@
 
 ## 2. 현재 기준선
 
-현재 저장소에는 application package와 `pyproject.toml`이 없으며, 문서와 Python
-fixture·analysis schema 검증기만 있다. 따라서 기존 구현 관행을 추정하지 않고
-승인된 기술 결정과 공개 계약을 초기 구현의 기준으로 삼는다.
+저장소에는 `TASK-001`에서 생성한 최소 application package, `pyproject.toml`,
+`uv.lock`과 offline 품질 Gate가 있다. 분석 model·source·storage·vertical
+slice는 아직 없으므로 승인된 기술 결정과 공개 계약을 후속 구현의 기준으로
+삼는다.
 
-| 영역 | Draft 1 기준 |
+| 영역 | TASK-001 기준 |
 |:---|:---|
 | Runtime | Python 단일 core + CLI |
 | Package | `src/scan_tool/` src layout |
@@ -40,9 +41,9 @@ fixture·analysis schema 검증기만 있다. 따라서 기존 구현 관행을 
 | Lint·format | Ruff |
 | 공개 계약 | Analysis I/O Schema `0.1` |
 
-Python 범위는 `>=3.12,<3.15` 가안이다. 프로젝트 초기화 시 실제 dependency
-해석을 통과한 patch 버전을 lock하기 전까지 특정 patch 버전을 문서에서
-확정하지 않는다.
+Python 지원 범위는 `>=3.12,<3.15`, 재현 기준 patch는 `.python-version`의
+`3.13.7`이다. `uv 0.11.32`로 macOS arm64 환경에서 lock 해석과 독립 임시
+환경 cold install을 통과했다.
 
 ## 3. 규범 우선순위
 
@@ -328,19 +329,20 @@ export -----> domain
 
 ## 16. Tooling과 dependency
 
-### 16.1 기본 명령 가안
+### 16.1 기본 명령
 
 ```bash
 uv sync --locked
 uv run ruff check .
 uv run ruff format --check .
 uv run pytest
-python3 docs/05_QA_Validation/scripts/validate_fixture_schemas.py
-python3 docs/05_QA_Validation/scripts/validate_analysis_schemas.py
+uv run python docs/05_QA_Validation/scripts/validate_fixture_schemas.py
+uv run python docs/05_QA_Validation/scripts/validate_analysis_schemas.py
+uv run python scripts/verify.py
 ```
 
-`pyproject.toml`과 `uv.lock` 생성 전에는 위 `uv` 명령을 실행 계약으로 보지
-않는다. 초기화 PR에서 실제 명령과 dependency version을 검증해 확정한다.
+마지막 명령은 앞선 Ruff·pytest·두 Schema 검증을 순서대로 실행하는
+`TASK-001` 단일 offline Gate다.
 
 ### 16.2 Dependency Gate
 
@@ -381,8 +383,7 @@ Git에 포함하고 수동 편집하지 않는다.
 
 ## 18. Git 제외 대상과 로컬 데이터
 
-현재 `.gitignore`에는 `.venv/`, `__pycache__/`, `*.py[cod]`만 있다.
-Python 프로젝트 초기화 전에 다음 항목을 보강한다.
+`.gitignore`는 다음 로컬·생성 산출물을 제외한다.
 
 ```gitignore
 .scan/
@@ -405,8 +406,8 @@ dist/
 
 | 우선순위 | 항목 | 완료 조건 |
 |:---:|:---|:---|
-| High | `.gitignore` 보강 | `.scan/`, `.env*`, test·build cache 제외와 `.env.example` 예외 확인 |
-| High | Python project 초기화 | Python 범위 검증, `pyproject.toml`, `uv.lock`, src layout 생성 |
+| Done | `.gitignore` 보강 | `.scan/`, `.env*`, test·build cache, 로컬 DB 제외 완료 |
+| Done | Python project 초기화 | Python 3.13.7, `pyproject.toml`, `uv.lock`, src layout, offline Gate 완료 |
 | High | Schema 생성·diff 명령 | Pydantic 모델 생성본과 승인 Schema `0.1` 의미상 diff 자동 검사 |
 | High | CLI flow·terminal preview | UI-First Gate 통과. 구현 시 FB-001(최종 stdout retry 압축) 반영 |
 | Medium | 정적 타입 검사 채택 여부 | pytest·Ruff만으로 부족한 실제 사례가 있으면 도구 비교 후 결정 |
@@ -434,7 +435,8 @@ dist/
 5. P0·V1 `OSS-*` 재사용·직접 구현 경계를 확정했다.
 6. SQLite 논리 DB Schema·README·MIT License와 Document Completion Gate를 닫았다.
 7. 공식 규정은 Active Watch로 유지하며 제한 기능을 기본 비활성화한다.
-8. 별도 구현 승인을 받은 뒤 Python project를 초기화한다.
+8. 별도 구현 승인에 따라 Python project와 offline 품질 Gate를 초기화했다.
+9. 다음 구현은 별도 승인 후 `TASK-002` 또는 `TASK-003`에서 시작한다.
 
 ## 22. Related Documents
 
@@ -453,3 +455,4 @@ dist/
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - DEX·AUTH·FREEZE 회귀 기준
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 구현 전 승인할 자동·수동 검증 기준
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - 모델·증거·source 참조 예
+- **QA_Validation**: [TASK-001 Bootstrap 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md) - 실제 Python·lock·dependency·품질 Gate

@@ -5,10 +5,12 @@ SCAN 2026.
 
 ## Current status
 
-The repository is documentation-complete for the approved pre-code baseline.
-Application implementation has not started. Official rules for AI, automation,
-prebuilt tools, external APIs, and challenge submission remain `unclear`; related
-features stay disabled until an authoritative notice is recorded.
+The repository is documentation-complete for the approved baseline, and `TASK-001`
+has initialized the Python project and offline quality gate. Analysis models,
+source adapters, storage, and DEX/AUTH/FREEZE analyzers are not implemented yet.
+Official rules for AI, automation, prebuilt tools, external APIs, and challenge
+submission remain `unclear`; related features stay disabled until an authoritative
+notice is recorded.
 
 ## What is planned
 
@@ -35,31 +37,32 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | Roadmap | [`00_ROADMAP.md`](docs/04_Logic_Progress/00_ROADMAP.md) | document and implementation gates |
 | Backlog | [`00_BACKLOG.md`](docs/04_Logic_Progress/00_BACKLOG.md) | atomic implementation tasks |
 | QA | [`02_QA_CHECKLIST.md`](docs/05_QA_Validation/02_QA_CHECKLIST.md) | pre-code, PR, regression, competition gates |
+| TASK-001 evidence | [`05_TASK_001_BOOTSTRAP_REPORT.md`](docs/05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md) | Python, lock, dependency, and quality-gate evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
 
-The current repository validation does not install or run application code.
+Install the exact locked environment and run the complete offline quality gate:
 
 ```bash
-python3 docs/05_QA_Validation/scripts/validate_fixture_schemas.py
-python3 docs/05_QA_Validation/scripts/validate_analysis_schemas.py
-git diff --check
+uv sync --locked
+uv run python scripts/verify.py
 ```
 
-The expected schema-validator outputs are:
+The gate runs Ruff lint and format checks, pytest, and both existing Schema
+validators. Expected final outputs include:
 
 ```text
+5 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 ```
 
-The fixture validator requires `jsonschema`:
+The installed package currently exposes only the approved bootstrap surface:
 
 ```bash
-python3 -m venv .venv
-. .venv/bin/activate
-python3 -m pip install -r docs/05_QA_Validation/requirements-fixtures.txt
+uv run scan --help
+uv run scan --version
 ```
 
 ## Rules and safe defaults
@@ -72,10 +75,10 @@ python3 -m pip install -r docs/05_QA_Validation/requirements-fixtures.txt
 
 ## Implementation boundary
 
-The next implementation task is `TASK-001`, Python project initialization. It
-requires separate user approval even though the document completion gate is closed.
-Exact dependency versions, `uv.lock`, SQLite DDL, migrations, and backup commands
-are implementation outputs, not claims made by this documentation baseline.
+`TASK-001` is complete. The next eligible tasks are `TASK-002` (Analysis I/O
+models) and `TASK-003` (source orchestration); each still requires its own
+implementation approval. SQLite DDL, live APIs, AI/agent execution, and CTFd
+automation remain unimplemented.
 
 ## License
 

@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-27 15:52
-> Status: Approved 1.0 · Document Gate Passed · Implementation Not Executed
+> Last Updated: 2026-07-27 20:57
+> Status: Approved 1.1 · TASK-001 Project Gate Passed
 
 ## 1. 문서 목적
 
@@ -10,9 +10,9 @@
 결과는 [P0·V1 QA 시나리오](./01_TEST_SCENARIOS.md)가 규범이며, 이 문서는
 언제 무엇을 실행하고 어떤 증거를 남겨야 하는지 정의한다.
 
-현재 Python application code는 없으며 QA 시나리오 24개는
-`Scope Approved / Not Executed` 상태다. 문서 검증 통과와 구현 테스트
-통과를 같은 의미로 사용하지 않는다.
+최소 Python package와 offline 품질 Gate가 생성됐다. QA 시나리오 24개 중
+`QA-BOOT-001`은 `pass`, 나머지 23개는 `not_executed`다. Project Gate
+통과를 분석 기능이나 통합 Gate 통과와 같은 의미로 사용하지 않는다.
 
 `TASK-010`의 Agentic Parallel Solve QA 6개는 별도
 `Scope Approved / Not Executed` 상태이며 기존 24개 P0·V1 집계를 변경하지
@@ -78,7 +78,7 @@
 | Gate | 실행 시점 | QA ID | 현재 상태 |
 |:---|:---|:---|:---|
 | Document Gate | 구현 전과 모든 문서 PR | `QA-REG-003`의 문서·Schema·fixture 부분 | pass: 2026-07-27 문서 완료 보고서 |
-| Project Gate | `TASK-001` 완료 후 | `QA-BOOT-001` | not_executed |
+| Project Gate | `TASK-001` 완료 후 | `QA-BOOT-001` | pass: 2026-07-27 |
 | Contract Gate | `TASK-002` 완료 후 | `QA-SCHEMA-001`, `QA-SCHEMA-002` | not_executed |
 | Source Gate | `TASK-003` 완료 후 | `QA-RULE-001`, `QA-SOURCE-001`, `QA-RETRY-001`, `QA-FALLBACK-001` | not_executed |
 | Storage Gate | `TASK-004` 완료 후 | `QA-CACHE-001`, `QA-EXPORT-001`, `QA-ARTIFACT-001`, `QA-SEC-001`의 storage 범위 | not_executed |
@@ -94,15 +94,15 @@ ID는 24개 집계에서 한 번만 센다.
 ## 5. 구현 착수 전 Gate
 
 - [x] Document Completion Gate가 사용자 승인으로 닫혔다.
-- [ ] `TASK-001` 시작을 별도로 승인받았다.
-- [ ] Backlog의 관련 Concept·UI·HTML Preview·Technical·QA 링크를 다시 읽었다.
-- [ ] Rules Register의 API·자동화·AI·사전 도구 상태를 확인했다.
-- [ ] P0·V1 관련 오픈소스 후보의 고정 commit·license·`OSS-*` 결정을 확인했다.
-- [ ] 채택 후보가 applicable confirmed fixture 또는 공개 사례 검증을 통과했다.
-- [ ] 제한된 source와 동작이 실행 전 차단되는지 요구사항으로 확인했다.
-- [ ] 실제 dependency·license·Python 범위를 결정했다.
-- [ ] secret·private key·서명·거래 전송이 범위 밖임을 확인했다.
-- [ ] 테스트가 사용자 실제 홈·credential·`.scan/`을 읽거나 변경하지 않게 한다.
+- [x] `TASK-001` 시작을 별도로 승인받았다.
+- [x] Backlog의 관련 Concept·UI·HTML Preview·Technical·QA 링크를 다시 읽었다.
+- [x] Rules Register의 API·자동화·AI·사전 도구 상태를 확인했다.
+- [x] P0·V1 관련 오픈소스 후보의 고정 commit·license·`OSS-*` 결정을 확인했다.
+- [x] TASK-001 dependency는 공식 package와 공개 metadata로 검증했다.
+- [x] 제한된 source와 동작이 실행 전 차단되는지 요구사항으로 확인했다.
+- [x] 실제 dependency·license·Python 범위를 결정했다.
+- [x] secret·private key·서명·거래 전송이 범위 밖임을 확인했다.
+- [x] 테스트가 사용자 실제 홈·credential·`.scan/`을 읽거나 변경하지 않게 한다.
 
 이 Gate는 문서 완료 승인과 구현 승인 사이의 분리선이며, DOC-M3 완료만으로
 체크할 수 없다.
@@ -111,8 +111,8 @@ ID는 24개 집계에서 한 번만 센다.
 
 ### 6.1 TASK-001~TASK-005 공통 기반
 
-- [ ] clean checkout과 잠금 파일로 환경을 재현한다.
-- [ ] Ruff·format·pytest와 두 Schema 검증기를 실행한다.
+- [x] TASK-001 범위에서 독립 임시 환경과 잠금 파일로 설치를 재현했다.
+- [x] TASK-001 범위에서 Ruff·format·pytest와 두 Schema 검증기를 실행했다.
 - [ ] Analysis I/O 모델과 승인 Schema의 의미상 diff가 0이다.
 - [ ] offline cache miss에서 네트워크 호출이 0건이다.
 - [ ] timeout·429·일시적 5xx만 제한적으로 재시도한다.
@@ -180,12 +180,12 @@ ID는 24개 집계에서 한 번만 센다.
 
 ### 7.2 모든 구현 PR
 
-- [ ] 관련 작업의 unit·integration·regression을 실행한다.
+- [x] TASK-001의 unit·integration·regression을 실행했다.
 - [ ] 새 오류·source·결과 필드가 승인 계약과 연결된다.
 - [ ] mock·fixture 변경이 정답을 편의상 바꾸지 않는다.
-- [ ] dependency 추가 시 라이선스·공식 배포·보안 근거를 기록한다.
-- [ ] 직접 구현 기능에 대응하는 오픈소스 조사·제외 이유가 `OSS-*` 결정에 있다.
-- [ ] secret scan과 로컬 경로 비노출을 확인한다.
+- [x] TASK-001 dependency의 라이선스·공식 배포·취약점 점검 근거를 기록했다.
+- [x] TASK-001 직접 구현 범위가 `OSS-*` 결정과 일치한다.
+- [x] TASK-001 추적 파일에서 secret·`.scan/`·로컬 DB가 0건임을 확인했다.
 - [ ] UI 동작 변경 시 HTML Preview·UI 문서·피드백을 동기화한다.
 
 ### 7.3 대회 직전
@@ -243,6 +243,9 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 
 실행하지 않은 항목에 `pass`를 기록하지 않는다. `live` 결과는 source 상태를
 설명할 수 있지만 결정적 offline regression을 대신하지 않는다.
+
+`TASK-001`의 실행 환경·dependency·명령·결과는
+[Bootstrap 검증 보고서](./05_TASK_001_BOOTSTRAP_REPORT.md)에 기록한다.
 
 ## 10. 365 글로벌 평가 기준
 
