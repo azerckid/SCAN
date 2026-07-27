@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-27 23:32
-> Status: Approved 1.5 · TASK-005 CLI Scope Passed
+> Last Updated: 2026-07-28 00:58
+> Status: Approved 1.6 · TASK-006 DEX Scope Passed
 
 ## 1. 문서 목적
 
@@ -12,9 +12,9 @@
 
 최소 Python package와 offline 품질 Gate, Analysis I/O runtime 계약이
 구현됐고 source policy·retry·fallback 및 SQLite storage 계층이 추가됐다.
-QA 시나리오 24개 중 12개는 `pass`, CLI resume/source/security 교차
-시나리오 3개는 `partial`, 나머지 9개는 `not_executed`다. TASK-005 CLI
-범위 통과를 vertical 분석이나 통합 Gate 통과와 같은 의미로 사용하지 않는다.
+QA 시나리오 24개 중 15개는 `pass`, source/security 교차 시나리오 2개는
+`partial`, 나머지 7개는 `not_executed`다. TASK-006 DEX 범위 통과를
+AUTH·FREEZE나 전체 통합 Gate 통과와 같은 의미로 사용하지 않는다.
 
 `TASK-010`의 Agentic Parallel Solve QA 6개는 별도
 `Scope Approved / Not Executed` 상태이며 기존 24개 P0·V1 집계를 변경하지
@@ -67,7 +67,7 @@ QA 시나리오 24개 중 12개는 `pass`, CLI resume/source/security 교차
 |:---|:---|
 | 정의 수 | 24 |
 | 승인 상태 | Scope Approved |
-| 실행 상태 | 12 pass / 3 partial / 9 not_executed |
+| 실행 상태 | 15 pass / 2 partial / 7 not_executed |
 | 구현 전 허용 실행 | 문서 링크·ID·Schema·fixture 정합 검사만 |
 | 전체 실행 Gate | `TASK-009` 통합 회귀 |
 
@@ -84,8 +84,8 @@ QA 시나리오 24개 중 12개는 `pass`, CLI resume/source/security 교차
 | Contract Gate | `TASK-002` 완료 후 | `QA-SCHEMA-001`, `QA-SCHEMA-002` | pass: 2026-07-27 |
 | Source Gate | `TASK-003` 완료 후 | `QA-RULE-001`, `QA-SOURCE-001`, `QA-RETRY-001`, `QA-FALLBACK-001` | TASK-003 scope pass: retry/fallback pass, rule/source partial |
 | Storage Gate | `TASK-004` 완료 후 | `QA-CACHE-001`, `QA-EXPORT-001`, `QA-ARTIFACT-001`, `QA-SEC-001`의 storage 범위 | storage scope pass: cache/export/artifact pass, security partial |
-| CLI Gate | `TASK-005` 완료 후 | `QA-CLI-001`, `QA-CLI-002`, `QA-CLI-003`, `QA-CLI-004`, `QA-SEC-001`의 CLI 범위 | CLI scope pass: CLI-001~003 pass, CLI-004/security partial |
-| DEX Gate | `TASK-006` 완료 후 | `QA-DEX-001`, `QA-DEX-002` | not_executed |
+| CLI Gate | `TASK-005` 완료 후 | `QA-CLI-001`, `QA-CLI-002`, `QA-CLI-003`, `QA-CLI-004`, `QA-SEC-001`의 CLI 범위 | CLI-001~003 pass, CLI-004·security partial |
+| DEX Gate | `TASK-006` 완료 후 | `QA-DEX-001`, `QA-DEX-002`, `QA-CLI-004`의 실제 DEX resume 범위 | DEX-001·002와 CLI-004 pass: 2026-07-28 |
 | AUTH Gate | `TASK-007` 완료 후 | `QA-AUTH-001`, `QA-AUTH-002` | not_executed |
 | FREEZE Gate | `TASK-008` 완료 후 | `QA-FREEZE-001`, `QA-FREEZE-002` | not_executed |
 | Integration Gate | `TASK-009` 완료 전 | `QA-REG-001`, `QA-REG-002`, `QA-REG-003` 전체, `QA-SEC-001` 전체 | not_executed |
@@ -111,7 +111,7 @@ ID는 24개 집계에서 한 번만 센다.
 
 ## 6. 작업별 QA Gate
 
-### 6.1 TASK-001~TASK-005 공통 기반
+### 6.1 TASK-001~TASK-006 공통 기반
 
 - [x] TASK-001 범위에서 독립 임시 환경과 잠금 파일로 설치를 재현했다.
 - [x] TASK-001 범위에서 Ruff·format·pytest와 두 Schema 검증기를 실행했다.
@@ -125,13 +125,14 @@ ID는 24개 집계에서 한 번만 센다.
 - [x] TASK-004 storage 범위에서 secret canary와 사용자 절대 경로가 DB·artifact·export에 0건이다.
 - [x] TASK-005 CLI 범위에서 secret canary와 사용자 절대 경로가 stdout·stderr·오류에 0건이다.
 - [x] TASK-003 source payload repr·오류·attempt에는 query·header secret이 0건이다.
+- [x] TASK-006 raw replay 입력의 미검증 extra·로컬 절대 경로가 artifact와 terminal에 남지 않는다.
 
 ### 6.2 TASK-006 DEX
 
-- [ ] USDC 입력 `25000000000` raw가 exact match다.
-- [ ] pool output WETH `14449515027026387018` raw가 exact match다.
-- [ ] user net output native ETH가 동일 raw로 별도 결과에 있다.
-- [ ] internal call 제거 시 `partial`, 자산·수량 오판 시 complete 거부다.
+- [x] USDC 입력 `25000000000` raw가 exact match다.
+- [x] pool output WETH `14449515027026387018` raw가 exact match다.
+- [x] user net output native ETH가 동일 raw로 별도 결과에 있다.
+- [x] internal call 제거 시 `partial`, 자산·수량 오판 시 complete 거부다.
 
 ### 6.3 TASK-007 AUTH
 
@@ -185,8 +186,8 @@ ID는 24개 집계에서 한 번만 센다.
 ### 7.2 모든 구현 PR
 
 - [x] TASK-001의 unit·integration·regression을 실행했다.
-- [ ] 새 오류·source·결과 필드가 승인 계약과 연결된다.
-- [ ] mock·fixture 변경이 정답을 편의상 바꾸지 않는다.
+- [x] 새 오류·source·결과 필드가 승인 계약과 연결된다.
+- [x] mock·fixture 변경이 정답을 편의상 바꾸지 않는다.
 - [x] TASK-002 범위의 오류·source·결과 필드를 승인 계약과 연결했다.
 - [x] TASK-002는 fixture 정답을 변경하지 않고 example을 round-trip했다.
 - [x] TASK-003 source·provider·attempt·오류 필드를 승인 요구사항과 연결했다.
@@ -196,13 +197,15 @@ ID는 24개 집계에서 한 번만 센다.
 - [x] TASK-003 HTTPX dependency의 라이선스·취약점 점검 근거를 기록했다.
 - [x] TASK-004가 새 dependency 없이 Python·SQLite 표준 API만 사용함을 확인했다.
 - [x] TASK-005가 새 dependency 없이 기존 Typer·Pydantic·stdlib을 사용함을 확인했다.
+- [x] TASK-006이 승인된 `eth-abi`·`eth-utils`만 추가하고 lockfile로 고정했다.
 - [x] TASK-001 직접 구현 범위가 `OSS-*` 결정과 일치한다.
 - [x] TASK-003 구현이 `TD-013`·`TD-014`의 adapter/orchestration 분리와 일치한다.
-- [x] TASK-001~005 추적 파일에서 secret·`.scan/`·로컬 DB가 0건임을 확인했다.
-- [ ] UI 동작 변경 시 HTML Preview·UI 문서·피드백을 동기화한다.
+- [x] TASK-001~006 추적 파일에서 secret·`.scan/`·로컬 DB가 0건임을 확인했다.
+- [x] UI 동작 변경 시 HTML Preview·UI 문서·피드백을 동기화한다.
 - [x] TASK-003은 UI 동작을 변경하지 않고 기존 retry/fallback 표시 계약을 유지했다.
 - [x] TASK-004는 UI 동작을 변경하지 않고 기존 cache/resume/export 표시 계약을 유지했다.
 - [x] TASK-005 실제 help·snapshot과 Preview의 의도된 차이를 FB-002로 기록했다.
+- [x] TASK-006 `--evidence` offline replay와 DEX complete·partial 출력을 UI 문서에 동기화했다.
 
 ### 7.3 대회 직전
 
@@ -270,6 +273,8 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 [Storage 검증 보고서](./08_TASK_004_STORAGE_REPORT.md)에 기록한다.
 `TASK-005`의 command·renderer·exit code·CLI security 결과는
 [CLI 검증 보고서](./09_TASK_005_CLI_REPORT.md)에 기록한다.
+`TASK-006`의 raw decode·정합·partial·resume·DEX security 결과는
+[DEX 검증 보고서](./10_TASK_006_DEX_REPORT.md)에 기록한다.
 
 ## 10. 365 글로벌 평가 기준
 
@@ -334,3 +339,4 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **QA_Validation**: [TASK-003 Source 보고서](./07_TASK_003_SOURCE_REPORT.md) - HTTPX·policy·retry·fallback·TASK-003 source 범위 증거
 - **QA_Validation**: [TASK-004 Storage 보고서](./08_TASK_004_STORAGE_REPORT.md) - SQLite·cache·checkpoint·artifact·export·storage security 증거
 - **QA_Validation**: [TASK-005 CLI 보고서](./09_TASK_005_CLI_REPORT.md) - 네 명령·renderer·exit code·CLI security 증거
+- **QA_Validation**: [TASK-006 DEX 보고서](./10_TASK_006_DEX_REPORT.md) - raw decode·정합·partial·resume·DEX security 증거

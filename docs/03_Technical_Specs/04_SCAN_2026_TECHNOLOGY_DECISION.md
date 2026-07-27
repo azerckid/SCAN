@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-27 23:32
-> Status: Approved 1.5 · TASK-001~005 Applied
+> Last Updated: 2026-07-28 00:58
+> Status: Approved 1.6 · TASK-001~006 Applied
 
 ## 1. 문서 목적
 
@@ -95,8 +95,10 @@ lockfile 변경 없이 실행한다.
 `TASK-001` 적용 결과 Python 재현 기준은 `3.13.7`이며 직접 dependency의
 현재 lock 결과는 Typer `0.27.0`, Pydantic `2.13.4`, HTTPX `0.28.1`,
 jsonschema `4.26.0`, pytest `9.1.1`, Ruff `0.16.0`이다. build backend는
-Hatchling `1.31.0`으로 고정했다. eth-abi·eth-utils는 후속 EVM 작업에서 실제
-사용 코드와 함께 추가한다. TASK-001 전체 간접 dependency 점검은
+Hatchling `1.31.0`으로 고정했다. TASK-006에서 `eth-abi 5.2.0`과
+`eth-utils 5.3.1`을 실제 DEX raw decode·주소 정규화 코드와 함께 추가했다.
+두 직접 dependency와 확인 가능한 전이 dependency는 MIT 계열이고
+`uv pip check`를 통과했다. TASK-001 전체 간접 dependency 점검은
 [TASK-001 검증 보고서](../05_QA_Validation/05_TASK_001_BOOTSTRAP_REPORT.md)에
 기록하며, Pydantic 추가 점검은
 [TASK-002 검증 보고서](../05_QA_Validation/06_TASK_002_CONTRACT_REPORT.md)에
@@ -413,7 +415,9 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 12. `TASK-003`에서 HTTPX 0.28.1과 source port·policy·retry·fallback을 구현했다.
 13. `TASK-004`에서 SQLite schema v1·WAL·artifact·export 결정을 구현했다.
 14. `TASK-005`에서 Typer command surface·terminal renderer·exit code를 구현했다.
-15. 다음 구현은 별도 승인 후 `TASK-006`에서 시작한다.
+15. `TASK-006`에서 `eth-abi 5.2.0`·`eth-utils 5.3.1`과 작은 DEX decoder를
+    채택하고 web3.py 없이 confirmed raw replay를 재현했다.
+16. 다음 구현은 별도 승인 후 `TASK-007` AUTH vertical slice로 진행한다.
 
 ## 18. Related Documents
 
@@ -435,3 +439,4 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - HTTPX·policy·retry·fallback 검증
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - sqlite3·artifact·export·backup 검증
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - Typer·stdout/stderr·exit code 검증
+- **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - ABI decoder·dependency·정합 검증

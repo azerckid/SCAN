@@ -13,7 +13,9 @@ implemented the rules-gated HTTP source port, retry, and fallback orchestration.
 content-addressed artifacts, backup verification, and JSON/Markdown exports.
 `TASK-005` implemented the four-command CLI, terminal renderer, stable exit codes,
 local `.scan/` composition root, and persisted-result display. The
-DEX/AUTH/FREEZE analyzers are not implemented yet.
+`TASK-006` DEX slice now decodes raw Transfer·Swap·Withdrawal logs, reconciles
+USDC/WETH/native ETH outputs, preserves supporting metadata, and supports reviewed
+offline replay with checkpoint resume. AUTH/FREEZE analyzers are not implemented yet.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`; related features stay disabled until an authoritative
 notice is recorded.
@@ -48,6 +50,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-003 evidence | [`07_TASK_003_SOURCE_REPORT.md`](docs/05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) | source policy, retry, fallback, dependency, and TASK-003 scope evidence |
 | TASK-004 evidence | [`08_TASK_004_STORAGE_REPORT.md`](docs/05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) | SQLite, cache, checkpoint, artifact, export, backup, and storage-security evidence |
 | TASK-005 evidence | [`09_TASK_005_CLI_REPORT.md`](docs/05_QA_Validation/09_TASK_005_CLI_REPORT.md) | CLI commands, renderer, exit codes, UI comparison, and CLI-security evidence |
+| TASK-006 evidence | [`10_TASK_006_DEX_REPORT.md`](docs/05_QA_Validation/10_TASK_006_DEX_REPORT.md) | raw DEX replay, exact reconciliation, partial/failure, resume, and DEX-security evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -64,7 +67,7 @@ validators, followed by the generated-Pydantic-Schema compatibility check.
 Expected final outputs include:
 
 ```text
-77 passed
+88 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
@@ -76,14 +79,14 @@ The installed package exposes the approved TASK-005 command surface:
 uv run scan --help
 uv run scan --version
 uv run scan validate REQUEST.json
-uv run scan analyze --request REQUEST.json
+uv run scan analyze --request REQUEST.json --evidence RAW_REPLAY.json
 uv run scan resume ANALYSIS_ID
 uv run scan show ANALYSIS_ID
 ```
 
-Until TASK-006 through TASK-008 add the vertical analyzers, a valid analysis
-request stops explicitly with `source_unavailable` and exit code `4`; it does not
-make a hidden live request or claim a forensic result.
+TASK-006 accepts only reviewed offline DEX replay evidence. A DEX request without
+`--evidence`, or AUTH/FREEZE requests before TASK-007/008, stop explicitly with
+`source_unavailable`; no hidden live request is made.
 
 ## Rules and safe defaults
 
@@ -95,8 +98,8 @@ make a hidden live request or claim a forensic result.
 
 ## Implementation boundary
 
-`TASK-001` through `TASK-005` are complete. The next eligible task is `TASK-006`
-(DEX vertical slice) and still requires separate implementation approval. No live
+`TASK-001` through `TASK-006` are complete. The next eligible task is `TASK-007`
+(AUTH vertical slice) and still requires separate implementation approval. No live
 provider configuration exists; live transport also
 requires `rule_status: allowed`. AI/agent execution and CTFd automation remain
 unimplemented.

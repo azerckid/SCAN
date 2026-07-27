@@ -1,6 +1,6 @@
 # SCAN Analysis I/O Schema 0.1 Examples
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-27 21:22
+> Last Updated: 2026-07-28 00:58
 
 ## 1. 목적
 
@@ -18,6 +18,10 @@
 
 예제는 fixture의 모든 원본 증거를 복제하지 않는다. Schema의 공통 필드,
 유형 분리, exact-match 핵심 결과와 참조 무결성을 보여주는 최소 예다.
+
+TASK-006 실제 DEX analyzer는 이 예제의 세 result ID·raw 값을 유지하면서
+`EV-DEX-METADATA` supporting provenance를 추가한다. 예제와 runtime의 증거
+개수가 달라도 공개 Schema와 채점 결과의 의미는 바뀌지 않는다.
 
 ## 3. 검증
 
@@ -48,3 +52,4 @@ Schema의 35개 probe 수락 결과를 비교한다.
 - **Technical_Specs**: [P0·V1 도구 요구사항](../../../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - exact-match 완료 조건
 - **QA_Validation**: [Reference Fixtures](../../01_REFERENCE_FIXTURES.md) - 예제 원본 fixture 목록
 - **QA_Validation**: [DEX](../../fixtures/FX-SVC-DEX-001/README.md), [AUTH](../../fixtures/FX-EVM-AUTH-001/README.md), [FREEZE](../../fixtures/FX-EVM-FREEZE-001/README.md) - 기준 패키지
+- **QA_Validation**: [TASK-006 DEX 보고서](../../10_TASK_006_DEX_REPORT.md) - 예제와 실제 raw replay 결과 대조

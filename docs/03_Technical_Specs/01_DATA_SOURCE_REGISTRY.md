@@ -1,7 +1,7 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-27 23:32
-> Status: Draft · TASK-005 CLI Baseline Applied · Rules Unclear
+> Last Updated: 2026-07-28 00:58
+> Status: Draft · TASK-006 DEX Offline Replay Applied · Rules Unclear
 
 ## 1. 문서 목적
 
@@ -258,8 +258,22 @@
 - raw body는 SQLite가 아니라 content-addressed artifact에 저장한다.
 - 같은 cache key에 다른 artifact·source provenance가 들어오면 덮어쓰지 않고
   conflict로 거부한다.
-- 실제 사용자 `.scan/` composition root는 TASK-005에서 만들었지만 vertical
-  analyzer와 live provider 설정은 TASK-006~008·Rules Gate 전까지 활성화하지 않는다.
+- 실제 사용자 `.scan/` composition root는 TASK-005에서 만들었다. TASK-006
+  DEX analyzer는 confirmed fixture에서 검토한 raw transaction·receipt·internal
+  call·metadata artifact만 읽는다. live provider 구성은 여전히 만들지 않았다.
+
+## 8.3 TASK-006 DEX source 기준선
+
+- `DS-EVM-RPC-PUBLIC`은 raw transaction·receipt의 scoring source,
+  `DS-EXPLORER-EVM`은 internal native call의 scoring source다.
+- `DS-EVM-RPC-ARCHIVE`의 `getPair` 결과와 `DS-DEX-META`의 pinned 주소는
+  pair·router provenance를 확인하는 supporting source다.
+- reviewed `raw-replay.json`은 각 source ID·provider ID·조회 시각과 raw hex를
+  보존하며 분석기는 이 파일 밖의 endpoint를 호출하지 않는다.
+- 2026-07-28 재조회에서 TX·receipt log·internal call이 confirmed 기준값과
+  일치했다. 이는 live 자동화 허용을 뜻하지 않는다.
+- internal call이 없으면 `partial/trace_unavailable`, Transfer·Swap·Withdrawal
+  정합이 깨지면 `failed/reconciliation_failed`로 증거를 보존한다.
 
 ## 9. 다음 단계
 
@@ -268,6 +282,8 @@
 3. live provider 구성 전 공식 plan·rate limit·fallback을 재확인한다.
 4. TASK-004 cache·attempt 저장 기준선을 TASK-005 CLI composition root에 주입했다.
 5. live source가 제한되면 offline fixture·cache·human fallback을 사용한다.
+6. TASK-006 DEX offline replay 기준선을 유지하고 다음은 TASK-007 AUTH source
+   경계를 별도 승인 후 연결한다.
 
 ## 10. Related Documents
 
@@ -282,3 +298,4 @@
 - **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - source transport·policy·retry·fallback 검증
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - source attempt·cache·artifact 저장 검증
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - source policy 차단·CLI 오류·exit code 검증
+- **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - reviewed raw source·재조회·정합 검증

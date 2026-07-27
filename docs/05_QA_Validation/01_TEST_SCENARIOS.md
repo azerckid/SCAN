@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-27 23:32
-> Status: Approved 1.5 · TASK-005 CLI Scope Passed
+> Last Updated: 2026-07-28 00:58
+> Status: Approved 1.6 · TASK-006 DEX Scope Passed
 
 ## 1. 문서 목적
 
@@ -17,10 +17,12 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 `QA-EXPORT-001`, `QA-ARTIFACT-001`은 통과했고 `QA-SEC-001`은 storage
 범위를 통과했다. `TASK-005` 완료로 `QA-CLI-001`~`003`과
 `QA-RULE-001`은 통과했고 `QA-CLI-004`, `QA-SOURCE-001`,
-`QA-SEC-001`은 vertical·통합 범위가 남아 `partial`이다.
+`QA-SEC-001`은 vertical·통합 범위가 남아 `partial`이다. `TASK-006`으로
+`QA-DEX-001`, `QA-DEX-002`, 실제 DEX checkpoint를 포함한 `QA-CLI-004`가
+통과했다.
 
 현재 정의된 시나리오는 24개이며 승인 상태는 `Scope Approved`, 실행 상태는
-`12 pass / 3 partial / 9 not_executed`다. 작업별·통합 실행 시점은
+`15 pass / 2 partial / 7 not_executed`다. 작업별·통합 실행 시점은
 [QA Checklist](./02_QA_CHECKLIST.md)에서 관리한다.
 
 병렬 문제풀이 `TASK-010`의 6개 시나리오는
@@ -81,7 +83,7 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - package import와 `scan --help`가 성공한다.
   - Git 추적 파일에 `.scan/`, DB, cache, secret이 없다.
 - **Result**: `pass` — TASK-001 이후 모든 PR에서 공통 offline Gate를
-  재실행했고 TASK-005 기준 Ruff·77 tests·세 Schema 검증이 통과했다.
+  재실행했고 TASK-006 기준 Ruff·88 tests·세 Schema 검증이 통과했다.
 
 ### QA-SCHEMA-001 — 유효한 request·result round-trip
 
@@ -192,9 +194,9 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 첫 실행은 checkpoint 보존을 시도하고 종료 코드 `130`이다.
   - resume은 완료 stage를 재호출하지 않고 `resumed: true`를 기록한다.
   - show는 저장된 result와 동일한 상태·ID·raw 값을 표시한다.
-- **Result**: `partial` — fault-injection result의 analyze→저장→show 동일성과
-  중단 code `130`, run 보존을 확인했다. 실제 DEX stage checkpoint 재개는
-  `TASK-006`, 전체 통합은 `TASK-009`에서 실행한다.
+- **Result**: `pass` — DEX raw replay artifact checkpoint를 먼저 저장하고
+  decoder 중단 code `130`을 주입한 뒤 `resume`에서 source file을 다시 읽지
+  않고 complete로 복구했다. `show`의 raw·artifact URI도 저장 결과와 일치했다.
 
 ## 5. Source·Policy·Retry Gate
 
@@ -346,6 +348,9 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - WETH와 native ETH를 서로 다른 자산·결과로 보존한다.
   - 필수 log index `275`, `276`, `278`, `279`와 source가 연결된다.
   - 상태 `complete`, 종료 코드 `0`, tolerance는 raw `0`이다.
+- **Result**: `pass` — 공개 RPC raw receipt의 log `275`, `276`, `278`,
+  `279`를 eth-abi로 디코딩하고 Blockscout internal call·고정 Uniswap
+  metadata와 정합했다. 세 결과·JSON·Markdown·terminal raw 값이 일치했다.
 
 ### QA-DEX-002 — 부분 성공과 자산 오판 방지
 
@@ -362,6 +367,10 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 1은 입증된 pool output과 `partial`, 종료 코드 `3`이다.
   - 2와 3은 `complete`가 될 수 없고 정합 실패로 종료된다.
   - 누락 requirement와 관련 evidence ID가 오류에 연결된다.
+- **Result**: `pass` — internal call 제거는 pool output을 보존한 `partial`
+  및 `trace_unavailable`이었고, Swap output 1 raw 변경은
+  `reconciliation_failed` failed였다. WETH를 native ETH 결과로 승격하지
+  않았다.
 
 ## 8. AUTH Vertical Slice
 
@@ -523,6 +532,7 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 - **QA_Validation**: [TASK-003 Source 보고서](./07_TASK_003_SOURCE_REPORT.md) - 규정·offline·retry·fallback·secret 비노출 증거
 - **QA_Validation**: [TASK-004 Storage 보고서](./08_TASK_004_STORAGE_REPORT.md) - SQLite·cache·checkpoint·artifact·export 증거
 - **QA_Validation**: [TASK-005 CLI 보고서](./09_TASK_005_CLI_REPORT.md) - command·renderer·exit code·CLI security 증거
+- **QA_Validation**: [TASK-006 DEX 보고서](./10_TASK_006_DEX_REPORT.md) - raw decode·정합·partial·resume 증거
 - **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 병렬성·격리·독립 검증·수동 제출 QA
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - request·result 기준
 - **QA_Validation**: [DEX fixture](./fixtures/FX-SVC-DEX-001/README.md), [AUTH fixture](./fixtures/FX-EVM-AUTH-001/README.md), [FREEZE fixture](./fixtures/FX-EVM-FREEZE-001/README.md) - exact-match 원본
