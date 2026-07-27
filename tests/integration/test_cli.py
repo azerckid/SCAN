@@ -564,6 +564,7 @@ def test_freeze_missing_unblacklist_is_partial_and_preserves_blacklist(
     replay["unblacklist"] = None
     replay["state_query"]["snapshots"] = replay["state_query"]["snapshots"][:2]
     replay["explorer_cross_check"] = replay["explorer_cross_check"][:1]
+    replay["public_rpc_cross_check"] = replay["public_rpc_cross_check"][:1]
     write_json(evidence_path, replay)
 
     result = runner.invoke(
@@ -582,6 +583,34 @@ def test_freeze_missing_unblacklist_is_partial_and_preserves_blacklist(
     assert "blacklist_transition" in result.stdout
     assert "unblacklist_transition" not in result.stdout
     assert "evidence_incomplete" in result.stderr
+
+
+def test_freeze_restricted_policy_returns_exit_five_before_replay(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request = load_document("freeze", "request")
+    request["source_policy"]["rule_status"] = "restricted"  # type: ignore[index]
+    request_path = tmp_path / "restricted-freeze.json"
+    write_json(request_path, request)
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(FREEZE_FIXTURE),
+        ],
+    )
+
+    assert result.exit_code == 5
+    assert "FAILED AN-FX-EVM-FREEZE-001" in result.stdout
+    assert "rule_restricted" in result.stdout + result.stderr
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        assert runtime.storage.count("checkpoints") == 0
 
 
 def test_freeze_keyboard_interrupt_resumes_from_saved_replay(

@@ -74,6 +74,7 @@ def test_missing_unblacklist_transition_is_partial_with_blacklist_preserved() ->
     document["unblacklist"] = None
     document["state_query"]["snapshots"] = document["state_query"]["snapshots"][:2]  # type: ignore[index]
     document["explorer_cross_check"] = document["explorer_cross_check"][:1]  # type: ignore[index]
+    document["public_rpc_cross_check"] = document["public_rpc_cross_check"][:1]  # type: ignore[index]
 
     result = analyze(document).root
 
@@ -123,6 +124,20 @@ def test_state_transition_change_fails_reconciliation() -> None:
 
     assert result.status == "failed"
     assert "state_value_after_blacklist" in result.errors[0].details["mismatches"]
+
+
+def test_public_rpc_status_claim_must_match_reviewed_receipt() -> None:
+    document = replay_document()
+    document["public_rpc_cross_check"][0]["status"] = "0x0"  # type: ignore[index]
+
+    result = analyze(document).root
+
+    assert result.status == "failed"
+    assert "public_rpc_cross_check" in result.errors[0].details["mismatches"]
+    public_evidence = next(
+        item for item in result.evidence if item.evidence_id == "EV-FREEZE-PUBLIC-RPC-CROSS-CHECK"
+    )
+    assert public_evidence.decoded["all_status_success"] is False
 
 
 def test_circle_context_cannot_be_promoted_to_address_specific() -> None:

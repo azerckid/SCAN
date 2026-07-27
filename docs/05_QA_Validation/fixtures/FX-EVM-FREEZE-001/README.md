@@ -1,6 +1,6 @@
 # Fixture: FX-EVM-FREEZE-001
 > Created: 2026-07-24 19:19
-> Last Updated: 2026-07-28 01:59
+> Last Updated: 2026-07-28 02:22
 > Status: Confirmed
 
 ## 1. 목적
@@ -34,7 +34,7 @@ USDC 주소별 블랙리스트의 설정·해제 생명주기를 이벤트, 과�
 | `input.json` | 토큰, 모드, 대상 주소, 설정·해제 TX와 상태 블록 |
 | `expected.json` | 두 상태 전이와 이벤트·공식 맥락 기준 정답 |
 | `evidence.json` | 이벤트·호출·상태·맥락을 분리한 증거와 provenance |
-| `raw-replay.json` | TASK-008 offline decoder가 읽는 reviewed transaction·receipt·state·공식 맥락 |
+| `raw-replay.json` | TASK-008 offline decoder가 읽는 reviewed transaction·receipt·Public RPC cross-check·state·공식 맥락 |
 
 세 JSON은 공통 `schema_version: 0.1`을 따른다. calldata는
 `call_evidence`, 발행사·OFAC 자료는 `context_evidence`에 두며, 채점

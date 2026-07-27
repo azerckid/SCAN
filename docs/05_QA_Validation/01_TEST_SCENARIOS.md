@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 01:34
+> Last Updated: 2026-07-28 02:22
 > Status: Approved 1.8 · TASK-008 FREEZE Scope Passed
 
 ## 1. 문서 목적
@@ -84,7 +84,7 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - package import와 `scan --help`가 성공한다.
   - Git 추적 파일에 `.scan/`, DB, cache, secret이 없다.
 - **Result**: `pass` — TASK-001 이후 모든 PR에서 공통 offline Gate를
-  재실행했고 TASK-008 기준 Ruff·115 tests·세 Schema 검증이 통과했다.
+  재실행했고 TASK-008 기준 Ruff·117 tests·세 Schema 검증이 통과했다.
 
 ### QA-SCHEMA-001 — 유효한 request·result round-trip
 

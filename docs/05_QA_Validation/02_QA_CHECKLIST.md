@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-28 01:34
+> Last Updated: 2026-07-28 02:22
 > Status: Approved 1.8 · TASK-008 FREEZE Scope Passed
 
 ## 1. 문서 목적

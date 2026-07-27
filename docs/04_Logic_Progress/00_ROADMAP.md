@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-28 01:59
+> Last Updated: 2026-07-28 02:22
 > Status: Approved 1.5 · Document Completion Gate Passed · TASK-008 Done
 
 ## 1. 문서 목적
@@ -78,7 +78,7 @@
 | [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) | Confirmed 0.1 | fixture schema 변경 요구가 생길 때만 개정 |
 | [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) | Draft 1 · Approved Baseline | 공식 규정 변경은 source policy로 역반영 |
 | [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) | Approved 1.8 · TASK-001~008 Applied | FREEZE도 기존 eth-abi·eth-utils lock 재사용 |
-| [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Contract Approved 0.1 · TASK-002·005·006·007 Applied | Schema probe PASS 3 유지 |
+| [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Contract Approved 0.1 · TASK-002·005·006·007·008 Applied | Schema probe PASS 3 유지 |
 | [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) | Approved 1.0 · P0/V1 Closed | 이후 단계 그룹은 Deferred |
 | [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) | Draft 1 · Rules-Gated | 역할·Queue·검증·수동 제출 승인, 구현은 `TASK-010` 별도 승인 |
 

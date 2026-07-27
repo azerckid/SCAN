@@ -1,6 +1,6 @@
 # TASK-008 FREEZE Vertical Slice 검증 보고서
 > Created: 2026-07-28 01:59
-> Last Updated: 2026-07-28 01:59
+> Last Updated: 2026-07-28 02:22
 > Status: TASK-008 Scope Passed · Offline Raw Replay Only
 
 ## 1. 판정
@@ -45,6 +45,7 @@ CTFd, AI 기능은 추가하지 않았다.
 - 설정 TX block `15302549`, nonce `49`, `Blacklisted` log index `85`
 - 해제 TX block `22099072`, nonce `110`, `UnBlacklisted` log index `7`
 - 두 calldata selector와 event target이 fixture 대상 주소와 일치
+- Public RPC cross-check의 두 receipt status·block이 raw receipt와 일치
 - archive `isBlacklisted`가 `false → true → true → false`
 - Blockscout의 `blacklist`·`unBlacklist` method와 대상 주소가 raw와 일치
 - OFAC 2022·2025 원문은 대상 주소를 명시하고 Circle 자료는 주소를 명시하지 않음
@@ -80,7 +81,7 @@ UV_CACHE_DIR=/private/tmp/scan-uv-cache uv pip check --python .venv/bin/python
 
 ```text
 All checks passed!
-115 passed
+117 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
@@ -126,7 +127,7 @@ TASK-008은 직접 dependency와 `uv.lock`을 변경하지 않는다.
 
 | 기준 | 상태 | 증거 |
 |:---|:---:|:---|
-| Functionality | Pass | raw decode·exact 정합·partial·resume·115 tests |
+| Functionality | Pass | raw decode·exact 정합·partial·resume·117 tests |
 | Potential Impact | Pass | 토큰 통제 생명주기 조사에 재사용 가능한 증거 계약 |
 | Novelty | Pass | 온체인 상태와 공식 사건 맥락을 명시적으로 분리 |
 | UX | Pass | confirmed 전이와 `SCOPE / EXTERNAL CONTEXT` 분리 |

@@ -139,6 +139,18 @@
       "log_index": 7
     }
   ],
+  "public_rpc_cross_check": [
+    {
+      "transaction_hash": "0xc67cf29fc3feb0073e98f5c341671a8e96999854e37fd876f05046f13c53af72",
+      "block_number": "0xe97f95",
+      "status": "0x1"
+    },
+    {
+      "transaction_hash": "0xecf9033c7148239246b312636648774b10fe940489f0d5ca4970677aef241537",
+      "block_number": "0x1513480",
+      "status": "0x1"
+    }
+  ],
   "official_context": [
     {
       "context_id": "circle_response",

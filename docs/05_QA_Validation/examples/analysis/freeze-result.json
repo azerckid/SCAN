@@ -54,9 +54,13 @@
         "circle_address_specific": false,
         "ofac_address_specific": true,
         "current_sanctions_status": "not_assessed",
-        "criminal_intent": "not_assessed"
+        "criminal_intent": "not_assessed",
+        "global_pause": {
+          "applicable": false
+        }
       },
       "tool_requirement_ids": [
+        "REQ-V1-FREEZE-004",
         "REQ-V1-FREEZE-005",
         "REQ-V1-FREEZE-006",
         "REQ-V1-FREEZE-007",

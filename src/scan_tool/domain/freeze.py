@@ -51,6 +51,12 @@ class ExplorerTransaction(ContractModel):
     log_index: int = Field(ge=0)
 
 
+class PublicRpcReceiptCrossCheck(ContractModel):
+    transaction_hash: TransactionHash
+    block_number: HexQuantity
+    status: HexQuantity
+
+
 class OfficialContext(ContractModel):
     context_id: Literal[
         "circle_response",
@@ -102,6 +108,7 @@ class FreezeReplay(ContractModel):
     unblacklist: TransactionEvidence | None
     state_query: FreezeStateQuery
     explorer_cross_check: list[ExplorerTransaction]
+    public_rpc_cross_check: list[PublicRpcReceiptCrossCheck]
     official_context: list[OfficialContext]
     interface_metadata: InterfaceMetadata
     global_pause_applicable: Literal[False]

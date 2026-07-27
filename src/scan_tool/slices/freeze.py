@@ -292,6 +292,7 @@ def _mismatches(
     mismatches.extend(_state_mismatches(request, replay, decoded))
     mismatches.extend(_context_mismatches(replay))
     mismatches.extend(_explorer_mismatches(replay, decoded))
+    mismatches.extend(_public_rpc_mismatches(replay))
     return mismatches
 
 
@@ -397,6 +398,27 @@ def _explorer_mismatches(
             or item.log_index != int(log.log_index, 16)
         ):
             return ["explorer_cross_check"]
+    return []
+
+
+def _public_rpc_mismatches(replay: FreezeReplay) -> list[str]:
+    expected = {
+        replay.blacklist.transaction.hash: replay.blacklist.receipt,
+    }
+    if replay.unblacklist is not None:
+        expected[replay.unblacklist.transaction.hash] = replay.unblacklist.receipt
+    if len(replay.public_rpc_cross_check) != len(expected) or {
+        item.transaction_hash for item in replay.public_rpc_cross_check
+    } != set(expected):
+        return ["public_rpc_cross_check_set"]
+    for item in replay.public_rpc_cross_check:
+        receipt = expected[item.transaction_hash]
+        if (
+            item.block_number != receipt.block_number
+            or item.status != receipt.status
+            or item.status != "0x1"
+        ):
+            return ["public_rpc_cross_check"]
     return []
 
 
@@ -568,9 +590,7 @@ def _interface_evidence(replay: FreezeReplay) -> dict[str, object]:
 
 def _public_cross_check(replay: FreezeReplay) -> dict[str, object]:
     evidence_id = "EV-FREEZE-PUBLIC-RPC-CROSS-CHECK"
-    hashes = [replay.blacklist.transaction.hash]
-    if replay.unblacklist is not None:
-        hashes.append(replay.unblacklist.transaction.hash)
+    statuses = {item.transaction_hash: item.status for item in replay.public_rpc_cross_check}
     return {
         "evidence_id": evidence_id,
         "evidence_type": "context",
@@ -579,7 +599,11 @@ def _public_cross_check(replay: FreezeReplay) -> dict[str, object]:
         "method": "eth_getTransactionByHash_and_receipt",
         "retrieved_at": replay.sources.public_rpc.retrieved_at,
         "locator": {"chain_id": replay.chain_id},
-        "decoded": {"transaction_hashes": hashes, "all_status_success": True},
+        "decoded": {
+            "receipt_status_by_transaction": statuses,
+            "all_status_success": bool(statuses)
+            and all(status == "0x1" for status in statuses.values()),
+        },
         "raw_artifact": _artifact(replay, evidence_id),
     }
 

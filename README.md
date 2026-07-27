@@ -75,7 +75,7 @@ validators, followed by the generated-Pydantic-Schema compatibility check.
 Expected final outputs include:
 
 ```text
-115 passed
+117 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
