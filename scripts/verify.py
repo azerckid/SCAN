@@ -22,6 +22,14 @@ COMMANDS = (
         sys.executable,
         "scripts/check_analysis_schema.py",
     ),
+    (
+        sys.executable,
+        "scripts/check_repository_traceability.py",
+    ),
+    (
+        sys.executable,
+        "scripts/check_repository_security.py",
+    ),
 )
 
 
