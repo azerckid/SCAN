@@ -13,12 +13,17 @@ from scan_tool.application.cli_runtime import CliRuntime
 from scan_tool.application.terminal import ProgressEvent, render_progress, render_result
 from scan_tool.cli import app
 from scan_tool.domain import validate_analysis_result
+from scan_tool.slices.auth import analyze_auth_replay
 from scan_tool.slices.dex import analyze_dex_replay
 
 EXAMPLES = Path(__file__).resolve().parents[2] / "docs/05_QA_Validation/examples/analysis"
 DEX_FIXTURE = (
     Path(__file__).resolve().parents[2]
     / "docs/05_QA_Validation/fixtures/FX-SVC-DEX-001/raw-replay.json"
+)
+AUTH_FIXTURE = (
+    Path(__file__).resolve().parents[2]
+    / "docs/05_QA_Validation/fixtures/FX-EVM-AUTH-001/raw-replay.json"
 )
 runner = CliRunner()
 
@@ -347,6 +352,150 @@ def test_invalid_dex_replay_does_not_persist_or_echo_local_path(
     assert result.exit_code == 4
     assert "decode_failed" in combined
     assert "/Users/private-evidence/" not in combined
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        assert runtime.storage.count("checkpoints") == 0
+        assert runtime.storage.count("artifacts") == 3
+
+
+def test_auth_analyze_persists_and_show_renders_exact_results(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    write_json(request_path, load_document("auth", "request"))
+
+    analyzed = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(AUTH_FIXTURE),
+        ],
+    )
+    shown = runner.invoke(app, ["show", "AN-FX-EVM-AUTH-001"])
+
+    assert analyzed.exit_code == 0
+    assert shown.exit_code == 0
+    for output in (analyzed.stdout, shown.stdout):
+        assert "COMPLETE AN-FX-EVM-AUTH-001" in output
+        assert "approval" in output
+        assert "consumed_delta_raw=4500000" in output
+        assert "authorization_consumption" in output
+        assert "amount_raw=4500000" in output
+        assert "theft_or_phishing_attribution" in output
+        assert "theft_or_phishing_claim=False" in output
+        assert "artifact://sha256/" in output
+    assert "eth.drpc.org" not in analyzed.stdout + analyzed.stderr
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        stored = runtime.load_result("AN-FX-EVM-AUTH-001")
+        assert stored is not None
+        assert [item.result_type for item in stored.result.root.results] == [
+            "approval",
+            "allowance_lifecycle",
+            "authorization_consumption",
+            "theft_or_phishing_attribution",
+        ]
+        assert runtime.storage.count("checkpoints") == 1
+
+
+def test_auth_missing_archive_state_is_partial_and_preserves_approval(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    evidence_path = tmp_path / "missing-state.json"
+    write_json(request_path, load_document("auth", "request"))
+    replay = json.loads(AUTH_FIXTURE.read_text())
+    replay["allowance_query"]["snapshots"] = replay["allowance_query"]["snapshots"][:2]
+    write_json(evidence_path, replay)
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(evidence_path),
+        ],
+    )
+
+    assert result.exit_code == 3
+    assert "PARTIAL AN-FX-EVM-AUTH-001" in result.stdout
+    assert "approval" in result.stdout
+    assert "authorization_consumption" not in result.stdout
+    assert "archive_required" in result.stderr
+
+
+def test_auth_keyboard_interrupt_resumes_from_saved_replay(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    write_json(request_path, load_document("auth", "request"))
+
+    def interrupt(*_: object, **__: object) -> None:
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr("scan_tool.application.cli_runtime.analyze_auth_replay", interrupt)
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(AUTH_FIXTURE),
+        ],
+    )
+
+    assert result.exit_code == 130
+    assert "INTERRUPTED AN-FX-EVM-AUTH-001" in result.stdout
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        assert runtime.storage.count("checkpoints") == 1
+
+    monkeypatch.setattr(
+        "scan_tool.application.cli_runtime.analyze_auth_replay",
+        analyze_auth_replay,
+    )
+    resumed = runner.invoke(app, ["resume", "AN-FX-EVM-AUTH-001"])
+    assert resumed.exit_code == 0
+    assert "COMPLETE AN-FX-EVM-AUTH-001" in resumed.stdout
+    assert "resumed yes" in resumed.stdout
+
+
+def test_invalid_auth_replay_is_not_persisted_or_echoed(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    evidence_path = tmp_path / "unsafe.json"
+    write_json(request_path, load_document("auth", "request"))
+    replay = json.loads(AUTH_FIXTURE.read_text())
+    replay["local_path"] = "/Users/private-auth/source.json"
+    write_json(evidence_path, replay)
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--evidence",
+            str(evidence_path),
+        ],
+    )
+    combined = result.stdout + result.stderr
+
+    assert result.exit_code == 4
+    assert "decode_failed" in combined
+    assert "/Users/private-auth/" not in combined
     with CliRuntime.open(tmp_path / ".scan") as runtime:
         assert runtime.storage.count("checkpoints") == 0
         assert runtime.storage.count("artifacts") == 3

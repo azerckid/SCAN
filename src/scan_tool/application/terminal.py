@@ -9,7 +9,7 @@ from typing import TextIO
 from pydantic.experimental.missing_sentinel import MISSING
 
 from scan_tool.domain.analysis_error import ErrorCode
-from scan_tool.domain.analysis_result import AnalysisResult, AnalysisStatus
+from scan_tool.domain.analysis_result import AnalysisResult, AnalysisStatus, Classification
 
 EXIT_COMPLETE = 0
 EXIT_INPUT = 2
@@ -58,10 +58,21 @@ def render_result(
         f"{status} {document.analysis_id} · {document.analysis_type} · chain {document.chain_id}\n"
     )
 
-    if document.results:
+    confirmed = [
+        item for item in document.results if item.classification == Classification.CONFIRMED_FACT
+    ]
+    scoped = [
+        item for item in document.results if item.classification != Classification.CONFIRMED_FACT
+    ]
+    if confirmed:
         stdout.write("\nCONFIRMED RESULTS\n")
-        for item in document.results:
+        for item in confirmed:
             stdout.write(f"{item.result_type:<20} {_compact_value(item.value)}\n")
+    if scoped:
+        stdout.write("\nSCOPE\n")
+        for item in scoped:
+            label = str(item.classification).upper().replace("_", " ")
+            stdout.write(f"{label:<14} {item.result_type} · {_compact_value(item.value)}\n")
 
     for warning in document.warnings:
         stderr.write(f"WARNING    {warning.code} · {_single_line(warning.message)}\n")
@@ -94,7 +105,14 @@ def safe_path_label(path: Path) -> str:
 
 
 def _compact_value(value: dict[str, object]) -> str:
-    preferred = ("symbol", "amount_raw", "before", "after", "target_address")
+    preferred = (
+        "symbol",
+        "amount_raw",
+        "before",
+        "after",
+        "target_address",
+        "theft_or_phishing_claim",
+    )
     parts = []
     for key in value:
         if key in preferred or key.endswith("_raw"):
