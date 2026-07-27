@@ -1,7 +1,7 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-28 00:58
-> Status: Approved 1.2 · UI-First Gate Passed · TASK-006 DEX Applied
+> Last Updated: 2026-07-28 01:34
+> Status: Approved 1.3 · UI-First Gate Passed · TASK-007 AUTH Applied
 
 ## 1. 문서 목적
 
@@ -38,7 +38,7 @@ I/O Schema `0.1` 요청 파일을 공통 진입점으로 사용하고 `analysis_
 | `scan show ANALYSIS_ID` | 저장 결과와 증거 경로 재표시 | 기존 analysis ID | summary·not found |
 | `scan --help` | 명령과 다음 행동 확인 | 없음 | 도움말 |
 
-V1의 canonical 실행은 `scan analyze --request PATH`이며, TASK-006 DEX
+V1의 canonical 실행은 `scan analyze --request PATH`이며, TASK-006/007 DEX·AUTH
 offline replay는 `--evidence`로 검토한 raw replay JSON을 함께 받는다. 이
 옵션은 source adapter 입력이지 Analysis Request Schema 필드가 아니다.
 `analysis_type`별
@@ -222,8 +222,10 @@ TASK-005는 위 여섯 종료 코드를 renderer와 CLI fault-injection test로
 `source_unavailable`, 종료 코드 `4`로 명시적으로 종료한다.
 
 TASK-006은 DEX offline replay에서 complete `0`, internal call 누락 partial
-`3`, 로그 정합 실패 `4`, 규정 차단 `5`를 실제 분석 결과로 검증했다. AUTH와
-FREEZE는 TASK-007·008 전까지 계속 `source_unavailable`로 종료한다.
+`3`, 로그 정합 실패 `4`, 규정 차단 `5`를 실제 분석 결과로 검증했다.
+TASK-007 AUTH는 complete `0`, state·trace 누락 partial `3`, 정합 실패 `4`,
+규정 차단 `5`와 checkpoint resume을 검증했다. FREEZE만 TASK-008 전까지
+`source_unavailable`로 종료한다.
 
 ## 11. 도움말과 빈 상태
 
@@ -349,6 +351,15 @@ flowchart LR
 - progress에는 evidence 파일 basename만 표시하고 전체 로컬 경로·provider
   URL·secret을 출력하지 않는다.
 
+## 16.2 TASK-007 화면 대조
+
+- confirmed AUTH fixture에서 `uint256.max` 승인, allowance 네 지점,
+  `4500000` raw 소비와 실패 거래 nonce 327~329를 exact 정합한다.
+- `CONFIRMED RESULTS`에는 입증된 결과만 두고, 피싱·탈취는 `SCOPE`의
+  `NOT ASSESSED theft_or_phishing_attribution`과 claim `false`로 표시한다.
+- state 또는 trace가 없으면 확보한 증거·결론만 보존한 `PARTIAL`과 resume
+  명령을 출력하며 소비를 완전 결과로 승격하지 않는다.
+
 ## 17. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위
@@ -367,3 +378,4 @@ flowchart LR
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 명령·상태·종료 코드 검증
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - preview 기준값
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - 실제 complete·partial·resume 화면 대조
+- **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - AUTH complete·partial·scope·resume 화면 대조

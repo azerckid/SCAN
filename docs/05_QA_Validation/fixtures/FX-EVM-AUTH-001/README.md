@@ -1,6 +1,6 @@
 # Fixture: FX-EVM-AUTH-001
 > Created: 2026-07-24 19:19
-> Last Updated: 2026-07-25 03:18
+> Last Updated: 2026-07-28 01:34
 > Status: Confirmed
 
 ## 1. 목적
@@ -34,6 +34,7 @@
 | `input.json` | 대상 주소·토큰·승인·소비 TX와 조회 블록 |
 | `expected.json` | 승인 유형별 증거, allowance 전후와 실제 전송 기준 정답 |
 | `evidence.json` | 이벤트·calldata·상태 조회 원본과 provenance |
+| `raw-replay.json` | TASK-007이 오프라인에서 엄격 검증·디코딩하는 reviewed raw transaction·receipt·trace·state |
 
 세 JSON은 공통 `schema_version: 0.1`을 따르며, 채점 요구사항은 이벤트·호출·
 상태 증거 ID를 각각 참조한다.
@@ -48,6 +49,8 @@
 6. allowance 감소량 `4500000` raw가 `transferFrom` 인자와 USDC `Transfer` 로그에 모두 일치함을 확인했다.
 7. 같은 입력으로 승인·Transfer 로그, allowance 네 지점, `transferFrom` trace를 다시 조회해 모든 raw 값이 일치함을 확인했다.
 8. Uniswap 공식 `sdk-core` 커밋 `baff6d3c78b09aa0b2f96148bc223b42a57fd28a`에서 Ethereum mainnet의 `SwapRouter02` 주소를 재현하고 MIT 라이선스를 확인했다.
+9. 2026-07-28 공개 RPC에서 제외 거래 세 건의 nonce `327`, `328`, `329`와
+   receipt status `0`을 다시 확인하고 `raw-replay.json`에 고정했다.
 
 이 fixture의 확정 사실은 승인과 권한 소비의 연결이다. 대상 주소 V의 피해 여부나 피싱·탈취 판단은 오프체인 증거가 없으므로 채점 대상에 포함하지 않는다.
 
@@ -60,3 +63,4 @@
 - **Explorer**: [승인 TX](https://etherscan.io/tx/0x3f7037014b8709f02bf2032d70ce4ec6854a53ed141b63d6a7ea359a9dccdabd), [소비 TX](https://etherscan.io/tx/0x7b888fbf7ee76c99ec1e1a31d8bc1d43806f7f5e7fcfd4121a6a21a768e9af51) - UI 교차확인
 - **Official metadata**: [Uniswap sdk-core pinned commit](https://github.com/Uniswap/sdk-core/commit/baff6d3c78b09aa0b2f96148bc223b42a57fd28a) - Ethereum `SwapRouter02` 주소의 고정 근거
 - **Official cross-check**: [Uniswap Deployments](https://developers.uniswap.org/deployments) - 사람이 읽는 최신 배포 목록
+- **QA_Validation**: [TASK-007 AUTH 보고서](../../11_TASK_007_AUTH_REPORT.md) - raw replay analyzer·partial·resume·보안 검증

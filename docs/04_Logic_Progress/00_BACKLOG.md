@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 00:58
-> Status: Approved 1.6 · TASK-001~006 Done
+> Last Updated: 2026-07-28 01:34
+> Status: Approved 1.7 · TASK-001~007 Done
 
 ## 1. 문서 목적
 
@@ -9,7 +9,7 @@
 CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업으로
 전환한다.
 
-Backlog 범위와 `TASK-001`~`TASK-006` 구현은 별도로 승인되었다. 여섯 작업은
+Backlog 범위와 `TASK-001`~`TASK-007` 구현은 별도로 승인되었다. 일곱 작업은
 완료됐고 나머지 작업은 `ToDo`다. 후속 작업은 각각 별도 승인 전에는
 `In Progress`로 이동하지 않는다.
 
@@ -393,22 +393,22 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] 실제 DEX result·evidence ID를 Schema 예제·QA와 대조했다.
   - [x] fixture 정답 변경 없이 raw replay adapter로 구현 차이를 해결했다.
 
-### [ ] TASK-007: AUTH vertical slice 구현
+### [x] TASK-007: AUTH vertical slice 구현
 
-- Status: ToDo
+- Status: Done
 - Priority: V1 · High
 - Depends On: TASK-002, TASK-003, TASK-004
 - Requirement IDs: `REQ-P0-EVM-001`~`REQ-P0-EVM-008`,
   `REQ-V1-AUTH-001`~`REQ-V1-AUTH-007`
 - Atomic Tasks:
-  - [ ] Approval event와 approve calldata의 owner·spender·amount를 정합한다.
-  - [ ] 네 historical block의 allowance를 archive source에서 조회한다.
-  - [ ] 성공 trace의 `transferFrom`과 Transfer event를 연결한다.
-  - [ ] allowance 감소와 `4500000` raw 소비를 exact 정합한다.
-  - [ ] receipt status 0인 중간 거래 3개를 소비에서 제외한다.
-  - [ ] event·call·state evidence를 분리한다.
-  - [ ] 피싱·탈취 귀속을 `not_assessed`로 출력한다.
-  - [ ] `FX-EVM-AUTH-001` regression을 자동화한다.
+  - [x] Approval event와 approve calldata의 owner·spender·amount를 정합한다.
+  - [x] 네 historical block의 allowance를 archive source에서 조회한다.
+  - [x] 성공 trace의 `transferFrom`과 Transfer event를 연결한다.
+  - [x] allowance 감소와 `4500000` raw 소비를 exact 정합한다.
+  - [x] receipt status 0인 중간 거래 3개를 소비에서 제외한다.
+  - [x] event·call·state evidence를 분리한다.
+  - [x] 피싱·탈취 귀속을 `not_assessed`로 출력한다.
+  - [x] `FX-EVM-AUTH-001` regression을 자동화한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - AUTH 권한 소비 문제 조건
   - [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - AUTH vertical slice 선정
@@ -424,24 +424,25 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - Related QA Docs:
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - `QA-AUTH-*`
   - [AUTH fixture](../05_QA_Validation/fixtures/FX-EVM-AUTH-001/README.md) - confirmed 정답·증거
+  - [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - 실제 raw replay·정합·partial·resume 증거
 - Implementation Preconditions:
-  - [ ] AUTH 요구사항·fixture·source 문서를 다시 확인했다.
-  - [ ] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
-  - [ ] HTML Preview의 partial·retry·resume와 FB-001을 확인했다.
-  - [ ] event·call·state·failed TX 최소 필드를 확인했다.
-  - [ ] external mutation 없이 historical read만 수행한다.
-  - [ ] archive·trace unavailable의 partial 기준을 확인했다.
-  - [ ] 피해·피싱·탈취를 자동 단정하지 않는다.
+  - [x] AUTH 요구사항·fixture·source 문서를 다시 확인했다.
+  - [x] HTML Preview 사용자 확인과 피드백 기록을 확인했다.
+  - [x] HTML Preview의 partial·retry·resume와 FB-001을 확인했다.
+  - [x] event·call·state·failed TX 최소 필드를 확인했다.
+  - [x] external mutation 없이 historical read만 수행한다.
+  - [x] archive·trace unavailable의 partial 기준을 확인했다.
+  - [x] 피해·피싱·탈취를 자동 단정하지 않는다.
 - Acceptance Criteria:
-  - [ ] 승인과 allowance 네 지점이 fixture와 exact match한다.
-  - [ ] 성공 소비·Transfer·allowance delta가 `4500000` raw로 일치한다.
-  - [ ] 실패 거래 3개가 결과에서 제외되고 실패 사실은 보존된다.
-  - [ ] theft·phishing은 `not_assessed`이며 victim 문구를 사용하지 않는다.
-  - [ ] archive state 누락 주입 시 확보한 승인 결과를 가진 partial이다.
-  - [ ] resume에서 기존 evidence ID와 완료 cache를 재사용한다.
+  - [x] 승인과 allowance 네 지점이 fixture와 exact match한다.
+  - [x] 성공 소비·Transfer·allowance delta가 `4500000` raw로 일치한다.
+  - [x] 실패 거래 3개가 결과에서 제외되고 실패 사실은 보존된다.
+  - [x] theft·phishing은 `not_assessed`이며 victim 문구를 사용하지 않는다.
+  - [x] archive state 누락 주입 시 확보한 승인 결과를 가진 partial이다.
+  - [x] resume에서 기존 evidence ID와 완료 artifact를 재사용한다.
 - Document Sync Check:
-  - [ ] FB-001을 CLI snapshot·QA에 반영했다.
-  - [ ] 실제 AUTH 결과를 fixture·Schema 예제·문제은행 표현과 대조했다.
+  - [x] FB-001을 CLI `SCOPE`·QA에 반영했다.
+  - [x] 실제 AUTH 결과를 fixture·Schema 예제·문제은행 표현과 대조했다.
 
 ### [ ] TASK-008: FREEZE vertical slice 구현
 
@@ -627,6 +628,8 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   ([검증 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md))
 - `TASK-006` — raw DEX log decode, WETH/native 분리, partial·reconciliation
   ([검증 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md))
+- `TASK-007` — Approval·allowance·transferFrom 정합, 실패 거래·귀속 범위 분리
+  ([검증 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md))
 
 ## 7. Backlog 승인 Gate
 
@@ -638,6 +641,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-004 storage·artifact·export 구현을 별도로 승인
 - [x] TASK-005 CLI command·renderer·exit code 구현을 별도로 승인
 - [x] TASK-006 DEX vertical slice 구현을 별도로 승인
+- [x] TASK-007 AUTH vertical slice 구현을 별도로 승인
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
@@ -647,6 +651,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-004 승인 후 `codex/task-004-storage-artifacts` branch 사용
 - [x] TASK-005 승인 후 `codex/task-005-cli-analyze` branch 사용
 - [x] TASK-006 승인 후 `codex/task-006-dex-vertical-slice` branch 사용
+- [x] TASK-007 승인 후 `codex/task-007-auth-vertical-slice` branch 사용
 
 ## 8. 365 글로벌 평가 기준
 
