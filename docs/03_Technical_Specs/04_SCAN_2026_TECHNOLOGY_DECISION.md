@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 기술 선택 기록
 > Created: 2026-07-26 00:01
-> Last Updated: 2026-07-28 01:59
-> Status: Approved 1.8 · TASK-001~008 Applied
+> Last Updated: 2026-07-28 02:34
+> Status: Approved 1.9 · TASK-001~009 Applied
 
 ## 1. 문서 목적
 
@@ -421,7 +421,10 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
     재사용해 dependency와 lockfile을 변경하지 않았다.
 17. `TASK-008` FREEZE도 기존 Pydantic·eth-abi·eth-utils·storage를 재사용해
     dependency와 lockfile을 변경하지 않았다.
-18. 다음 구현은 별도 승인 후 `TASK-009` 통합 Gate로 진행한다.
+18. `TASK-009` 통합 Gate는 stdlib 기반 repository traceability·security
+    script와 pytest 회귀로 구현해 dependency와 lockfile을 변경하지 않았다.
+19. `TASK-010`은 공식 Rules와 별도 승인 전에는 기술 결정을 구현으로
+    승격하지 않는다.
 
 ## 18. Related Documents
 
@@ -446,3 +449,4 @@ Business Plan을 억지로 기술 선택에 넣지 않는다. 대회 이후 제�
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - ABI decoder·dependency·정합 검증
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - ABI decoder 재사용·dependency·정합 검증
 - **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - ABI decoder 재사용·dependency·context 정합 검증
+- **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - dependency 불변·결정성·보안 Gate 증거

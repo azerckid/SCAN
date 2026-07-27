@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-28 02:22
-> Status: Approved 1.8 · TASK-008 FREEZE Scope Passed
+> Last Updated: 2026-07-28 02:34
+> Status: Approved 1.9 · TASK-009 Integration Passed
 
 ## 1. 문서 목적
 
@@ -12,9 +12,8 @@
 
 최소 Python package와 offline 품질 Gate, Analysis I/O runtime 계약이
 구현됐고 source policy·retry·fallback 및 SQLite storage 계층이 추가됐다.
-QA 시나리오 24개 중 19개는 `pass`, source/security 교차 시나리오 2개는
-`partial`, 나머지 3개는 `not_executed`다. TASK-008 FREEZE 범위 통과를
-전체 통합 Gate 통과와 같은 의미로 사용하지 않는다.
+QA 시나리오 24개는 모두 `pass`다. TASK-009에서 source/security 교차
+시나리오와 regression 3개를 닫아 offline P0·V1 통합 Gate를 통과했다.
 
 `TASK-010`의 Agentic Parallel Solve QA 6개는 별도
 `Scope Approved / Not Executed` 상태이며 기존 24개 P0·V1 집계를 변경하지
@@ -51,7 +50,7 @@ QA 시나리오 24개 중 19개는 `pass`, source/security 교차 시나리오 2
 - [x] 각 Deferred fixture에 필요 소스·승격 조건·재검토 시점이 있다.
 - [x] fixture Schema 검증기가 `PASS 3`이다.
 - [x] analysis Schema 검증기가 `PASS 3`이다.
-- [x] Backlog `TASK-001`~`TASK-009`는 모두 `ToDo`다.
+- [x] DOC-M3 기준선 당시 Backlog `TASK-001`~`TASK-009`는 모두 `ToDo`였다.
 - [x] HTML UI Preview Gate와 UI-First Gate 통과 기록이 존재한다.
 - [x] 이 Checklist와 QA 시나리오 범위를 사용자가 승인했다.
 - [x] DOC-M2가 확인 사실·`unclear`·Notification Intake 기준선으로 완료되었다.
@@ -67,7 +66,7 @@ QA 시나리오 24개 중 19개는 `pass`, source/security 교차 시나리오 2
 |:---|:---|
 | 정의 수 | 24 |
 | 승인 상태 | Scope Approved |
-| 실행 상태 | 19 pass / 2 partial / 3 not_executed |
+| 실행 상태 | 24 pass / 0 partial / 0 not_executed |
 | 구현 전 허용 실행 | 문서 링크·ID·Schema·fixture 정합 검사만 |
 | 전체 실행 Gate | `TASK-009` 통합 회귀 |
 
@@ -82,13 +81,13 @@ QA 시나리오 24개 중 19개는 `pass`, source/security 교차 시나리오 2
 | Document Gate | 구현 전과 모든 문서 PR | `QA-REG-003`의 문서·Schema·fixture 부분 | pass: 2026-07-27 문서 완료 보고서 |
 | Project Gate | `TASK-001` 완료 후 | `QA-BOOT-001` | pass: 2026-07-27 |
 | Contract Gate | `TASK-002` 완료 후 | `QA-SCHEMA-001`, `QA-SCHEMA-002` | pass: 2026-07-27 |
-| Source Gate | `TASK-003` 완료 후 | `QA-RULE-001`, `QA-SOURCE-001`, `QA-RETRY-001`, `QA-FALLBACK-001` | TASK-003 scope pass: retry/fallback pass, rule/source partial |
-| Storage Gate | `TASK-004` 완료 후 | `QA-CACHE-001`, `QA-EXPORT-001`, `QA-ARTIFACT-001`, `QA-SEC-001`의 storage 범위 | storage scope pass: cache/export/artifact pass, security partial |
-| CLI Gate | `TASK-005` 완료 후 | `QA-CLI-001`, `QA-CLI-002`, `QA-CLI-003`, `QA-CLI-004`, `QA-SEC-001`의 CLI 범위 | CLI-001~003 pass, CLI-004·security partial |
+| Source Gate | `TASK-003` 완료 후 | `QA-RULE-001`, `QA-SOURCE-001`, `QA-RETRY-001`, `QA-FALLBACK-001` | TASK-009 최종 재검증 포함 pass |
+| Storage Gate | `TASK-004` 완료 후 | `QA-CACHE-001`, `QA-EXPORT-001`, `QA-ARTIFACT-001`, `QA-SEC-001`의 storage 범위 | TASK-009 보안 통합 재검증 포함 pass |
+| CLI Gate | `TASK-005` 완료 후 | `QA-CLI-001`, `QA-CLI-002`, `QA-CLI-003`, `QA-CLI-004`, `QA-SEC-001`의 CLI 범위 | TASK-009 통합 재검증 포함 pass |
 | DEX Gate | `TASK-006` 완료 후 | `QA-DEX-001`, `QA-DEX-002`, `QA-CLI-004`의 실제 DEX resume 범위 | DEX-001·002와 CLI-004 pass: 2026-07-28 |
 | AUTH Gate | `TASK-007` 완료 후 | `QA-AUTH-001`, `QA-AUTH-002` | pass: 2026-07-28 |
 | FREEZE Gate | `TASK-008` 완료 후 | `QA-FREEZE-001`, `QA-FREEZE-002` | pass: 2026-07-28 |
-| Integration Gate | `TASK-009` 완료 전 | `QA-REG-001`, `QA-REG-002`, `QA-REG-003` 전체, `QA-SEC-001` 전체 | not_executed |
+| Integration Gate | `TASK-009` 완료 후 | `QA-REG-001`, `QA-REG-002`, `QA-REG-003` 전체, `QA-SEC-001` 전체 | pass: 2026-07-28 |
 
 `QA-REG-003`과 `QA-SEC-001`은 범위별로 여러 Gate에서 실행하지만 시나리오
 ID는 24개 집계에서 한 번만 센다.
@@ -152,12 +151,12 @@ ID는 24개 집계에서 한 번만 센다.
 
 ### 6.5 TASK-009 통합
 
-- [ ] 24개 QA 시나리오의 최종 결과가 기록된다.
-- [ ] 세 confirmed fixture를 두 번 실행해 결정적 값이 같다.
-- [ ] 오류 코드 11개의 result·error·exit code 행렬이 일치한다.
-- [ ] 모든 result→evidence→source 참조가 유효하다.
-- [ ] 문서·Backlog·Schema·fixture·구현 경로가 동기화된다.
-- [ ] `live` 실패가 offline 회귀 정답을 변경하지 않는다.
+- [x] 24개 QA 시나리오의 최종 결과가 기록된다.
+- [x] 세 confirmed fixture를 두 번 실행해 결정적 값이 같다.
+- [x] 오류 코드 11개의 result·error·exit code 행렬이 일치한다.
+- [x] 모든 result→evidence→source 참조가 유효하다.
+- [x] 문서·Backlog·Schema·fixture·구현 경로가 동기화된다.
+- [x] `live` 실패가 offline 회귀 정답을 변경하지 않는다.
 
 ### 6.6 TASK-010 병렬 문제풀이 운영
 
@@ -202,9 +201,10 @@ ID는 24개 집계에서 한 번만 센다.
 - [x] TASK-006이 승인된 `eth-abi`·`eth-utils`만 추가하고 lockfile로 고정했다.
 - [x] TASK-007이 기존 `eth-abi`·`eth-utils`를 재사용하고 dependency·lockfile을 변경하지 않았다.
 - [x] TASK-008이 기존 `eth-abi`·`eth-utils`를 재사용하고 dependency·lockfile을 변경하지 않았다.
+- [x] TASK-009가 stdlib 검증기만 추가하고 dependency·lockfile을 변경하지 않았다.
 - [x] TASK-001 직접 구현 범위가 `OSS-*` 결정과 일치한다.
 - [x] TASK-003 구현이 `TD-013`·`TD-014`의 adapter/orchestration 분리와 일치한다.
-- [x] TASK-001~008 추적 파일에서 secret·`.scan/`·로컬 DB가 0건임을 확인했다.
+- [x] TASK-001~009 추적 파일에서 secret·`.scan/`·로컬 DB가 0건임을 확인했다.
 - [x] UI 동작 변경 시 HTML Preview·UI 문서·피드백을 동기화한다.
 - [x] TASK-003은 UI 동작을 변경하지 않고 기존 retry/fallback 표시 계약을 유지했다.
 - [x] TASK-004는 UI 동작을 변경하지 않고 기존 cache/resume/export 표시 계약을 유지했다.
@@ -212,6 +212,7 @@ ID는 24개 집계에서 한 번만 센다.
 - [x] TASK-006 `--evidence` offline replay와 DEX complete·partial 출력을 UI 문서에 동기화했다.
 - [x] TASK-007 AUTH complete·partial·resume과 `SCOPE / NOT ASSESSED` 출력을 UI 문서에 동기화했다.
 - [x] TASK-008 FREEZE complete·partial·resume과 온체인 상태·공식 맥락 분리 출력을 UI 문서에 동기화했다.
+- [x] TASK-009에서 실제 CLI·Preview를 재대조했고 renderer 변경이 없음을 기록했다.
 
 ### 7.3 대회 직전
 
@@ -285,6 +286,8 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 [AUTH 검증 보고서](./11_TASK_007_AUTH_REPORT.md)에 기록한다.
 `TASK-008`의 상태 전이·공식 맥락·partial·resume·FREEZE security 결과는
 [FREEZE 검증 보고서](./12_TASK_008_FREEZE_REPORT.md)에 기록한다.
+`TASK-009`의 24개 QA·결정성·오류 행렬·추적성·보안 결과는
+[통합 검증 보고서](./13_TASK_009_INTEGRATION_REPORT.md)에 기록한다.
 
 ## 10. 365 글로벌 평가 기준
 
@@ -299,12 +302,12 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 
 ## 11. Originality & Ethics Check
 
-- [ ] 공개 TX·문서·오픈소스 주소 자료의 URL·license·retrieved_at을 보존한다.
-- [ ] 제3자의 신원·범죄 의도·피해 여부를 근거 없이 단정하지 않는다.
-- [ ] AUTH 탈취·FREEZE 범죄·현재 제재를 `not_assessed` 경계 밖으로 확장하지 않는다.
-- [ ] 비공개 문제·답안·개인정보를 저장소나 허용되지 않은 외부 서비스로 전송하지 않는다.
-- [ ] API key·credential·private key·로컬 절대 경로가 산출물에 남지 않는다.
-- [ ] 공식 규정에서 제한된 자동화·AI·source를 실행 전에 차단한다.
+- [x] 공개 TX·문서·오픈소스 주소 자료의 URL·license·retrieved_at을 보존한다.
+- [x] 제3자의 신원·범죄 의도·피해 여부를 근거 없이 단정하지 않는다.
+- [x] AUTH 탈취·FREEZE 범죄·현재 제재를 `not_assessed` 경계 밖으로 확장하지 않는다.
+- [x] 비공개 문제·답안·개인정보를 저장소나 허용되지 않은 외부 서비스로 전송하지 않는다.
+- [x] API key·credential·private key·로컬 절대 경로가 산출물에 남지 않는다.
+- [x] 공식 규정에서 제한된 자동화·AI·source를 실행 전에 차단한다.
 
 ## 12. 승인과 완료 조건
 
@@ -312,9 +315,9 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 
 - [x] 사용자가 Checklist와 24개 QA 시나리오 범위를 승인했다.
 - [x] Document Completion Gate를 닫고 구현 착수는 별도 승인으로 분리했다.
-- [ ] 구현된 QA만 `pass / partial / fail / blocked`로 기록한다.
-- [ ] `TASK-009` 종료 전 24개 시나리오의 최종 상태와 증거를 기록한다.
-- [ ] 구현하지 않은 범위는 `not_executed`로 남기고 통과로 계산하지 않는다.
+- [x] 구현된 QA만 `pass / partial / fail / blocked`로 기록한다.
+- [x] `TASK-009` 종료 시 24개 시나리오의 최종 상태와 증거를 기록했다.
+- [x] 구현하지 않은 범위는 `not_executed`로 남기고 통과로 계산하지 않는다.
 
 문서 단계 완료 조건은 실행 시점·판정·증거 형식이 정해지고 fixture 처리
 방침이 연결되는 것이다. 제품 QA 완료 조건은 구현 후 모든 mandatory Gate를
@@ -352,3 +355,4 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **QA_Validation**: [TASK-006 DEX 보고서](./10_TASK_006_DEX_REPORT.md) - raw decode·정합·partial·resume·DEX security 증거
 - **QA_Validation**: [TASK-007 AUTH 보고서](./11_TASK_007_AUTH_REPORT.md) - exact 정합·실패 TX·scope·partial·resume·AUTH security 증거
 - **QA_Validation**: [TASK-008 FREEZE 보고서](./12_TASK_008_FREEZE_REPORT.md) - 상태 전이·공식 맥락·scope·partial·resume·FREEZE security 증거
+- **QA_Validation**: [TASK-009 통합 보고서](./13_TASK_009_INTEGRATION_REPORT.md) - 24 QA·결정성·오류 행렬·추적성·보안 증거

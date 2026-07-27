@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-28 02:22
-> Status: Approved 1.5 · Document Completion Gate Passed · TASK-008 Done
+> Last Updated: 2026-07-28 02:34
+> Status: Approved 1.6 · Document Completion Gate Passed · TASK-009 Done
 
 ## 1. 문서 목적
 
@@ -61,7 +61,7 @@
 |:---|:---|:---|
 | [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) | UI-First Gate Passed · TASK-008 Applied | DEX·AUTH·FREEZE complete·partial·resume 연결 |
 | [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) | UI-First Gate Passed · TASK-008 Applied | FREEZE confirmed와 external context scope 분리 |
-| [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) | TASK-008 Compared | FREEZE rule block·partial·scope와 실제 terminal 일치 |
+| [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) | TASK-009 Regression Compared | 세 vertical·오류·resume와 실제 terminal 재대조 |
 | [Web Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) | Draft 1 · Non-Blocking UX Track | 정적 Preview 사용자 검토, 구현 승격은 Python 엔진 안정화 후 별도 승인 |
 | [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) | Draft 1 · Rules-Gated UI Track | 정적 Preview 사용자 검토, Rules·별도 구현 승인 후 `TASK-010` |
 | [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) | 사용자 확인 완료 | 구현 전 기준 화면으로 동결 |
@@ -72,13 +72,13 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Approved 1.8 · TASK-001~008 Applied | 세 vertical slice 원칙 적용 완료 |
+| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Approved 1.9 · TASK-001~009 Applied | offline P0·V1 품질·보안 Gate 적용 완료 |
 | [SQLite 논리 DB Schema](../03_Technical_Specs/01_DB_SCHEMA.md) | Approved 1.2 · Schema v1 Applied | CLI composition·artifact 조회 적용 |
 | [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) | Draft · Approved Baseline | 규정·provider plan·rate limit은 live 사용 전 갱신 |
 | [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) | Confirmed 0.1 | fixture schema 변경 요구가 생길 때만 개정 |
 | [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) | Draft 1 · Approved Baseline | 공식 규정 변경은 source policy로 역반영 |
-| [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) | Approved 1.8 · TASK-001~008 Applied | FREEZE도 기존 eth-abi·eth-utils lock 재사용 |
-| [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Contract Approved 0.1 · TASK-002·005·006·007·008 Applied | Schema probe PASS 3 유지 |
+| [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) | Approved 1.9 · TASK-001~009 Applied | 통합 Gate는 stdlib script로 dependency 추가 없음 |
+| [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Contract Approved 0.1 · TASK-002·005·006·007·008·009 Applied | 11-code·참조·Schema probe PASS 유지 |
 | [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) | Approved 1.0 · P0/V1 Closed | 이후 단계 그룹은 Deferred |
 | [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) | Draft 1 · Rules-Gated | 역할·Queue·검증·수동 제출 승인, 구현은 `TASK-010` 별도 승인 |
 
@@ -86,7 +86,7 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [P0·V1 구현 Backlog](./00_BACKLOG.md) | Approved 1.8 · TASK-001~008 Done | TASK-009 통합 Gate는 별도 승인 |
+| [P0·V1 구현 Backlog](./00_BACKLOG.md) | Approved 1.9 · TASK-001~009 Done | P0·V1 완료, TASK-010은 별도 Rules Gate |
 | 이 문서 | Approved 1.3 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
 | `01_EXECUTION_PLAN.md` | 조건부 미작성 | 구현 일정이 필요할 때 Backlog를 날짜·담당자로 전환 |
 | `02_ROADMAP_BACKLOG_SYNC.md` | 조건부 미작성 | 구현 시작 전 Roadmap↔Backlog 상태 동기화 규칙 작성 |
@@ -96,8 +96,8 @@
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
 | [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.0 · Fixture Scope Closed | 후보 5개 Deferred 결정; 단계별 승격 조건 유지 |
-| [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Approved 1.8 · FREEZE Scope Passed | 19 pass·2 partial·3 not_executed |
-| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 1.8 · FREEZE Scope Passed | 통합 Gate 유지 |
+| [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Approved 1.9 · Integration Passed | 24 pass·0 partial·0 not_executed |
+| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 1.9 · Integration Passed | offline P0·V1 Gate 완료 |
 | [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Draft 1 · Scope Approved | `TASK-010` 별도 구현 승인과 Rules 필요 |
 | [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | Pass | 문서 검증 증거·Known Issue·승인 경계 |
 | DEX·AUTH·FREEZE fixture | Confirmed | V1 기준값으로 동결, 정답 임의 변경 금지 |
@@ -227,7 +227,8 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 8 | 완료 (2026-07-28) | Backlog `TASK-006` DEX vertical slice | raw replay·exact match·partial·resume |
 | 9 | 완료 (2026-07-28) | Backlog `TASK-007` AUTH vertical slice | Approval·allowance·transferFrom·실패 TX·scope |
 | 10 | 완료 (2026-07-28) | Backlog `TASK-008` FREEZE vertical slice | blacklist lifecycle·context scope·partial·resume |
-| 11 | 별도 승인 후 | Backlog `TASK-009` 통합 회귀·보안·문서 Gate | TASK-005~008 의존 |
+| 11 | 완료 (2026-07-28) | Backlog `TASK-009` 통합 회귀·보안·문서 Gate | 24 QA·11-code·추적성·보안 통과 |
+| 12 | Rules·Preview·별도 승인 후 | Backlog `TASK-010` 병렬 문제풀이 운영 | P0·V1 비차단 별도 트랙 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.
 `DOC-M2`~`DOC-M5`나 `TASK-001`의 선행 조건으로 추가하지 않는다. 실제 웹
