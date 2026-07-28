@@ -401,13 +401,21 @@ class SQLiteOperationsRepository:
             )
             existing = self._connection.execute(
                 """
-                SELECT byte_length, relative_path FROM artifacts WHERE sha256 = ?
+                SELECT
+                    byte_length, media_type, relative_path, artifact_kind,
+                    redaction_status, license_status
+                FROM artifacts
+                WHERE sha256 = ?
                 """,
                 (record.sha256,),
             ).fetchone()
             if (
                 existing["byte_length"] != record.byte_length
+                or existing["media_type"] != record.media_type
                 or existing["relative_path"] != record.relative_path
+                or existing["artifact_kind"] != record.artifact_kind
+                or existing["redaction_status"] != record.redaction_status
+                or existing["license_status"] != record.license_status
             ):
                 raise ValueError("artifact hash conflicts with existing metadata")
 

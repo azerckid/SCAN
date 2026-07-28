@@ -1,6 +1,6 @@
 # OPS-IMPL-03 AI Planner Gate 검증 보고서
 > Created: 2026-07-28 13:55
-> Last Updated: 2026-07-28 13:55
+> Last Updated: 2026-07-28 14:09
 > Status: Passed · Offline Fake QA Only · Live Rules-Gated
 
 ## 1. 범위
@@ -46,6 +46,8 @@ raw adapter output은 다음 순서로 처리한다.
 
 중간 실패로 artifact 파일만 남는 경우 덮어쓰거나 삭제하지 않는다. 기존
 artifact 복구 원칙에 따라 orphan 검토 대상으로 보존한다.
+동일 SHA-256을 다시 기록할 때는 byte length·path뿐 아니라 media type·
+artifact kind·redaction·license metadata도 일치해야 한다.
 
 ## 3. AI mode Gate
 
@@ -55,7 +57,9 @@ artifact 복구 원칙에 따라 orphan 검토 대상으로 보존한다.
 | `rules_gated` + waiting planner job | 0회 | `rules_gated` |
 | `rule_restricted` + waiting planner job | 0회 | `rule_restricted` |
 | provider/model/adapter/boundary 불일치 | 0회 | `rule_restricted` |
-| `approved_problem_data` + Operator 미승인 | 0회 | `rules_gated` |
+| `approved_problem_data` + Operator 미승인 + waiting job | 0회 | `rules_gated` |
+| `approved_problem_data` + Operator 미승인 + queued job | 0회 | `invalid_operations_input` |
+| `planning_and_approved_tools` + waiting job | 0회 | `rules_gated` |
 | fake QA + live competition | 0회 | `rule_restricted` |
 | cross-problem·plan·job·mode 참조 오류 | 0회 | `invalid_operations_input` |
 
@@ -66,9 +70,9 @@ allowed mode의 planner job은 `queued`, gated/restricted mode는 `waiting`이�
 
 | 검증 | 결과 |
 |:---|:---:|
-| OPS-IMPL-03 planner unit tests | PASS 12 |
+| OPS-IMPL-03 planner unit tests | PASS 14 |
 | SQLite operations integration tests | PASS 11 |
-| 전체 pytest | PASS 185 |
+| 전체 pytest | PASS 187 |
 | fixture·Analysis I/O·generated Analysis Schema | PASS 3 / PASS 3 / PASS 3 |
 | operations contract runtime/Schema probes | PASS 17 |
 | repository traceability | PASS 734 links |
@@ -76,9 +80,10 @@ allowed mode의 planner job은 `queued`, gated/restricted mode는 `waiting`이�
 | 신규 runtime dependency | 없음 |
 | live network·AI·CTFd | 0건 |
 
-테스트는 allowed fake 성공, gated/restricted pre-call 차단, live fake 금지,
-provider·boundary mismatch, Operator 승인 누락, budget 초과, timeout, secret
-raw output, cross-problem command, adapter 출력 ID mismatch를 확인한다.
+테스트는 allowed fake 성공, gated/restricted/tool-mode pre-call 차단, live
+fake 금지, provider·boundary mismatch, Operator 승인·job 상태, token/cost
+budget 초과, timeout, secret raw output, cross-problem command, adapter 출력
+ID mismatch를 확인한다.
 
 ## 5. QA 판정과 잔여 Gate
 

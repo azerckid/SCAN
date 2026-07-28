@@ -14,6 +14,7 @@ from scan_tool.domain.operations import (
     AdapterKind,
     AIExecutionMode,
     AIRuleState,
+    AIToolMode,
     CompetitionEnvironment,
     DataBoundary,
     JobRecord,
@@ -25,6 +26,7 @@ from scan_tool.domain.planning import (
     PlannerAdapterResponse,
     PlannerBudgets,
     PlannerContext,
+    PlannerUsage,
 )
 from scan_tool.domain.storage import ArtifactRecord
 from scan_tool.domain.validation import validate_operations_document
@@ -91,6 +93,7 @@ def _mode(
     data_boundary: DataBoundary = DataBoundary.SYNTHETIC_ONLY,
     provider_id: str = DeterministicFakePlanner.provider_id,
     model_id: str = DeterministicFakePlanner.model_id,
+    tool_mode: AIToolMode = AIToolMode.PLANNING_ONLY,
 ) -> AIExecutionMode:
     return AIExecutionMode(
         mode_id="MODE-FAKE-QA",
@@ -99,7 +102,7 @@ def _mode(
         model_id=model_id,
         adapter_kind=adapter_kind,
         data_boundary=data_boundary,
-        tool_mode="planning_only",
+        tool_mode=tool_mode,
         rule_state=rule_state,
         affected_rule_ids=["RULE-AI"],
         rules_snapshot_ref="RULES-SNAPSHOT-20260728",
@@ -300,7 +303,37 @@ def test_approved_problem_data_requires_operator_approval_before_external_call(
     )
     recorder = ArtifactRecorder()
 
-    execution = asyncio.run(_service(tmp_path, adapter, recorder).execute(_command(mode=mode)))
+    execution = asyncio.run(
+        _service(tmp_path, adapter, recorder).execute(
+            _command(mode=mode, job_status=JobStatus.WAITING)
+        )
+    )
+
+    assert execution.error is not None
+    assert execution.error.code is OperationErrorCode.RULES_GATED
+    assert adapter.calls == 0
+    assert recorder.records == []
+
+    invalid_execution = asyncio.run(
+        _service(tmp_path, adapter, recorder).execute(_command(mode=mode))
+    )
+    assert invalid_execution.error is not None
+    assert invalid_execution.error.code is OperationErrorCode.INVALID_OPERATIONS_INPUT
+    assert adapter.calls == 0
+
+
+def test_unimplemented_approved_tool_mode_waits_without_adapter_call(
+    tmp_path: Path,
+) -> None:
+    adapter = CountingAdapter(DeterministicFakePlanner())
+    recorder = ArtifactRecorder()
+    mode = _mode(tool_mode=AIToolMode.PLANNING_AND_APPROVED_TOOLS)
+
+    execution = asyncio.run(
+        _service(tmp_path, adapter, recorder).execute(
+            _command(mode=mode, job_status=JobStatus.WAITING)
+        )
+    )
 
     assert execution.error is not None
     assert execution.error.code is OperationErrorCode.RULES_GATED
@@ -318,6 +351,33 @@ def test_budget_excess_fails_without_persisting_raw_output(tmp_path: Path) -> No
     assert execution.error.code is OperationErrorCode.PLANNER_FAILED
     assert execution.error.details["failure_kind"] == "token_budget_exceeded"
     assert execution.adapter_called is True
+    assert recorder.records == []
+
+
+def test_cost_budget_excess_fails_without_persisting_raw_output(tmp_path: Path) -> None:
+    fake = DeterministicFakePlanner()
+    command = _command()
+    safe_response = asyncio.run(fake.plan(command.context))
+    adapter = StaticAdapter(
+        replace(
+            safe_response,
+            usage=PlannerUsage(
+                input_tokens=safe_response.usage.input_tokens,
+                output_tokens=safe_response.usage.output_tokens,
+                cost_microunits=1,
+            ),
+        ),
+        adapter_kind=AdapterKind.FAKE_QA,
+        provider_id=fake.provider_id,
+        model_id=fake.model_id,
+    )
+    recorder = ArtifactRecorder()
+
+    execution = asyncio.run(_service(tmp_path, adapter, recorder).execute(command))
+
+    assert execution.error is not None
+    assert execution.error.code is OperationErrorCode.PLANNER_FAILED
+    assert execution.error.details["failure_kind"] == "cost_budget_exceeded"
     assert recorder.records == []
 
 

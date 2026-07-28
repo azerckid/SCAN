@@ -13,6 +13,7 @@ from scan_tool.domain.operations import (
     AdapterKind,
     AIExecutionMode,
     AIRuleState,
+    AIToolMode,
     CompetitionEnvironment,
     CompetitionManifest,
     DataBoundary,
@@ -165,15 +166,21 @@ class PlannerService:
             if command.planner_job.status is not JobStatus.WAITING:
                 return OperationErrorCode.INVALID_OPERATIONS_INPUT
             return OperationErrorCode.RULE_RESTRICTED
-        if command.planner_job.status is not JobStatus.QUEUED:
-            return OperationErrorCode.INVALID_OPERATIONS_INPUT
         if command.context.data_boundary is not command.mode.data_boundary:
             return OperationErrorCode.RULE_RESTRICTED
+        if command.mode.tool_mode is not AIToolMode.PLANNING_ONLY:
+            if command.planner_job.status is not JobStatus.WAITING:
+                return OperationErrorCode.INVALID_OPERATIONS_INPUT
+            return OperationErrorCode.RULES_GATED
         if (
             command.mode.data_boundary is DataBoundary.APPROVED_PROBLEM_DATA
             and not command.operator_approved_problem_data
         ):
+            if command.planner_job.status is not JobStatus.WAITING:
+                return OperationErrorCode.INVALID_OPERATIONS_INPUT
             return OperationErrorCode.RULES_GATED
+        if command.planner_job.status is not JobStatus.QUEUED:
+            return OperationErrorCode.INVALID_OPERATIONS_INPUT
         if self._adapter.adapter_kind is not command.mode.adapter_kind:
             return OperationErrorCode.RULE_RESTRICTED
         if (

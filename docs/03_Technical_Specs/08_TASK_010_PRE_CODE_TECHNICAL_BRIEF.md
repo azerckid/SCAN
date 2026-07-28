@@ -1,6 +1,6 @@
 # TASK-010 Pre-Code Technical Brief
 > Created: 2026-07-28 11:28
-> Last Updated: 2026-07-28 13:55
+> Last Updated: 2026-07-28 14:09
 > Status: Approved 1.3 · OPS-IMPL-01~03 Implemented · Rules-Gated
 
 ## 1. 문서 목적
@@ -430,6 +430,11 @@ adapter와 boundary 조합이 표와 다르면 Planner I/O 전에 거부한다.
 허용 mode가 없으면 Python evidence worker가 독립 준비를 수행할 수 있어도
 full TASK-010 flow를 완료로 표시하지 않는다.
 
+`OPS-IMPL-03` Planner adapter는 도구를 실행하지 않으므로
+`planning_only`만 실행한다. `planning_and_approved_tools`는 승인된 tool
+worker Gate가 구현되기 전까지 planner job을 `waiting + rules_gated`로
+유지한다.
+
 ## 9. Queue·병렬성·dedup
 
 ### 9.1 scheduler
@@ -579,7 +584,7 @@ cross-record·lifecycle·상태 전이는 Python validator가 규범이다.
 |:---|:---|:---|
 | `OPS-IMPL-01` | operations domain model·공개 Schema·state validator | **Done** · 29 unit tests + 17 runtime/Schema probes |
 | `OPS-IMPL-02` | SQLite v2 additive migration·repository·event log | **Done** · 10 integration tests + 전체 172 tests |
-| `OPS-IMPL-03` | Planner port·fake QA adapter·AI mode Gate | **Done** · 12 unit tests · QA-OPS-RULE-001 partial |
+| `OPS-IMPL-03` | Planner port·fake QA adapter·AI mode Gate | **Done** · 14 unit tests · QA-OPS-RULE-001 partial |
 | `OPS-IMPL-04` | bounded Queue·dependency·isolation·dedup | QA-OPS-PAR/INTRA-001 |
 | `OPS-IMPL-05` | DEX·AUTH·FREEZE evidence worker adapter | Analysis I/O pair·artifact link |
 | `OPS-IMPL-06` | candidate builder·independent Verifier Gate | QA-OPS-VERIFY/CONFLICT-001 |

@@ -396,9 +396,16 @@ def test_operations_repository_records_immutable_planner_artifact(
     with SQLiteOperationsRepository(database) as repository:
         repository.record_artifact(record)
         repository.record_artifact(record)
-        conflicting = replace(record, byte_length=25)
-        with pytest.raises(ValueError, match="artifact hash conflicts"):
-            repository.record_artifact(conflicting)
+        conflicts = (
+            replace(record, byte_length=25),
+            replace(record, media_type="text/plain"),
+            replace(record, artifact_kind="other_kind"),
+            replace(record, redaction_status="not_required"),
+            replace(record, license_status="unknown"),
+        )
+        for conflicting in conflicts:
+            with pytest.raises(ValueError, match="artifact hash conflicts"):
+                repository.record_artifact(conflicting)
 
     with sqlite3.connect(database) as connection:
         row = connection.execute(
