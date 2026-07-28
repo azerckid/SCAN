@@ -1,6 +1,6 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 02:35
+> Last Updated: 2026-07-29 02:46
 > Status: Proposed 0.1 · Smoke Not Executed · Secrets Not Configured
 
 ## 1. 목적
@@ -9,6 +9,13 @@
 공급자와 AI Planner 공급자의 최소 준비·검증 Gate를 정의한다. 첫 적용 대상은
 `TASK-012`의 candidate fixture 4개지만, 통과한 source·provenance·fallback
 계약은 뒤의 PATH·Service·Case Work Package에서도 재사용한다.
+
+이번 QuickNode·Alchemy·Blockscout topology는 **Ethereum 계열 source
+역할에만** 적용한다. PATH·Service·Case가 EVM 원자료를 사용할 때는 이를
+재사용할 수 있지만, Bitcoin은 UTXO/node 공급자, OSINT·label은 공식
+목록·웹·Terms 공급자를 별도 선정한다. 모든 Work Package가 재사용하는 것은
+특정 공급자 이름이 아니라 `Rules → secret → capability smoke → 독립 재현
+→ 반례 → provenance` Gate 패턴이다.
 
 이 문서는 공급자 가입·결제·API key 발급을 승인하거나 실제 live 호출을
 실행하는 문서가 아니다. 현재 단계에서 확정하는 것은 후보 topology, 비밀정보
@@ -151,6 +158,11 @@ hash 계산 전후 모두 artifact에 들어가면 안 된다.
 - internal native value 이동 부재
 - trace unavailable → partial
 - historical state와 `latest` 차이
+
+승격에 적용하는 반례는 이 목록만이 아니라
+[Live Provider Capability QA §5](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md)와
+[TASK-012 Fixture 후보 보고서 §7](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md)의
+문제별 반례를 합친 **합집합**이다. 한 문서에만 적힌 반례도 생략할 수 없다.
 
 독립 trace를 확보하지 못하면 trace-dependent 항목은 `partial` 또는
 `candidate`를 유지한다. supporting explorer 일치는 독립 RPC 일치를

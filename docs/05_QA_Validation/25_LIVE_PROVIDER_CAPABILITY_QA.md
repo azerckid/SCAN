@@ -1,6 +1,6 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 02:35
+> Last Updated: 2026-07-29 02:46
 > Status: Proposed 0.1 · Not Executed
 
 ## 1. 목적
@@ -12,12 +12,12 @@ AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하�
 
 ## 2. 실행 전 보안 Gate
 
+- [ ] 공식 Rules의 provider·model·data·tool mode가 허용 상태다.
 - [ ] 실제 secret은 로컬 환경에만 있고 저장소·SQLite·fixture·artifact에 없다.
 - [ ] endpoint query token과 Authorization header를 기록·출력하지 않는다.
 - [ ] EVM method allowlist는 read-only이고 signing·send method가 없다.
 - [ ] canary secret이 성공·실패·timeout·fallback 출력에 나타나지 않는다.
 - [ ] provider별 논리 ID와 실제 endpoint mapping은 로컬 설정에서만 존재한다.
-- [ ] 공식 Rules의 provider·model·data·tool mode가 허용 상태다.
 
 하나라도 실패하면 smoke를 시작하지 않는다.
 
@@ -57,6 +57,10 @@ AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하�
 | internal value 없음 | native internal flow 생성 금지 | not_executed |
 | trace unavailable | partial + 원인 보존 | not_executed |
 | historical/latest 차이 | 고정 block 값만 채점 | not_executed |
+
+이 표와 [Live Provider Readiness §7](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md),
+[TASK-012 Fixture 후보 보고서 §7](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md)에
+기록된 반례의 합집합이 최소 실행 범위다.
 
 ## 6. AI Planner capability
 

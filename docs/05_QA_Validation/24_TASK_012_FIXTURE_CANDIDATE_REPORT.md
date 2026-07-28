@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Fixture 후보 선정 보고서
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 02:35
+> Last Updated: 2026-07-29 02:46
 > Status: Candidate Pack 0.1 · Implementation Not Started
 
 ## 1. 목적과 판정
@@ -85,7 +85,9 @@ historical state, token transfer range, internal call에서 별도로 계산한�
 1. [x] primary·independent·supporting provider 후보 topology와 smoke 계약 문서화
 2. [ ] 로컬 secret 구성 후 read-only capability smoke 통과
 3. [ ] 네 패키지의 독립 공급자 2차 재현
-4. [ ] checksum·timestamp→block·zero-value Transfer·failed internal call 반례
+4. [ ] Readiness §7·Capability QA §5와 이 보고서의
+   checksum·timestamp→block·zero-value Transfer·failed internal call 반례
+   **합집합** 통과
 5. [ ] Analysis I/O version 영향과 네 result type 승인
 6. [ ] CLI Preview의 complete·partial·failed 표시 재검토
 7. [ ] TASK-012 Context Receipt `PASS`
