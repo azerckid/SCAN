@@ -35,8 +35,10 @@ content-addressed artifacts. `OPS-IMPL-06` builds canonical evidence-linked
 candidates, independently replays raw evidence, preserves conflicts, and allows
 only the Application Gate to mark a candidate submission-ready. `OPS-IMPL-07`
 adds SQLite v2 read-back, a strict OperationsSnapshot, shared JSON/terminal
-rendering, and the read-only local `operations` command. Live AI and
-submission-record mutation remain unimplemented.
+rendering, and the read-only local `operations` command. `OPS-IMPL-08` adds
+job-scoped same-problem leaf concurrency, composite stale/Rules alerts, explicit
+SQLite Board input, and an atomic human-confirmed local submission record.
+Live AI and CTFd network submission remain unimplemented.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`, so external execution modes remain `rules_gated` until
 an authoritative notice is recorded.
@@ -80,6 +82,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | OPS-IMPL-05 evidence | [`18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md`](docs/05_QA_Validation/18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) | approved plan projection, DEX/AUTH/FREEZE replay, workspace isolation, artifact, and checkpoint evidence |
 | OPS-IMPL-06 evidence | [`19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md`](docs/05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) | canonical candidate, fresh independent replay, conflict preservation, and promotion-gate evidence |
 | OPS-IMPL-07 evidence | [`20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md`](docs/05_QA_Validation/20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) | SQLite read-back, strict snapshot, local terminal/JSON view, and Preview-state mapping evidence |
+| OPS-IMPL-08 evidence | [`21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md`](docs/05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) | same-problem leaf concurrency, manual submission record, six Operations QA, and final security evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -97,13 +100,13 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-260 passed
+271 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 793 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 65 runtime/evidence files
+PASS repository traceability: 806 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 66 runtime/evidence files
 ```
 
 The installed package exposes the approved analysis and local operations command surface:
@@ -113,6 +116,8 @@ uv run scan --help
 uv run scan --version
 uv run scan operations --bundle docs/05_QA_Validation/examples/operations/rules-gated-bundle.json
 uv run scan operations --bundle docs/05_QA_Validation/examples/operations/rules-gated-bundle.json --output json
+uv run scan operations --database /explicit/path/scan.sqlite3 --competition-id COMP-SCAN-2026
+uv run scan mark-submitted --database /explicit/path/scan.sqlite3 --competition-id COMP-SCAN-2026 --candidate-id CAND-ID --response unknown --confirm
 uv run scan validate REQUEST.json
 uv run scan analyze --request REQUEST.json --evidence RAW_REPLAY.json
 uv run scan resume ANALYSIS_ID
@@ -134,10 +139,10 @@ A supported request without `--evidence` stops explicitly with
 ## Implementation boundary
 
 `TASK-001` through `TASK-009` are complete. The offline P0·V1 baseline is closed.
-`TASK-010` is a separate rules-gated operations track and requires authoritative
-rules, Operations Board review, and separate implementation approval. No live
-provider configuration exists; live transport also requires
-`rule_status: allowed`. AI/agent execution and CTFd automation remain unimplemented.
+`TASK-010` offline Operations V1 is complete through human-confirmed local
+submission recording. No live provider configuration exists; live transport still
+requires authoritative Rules and `rule_status: allowed`. The CLI never calls CTFd,
+stores no CTFd credential, and does not implement automatic submission.
 
 ## License
 

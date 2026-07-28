@@ -17,7 +17,7 @@ from scan_tool.domain.analysis_request import (
 )
 from scan_tool.ports.evidence import EvidenceAdapterResponse
 
-_SAFE_WORKSPACE_KEY = re.compile(r"^PROB-[A-Z0-9][A-Z0-9-]{1,63}$")
+_SAFE_WORKSPACE_KEY = re.compile(r"^PROB-[A-Z0-9][A-Z0-9-]{1,63}(?:/JOB-[A-Z0-9][A-Z0-9-]{2,63})?$")
 
 
 class InProcessEvidenceWorker:
@@ -68,7 +68,7 @@ class InProcessEvidenceWorker:
         replay_body: bytes,
         replay_sha256: str,
     ) -> EvidenceAdapterResponse:
-        workspace = self._root / workspace_key
+        workspace = self._root.joinpath(*workspace_key.split("/"))
         with CliRuntime.open(workspace) as runtime:
             existing_request = runtime.load_request(request.root.analysis_id)
             if existing_request is None:

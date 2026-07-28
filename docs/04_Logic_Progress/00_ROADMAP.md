@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-28 16:26
-> Status: Approved 2.5 · TASK-009 Done · TASK-010 OPS-IMPL-01~07 Done
+> Last Updated: 2026-07-29 00:41
+> Status: Approved 2.6 · TASK-009 Done · TASK-010 Offline V1 Gate Passed
 
 ## 1. 문서 목적
 
@@ -63,7 +63,7 @@
 | [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) | UI-First Gate Passed · TASK-008 Applied | FREEZE confirmed와 external context scope 분리 |
 | [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) | TASK-009 Regression Compared | 세 vertical·오류·resume와 실제 terminal 재대조 |
 | [Web Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) | Draft 1 · Non-Blocking UX Track | 정적 Preview 사용자 검토, 구현 승격은 Python 엔진 안정화 후 별도 승인 |
-| [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) | Approved 1.1 · OPS-IMPL-07 Local View Applied · Rules-Gated | submission mutation은 OPS-IMPL-08 |
+| [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) | Approved 1.2 · OPS-IMPL-08 Local Submission Applied · Rules-Gated | live/web runtime은 별도 승인 |
 | [HTML Terminal Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) | 사용자 확인 완료 | 구현 전 기준 화면으로 동결 |
 | [HTML Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) | Draft · Review Pending | read-only 시연 UX 검토용, Document Completion Gate 비차단 |
 | [HTML Operations Board Preview](../02_UI_Screens/previews/03_competition_operations_board_preview.html) | User Review Passed · PR #27 | 문제·worker·검증·수동 제출 UX 승인 기준선, `TASK-010` 전용 |
@@ -72,7 +72,7 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Approved 2.6 · OPS-IMPL-01~07 Applied | offline 품질·보안·Evidence·Verifier·Snapshot Gate 적용 |
+| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Approved 2.7 · OPS-IMPL-01~08 Applied | offline 품질·보안·Evidence·Verifier·Submission Gate 적용 |
 | [SQLite 논리 DB Schema](../03_Technical_Specs/01_DB_SCHEMA.md) | Approved 1.3 · Schema v2 Applied | 실제 사용자 DB migration은 별도 승인 |
 | [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) | Draft · Approved Baseline | 규정·provider plan·rate limit은 live 사용 전 갱신 |
 | [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) | Confirmed 0.1 | fixture schema 변경 요구가 생길 때만 개정 |
@@ -81,14 +81,14 @@
 | [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Contract Approved 0.1 · TASK-002·005·006·007·008·009 Applied | 11-code·참조·Schema probe PASS 유지 |
 | [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) | Approved 1.0 · P0/V1 Closed | 이후 단계 그룹은 Deferred |
 | [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) | AI-Native Contract Approved 1.0 · UI-First Gate Passed · Rules-Gated | 구현은 `TASK-010` 별도 승인 |
-| [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) | Approved 1.7 · OPS-IMPL-01~07 Implemented · Rules-Gated | `OPS-IMPL-08` 별도 승인 |
+| [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) | Approved 1.8 · OPS-IMPL-01~08 Offline Implemented | live mode는 Rules-Gated |
 
 ### 3.4 Logic Progress
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~009 Done · TASK-010 OPS-IMPL-01~07 Done | 후속 OPS-IMPL-08 별도 승인 |
-| 이 문서 | Approved 2.5 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
+| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~009 Done · TASK-010 Offline V1 Gate Passed | live mode는 공식 Rules 대기 |
+| 이 문서 | Approved 2.6 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
 | `01_EXECUTION_PLAN.md` | 조건부 미작성 | 구현 일정이 필요할 때 Backlog를 날짜·담당자로 전환 |
 | `02_ROADMAP_BACKLOG_SYNC.md` | 조건부 미작성 | 구현 시작 전 Roadmap↔Backlog 상태 동기화 규칙 작성 |
 
@@ -98,8 +98,9 @@
 |:---|:---|:---|
 | [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.0 · Fixture Scope Closed | 후보 5개 Deferred 결정; 단계별 승격 조건 유지 |
 | [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Approved 1.9 · Integration Passed | 24 pass·0 partial·0 not_executed |
-| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 2.8 · OPS-IMPL-01~07 Passed | submission·security final QA 미실행 |
-| [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Contract Approved · OPS-IMPL-07 Runtime Partial | Snapshot·VERIFY·CONFLICT pass, submission·live Rules 필요 |
+| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 2.9 · OPS-IMPL-01~08 Offline Passed | live Rules·실대회 성능 미실행 |
+| [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Contract Approved · Offline 6 QA Passed | live Rules·실대회 성능 별도 |
+| [OPS-IMPL-08 Final Integration Report](../05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) | Passed · Offline Operations V1 | 수동 제출·보안·leaf 병렬·6 QA |
 | [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | Pass | 문서 검증 증거·Known Issue·승인 경계 |
 | DEX·AUTH·FREEZE fixture | Confirmed | V1 기준값으로 동결, 정답 임의 변경 금지 |
 
@@ -204,7 +205,7 @@ Backlog로 분리했다.
 
 위 항목은 Document Completion Gate가 닫힌 시점의 기준선이다. Gate 이후 별도
 구현 승인으로 `TASK-001`~`TASK-009`와 `TASK-010`의
-`OPS-IMPL-01`~`OPS-IMPL-07`이 완료됐으며 현재 상태는
+`OPS-IMPL-01`~`OPS-IMPL-08`이 완료됐으며 현재 상태는
 [Backlog](./00_BACKLOG.md)가 관리한다.
 
 완료 조건: 사용자가 문서 완료를 승인하면 이 Gate는 닫힌다. `TASK-001`
@@ -230,7 +231,7 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 9 | 완료 (2026-07-28) | Backlog `TASK-007` AUTH vertical slice | Approval·allowance·transferFrom·실패 TX·scope |
 | 10 | 완료 (2026-07-28) | Backlog `TASK-008` FREEZE vertical slice | blacklist lifecycle·context scope·partial·resume |
 | 11 | 완료 (2026-07-28) | Backlog `TASK-009` 통합 회귀·보안·문서 Gate | 24 QA·11-code·추적성·보안 통과 |
-| 12 | 진행 중 (OPS-IMPL-01~07 완료) | Backlog `TASK-010` 병렬 문제풀이 운영 | 다음 OPS-IMPL-08 submission·security integration |
+| 12 | 완료 (2026-07-29, offline V1) | Backlog `TASK-010` 병렬 문제풀이 운영 | live mode는 공식 Rules·별도 승인 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.
 `DOC-M2`~`DOC-M5`나 `TASK-001`의 선행 조건으로 추가하지 않는다. 실제 웹

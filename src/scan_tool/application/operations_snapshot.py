@@ -62,6 +62,11 @@ class SnapshotViewState(StrEnum):
     RULES_UNAVAILABLE = "rules_unavailable"
 
 
+class SnapshotAlert(StrEnum):
+    STALE = "stale"
+    RULES_UNAVAILABLE = "rules_unavailable"
+
+
 class WorkerHealth(StrEnum):
     IDLE = "idle"
     QUEUED = "queued"
@@ -183,6 +188,7 @@ class OperationsSnapshot(ContractModel):
     generated_at: UtcDatetime
     stale_at: UtcDatetime
     view_state: SnapshotViewState
+    alerts: list[SnapshotAlert]
     competition: SnapshotCompetition
     ai_mode: SnapshotAIMode | None
     summary: SnapshotSummary
@@ -260,6 +266,7 @@ class OperationsSnapshotBuilder:
             generated_at=generated_at,
             stale_at=stale_at,
             view_state=_view_state(document, latest_mode, observed_at, stale_at),
+            alerts=_alerts(latest_mode, observed_at, stale_at),
             competition=SnapshotCompetition(
                 competition_id=bundle.manifest.competition_id,
                 phase=bundle.manifest.phase,
@@ -478,6 +485,19 @@ def _view_state(
     return SnapshotViewState.DEFAULT
 
 
+def _alerts(
+    latest_mode: AIExecutionMode | None,
+    observed_at: datetime,
+    stale_at: datetime,
+) -> list[SnapshotAlert]:
+    alerts: list[SnapshotAlert] = []
+    if observed_at > stale_at:
+        alerts.append(SnapshotAlert.STALE)
+    if latest_mode is not None and latest_mode.rule_state is not AIRuleState.ALLOWED:
+        alerts.append(SnapshotAlert.RULES_UNAVAILABLE)
+    return alerts
+
+
 def _worker_health(status: JobStatus) -> WorkerHealth:
     return {
         JobStatus.QUEUED: WorkerHealth.QUEUED,
@@ -500,7 +520,7 @@ def _next_action(status: ProblemStatus) -> str:
         ProblemStatus.VERIFYING: "complete independent verification",
         ProblemStatus.REVIEW_REQUIRED: "resolve conflicts and uncertainties",
         ProblemStatus.SUBMISSION_READY: "copy the full answer for human submission",
-        ProblemStatus.SUBMITTED: "record the manual CTFd response",
+        ProblemStatus.SUBMITTED: "review the recorded response and continue",
     }[status]
 
 

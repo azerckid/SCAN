@@ -1,7 +1,7 @@
 # SCAN 2026 Competition Operations Board
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 16:26
-> Status: Approved 1.1 · AI-Native Interactive Preview · UI-First Gate Passed · OPS-IMPL-07 Local View Applied · Rules-Gated
+> Last Updated: 2026-07-29 00:41
+> Status: Approved 1.2 · AI-Native Interactive Preview · UI-First Gate Passed · OPS-IMPL-08 Local Submission Applied · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -286,6 +286,12 @@ OPS-IMPL-07의 `scan operations` 명령은 같은 상태 label과 정보 계층�
 validated Operations contract에서 읽어 terminal 또는 JSON으로 표시한다.
 이 명령은 read-only local view이며 Preview의 mutation이나 CTFd 제출을
 실행하지 않는다.
+
+OPS-IMPL-08의 `mark-submitted`는 CTFd에 사람이 직접 제출한 뒤 `--confirm`으로
+응답만 로컬 SQLite에 기록한다. candidate 전체 answer 복사와 제출 기록은
+분리되며, 명령에는 CTFd endpoint·credential·session·자동 submit 경로가 없다.
+`operations --database ... --competition-id ...`는 사용자가 명시한 SQLite v2만
+읽고 자동 탐색·migration을 하지 않는다.
 
 ## 12. 사용자 확인 Gate
 

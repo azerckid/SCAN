@@ -540,6 +540,8 @@ def _promotion_policy_error(command: CandidatePromotionCommand) -> str | None:
         or command.reporter_job.job_id not in command.verification.independent_from_job_ids
     ):
         return "verifier_job_invalid"
+    if any(run.job.problem_id != command.problem.problem_id for run in command.evidence_runs):
+        return "evidence_problem_mismatch"
     if any(run.job.plan_id != command.reporter_job.plan_id for run in command.evidence_runs):
         return "evidence_plan_mismatch"
     return _evidence_run_policy_error(

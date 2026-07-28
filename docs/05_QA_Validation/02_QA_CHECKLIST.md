@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-28 16:26
-> Status: Approved 2.8 · TASK-009 Passed · TASK-010 OPS-IMPL-01~07 Passed
+> Last Updated: 2026-07-29 00:41
+> Status: Approved 2.9 · TASK-009 Passed · TASK-010 Offline 6 QA Passed
 
 ## 1. 문서 목적
 
@@ -15,9 +15,9 @@
 QA 시나리오 24개는 모두 `pass`다. TASK-009에서 source/security 교차
 시나리오와 regression 3개를 닫아 offline P0·V1 통합 Gate를 통과했다.
 
-`TASK-010`의 Agentic Parallel Solve QA 6개는 별도
-`Scope Approved / Not Executed` 상태이며 기존 24개 P0·V1 집계를 변경하지
-않는다.
+`TASK-010`의 Agentic Parallel Solve QA 6개는 OPS-IMPL-08에서 offline
+범위가 모두 `pass`다. 이는 기존 24개 P0·V1 집계를 변경하지 않으며 live
+AI·RPC·CTFd 허용 또는 실대회 성능 통과를 뜻하지 않는다.
 
 ## 2. 상태와 판정
 
@@ -188,16 +188,24 @@ ID는 24개 집계에서 한 번만 센다.
   failed·stale·rules unavailable 상태를 Preview label로 표시한다.
 - [x] read-only `scan operations`는 local bundle만 읽으며 AI·RPC·CTFd
   network call과 mutation을 만들지 않는다.
+- [x] `scan operations --database ... --competition-id ...`는 명시적으로
+  지정한 SQLite v2만 읽고 같은 strict snapshot을 terminal·JSON으로 표시한다.
+- [x] stale와 Rules unavailable이 동시에 참이면 두 alert를 모두 보존한다.
+- [x] `scan mark-submitted`는 `submission_ready` 후보와 명시적 사람 확인
+  뒤에만 local submission·event·상태 전이를 한 트랜잭션으로 기록한다.
 - [x] 문제 간 상태·result·checkpoint·artifact가 격리된다.
 - [x] 문제 간 candidate가 격리된다.
-- [ ] 문제 내부 leaf job dependency와 source request dedup이 일치한다.
+- [x] 같은 문제의 두 leaf job이 별도 workspace에서 겹쳐 실행되고 Reporter는
+  두 dependency가 끝난 뒤에만 reconciliation한다.
+- [x] 문제 내부 leaf job dependency와 source request dedup이 일치한다.
 - [x] provider·worker별 동시성 제한과 Queue age가 read model에 표시된다.
 - [x] worker 하나의 실패가 다른 문제 scheduler 결과로 전파되지 않는다.
 - [x] 독립 검증 없는 후보와 충돌 후보가 `submission_ready`가 아니다.
-- [ ] AI mode 미확정 시 `rules_gated`, 금지 mode 호출 시
+- [x] AI mode 미확정 시 `rules_gated`, 금지 mode 호출 시
   `rule_restricted`, 공식 허용 adapter 교체만 동작한다.
-- [ ] CTFd 자동 제출·credential·session·brute force가 0건이다.
-- [ ] Agentic Parallel Solve QA 6개의 구현된 범위를 실행·기록한다.
+- [x] offline runtime과 테스트에 CTFd 자동 제출·credential·session·
+  brute force가 0건이다.
+- [x] Agentic Parallel Solve QA 6개의 offline 범위를 실행·기록한다.
 
 ## 7. PR·릴리스·대회 전 Gate
 
@@ -230,6 +238,8 @@ ID는 24개 집계에서 한 번만 센다.
 - [x] TASK-007이 기존 `eth-abi`·`eth-utils`를 재사용하고 dependency·lockfile을 변경하지 않았다.
 - [x] TASK-008이 기존 `eth-abi`·`eth-utils`를 재사용하고 dependency·lockfile을 변경하지 않았다.
 - [x] TASK-009가 stdlib 검증기만 추가하고 dependency·lockfile을 변경하지 않았다.
+- [x] TASK-010 OPS-IMPL-01~08이 새 dependency 없이 승인된 Python·SQLite
+  경계 안에서 Operations contract·Queue·Evidence·Verifier·local submission을 구현했다.
 - [x] TASK-001 직접 구현 범위가 `OSS-*` 결정과 일치한다.
 - [x] TASK-003 구현이 `TD-013`·`TD-014`의 adapter/orchestration 분리와 일치한다.
 - [x] TASK-001~009 추적 파일에서 secret·`.scan/`·로컬 DB가 0건임을 확인했다.
@@ -241,6 +251,8 @@ ID는 24개 집계에서 한 번만 센다.
 - [x] TASK-007 AUTH complete·partial·resume과 `SCOPE / NOT ASSESSED` 출력을 UI 문서에 동기화했다.
 - [x] TASK-008 FREEZE complete·partial·resume과 온체인 상태·공식 맥락 분리 출력을 UI 문서에 동기화했다.
 - [x] TASK-009에서 실제 CLI·Preview를 재대조했고 renderer 변경이 없음을 기록했다.
+- [x] OPS-IMPL-08에서 Operations Board local read·manual submission 흐름을
+  UI 문서와 동기화하고 HTML Preview 자체는 변경하지 않았다.
 
 ### 7.3 대회 직전
 
@@ -389,3 +401,4 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **QA_Validation**: [OPS-IMPL-05 Evidence Worker 보고서](./18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - 승인 projection·세 vertical·artifact·checkpoint·격리 검증
 - **QA_Validation**: [OPS-IMPL-06 Candidate·Verifier 보고서](./19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) - canonical answer·fresh replay·conflict·promotion Gate 검증
 - **QA_Validation**: [OPS-IMPL-07 OperationsSnapshot 보고서](./20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - SQLite read-back·strict snapshot·local view 검증
+- **QA_Validation**: [OPS-IMPL-08 Final Integration 보고서](./21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - leaf 병렬·local submission·보안·6개 offline 운영 QA

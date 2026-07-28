@@ -646,7 +646,7 @@ def test_promotion_rejects_cross_problem_evidence() -> None:
 
     assert promoted.candidate is None
     assert promoted.error is not None
-    assert promoted.error.details == {"reason": "evidence_plan_mismatch"}
+    assert promoted.error.details == {"reason": "evidence_problem_mismatch"}
 
 
 def test_conflicting_replay_is_preserved_and_not_promoted() -> None:
@@ -719,6 +719,51 @@ def test_official_and_heuristic_labels_are_not_silently_merged() -> None:
     assert verification_execution.verification.status is VerificationStatus.CONFLICT
     assert promoted.candidate is not None
     assert promoted.candidate.status is CandidateStatus.REVIEW_REQUIRED
+
+
+def test_matching_dual_label_replay_still_blocks_confirmed_fact_promotion() -> None:
+    scenario = _scenario("auth")
+    document = copy.deepcopy(scenario.evidence_run.result.to_contract_dict())
+    heuristic = copy.deepcopy(document["results"][-1])  # type: ignore[index]
+    heuristic.update(
+        {
+            "result_id": "RES-AUTH-HEURISTIC-MATCH",
+            "result_type": "address_label",
+            "classification": "heuristic",
+            "value": {"label": "suspected_spender_cluster"},
+        }
+    )
+    document["results"].append(heuristic)  # type: ignore[union-attr]
+    dual_label_result = validate_analysis_result(document)
+    evidence_run = replace(scenario.evidence_run, result=dual_label_result)
+    scenario = replace(scenario, evidence_run=evidence_run)
+    candidate = _candidate(
+        scenario,
+        selected_result_ids=(
+            "RES-AUTH-APPROVAL",
+            "RES-AUTH-HEURISTIC-MATCH",
+        ),
+    )
+
+    verification_execution = asyncio.run(
+        IndependentVerifier(
+            StaticEvidencePort(_response(dual_label_result)),
+            clock=lambda: NOW,
+        ).verify(_verification_command(scenario, candidate))
+    )
+    assert verification_execution.verification is not None
+    promoted = CandidatePromotionGate(clock=lambda: NOW).promote(
+        _promotion_command(
+            scenario,
+            candidate,
+            verification_execution.verification,
+        )
+    )
+
+    assert verification_execution.verification.status is VerificationStatus.PASS
+    assert promoted.candidate is not None
+    assert promoted.candidate.status is CandidateStatus.REVIEW_REQUIRED
+    assert promoted.candidate.recommendation is Recommendation.INVESTIGATE
 
 
 def test_missing_replay_evidence_is_incomplete_and_not_promoted() -> None:

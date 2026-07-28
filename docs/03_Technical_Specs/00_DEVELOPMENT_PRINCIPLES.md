@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-28 16:26
-> Status: Approved 2.6 · TASK-001~009 · OPS-IMPL-01~07 Applied
+> Last Updated: 2026-07-29 00:41
+> Status: Approved 2.7 · TASK-001~009 · OPS-IMPL-01~08 Applied
 
 ## 1. 문서 목적
 
@@ -465,8 +465,10 @@ dist/
     conflict 보존과 Application-only promotion Gate를 구현했다.
 23. `OPS-IMPL-07`에서 SQLite v2 read-back, strict OperationsSnapshot,
     JSON/terminal 공통 view와 read-only local CLI를 구현했다.
-24. 후속 `OPS-IMPL-08`은 별도 승인을 요구하며, live AI mode는
-    공식 Rules 확인 전까지 `rules_gated`다.
+24. `OPS-IMPL-08`에서 job-scoped evidence workspace, 복합 snapshot alert,
+    explicit SQLite Board input과 사람 확인 수동 제출 기록을 구현했다.
+25. live AI mode와 CTFd network submission은 공식 Rules·별도 승인 전까지
+    `rules_gated` 또는 미구현 상태다.
 
 ## 22. Related Documents
 
@@ -500,3 +502,4 @@ dist/
 - **QA_Validation**: [OPS-IMPL-05 Evidence Worker 보고서](../05_QA_Validation/18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - 승인 projection·세 vertical·workspace·artifact·checkpoint 검증
 - **QA_Validation**: [OPS-IMPL-06 Candidate·Verifier 보고서](../05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) - canonical answer·fresh replay·conflict·promotion 검증
 - **QA_Validation**: [OPS-IMPL-07 OperationsSnapshot 보고서](../05_QA_Validation/20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - SQLite read-back·strict snapshot·local view 검증
+- **QA_Validation**: [OPS-IMPL-08 Final Integration 보고서](../05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - leaf 병렬·수동 제출·보안·6개 운영 QA

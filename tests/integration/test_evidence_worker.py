@@ -13,6 +13,12 @@ from threading import Lock
 import pytest
 
 from scan_tool.adapters.evidence import InProcessEvidenceWorker
+from scan_tool.application.candidate_verifier import (
+    CandidateBuildCommand,
+    CandidateBuilder,
+    CandidateBuildExecution,
+    EvidenceRun,
+)
 from scan_tool.application.cli_runtime import AnalysisUnavailable, CliRuntime
 from scan_tool.application.evidence_worker import (
     ApprovedReplay,
@@ -20,7 +26,11 @@ from scan_tool.application.evidence_worker import (
     EvidenceWorkerCommand,
     EvidenceWorkerService,
 )
-from scan_tool.application.scheduler import BoundedJobScheduler
+from scan_tool.application.scheduler import (
+    BoundedJobScheduler,
+    QueueLimits,
+    WorkerOutcome,
+)
 from scan_tool.domain import validate_analysis_request, validate_analysis_result
 from scan_tool.domain.analysis_request import AnalysisRequest, AnalysisType, RuleStatus
 from scan_tool.domain.analysis_result import AnalysisResult, AnalysisStatus
@@ -261,7 +271,7 @@ def test_confirmed_fixture_runs_through_in_process_worker(
     assert execution.event.safe_details_json["result_ids"]
     assert execution.event.safe_details_json["evidence_ids"]
     assert execution.event.safe_details_json["source_record_ids"]
-    workspace = tmp_path / "workspaces" / command.problem.problem_id
+    workspace = tmp_path / "workspaces" / command.problem.problem_id / command.job.job_id
     assert (workspace / "scan.sqlite3").exists()
 
 
@@ -282,7 +292,142 @@ def test_three_vertical_workers_connect_to_bounded_scheduler(tmp_path: Path) -> 
     assert len({command.problem.problem_id for command in commands.values()}) == 3
     for command in commands.values():
         assert (tmp_path / command.problem.problem_id / "scan.sqlite3").exists() is False
-        assert (tmp_path / "workspaces" / command.problem.problem_id / "scan.sqlite3").exists()
+        assert (
+            tmp_path
+            / "workspaces"
+            / command.problem.problem_id
+            / command.job.job_id
+            / "scan.sqlite3"
+        ).exists()
+
+
+def _reconcile_candidate(
+    commands: dict[str, EvidenceWorkerCommand],
+    queue_executor: EvidenceQueueExecutor,
+    dex: EvidenceWorkerCommand,
+    combined_plan: PlanHypothesis,
+    reporter: JobRecord,
+) -> CandidateBuildExecution:
+    evidence_runs = []
+    selected_result_ids = []
+    for job_id, command in commands.items():
+        execution = queue_executor.execution_for(job_id)
+        assert execution.result is not None
+        completed_job = command.job.model_copy(
+            update={
+                "status": JobStatus.COMPLETE,
+                "attempt": 1,
+                "started_at": NOW,
+                "finished_at": NOW,
+            }
+        )
+        evidence_runs.append(
+            EvidenceRun(
+                job=completed_job,
+                request=command.request,
+                result=execution.result,
+                approved_replay=command.approved_replay,
+            )
+        )
+        selected_result_ids.append(execution.result.root.results[0].result_id)
+    return CandidateBuilder(clock=lambda: NOW).build(
+        CandidateBuildCommand(
+            manifest=dex.manifest,
+            problem=dex.problem.model_copy(update={"status": ProblemStatus.RUNNING}),
+            plan=combined_plan,
+            reporter_job=reporter.model_copy(
+                update={"status": JobStatus.RUNNING, "started_at": NOW}
+            ),
+            evidence_runs=tuple(evidence_runs),
+            candidate_id="CAND-DEX-MULTI-LEAF",
+            selected_result_ids=tuple(selected_result_ids),
+            confidence=90,
+            confidence_basis="Two scoped leaf results were reconciled.",
+            uncertainties=(),
+            worker_id="WORKER-REPORTER-01",
+            event_id="OEV-DEX-MULTI-LEAF",
+            error_id="OERR-DEX-MULTI-LEAF",
+        )
+    )
+
+
+def test_two_leaf_jobs_run_in_parallel_before_same_problem_reconciliation(
+    tmp_path: Path,
+) -> None:
+    dex = _command("dex")
+    auth = _command("auth")
+    auth_job = auth.job.model_copy(
+        update={
+            "problem_id": dex.problem.problem_id,
+            "plan_id": dex.plan.plan_id,
+        }
+    )
+    combined_plan = dex.plan.model_copy(
+        update={"leaf_job_specs": [dex.plan.leaf_job_specs[0], auth.plan.leaf_job_specs[0]]}
+    )
+    commands = {
+        dex.job.job_id: replace(dex, plan=combined_plan),
+        auth_job.job_id: replace(
+            auth,
+            manifest=dex.manifest,
+            problem=dex.problem,
+            plan=combined_plan,
+            job=auth_job,
+        ),
+    }
+    reporter = JobRecord(
+        job_id="JOB-DEX-RECONCILE",
+        problem_id=dex.problem.problem_id,
+        plan_id=dex.plan.plan_id,
+        role=JobRole.REPORTER,
+        job_type="candidate_reconciliation",
+        status=JobStatus.QUEUED,
+        priority=ProblemPriority.NORMAL,
+        idempotency_key=hashlib.sha256(b"dex:auth:reconcile").hexdigest(),
+        attempt=0,
+        max_attempts=1,
+        queued_at=NOW,
+    )
+    worker = TrackingEvidenceWorker(tmp_path / "parallel-workspaces")
+    queue_executor = EvidenceQueueExecutor(
+        EvidenceWorkerService(worker, clock=lambda: NOW),
+        commands,
+    )
+    reconciled = []
+
+    async def execute(job: JobRecord, attempt: int) -> WorkerOutcome:
+        if job.role is JobRole.REPORTER:
+            reconciled.append(
+                _reconcile_candidate(
+                    commands,
+                    queue_executor,
+                    dex,
+                    combined_plan,
+                    reporter,
+                )
+            )
+            return WorkerOutcome(status=JobStatus.COMPLETE)
+        return await queue_executor(job, attempt)
+
+    scheduled = asyncio.run(
+        BoundedJobScheduler(
+            execute,
+            limits=QueueLimits(max_active_jobs_per_problem=2),
+        ).execute(
+            [*map(lambda command: command.job, commands.values()), reporter],
+            dependencies={reporter.job_id: tuple(commands)},
+        )
+    )
+
+    assert scheduled.max_observed_jobs_per_problem == 2
+    assert worker.max_active == 2
+    assert scheduled.dispatch_order[-1] == reporter.job_id
+    assert len(reconciled) == 1
+    assert reconciled[0].error is None
+    assert reconciled[0].candidate is not None
+    assert len(reconciled[0].candidate.result_refs) == 2
+    assert all(result.status is JobStatus.COMPLETE for result in scheduled.results)
+    assert all(queue_executor.execution_for(job_id).result is not None for job_id in commands)
 
 
 def test_completed_analysis_is_reused_without_duplicate_rows(tmp_path: Path) -> None:
