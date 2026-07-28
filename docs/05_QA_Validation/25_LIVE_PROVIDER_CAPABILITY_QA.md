@@ -43,7 +43,7 @@ live rate/timeout 반례, 독립 trace와 AI Planner capability는 아직
 | filtered logs | pass | pass | USDC Transfer 23건·첫 5개 요약 일치 |
 | historical call/state | pass | pass | block `0xfdf1d0`, decimals `6` 일치 |
 | trace | pass | failed/conditional | primary callTracer 성공, Alchemy HTTP 400·대체 독립 trace 미선정 |
-| rate/timeout | offline injected pass | live not_executed | timeout·429·unsupported·malformed 구조화, 실제 provider 측정 잔여 |
+| rate/timeout | offline injected pass | live not_executed | timeout·429·method-not-found→`invalid_response`·malformed 구조화, 실제 provider 측정 잔여 |
 
 결과는 provider 문서의 지원 표시가 아니라 실제 계정과 대상 block에서
 관찰한 값으로 채운다. 무료·유료 plan 차이도 실제 계정 범위만 기록한다.
@@ -73,9 +73,9 @@ credential 회전, live rate/timeout·fallback 검증이 남아 `confirmed`는
 - [x] decoded 값은 raw response에서 다시 계산됐다.
 - [x] capability smoke에서 두 공급자의 공통 6개 decoded summary가 모두 일치했다.
 - [x] TASK-012 fixture replay에서 두 공급자의 공통 9개 decoded summary가 모두 일치했다.
-- [ ] mismatch·unsupported·timeout·fallback 반례를 실행한다.
+- [ ] mismatch·method-not-found·timeout·fallback 반례를 실행한다.
   - [x] timeout·429·method not found·malformed JSON offline 주입 검증
-  - [ ] live provider rate/timeout·dialect unsupported 검증
+  - [ ] live provider rate/timeout·dialect method-not-found 검증
 - [ ] supporting explorer는 제3의 교차확인이고 독립 RPC 대체물이 아니다.
 
 ## 5. TASK-012 반례

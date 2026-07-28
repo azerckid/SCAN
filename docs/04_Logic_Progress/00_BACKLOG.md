@@ -852,8 +852,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
     - [x] 네 fixture의 공통 9개 조회를 QuickNode·Alchemy에서 독립 재현하고
       decoded 값 일치를 확인해 `verifying`으로 승격했다.
     - [x] 네 fixture의 합성 negative oracle 24개를 두 번 실행해 결정성을 확인했다.
-    - [x] 독립 Trace 두 dialect 정규화와 timeout·429·unsupported·malformed
-      offline 주입 검증을 통과했다.
+    - [x] 독립 Trace 두 dialect 정규화·교차 동등성과 timeout·429·
+      method-not-found(`invalid_response`)·malformed offline 주입 검증을 통과했다.
     - [ ] 노출 credential 회전·독립 trace·live rate/timeout 반례를 통과해 Provider Gate를 닫는다.
     - [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만
       `confirmed`로 승격한다.

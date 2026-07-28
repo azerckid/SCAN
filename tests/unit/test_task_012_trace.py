@@ -61,7 +61,7 @@ def test_debug_call_tracer_normalizes_successful_nested_inflow() -> None:
     assert summary["matching_successful_inflows"] == [
         {
             "path": [0],
-            "type": "CALL",
+            "type": "call",
             "from": "0xrouter",
             "to": SUBJECT.upper(),
             "value_hex": EXPECTED_INFLOW_HEX,
@@ -128,6 +128,55 @@ def test_parity_trace_normalizes_inflow_and_excludes_failed_trace() -> None:
             "error": None,
         }
     ]
+
+
+def test_dialects_normalize_equivalent_inflow_to_identical_fields() -> None:
+    debug_result = {
+        "type": "CALL",
+        "from": SUBJECT,
+        "to": "0xrouter",
+        "value": "0x0",
+        "calls": [
+            {
+                "type": "CALL",
+                "from": "0xrouter",
+                "to": SUBJECT,
+                "value": EXPECTED_INFLOW_HEX,
+            }
+        ],
+    }
+    parity_result = [
+        {
+            "type": "call",
+            "action": {
+                "callType": "call",
+                "from": "0xrouter",
+                "to": SUBJECT,
+                "value": EXPECTED_INFLOW_HEX,
+            },
+            "traceAddress": [0],
+        }
+    ]
+
+    debug_inflows = decode_trace_summary(
+        "debug_call_tracer",
+        _body(debug_result),
+    )["matching_successful_inflows"]
+    parity_inflows = decode_trace_summary(
+        "parity_trace_transaction",
+        _body(parity_result),
+    )["matching_successful_inflows"]
+
+    assert debug_inflows == parity_inflows
+    assert set(debug_inflows[0]) == {
+        "path",
+        "type",
+        "from",
+        "to",
+        "value_hex",
+        "value_wei",
+        "error",
+    }
 
 
 @pytest.mark.parametrize(

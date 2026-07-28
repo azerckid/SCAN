@@ -168,7 +168,7 @@ header secret을 저장 전 guard한다. 이 검사는 구성해 전달한 secre
 | `request_scope` | chain·block tag·tx hash 또는 안전한 filter 요약 |
 | `retrieved_at` | UTC offset이 있는 조회 시각 |
 | `duration_ms` | 호출 시간 |
-| `outcome` | success / timeout / rate_limited / unsupported / invalid_response |
+| `outcome` | success / timeout / rate_limited / permanent / invalid_response |
 | `http_status` / `rpc_code` | 해당 시 안전한 숫자만 |
 | `raw_sha256` | secret 제거 후 raw artifact SHA-256 |
 | `decoded_summary` | 기대값과 비교할 최소 decoded 값 |

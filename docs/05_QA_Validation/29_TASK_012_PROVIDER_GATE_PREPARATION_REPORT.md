@@ -26,7 +26,9 @@
 | `parity_trace_transaction` | `trace_transaction` | TX | 성공한 내부 native inflow | Not Executed |
 
 두 응답은 `matching_successful_inflows`의 `path·type·from·to·value_hex·value_wei`
-형태로 정규화한다. 실패 call과 zero value는 답에 포함하지 않는다.
+형태로 정규화한다. call type은 소문자로 통일하며, 동일 synthetic inflow에서
+두 dialect의 전체 정규화 필드가 일치하는지 직접 검증한다. 실패 call과 zero
+value는 답에 포함하지 않는다.
 
 공식 문서 기준:
 
@@ -84,13 +86,13 @@ uv run python scripts/replay_task_012_trace.py \
 - [ ] 새 독립 endpoint의 `eth_chainId`
 - [ ] 선택 dialect 실제 Trace 성공
 - [ ] primary와 독립 trace의 inflow raw 값 일치
-- [ ] live timeout·rate-limit·unsupported 결과 기록
+- [ ] live timeout·rate-limit·method-not-found(`invalid_response`) 결과 기록
 - [ ] TOKEN-002 fixture의 conditional confirmed 판단
 - [ ] Context Receipt와 제품 analyzer 구현 승인
 
 ## 7. 검증
 
-- trace dialect·정규화·shape·failure unit: 10 cases
+- trace dialect·정규화·교차 동등성·shape·failure unit: 11 cases
 - provider smoke·candidate replay 관련 unit: 21 cases
 - 두 dialect dry-run: `not_executed`, `network_calls: 0`
 - repository full Gate: `scripts/verify.py`

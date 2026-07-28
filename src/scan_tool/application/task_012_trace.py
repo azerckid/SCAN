@@ -168,7 +168,7 @@ def _append_inflow(
     matches.append(
         {
             "path": list(path) if isinstance(path, Sequence) else [],
-            "type": call_type,
+            "type": call_type.lower() if isinstance(call_type, str) else call_type,
             "from": sender,
             "to": recipient,
             "value_hex": value,
