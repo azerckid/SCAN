@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Analysis Contract 제안
 > Created: 2026-07-29 04:46
-> Last Updated: 2026-07-29 04:58
+> Last Updated: 2026-07-29 05:12
 > Status: Proposed 0.2 Draft · Analysis I/O 0.1 Unchanged · Runtime Not Implemented
 
 ## 1. 목적과 판정
@@ -112,7 +112,10 @@ Schema v2는 analysis type 문자열을 저장하므로 DDL migration은 현재
 - 독립 verification 전에는 `confirmed`·submission-ready로 보이지 않게 한다.
 - 기존 DEX·AUTH·FREEZE CLI 출력은 0.1 경로를 유지한다.
 
-HTML Preview 변경은 이 제안의 승인 후 별도 UI-First Gate로 처리한다.
+기존 V1 Preview는 변경하지 않는다. 별도
+[TASK-012 EVM Core UI](../02_UI_Screens/05_TASK_012_EVM_CORE_UI.md)와
+[HTML Preview](../02_UI_Screens/previews/04_task_012_evm_core_cli_preview.html)를
+작성했으며, 자동 검증 후 사용자 UI-First 확인을 별도 Gate로 둔다.
 
 ## 8. 검증 증거
 
@@ -136,7 +139,8 @@ uv run python scripts/check_task_012_analysis_contract_proposal.py
 ## 9. 승인 전 잔여
 
 - [ ] 사용자 계약 승인
-- [ ] CLI Preview의 네 query 입력·partial 표시 검토
+- [x] TASK-012 전용 HTML Preview 작성·정적 검증
+- [ ] CLI Preview의 네 query 입력·complete·partial·failed 사용자 검토
 - [ ] Analysis I/O 0.2 정식 Schema·Pydantic 모델 승인
 - [ ] credential 회전·독립 trace·live rate/timeout Gate
 - [ ] fixture conditional confirmed
@@ -158,7 +162,10 @@ uv run python scripts/check_task_012_analysis_contract_proposal.py
 - **Technical_Specs**: [Analysis I/O Schema 0.1](./05_ANALYSIS_IO_SCHEMA.md) - 현재 승인 기준선
 - **Technical_Specs**: [Coverage 확장 Brief](./09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-EVM-CORE
 - **Technical_Specs**: [Live Provider Readiness](./10_LIVE_PROVIDER_READINESS.md) - source·Trace Gate
+- **UI_Screens**: [TASK-012 EVM Core UI](../02_UI_Screens/05_TASK_012_EVM_CORE_UI.md) - 4 query·3상태 Draft
+- **UI_Screens**: [TASK-012 EVM Core Preview](../02_UI_Screens/previews/04_task_012_evm_core_cli_preview.html) - 사용자 확인 대상
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012 Context Lock
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 네 verifying fixture
 - **QA_Validation**: [제안 예제](../05_QA_Validation/examples/task-012/README.md) - 12개 contract case
 - **QA_Validation**: [Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 24개 offline 반례
+- **QA_Validation**: [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) - 자동·브라우저·사용자 Gate

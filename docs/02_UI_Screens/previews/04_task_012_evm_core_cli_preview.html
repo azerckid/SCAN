@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCAN TASK-012 EVM Core CLI Preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page: #070a10;
+      --panel: #0d131d;
+      --raised: #141c29;
+      --terminal: #080d14;
+      --border: #29364a;
+      --fg: #dce3ec;
+      --muted: #8491a5;
+      --accent: #75a9ff;
+      --success: #52d39a;
+      --warning: #f2c14e;
+      --danger: #ff6f7f;
+      --context: #bc9cff;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: Inter, Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(64, 111, 178, .18), transparent 34rem),
+        radial-gradient(circle at 92% 25%, rgba(111, 75, 170, .12), transparent 30rem),
+        var(--page);
+      color: var(--fg);
+      font-family: var(--sans);
+    }
+    button, code, pre { font-family: var(--mono); }
+    button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .page { width: min(1480px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 52px; }
+    header { display: flex; justify-content: space-between; gap: 24px; align-items: end; }
+    .eyebrow { color: var(--accent); font: 700 11px var(--mono); letter-spacing: .12em; }
+    h1 { margin: 8px 0 0; font-size: clamp(28px, 4vw, 46px); letter-spacing: -.04em; }
+    .lede { max-width: 820px; margin: 12px 0 0; color: #aab5c6; line-height: 1.65; }
+    .gate {
+      min-width: 245px; padding: 13px 15px; border: 1px solid var(--border);
+      border-radius: 10px; background: rgba(13, 19, 29, .9);
+    }
+    .gate span { display: block; color: var(--muted); font: 10px var(--mono); }
+    .gate strong { display: block; margin-top: 5px; color: var(--warning); font: 700 12px var(--mono); }
+    .notice {
+      margin-top: 20px; padding: 12px 14px; border: 1px solid #4a3d1b;
+      border-radius: 9px; background: #211c10; color: #e7d99f; font: 12px/1.55 var(--mono);
+    }
+    .query-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 18px; }
+    .query-tab {
+      min-height: 68px; padding: 11px 13px; border: 1px solid var(--border);
+      border-radius: 9px; background: var(--panel); color: #aeb9c9; text-align: left; cursor: pointer;
+    }
+    .query-tab[aria-selected="true"] { border-color: #42679b; background: #14243b; color: #f3f7fc; }
+    .query-tab b { display: block; font-size: 12px; }
+    .query-tab span { display: block; margin-top: 5px; color: var(--muted); font-size: 10px; }
+    .workspace { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 14px; margin-top: 14px; }
+    .panel { border: 1px solid var(--border); border-radius: 11px; background: var(--panel); overflow: hidden; }
+    .panel-head {
+      display: flex; justify-content: space-between; align-items: center; min-height: 48px;
+      padding: 0 15px; border-bottom: 1px solid var(--border); color: #edf2f8;
+      font: 700 11px var(--mono); letter-spacing: .05em;
+    }
+    .draft-chip { color: var(--warning); }
+    .panel-body { padding: 15px; }
+    .query-copy { margin: 0 0 15px; color: #aab6c7; font-size: 13px; line-height: 1.6; }
+    .field-list { display: grid; gap: 8px; margin: 0; }
+    .field {
+      display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: 10px;
+      padding: 9px 10px; border: 1px solid #202b3c; border-radius: 7px; background: #0a0f17;
+    }
+    .field dt { color: var(--muted); font: 10px var(--mono); }
+    .field dd { margin: 0; color: #e2e8f0; font: 11px/1.45 var(--mono); overflow-wrap: anywhere; }
+    .state-label { margin: 18px 0 8px; color: var(--muted); font: 10px var(--mono); letter-spacing: .09em; }
+    .state-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .state-tab {
+      padding: 9px 6px; border: 1px solid var(--border); border-radius: 7px;
+      background: var(--raised); color: #aeb8c7; cursor: pointer; font-size: 10px;
+    }
+    .state-tab[data-state="complete"][aria-selected="true"] { color: var(--success); border-color: var(--success); }
+    .state-tab[data-state="partial"][aria-selected="true"] { color: var(--warning); border-color: var(--warning); }
+    .state-tab[data-state="failed"][aria-selected="true"] { color: var(--danger); border-color: var(--danger); }
+    .terminal { min-height: 672px; background: var(--terminal); font-family: var(--mono); }
+    .terminal-head {
+      display: flex; justify-content: space-between; padding: 12px 15px;
+      border-bottom: 1px solid #202b3c; color: var(--muted); font-size: 10px;
+    }
+    .terminal-body { padding: 20px 22px 26px; }
+    .status-row { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #202938; }
+    .badge { padding: 3px 8px; border: 1px solid currentColor; border-radius: 4px; font: 800 10px var(--mono); }
+    .badge.complete { color: var(--success); background: #102b23; }
+    .badge.partial { color: var(--warning); background: #2e2612; }
+    .badge.failed { color: var(--danger); background: #31171f; }
+    .analysis-id { color: var(--accent); font-size: 12px; }
+    .type { color: var(--muted); font-size: 11px; }
+    .section-title { margin-top: 17px; color: #74839a; font: 700 10px var(--mono); letter-spacing: .12em; }
+    .result-list { display: grid; gap: 5px; margin-top: 8px; }
+    .result-line { display: grid; grid-template-columns: 22ch minmax(0, 1fr); gap: 2ch; font: 12px/1.55 var(--mono); }
+    .result-line .key { color: #8492a6; }
+    .result-line .value { overflow-wrap: anywhere; }
+    .result-line .value.complete { color: var(--success); }
+    .result-line .value.partial { color: var(--warning); }
+    .result-line .value.failed { color: var(--danger); }
+    .callout { margin-top: 15px; padding: 11px 12px; border: 1px solid var(--border); border-left: 3px solid var(--context); border-radius: 7px; background: #101722; font: 11px/1.55 var(--mono); }
+    .callout b { color: var(--context); }
+    .next { color: #f2f5f9; }
+    .json-panel { margin-top: 14px; }
+    pre {
+      max-height: 310px; margin: 0; padding: 15px; overflow: auto; background: #080c12;
+      color: #b9c6d8; font-size: 10px; line-height: 1.55; white-space: pre-wrap;
+    }
+    footer { display: flex; justify-content: space-between; gap: 16px; margin-top: 17px; color: #6f7d91; font: 10px var(--mono); }
+    @media (max-width: 940px) {
+      header, .workspace { display: grid; grid-template-columns: 1fr; }
+      .gate { min-width: 0; }
+      .query-tabs { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .page { width: min(100% - 18px, 560px); padding-top: 20px; }
+      .query-tabs { grid-template-columns: 1fr; }
+      .field, .result-line { grid-template-columns: 1fr; }
+      footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <div class="eyebrow">SCAN 2026 · TASK-012 · UI-FIRST GATE</div>
+        <h1>EVM Core CLI preview</h1>
+        <p class="lede">4개 범용 EVM query의 최소 입력과 complete·partial·failed 계약을 같은 CLI 골격에서 검토합니다.</p>
+      </div>
+      <div class="gate" aria-label="TASK-012 UI Gate 상태">
+        <span>Gate status</span>
+        <strong>USER REVIEW PENDING</strong>
+      </div>
+    </header>
+
+    <div class="notice" role="note">
+      PROPOSAL ONLY · Analysis I/O 0.2 Draft · Runtime not implemented · No network, file, DB, or external API calls
+    </div>
+
+    <nav class="query-tabs" role="tablist" aria-label="EVM Core query">
+      <button class="query-tab" role="tab" aria-selected="true" data-query="object_summary">
+        <b>Object summary</b><span>type · code · fee</span>
+      </button>
+      <button class="query-tab" role="tab" aria-selected="false" data-query="historical_balance">
+        <b>Historical balance</b><span>block · native · ERC-20</span>
+      </button>
+      <button class="query-tab" role="tab" aria-selected="false" data-query="first_token_transfer">
+        <b>First token transfer</b><span>ordered logs · range</span>
+      </button>
+      <button class="query-tab" role="tab" aria-selected="false" data-query="native_inflow">
+        <b>Native inflow</b><span>top-level · internal trace</span>
+      </button>
+    </nav>
+
+    <section class="workspace">
+      <aside class="panel" aria-label="요청 입력 요약">
+        <div class="panel-head"><span>REQUEST</span><span class="draft-chip">0.2-draft</span></div>
+        <div class="panel-body">
+          <p class="query-copy" id="query-copy"></p>
+          <dl class="field-list" id="request-fields"></dl>
+          <div class="state-label">RESULT SCENARIO</div>
+          <div class="state-tabs" role="tablist" aria-label="결과 상태">
+            <button class="state-tab" role="tab" aria-selected="true" data-state="complete">COMPLETE</button>
+            <button class="state-tab" role="tab" aria-selected="false" data-state="partial">PARTIAL</button>
+            <button class="state-tab" role="tab" aria-selected="false" data-state="failed">FAILED</button>
+          </div>
+        </div>
+      </aside>
+
+      <div>
+        <section class="panel terminal" aria-live="polite">
+          <div class="terminal-head"><span>scan analyze · preview</span><span>read-only contract</span></div>
+          <div class="terminal-body">
+            <div class="status-row">
+              <span class="badge complete" id="status-badge">OK COMPLETE</span>
+              <span class="analysis-id" id="analysis-id"></span>
+              <span class="type" id="analysis-type">evm_core · chain 1</span>
+            </div>
+            <div class="section-title">INPUT</div>
+            <div class="result-list" id="input-summary"></div>
+            <div class="section-title" id="result-heading">CONFIRMED RESULT</div>
+            <div class="result-list" id="result-summary"></div>
+            <div class="section-title">EVIDENCE / SOURCE</div>
+            <div class="result-list" id="evidence-summary"></div>
+            <div class="section-title">NEXT</div>
+            <div class="result-list"><div class="result-line"><span class="key">action</span><span class="value next" id="next-action"></span></div></div>
+            <div class="callout"><b>CONTRACT BOUNDARY</b><br><span id="boundary"></span></div>
+          </div>
+        </section>
+
+        <section class="panel json-panel">
+          <div class="panel-head"><span>RESULT CONTRACT JSON</span><span id="json-status">complete</span></div>
+          <pre id="result-json" tabindex="0"></pre>
+        </section>
+      </div>
+    </section>
+
+    <footer>
+      <span>12 proposal cases · 14 Schema probes · fixture status verifying</span>
+      <span>Preview only · no secrets · no product analyzer</span>
+    </footer>
+  </main>
+
+  <script>
+    const shared = {
+      object_summary: {
+        copy: "주소·TX·블록을 분류하고 요청된 경우 실제 gas used × effective price로 fee를 계산합니다.",
+        fields: {
+          values: "6 mixed values",
+          block_number: "16642512",
+          include_transaction_fee: "true"
+        },
+        complete: {
+          data: { objects: "6 classified", fee_paid_wei: "8115326069137440" },
+          errors: [],
+          evidence: "EV-EVM-OBJECTS · EV-EVM-FEE",
+          sources: "SRC-EVM-OBJECTS",
+          next: "Review full classifications and evidence locators.",
+          boundary: "fee 요청이 true이므로 fee_paid_wei가 필수입니다."
+        },
+        partial: {
+          data: { objects: "1 classified · account_kind missing" },
+          errors: [{ code: "source_unavailable", stage: "historical_code", retryable: true }],
+          evidence: "EV-EVM-OBJECT-ADDRESS",
+          sources: "SRC-EVM-OBJECTS-PARTIAL",
+          next: "Retry with a historical code-capable source.",
+          boundary: "확인된 분류는 보존하지만 account kind를 추정하지 않습니다."
+        },
+        failed: {
+          data: null,
+          errors: [{ code: "source_unavailable", stage: "object_lookup", retryable: true }],
+          evidence: "0 refs",
+          sources: "0 refs",
+          next: "Check source health before retrying the object lookup.",
+          boundary: "유효한 object 결과가 없어 data는 null입니다."
+        }
+      },
+      historical_balance: {
+        copy: "고정 블록의 post-state에서 native와 ERC-20 raw balance를 각각 조회합니다.",
+        fields: {
+          subject_address: "0xa406bc6e…c3a7fdf",
+          block_number: "16642512",
+          block_timestamp: "1676565263",
+          state_semantics: "post_state",
+          assets: "ETH native · USDC ERC-20"
+        },
+        complete: {
+          data: { ETH_amount_raw: "148897435437879000853", USDC_amount_raw: "26470158088" },
+          errors: [],
+          evidence: "EV-EVM-BALANCE-ETH · EV-EVM-BALANCE-USDC",
+          sources: "SRC-EVM-HISTORICAL-STATE",
+          next: "Review block pin, decimals, and raw state evidence.",
+          boundary: "USDC 입력에는 token_address가 필수이며 latest state로 대체하지 않습니다."
+        },
+        partial: {
+          data: { ETH_amount_raw: "148897435437879000853", USDC_amount_raw: "missing" },
+          errors: [{ code: "archive_required", stage: "historical_token_state", retryable: false }],
+          evidence: "EV-EVM-BALANCE-ETH",
+          sources: "SRC-EVM-HISTORICAL-STATE-PARTIAL",
+          next: "Select an archive source that supports historical eth_call.",
+          boundary: "확인된 ETH는 보존하고 누락된 USDC를 0으로 표시하지 않습니다."
+        },
+        failed: {
+          data: null,
+          errors: [{ code: "archive_required", stage: "historical_state", retryable: false }],
+          evidence: "0 refs",
+          sources: "0 refs",
+          next: "Configure an archive-capable source before retrying.",
+          boundary: "고정 block state 전체가 없으므로 latest 값을 답으로 사용하지 않습니다."
+        }
+      },
+      first_token_transfer: {
+        copy: "token·subject·성공 여부를 고정하고 block/transaction/log 순서의 첫 outgoing Transfer를 찾습니다.",
+        fields: {
+          subject_address: "0xa406bc6e…c3a7fdf",
+          token_address: "0xa0b86991…3606eb48",
+          start_block: "16642512",
+          ordering: "block_transaction_log_asc",
+          exclude_zero: "true"
+        },
+        complete: {
+          data: { range_complete: true, log_index: 275, amount_raw: "25000000000" },
+          errors: [],
+          evidence: "EV-EVM-FIRST-TRANSFER",
+          sources: "SRC-EVM-TRANSFER-RANGE",
+          next: "Review token, from, ordering, and receipt success.",
+          boundary: "range_complete가 true일 때만 first라는 표현을 확정합니다."
+        },
+        partial: {
+          data: { range_complete: false, candidate_log_index: 275, amount_raw: "25000000000" },
+          errors: [{ code: "evidence_incomplete", stage: "range_pagination", retryable: true }],
+          evidence: "EV-EVM-FIRST-TRANSFER-CANDIDATE",
+          sources: "SRC-EVM-TRANSFER-RANGE-PARTIAL",
+          next: "Resume the remaining pages before promoting the candidate.",
+          boundary: "후보는 보존하지만 불완전 범위에서 first로 승격하지 않습니다."
+        },
+        failed: {
+          data: null,
+          errors: [{ code: "source_unavailable", stage: "transfer_log_scan", retryable: true }],
+          evidence: "0 refs",
+          sources: "0 refs",
+          next: "Restore the filtered log source and restart the scan.",
+          boundary: "log scan 자체가 실패했으므로 visible candidate도 만들지 않습니다."
+        }
+      },
+      native_inflow: {
+        copy: "top-level value와 성공한 internal call의 native inflow를 분리해 계산합니다.",
+        fields: {
+          interest_address: "0xa406bc6e…c3a7fdf",
+          transaction_hash: "0xbbdaad89…d855fa5",
+          require_trace: "true",
+          exclude_reverted: "true"
+        },
+        complete: {
+          data: { top_level_value_wei: "0", internal_inflow_wei: "14449515027026387018", successful_call_count: 1, trace_complete: true },
+          errors: [],
+          evidence: "EV-TOKEN-INTERNAL-TX · EV-TOKEN-INTERNAL-ETH",
+          sources: "SRC-EVM-INFLOW-TRACE",
+          next: "Review call path, success flag, recipient, and raw value.",
+          boundary: "top-level value와 internal inflow를 합쳐 하나의 근거처럼 표시하지 않습니다."
+        },
+        partial: {
+          data: { top_level_value_wei: "0", internal_inflow_wei: "0", successful_call_count: 0, trace_complete: false },
+          errors: [{ code: "trace_unavailable", stage: "internal_call_trace", retryable: true }],
+          evidence: "EV-TOKEN-INTERNAL-TX",
+          sources: "SRC-EVM-INFLOW-TRACE-FAILED",
+          next: "Retry with an independent trace-capable provider.",
+          boundary: "trace가 없으므로 internal inflow 0을 확정값으로 해석하지 않습니다."
+        },
+        failed: {
+          data: null,
+          errors: [{ code: "trace_unavailable", stage: "internal_call_trace", retryable: false }],
+          evidence: "0 refs",
+          sources: "0 refs",
+          next: "Resolve trace capability before running this required-trace query.",
+          boundary: "필수 trace 전체가 없으므로 data는 null입니다."
+        }
+      }
+    };
+
+    const queryTabs = [...document.querySelectorAll(".query-tab")];
+    const stateTabs = [...document.querySelectorAll(".state-tab")];
+    let activeQuery = "object_summary";
+    let activeState = "complete";
+
+    function addLine(container, key, value, tone = "") {
+      const row = document.createElement("div");
+      row.className = "result-line";
+      const keyNode = document.createElement("span");
+      keyNode.className = "key";
+      keyNode.textContent = key;
+      const valueNode = document.createElement("span");
+      valueNode.className = `value ${tone}`.trim();
+      valueNode.textContent = String(value);
+      row.append(keyNode, valueNode);
+      container.append(row);
+    }
+
+    function render() {
+      const query = shared[activeQuery];
+      const scenario = query[activeState];
+      document.querySelector("#query-copy").textContent = query.copy;
+      const fields = document.querySelector("#request-fields");
+      fields.replaceChildren();
+      Object.entries(query.fields).forEach(([key, value]) => {
+        const row = document.createElement("div");
+        row.className = "field";
+        const term = document.createElement("dt");
+        term.textContent = key;
+        const detail = document.createElement("dd");
+        detail.textContent = value;
+        row.append(term, detail);
+        fields.append(row);
+      });
+
+      const badge = document.querySelector("#status-badge");
+      badge.className = `badge ${activeState}`;
+      badge.textContent = activeState === "complete" ? "OK COMPLETE" : activeState === "partial" ? "! PARTIAL" : "X FAILED";
+      document.querySelector("#analysis-id").textContent = `AN-EVM-${activeQuery.replaceAll("_", "-").toUpperCase()}-${activeState.toUpperCase()}`;
+      document.querySelector("#result-heading").textContent = activeState === "complete" ? "CONFIRMED RESULT" : activeState === "partial" ? "PARTIAL RESULT / ERROR" : "FAILED / ERROR";
+      document.querySelector("#json-status").textContent = activeState;
+
+      const input = document.querySelector("#input-summary");
+      input.replaceChildren();
+      addLine(input, "analysis_type", "evm_core");
+      addLine(input, "query_kind", activeQuery);
+      addLine(input, "chain / mode", "1 · offline proposal");
+
+      const result = document.querySelector("#result-summary");
+      result.replaceChildren();
+      if (scenario.data === null) {
+        addLine(result, "data", "null", "failed");
+      } else {
+        Object.entries(scenario.data).forEach(([key, value]) => addLine(result, key, value, activeState));
+      }
+      if (scenario.errors.length === 0) {
+        addLine(result, "errors", "0");
+      } else {
+        scenario.errors.forEach((error) => addLine(result, error.code, `stage=${error.stage} · retryable=${error.retryable}`, activeState));
+      }
+
+      const evidence = document.querySelector("#evidence-summary");
+      evidence.replaceChildren();
+      addLine(evidence, "evidence_refs", scenario.evidence);
+      addLine(evidence, "source_record_refs", scenario.sources);
+      document.querySelector("#next-action").textContent = scenario.next;
+      document.querySelector("#boundary").textContent = scenario.boundary;
+
+      const envelope = {
+        analysis_type: "evm_core",
+        chain_id: 1,
+        query_kind: activeQuery,
+        status: activeState,
+        data: scenario.data,
+        errors: scenario.errors,
+        evidence_refs: scenario.evidence === "0 refs" ? [] : scenario.evidence.split(" · "),
+        source_record_refs: scenario.sources === "0 refs" ? [] : [scenario.sources]
+      };
+      document.querySelector("#result-json").textContent = JSON.stringify(envelope, null, 2);
+    }
+
+    function selectQuery(query) {
+      activeQuery = query;
+      queryTabs.forEach((tab) => {
+        const selected = tab.dataset.query === query;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      render();
+    }
+
+    function selectState(state) {
+      activeState = state;
+      stateTabs.forEach((tab) => {
+        const selected = tab.dataset.state === state;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      render();
+    }
+
+    function bindRovingTabs(tabs, dataKey, select) {
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => select(tab.dataset[dataKey]));
+        tab.addEventListener("keydown", (event) => {
+          if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) return;
+          event.preventDefault();
+          const direction = ["ArrowRight", "ArrowDown"].includes(event.key) ? 1 : -1;
+          const next = (index + direction + tabs.length) % tabs.length;
+          tabs[next].focus();
+          select(tabs[next].dataset[dataKey]);
+        });
+      });
+    }
+
+    bindRovingTabs(queryTabs, "query", selectQuery);
+    bindRovingTabs(stateTabs, "state", selectState);
+    render();
+  </script>
+</body>
+</html>

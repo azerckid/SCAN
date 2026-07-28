@@ -1,7 +1,7 @@
 # SCAN 2026 CLI Terminal UI Design
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-28 01:59
-> Status: Approved 1.4 · UI-First Gate Passed · TASK-008 FREEZE Applied
+> Last Updated: 2026-07-29 05:12
+> Status: Approved 1.4 · V1 UI-First Gate Passed · TASK-012 Draft Review Pending
 
 ## 1. 문서 목적
 
@@ -324,6 +324,11 @@ V1 CLI는 비대화형 실행을 기본으로 하므로 실행 중 필수 키 �
 Preview의 버튼은 구현 API가 아니라 검토 편의를 위한 상태 전환 장치다. Preview에
 표시된 수치 중 DEX·AUTH의 기준값은 confirmed Analysis I/O 예제를 사용한다.
 
+TASK-012는 기존 Preview를 수정하지 않고
+[EVM Core Preview](./previews/04_task_012_evm_core_cli_preview.html)로 분리한다.
+이 Preview는 4 query × complete·partial·failed 3상태를 전환하며
+`0.2-draft`·runtime 미구현·fixture verifying을 화면 상단과 하단에 명시한다.
+
 ## 13. UI Design Gate
 
 - [x] 정보 계층 정의
@@ -393,12 +398,16 @@ data다. 실제 측정이나 대회 상태로 주장하지 않는다.
 - **UI_Screens**: [HTML Terminal Preview](./previews/01_cli_terminal_preview.html) - 상태별 화면
 - **UI_Screens**: [HTML Workbench Preview](./previews/02_investigation_workbench_preview.html) - read-only 조사 화면 Draft
 - **UI_Screens**: [Operations Board Preview](./previews/03_competition_operations_board_preview.html) - 병렬 운영 UI Draft
+- **UI_Screens**: [TASK-012 EVM Core UI](./05_TASK_012_EVM_CORE_UI.md) - 0.2 Draft 입력·상태·접근성
+- **UI_Screens**: [TASK-012 EVM Core Preview](./previews/04_task_012_evm_core_cli_preview.html) - 4 query × 3상태 검토
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 운영 상태와 역할 규범
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - stdout·stderr·보안 원칙
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 화면 데이터의 source of truth
+- **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - Preview 표시값·조건부 불변조건
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - renderer·CLI 구현 책임
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - exact-match 기준
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - terminal·접근성·출력 채널 기준
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - DEX renderer·partial·resume 대조
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - AUTH renderer·scope·partial·resume 대조
 - **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - FREEZE renderer·context·partial·resume 대조
+- **QA_Validation**: [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) - 정적·상호작용·사용자 확인

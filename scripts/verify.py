@@ -42,6 +42,10 @@ COMMANDS = (
         sys.executable,
         "scripts/check_task_012_analysis_contract_proposal.py",
     ),
+    (
+        sys.executable,
+        "scripts/check_task_012_ui_preview.py",
+    ),
 )
 
 
