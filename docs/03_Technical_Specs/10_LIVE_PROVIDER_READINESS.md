@@ -1,7 +1,7 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 02:46
-> Status: Proposed 0.1 · Smoke Not Executed · Secrets Not Configured
+> Last Updated: 2026-07-29 03:06
+> Status: Runner Prepared · Smoke Not Executed · Secrets Not Configured
 
 ## 1. 목적
 
@@ -32,6 +32,7 @@
 | EVM 공급자 topology | 후보 선정, 계정·plan·smoke 미확정 |
 | AI Planner 공급자 | 필수 역할 확정, provider/model/비용 smoke 미실행 |
 | TASK-012 구현 | 미승인·미시작 |
+| 안전한 smoke runner | 준비 완료, 기본 network 0건 |
 
 `27문항 준비`는 27개의 개별 프로그램을 동시에 구현한다는 뜻이 아니다.
 공통 수집·상태·로그·trace·경로·라벨·UTXO 엔진을 Work Package 순서로
@@ -113,6 +114,27 @@ URL로 그대로 출력하지 않고 논리 `provider_id`만 남긴다.
 `eth_getLogs`는 receipt의 logs를 복사하는 검증으로 대체하지 않는다.
 address·topic·fromBlock·toBlock 조건을 고정해 별도 요청한다. capability
 지원 여부와 해당 fixture 값의 정확성은 별개로 기록한다.
+
+### 5.1 실행 도구
+
+기본 실행은 endpoint를 읽거나 네트워크를 호출하지 않는 plan 출력이다.
+
+```bash
+uv run python scripts/smoke_live_provider.py --role primary
+```
+
+실제 호출은 `--execute`, `--rules-status allowed`, 역할별 endpoint 환경변수가
+모두 있어야 열린다. 현재 공식 Rules가 `unclear`이고 세 EVM endpoint
+환경변수가 없으므로 live smoke는 실행하지 않았다. runner는 기존 HTTPX
+JSON-RPC adapter·content-addressed artifact·secret guard를 재사용하며
+`eth_sendRawTransaction`이나 서명 method를 포함하지 않는다.
+
+`--output-root`는 저장소 `.scan/live-provider-smoke/`와 그 하위만 허용한다.
+URL userinfo는 거부하고 URL path/query token 및 composition root가 전달한
+header secret을 저장 전 guard한다. 이 검사는 구성해 전달한 secret만
+대상으로 하므로 artifact 상태도 `checked_configured_secrets`로 기록한다.
+보안 guard가 차단하면 traceback이나 원문을 출력하지 않고
+`security_blocked`, exit `4`로 종료한다.
 
 ## 6. Smoke·재현 증거 레코드
 
@@ -221,3 +243,4 @@ Verifier가 없는 결과는 `submission_ready`가 될 수 없다.
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - 공급자 Gate 이후 순서
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실행 전 체크와 기록 형식
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - candidate 4개
+- **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - network 0건·Gate·테스트 증거

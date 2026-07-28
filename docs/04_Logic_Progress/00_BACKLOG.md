@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 02:35
+> Last Updated: 2026-07-29 02:56
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -846,6 +846,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
   - [ ] 네 문제의 공개 사례·reference answer·partial 조건을 확정한다.
     - [x] 후보 패키지 4개와 1차 재조회 결과를 작성했다.
     - [x] live provider 후보 topology·secret·capability smoke 계약을 문서화했다.
+    - [x] 기본 network 0건·Rules/endpoint opt-in smoke runner를 준비했다.
     - [ ] 실제 계정·plan을 준비하고 read-only capability smoke를 통과한다.
     - [ ] 독립 2차 재현·반례를 통과해 `confirmed`로 승격한다.
   - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 고정한다.
@@ -869,6 +870,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
   - [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - Assisted 4개 기준선
   - [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 후보 4개·reference answer·source 장애
   - [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·secret·독립성·반례
+  - [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - 미실행 경계·unit·dry-run
 - Implementation Preconditions:
   - [ ] 관련 문서와 네 문제의 입력·출력·상태를 확인한다.
   - [ ] primary·independent 공급자와 필요 시 독립 trace 역할의 capability smoke를 통과한다.
@@ -893,7 +895,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Document Sync Check:
   - [ ] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - candidate 4개와 provider Gate 문서 완료, 실제 smoke·독립 재현·Schema·UI·사용자 구현 승인 전 착수 금지
+  - Status: PENDING - candidate 4개와 안전한 smoke runner 완료, Rules·endpoint·실제 smoke·독립 재현·Schema·UI·사용자 구현 승인 전 착수 금지
   - Required References Read: 위 Related 문서 전체
   - Constraints: exact raw 수량, historical state block 고정, 귀속 미평가
   - Conflicts: None known

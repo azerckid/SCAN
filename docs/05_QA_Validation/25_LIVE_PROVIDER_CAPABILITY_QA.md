@@ -1,7 +1,7 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 02:46
-> Status: Proposed 0.1 · Not Executed
+> Last Updated: 2026-07-29 03:06
+> Status: Runner Prepared · Live Not Executed
 
 ## 1. 목적
 
@@ -9,6 +9,9 @@
 AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하는 실행
 체크리스트다. 문서 작성 시점에는 API key를 구성하거나 live 호출을 실행하지
 않았으므로 모든 결과는 `not_executed`다.
+
+`scripts/smoke_live_provider.py`와 offline unit/dry-run 검증은 준비됐지만,
+이는 아래 capability 결과를 `pass`로 바꾸지 않는다.
 
 ## 2. 실행 전 보안 Gate
 
@@ -18,6 +21,9 @@ AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하�
 - [ ] EVM method allowlist는 read-only이고 signing·send method가 없다.
 - [ ] canary secret이 성공·실패·timeout·fallback 출력에 나타나지 않는다.
 - [ ] provider별 논리 ID와 실제 endpoint mapping은 로컬 설정에서만 존재한다.
+- [ ] output은 저장소 `.scan/live-provider-smoke/` 하위에만 생성된다.
+- [ ] URL userinfo는 거부되고 구성된 URL/header secret이 guard에 전달된다.
+- [ ] secret 차단은 원문·traceback 없이 `security_blocked`로 종료된다.
 
 하나라도 실패하면 smoke를 시작하지 않는다.
 
@@ -111,3 +117,4 @@ fixture는 candidate로 둔다. `pass`도 TASK-012 구현 승인을 자동으로
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - Gate 실행 순서
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - automated 승격 기준
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 재현 대상 4개
+- **QA_Validation**: [Smoke Runner 준비 보고서](./26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - 코드·dry-run·network 0건 검증
