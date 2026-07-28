@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-28 14:23
-> Status: Approved 2.5 · TASK-009 Passed · TASK-010 OPS-IMPL-01~04 Passed
+> Last Updated: 2026-07-28 14:51
+> Status: Approved 2.6 · TASK-009 Passed · TASK-010 OPS-IMPL-01~05 Passed
 
 ## 1. 문서 목적
 
@@ -172,7 +172,12 @@ ID는 24개 집계에서 한 번만 센다.
   idempotency dedup·source capability limit test가 통과한다.
   이 체크는 OPS-IMPL-04 unit Gate만 뜻하며, 실제 Analysis I/O·artifact·
   candidate 연결 전까지 `QA-OPS-PAR-001`·`QA-OPS-INTRA-001`은 `partial`이다.
-- [ ] 문제 간 상태·result·checkpoint·candidate가 격리된다.
+- [x] OPS-IMPL-05 승인 plan projection·DEX/AUTH/FREEZE Analysis I/O·
+  문제별 workspace·artifact·checkpoint integration test가 통과한다.
+  이 체크는 Python evidence worker Gate만 뜻하며 candidate·독립 Verifier
+  연결 전까지 운영 QA는 `partial`이다.
+- [x] 문제 간 상태·result·checkpoint·artifact가 격리된다.
+- [ ] 문제 간 candidate가 격리된다.
 - [ ] 문제 내부 leaf job dependency와 source request dedup이 일치한다.
 - [ ] provider·worker별 동시성 제한과 Queue age가 표시된다.
 - [x] worker 하나의 실패가 다른 문제 scheduler 결과로 전파되지 않는다.
@@ -369,3 +374,4 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **QA_Validation**: [TASK-008 FREEZE 보고서](./12_TASK_008_FREEZE_REPORT.md) - 상태 전이·공식 맥락·scope·partial·resume·FREEZE security 증거
 - **QA_Validation**: [TASK-009 통합 보고서](./13_TASK_009_INTEGRATION_REPORT.md) - 24 QA·결정성·오류 행렬·추적성·보안 증거
 - **QA_Validation**: [OPS-IMPL-04 bounded Queue 보고서](./17_OPS_IMPL_04_BOUNDED_QUEUE_REPORT.md) - 병렬성·dependency·격리·재시도·dedup 검증
+- **QA_Validation**: [OPS-IMPL-05 Evidence Worker 보고서](./18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - 승인 projection·세 vertical·artifact·checkpoint·격리 검증

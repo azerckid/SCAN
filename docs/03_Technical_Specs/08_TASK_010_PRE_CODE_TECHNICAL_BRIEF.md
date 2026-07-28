@@ -1,7 +1,7 @@
 # TASK-010 Pre-Code Technical Brief
 > Created: 2026-07-28 11:28
-> Last Updated: 2026-07-28 14:23
-> Status: Approved 1.4 · OPS-IMPL-01~04 Implemented · Rules-Gated
+> Last Updated: 2026-07-28 15:08
+> Status: Approved 1.5 · OPS-IMPL-01~05 Implemented · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -586,7 +586,7 @@ cross-record·lifecycle·상태 전이는 Python validator가 규범이다.
 | `OPS-IMPL-02` | SQLite v2 additive migration·repository·event log | **Done** · 10 integration tests + 전체 172 tests |
 | `OPS-IMPL-03` | Planner port·fake QA adapter·AI mode Gate | **Done** · 14 unit tests · QA-OPS-RULE-001 partial |
 | `OPS-IMPL-04` | bounded Queue·dependency·isolation·dedup | **Done** · 19 unit tests · QA-OPS-PAR/INTRA-001 partial |
-| `OPS-IMPL-05` | DEX·AUTH·FREEZE evidence worker adapter | Analysis I/O pair·artifact link |
+| `OPS-IMPL-05` | DEX·AUTH·FREEZE evidence worker adapter | **Done** · 19 integration tests · 전체 225 tests · problem workspace lock · QA-OPS-PAR/INTRA/RULE partial |
 | `OPS-IMPL-06` | candidate builder·independent Verifier Gate | QA-OPS-VERIFY/CONFLICT-001 |
 | `OPS-IMPL-07` | OperationsSnapshot·command result·local CLI view | Preview state mapping test |
 | `OPS-IMPL-08` | security·submission record·integration report | QA-OPS-SUBMIT-001, full verify |
@@ -603,7 +603,7 @@ runtime 파일을 만들지 않는다.
 | `REQ-OPS-VERIFY-001`~`006` | §5.6~5.7, §10 | `QA-OPS-VERIFY-001`, `QA-OPS-CONFLICT-001` |
 | `REQ-OPS-SUBMIT-001`~`004` | §5.7, §6.2, §12 | `QA-OPS-SUBMIT-001` |
 
-Analysis I/O와 fixture 회귀는 현재 206개 테스트·Schema/fixture PASS 3 기준을
+Analysis I/O와 fixture 회귀는 현재 225개 테스트·Schema/fixture PASS 3 기준을
 후퇴시키지 않는다.
 
 ## 15. 구현 승격 Gate
@@ -619,6 +619,7 @@ Analysis I/O와 fixture 회귀는 현재 206개 테스트·Schema/fixture PASS 3
 - [x] `OPS-IMPL-02` 구현 착수를 별도로 승인했다.
 - [x] `OPS-IMPL-03` 구현 착수를 별도로 승인했다.
 - [x] `OPS-IMPL-04` 구현 착수를 별도로 승인했다.
+- [x] `OPS-IMPL-05` 구현 착수를 별도로 승인했다.
 
 공식 Rules가 미확정이어도 fake adapter 기반 contract·scheduler QA 구현은
 별도 승인 후 시작할 수 있다. 실제 대회 문제에 사용할 AI adapter와 external
@@ -662,3 +663,4 @@ data 전송은 `allowed` mode가 확정되기 전까지 `rules_gated`다.
 - **QA_Validation**: [OPS-IMPL-02 SQLite v2 보고서](../05_QA_Validation/15_OPS_IMPL_02_SQLITE_REPORT.md) - backup·migration rollback·repository·event log 검증
 - **QA_Validation**: [OPS-IMPL-03 AI Planner Gate 보고서](../05_QA_Validation/16_OPS_IMPL_03_PLANNER_REPORT.md) - fake QA·mode policy·artifact·budget·보안 검증
 - **QA_Validation**: [OPS-IMPL-04 bounded Queue 보고서](../05_QA_Validation/17_OPS_IMPL_04_BOUNDED_QUEUE_REPORT.md) - job DAG·격리·재시도·dedup·source capability 제한 검증
+- **QA_Validation**: [OPS-IMPL-05 Evidence Worker 보고서](../05_QA_Validation/18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - 승인 projection·DEX/AUTH/FREEZE·workspace·artifact·checkpoint 검증

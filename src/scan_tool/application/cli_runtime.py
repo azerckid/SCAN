@@ -1,5 +1,6 @@
 """CLI composition helpers over the approved storage and Analysis I/O contracts."""
 
+import hashlib
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -115,12 +116,16 @@ class CliRuntime:
         request: AnalysisRequest,
         *,
         replay_path: Path | None = None,
+        replay_body: bytes | None = None,
+        expected_replay_sha256: str | None = None,
     ) -> AnalysisResult:
         document = request.root
         if isinstance(document, DexAnalysisRequest):
             replay_body, checkpoint_id, resumed = self._load_replay(
                 document.analysis_id,
                 replay_path,
+                replay_body,
+                expected_replay_sha256,
                 stage=DEX_REPLAY_STAGE,
                 replay_model=DexReplay,
                 analysis_label="DEX",
@@ -135,6 +140,8 @@ class CliRuntime:
             replay_body, checkpoint_id, resumed = self._load_replay(
                 document.analysis_id,
                 replay_path,
+                replay_body,
+                expected_replay_sha256,
                 stage=AUTH_REPLAY_STAGE,
                 replay_model=AuthReplay,
                 analysis_label="AUTH",
@@ -149,6 +156,8 @@ class CliRuntime:
             replay_body, checkpoint_id, resumed = self._load_replay(
                 document.analysis_id,
                 replay_path,
+                replay_body,
+                expected_replay_sha256,
                 stage=FREEZE_REPLAY_STAGE,
                 replay_model=FreezeReplay,
                 analysis_label="FREEZE",
@@ -165,6 +174,8 @@ class CliRuntime:
         self,
         analysis_id: str,
         replay_path: Path | None,
+        replay_body: bytes | None,
+        expected_replay_sha256: str | None,
         *,
         stage: str,
         replay_model: type[DexReplay] | type[AuthReplay] | type[FreezeReplay],
@@ -175,21 +186,35 @@ class CliRuntime:
             raw_sha256 = checkpoint.cursor.get("raw_artifact_sha256")
             if not isinstance(raw_sha256, str):
                 raise AnalysisUnavailable("The saved replay checkpoint is invalid.")
+            if expected_replay_sha256 is not None and raw_sha256 != expected_replay_sha256:
+                raise AnalysisUnavailable("The saved replay does not match the approved input.")
             artifact = self.storage.get_artifact(raw_sha256)
             if artifact is None:
                 raise AnalysisUnavailable("The saved replay artifact is unavailable.")
             return self.artifacts.read(artifact), checkpoint.checkpoint_id, True
 
-        if replay_path is None:
+        if replay_path is not None and replay_body is not None:
+            raise AnalysisUnavailable("Replay path and replay bytes cannot be used together.")
+        if replay_body is None and replay_path is None:
             raise AnalysisUnavailable(
                 f"{analysis_label} analysis requires --evidence RAW_REPLAY.json in offline mode."
             )
-        try:
-            replay_body = replay_path.read_bytes()
-        except OSError as error:
-            raise AnalysisUnavailable(
-                f"The {analysis_label} replay evidence file is unavailable."
-            ) from error
+        if replay_body is None:
+            if replay_path is None:
+                raise AnalysisUnavailable(
+                    f"The {analysis_label} replay evidence file is unavailable."
+                )
+            try:
+                replay_body = replay_path.read_bytes()
+            except OSError as error:
+                raise AnalysisUnavailable(
+                    f"The {analysis_label} replay evidence file is unavailable."
+                ) from error
+        if (
+            expected_replay_sha256 is not None
+            and hashlib.sha256(replay_body).hexdigest() != expected_replay_sha256
+        ):
+            raise AnalysisUnavailable("The replay evidence does not match the approved input.")
         try:
             replay_model.model_validate_json(replay_body)
         except ValidationError:

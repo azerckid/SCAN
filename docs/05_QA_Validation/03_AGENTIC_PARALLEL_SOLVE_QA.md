@@ -1,7 +1,7 @@
 # SCAN 2026 Agentic Parallel Solve QA
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 14:23
-> Status: AI-Native Contract Approved 1.2 · OPS-IMPL-04 Runtime Partial · Rules-Gated
+> Last Updated: 2026-07-28 14:51
+> Status: AI-Native Contract Approved 1.3 · OPS-IMPL-05 Runtime Partial · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -29,8 +29,9 @@
 
 - **Mode**: fault-injection
 - **Result**: **partial** — 둘 이상의 문제 동시 실행·worker 예외 격리·
-  global/problem/role concurrency는 통과, Analysis result·artifact·candidate
-  격리는 OPS-IMPL-05~07에서 연결
+  global/problem/role concurrency와 DEX·AUTH·FREEZE Analysis
+  workspace·result·checkpoint·artifact 격리는 통과, candidate 격리는
+  OPS-IMPL-06~07에서 연결
 - **Backlog**: `TASK-010`
 - **Requirements**: `REQ-OPS-QUEUE-001`~`REQ-OPS-QUEUE-006`
 - **Preconditions**: Q01 DEX, Q02 AUTH, Q03 FLOW 고정 request와 서로 다른 workspace
@@ -49,8 +50,9 @@
 
 - **Mode**: fault-injection
 - **Result**: **partial** — 독립 leaf 병렬성·dependency 대기·job idempotency·
-  in-flight source request dedup·capability limit은 통과, 실제 Analysis I/O와
-  source provenance 연결은 OPS-IMPL-05에서 실행
+  in-flight source request dedup·capability limit과 Queue→Analysis I/O
+  worker 연결은 통과, 실제 한 문제의 복수 evidence leaf reconciliation은
+  OPS-IMPL-06에서 실행
 - **Backlog**: `TASK-010`
 - **Requirements**: `REQ-OPS-QUEUE-001`, `REQ-OPS-QUEUE-002`,
   `REQ-OPS-QUEUE-003`, `REQ-OPS-QUEUE-006`
@@ -106,7 +108,8 @@
 - **Backlog**: `TASK-010`
 - **Requirements**: `REQ-OPS-IN-002`, `REQ-NFR-008`
 - **Result**: **partial** — fake QA Planner·pre-call mode Gate와 scheduler는
-  통과, Python evidence worker·실제 local/external adapter는 미실행
+  통과하고 승인 plan projection의 offline Python evidence worker까지 실행,
+  공식 허용 실제 local/external adapter는 미실행
 - **Preconditions**: 필수 AI Planner, 비공개 문제 원문, fake/local·external
   AI adapter, `RULE-AI-001` 상태 전환
 - **Steps**:
@@ -171,7 +174,7 @@ UI Preview 체크박스는 2026-07-28 사용자 브라우저 검토와 승인 �
 
 | Criterion | Status | Draft 검증 증거 |
 |:---|:---:|:---|
-| Functionality | Partial | Planner mode Gate·bounded Queue·dependency·실패 격리·dedup 통과; evidence·Verifier 미실행 |
+| Functionality | Partial | Planner mode Gate·bounded Queue·세 vertical evidence·workspace/artifact 격리 통과; candidate·Verifier 미실행 |
 | Potential Impact | Not Executed | 제한 시간 내 복수 문제 처리량과 Queue age 측정 |
 | Novelty | Not Executed | evidence-first 독립 검증과 role fallback |
 | UX | Preview Passed / Runtime Not Executed | 사용자 브라우저 검토 통과; runtime 상태 판독·키보드·수동 제출은 미실행 |
@@ -209,3 +212,4 @@ UI Preview 체크박스는 2026-07-28 사용자 브라우저 검토와 승인 �
 - **Logic_Progress**: [Roadmap](../04_Logic_Progress/00_ROADMAP.md) - Rules-gated 비차단 운영 트랙
 - **QA_Validation**: [P0·V1 QA 시나리오](./01_TEST_SCENARIOS.md) - 기존 24개 코어 QA 기준선
 - **QA_Validation**: [QA Checklist](./02_QA_CHECKLIST.md) - 운영 QA 승인·대회 전 실행 시점
+- **QA_Validation**: [OPS-IMPL-05 Evidence Worker 보고서](./18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - 세 vertical·Queue·workspace·artifact·checkpoint 검증
