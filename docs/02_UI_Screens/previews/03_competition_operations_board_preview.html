@@ -56,6 +56,7 @@
     .clock strong { display: block; font-size: 23px; font-variant-numeric: tabular-nums; }
     .clock span { color: var(--muted); font-size: 12px; }
     .rules { display: flex; flex-wrap: wrap; gap: 7px; justify-content: flex-end; }
+    .top-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; align-items: center; }
     .pill, .status, .role {
       display: inline-flex;
       align-items: center;
@@ -76,6 +77,52 @@
       gap: 10px;
       margin: 14px 0;
     }
+    .workflow {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      margin: 0 0 14px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(16, 27, 43, .82);
+    }
+    .steps { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .step { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .04em; }
+    .step::after { content: "→"; margin-left: 6px; color: #4b5f7a; }
+    .step:last-child::after { content: ""; margin: 0; }
+    .step.active { color: var(--cyan); }
+    .state-tools { display: flex; gap: 7px; align-items: center; }
+    .mode-panel {
+      margin: 0 0 14px;
+      padding: 13px 14px;
+      background: rgba(16, 27, 43, .82);
+    }
+    .mode-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .mode-head h2 { margin: 0; font-size: 13px; }
+    .mode-head p { margin: 3px 0 0; color: var(--muted); font-size: 10px; }
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .mode-cell {
+      min-width: 0;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #0b1524;
+    }
+    .mode-cell span { display: block; color: var(--muted); font-size: 9px; }
+    .mode-cell strong { display: block; margin-top: 4px; font-size: 11px; overflow-wrap: anywhere; }
+    .mode-cell strong.wait { color: var(--amber); }
     .metric {
       padding: 13px 15px;
       border: 1px solid var(--line);
@@ -119,6 +166,16 @@
       cursor: pointer;
     }
     .filter[aria-pressed="true"] { color: var(--text); border-color: var(--cyan); }
+    .field-control {
+      min-height: 34px;
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #0d1726;
+      color: var(--text);
+      font: inherit;
+      font-size: 11px;
+    }
     table { width: 100%; border-collapse: collapse; }
     th {
       padding: 9px 12px;
@@ -138,6 +195,7 @@
     .status.ready { color: var(--green); border-color: rgba(88, 227, 162, .42); }
     .status.running { color: var(--cyan); border-color: rgba(90, 215, 255, .42); }
     .status.verify { color: var(--violet); border-color: rgba(182, 160, 255, .42); }
+    .status.queued, .status.captured { color: var(--muted); border-color: rgba(151, 168, 194, .42); }
     .status.partial, .status.review { color: var(--amber); border-color: rgba(255, 202, 103, .42); }
     .status.fail { color: var(--red); border-color: rgba(255, 119, 133, .42); }
     .bar { width: 82px; height: 5px; border-radius: 99px; background: #26344a; overflow: hidden; margin-top: 6px; }
@@ -152,7 +210,12 @@
       border: 1px solid var(--line);
       border-radius: 11px;
       background: var(--panel-2);
+      width: 100%;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
     }
+    .worker:hover, .worker:focus { border-color: var(--cyan); outline: none; }
     .avatar {
       display: grid;
       place-items: center;
@@ -206,6 +269,8 @@
       font-weight: 750;
     }
     .action.primary { border-color: rgba(88, 227, 162, .5); color: var(--green); }
+    .action.danger { border-color: rgba(255, 119, 133, .45); color: var(--red); }
+    .action:disabled { cursor: not-allowed; opacity: .45; }
     .action:focus { outline: 2px solid var(--cyan); outline-offset: 2px; }
     .source-grid { padding: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .source {
@@ -231,7 +296,7 @@
     .activity-message { color: var(--text); }
     .detail { margin-top: 12px; }
     .detail-body { padding: 16px; }
-    .detail-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 12px; }
+    .detail-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
     .detail h3 { margin: 0 0 8px; font-size: 12px; color: var(--cyan); }
     .detail ul { margin: 0; padding-left: 17px; color: var(--muted); font-size: 11px; line-height: 1.65; }
     .notice {
@@ -243,6 +308,78 @@
       color: #f8d995;
       font-size: 11px;
     }
+    .notice.error { border-color: rgba(255, 119, 133, .45); background: rgba(255, 119, 133, .07); color: #ffc2c8; }
+    .state-banner {
+      margin: 0 0 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel-2);
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .state-banner[hidden], .empty-row[hidden] { display: none; }
+    .empty-row td { padding: 28px; text-align: center; color: var(--muted); }
+    .skeleton { animation: pulse 1.2s ease-in-out infinite alternate; opacity: .45; }
+    @keyframes pulse { to { opacity: .8; } }
+    .meta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 12px; margin-top: 10px; }
+    .meta-grid div { color: var(--muted); font-size: 10px; }
+    .meta-grid b { display: block; margin-top: 2px; color: var(--text); overflow-wrap: anywhere; }
+    .control-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; align-items: center; }
+    .dependency-list { display: grid; gap: 5px; margin-top: 8px; }
+    .dependency { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 10px; }
+    .dependency b { color: var(--text); }
+    .input-summary {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #0b1524;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+    .input-summary b { color: var(--text); }
+    .verification-card { width: 100%; color: var(--text); text-align: left; cursor: pointer; font: inherit; }
+    .verification-card:hover, .verification-card:focus { border-color: var(--cyan); outline: none; }
+    .evidence-link { color: var(--cyan); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+    dialog {
+      width: min(760px, calc(100vw - 28px));
+      max-height: 88vh;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--panel);
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+    dialog::backdrop { background: rgba(3, 7, 13, .78); }
+    .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 17px; border-bottom: 1px solid var(--line); }
+    .dialog-head h2 { margin: 0; font-size: 16px; }
+    .dialog-body { padding: 17px; overflow: auto; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-grid .wide { grid-column: 1 / -1; }
+    label.form-field { display: grid; gap: 6px; color: var(--muted); font-size: 10px; font-weight: 750; }
+    label.form-field input, label.form-field select, label.form-field textarea {
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #0b1524;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+    }
+    label.form-field textarea { min-height: 112px; resize: vertical; }
+    .choice-list { display: grid; gap: 7px; padding: 10px; border: 1px solid var(--line); border-radius: 9px; background: #0b1524; }
+    .choice-list label { color: var(--text); font-size: 11px; }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+    .triage-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+    .triage-summary div { padding: 10px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel-2); }
+    .triage-summary span { display: block; color: var(--muted); font-size: 9px; }
+    .triage-summary b { display: block; margin-top: 4px; font-size: 12px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     .toast {
       position: fixed;
       right: 20px;
@@ -263,12 +400,17 @@
       .layout { grid-template-columns: 1.4fr .8fr; }
       .stack { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; }
       .summary { grid-template-columns: repeat(3, 1fr); }
+      .mode-grid { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 800px) {
       .app { padding: 10px; }
       .topbar { grid-template-columns: 1fr; }
       .clock, .rules { text-align: left; justify-content: flex-start; }
-      .layout, .stack, .detail-grid { grid-template-columns: 1fr; }
+      .layout, .stack, .detail-grid, .form-grid, .triage-summary { grid-template-columns: 1fr; }
+      .workflow { grid-template-columns: 1fr; }
+      .mode-head { align-items: flex-start; flex-direction: column; }
+      .mode-grid { grid-template-columns: 1fr; }
+      .form-grid .wide { grid-column: auto; }
       .summary { grid-template-columns: repeat(2, 1fr); }
       .table-wrap { overflow-x: auto; }
       table { min-width: 680px; }
@@ -288,20 +430,62 @@
         <strong>22:41:08</strong>
         <span>remaining · demo value</span>
       </div>
-      <div class="rules" aria-label="Rules status">
-        <span class="pill warn">AI RULE: UNCLEAR</span>
-        <span class="pill warn">PREBUILT: UNCLEAR</span>
-        <span class="pill off">AUTO-SUBMIT: OFF</span>
+      <div class="top-actions">
+        <div class="rules" aria-label="Rules status">
+          <span class="pill warn">AI MODE: RULES GATED</span>
+          <span class="pill warn">PREBUILT: UNCLEAR</span>
+          <span class="pill off">AUTO-SUBMIT: OFF</span>
+        </div>
+        <button class="action primary" id="add-problem" type="button">+ Add problem</button>
       </div>
     </header>
 
     <section class="summary" aria-label="Competition summary">
-      <div class="metric"><span>Problems</span><strong>12</strong><small>6 visible / 12 total</small></div>
-      <div class="metric"><span>Active</span><strong>4</strong></div>
+      <div class="metric"><span>Problems</span><strong id="problem-count">12</strong><small id="visible-count">6 visible / 12 total</small></div>
+      <div class="metric"><span>Active</span><strong id="active-count">4</strong></div>
       <div class="metric"><span>Verifying</span><strong>2</strong></div>
       <div class="metric"><span>Ready</span><strong style="color:var(--green)">1</strong></div>
-      <div class="metric"><span>Submitted</span><strong>3</strong></div>
+      <div class="metric"><span>Submitted</span><strong id="submitted-count">3</strong></div>
       <div class="metric"><span>Queue age</span><strong>04:12</strong></div>
+    </section>
+
+    <section class="workflow" aria-label="Problem solving workflow">
+      <div class="steps">
+        <span class="step active">1 Capture</span>
+        <span class="step">2 AI plan</span>
+        <span class="step">3 Approve plan</span>
+        <span class="step">4 Run</span>
+        <span class="step">5 Verify</span>
+        <span class="step">6 Human submit</span>
+      </div>
+      <div class="state-tools">
+        <label for="preview-state" class="sr-only">Preview state</label>
+        <select class="field-control" id="preview-state">
+          <option value="default">Default state</option>
+          <option value="loading">Loading state</option>
+          <option value="empty">Empty state</option>
+          <option value="stale">Stale state</option>
+          <option value="rules">Rules unavailable</option>
+        </select>
+      </div>
+    </section>
+    <div class="state-banner" id="state-banner" role="status" aria-live="polite" hidden></div>
+
+    <section class="panel mode-panel" aria-labelledby="ai-mode-title">
+      <div class="mode-head">
+        <div>
+          <h2 id="ai-mode-title">AI Execution Mode</h2>
+          <p>AI Planner는 필수이며 Rules Gate가 허용 실행 mode만 선택합니다.</p>
+        </div>
+        <span class="pill warn">rules_gated · EXTERNAL I/O 0</span>
+      </div>
+      <div class="mode-grid">
+        <div class="mode-cell"><span>Provider</span><strong class="wait">PENDING OFFICIAL RULES</strong></div>
+        <div class="mode-cell"><span>Model</span><strong class="wait">PENDING OFFICIAL RULES</strong></div>
+        <div class="mode-cell"><span>Data boundary</span><strong>NO EXTERNAL TRANSMISSION</strong></div>
+        <div class="mode-cell"><span>Tool mode</span><strong>PYTHON EVIDENCE · OFFLINE</strong></div>
+        <div class="mode-cell"><span>State semantics</span><strong>GATED = WAIT · RESTRICTED = REJECT</strong></div>
+      </div>
     </section>
 
     <section class="layout">
@@ -320,39 +504,40 @@
         <div class="table-wrap">
           <table>
             <thead>
-              <tr><th>Problem</th><th>Score</th><th>Status</th><th>Role</th><th>Progress</th><th>Age</th></tr>
+              <tr><th>Problem</th><th>Score</th><th>Priority</th><th>Status</th><th>Owner / role</th><th>Progress</th><th>Age</th></tr>
             </thead>
-            <tbody>
-              <tr class="problem selected" tabindex="0" data-kind="ready" data-id="Q01">
+            <tbody id="problem-rows">
+              <tr class="problem selected" tabindex="0" aria-selected="true" data-kind="ready" data-id="Q01">
                 <td><span class="problem-id">Q01 · DEX</span><span class="problem-name">Pool vs user output</span></td>
-                <td>150</td><td><span class="status ready">SUBMISSION READY</span></td><td>EVM + Verifier</td>
+                <td>150</td><td><span class="pill">HIGH · human</span></td><td><span class="status ready">SUBMISSION READY</span></td><td>Operator · EVM + Verifier</td>
                 <td>6/6<div class="bar"><i style="width:100%"></i></div></td><td>08:21</td>
               </tr>
-              <tr class="problem" tabindex="0" data-kind="active" data-id="Q02">
+              <tr class="problem" tabindex="0" aria-selected="false" data-kind="active" data-id="Q02">
                 <td><span class="problem-id">Q02 · FLOW</span><span class="problem-name">Multi-hop destination</span></td>
-                <td>300</td><td><span class="status running">RUNNING</span></td><td>Tracer</td>
+                <td>300</td><td><span class="pill">CRITICAL · derived</span></td><td><span class="status running">RUNNING</span></td><td>Coordinator · Tracer</td>
                 <td>3/7<div class="bar"><i style="width:43%"></i></div></td><td>12:08</td>
               </tr>
-              <tr class="problem" tabindex="0" data-kind="active" data-id="Q03">
+              <tr class="problem" tabindex="0" aria-selected="false" data-kind="active" data-id="Q03">
                 <td><span class="problem-id">Q03 · AUTH</span><span class="problem-name">Allowance consumption</span></td>
-                <td>200</td><td><span class="status verify">VERIFYING</span></td><td>EVM + Verifier</td>
+                <td>200</td><td><span class="pill">HIGH · derived</span></td><td><span class="status verify">VERIFYING</span></td><td>Operator · EVM + Verifier</td>
                 <td>5/6<div class="bar"><i style="width:83%"></i></div></td><td>06:42</td>
               </tr>
-              <tr class="problem" tabindex="0" data-kind="active" data-id="Q04">
+              <tr class="problem" tabindex="0" aria-selected="false" data-kind="active" data-id="Q04">
                 <td><span class="problem-id">Q04 · BRIDGE</span><span class="problem-name">Cross-chain match</span></td>
-                <td>400</td><td><span class="status partial">PARTIAL</span></td><td>Tracer + OSINT</td>
+                <td>400</td><td><span class="pill">NORMAL · human</span></td><td><span class="status partial">PARTIAL</span></td><td>Operator · Tracer + OSINT</td>
                 <td>4/8<div class="bar"><i style="width:50%;background:var(--amber)"></i></div></td><td>18:51</td>
               </tr>
-              <tr class="problem" tabindex="0" data-kind="active" data-id="Q05">
+              <tr class="problem" tabindex="0" aria-selected="false" data-kind="active" data-id="Q05">
                 <td><span class="problem-id">Q05 · LABEL</span><span class="problem-name">Service attribution</span></td>
-                <td>250</td><td><span class="status review">REVIEW REQUIRED</span></td><td>OSINT</td>
+                <td>250</td><td><span class="pill">NORMAL · derived</span></td><td><span class="status review">REVIEW REQUIRED</span></td><td>Verifier · OSINT</td>
                 <td>2/5<div class="bar"><i style="width:40%;background:var(--amber)"></i></div></td><td>09:10</td>
               </tr>
-              <tr class="problem" tabindex="0" data-kind="other" data-id="Q06">
+              <tr class="problem" tabindex="0" aria-selected="false" data-kind="other" data-id="Q06">
                 <td><span class="problem-id">Q06 · PROXY</span><span class="problem-name">Implementation history</span></td>
-                <td>350</td><td><span class="status fail">FAILED</span></td><td>EVM</td>
+                <td>350</td><td><span class="pill">DEFERRED · human</span></td><td><span class="status fail">FAILED</span></td><td>Operator · EVM</td>
                 <td>1/5<div class="bar"><i style="width:20%;background:var(--red)"></i></div></td><td>03:19</td>
               </tr>
+              <tr class="empty-row" id="empty-row" hidden><td colspan="7"><strong>등록된 문제가 없습니다.</strong><br>Rules 상태를 확인한 뒤 <b>Add problem</b>으로 CTFd 문제를 등록하십시오.</td></tr>
             </tbody>
           </table>
         </div>
@@ -364,12 +549,12 @@
           <span class="pill">QUEUE 7</span>
         </div>
         <div class="workers">
-          <div class="worker"><div class="avatar">C</div><div><strong>Coordinator</strong><span>triage Q07 · plan 2 jobs</span></div><i class="health"></i></div>
-          <div class="worker"><div class="avatar">E</div><div><strong>EVM Analyst</strong><span>Q03 · archive state</span></div><i class="health"></i></div>
-          <div class="worker"><div class="avatar">T</div><div><strong>Flow Tracer</strong><span>Q02 · hop 12 / 40</span></div><i class="health"></i></div>
-          <div class="worker"><div class="avatar">O</div><div><strong>OSINT Analyst</strong><span>Q05 · official source check</span></div><i class="health"></i></div>
-          <div class="worker"><div class="avatar">V</div><div><strong>Verifier</strong><span>Q03 · 5 / 6 checks</span></div><i class="health"></i></div>
-          <div class="worker"><div class="avatar">R</div><div><strong>Reporter</strong><span>waiting · Rules Gate</span></div><i class="health wait"></i></div>
+          <button class="worker" type="button" data-worker="AI Planner / Coordinator" data-detail="Q07 method hypothesis · plan 2 jobs · provider mode rules-gated"><div class="avatar">A</div><div><strong>AI Planner / Coordinator</strong><span>Q07 · method plan 2 jobs</span></div><i class="health wait" role="status" aria-label="waiting for permitted AI mode"></i></button>
+          <button class="worker" type="button" data-worker="EVM Analyst" data-detail="Q03 · archive state · 06:42 · retry 0"><div class="avatar">E</div><div><strong>EVM Analyst</strong><span>Q03 · archive state</span></div><i class="health" role="status" aria-label="healthy"></i></button>
+          <button class="worker" type="button" data-worker="Flow Tracer" data-detail="Q02 · hop 12 / 40 · dependency 2 waiting"><div class="avatar">T</div><div><strong>Flow Tracer</strong><span>Q02 · hop 12 / 40</span></div><i class="health" role="status" aria-label="healthy"></i></button>
+          <button class="worker" type="button" data-worker="OSINT Analyst" data-detail="Q05 · official source check · RULE-OSINT allowed"><div class="avatar">O</div><div><strong>OSINT Analyst</strong><span>Q05 · official source check</span></div><i class="health" role="status" aria-label="healthy"></i></button>
+          <button class="worker" type="button" data-worker="Verifier" data-detail="Q03 · 5 / 6 checks · independent run VER-Q03-002"><div class="avatar">V</div><div><strong>Verifier</strong><span>Q03 · 5 / 6 checks</span></div><i class="health" role="status" aria-label="healthy"></i></button>
+          <button class="worker" type="button" data-worker="Reporter" data-detail="waiting · permitted AI mode · evidence-backed candidate only"><div class="avatar">R</div><div><strong>Reporter</strong><span>waiting · Rules Gate</span></div><i class="health wait" role="status" aria-label="waiting for rules"></i></button>
         </div>
       </section>
 
@@ -377,18 +562,27 @@
         <section class="panel" aria-labelledby="verify-title">
           <div class="panel-head"><div><h2 id="verify-title">Verification Rail</h2><small>독립 검증과 충돌</small></div></div>
           <div class="cards">
-            <article class="card selected">
+            <button type="button" class="card verification-card selected" data-candidate="CAND-Q01-001" data-verification="VER-Q01-002 · independent verifier · 6/6 pass" data-evidence="EV-Q01-LOG-04, EV-Q01-STATE-02">
               <div class="card-top"><h3>Q01 · CAND-Q01-001</h3><span class="status ready">6/6 PASS</span></div>
               <p>address·TX·chain·raw amount·decimals·format을 원본 evidence로 재확인했습니다.</p>
-            </article>
-            <article class="card">
+            </button>
+            <button type="button" class="card verification-card" data-candidate="CAND-Q03-002" data-verification="VER-Q03-002 · independent verifier · 5/6 pass" data-evidence="EV-Q03-APPROVAL-01, EV-Q03-CALL-03">
               <div class="card-top"><h3>Q03 · CAND-Q03-002</h3><span class="status verify">5/6</span></div>
               <p>allowance after-consumption archive state 재조회가 남았습니다.</p>
-            </article>
-            <article class="card">
+            </button>
+            <button type="button" class="card verification-card" data-candidate="CAND-Q05-001" data-verification="VER-Q05-001 · conflict preserved · review required" data-evidence="EV-Q05-OFFICIAL-01 vs EV-Q05-HEUR-03">
               <div class="card-top"><h3>Q05 · CAND-Q05-001</h3><span class="status review">CONFLICT</span></div>
               <p>공식 service label과 heuristic cluster 결과가 일치하지 않습니다.</p>
-            </article>
+            </button>
+            <div class="card" id="verification-detail">
+              <div class="card-top"><h3 id="verification-id">VER-Q01-002</h3><span class="pill">INDEPENDENT</span></div>
+              <p id="verification-copy">독립 Verifier · 6/6 pass · evidence EV-Q01-LOG-04, EV-Q01-STATE-02</p>
+              <div class="actions">
+                <button class="action" id="verification-evidence" type="button">Open evidence</button>
+                <button class="action" id="rerun-verification" type="button">Re-run check</button>
+                <button class="action danger" id="hold-candidate" type="button">Hold candidate</button>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -398,14 +592,22 @@
             <article class="card">
               <div class="card-top"><h3>Q01 · Address</h3><span class="status ready">READY</span></div>
               <div class="answer" id="answer">0x8ba1f109551bd432803012645ac136ddd64dba72</div>
+              <div class="meta-grid">
+                <div>Candidate ID<b>CAND-Q01-001</b></div>
+                <div>Format<b>address · 0x + 40 hex</b></div>
+                <div>Confidence<b>high · capped by 6/6 evidence</b></div>
+                <div>Recommendation<b>submit</b></div>
+                <div>Evidence<b><button type="button" class="action evidence-link" id="submission-evidence">2 decisive refs</button></b></div>
+                <div>Uncertainty<b>none in scored scope</b></div>
+              </div>
               <div class="checklist">
                 <div class="check"><span>Independent verification</span><b>PASS</b></div>
                 <div class="check"><span>Answer format</span><b>PASS</b></div>
-                <div class="check"><span>Human approval</span><b class="warn">PENDING</b></div>
+                <label class="check"><span><input type="checkbox" id="human-approval"> Human approval</span><b class="warn" id="approval-state">PENDING</b></label>
               </div>
               <div class="actions">
                 <button class="action primary" id="copy-answer">Copy answer</button>
-                <button class="action" id="mark-submitted">Mark submitted</button>
+                <button class="action" id="mark-submitted" disabled>Mark submitted</button>
               </div>
             </article>
           </div>
@@ -432,8 +634,26 @@
             <h3>Submission recommendation</h3>
             <ul id="recommendation-list"><li>recommendation: submit</li><li>confidence: high, evidence-backed</li><li>CTFd action: human only</li></ul>
           </div>
+          <div>
+            <h3>Execution controls</h3>
+            <div class="dependency-list" id="dependency-list">
+              <div class="dependency"><span>receipt + logs</span><b>complete</b></div>
+              <div class="dependency"><span>reconciliation</span><b>complete</b></div>
+              <div class="dependency"><span>independent verify</span><b>complete</b></div>
+            </div>
+            <div class="control-row">
+              <label for="priority-control" class="sr-only">Priority</label>
+              <select class="field-control" id="priority-control">
+                <option>critical</option><option selected>high</option><option>normal</option><option>deferred</option>
+              </select>
+              <button class="action primary" id="approve-plan" type="button">Approve & queue</button>
+              <button class="action" id="pause-job" type="button">Pause / resume</button>
+              <button class="action" id="reassign-job" type="button">Reassign</button>
+            </div>
+          </div>
         </div>
-        <div class="notice">AI·사전 제작 도구 규정은 현재 UNCLEAR demo 상태입니다. 실제 실행에서는 Rules Gate가 관련 worker를 차단하며, 이 Preview는 RPC·AI·CTFd를 호출하지 않습니다.</div>
+        <div class="input-summary" id="input-summary"><b>Captured input</b> · fixture-backed demo request · answer format address</div>
+        <div class="notice">AI Planner는 SCAN 실행 구조의 필수 계층입니다. Rules Gate는 AI 사용 여부가 아니라 허용된 provider·모델·전송 범위를 선택합니다. AI 계획은 가설이며 Python 도구 실행과 독립 증거 검증을 통과해야 합니다. 이 Preview는 RPC·AI·CTFd를 호출하지 않습니다.</div>
       </div>
     </section>
 
@@ -443,7 +663,7 @@
         <div class="source"><strong>EVM Public RPC · HEALTHY</strong><span>2 / 4 concurrent · p95 not measured</span></div>
         <div class="source"><strong>Archive RPC · THROTTLED</strong><span>1 / 1 concurrent · retry in 12s</span></div>
         <div class="source"><strong>Explorer API · HEALTHY</strong><span>cache hit 18 · request dedup 4</span></div>
-        <div class="source"><strong>External AI · DISABLED</strong><span>RULE-AI-001 unclear · human fallback</span></div>
+        <div class="source"><strong>AI Planner · REQUIRED / GATED</strong><span>provider·model·data boundary pending Rules · Preview call 0</span></div>
       </div>
     </section>
 
@@ -460,52 +680,170 @@
       </ol>
     </section>
   </main>
+  <dialog id="problem-dialog" aria-labelledby="problem-dialog-title">
+    <form id="problem-form">
+      <div class="dialog-head">
+        <div><h2 id="problem-dialog-title">Register CTFd problem</h2><small id="problem-step-label">Step 1 of 2 · Capture original</small></div>
+        <button class="action" type="button" data-close="problem-dialog">Close</button>
+      </div>
+      <div class="dialog-body">
+        <section id="capture-step">
+          <div class="form-grid">
+            <label class="form-field">Problem ID<input id="problem-id" value="Q13" required pattern="[A-Za-z0-9_-]+"></label>
+            <label class="form-field">Score<input id="problem-score" type="number" value="300" min="0" required></label>
+            <label class="form-field">Required answer format
+              <select id="problem-format" required><option>address</option><option>transaction hash</option><option>raw amount</option><option>text</option><option>tuple</option></select>
+            </label>
+            <label class="form-field">Provided URL<input id="problem-url" type="url" placeholder="https://scan2026.ctfd.io/files/..."></label>
+            <label class="form-field wide">Original problem text<textarea id="problem-text" required>Trace the supplied Ethereum transaction and identify the final recipient address. Submit a checksummed address.</textarea></label>
+            <label class="form-field">Provided file<input id="problem-file" type="file"></label>
+            <div class="choice-list">
+              <strong>Rules Gate before external transfer</strong>
+              <label><input type="checkbox" checked disabled> AI Planner — required; execution mode selected by Rules Gate</label>
+              <label><input type="checkbox" checked> Python/CLI evidence tool execution</label>
+            </div>
+          </div>
+          <div class="notice">원문·URL·첨부 파일명은 생성된 문제 상세의 로컬 demo state에 연결됩니다. AI Planner는 해결 방법을 설계하지만 이 Preview에서는 파일 내용 읽기·업로드와 AI·RPC·CTFd 호출이 모두 0건입니다.</div>
+          <div class="dialog-actions">
+            <button class="action primary" id="review-triage" type="button">Review triage</button>
+          </div>
+        </section>
+        <section id="triage-step" hidden>
+          <div class="triage-summary">
+            <div><span>AI method hypothesis</span><b>FLOW · destination trace</b></div>
+            <div><span>Difficulty</span><b>medium · hypothesis</b></div>
+            <div><span>Answer format</span><b id="triage-format">address</b></div>
+          </div>
+          <div class="choice-list">
+            <strong>Proposed leaf jobs</strong>
+            <label><input class="leaf-job" type="checkbox" value="Collect receipt and transfer logs" checked> Collect receipt and transfer logs</label>
+            <label><input class="leaf-job" type="checkbox" value="Expand transfer path" checked> Expand transfer path</label>
+            <label><input class="leaf-job" type="checkbox" value="Reconcile candidate destination" checked> Reconcile candidate destination</label>
+            <label><input class="leaf-job" type="checkbox" value="Independent raw-evidence verification" checked> Independent raw-evidence verification</label>
+            <span id="leaf-error" role="alert" style="color:var(--red)" hidden>실행할 leaf job을 최소 1개 선택하십시오.</span>
+          </div>
+          <div class="form-grid" style="margin-top:12px">
+            <label class="form-field">Human priority
+              <select id="new-priority"><option>critical</option><option selected>high</option><option>normal</option><option>deferred</option></select>
+            </label>
+            <label class="form-field">Assigned role
+              <select id="new-role"><option selected>Flow Tracer + Verifier</option><option>EVM Analyst + Verifier</option><option>Python Evidence Worker</option></select>
+            </label>
+          </div>
+          <div class="notice">유형·난이도·도구·leaf job은 AI Planner의 운영 가설입니다. Operator 승인 후 Python 도구가 실행하며, 원본 evidence가 없는 AI 출력은 정답으로 승격되지 않습니다.</div>
+          <div class="dialog-actions">
+            <button class="action" id="back-capture" type="button">Back</button>
+            <button class="action primary" id="queue-problem" type="submit">Approve & queue</button>
+          </div>
+        </section>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="worker-dialog" aria-labelledby="worker-dialog-title">
+    <div class="dialog-head"><h2 id="worker-dialog-title">Worker detail</h2><button class="action" type="button" data-close="worker-dialog">Close</button></div>
+    <div class="dialog-body">
+      <div class="meta-grid">
+        <div>Role<b id="worker-name">Coordinator</b></div>
+        <div>Current stage<b id="worker-detail">triage Q07</b></div>
+        <div>Source budget<b>provider 2 / 4 · worker 1 / 2</b></div>
+        <div>Checkpoint<b>preserved · 22:40:11</b></div>
+      </div>
+      <div class="control-row"><button class="action" id="worker-pause" type="button">Pause safely</button><button class="action" id="worker-reassign" type="button">Reassign job</button></div>
+    </div>
+  </dialog>
+
+  <dialog id="submission-dialog" aria-labelledby="submission-dialog-title">
+    <form id="submission-form">
+      <div class="dialog-head"><h2 id="submission-dialog-title">Record manual CTFd submission</h2><button class="action" type="button" data-close="submission-dialog">Close</button></div>
+      <div class="dialog-body">
+        <div class="notice">이 화면은 CTFd로 전송하지 않습니다. Operator가 브라우저에서 직접 제출한 결과만 기록합니다.</div>
+        <div class="form-grid" style="margin-top:12px">
+          <label class="form-field">CTFd response
+            <select id="submission-result" required><option value="">Select result</option><option value="correct">Correct</option><option value="incorrect">Incorrect</option><option value="unknown">No response / unknown</option></select>
+          </label>
+          <label class="form-field">Submitted at<input id="submission-time" type="datetime-local" required></label>
+          <label class="form-field wide">Operator note<textarea id="submission-note" placeholder="Optional note; never store credentials or session cookies."></textarea></label>
+        </div>
+        <div class="dialog-actions"><button class="action primary" type="submit">Save submission record</button></div>
+      </div>
+    </form>
+  </dialog>
+
   <div class="toast" id="toast" role="status" aria-live="polite">Copied</div>
   <script>
-    const rows = [...document.querySelectorAll(".problem")];
+    const memoryState = {};
+    const safeStorage = {
+      get(key) {
+        try { return sessionStorage.getItem(key); } catch { return memoryState[key] || null; }
+      },
+      set(key, value) {
+        memoryState[key] = value;
+        try { sessionStorage.setItem(key, value); } catch { /* local preview fallback */ }
+      }
+    };
+    let rows = [...document.querySelectorAll(".problem")];
+    let selectedProblem = safeStorage.get("scan-ops-selected") || "Q01";
+    let activeFilter = safeStorage.get("scan-ops-filter") || "all";
     const title = document.querySelector("#detail-title");
     const toast = document.querySelector("#toast");
     const jobList = document.querySelector("#job-list");
     const evidenceList = document.querySelector("#evidence-list");
     const recommendationList = document.querySelector("#recommendation-list");
+    const dependencyList = document.querySelector("#dependency-list");
     const problemDetails = {
       Q01: {
         title: "Q01 Detail · AN-Q01-DEX-001",
         jobs: ["receipt·log collection complete", "pool/user output reconciliation complete", "independent RPC replay complete"],
         evidence: ["4 confirmed evidence refs", "2 scoring sources", "0 unresolved conflicts"],
-        recommendation: ["recommendation: submit", "confidence: high, evidence-backed", "CTFd action: human only"]
+        recommendation: ["recommendation: submit", "confidence: high, evidence-backed", "CTFd action: human only"],
+        dependencies: [["receipt + logs", "complete"], ["reconciliation", "complete"], ["independent verify", "complete"]],
+        priority: "high"
       },
       Q02: {
         title: "Q02 Detail · AN-Q02-FLOW-001",
         jobs: ["transfer graph running", "hop 12 / 40 expanded", "destination reconciliation waiting"],
         evidence: ["18 confirmed transfer refs", "3 branch candidates", "2 unresolved destinations"],
-        recommendation: ["recommendation: investigate", "confidence: pending path completion", "CTFd action: hold"]
+        recommendation: ["recommendation: investigate", "confidence: pending path completion", "CTFd action: hold"],
+        dependencies: [["transfer collection", "complete"], ["branch expansion", "running"], ["reconciliation", "blocked"]],
+        priority: "critical"
       },
       Q03: {
         title: "Q03 Detail · AN-Q03-AUTH-001",
         jobs: ["Approval linked", "transferFrom consumption linked", "archive state replay running"],
         evidence: ["5 / 6 required checks pass", "allowance after-consumption pending", "0 classification conflicts"],
-        recommendation: ["recommendation: hold", "confidence: high after final state", "CTFd action: wait for verifier"]
+        recommendation: ["recommendation: hold", "confidence: high after final state", "CTFd action: wait for verifier"],
+        dependencies: [["event + call", "complete"], ["archive state", "running"], ["independent verify", "waiting"]],
+        priority: "high"
       },
       Q04: {
         title: "Q04 Detail · AN-Q04-BRIDGE-001",
         jobs: ["source-chain lock confirmed", "destination candidate collection partial", "fallback provider retry scheduled"],
         evidence: ["4 confirmed source refs", "2 heuristic destination candidates", "archive source timeout preserved"],
-        recommendation: ["recommendation: investigate", "confidence: medium", "CTFd action: hold"]
+        recommendation: ["recommendation: investigate", "confidence: medium", "CTFd action: hold"],
+        dependencies: [["source chain", "complete"], ["destination chain", "partial"], ["reconciliation", "blocked"]],
+        priority: "normal"
       },
       Q05: {
         title: "Q05 Detail · AN-Q05-LABEL-001",
         jobs: ["official source collected", "heuristic cluster generated", "conflict review queued"],
         evidence: ["1 official context ref", "3 heuristic cluster refs", "1 unresolved label conflict"],
-        recommendation: ["recommendation: review", "confidence: not decisive", "CTFd action: hold"]
+        recommendation: ["recommendation: review", "confidence: not decisive", "CTFd action: hold"],
+        dependencies: [["official context", "complete"], ["heuristic cluster", "complete"], ["conflict review", "queued"]],
+        priority: "normal"
       },
       Q06: {
         title: "Q06 Detail · AN-Q06-PROXY-001",
         jobs: ["proxy slot read failed", "implementation history unavailable", "checkpoint preserved"],
         evidence: ["1 input transaction ref", "0 implementation-state refs", "source failure recorded"],
-        recommendation: ["recommendation: retry or defer", "confidence: unavailable", "CTFd action: do not submit"]
+        recommendation: ["recommendation: retry or defer", "confidence: unavailable", "CTFd action: do not submit"],
+        dependencies: [["proxy slot", "failed"], ["history", "blocked"], ["checkpoint", "preserved"]],
+        priority: "deferred"
       }
     };
+    const esc = (value) => String(value).replace(/[&<>"']/g, character => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[character]);
     function renderList(target, items) {
       target.replaceChildren(...items.map((item) => {
         const entry = document.createElement("li");
@@ -518,16 +856,48 @@
       toast.classList.add("show");
       window.setTimeout(() => toast.classList.remove("show"), 1800);
     }
-    rows.forEach((row) => {
-      const select = () => {
-        rows.forEach((item) => item.classList.remove("selected"));
+    function addActivity(event, message) {
+      const item = document.createElement("li");
+      item.className = "activity-item";
+      const time = new Date().toLocaleTimeString("en-GB", {hour12: false});
+      item.innerHTML = `<span class="activity-time">${esc(time)}</span><span class="activity-event">${esc(event)}</span><span class="activity-message">${esc(message)}</span>`;
+      document.querySelector(".activity-list").prepend(item);
+    }
+    function renderDependencies(items) {
+      dependencyList.replaceChildren(...items.map(([name, state]) => {
+        const row = document.createElement("div");
+        row.className = "dependency";
+        const label = document.createElement("span");
+        label.textContent = name;
+        const value = document.createElement("b");
+        value.textContent = state;
+        row.append(label, value);
+        return row;
+      }));
+    }
+    function selectRow(row) {
+        rows.forEach((item) => {
+          item.classList.remove("selected");
+          item.setAttribute("aria-selected", "false");
+        });
         row.classList.add("selected");
+        row.setAttribute("aria-selected", "true");
+        selectedProblem = row.dataset.id;
+        safeStorage.set("scan-ops-selected", selectedProblem);
         const detail = problemDetails[row.dataset.id];
         title.textContent = detail.title;
         renderList(jobList, detail.jobs);
         renderList(evidenceList, detail.evidence);
         renderList(recommendationList, detail.recommendation);
-      };
+        renderDependencies(detail.dependencies);
+        document.querySelector("#priority-control").value = detail.priority;
+        const captured = detail.capturedInput;
+        document.querySelector("#input-summary").textContent = captured
+          ? `Captured input · original: ${captured.originalText} · URL: ${captured.url || "none"} · file name: ${captured.fileName || "none"} · answer format: ${captured.format}`
+          : "Captured input · fixture-backed demo request · full source remains in the fixture package";
+    }
+    function bindRow(row) {
+      const select = () => selectRow(row);
       row.addEventListener("click", select);
       row.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -535,17 +905,232 @@
           select();
         }
       });
-    });
+    }
+    rows.forEach(bindRow);
+    const restoredRow = rows.find(row => row.dataset.id === selectedProblem) || rows[0];
+    if (restoredRow) selectRow(restoredRow);
+
+    function applyFilter() {
+      rows.forEach((row) => {
+        row.hidden = activeFilter !== "all" && row.dataset.kind !== activeFilter;
+      });
+      document.querySelectorAll(".filter").forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.filter === activeFilter));
+      });
+      const visible = rows.filter(row => !row.hidden).length;
+      document.querySelector("#visible-count").textContent = `${visible} visible / ${document.querySelector("#problem-count").textContent} total`;
+    }
     document.querySelectorAll(".filter").forEach((button) => {
       button.addEventListener("click", () => {
-        document.querySelectorAll(".filter").forEach((item) => item.setAttribute("aria-pressed", "false"));
-        button.setAttribute("aria-pressed", "true");
-        const filter = button.dataset.filter;
-        rows.forEach((row) => {
-          row.hidden = filter !== "all" && row.dataset.kind !== filter;
-        });
+        activeFilter = button.dataset.filter;
+        safeStorage.set("scan-ops-filter", activeFilter);
+        applyFilter();
       });
     });
+    applyFilter();
+
+    const stateBanner = document.querySelector("#state-banner");
+    const emptyRow = document.querySelector("#empty-row");
+    const summarySnapshot = {
+      problems: document.querySelector("#problem-count").textContent,
+      active: document.querySelector("#active-count").textContent,
+      visible: document.querySelector("#visible-count").textContent
+    };
+    document.querySelector("#preview-state").addEventListener("change", (event) => {
+      const state = event.target.value;
+      document.querySelector("#problem-count").textContent = summarySnapshot.problems;
+      document.querySelector("#active-count").textContent = summarySnapshot.active;
+      document.querySelectorAll(".panel").forEach(panel => panel.classList.remove("skeleton"));
+      stateBanner.hidden = state === "default";
+      stateBanner.className = "state-banner";
+      emptyRow.hidden = true;
+      applyFilter();
+      if (state === "loading") {
+        stateBanner.textContent = "Refreshing selected panels · previous evidence and candidates remain visible · first feedback 112ms.";
+        document.querySelectorAll(".layout .panel").forEach(panel => panel.classList.add("skeleton"));
+      } else if (state === "empty") {
+        rows.forEach(row => { row.hidden = true; });
+        emptyRow.hidden = false;
+        document.querySelector("#problem-count").textContent = "0";
+        document.querySelector("#active-count").textContent = "0";
+        document.querySelector("#visible-count").textContent = "0 visible / 0 total";
+        stateBanner.textContent = "Empty state · 0 problems · Rules 확인 후 Add problem으로 시작하십시오.";
+      } else if (state === "stale") {
+        stateBanner.classList.add("error");
+        stateBanner.textContent = "STALE · Archive RPC last updated 22:40:11 · retry at 22:42:00 · cached evidence remains visible.";
+      } else if (state === "rules") {
+        stateBanner.classList.add("error");
+        stateBanner.textContent = "RULES UNAVAILABLE · AI Planner required · provider/model/data mode pending RULE-AI-001 · recheck 12:15 KST · no external transmission.";
+      }
+    });
+
+    const problemDialog = document.querySelector("#problem-dialog");
+    document.querySelector("#add-problem").addEventListener("click", () => {
+      document.querySelector("#capture-step").hidden = false;
+      document.querySelector("#triage-step").hidden = true;
+      document.querySelector("#problem-step-label").textContent = "Step 1 of 2 · Capture original";
+      document.querySelector("#leaf-error").hidden = true;
+      problemDialog.showModal();
+    });
+    document.querySelectorAll("[data-close]").forEach(button => {
+      button.addEventListener("click", () => document.querySelector(`#${button.dataset.close}`).close());
+    });
+    document.querySelector("#review-triage").addEventListener("click", () => {
+      const required = ["#problem-id", "#problem-score", "#problem-text"].map(selector => document.querySelector(selector));
+      if (!required.every(field => field.reportValidity())) return;
+      document.querySelector("#capture-step").hidden = true;
+      document.querySelector("#triage-step").hidden = false;
+      document.querySelector("#problem-step-label").textContent = "Step 2 of 2 · Review hypothesis and plan";
+      document.querySelector("#triage-format").textContent = document.querySelector("#problem-format").value;
+    });
+    document.querySelector("#back-capture").addEventListener("click", () => {
+      document.querySelector("#capture-step").hidden = false;
+      document.querySelector("#triage-step").hidden = true;
+      document.querySelector("#problem-step-label").textContent = "Step 1 of 2 · Capture original";
+    });
+    document.querySelectorAll(".leaf-job").forEach(input => {
+      input.addEventListener("change", () => {
+        document.querySelector("#leaf-error").hidden = true;
+      });
+    });
+    document.querySelector("#problem-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const id = document.querySelector("#problem-id").value.trim().toUpperCase();
+      if (problemDetails[id]) {
+        notify(`${id} already exists. Duplicate execution blocked.`);
+        return;
+      }
+      const score = document.querySelector("#problem-score").value;
+      const format = document.querySelector("#problem-format").value;
+      const priority = document.querySelector("#new-priority").value;
+      const role = document.querySelector("#new-role").value;
+      const selectedJobs = [...document.querySelectorAll(".leaf-job:checked")].map(input => input.value);
+      if (selectedJobs.length === 0) {
+        document.querySelector("#leaf-error").hidden = false;
+        document.querySelector(".leaf-job").focus();
+        return;
+      }
+      const originalText = document.querySelector("#problem-text").value.trim();
+      const providedUrl = document.querySelector("#problem-url").value.trim();
+      const providedFile = document.querySelector("#problem-file").files[0];
+      const fileName = providedFile ? providedFile.name : "";
+      const dependencyNames = {
+        "Collect receipt and transfer logs": "receipt + logs",
+        "Expand transfer path": "path expansion",
+        "Reconcile candidate destination": "reconciliation",
+        "Independent raw-evidence verification": "independent verify"
+      };
+      const dependencies = selectedJobs.map((job, index) => [
+        dependencyNames[job],
+        index < 2 ? "queued" : "blocked"
+      ]);
+      const row = document.createElement("tr");
+      row.className = "problem";
+      row.tabIndex = 0;
+      row.setAttribute("aria-selected", "false");
+      row.dataset.kind = "active";
+      row.dataset.id = id;
+      row.innerHTML = `<td><span class="problem-id">${esc(id)} · FLOW</span><span class="problem-name">Newly captured destination trace</span></td><td>${esc(score)}</td><td><span class="pill">${esc(priority.toUpperCase())} · human</span></td><td><span class="status queued">QUEUED</span></td><td>Operator · ${esc(role)}</td><td>0/${selectedJobs.length}<div class="bar"><i style="width:0%"></i></div></td><td>00:00</td>`;
+      document.querySelector("#problem-rows").insertBefore(row, emptyRow);
+      problemDetails[id] = {
+        title: `${id} Detail · PLAN-${id}-FLOW-001`,
+        jobs: ["original problem preserved", "AI method hypothesis approved", ...selectedJobs.map(job => `${job} · queued`)],
+        evidence: ["0 evidence refs · execution not started", "Rules Gate checked", "duplicate request guard active"],
+        recommendation: ["recommendation: run approved jobs", `answer format: ${format}`, "CTFd action: hold"],
+        dependencies,
+        priority,
+        capturedInput: {
+          originalText,
+          url: providedUrl,
+          fileName,
+          format
+        }
+      };
+      rows.push(row);
+      bindRow(row);
+      document.querySelector("#problem-count").textContent = String(Number(document.querySelector("#problem-count").textContent) + 1);
+      summarySnapshot.problems = document.querySelector("#problem-count").textContent;
+      activeFilter = "all";
+      applyFilter();
+      summarySnapshot.visible = document.querySelector("#visible-count").textContent;
+      selectRow(row);
+      problemDialog.close();
+      addActivity("QUEUED", `${id} captured, triaged, and queued ${selectedJobs.length} selected leaf job(s) after Operator approval.`);
+      notify(`${id} queued ${selectedJobs.length} selected job(s). No external call was made.`);
+    });
+
+    document.querySelector("#priority-control").addEventListener("change", (event) => {
+      const detail = problemDetails[selectedProblem];
+      detail.priority = event.target.value;
+      const row = rows.find(item => item.dataset.id === selectedProblem);
+      row.cells[2].innerHTML = `<span class="pill">${esc(detail.priority.toUpperCase())} · human</span>`;
+      addActivity("PRIORITY", `${selectedProblem} priority changed to ${detail.priority} by Operator.`);
+    });
+    document.querySelector("#approve-plan").addEventListener("click", () => {
+      const row = rows.find(item => item.dataset.id === selectedProblem);
+      const wasQueued = Boolean(row.querySelector(".status.queued"));
+      row.dataset.kind = "active";
+      row.cells[3].innerHTML = '<span class="status running">RUNNING</span>';
+      if (wasQueued) {
+        document.querySelector("#active-count").textContent = String(Number(document.querySelector("#active-count").textContent) + 1);
+        summarySnapshot.active = document.querySelector("#active-count").textContent;
+      }
+      problemDetails[selectedProblem].dependencies = problemDetails[selectedProblem].dependencies.map(([name, state], index) => [name, index === 0 ? "running" : state]);
+      renderDependencies(problemDetails[selectedProblem].dependencies);
+      addActivity("STARTED", `${selectedProblem} approved plan moved to running.`);
+      notify("Approved plan started in offline demo mode.");
+    });
+    document.querySelector("#pause-job").addEventListener("click", () => {
+      const row = rows.find(item => item.dataset.id === selectedProblem);
+      const paused = row.dataset.paused !== "true";
+      row.dataset.paused = String(paused);
+      row.cells[3].innerHTML = paused ? '<span class="status partial">PAUSED · CHECKPOINTED</span>' : '<span class="status running">RUNNING</span>';
+      addActivity(paused ? "PAUSED" : "RESUMED", `${selectedProblem} ${paused ? "checkpoint preserved" : "resumed from checkpoint"}.`);
+      notify(paused ? "Job paused safely; other problems continue." : "Job resumed from checkpoint.");
+    });
+    document.querySelector("#reassign-job").addEventListener("click", () => {
+      const row = rows.find(item => item.dataset.id === selectedProblem);
+      row.cells[4].textContent = "Operator · Python Evidence Worker";
+      addActivity("REASSIGNED", `${selectedProblem} moved to Python Evidence Worker under the existing AI plan.`);
+      notify("Reassigned without changing other problem states.");
+    });
+
+    document.querySelectorAll(".worker").forEach(worker => {
+      worker.addEventListener("click", () => {
+        document.querySelector("#worker-name").textContent = worker.dataset.worker;
+        document.querySelector("#worker-detail").textContent = worker.dataset.detail;
+        document.querySelector("#worker-dialog").showModal();
+      });
+    });
+    document.querySelector("#worker-pause").addEventListener("click", () => notify("Worker pause requested; active checkpoint preserved."));
+    document.querySelector("#worker-reassign").addEventListener("click", () => notify("Worker job moved back to the queue."));
+
+    document.querySelectorAll(".verification-card").forEach(card => {
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".verification-card").forEach(item => item.classList.remove("selected"));
+        card.classList.add("selected");
+        document.querySelector("#verification-id").textContent = card.dataset.verification.split(" · ")[0];
+        document.querySelector("#verification-copy").textContent = `${card.dataset.verification} · evidence ${card.dataset.evidence}`;
+      });
+    });
+    document.querySelector("#rerun-verification").addEventListener("click", () => {
+      addActivity("VERIFY", "Independent raw-evidence check queued; candidate remains unchanged.");
+      notify("Independent verification queued.");
+    });
+    document.querySelector("#hold-candidate").addEventListener("click", () => {
+      addActivity("HOLD", "Selected candidate held for conflict or missing evidence.");
+      notify("Candidate held; submission_ready was not granted.");
+    });
+
+    function openWorkbench() {
+      safeStorage.set("scan-ops-selected", selectedProblem);
+      safeStorage.set("scan-ops-filter", activeFilter);
+      window.location.href = "02_investigation_workbench_preview.html?from=operations&problem=" + encodeURIComponent(selectedProblem);
+    }
+    document.querySelector("#verification-evidence").addEventListener("click", openWorkbench);
+    document.querySelector("#submission-evidence").addEventListener("click", openWorkbench);
+    document.querySelector("#open-evidence").addEventListener("click", openWorkbench);
+
     document.querySelector("#copy-answer").addEventListener("click", async () => {
       const value = document.querySelector("#answer").textContent.trim();
       try {
@@ -555,11 +1140,30 @@
         notify("Clipboard unavailable in this preview.");
       }
     });
-    document.querySelector("#mark-submitted").addEventListener("click", () => {
-      notify("Demo only: human submission confirmation would be required.");
+    const approval = document.querySelector("#human-approval");
+    approval.addEventListener("change", () => {
+      document.querySelector("#approval-state").textContent = approval.checked ? "APPROVED" : "PENDING";
+      document.querySelector("#approval-state").classList.toggle("warn", !approval.checked);
+      document.querySelector("#mark-submitted").disabled = !approval.checked;
+      addActivity("APPROVAL", `Q01 human approval ${approval.checked ? "granted" : "revoked"}.`);
     });
-    document.querySelector("#open-evidence").addEventListener("click", () => {
-      notify("Demo only: this opens the read-only Investigation Workbench.");
+    document.querySelector("#mark-submitted").addEventListener("click", () => {
+      const now = new Date();
+      const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      document.querySelector("#submission-time").value = local;
+      document.querySelector("#submission-dialog").showModal();
+    });
+    document.querySelector("#submission-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const result = document.querySelector("#submission-result");
+      if (!result.reportValidity()) return;
+      const time = document.querySelector("#submission-time").value;
+      document.querySelector("#submitted-count").textContent = String(Number(document.querySelector("#submitted-count").textContent) + 1);
+      document.querySelector("#submission-dialog").close();
+      document.querySelector("#mark-submitted").disabled = true;
+      document.querySelector("#mark-submitted").textContent = "Submitted · recorded";
+      addActivity("SUBMITTED", `Q01 manual CTFd result recorded as ${result.value} at ${time}.`);
+      notify("Manual submission result recorded locally.");
     });
   </script>
 </body>

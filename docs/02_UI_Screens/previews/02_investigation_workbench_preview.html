@@ -148,6 +148,9 @@
     }
 
     .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       min-height: 36px;
       padding: 0 13px;
       border: 1px solid var(--line-strong);
@@ -156,6 +159,8 @@
       cursor: pointer;
       font-size: 12px;
       font-weight: 650;
+      color: var(--text);
+      text-decoration: none;
     }
 
     .button:hover {
@@ -955,6 +960,7 @@
         <div id="schemaLine" class="schema">AN-FX-SVC-DEX-001 · chain 1 · schema 0.1</div>
       </div>
       <div class="top-actions">
+        <a id="backOperations" class="button" href="03_competition_operations_board_preview.html" hidden>Back to Operations</a>
         <button id="showJson" class="button" type="button">View JSON</button>
         <button class="button primary" type="button" disabled title="Implementation is not approved">Read-only Preview</button>
       </div>
@@ -1250,7 +1256,10 @@
     const graph = document.getElementById("graph");
     const caseList = document.getElementById("caseList");
     const filters = new Set(["confirmed", "context", "heuristic", "missing"]);
-    let activeKey = "dex";
+    const routeParams = new URLSearchParams(window.location.search);
+    const routeProblem = routeParams.get("problem");
+    const caseByProblem = {Q01: "dex", Q03: "auth", Q08: "freeze"};
+    let activeKey = caseByProblem[routeProblem] || (routeProblem ? "challenge" : "dex");
     let activeSelection = null;
 
     function esc(value) {
@@ -1462,6 +1471,8 @@
       });
     });
 
+    const fromOperations = routeParams.get("from") === "operations";
+    document.getElementById("backOperations").hidden = !fromOperations;
     const dialog = document.getElementById("jsonDialog");
     document.getElementById("showJson").addEventListener("click", () => dialog.showModal());
     document.getElementById("closeJson").addEventListener("click", () => dialog.close());

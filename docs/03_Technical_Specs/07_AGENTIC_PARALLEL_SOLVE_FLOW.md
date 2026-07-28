@@ -1,21 +1,25 @@
 # SCAN 2026 Agentic Parallel Solve Flow
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-27 00:54
-> Status: Draft 1 · Rules-Gated · Implementation Not Approved
+> Last Updated: 2026-07-28 10:24
+> Status: Draft 1 · AI-Native · Rules-Gated · Implementation Not Approved
 
 ## 1. 문서 목적
 
 이 문서는 SCAN 2026에서 여러 문제를 동시에 접수·분류·분석·검증하고,
 사람이 최종 답을 제출하기까지의 운영·오케스트레이션 계약을 정의한다.
 
-목표는 생성형 AI가 정답을 추측해 자동 제출하는 시스템이 아니다.
+SCAN은 AI Planner/Coordinator를 필수 실행 계층으로 사용한다. AI의 주된
+책임은 정답 문장을 추측하는 것이 아니라 해결 방법을 가설로 만들고, 필요한
+leaf job과 Python 도구 실행 계획을 구성하며, 실행 결과의 누락·충돌·다음
+행동을 추론하는 것이다.
 
-> 사람은 문제 입력·우선순위·최종 제출을 통제하고, Coordinator는 분석
-> 작업을 분해하며, Python 포렌식 엔진은 결정적 계산을 수행하고, 독립
+> 사람은 문제 입력·우선순위·최종 제출을 통제하고, AI Planner/Coordinator는
+> 분석 방법과 작업을 분해하며, Python 포렌식 엔진은 결정적 계산을 수행하고, 독립
 > Verifier는 원본 증거로 정답 후보를 재검증한다.
 
-이 문서는 구현 승인이 아니다. 생성형 AI·외부 API·사전 제작 도구 허용
-범위가 공식 규정에서 확인된 기능만 활성화한다.
+이 문서는 구현 승인이 아니다. AI 사용은 제품 요구사항으로 확정하며,
+공식 규정은 사용할 provider·model·외부 전송·사전 제작 도구의 실행 mode를
+결정한다.
 
 ## 2. 아키텍처 원칙
 
@@ -24,7 +28,7 @@
 ```mermaid
 flowchart TB
     USER["사람 Operator"] --> CONTROL["Competition Operations Board"]
-    CONTROL --> COORD["Coordinator"]
+    CONTROL --> COORD["AI Planner / Coordinator"]
     COORD --> WORKERS["Agent 또는 Human Worker"]
     WORKERS --> CORE["Python Forensics Core"]
     CORE --> RESULT["Analysis I/O 0.1 Leaf Result"]
@@ -34,7 +38,8 @@ flowchart TB
     USER --> CTFD["CTFd 수동 제출"]
 ```
 
-- Python 코어는 AI 없이 CLI에서 직접 실행할 수 있어야 한다.
+- Python 코어는 결정적 재현·검증을 위해 CLI에서 독립 실행할 수 있어야
+  하지만, `TASK-010` 전체 문제풀이 흐름은 AI Planner를 필수로 사용한다.
 - 에이전트는 승인된 CLI·port를 호출하며 코어의 계산 규칙을 복제하지 않는다.
 - Analysis I/O `0.1` result가 leaf 분석의 단일 source of truth다.
 - Operations Board는 결과를 지휘·집계하지만 새로운 온체인 사실을 만들지 않는다.
@@ -55,7 +60,7 @@ dependency로 둔다.
 
 | Role ID | 역할 | 책임 | 금지 |
 |:---|:---|:---|:---|
-| `ROLE-COORDINATOR` | 문제 분류·배정 | 요구 정답, 체인, 유형, 난이도, leaf job 계획 | 근거 없는 정답 확정 |
+| `ROLE-COORDINATOR` | AI Planner·문제 분류·배정 | 해결 방법 가설, 요구 정답, 체인, 유형, 난이도, leaf job 계획 | 근거 없는 정답 확정 |
 | `ROLE-EVM` | EVM 분석 | TX·receipt·log·call·state·프로토콜 해석 | 외부 귀속 단정 |
 | `ROLE-TRACER` | 자금 흐름 | N-hop, 분기·재병합, 브리지 후보, 종착지 | 휴리스틱을 확정 경로로 표시 |
 | `ROLE-OSINT` | 라벨·공식 맥락 | 공식 출처·주소 라벨·시점·반례 수집 | 비공개 데이터 무단 전송 |
@@ -67,9 +72,10 @@ dependency로 둔다.
 `ROLE-EVM`과 최종 `ROLE-VERIFIER`를 동시에 맡아 독립 검증을 통과했다고
 표시하면 안 된다.
 
-AI가 제한되면 `ROLE-COORDINATOR`, `ROLE-EVM`, `ROLE-TRACER`,
-`ROLE-OSINT`, `ROLE-VERIFIER`, `ROLE-REPORTER`를 사람 또는 직접 실행한
-Python worker가 담당한다. 역할 ID와 증거 계약은 유지한다.
+Rules Gate는 `ROLE-COORDINATOR`를 제거하지 않는다. 허용된 external 또는
+local AI provider·model·데이터 경계를 선택한다. 허용 가능한 AI mode가
+확정되지 않으면 전체 AI planning job을 `rules_gated`로 대기시키며, 사람이
+AI가 수행한 것처럼 plan을 대체해 full-mode 완료로 표시하지 않는다.
 
 ## 4. 식별자와 작업 단위
 
@@ -132,8 +138,8 @@ stateDiagram-v2
 | ID | 요구사항 |
 |:---|:---|
 | `REQ-OPS-IN-001` | 문제 원문, 제공 파일·URL, CTFd 문제 ID, 배점, 요구 답 형식을 원문과 구조화 필드로 함께 보존해야 한다. |
-| `REQ-OPS-IN-002` | 공개 전 문제·답안을 외부 AI·웹 서비스에 보내기 전에 Rules Gate를 통과해야 한다. |
-| `REQ-OPS-IN-003` | Coordinator의 유형·난이도·도구 추천은 운영 가설이며 확정 사실로 표시하면 안 된다. |
+| `REQ-OPS-IN-002` | AI Planner는 필수다. 공개 전 문제·답안을 외부 AI·웹 서비스에 보내기 전에 Rules Gate가 허용 provider·model·데이터 범위를 선택해야 한다. |
+| `REQ-OPS-IN-003` | AI Planner/Coordinator의 해결 방법·유형·난이도·도구 추천은 운영 가설이며 Python 실행 결과나 확정 사실로 표시하면 안 된다. |
 | `REQ-OPS-IN-004` | 문제별 우선순위는 배점·예상 시간·필수 dependency·현재 worker·source 상태와 사람이 지정한 값을 구분해야 한다. |
 
 ### 6.2 Queue와 worker
@@ -179,7 +185,7 @@ stateDiagram-v2
 | 전체 active job | CPU·memory·운영 복잡도 제한 | 낮은 우선순위 queued 유지 |
 | provider별 request | rate limit·ban 방지 | throttle·`Retry-After` 적용 |
 | chain별 archive call | 고비용 상태 조회 제한 | batching 또는 순차화 |
-| AI worker | 비용·정보 전송·중복 추론 제한 | 사람 승인 또는 대기 |
+| AI Planner·worker | 필수 planning의 비용·정보 전송·중복 추론 제한 | 허용 mode·budget 안에서 Queue 대기 |
 | OSINT fetch | ToS·외부 접촉 위험 제한 | Rules Gate·도메인별 제한 |
 
 ### 7.2 중복 제거
@@ -230,9 +236,16 @@ Competition Operations Board는 다음을 한 화면에서 보여야 한다.
 
 ## 10. 보안·규정·윤리 Gate
 
-- `RULE-AI-001`, `RULE-AUTO-001`, `RULE-PREBUILT-TOOL-001`,
-  `RULE-COLLAB-001`이 허용 범위를 제공하기 전 관련 worker를 기본 활성화하지
-  않는다.
+| 실행 상태 | 의미 | 허용 행동 |
+|:---|:---|:---|
+| `allowed` | 선택한 provider·model·data boundary·tool mode가 공식적으로 허용됨 | AI Planner 실행과 승인된 Python evidence job 배정 |
+| `rules_gated` | 허용 mode가 미확정 | 필수 AI planning job을 대기시키고 외부 I/O 0건 유지 |
+| `rule_restricted` | 요청한 mode가 공식적으로 금지·제한됨 | 해당 호출을 I/O 전에 거부하고 구조화 오류 보존; 다른 공식 허용 AI mode만 선택 |
+
+- `RULE-AI-001`, `RULE-PREBUILT-TOOL-001`, `RULE-DATA-001`은 AI 사용
+  여부가 아니라 허용 provider·model·전송 데이터·도구 mode를 결정한다.
+- 허용 AI mode가 확정되기 전에는 AI Planner job을 제거하지 않고
+  `rules_gated`로 대기시키며 외부 호출은 수행하지 않는다.
 - `RULE-DATA-001`이 불명확하면 문제 원문·첨부·답안을 외부 서비스에 보내지
   않는다.
 - `RULE-AUTO-SUBMIT-001`과 무관하게 본 Draft는 수동 제출만 허용한다.
@@ -245,7 +258,9 @@ Competition Operations Board는 다음을 한 화면에서 보여야 한다.
 
 | 제한 | 대체 경로 |
 |:---|:---|
-| 생성형 AI 금지 | 사람이 Coordinator·Reporter 역할, Python CLI worker 직접 실행 |
+| 허용 AI mode 미확정 | AI Planner job `rules_gated`, 외부 전송 0건, mode 확인 후 재개 |
+| 특정 AI provider 제한 | 규정상 허용된 local·external AI adapter로 교체 |
+| 모든 AI 사용 명시적 금지 | full AI-native Operations 실행 차단·Operator에게 규정 충돌 보고 |
 | 외부 API 제한 | 허용 RPC·offline cache·제공 데이터만 사용 |
 | Web UI 미구현 | terminal multiplexing과 결과 JSON·Markdown 사용 |
 | 일부 provider 장애 | 허용 fallback 또는 partial·checkpoint |
@@ -277,7 +292,8 @@ Degraded Mode에서도 Analysis I/O·evidence·source·human submission 계약�
 - 일부 worker·source 실패에도 확보한 증거가 있으면 문제는 `partial` 또는
   `review_required`가 될 수 있다.
 - 필수 정답 필드에 결정적 증거가 없으면 `submission_ready`가 될 수 없다.
-- Rules Gate가 제한하면 해당 기능은 실행 전에 `rule_restricted`로 차단한다.
+- Rules가 아직 미확정이면 job은 `rules_gated`로 대기하고, 요청한 mode의
+  제한이 확정되면 해당 호출은 실행 전에 `rule_restricted`로 거부한다.
 - 문제·worker 상태가 교착되거나 다른 문제의 데이터를 혼합하면 실패다.
 
 ## 13. 365 글로벌 평가 기준
@@ -286,14 +302,14 @@ Degraded Mode에서도 Analysis I/O·evidence·source·human submission 계약�
 |:---|:---|
 | Functionality | 여러 문제와 leaf 분석을 격리·병렬 실행하고 검증 Queue로 통합 |
 | Potential Impact | 한 사람이 반복 조회를 줄이고 제한 시간에 더 많은 문항 검토 |
-| Novelty | AI 답변보다 evidence-first 독립 검증과 역할 교체 가능성에 집중 |
+| Novelty | AI가 해결 방법을 계획하고 Python 증거 실행·독립 검증으로 답을 실증 |
 | UX | 문제·worker·검증·제출 상태를 한 운영 화면에서 통제 |
 | Open-source | CLI·Analysis I/O·role adapter가 교체 가능한 구조 |
 | Business Plan | 현재 대회 운영 명세이므로 수익 모델 N/A |
 
 ## 14. 구현 승격 Gate
 
-- [ ] 공식 Rules에서 활성화할 AI·자동화·외부 source 범위를 확인했다.
+- [ ] 공식 Rules에서 AI Planner에 사용할 provider·model·data·도구 mode를 확인했다.
 - [ ] Operations Board HTML Preview를 사용자가 검토했다.
 - [ ] 운영 manifest·verification·candidate persistence 범위를 승인했다.
 - [ ] worker 수·provider별 concurrency 기본값을 측정·승인했다.
