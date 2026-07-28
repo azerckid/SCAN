@@ -1,7 +1,7 @@
 # SCAN 2026 Competition Operations Board
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-27 01:29
-> Status: Draft 1 · Rules-Gated UI Track · Implementation Not Approved
+> Last Updated: 2026-07-28 09:56
+> Status: Draft 1 · Interactive Preview Updated · User Review Pending · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -244,20 +244,31 @@ CTA를 만들지 않는다. 제출 완료는 `Mark submitted`로 명확히 구�
 ## 11. HTML Preview 범위
 
 [Operations Board HTML Preview](./previews/03_competition_operations_board_preview.html)는
-다음을 정적으로 시연한다.
+다음을 로컬 demo state로 시연한다.
 
+- 문제 원문·ID·배점·답 형식·URL·첨부 파일명 접수와 문제 상세 연결
+- Rules Gate 확인 후 Coordinator 가설·선택 leaf job·사람 우선순위 승인
 - 6개 문제의 서로 다른 상태
 - 6개 역할 worker의 병렬 실행
+- 문제 우선순위 변경, plan 승인, pause·resume, role 재배정
+- worker의 `Tab`·`Shift+Tab` 이동과 `Enter`·`Space` 선택, 상세
+  stage·source budget·checkpoint
 - provider health·rate limit·cache
-- 검증 중·충돌·제출 준비 후보
+- 검증 중·충돌·제출 준비 후보와 independent verification 상세
+- candidate ID·answer format·confidence·evidence·uncertainty·recommendation
 - assignment·fallback·verification 축약 Activity Log
-- answer 복사와 `Mark submitted`의 분리
+- human approval, answer 복사, `Mark submitted`, CTFd 응답·시각 기록의 분리
 - AI `unclear`, auto-submit `OFF`
 - 전체 12개 중 현재 6개 표시 범위
 - problem row 선택에 따른 Detail 본문 전환
+- selector로 Loading·Empty·Stale·Rules unavailable 상태 확인
+- Problem Board 행으로 Partial·Failed 상태 확인
+- Investigation Workbench 이동과 Operations 선택 상태 복원
 
-실제 RPC·AI·CTFd·DB 호출은 없다. 표시 숫자는 UX 검토용 demo data이며
-성능·정확도 측정값이 아니다.
+입력·우선순위·승인·제출 기록은 브라우저 메모리의 demo state만 변경한다.
+실제 RPC·AI·CTFd·DB 호출과 credential 저장은 없다. 표시 숫자는 UX 검토용
+demo data이며 성능·정확도 측정값이 아니다. 이 Preview 보강은 `TASK-010`
+오케스트레이션 구현 완료를 의미하지 않는다.
 
 ## 12. 사용자 확인 Gate
 
@@ -267,7 +278,8 @@ CTA를 만들지 않는다. 제출 완료는 `Mark submitted`로 명확히 구�
 - [ ] `review_required`와 `submission_ready`가 혼동되지 않는다.
 - [ ] 답 복사와 CTFd 제출 완료 기록이 분리되어 있다.
 - [ ] AI·자동화 Rules 차단과 fallback이 보인다.
-- [ ] loading·empty·partial·failed 상태가 확인된다.
+- [ ] selector에서 loading·empty·stale·Rules unavailable 상태가 확인된다.
+- [ ] Problem Board에서 partial·failed 상태와 다음 행동이 확인된다.
 - [ ] Workbench로 증거를 열고 돌아오는 흐름이 이해된다.
 
 사용자 확인 전에는 UI-First Gate를 통과하지 않으며 `TASK-010` 구현을

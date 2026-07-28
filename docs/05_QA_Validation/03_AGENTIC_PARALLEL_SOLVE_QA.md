@@ -1,7 +1,7 @@
 # SCAN 2026 Agentic Parallel Solve QA
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-27 15:52
-> Status: Draft 1 · Scope Approved · Not Executed · Rules-Gated
+> Last Updated: 2026-07-28 09:56
+> Status: Draft 1 · Scope Approved · Interactive Preview Updated · Runtime Not Executed · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -126,14 +126,25 @@
 
 ## 6. UI Preview Gate
 
+- [ ] 문제 원문·ID·배점·답 형식·파일·URL을 입력하고 Coordinator 가설을 검토할 수 있다.
+- [ ] Operator가 leaf job·사람 우선순위를 승인한 후에만 Queue로 이동한다.
 - [ ] 6개 이상의 문제 상태를 한 화면에서 구분할 수 있다.
-- [ ] problem row와 worker 상태를 키보드로 탐색할 수 있다.
+- [ ] problem row는 `Tab`·`Enter`·`Space`, worker는
+  `Tab`·`Shift+Tab`·`Enter`·`Space`로 탐색할 수 있다.
+- [ ] priority 변경, pause·resume, 재배정이 다른 문제 상태를 변경하지 않는다.
 - [ ] Rules Gate·auto-submit off가 첫 화면에 보인다.
 - [ ] `review_required`와 `submission_ready`가 색상 없이 구분된다.
-- [ ] candidate의 전체 answer와 evidence 이동 경로가 있다.
-- [ ] loading·empty·partial·failed·stale 상태가 문서에 정의되어 있다.
-- [ ] Workbench 이동 후 Operations 상태가 유지되는 계약이 있다.
+- [ ] candidate의 전체 answer·format·confidence·uncertainty·recommendation과 evidence 이동 경로가 있다.
+- [ ] independent verifier ID·check 수·evidence refs·conflict가 표시된다.
+- [ ] human approval 전 `Mark submitted`가 비활성이고 승인 후 수동 결과·시각을 기록할 수 있다.
+- [ ] selector에서 loading·empty·stale·Rules unavailable 상태를 확인할 수 있다.
+- [ ] Problem Board 행에서 partial·failed 상태와 다음 행동을 확인할 수 있다.
+- [ ] Workbench 이동 후 선택 problem과 filter가 복원된다.
 - [ ] Preview의 숫자가 실측 성능·정확도로 오인되지 않는다.
+
+체크박스는 사용자 브라우저 검토 또는 자동화된 UI QA 실행 후에만 닫는다.
+HTML에 demo interaction이 존재한다는 사실만으로 `TASK-010` runtime QA를
+`pass`로 변경하지 않는다.
 
 ## 7. 365 글로벌 평가 기준
 
