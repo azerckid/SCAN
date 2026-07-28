@@ -1,6 +1,6 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 04:08
+> Last Updated: 2026-07-29 04:25
 > Status: EVM Fixture Common Replay Passed · Overall Partial
 
 ## 1. 목적
@@ -14,8 +14,9 @@ Planner가 필요한 능력을 제공하는지 검증하는 실행 체크리스�
 
 fixture 공통 9개 decoded summary와 primary trace는 성공했다. Alchemy의
 독립 trace는 HTTP 400으로 실패했다. credential 회전, rate/timeout·negative
-oracle 반례와 AI Planner capability는 아직 미실행이므로 최종 상태는
-`partial`이다.
+oracle 19개는 합성 offline 입력으로 두 번 통과했다. credential 회전,
+live rate/timeout 반례, 독립 trace와 AI Planner capability는 아직
+미실행이므로 최종 상태는 `partial`이다.
 
 ## 2. 실행 전 보안 Gate
 
@@ -59,7 +60,9 @@ oracle 반례와 AI Planner capability는 아직 미실행이므로 최종 상�
 | internal native inflow trace | pass | failed | Alchemy HTTP 400, 독립 trace unresolved |
 
 공통 9개 조회는 두 공급자의 raw response에서 각각 decode했다. 네 fixture는
-`verifying`으로 올렸지만, 위 trace와 §5 반례가 남아 `confirmed`는 아니다.
+`verifying`으로 올렸다. §5 합성 반례는 통과했지만 독립 trace,
+credential 회전, live rate/timeout·fallback 검증이 남아 `confirmed`는
+아니다.
 
 ## 4. 독립성·정확성 판정
 
@@ -77,16 +80,21 @@ oracle 반례와 AI Planner capability는 아직 미실행이므로 최종 상�
 
 | 반례 | 기대 결과 | 현재 |
 |:---|:---|:---:|
-| 실패 transaction | 성공 flow에서 제외 | not_executed |
-| 같은 signature의 무관 log | contract/topic scope로 제외 | not_executed |
-| 다른 token Transfer | 대상 token ledger에서 제외 | not_executed |
-| internal value 없음 | native internal flow 생성 금지 | not_executed |
-| trace unavailable | partial + 원인 보존 | not_executed |
-| historical/latest 차이 | 고정 block 값만 채점 | not_executed |
+| 실패 transaction | 성공 flow에서 제외 | pass / synthetic offline |
+| 같은 signature의 무관 log | contract/topic scope로 제외 | pass / synthetic offline |
+| 다른 token Transfer | 대상 token ledger에서 제외 | pass / synthetic offline |
+| internal value 없음 | native internal flow 생성 금지 | pass / synthetic offline |
+| trace unavailable | partial + 원인 보존 | pass / synthetic offline |
+| historical/latest 차이 | 고정 block 값만 채점 | pass / synthetic offline |
 
 이 표와 [Live Provider Readiness §7](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md),
 [TASK-012 Fixture 후보 보고서 §7](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md)에
 기록된 반례의 합집합이 최소 실행 범위다.
+
+합집합을 확장한 19개 oracle은
+[TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md)에
+고정했다. 이는 live provider의 timeout·rate-limit 또는 독립 trace 실행을
+대체하지 않는다.
 
 ## 6. AI Planner capability
 
@@ -139,3 +147,4 @@ AI Planner의 품질은 정답 문장과의 유사도로 채점하지 않는다.
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - automated 승격 기준
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 재현 대상 4개
 - **QA_Validation**: [Smoke Runner 준비 보고서](./26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - 코드·dry-run·network 0건 검증
+- **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 19개 offline 반례·결정성

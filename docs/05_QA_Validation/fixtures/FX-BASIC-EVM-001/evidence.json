@@ -139,7 +139,7 @@
   "uncertainty": {
     "candidate_only": false,
     "verifying": true,
-    "remaining": "Provider replay passed; checksum negative oracle and consumer contract remain"
+    "remaining": "Provider replay and offline checksum classification oracle passed; consumer contract remains"
   },
   "provenance_notes": "The candidate reuses a confirmed public transaction as a common benchmark point but derives BASIC-EVM answers from RPC object and historical code lookups."
 }

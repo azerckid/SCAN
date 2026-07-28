@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 04:08
+> Last Updated: 2026-07-29 04:25
 > Status: Approved 1.1 · Phase 2 Verifying Pack
 
 ## 1. 문서 목적
@@ -296,7 +296,7 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 확정 전 증거 | Publicnode TX·receipt·block, dRPC historical code |
 | 부분·실패 | RPC/code 누락은 partial; malformed 강제 변환·gas limit fee 계산은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE`; `DS-EXPLORER-EVM`은 보조 |
-| 승격 잔여 | checksum 반례, consumer contract |
+| 승격 잔여 | offline checksum 분류 통과, consumer contract 승인 |
 | 마지막 확인 | 2026-07-29 03:55 |
 
 ---
@@ -336,7 +336,7 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 확정 전 증거 | raw receipt Transfer + Blockscout ascending token-transfer range |
 | 부분·실패 | event만 있고 첫 순서 미입증은 partial; token/from/order 오선택은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` 또는 범위 logs archive |
-| 승격 잔여 | zero-value·다중 로그·pagination 반례 |
+| 승격 잔여 | offline 반례 통과, 검색·정렬·pagination consumer contract 승인 |
 | 마지막 확인 | 2026-07-29 03:55 |
 
 ---
@@ -356,7 +356,7 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 확정 전 증거 | Publicnode outer TX·Withdrawal, Blockscout internal call, DEX raw replay의 call index |
 | 부분·실패 | trace 누락은 partial; outer value만 답·실패 call 합산은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` 또는 trace RPC |
-| 승격 잔여 | 다른 독립 trace, 실패·복수 call 반례 |
+| 승격 잔여 | offline 실패·복수 call 반례 통과, 다른 독립 trace·consumer contract 승인 |
 | 마지막 확인 | 2026-07-29 03:55 |
 
 ## 7. 승격 기준
@@ -418,6 +418,9 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 9. primary archive·trace와 independent TX·receipt·block·filtered
    logs·historical state capability smoke를 통과했다. endpoint·API key는
    fixture·artifact·DB에 저장하지 않으며 credential 회전은 후속 Gate다.
+10. TASK-012 네 fixture의 합성 negative oracle 19개를 두 번 실행해
+    complete·partial·failed 결정성을 통과했다. 독립 trace와 제품 Analysis
+    type 승인은 별도다.
 
 ## 10. Related Documents
 
@@ -438,4 +441,5 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 - **QA_Validation**: [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) - 우선 구축 fixture 패키지
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - EVM Core 후보 4개와 승격 전 잔여 Gate
 - **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 계정 smoke·secret·독립성
+- **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 네 verifying fixture의 19개 offline 반례
 - **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 사전 fixture·cache와 source 허용 범위

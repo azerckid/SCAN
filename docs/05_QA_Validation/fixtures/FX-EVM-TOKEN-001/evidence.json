@@ -102,7 +102,7 @@
   "uncertainty": {
     "candidate_only": false,
     "verifying": true,
-    "remaining": "Independent eth_getLogs replay passed; zero-value and multi-log negative oracles remain"
+    "remaining": "Independent eth_getLogs replay and offline transfer negative oracles passed; consumer contract remains"
   },
   "provenance_notes": "The explorer range query establishes ordering while the raw receipt event establishes deterministic event fields. Neither source substitutes for the other."
 }
