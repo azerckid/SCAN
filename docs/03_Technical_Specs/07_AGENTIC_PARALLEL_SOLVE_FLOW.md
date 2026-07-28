@@ -1,6 +1,6 @@
 # SCAN 2026 Agentic Parallel Solve Flow
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 11:53
+> Last Updated: 2026-07-29 02:35
 > Status: AI-Native Contract Approved 1.0 · UI-First Gate Passed · Rules-Gated · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -264,6 +264,13 @@ Competition Operations Board는 다음을 한 화면에서 보여야 한다.
 | 외부 API 제한 | 허용 RPC·offline cache·제공 데이터만 사용 |
 | Web UI 미구현 | terminal multiplexing과 결과 JSON·Markdown 사용 |
 | 일부 provider 장애 | 허용 fallback 또는 partial·checkpoint |
+
+AI Planner 장애의 fallback은 `AI를 사용하지 않음`이 아니다. Rules가 허용한
+보조 provider 또는 local LLM Planner가 같은 구조화 plan·leaf 계약을
+이어받는다. 어느 경로도 사용할 수 없으면 `rules_gated` 또는
+`review_required`에 머물며, LLM 문장만으로 답·confirmed fact를 만들지 않는다.
+provider/model·token·비용·timeout smoke는
+[Live Provider Readiness](./10_LIVE_PROVIDER_READINESS.md)에서 관리한다.
 | 서브에이전트 실패 | job 재배정, 확보 artifact 재사용 |
 | 독립 검증 불가 | `review_required`, 제출 권고 보류 |
 
@@ -331,6 +338,7 @@ Degraded Mode에서도 Analysis I/O·evidence·source·human submission 계약�
 - **Technical_Specs**: [P0·V1 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - Python leaf 분석 요구사항
 - **Technical_Specs**: [Analysis I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - leaf result·evidence·source 계약
 - **Technical_Specs**: [TASK-010 Pre-Code Technical Brief](./08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) - 최소 필드·mutation·SQLite v2·동시성 구현 제안
+- **Technical_Specs**: [Live Provider Readiness](./10_LIVE_PROVIDER_READINESS.md) - AI Planner provider·budget·fallback Gate
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - `TASK-010` 구현 책임과 Gate
 - **Logic_Progress**: [Roadmap](../04_Logic_Progress/00_ROADMAP.md) - Rules 확인 후 비차단 운영 트랙
 - **QA_Validation**: [QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 병렬성·격리·검증·수동 제출 기준

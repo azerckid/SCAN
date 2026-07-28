@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 02:08
+> Last Updated: 2026-07-29 02:35
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -845,6 +845,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Atomic Tasks:
   - [ ] 네 문제의 공개 사례·reference answer·partial 조건을 확정한다.
     - [x] 후보 패키지 4개와 1차 재조회 결과를 작성했다.
+    - [x] live provider 후보 topology·secret·capability smoke 계약을 문서화했다.
+    - [ ] 실제 계정·plan을 준비하고 read-only capability smoke를 통과한다.
     - [ ] 독립 2차 재현·반례를 통과해 `confirmed`로 승격한다.
   - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 고정한다.
   - [ ] 기존 source/cache/decode/reconciliation을 재사용한 Analysis type을 설계한다.
@@ -861,12 +863,16 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-EVM-CORE 계약
   - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - Schema 변경 Gate
   - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - build/wrap 결정
+  - [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - archive·logs·trace·AI Planner 선행 Gate
 - Related QA Docs:
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-EVM-001/002
   - [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - Assisted 4개 기준선
   - [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 후보 4개·reference answer·source 장애
+  - [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·secret·독립성·반례
 - Implementation Preconditions:
   - [ ] 관련 문서와 네 문제의 입력·출력·상태를 확인한다.
+  - [ ] primary·independent 공급자와 필요 시 독립 trace 역할의 capability smoke를 통과한다.
+  - [ ] API key·endpoint가 저장소·DB·fixture·로그에 없음을 검증한다.
   - [ ] confirmed fixture와 reference answer를 확보한다.
   - [ ] CLI Preview 재검토와 사용자 구현 승인을 기록한다.
   - [ ] CLI 진입·전환·이탈과 loading·empty·partial·failed 표시를 확인한다.
@@ -887,7 +893,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Document Sync Check:
   - [ ] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - candidate 4개 선정 완료, 독립 재현·Schema·UI·사용자 구현 승인 전 착수 금지
+  - Status: PENDING - candidate 4개와 provider Gate 문서 완료, 실제 smoke·독립 재현·Schema·UI·사용자 구현 승인 전 착수 금지
   - Required References Read: 위 Related 문서 전체
   - Constraints: exact raw 수량, historical state block 고정, 귀속 미평가
   - Conflicts: None known
@@ -1361,6 +1367,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - **Technical_Specs**: [SQLite 논리 DB Schema](../03_Technical_Specs/01_DB_SCHEMA.md) - `TASK-004` 저장·artifact·resume 논리 계약
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - `TASK-010` 역할·Queue·검증·제출 요구사항
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - `TASK-012~019` 엔진·fixture·계약 경계
+- **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - Phase 2 source·AI Planner capability Gate
 - **Logic_Progress**: [문서 완료 Roadmap](./00_ROADMAP.md) - 구현보다 먼저 통과할 문서 Gate
 - **Logic_Progress**: [Coverage 확장 Execution Plan](./01_EXECUTION_PLAN.md) - Wave·Stop/Go·진척 측정
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 수용·회귀 기준
@@ -1368,3 +1375,4 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - **QA_Validation**: [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 6개 QA
 - **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - P0·V1 최종 통합 Gate 증거
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 새 분석기의 자동화 승격 Gate
+- **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - TASK-012 선행 smoke·독립성

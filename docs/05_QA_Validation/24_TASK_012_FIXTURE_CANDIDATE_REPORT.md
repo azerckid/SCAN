@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Fixture 후보 선정 보고서
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 02:08
+> Last Updated: 2026-07-29 02:35
 > Status: Candidate Pack 0.1 · Implementation Not Started
 
 ## 1. 목적과 판정
@@ -82,14 +82,16 @@ historical state, token transfer range, internal call에서 별도로 계산한�
 
 ## 7. 다음 Gate
 
-1. [ ] 네 패키지의 독립 공급자 2차 재현
-2. [ ] checksum·timestamp→block·zero-value Transfer·failed internal call 반례
-3. [ ] Analysis I/O version 영향과 네 result type 승인
-4. [ ] CLI Preview의 complete·partial·failed 표시 재검토
-5. [ ] TASK-012 Context Receipt `PASS`
-6. [ ] 사용자 구현 착수 승인
+1. [x] primary·independent·supporting provider 후보 topology와 smoke 계약 문서화
+2. [ ] 로컬 secret 구성 후 read-only capability smoke 통과
+3. [ ] 네 패키지의 독립 공급자 2차 재현
+4. [ ] checksum·timestamp→block·zero-value Transfer·failed internal call 반례
+5. [ ] Analysis I/O version 영향과 네 result type 승인
+6. [ ] CLI Preview의 complete·partial·failed 표시 재검토
+7. [ ] TASK-012 Context Receipt `PASS`
+8. [ ] 사용자 구현 착수 승인
 
-이 여섯 조건 전에는 `TASK-012`를 `In Progress`로 바꾸거나 코드를 작성하지
+이 여덟 조건 전에는 `TASK-012`를 `In Progress`로 바꾸거나 코드를 작성하지
 않는다.
 
 ## 8. 365 글로벌 평가 기준
@@ -116,6 +118,8 @@ historical state, token transfer range, internal call에서 별도로 계산한�
 - **Concept_Design**: [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 네 대상 문제의 완료·부분·실패 기준
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - source 역할과 장애 기록
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-EVM-CORE 계약
+- **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - 공급자 후보·secret·smoke 계약
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012 Context Lock
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - fixture 공통 생명주기
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-EVM-001/002
+- **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·독립성·반례
