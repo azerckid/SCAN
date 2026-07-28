@@ -1,0 +1,102 @@
+{
+  "$schema": "../../schemas/operations-contract.schema.json",
+  "operations_schema_version": "0.1",
+  "manifest": {
+    "competition_id": "COMP-SCAN-2026",
+    "operations_schema_version": "0.1",
+    "name": "SCAN 2026",
+    "phase": "qualifier",
+    "environment": "live",
+    "rules_snapshot_ref": "RULES-SNAPSHOT-20260728",
+    "status": "active",
+    "created_at": "2026-07-28T03:00:00Z",
+    "updated_at": "2026-07-28T03:00:00Z"
+  },
+  "problems": [
+    {
+      "problem_id": "PROB-Q01",
+      "competition_id": "COMP-SCAN-2026",
+      "title": "Captured challenge awaiting AI mode",
+      "original_text_artifact": "artifact://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "provided_urls": [],
+      "provided_file_artifacts": [],
+      "score": 100,
+      "answer_format": "flag{...}",
+      "priority": "normal",
+      "priority_source": "human",
+      "status": "captured",
+      "active_plan_id": "PLAN-Q01-GATED",
+      "created_at": "2026-07-28T03:00:00Z",
+      "updated_at": "2026-07-28T03:00:00Z"
+    }
+  ],
+  "ai_modes": [
+    {
+      "mode_id": "MODE-RULES-GATED",
+      "competition_id": "COMP-SCAN-2026",
+      "adapter_kind": "external",
+      "data_boundary": "redacted_external",
+      "tool_mode": "planning_only",
+      "rule_state": "rules_gated",
+      "affected_rule_ids": [
+        "RULE-AI",
+        "RULE-DATA"
+      ],
+      "rules_snapshot_ref": "RULES-SNAPSHOT-20260728",
+      "created_at": "2026-07-28T03:00:00Z"
+    }
+  ],
+  "plans": [
+    {
+      "plan_id": "PLAN-Q01-GATED",
+      "problem_id": "PROB-Q01",
+      "mode_id": "MODE-RULES-GATED",
+      "planner_job_id": "JOB-Q01-PLANNER",
+      "status": "rules_gated",
+      "problem_type_hypothesis": "not_assessed",
+      "method_hypothesis": "Await an allowed AI execution mode before planning.",
+      "assumptions": [],
+      "missing_inputs": [
+        "authoritative AI rule"
+      ],
+      "leaf_job_specs": [],
+      "created_at": "2026-07-28T03:00:00Z"
+    }
+  ],
+  "jobs": [
+    {
+      "job_id": "JOB-Q01-PLANNER",
+      "problem_id": "PROB-Q01",
+      "plan_id": "PLAN-Q01-GATED",
+      "role": "planner",
+      "job_type": "ai_planning",
+      "status": "waiting",
+      "priority": "normal",
+      "idempotency_key": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "attempt": 0,
+      "max_attempts": 1,
+      "queued_at": "2026-07-28T03:00:00Z"
+    }
+  ],
+  "verifications": [],
+  "candidates": [],
+  "submissions": [],
+  "events": [
+    {
+      "event_id": "OEV-Q01-CAPTURED",
+      "competition_id": "COMP-SCAN-2026",
+      "problem_id": "PROB-Q01",
+      "entity_type": "problem",
+      "entity_id": "PROB-Q01",
+      "event_type": "captured",
+      "actor_type": "operator",
+      "actor_id": "local_operator",
+      "to_status": "captured",
+      "safe_details_json": {
+        "source": "manual_input"
+      },
+      "created_at": "2026-07-28T03:00:00Z"
+    }
+  ],
+  "errors": []
+}
