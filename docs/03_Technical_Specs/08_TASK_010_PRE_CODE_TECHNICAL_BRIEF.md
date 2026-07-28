@@ -1,6 +1,6 @@
 # TASK-010 Pre-Code Technical Brief
 > Created: 2026-07-28 11:28
-> Last Updated: 2026-07-28 11:28
+> Last Updated: 2026-07-28 11:43
 > Status: Draft 1 · Review Pending · Runtime Not Implemented · Rules-Gated
 
 ## 1. 문서 목적
@@ -61,6 +61,21 @@ UI-First Gate는 통과했지만 이 문서의 승인은 runtime 실행 승인�
 TASK-010은 기존 slice 내부의 decoding·reconciliation을 복제하지 않는다.
 Operations 계층은 Analysis Request를 만들고 기존 실행 경계에 전달하며,
 Analysis Result의 result·evidence·source 참조만 소비한다.
+
+### 3.1 데이터 소스와 경계
+
+| 데이터 | 입력 경로 | 보존·실행 경계 |
+|:---|:---|:---|
+| CTFd 문제 원문·파일·URL | Operator 수동 입력 | 로컬 reviewed artifact; CTFd API·session 없음 |
+| AI Planner context | Problem의 data-boundary projection | mode·Rules가 허용한 adapter에만 전달 |
+| EVM TX·log·call·state | Analysis Request `source_policy`와 `DS-*` 등록부 | 기존 source adapter·cache·artifact 재사용 |
+| 공식 label·context | 허용된 `DS-OSINT-WEB` 등 | Analysis I/O context evidence로 분리 |
+| offline replay | confirmed fixture 3개·reviewed raw replay | network 0건, exact regression |
+| 운영 상태 | command와 worker outcome | SQLite v2 metadata·append-only event |
+
+미등록 provider나 problem별 임의 URL을 source adapter가 자동 호출하지 않는다.
+실제 source ID·provider·rate limit은
+[데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md)를 따른다.
 
 ## 4. 목표 아키텍처
 
@@ -129,11 +144,17 @@ src/scan_tool/
 모든 공개 ID는 생성 후 변경하지 않는다. DB 내부 row ID를 화면이나 evidence
 참조로 대신 사용하지 않는다.
 
+운영 공개 model과 export는 `operations_schema_version: 0.1`을 가진다.
+이 버전은 Analysis I/O `0.1`, fixture version, SQLite `user_version`과 서로
+독립적이다. 공통 필수 필드의 추가·삭제·의미 변경은 operations schema version
+승격과 contract probe를 요구한다.
+
 ### 5.1 `CompetitionManifest`
 
 | 필드 | 필수 | 의미 |
 |:---|:---:|:---|
 | `competition_id` | 예 | 운영 세션 ID |
+| `operations_schema_version` | 예 | 운영 공개 계약 `0.1` |
 | `name`, `phase` | 예 | 대회명과 qualifier/final |
 | `rules_snapshot_ref` | 예 | 적용 Rules Register 기준 |
 | `status` | 예 | setup/active/paused/closed |
@@ -188,7 +209,7 @@ Rules Gate는 `rule_state`를 바꾸며 기존 mode row를 덮어쓰지 않는�
 | `method_hypothesis` | 예 | 정답이 아닌 해결 방법 |
 | `assumptions`, `missing_inputs` | 예 | 명시적 불확실성 |
 | `leaf_job_specs` | 예 | 구조화 job 배열 |
-| `raw_output_artifact` | 예 | 원 AI 응답의 redacted artifact |
+| `raw_output_artifact` | 조건부 | proposed/approved plan의 redacted AI 응답; rules_gated에는 없음 |
 | `created_at`, `decided_at` | 예/조건부 | 생성·사람 승인 시각 |
 
 `leaf_job_specs`는 최소 `role`, `purpose`, `analysis_type`, `inputs_projection`,
@@ -243,7 +264,7 @@ dependency는 `job_dependencies(job_id, depends_on_job_id)`로 분리한다. 한
 | `created_at`, `updated_at` | 예 | 수명주기 시각 |
 
 `SubmissionRecord`는 `submission_id`, `candidate_id`, `operator_confirmed`,
-`response`(correct/incorrect/unknown), `submitted_at`, `note_artifact`만 가진다.
+`response`(correct/incorrect/unknown), `submitted_at`, 선택 `note_artifact`만 가진다.
 CTFd endpoint·credential·cookie·Authorization은 필드로 만들지 않는다.
 
 ### 5.8 `OperationEvent`
@@ -289,7 +310,7 @@ verification·candidate version을 만든다.
 | `build_candidate` | Reporter | evidence results 존재 | candidate draft+refs+event |
 | `verify_candidate` | 독립 Verifier | candidate draft/review_required | checks+status+event |
 | `promote_candidate` | Application Gate | verification pass | submission_ready+event |
-| `mark_submitted` | Operator | submission_ready | submission row+candidate submitted+event |
+| `mark_submitted` | Operator | submission_ready | submission row+candidate/problem submitted+event |
 
 `promote_candidate`는 UI·AI adapter가 직접 호출할 수 없다. Application Gate가
 참조 무결성, 독립성, 필수 check를 다시 검사한다.
@@ -304,6 +325,12 @@ verification·candidate version을 만든다.
 6. AI 자연어 출력은 result/evidence ref가 될 수 없다.
 7. `submitted`는 Operator command에서만 생성된다.
 8. `rules_gated`는 대기 상태이고 `rule_restricted`는 금지된 mode 호출 거부다.
+9. `fake_qa` adapter는 synthetic/test competition에서만 `allowed`일 수 있다.
+
+허용 AI mode가 미확정이면 Problem은 `captured`, Plan은 `rules_gated`,
+Planner Job은 `waiting`으로 유지한다. mode가 `allowed`가 되면 같은 Problem에
+새 immutable mode snapshot을 연결하고 Planner Job을 `queued`로 전환한다.
+Problem을 `triaged`로 올리는 것은 구조화 plan이 생성된 뒤다.
 
 ## 7. SQLite schema v2 제안
 
@@ -379,6 +406,17 @@ PlannerPort.plan(
 fake adapter는 정해진 문제 유형·leaf plan을 반환해 scheduler와 Gate를
 검증한다. AI-native 제품 계약을 삭제하지 않지만 실제 AI 품질 증거도 아니다.
 
+### 8.2.1 adapter·data boundary 조합
+
+| `adapter_kind` | 허용 `data_boundary` | 금지 |
+|:---|:---|:---|
+| fake_qa | synthetic_only | 실제 문제 원문·첨부 |
+| local | local_only | external 전송으로 표시되는 boundary |
+| external | redacted_external/approved_problem_data | synthetic_only/local_only를 외부 전송 허가로 오해 |
+
+`approved_problem_data`는 Rules 원문과 Operator 승인이 모두 있을 때만 허용한다.
+adapter와 boundary 조합이 표와 다르면 Planner I/O 전에 거부한다.
+
 ### 8.3 mode 판정
 
 | 상태 | runtime 동작 |
@@ -394,7 +432,7 @@ full TASK-010 flow를 완료로 표시하지 않는다.
 
 ### 9.1 scheduler
 
-Python `asyncio.TaskGroup`, bounded `asyncio.Queue`, 역할별 semaphore를
+Python `asyncio.TaskGroup`, bounded `asyncio.PriorityQueue`, 역할별 semaphore를
 기본 구현 후보로 한다. 외부 distributed queue는 V1에서 사용하지 않는다.
 
 정렬은 `human priority → queued_at → job_id`의 결정적 순서를 사용한다.
@@ -421,14 +459,16 @@ AI 추천 점수는 표시할 수 있지만 사람 우선순위를 조용히 덮
 - dependency가 모두 `complete`가 아니면 reconciliation/verifier를 실행하지 않는다.
 - optional leaf 실패는 problem을 `partial`, required leaf 실패는
   `review_required` 또는 `failed`로 보낸다.
-- 한 problem의 exception은 해당 TaskGroup 경계에서 result로 변환하고 다른
-  problem TaskGroup을 cancel하지 않는다.
+- worker wrapper는 예상 예외를 `JobOutcome`으로 변환한다. 처리되지 않은
+  leaf 예외가 `TaskGroup` sibling과 다른 problem TaskGroup을 연쇄 cancel하지
+  않도록 problem별 supervisor 경계를 둔다.
 - pause는 새 job 배정을 막고 running leaf에 cooperative cancel을 요청한 뒤
   완료 checkpoint를 보존한다.
 
 ### 9.4 source request dedup
 
-- 기존 canonical source request fingerprint와 block tag를 key로 사용한다.
+- 기존 `build_cache_key(chain_id, SourceRequest)`와 동일하게 chain ID,
+  capability·method·정규화 params·block tag의 canonical hash를 key로 사용한다.
 - 같은 in-flight key는 새 외부 호출 대신 같은 future를 구독한다.
 - 완료된 값은 기존 cache/artifact를 사용하되 problem별 evidence link를 만든다.
 - mutable `latest`·웹 문서·실패 응답은 immutable 공유하지 않는다.
@@ -474,6 +514,7 @@ raw replay hash를 독립 입력으로 사용한다. 같은 자연어 결론을 
 
 | 영역 | 최소 필드 |
 |:---|:---|
+| contract | `operations_schema_version: 0.1`, snapshot ID, generated_at |
 | competition | ID, phase, elapsed/remaining 입력, rules snapshot |
 | ai_mode | provider, model, data boundary, tool mode, rule state |
 | summary | total/active/verifying/ready/submitted/queue age |
@@ -595,6 +636,7 @@ data 전송은 `allowed` mode가 확정되기 전까지 `rules_gated`다.
 - **UI_Screens**: [Operations Board Preview](../02_UI_Screens/previews/03_competition_operations_board_preview.html) - UI-First Gate 기준선
 - **Technical_Specs**: [Python 개발 원칙](./00_DEVELOPMENT_PRINCIPLES.md) - 계층·품질·보안 원칙
 - **Technical_Specs**: [SQLite DB Schema](./01_DB_SCHEMA.md) - schema v1·artifact 기준선
+- **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - source ID·provider·rate limit·보존 제약
 - **Technical_Specs**: [Analysis I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - leaf request/result 계약
 - **Technical_Specs**: [Agentic Parallel Solve Flow](./07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - `REQ-OPS-*` 규범
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - `TASK-010` 구현 책임

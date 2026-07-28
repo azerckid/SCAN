@@ -85,7 +85,7 @@ Expected final outputs include:
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
-PASS repository traceability: 711 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
+PASS repository traceability: 713 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
 PASS repository security scan: 51 runtime/evidence files
 ```
 
