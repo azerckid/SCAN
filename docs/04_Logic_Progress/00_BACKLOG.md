@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 13:55
-> Status: TASK-001~009 Done · TASK-010 OPS-IMPL-01~03 Done · OPS-IMPL-04~08 ToDo
+> Last Updated: 2026-07-28 14:23
+> Status: TASK-001~009 Done · TASK-010 OPS-IMPL-01~04 Done · OPS-IMPL-05~08 ToDo
 
 ## 1. 문서 목적
 
@@ -548,7 +548,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 
 ### [ ] TASK-010: AI-native Rules-gated 병렬 문제풀이 Operations 구현
 
-- Status: Partial Implementation · OPS-IMPL-01~03 Done · Rules-Gated
+- Status: Partial Implementation · OPS-IMPL-01~04 Done · Rules-Gated
 - Priority: Tournament Operations · Conditional
 - Depends On: TASK-005, TASK-009, Operations Board Preview 승인;
   live AI mode만 공식 Rules 확인 필요
@@ -565,9 +565,9 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [ ] AI Planner/Coordinator·EVM·Tracer·OSINT·Verifier·Reporter role adapter를 정의한다.
   - [ ] AI plan에 따라 human-approved Python CLI worker가 evidence job을 실행하게 한다.
   - [ ] 문제 간 workspace·result·checkpoint·candidate를 격리한다.
-  - [ ] 문제 내부 독립 leaf job을 제한된 동시성으로 실행한다.
-  - [ ] source request idempotency·dedup·provider별 concurrency budget을 구현한다.
-  - [ ] worker 실패를 해당 job·dependency에만 전파한다.
+  - [x] 문제 내부 독립 leaf job을 제한된 동시성으로 실행한다.
+  - [x] source request idempotency·in-flight dedup·capability별 concurrency budget을 구현한다.
+  - [x] worker 실패를 해당 job·dependency에만 전파한다.
   - [ ] conflict·missing evidence·self-check를 `review_required`로 보낸다.
   - [ ] 독립 Verifier가 raw evidence를 재조회한 뒤에만 candidate를 승격한다.
   - [ ] Operations Board의 problem·worker·verification·submission 상태를 연결한다.
@@ -608,6 +608,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] `OPS-IMPL-01` 구현 착수를 별도로 승인받았다.
   - [x] 후속 `OPS-IMPL-02` 구현 착수를 별도로 승인받았다.
   - [x] 후속 `OPS-IMPL-03` 구현 착수를 별도로 승인받았다.
+  - [x] 후속 `OPS-IMPL-04` 구현 착수를 별도로 승인받았다.
 - Acceptance Criteria:
   - [ ] 두 개 이상의 문제를 동시에 처리하며 상태·결과·candidate가 격리된다.
   - [ ] 모든 문제에 AI method hypothesis와 승인된 leaf job plan이 존재한다.
