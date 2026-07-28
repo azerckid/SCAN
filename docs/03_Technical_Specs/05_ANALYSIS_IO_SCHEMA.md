@@ -1,6 +1,6 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-28 11:28
+> Last Updated: 2026-07-29 04:58
 > Status: Contract Approved 0.1 · TASK-002·005·006·007·008·009 Applied
 > Schema Version: 0.1
 
@@ -321,6 +321,11 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
 16. `TASK-009`에서 공개 오류 enum 11개 전체의 status·exit code, 세 fixture
     result 결정성, result→evidence→source 참조를 회귀했다.
 17. 계약 변경이 없어 Schema 버전은 `0.1`을 유지한다.
+18. `TASK-012`는 기존 `0.1`을 암묵적으로 확장하지 않고, 격리된
+    `evm_core` `0.2-draft` 제안과 4개 query kind·12개
+    complete/partial/failed 사례·14개 Schema probe를 작성했다. 명시적 승인
+    전에는 `0.1` 계약과
+    runtime `AnalysisType`을 변경하지 않는다.
 
 ## 12. Related Documents
 
@@ -335,6 +340,7 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - Pydantic·artifact·adapter 결정
 - **Technical_Specs**: [Agentic Parallel Solve Flow](./07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - leaf analysis와 운영 manifest의 경계
 - **Technical_Specs**: [TASK-010 Pre-Code Technical Brief](./08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) - Analysis I/O 0.1을 유지하는 운영 model·storage 경계
+- **Technical_Specs**: [TASK-012 Analysis Contract Proposal](./11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - `evm_core` 0.2 Draft와 0.1 비변경 경계
 - **UI_Screens**: [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 여러 leaf result의 운영 상태 표시
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - model·Schema 구현 작업과 완료 기준
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 변환 대상 confirmed fixture

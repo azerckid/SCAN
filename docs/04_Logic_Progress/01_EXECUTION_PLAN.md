@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 04:32
+> Last Updated: 2026-07-29 04:58
 > Status: Proposed 0.1 · No Implementation Approval
 
 ## 1. 목적
@@ -45,11 +45,14 @@
 - [x] 네 fixture의 공통 9개 조회를 두 공급자에서 재현하고 decoded 일치를
   확인해 `verifying`으로 승격한다.
 - [x] 네 fixture의 합성 negative oracle 24개를 두 번 실행해 결정성을 고정한다.
+- [x] 격리된 `evm_core` `0.2-draft`의 4개 query kind와
+  complete·partial·failed 12개 사례·14개 Schema probe를 작성하고
+  Analysis I/O `0.1` 비변경을 확인한다.
 - [ ] 독립 trace와 rate-limit·timeout·unsupported 반례를 실행한다.
 - [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만 `confirmed` 승격한다.
-- [ ] 네 문제 입력·정답 필드와 partial 조건을 승인한다.
+- [ ] 네 문제 입력·정답 필드와 partial 조건 제안을 승인한다.
 - [ ] 기존 EVM decoder·source·cache 재사용 범위를 확인한다.
-- [ ] 네 문제를 하나의 범용 엔진으로 처리할 최소 Analysis type을 결정한다.
+- [ ] 제안된 `evm_core` Analysis type과 Analysis I/O 정식 version·migration을 승인한다.
 - [ ] exact·evidence·determinism·negative oracle 회귀를 통과한다.
 
 ### [ ] Wave 2 — NFT·Proxy와 PATH
@@ -119,6 +122,7 @@
 - **UI_Screens**: [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - path·timeline UX 후보
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - Work Package 계약
 - **Technical_Specs**: [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 공개 계약 변경 Gate
+- **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - EVM Core 0.2 Draft와 0.1 비변경 검증
 - **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - Wave 1 source·AI Planner 선행 Gate
 - **Logic_Progress**: [Backlog](./00_BACKLOG.md) - TASK-012~019 상태
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 승격 검증 기준

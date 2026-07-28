@@ -38,6 +38,10 @@ COMMANDS = (
         sys.executable,
         "scripts/verify_task_012_negative_oracles.py",
     ),
+    (
+        sys.executable,
+        "scripts/check_task_012_analysis_contract_proposal.py",
+    ),
 )
 
 
