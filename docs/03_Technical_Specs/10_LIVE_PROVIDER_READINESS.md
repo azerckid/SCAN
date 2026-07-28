@@ -1,6 +1,6 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 03:39
+> Last Updated: 2026-07-29 03:46
 > Status: Pre-event Smoke Partial Pass · Credential Rotation Pending · Competition Rules Unclear
 
 ## 1. 목적
@@ -126,8 +126,8 @@ uv run python scripts/smoke_live_provider.py --role primary
 실제 호출은 `--execute`, `--rules-status allowed`, 역할별 endpoint 환경변수가
 모두 있어야 열린다. primary·verify endpoint는 2026-07-29 03:32 KST에 로컬
 `.env.local`로 구성됐지만 공식 Rules가 `unclear`이므로 live smoke는
-실행하지 않았다. trace endpoint는 아직 미설정이다. runner는 기존 HTTPX
-JSON-RPC adapter·content-addressed artifact·secret guard를 재사용하며
+**03:32 KST 당시에는** 실행하지 않았다. trace endpoint는 아직 미설정이다.
+runner는 기존 HTTPX JSON-RPC adapter·content-addressed artifact·secret guard를 재사용하며
 `eth_sendRawTransaction`이나 서명 method를 포함하지 않는다.
 
 두 endpoint credential은 설정 과정에서 대화 채널에 노출됐다. 사용자는
