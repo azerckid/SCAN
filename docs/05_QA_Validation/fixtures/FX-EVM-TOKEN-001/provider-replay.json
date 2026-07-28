@@ -1,0 +1,34 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-EVM-TOKEN-001",
+  "captured_at": "2026-07-28T18:54:34.101826+00:00",
+  "status": "verifying",
+  "request_scope": {
+    "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "from_topic": "0x000000000000000000000000a406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+    "from_block": "0xfdf1d0",
+    "to_block": "0xfdf1d0"
+  },
+  "providers": [
+    {
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "raw_sha256": "16d112d2850380f01c6f76914afc60eac76e7c6a1426662fe8debf31ba194288"
+    },
+    {
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "raw_sha256": "65f78f47eaee84acdada902dd06ea673504bffeeb1382da8a9458a31e83c3001"
+    }
+  ],
+  "decoded_match": {
+    "count": 1,
+    "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+    "transaction_index": 104,
+    "log_index": 275,
+    "to": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+    "amount_raw": "25000000000"
+  },
+  "remaining_gate": [
+    "zero-value transfer negative oracle",
+    "multiple-log ordering and pagination oracle"
+  ]
+}

@@ -1,7 +1,7 @@
 # Fixture: FX-BASIC-EVM-001
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 02:08
-> Status: Candidate
+> Last Updated: 2026-07-29 03:55
+> Status: Verifying
 
 ## 1. 목적
 
@@ -18,7 +18,7 @@ Ethereum 입력 문자열을 주소, transaction hash, block hash/number와 잘�
 | 기준 TX | `0xbbdaad89...55fa5` |
 | EOA | `0xA406bC6E...A7FDF` |
 | Contract | `0xEf1c6E67...4BF6B` |
-| 상태 | `candidate` — 두 번째 독립 재현 전 |
+| 상태 | `verifying` — QuickNode·Alchemy decoded 결과 일치 |
 | 재사용 기준점 | confirmed `FX-SVC-DEX-001`의 공개 TX |
 
 ## 3. 채점 범위
@@ -32,9 +32,12 @@ Ethereum 입력 문자열을 주소, transaction hash, block hash/number와 잘�
 
 ## 4. 승격 전 잔여
 
-1. transaction·receipt·block·code 조회를 다른 공급자에서 한 번 더 재현한다.
-2. EIP-55 checksum positive/negative 반례를 별도 검증한다.
-3. candidate fixture를 소비할 Analysis type과 오류 계약을 승인한다.
+1. [x] transaction·receipt·block·code를 QuickNode·Alchemy에서 재현했다.
+2. [ ] EIP-55 checksum positive/negative 반례를 별도 검증한다.
+3. [ ] fixture를 소비할 Analysis type과 오류 계약을 승인한다.
+
+Provider별 raw SHA-256과 일치 결과는 [provider-replay.json](./provider-replay.json)에
+고정했다.
 
 ## 5. Related Documents
 

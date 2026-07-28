@@ -89,10 +89,10 @@ DOC-M3 결정에 따라 `Deferred`, 4개는 TASK-012 Phase 2 `candidate`로
 | FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | V1 기준선 | FREEZE, state/logs |
 | FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | Deferred | RECON, PRICE, 다주소 집계 |
 | FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | Deferred | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
-| [FX-BASIC-EVM-001](./fixtures/FX-BASIC-EVM-001/README.md) | BASIC-EVM-001 | 1 | 후보 | Phase 2 candidate | EVM-TX, block, code |
-| [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 후보 | Phase 2 candidate | EVM-STATE, decimals |
-| [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 후보 | Phase 2 candidate | EVM-LOG, first ordering |
-| [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | EVM-TOKEN-002 | 1 | 후보 | Phase 2 candidate | EVM-TRACE, native sum |
+| [FX-BASIC-EVM-001](./fixtures/FX-BASIC-EVM-001/README.md) | BASIC-EVM-001 | 1 | 검증 중 | Phase 2 provider replay pass | EVM-TX, block, code |
+| [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 검증 중 | Phase 2 provider replay pass | EVM-STATE, decimals |
+| [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 검증 중 | Phase 2 provider replay pass | EVM-LOG, first ordering |
+| [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | EVM-TOKEN-002 | 1 | 검증 중 | Primary trace pass, independent blocked | EVM-TRACE, native sum |
 
 ## 6. Fixture 상세
 
@@ -285,7 +285,7 @@ raw replay를 기준 정답·provenance 원본으로 사용한다.
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | BASIC-EVM-001 |
-| 상태 | 후보 — Phase 2 candidate, 공개 값 1차 재조회 완료 |
+| 상태 | 검증 중 — QuickNode·Alchemy object/code replay 일치 |
 | 패키지 | [FX-BASIC-EVM-001](./fixtures/FX-BASIC-EVM-001/README.md) |
 | 데이터 형태 | 공개 온체인 / JSON fixture |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -295,8 +295,8 @@ raw replay를 기준 정답·provenance 원본으로 사용한다.
 | 확정 전 증거 | Publicnode TX·receipt·block, dRPC historical code |
 | 부분·실패 | RPC/code 누락은 partial; malformed 강제 변환·gas limit fee 계산은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE`; `DS-EXPLORER-EVM`은 보조 |
-| 승격 잔여 | 독립 공급자 2차 재현, checksum 반례, raw replay |
-| 마지막 확인 | 2026-07-29 02:08 |
+| 승격 잔여 | checksum 반례, consumer contract |
+| 마지막 확인 | 2026-07-29 03:55 |
 
 ---
 
@@ -305,7 +305,7 @@ raw replay를 기준 정답·provenance 원본으로 사용한다.
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | BASIC-EVM-002 |
-| 상태 | 후보 — Phase 2 candidate, 공개 값 1차 재조회 완료 |
+| 상태 | 검증 중 — QuickNode·Alchemy historical state 일치 |
 | 패키지 | [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) |
 | 데이터 형태 | 공개 historical state / JSON fixture |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -315,8 +315,8 @@ raw replay를 기준 정답·provenance 원본으로 사용한다.
 | 확정 전 증거 | dRPC `eth_getBalance`, historical `balanceOf`, `decimals`; Publicnode block |
 | 부분·실패 | archive/decimals 누락은 partial; latest 대체·정밀도 손실은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-ARCHIVE`, `DS-EVM-RPC-PUBLIC` |
-| 승격 잔여 | 독립 archive 2차 재현, timestamp→block 반례, raw replay |
-| 마지막 확인 | 2026-07-29 02:08 |
+| 승격 잔여 | timestamp→block 반례, archive_required contract |
+| 마지막 확인 | 2026-07-29 03:55 |
 
 ---
 
@@ -325,7 +325,7 @@ raw replay를 기준 정답·provenance 원본으로 사용한다.
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-TOKEN-001 |
-| 상태 | 후보 — Phase 2 candidate, 첫 순서 독립 입증 미완료 |
+| 상태 | 검증 중 — QuickNode·Alchemy exact block/filter 1건 일치 |
 | 패키지 | [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) |
 | 데이터 형태 | 공개 receipt event + explorer range / JSON fixture |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -335,8 +335,8 @@ raw replay를 기준 정답·provenance 원본으로 사용한다.
 | 확정 전 증거 | raw receipt Transfer + Blockscout ascending token-transfer range |
 | 부분·실패 | event만 있고 첫 순서 미입증은 partial; token/from/order 오선택은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` 또는 범위 logs archive |
-| 승격 잔여 | 독립 `eth_getLogs`, zero-value·다중 로그 반례, raw replay |
-| 마지막 확인 | 2026-07-29 02:08 |
+| 승격 잔여 | zero-value·다중 로그·pagination 반례 |
+| 마지막 확인 | 2026-07-29 03:55 |
 
 ---
 
@@ -345,7 +345,7 @@ raw replay를 기준 정답·provenance 원본으로 사용한다.
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-TOKEN-002 |
-| 상태 | 후보 — Phase 2 candidate, 독립 trace 미완료 |
+| 상태 | 검증 중 — primary trace 성공, Alchemy trace HTTP 400 |
 | 패키지 | [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) |
 | 데이터 형태 | 공개 TX·receipt·internal call / JSON fixture |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -355,8 +355,8 @@ raw replay를 기준 정답·provenance 원본으로 사용한다.
 | 확정 전 증거 | Publicnode outer TX·Withdrawal, Blockscout internal call, DEX raw replay의 call index |
 | 부분·실패 | trace 누락은 partial; outer value만 답·실패 call 합산은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` 또는 trace RPC |
-| 승격 잔여 | 독립 `debug_traceTransaction`, 실패·복수 call 반례, 자체 raw replay |
-| 마지막 확인 | 2026-07-29 02:08 |
+| 승격 잔여 | 다른 독립 trace, 실패·복수 call 반례 |
+| 마지막 확인 | 2026-07-29 03:55 |
 
 ## 7. 승격 기준
 

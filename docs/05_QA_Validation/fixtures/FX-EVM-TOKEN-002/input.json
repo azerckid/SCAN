@@ -4,7 +4,7 @@
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-TOKEN-002",
   "problem_id": "EVM-TOKEN-002",
-  "status": "candidate",
+  "status": "verifying",
   "chain": {
     "name": "ethereum",
     "chain_id": 1

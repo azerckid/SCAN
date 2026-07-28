@@ -3,8 +3,9 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-TOKEN-002",
-  "status": "candidate",
-  "captured_at": "2026-07-28T17:08:25Z",
+  "status": "verifying",
+  "captured_at": "2026-07-28T18:54:32.580829Z",
+  "provider_replay_file": "provider-replay.json",
   "event_evidence": [
     {
       "evidence_id": "EV-TOKEN-INTERNAL-WITHDRAWAL",
@@ -62,6 +63,23 @@
   ],
   "sources": [
     {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "PROVIDER-EVM-PRIMARY",
+      "methods": ["eth_getTransactionByHash", "eth_getTransactionReceipt", "debug_traceTransaction"],
+      "retrieved_at": "2026-07-28T18:54:32.580829Z",
+      "replay_manifest": "provider-replay.json"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "PROVIDER-EVM-TRACE-VERIFY",
+      "methods": ["debug_traceTransaction"],
+      "retrieved_at": "2026-07-28T18:50:32.004599Z",
+      "outcome": "failed",
+      "http_status": 400,
+      "failure_kind": "permanent",
+      "replay_manifest": "provider-replay.json"
+    },
+    {
       "source_id": "DS-EVM-RPC-PUBLIC",
       "provider": "ethereum.publicnode.com",
       "endpoint": "https://ethereum.publicnode.com",
@@ -90,8 +108,9 @@
     "internal_amount_matches_withdrawal": true
   },
   "uncertainty": {
-    "candidate_only": true,
-    "remaining": "Independent debug trace replay and failed/multiple-call negative cases"
+    "candidate_only": false,
+    "verifying": true,
+    "remaining": "Primary debug trace passed; independent trace failed and negative cases remain"
   },
   "provenance_notes": "The internal call is the scoring evidence for native ETH inflow. The WETH withdrawal event is retained only as an amount cross-check."
 }
