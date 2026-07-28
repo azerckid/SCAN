@@ -200,7 +200,10 @@ class CliRuntime:
                 f"{analysis_label} analysis requires --evidence RAW_REPLAY.json in offline mode."
             )
         if replay_body is None:
-            assert replay_path is not None
+            if replay_path is None:
+                raise AnalysisUnavailable(
+                    f"The {analysis_label} replay evidence file is unavailable."
+                )
             try:
                 replay_body = replay_path.read_bytes()
             except OSError as error:

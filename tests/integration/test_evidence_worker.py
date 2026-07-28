@@ -4,9 +4,11 @@ import asyncio
 import copy
 import hashlib
 import json
+import time
 from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
+from threading import Lock
 
 import pytest
 
@@ -89,6 +91,36 @@ class StaticEvidencePort:
         assert replay_sha256
         assert self.response is not None
         return self.response
+
+
+class TrackingEvidenceWorker(InProcessEvidenceWorker):
+    def __init__(self, root: Path) -> None:
+        super().__init__(root)
+        self.active = 0
+        self.max_active = 0
+        self._tracking_lock = Lock()
+
+    def _analyze_locked(
+        self,
+        workspace_key: str,
+        request: AnalysisRequest,
+        replay_body: bytes,
+        replay_sha256: str,
+    ) -> EvidenceAdapterResponse:
+        with self._tracking_lock:
+            self.active += 1
+            self.max_active = max(self.max_active, self.active)
+        try:
+            time.sleep(0.02)
+            return super()._analyze_locked(
+                workspace_key,
+                request,
+                replay_body,
+                replay_sha256,
+            )
+        finally:
+            with self._tracking_lock:
+                self.active -= 1
 
 
 def _request(name: str) -> AnalysisRequest:
@@ -269,6 +301,50 @@ def test_completed_analysis_is_reused_without_duplicate_rows(tmp_path: Path) -> 
     assert second.event.safe_details_json["reused"] is True
 
 
+def test_same_problem_evidence_jobs_are_serialized(tmp_path: Path) -> None:
+    adapter = TrackingEvidenceWorker(tmp_path / "workspaces")
+
+    async def run_workers() -> tuple[EvidenceAdapterResponse, EvidenceAdapterResponse]:
+        dex_replay = _replay("dex")
+        auth_replay = _replay("auth")
+        return await asyncio.gather(
+            adapter.analyze(
+                workspace_key="PROB-MULTI",
+                request=_request("dex"),
+                replay_body=dex_replay.body,
+                replay_sha256=dex_replay.sha256,
+            ),
+            adapter.analyze(
+                workspace_key="PROB-MULTI",
+                request=_request("auth"),
+                replay_body=auth_replay.body,
+                replay_sha256=auth_replay.sha256,
+            ),
+        )
+
+    dex_response, auth_response = asyncio.run(run_workers())
+
+    assert adapter.max_active == 1
+    assert dex_response.result.root.status is AnalysisStatus.COMPLETE
+    assert auth_response.result.root.status is AnalysisStatus.COMPLETE
+
+
+def test_workspace_accepts_maximum_problem_id_length(tmp_path: Path) -> None:
+    adapter = InProcessEvidenceWorker(tmp_path / "workspaces")
+    replay = _replay("dex")
+
+    response = asyncio.run(
+        adapter.analyze(
+            workspace_key="PROB-" + ("A" * 64),
+            request=_request("dex"),
+            replay_body=replay.body,
+            replay_sha256=replay.sha256,
+        )
+    )
+
+    assert response.result.root.status is AnalysisStatus.COMPLETE
+
+
 def test_completed_analysis_reuse_rejects_changed_approved_replay(
     tmp_path: Path,
 ) -> None:
@@ -299,6 +375,7 @@ def test_completed_analysis_reuse_rejects_changed_approved_replay(
     (
         "hash",
         "restricted",
+        "online",
         "unapproved_plan",
         "projection_mismatch",
         "paused_competition",
@@ -323,6 +400,11 @@ def test_pre_call_gate_rejects_invalid_execution(
     elif reason == "restricted":
         document = command.request.to_contract_dict()
         document["source_policy"]["rule_status"] = RuleStatus.RESTRICTED.value
+        command = _command("dex", request=validate_analysis_request(document))
+        expected_code = OperationErrorCode.RULE_RESTRICTED
+    elif reason == "online":
+        document = command.request.to_contract_dict()
+        document["source_policy"]["offline_mode"] = False
         command = _command("dex", request=validate_analysis_request(document))
         expected_code = OperationErrorCode.RULE_RESTRICTED
     elif reason == "unapproved_plan":
@@ -385,8 +467,27 @@ def test_adapter_exception_is_redacted_from_error_and_event() -> None:
     assert execution.adapter_called is True
     assert execution.error is not None
     assert execution.error.code is OperationErrorCode.EVIDENCE_WORKER_FAILED
+    assert execution.error.details == {"reason": "analysis_adapter_failed"}
     assert secret not in serialized
     assert str(ROOT) not in serialized
+
+
+def test_invalid_adapter_response_is_rejected_separately() -> None:
+    response = replace(
+        _static_response("dex"),
+        export_uris=("invalid://json", "invalid://markdown"),
+    )
+    execution = asyncio.run(
+        EvidenceWorkerService(
+            StaticEvidencePort(response),
+            clock=lambda: NOW,
+        ).execute(_command("dex"))
+    )
+
+    assert execution.worker_outcome.status is JobStatus.FAILED
+    assert execution.error is not None
+    assert execution.error.code is OperationErrorCode.EVIDENCE_WORKER_FAILED
+    assert execution.error.details == {"reason": "analysis_response_rejected"}
 
 
 def test_queue_executor_rejects_unregistered_or_changed_job(tmp_path: Path) -> None:

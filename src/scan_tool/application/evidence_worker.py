@@ -95,9 +95,12 @@ class EvidenceWorkerService:
                 replay_body=command.approved_replay.body,
                 replay_sha256=command.approved_replay.sha256,
             )
+        except Exception:
+            return self._failed(command, "analysis_adapter_failed", adapter_called=True)
+        try:
             self._validate_response(command, response)
         except Exception:
-            return self._failed(command, "analysis_execution_failed", adapter_called=True)
+            return self._failed(command, "analysis_response_rejected", adapter_called=True)
         return self._completed(command, response)
 
     def _policy_error(

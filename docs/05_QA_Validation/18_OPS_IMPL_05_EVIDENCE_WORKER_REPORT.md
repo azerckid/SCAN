@@ -1,6 +1,6 @@
 # OPS-IMPL-05 Evidence Worker 검증 보고서
 > Created: 2026-07-28 14:51
-> Last Updated: 2026-07-28 14:51
+> Last Updated: 2026-07-28 15:08
 > Status: Passed · QA-OPS-PAR-001 / QA-OPS-INTRA-001 / QA-OPS-RULE-001 Partial
 
 ## 1. 목적과 범위
@@ -16,6 +16,7 @@ AI가 제안한 방법은 정답으로 취급하지 않고, Python worker가 raw
 - 승인 plan·leaf·Analysis request의 problem·job·input projection 검증
 - 승인 replay 본문·SHA-256과 checkpoint 재개 해시 고정
 - 문제별 SQLite·artifact·checkpoint workspace 격리
+- 같은 문제의 다중 evidence job에 대한 in-process workspace lock
 - DEX·AUTH·FREEZE confirmed fixture의 실제 Analysis 실행
 - Analysis complete·partial·failed를 Queue worker outcome으로 변환
 - request·replay·JSON·Markdown artifact URI를 안전한 operation event에 연결
@@ -34,10 +35,10 @@ AI가 제안한 방법은 정답으로 취급하지 않고, Python worker가 raw
 | 위치 | 책임 |
 |:---|:---|
 | `src/scan_tool/ports/evidence.py` | Evidence Worker port·artifact/result 응답 계약 |
-| `src/scan_tool/adapters/evidence.py` | 문제별 workspace에서 기존 `CliRuntime`을 실행하는 in-process adapter |
+| `src/scan_tool/adapters/evidence.py` | ProblemId 정합 workspace·문제별 lock에서 기존 `CliRuntime`을 실행하는 in-process adapter |
 | `src/scan_tool/application/evidence_worker.py` | pre-call Gate·Analysis pair 검증·Queue outcome·event/error 변환 |
 | `src/scan_tool/application/cli_runtime.py` | 승인 replay bytes·SHA-256과 저장 checkpoint 해시 검증 |
-| `tests/integration/test_evidence_worker.py` | 세 fixture·병렬 Queue·격리·재사용·partial·failure·보안 15 tests |
+| `tests/integration/test_evidence_worker.py` | 세 fixture·병렬 Queue·동일 문제 lock·격리·재사용·partial·failure·보안 19 tests |
 
 기존 DEX·AUTH·FREEZE analyzer를 복제하지 않았다. worker는 승인된
 `inputs_projection`이 실제 Analysis request inputs와 정확히 일치할 때만
@@ -48,8 +49,8 @@ AI가 제안한 방법은 정답으로 취급하지 않고, Python worker가 raw
 
 | 검증 | 결과 |
 |:---|:---:|
-| OPS-IMPL-05 integration | 15 passed |
-| 전체 pytest | 221 passed |
+| OPS-IMPL-05 integration | 19 passed |
+| 전체 pytest | 225 passed |
 | Ruff lint·format | pass |
 | fixture Schema | PASS 3 |
 | Analysis request/result | PASS 3 |
@@ -71,6 +72,12 @@ AI가 제안한 방법은 정답으로 취급하지 않고, Python worker가 raw
    adapter 호출 0건으로 차단됐다.
 6. partial Analysis result는 job `partial`과 구조화 error로 보존됐다.
 7. adapter 예외의 원문 secret과 로컬 절대 경로는 event·error에 반사되지 않았다.
+8. 같은 문제의 DEX·AUTH job을 동시에 요청해도 workspace 임계 구간의 최대
+   동시 실행은 1이었고 두 Analysis 모두 완료됐다.
+9. `ProblemId` 최대 길이 workspace를 허용하고 `offline_mode=false`는 adapter
+   호출 0건으로 차단했다.
+10. adapter 실행 실패와 adapter 응답 검증 실패를 서로 다른 안전한 reason으로
+    기록했다.
 
 ## 4. QA 판정
 
@@ -96,8 +103,9 @@ AI가 제안한 방법은 정답으로 취급하지 않고, Python worker가 raw
 
 ## 6. Known Issues와 다음 단계
 
-- in-process adapter의 동기 vertical 실행은 `asyncio.to_thread`로 격리한다.
-  distributed worker와 process 격리는 현재 범위가 아니다.
+- in-process adapter의 동기 vertical 실행은 `asyncio.to_thread`로 격리하고
+  같은 problem workspace는 lock으로 직렬화한다. distributed worker와
+  process 간 lock은 현재 범위가 아니다.
 - event에는 request·replay·export artifact URI가 포함되지만 중앙 SQLite v2의
   cross-record 저장은 OPS-IMPL-07 composition root에서 연결한다.
 - 실제 한 문제의 복수 evidence leaf reconciliation과 candidate 생성은 아직
@@ -112,7 +120,7 @@ Gate다.
 
 | 기준 | 판정 | 증거·경계 |
 |:---|:---:|:---|
-| Functionality | Pass | 세 vertical·Queue·격리·partial·resume 15 integration tests |
+| Functionality | Pass | 세 vertical·Queue·동일 문제 lock·격리·partial·resume 19 integration tests |
 | Potential Impact | Partial | 복수 문제 동시 evidence 실행 확인, 실제 대회 처리량 미측정 |
 | Novelty | Partial | AI 방법 가설을 결정적 Python evidence로 실증, 독립 Verifier 미구현 |
 | UX | N/A | OperationsSnapshot·Board runtime은 OPS-IMPL-07 범위 |

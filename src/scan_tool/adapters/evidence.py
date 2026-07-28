@@ -3,6 +3,7 @@
 import asyncio
 import re
 from pathlib import Path
+from threading import Lock
 
 from scan_tool.application.cli_runtime import (
     AUTH_REPLAY_STAGE,
@@ -16,7 +17,7 @@ from scan_tool.domain.analysis_request import (
 )
 from scan_tool.ports.evidence import EvidenceAdapterResponse
 
-_SAFE_WORKSPACE_KEY = re.compile(r"^[A-Z0-9][A-Z0-9-]{1,63}$")
+_SAFE_WORKSPACE_KEY = re.compile(r"^PROB-[A-Z0-9][A-Z0-9-]{1,63}$")
 
 
 class InProcessEvidenceWorker:
@@ -24,6 +25,8 @@ class InProcessEvidenceWorker:
 
     def __init__(self, root: Path) -> None:
         self._root = root
+        self._workspace_locks: dict[str, Lock] = {}
+        self._workspace_locks_guard = Lock()
 
     async def analyze(
         self,
@@ -44,6 +47,21 @@ class InProcessEvidenceWorker:
         )
 
     def _analyze_sync(
+        self,
+        workspace_key: str,
+        request: AnalysisRequest,
+        replay_body: bytes,
+        replay_sha256: str,
+    ) -> EvidenceAdapterResponse:
+        with self._workspace_lock(workspace_key):
+            return self._analyze_locked(
+                workspace_key,
+                request,
+                replay_body,
+                replay_sha256,
+            )
+
+    def _analyze_locked(
         self,
         workspace_key: str,
         request: AnalysisRequest,
@@ -101,6 +119,10 @@ class InProcessEvidenceWorker:
                 ),
                 reused=False,
             )
+
+    def _workspace_lock(self, workspace_key: str) -> Lock:
+        with self._workspace_locks_guard:
+            return self._workspace_locks.setdefault(workspace_key, Lock())
 
     def _replay_artifact_uri(
         self,

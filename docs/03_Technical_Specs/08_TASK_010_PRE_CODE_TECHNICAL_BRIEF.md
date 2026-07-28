@@ -1,6 +1,6 @@
 # TASK-010 Pre-Code Technical Brief
 > Created: 2026-07-28 11:28
-> Last Updated: 2026-07-28 14:51
+> Last Updated: 2026-07-28 15:08
 > Status: Approved 1.5 · OPS-IMPL-01~05 Implemented · Rules-Gated
 
 ## 1. 문서 목적
@@ -586,7 +586,7 @@ cross-record·lifecycle·상태 전이는 Python validator가 규범이다.
 | `OPS-IMPL-02` | SQLite v2 additive migration·repository·event log | **Done** · 10 integration tests + 전체 172 tests |
 | `OPS-IMPL-03` | Planner port·fake QA adapter·AI mode Gate | **Done** · 14 unit tests · QA-OPS-RULE-001 partial |
 | `OPS-IMPL-04` | bounded Queue·dependency·isolation·dedup | **Done** · 19 unit tests · QA-OPS-PAR/INTRA-001 partial |
-| `OPS-IMPL-05` | DEX·AUTH·FREEZE evidence worker adapter | **Done** · 15 integration tests · 전체 221 tests · QA-OPS-PAR/INTRA/RULE partial |
+| `OPS-IMPL-05` | DEX·AUTH·FREEZE evidence worker adapter | **Done** · 19 integration tests · 전체 225 tests · problem workspace lock · QA-OPS-PAR/INTRA/RULE partial |
 | `OPS-IMPL-06` | candidate builder·independent Verifier Gate | QA-OPS-VERIFY/CONFLICT-001 |
 | `OPS-IMPL-07` | OperationsSnapshot·command result·local CLI view | Preview state mapping test |
 | `OPS-IMPL-08` | security·submission record·integration report | QA-OPS-SUBMIT-001, full verify |
@@ -603,7 +603,7 @@ runtime 파일을 만들지 않는다.
 | `REQ-OPS-VERIFY-001`~`006` | §5.6~5.7, §10 | `QA-OPS-VERIFY-001`, `QA-OPS-CONFLICT-001` |
 | `REQ-OPS-SUBMIT-001`~`004` | §5.7, §6.2, §12 | `QA-OPS-SUBMIT-001` |
 
-Analysis I/O와 fixture 회귀는 현재 221개 테스트·Schema/fixture PASS 3 기준을
+Analysis I/O와 fixture 회귀는 현재 225개 테스트·Schema/fixture PASS 3 기준을
 후퇴시키지 않는다.
 
 ## 15. 구현 승격 Gate
