@@ -1,27 +1,29 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 03:06
-> Status: Runner Prepared · Live Not Executed
+> Last Updated: 2026-07-29 03:39
+> Status: EVM Common Smoke Passed · Overall Partial
 
 ## 1. 목적
 
 이 문서는 TASK-012 fixture 4개의 독립 재현 전에 EVM read-only 공급자와
 AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하는 실행
-체크리스트다. 문서 작성 시점에는 API key를 구성하거나 live 호출을 실행하지
-않았으므로 모든 결과는 `not_executed`다.
+체크리스트다. 사용자가 승인한 대회 전 공급자 준비 점검으로 primary 7건,
+verify 6건의 read-only 호출을 실행했다. 이는 공식 대회 Rules를 `allowed`로
+확정한 것이 아니며 대회 중 live mode는 계속 `rules_gated`다.
 
-`scripts/smoke_live_provider.py`와 offline unit/dry-run 검증은 준비됐지만,
-이는 아래 capability 결과를 `pass`로 바꾸지 않는다.
+공통 6개 capability와 primary trace는 성공했다. credential 회전, 독립
+trace, rate/timeout 반례와 AI Planner capability는 아직 미실행이므로 최종
+상태는 `partial`이다.
 
 ## 2. 실행 전 보안 Gate
 
 - [ ] 공식 Rules의 provider·model·data·tool mode가 허용 상태다.
-- [ ] 실제 secret은 로컬 환경에만 있고 저장소·SQLite·fixture·artifact에 없다.
-- [ ] endpoint query token과 Authorization header를 기록·출력하지 않는다.
-- [ ] EVM method allowlist는 read-only이고 signing·send method가 없다.
+- [ ] primary·verify credential을 회전하고 새 값이 로컬 환경에만 있으며 저장소·SQLite·fixture·artifact·대화에 없다.
+- [x] endpoint query token과 Authorization header를 기록·출력하지 않는다.
+- [x] EVM method allowlist는 read-only이고 signing·send method가 없다.
 - [ ] canary secret이 성공·실패·timeout·fallback 출력에 나타나지 않는다.
-- [ ] provider별 논리 ID와 실제 endpoint mapping은 로컬 설정에서만 존재한다.
-- [ ] output은 저장소 `.scan/live-provider-smoke/` 하위에만 생성된다.
+- [ ] 회전된 provider endpoint mapping이 로컬 설정에만 존재한다.
+- [x] output은 저장소 `.scan/live-provider-smoke/` 하위에만 생성된다.
 - [ ] URL userinfo는 거부되고 구성된 URL/header secret이 guard에 전달된다.
 - [ ] secret 차단은 원문·traceback 없이 `security_blocked`로 종료된다.
 
@@ -31,13 +33,13 @@ AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하�
 
 | 검사 | Primary 결과 | Independent 결과 | 필수 증거 |
 |:---|:---:|:---:|:---|
-| chain ID | not_executed | not_executed | method·decoded ID·raw SHA |
-| transaction | not_executed | not_executed | hash·block·from/to |
-| receipt | not_executed | not_executed | status·logs·indices |
-| block | not_executed | not_executed | number·hash·timestamp |
-| filtered logs | not_executed | not_executed | address·topics·range·logs |
-| historical call/state | not_executed | not_executed | block tag·raw·decoded |
-| trace | not_executed | not_executed/conditional | tracer·timeout·call/value |
+| chain ID | pass | pass | `0x1`, raw SHA 기록 |
+| transaction | pass | pass | hash·block·from/to/value 일치 |
+| receipt | pass | pass | status `0x1`, log count 5 일치 |
+| block | pass | pass | number·hash·timestamp 일치 |
+| filtered logs | pass | pass | USDC Transfer 23건·첫 5개 요약 일치 |
+| historical call/state | pass | pass | block `0xfdf1d0`, decimals `6` 일치 |
+| trace | pass | not_executed/conditional | primary callTracer 성공, 독립 trace 미선정 |
 | rate/timeout | not_executed | not_executed | outcome·safe code·retry |
 
 결과는 provider 문서의 지원 표시가 아니라 실제 계정과 대상 block에서
@@ -45,12 +47,13 @@ AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하�
 
 ## 4. 독립성·정확성 판정
 
-- [ ] primary와 independent 호출은 서로 다른 공급자 infrastructure를 사용한다.
-- [ ] `eth_getLogs`는 receipt 복사가 아닌 filter 호출이다.
-- [ ] block tag, address, topics, token order와 calldata가 재현 가능하다.
-- [ ] raw artifact는 secret 제거 후 SHA-256으로 고정된다.
-- [ ] decoded 값은 expected 복사가 아니라 raw에서 다시 계산된다.
-- [ ] mismatch·unsupported·timeout·fallback을 성공으로 바꾸지 않는다.
+- [x] primary와 independent 호출은 QuickNode·Alchemy로 분리했다.
+- [x] `eth_getLogs`는 receipt 복사가 아닌 address·topic·block filter 호출이다.
+- [x] block tag, address, topics와 calldata가 재현 가능하다.
+- [x] raw artifact는 configured secret 검사를 거쳐 SHA-256으로 고정됐다.
+- [x] decoded 값은 raw response에서 다시 계산됐다.
+- [x] 두 공급자의 공통 6개 decoded summary가 모두 일치했다.
+- [ ] mismatch·unsupported·timeout·fallback 반례를 실행한다.
 - [ ] supporting explorer는 제3의 교차확인이고 독립 RPC 대체물이 아니다.
 
 ## 5. TASK-012 반례

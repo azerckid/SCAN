@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 02:56
+> Last Updated: 2026-07-29 03:46
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -847,7 +847,9 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
     - [x] 후보 패키지 4개와 1차 재조회 결과를 작성했다.
     - [x] live provider 후보 topology·secret·capability smoke 계약을 문서화했다.
     - [x] 기본 network 0건·Rules/endpoint opt-in smoke runner를 준비했다.
-    - [ ] 실제 계정·plan을 준비하고 read-only capability smoke를 통과한다.
+    - [x] QuickNode primary 공통 6개+trace와 Alchemy verifier 공통 6개
+      read-only smoke를 실행했다.
+    - [ ] 노출 credential 회전·독립 trace·rate/timeout 반례를 통과해 Provider Gate를 닫는다.
     - [ ] 독립 2차 재현·반례를 통과해 `confirmed`로 승격한다.
   - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 고정한다.
   - [ ] 기존 source/cache/decode/reconciliation을 재사용한 Analysis type을 설계한다.
@@ -874,6 +876,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Implementation Preconditions:
   - [ ] 관련 문서와 네 문제의 입력·출력·상태를 확인한다.
   - [ ] primary·independent 공급자와 필요 시 독립 trace 역할의 capability smoke를 통과한다.
+    - [x] primary·independent 공통 6개 decoded summary 일치와 primary trace 성공을 확인했다.
+    - [ ] credential 회전·독립 trace·rate/timeout 반례가 남아 전체 상태는 partial이다.
   - [ ] API key·endpoint가 저장소·DB·fixture·로그에 없음을 검증한다.
   - [ ] confirmed fixture와 reference answer를 확보한다.
   - [ ] CLI Preview 재검토와 사용자 구현 승인을 기록한다.
@@ -895,7 +899,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Document Sync Check:
   - [ ] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - candidate 4개와 안전한 smoke runner 완료, Rules·endpoint·실제 smoke·독립 재현·Schema·UI·사용자 구현 승인 전 착수 금지
+  - Status: PENDING - candidate 4개와 primary/verify pre-event smoke 완료, credential 회전·독립 trace·반례·독립 재현·Schema·UI·사용자 구현 승인 전 착수 금지
   - Required References Read: 위 Related 문서 전체
   - Constraints: exact raw 수량, historical state block 고정, 귀속 미평가
   - Conflicts: None known
