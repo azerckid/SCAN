@@ -397,6 +397,32 @@ def test_failed_dependency_keeps_reconciliation_waiting() -> None:
     assert blocked.attempts == 0
 
 
+def test_partial_dependency_keeps_reconciliation_waiting() -> None:
+    async def execute(job: JobRecord, _: int) -> WorkerOutcome:
+        if job.job_id == "JOB-Q01-TRACE":
+            return WorkerOutcome(
+                JobStatus.PARTIAL,
+                error_code="trace_incomplete",
+                checkpoint_ref="checkpoint://trace-partial",
+            )
+        return WorkerOutcome(JobStatus.COMPLETE)
+
+    result = asyncio.run(
+        BoundedJobScheduler(execute).execute(
+            [_job("TRACE"), _job("RECON")],
+            dependencies={"JOB-Q01-RECON": ("JOB-Q01-TRACE",)},
+        )
+    )
+
+    partial = result.result_for("JOB-Q01-TRACE")
+    assert partial.status is JobStatus.PARTIAL
+    assert partial.checkpoint_ref == "checkpoint://trace-partial"
+    blocked = result.result_for("JOB-Q01-RECON")
+    assert blocked.status is JobStatus.WAITING
+    assert blocked.error_code == "dependency_incomplete"
+    assert blocked.attempts == 0
+
+
 def test_retryable_failure_is_bounded_by_job_max_attempts() -> None:
     attempts: list[int] = []
 
@@ -416,6 +442,29 @@ def test_retryable_failure_is_bounded_by_job_max_attempts() -> None:
     assert attempts == [1, 2]
     assert result.result_for(job.job_id).status is JobStatus.COMPLETE
     assert result.result_for(job.job_id).attempts == 2
+
+
+def test_retryable_failure_stays_failed_after_max_attempts() -> None:
+    attempts: list[int] = []
+
+    async def execute(_: JobRecord, attempt: int) -> WorkerOutcome:
+        attempts.append(attempt)
+        return WorkerOutcome(
+            JobStatus.FAILED,
+            error_code="temporary_failure",
+            checkpoint_ref=f"checkpoint://attempt-{attempt}",
+            retryable=True,
+        )
+
+    job = _job("EXHAUST", max_attempts=2)
+    result = asyncio.run(BoundedJobScheduler(execute).execute([job]))
+
+    assert attempts == [1, 2]
+    exhausted = result.result_for(job.job_id)
+    assert exhausted.status is JobStatus.FAILED
+    assert exhausted.attempts == 2
+    assert exhausted.error_code == "temporary_failure"
+    assert exhausted.checkpoint_ref == "checkpoint://attempt-2"
 
 
 def test_paused_and_cancelled_jobs_are_not_dispatched() -> None:

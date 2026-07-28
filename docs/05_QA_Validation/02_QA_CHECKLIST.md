@@ -170,6 +170,8 @@ ID는 24개 집계에서 한 번만 센다.
   test가 통과한다.
 - [x] OPS-IMPL-04 bounded Queue·dependency DAG·문제별 실패 격리·재시도·
   idempotency dedup·source capability limit test가 통과한다.
+  이 체크는 OPS-IMPL-04 unit Gate만 뜻하며, 실제 Analysis I/O·artifact·
+  candidate 연결 전까지 `QA-OPS-PAR-001`·`QA-OPS-INTRA-001`은 `partial`이다.
 - [ ] 문제 간 상태·result·checkpoint·candidate가 격리된다.
 - [ ] 문제 내부 leaf job dependency와 source request dedup이 일치한다.
 - [ ] provider·worker별 동시성 제한과 Queue age가 표시된다.

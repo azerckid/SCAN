@@ -32,7 +32,7 @@
 |:---|:---|
 | `src/scan_tool/application/scheduler.py` | `BoundedJobScheduler`, 제한·dependency·retry·격리·job dedup |
 | 같은 파일 `InFlightRequestPool` | source capability 제한과 동일 요청 in-flight dedup |
-| `tests/unit/test_bounded_queue.py` | fault-injection·경계·결정성 17 tests |
+| `tests/unit/test_bounded_queue.py` | fault-injection·경계·결정성 19 tests |
 
 공개 Operations Schema `0.1`, Analysis I/O `0.1`, SQLite schema v2와 dependency는
 변경하지 않았다. worker는 `Callable[[JobRecord, attempt], WorkerOutcome]`로
@@ -42,8 +42,8 @@
 
 | 검증 | 결과 |
 |:---|:---:|
-| OPS-IMPL-04 unit | 17 passed |
-| 전체 pytest | 204 passed |
+| OPS-IMPL-04 unit | 19 passed |
+| 전체 pytest | 206 passed |
 | Ruff lint·format | pass |
 | fixture Schema | PASS 3 |
 | Analysis request/result | PASS 3 |
@@ -62,6 +62,7 @@
 4. dependency 실패 시 downstream job은 실행되지 않고 `waiting /
    dependency_incomplete`로 남았다.
 5. retryable 실패는 `max_attempts`까지만 재배정됐다.
+   소진 후에는 마지막 error·checkpoint와 함께 `failed`로 끝났다.
 6. 같은 scope의 idempotency key는 한 번만 실행됐고 duplicate 결과에
    canonical job ID와 checkpoint가 보존됐다.
 7. 같은 source request key의 동시 구독은 operation 1회만 실행됐고
@@ -103,7 +104,7 @@ adapter다.
 
 | 기준 | 판정 | 증거·경계 |
 |:---|:---:|:---|
-| Functionality | Pass | bounded Queue·dependency·격리·retry·dedup 17 tests |
+| Functionality | Pass | bounded Queue·dependency·격리·retry·dedup 19 tests |
 | Potential Impact | Partial | 복수 문제 동시 실행 확인, 실제 대회 처리량·Queue age 미측정 |
 | Novelty | Partial | AI plan과 결정적 worker 사이의 격리된 실행 계약, 전체 Verifier 흐름 미완성 |
 | UX | N/A | runtime read model·Operations Board는 OPS-IMPL-07 범위 |
