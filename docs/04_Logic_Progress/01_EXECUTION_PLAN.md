@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 05:58
+> Last Updated: 2026-07-29 06:14
 > Status: Proposed 0.1 · No Implementation Approval
 
 ## 1. 목적
@@ -52,7 +52,10 @@
   브라우저에서 검증한다.
 - [x] 사용자가 TASK-012 HTML Preview를 확인하고 UI-First Gate를 승인한다.
 - [ ] 정식 contract·provider Gate 후 제품 analyzer 구현 승인을 별도로 기록한다.
-- [ ] 독립 trace와 rate-limit·timeout·unsupported 반례를 실행한다.
+- [ ] 독립 trace와 rate-limit·timeout·method-not-found 반례를 실행한다.
+  - [x] 두 Trace dialect 정규화·교차 동등성과 timeout·429·
+    method-not-found(`invalid_response`)·malformed offline 주입 검증을 통과했다.
+  - [ ] 회전된 credential로 독립 trace와 live rate/timeout을 실행한다.
 - [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만 `confirmed` 승격한다.
 - [ ] 네 문제 입력·정답 필드와 partial 조건 제안을 승인한다.
 - [ ] 기존 EVM decoder·source·cache 재사용 범위를 확인한다.

@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 05:58
+> Last Updated: 2026-07-29 06:14
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -852,7 +852,9 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
     - [x] 네 fixture의 공통 9개 조회를 QuickNode·Alchemy에서 독립 재현하고
       decoded 값 일치를 확인해 `verifying`으로 승격했다.
     - [x] 네 fixture의 합성 negative oracle 24개를 두 번 실행해 결정성을 확인했다.
-    - [ ] 노출 credential 회전·독립 trace·rate/timeout 반례를 통과해 Provider Gate를 닫는다.
+    - [x] 독립 Trace 두 dialect 정규화·교차 동등성과 timeout·429·
+      method-not-found(`invalid_response`)·malformed offline 주입 검증을 통과했다.
+    - [ ] 노출 credential 회전·독립 trace·live rate/timeout 반례를 통과해 Provider Gate를 닫는다.
     - [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만
       `confirmed`로 승격한다.
   - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 승인한다.
@@ -891,11 +893,13 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
   - [TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 24개 offline 반례·결정성
   - [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - 미실행 경계·unit·dry-run
   - [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) - 자동·브라우저·사용자 Gate
+  - [TASK-012 Provider Gate 준비 보고서](../05_QA_Validation/29_TASK_012_PROVIDER_GATE_PREPARATION_REPORT.md) - 독립 Trace dialect·offline failure Gate
 - Implementation Preconditions:
   - [ ] 관련 문서와 네 문제의 입력·출력·상태를 확인한다.
   - [ ] primary·independent 공급자와 필요 시 독립 trace 역할의 capability smoke를 통과한다.
     - [x] primary·independent 공통 6개 decoded summary 일치와 primary trace 성공을 확인했다.
-    - [ ] credential 회전·독립 trace·rate/timeout 반례가 남아 전체 상태는 partial이다.
+    - [x] 독립 Trace dialect·provider failure offline 검증을 통과했다.
+    - [ ] credential 회전·독립 trace·live rate/timeout 반례가 남아 전체 상태는 partial이다.
   - [ ] API key·endpoint가 저장소·DB·fixture·로그에 없음을 검증한다.
   - [ ] confirmed fixture와 reference answer를 확보한다.
   - [x] CLI Preview 재검토와 사용자 UI 승인을 기록한다.

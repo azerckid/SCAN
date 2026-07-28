@@ -1,6 +1,6 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 04:32
+> Last Updated: 2026-07-29 06:14
 > Status: Pre-event Smoke Partial Pass · Credential Rotation Pending · Competition Rules Unclear
 
 ## 1. 목적
@@ -168,7 +168,7 @@ header secret을 저장 전 guard한다. 이 검사는 구성해 전달한 secre
 | `request_scope` | chain·block tag·tx hash 또는 안전한 filter 요약 |
 | `retrieved_at` | UTC offset이 있는 조회 시각 |
 | `duration_ms` | 호출 시간 |
-| `outcome` | success / timeout / rate_limited / unsupported / invalid_response |
+| `outcome` | success / timeout / rate_limited / permanent / invalid_response |
 | `http_status` / `rpc_code` | 해당 시 안전한 숫자만 |
 | `raw_sha256` | secret 제거 후 raw artifact SHA-256 |
 | `decoded_summary` | 기대값과 비교할 최소 decoded 값 |
@@ -210,6 +210,12 @@ hash 계산 전후 모두 artifact에 들어가면 안 된다.
 독립 trace를 확보하지 못하면 trace-dependent 항목은 `partial` 또는
 `candidate`를 유지한다. supporting explorer 일치는 독립 RPC 일치를
 대체하지 않는다.
+
+독립 Trace 재시도 계약은 `debug_traceTransaction(callTracer)`와
+`trace_transaction` 두 dialect를 동일한 성공 내부 inflow 구조로 정규화한다.
+timeout·429·method not found·malformed JSON은 offline 주입 검증을 통과했지만
+credential 회전 전이므로 추가 live 호출은 0건이다. Alchemy
+`trace_transaction`의 plan 제한은 실제 계정 확인 전까지 `unresolved`로 둔다.
 
 합성 offline 반례 24개는 두 번 실행해 결정성을 통과했다. 실행 근거는
 [TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md)다.
@@ -269,4 +275,5 @@ Verifier가 없는 결과는 `submission_ready`가 될 수 없다.
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실행 전 체크와 기록 형식
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - verifying 4개
 - **QA_Validation**: [TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 24개 offline 반례
+- **QA_Validation**: [TASK-012 Provider Gate 준비 보고서](../05_QA_Validation/29_TASK_012_PROVIDER_GATE_PREPARATION_REPORT.md) - Trace dialect·offline failure 검증
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - network 0건·Gate·테스트 증거
