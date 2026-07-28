@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 00:41
-> Status: TASK-001~009 Done · TASK-010 Offline V1 Gate Passed · Live Mode Rules-Gated
+> Last Updated: 2026-07-29 01:16
+> Status: TASK-001~009·011 Done · TASK-010 Offline V1 Gate Passed · Live Mode Rules-Gated
 
 ## 1. 문서 목적
 
@@ -9,9 +9,10 @@
 CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업으로
 전환한다.
 
-Backlog 범위와 `TASK-001`~`TASK-009` 구현은 별도로 승인되었다. 아홉 작업은
-완료됐고 Rules-gated `TASK-010`은 `ToDo`다. 후속 작업은 별도 승인 전에는
-`In Progress`로 이동하지 않는다.
+Backlog 범위와 `TASK-001`~`TASK-009` 구현은 별도로 승인되었다. 아홉 작업과
+예상문제 benchmark `TASK-011`은 완료됐고 Rules-gated `TASK-010`은 offline
+V1 범위가 완료됐다. live 후속 작업은 별도 승인 전에는 `In Progress`로
+이동하지 않는다.
 
 `TASK-010`은 공식 Rules·Operations Board Preview·별도 구현 승인에 의존하는
 비차단 운영 트랙이다. `TASK-001`~`TASK-009`의 P0·V1 의존 순서와 완료 Gate를
@@ -707,6 +708,103 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
     - N/A - 웹 runtime·live provider·CTFd network 제출·실대회 성능·DDL migration은 OPS-IMPL-08 승인 범위 밖이다.
   - Detailed Evidence:
     - [OPS-IMPL-08 Final Integration 보고서](../05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - 독립 검증 명령·local submission·병렬성·보안·잔여 P2 기록.
+
+### [x] TASK-011: 예상문제 Offline Benchmark 0.1
+
+- Status: Done · 3 Automated Pass / 6 Assisted / 21 Unsupported
+- Work Type: code
+- Priority: Coverage Validation · High
+- Depends On: TASK-006, TASK-007, TASK-008, TASK-009
+- Requirement IDs: `TEST-DEX-001`, `TEST-AUTH-001`, `TEST-FREEZE-001`,
+  `REQ-NFR-001`, `REQ-NFR-003`, `REQ-NFR-004`, `REQ-NFR-007`
+- Atomic Tasks:
+  - [x] 예상문제 은행 Draft 2의 30문항 ID를 manifest에 한 번씩 등록한다.
+  - [x] `automated / assisted / unsupported` 판정 기준을 고정한다.
+  - [x] confirmed DEX·AUTH·FREEZE를 실제 raw replay로 두 번 실행한다.
+  - [x] result value exact match·evidence ref·fixture requirement·결정성을 채점한다.
+  - [x] 잘못된 answer oracle이 benchmark 실패로 판정되는지 검증한다.
+  - [x] benchmark 경로가 저장소 밖으로 이탈하지 못하게 한다.
+  - [x] CLI 실행 중 network call이 0건인지 검증한다.
+  - [x] 30문항 coverage와 기능 공백을 QA 보고서에 기록한다.
+- Related Concept Docs:
+  - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - Draft 2 30문항과 완료·부분·실패 기준
+  - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - 기능별 빈도와 단계 제한
+- Related UI Docs:
+  - [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - offline 명령·오류·출력 경계
+- Related HTML Preview:
+  - N/A - 기존 CLI에 QA 전용 summary 명령을 추가하며 새로운 사용자 화면·동선은 만들지 않는다.
+- Related Technical Docs:
+  - [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - fixture-first·offline·최소 구현 기준
+  - [공통 Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 자동 사례의 result·evidence 계약
+- Related QA Docs:
+  - [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - confirmed DEX·AUTH·FREEZE oracle
+  - [예상문제 Offline Benchmark 보고서](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - coverage·채점·공백 결과
+- Component & Library Plan:
+  - shadcn/ui: N/A - Python CLI benchmark이며 웹 UI를 변경하지 않는다.
+  - Custom components: Pydantic manifest·runner·terminal/JSON summary.
+  - Reused components: Analysis I/O validator, DEX·AUTH·FREEZE slice, Typer, confirmed fixture.
+  - New libraries: 없음 - Pydantic·Typer·stdlib `json/pathlib/time`만 재사용한다.
+  - Excluded libraries: benchmark framework·dataframe·statistics package - 30개 manifest와 3개 실행에는 불필요하다.
+  - shadcn preset: N/A - UI 변경 없음.
+- Implementation Preconditions:
+  - [x] 사용자가 예상문제 실실행 benchmark를 승인했다.
+  - [x] 예상문제 은행 30문항과 Challenge Pack 경계를 다시 확인했다.
+  - [x] 현재 공개 Analysis type이 세 종류뿐임을 확인했다.
+  - [x] confirmed fixture 외 문제의 정확도를 주장하지 않기로 했다.
+  - [x] 입력은 reviewed repository fixture만 사용하고 live source를 호출하지 않는다.
+  - [x] 새 화면이 없어 기존 CLI UI 경계와 terminal summary만 확인했다.
+- Acceptance Criteria:
+  - [x] manifest가 30개 고유 문제 ID를 포함한다.
+  - [x] automated 3·assisted 6·unsupported 21 집계가 일치한다.
+  - [x] automated 3개가 complete·answer exact·evidence·requirement·determinism을 통과한다.
+  - [x] assisted·unsupported는 자동 성공률에 포함되지 않는다.
+  - [x] benchmark CLI의 network call이 0건이다.
+  - [x] 오류 oracle과 저장소 밖 path가 거부된다.
+- Document Sync Check:
+  - [x] 예상문제 은행·Backlog·Roadmap·README·QA 보고서를 동기화했다.
+  - [x] 30문항 자동화율 10%와 기능 공백을 과장 없이 기록했다.
+- Context Receipt:
+  - Status: PASS
+  - Required References Read:
+    - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 30문항 ID·난이도·기능 행렬을 확인했다.
+    - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - 원자적 기능과 Challenge Pack을 확인했다.
+    - [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - CLI 안전 출력 경계를 확인했다.
+    - [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - 최소 구현·fixture-first 기준을 확인했다.
+    - [공통 Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - result·evidence 참조 계약을 확인했다.
+    - [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - confirmed oracle 범위를 확인했다.
+    - [예상문제 Offline Benchmark 보고서](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 채점 결과와 잔여 공백을 확인했다.
+  - Constraints:
+    - 새 vertical·live adapter·fixture 정답을 만들지 않는다.
+    - confirmed fixture가 없는 문제는 automated로 분류하지 않는다.
+    - 실행 시간은 관찰값이며 SLA로 주장하지 않는다.
+  - Conflicts: None
+- Change Receipt:
+  - Files Changed:
+    - `src/scan_tool/application/expected_problem_benchmark.py`
+    - `src/scan_tool/cli.py`
+    - `docs/05_QA_Validation/benchmarks/expected-problem-v0.1.json`
+    - `tests/integration/test_expected_problem_benchmark.py`
+    - 예상문제·Roadmap·Backlog·README·QA 보고서
+  - Requirements Covered:
+    - 30문항 coverage 분류, confirmed 3개 exact/evidence/requirement/determinism 채점, offline CLI.
+  - Excluded Scope:
+    - 새 analyzer, live source, Challenge Pack fixture, 실제 대회 처리량.
+  - Basic Checks:
+    - `uv run pytest tests/integration/test_expected_problem_benchmark.py -q` - PASS - 6 passed.
+    - `uv run scan benchmark ...` - PASS - automated 3/3, network calls 0.
+  - Remaining Risks:
+    - assisted 6개와 unsupported 21개에는 reference fixture·전용 analyzer가 없다.
+- Verification Receipt:
+  - Status: PASS
+  - Commands and Results:
+    - `uv run python scripts/verify.py` - PASS - 277 tests와 Schema·traceability·security Gate.
+    - expected-problem benchmark integration - PASS - 6 passed.
+    - benchmark CLI - PASS - automated 3/3, assisted 6, unsupported 21.
+    - `git diff --check` - PASS.
+  - Unrun Checks:
+    - N/A - live source·Challenge Pack·실대회 성능은 TASK-011 범위 밖이다.
+  - Detailed Evidence:
+    - [예상문제 Offline Benchmark 보고서](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 채점 기준·30문항 coverage·우선 공백.
 
 ## 5. In Progress
 

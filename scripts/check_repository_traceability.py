@@ -1,4 +1,4 @@
-"""Validate TASK-009 document links, IDs, and fixture-to-example values."""
+"""Validate repository document links, TASK/QA IDs, and fixture-to-example values."""
 
 import json
 import re
@@ -53,7 +53,7 @@ def check_ids() -> tuple[int, int]:
     scenarios = (DOCS / "05_QA_Validation/01_TEST_SCENARIOS.md").read_text()
     task_ids = TASK_PATTERN.findall(backlog)
     qa_ids = QA_PATTERN.findall(scenarios)
-    assert len(task_ids) == len(set(task_ids)) == 10, "TASK IDs must be unique TASK-001~010"
+    assert len(task_ids) == len(set(task_ids)) == 11, "TASK IDs must be unique TASK-001~011"
     assert len(qa_ids) == len(set(qa_ids)) == 24, "QA IDs must be 24 unique definitions"
     return len(task_ids), len(qa_ids)
 

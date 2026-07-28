@@ -17,6 +17,7 @@ from scan_tool.application.cli_runtime import (
     AnalysisUnavailable,
     CliRuntime,
 )
+from scan_tool.application.expected_problem_benchmark import ExpectedProblemBenchmarkRunner
 from scan_tool.application.operations_snapshot import OperationsSnapshotBuilder
 from scan_tool.application.operations_terminal import render_operations_snapshot
 from scan_tool.application.submission import SubmissionCommand, SubmissionRecorder
@@ -331,6 +332,46 @@ def mark_submitted(
         f"RECORDED {execution.submission.submission_id} · "
         f"{candidate_id} · response {response.value} · network_calls 0"
     )
+
+
+@app.command()
+def benchmark(
+    manifest: Annotated[
+        Path,
+        typer.Option("--manifest", help="Expected-problem benchmark manifest."),
+    ],
+    output: Annotated[
+        str,
+        typer.Option("--output", help="terminal or json."),
+    ] = "terminal",
+) -> None:
+    """Run confirmed expected-problem fixtures and report current coverage gaps."""
+    if output not in {"terminal", "json"}:
+        _fail_input("invalid_input", "output must be terminal or json")
+    try:
+        runner = ExpectedProblemBenchmarkRunner(Path.cwd())
+        report = runner.run(runner.load_manifest(manifest))
+    except (ContractViolation, OSError, ValueError, ValidationError):
+        _fail_input("benchmark_invalid", "expected-problem benchmark could not be executed")
+    if output == "json":
+        typer.echo(report.model_dump_json(indent=2))
+    else:
+        typer.echo(
+            f"EXPECTED PROBLEMS {report.total_problems} · "
+            f"AUTOMATED {report.automated} · ASSISTED {report.assisted} · "
+            f"UNSUPPORTED {report.unsupported}"
+        )
+        for result in report.cases:
+            label = "PASS" if result.passed else "FAIL"
+            typer.echo(
+                f"{label} {result.problem_id} · {result.fixture_id} · {result.elapsed_ms:.1f}ms"
+            )
+        typer.echo(
+            f"BENCHMARK {report.passed}/{report.executed} automated cases passed · "
+            "network_mode offline"
+        )
+    if report.failed:
+        raise typer.Exit(EXIT_FAILED)
 
 
 def _load_operations_document(

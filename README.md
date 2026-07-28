@@ -38,6 +38,11 @@ adds SQLite v2 read-back, a strict OperationsSnapshot, shared JSON/terminal
 rendering, and the read-only local `operations` command. `OPS-IMPL-08` adds
 job-scoped same-problem leaf concurrency, composite stale/Rules alerts, explicit
 SQLite Board input, and an atomic human-confirmed local submission record.
+`TASK-011` adds an offline benchmark over all 30 expected problems: 3 cases are
+directly automated, 6 are assisted by reusable primitives, and 21 remain
+unsupported. The three automated cases pass exact answer, evidence,
+fixture-requirement, and deterministic replay checks. This is 3/3 accuracy within
+the automated scope, not 30/30 problem coverage.
 Live AI and CTFd network submission remain unimplemented.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`, so external execution modes remain `rules_gated` until
@@ -83,6 +88,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | OPS-IMPL-06 evidence | [`19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md`](docs/05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) | canonical candidate, fresh independent replay, conflict preservation, and promotion-gate evidence |
 | OPS-IMPL-07 evidence | [`20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md`](docs/05_QA_Validation/20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) | SQLite read-back, strict snapshot, local terminal/JSON view, and Preview-state mapping evidence |
 | OPS-IMPL-08 evidence | [`21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md`](docs/05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) | same-problem leaf concurrency, manual submission record, six Operations QA, and final security evidence |
+| TASK-011 benchmark | [`22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md`](docs/05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | 30-problem coverage classification, three exact offline executions, and prioritized capability gaps |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -100,13 +106,13 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-271 passed
+277 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 806 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 66 runtime/evidence files
+PASS repository traceability: 833 links, 11 TASK IDs, 24 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 67 runtime/evidence files
 ```
 
 The installed package exposes the approved analysis and local operations command surface:
@@ -118,6 +124,7 @@ uv run scan operations --bundle docs/05_QA_Validation/examples/operations/rules-
 uv run scan operations --bundle docs/05_QA_Validation/examples/operations/rules-gated-bundle.json --output json
 uv run scan operations --database /explicit/path/scan.sqlite3 --competition-id COMP-SCAN-2026
 uv run scan mark-submitted --database /explicit/path/scan.sqlite3 --competition-id COMP-SCAN-2026 --candidate-id CAND-ID --response unknown --confirm
+uv run scan benchmark --manifest docs/05_QA_Validation/benchmarks/expected-problem-v0.1.json
 uv run scan validate REQUEST.json
 uv run scan analyze --request REQUEST.json --evidence RAW_REPLAY.json
 uv run scan resume ANALYSIS_ID
@@ -138,7 +145,8 @@ A supported request without `--evidence` stops explicitly with
 
 ## Implementation boundary
 
-`TASK-001` through `TASK-009` are complete. The offline P0·V1 baseline is closed.
+`TASK-001` through `TASK-009` and `TASK-011` are complete. The offline P0·V1
+baseline and expected-problem Benchmark 0.1 are closed.
 `TASK-010` offline Operations V1 is complete through human-confirmed local
 submission recording. No live provider configuration exists; live transport still
 requires authoritative Rules and `rule_status: allowed`. The CLI never calls CTFd,
