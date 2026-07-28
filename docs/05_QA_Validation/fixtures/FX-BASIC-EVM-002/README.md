@@ -1,6 +1,6 @@
 # Fixture: FX-BASIC-EVM-002
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 03:55
+> Last Updated: 2026-07-29 04:25
 > Status: Verifying
 
 ## 1. 목적

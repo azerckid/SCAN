@@ -110,7 +110,7 @@
   "uncertainty": {
     "candidate_only": false,
     "verifying": true,
-    "remaining": "Primary debug trace passed; independent trace failed and negative cases remain"
+    "remaining": "Primary debug trace and offline negative oracles passed; independent trace and consumer contract remain"
   },
   "provenance_notes": "The internal call is the scoring evidence for native ETH inflow. The WETH withdrawal event is retained only as an amount cross-check."
 }

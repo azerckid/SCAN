@@ -1,6 +1,6 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 04:16
+> Last Updated: 2026-07-29 04:25
 > Status: EVM Fixture Common Replay Passed · Overall Partial
 
 ## 1. 목적
@@ -60,7 +60,9 @@ live rate/timeout 반례, 독립 trace와 AI Planner capability는 아직
 | internal native inflow trace | pass | failed | Alchemy HTTP 400, 독립 trace unresolved |
 
 공통 9개 조회는 두 공급자의 raw response에서 각각 decode했다. 네 fixture는
-`verifying`으로 올렸지만, 위 trace와 §5 반례가 남아 `confirmed`는 아니다.
+`verifying`으로 올렸다. §5 합성 반례는 통과했지만 독립 trace,
+credential 회전, live rate/timeout·fallback 검증이 남아 `confirmed`는
+아니다.
 
 ## 4. 독립성·정확성 판정
 

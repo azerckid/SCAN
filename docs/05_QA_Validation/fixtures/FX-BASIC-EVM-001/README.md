@@ -1,6 +1,6 @@
 # Fixture: FX-BASIC-EVM-001
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 03:55
+> Last Updated: 2026-07-29 04:25
 > Status: Verifying
 
 ## 1. 목적
@@ -33,7 +33,7 @@ Ethereum 입력 문자열을 주소, transaction hash, block hash/number와 잘�
 ## 4. 승격 전 잔여
 
 1. [x] transaction·receipt·block·code를 QuickNode·Alchemy에서 재현했다.
-2. [ ] EIP-55 checksum positive/negative 반례를 별도 검증한다.
+2. [x] malformed/checksum 분류 합성 oracle을 두 번 검증했다.
 3. [ ] fixture를 소비할 Analysis type과 오류 계약을 승인한다.
 
 Provider별 raw SHA-256과 일치 결과는 [provider-replay.json](./provider-replay.json)에

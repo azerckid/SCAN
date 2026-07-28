@@ -1,6 +1,6 @@
 # TASK-012 Negative Oracle 검증 보고서
 > Created: 2026-07-29 04:16
-> Last Updated: 2026-07-29 04:16
+> Last Updated: 2026-07-29 04:25
 > Status: Offline 19 Passed Twice · Independent Trace Pending
 
 ## 1. 목적과 판정
@@ -45,6 +45,7 @@ negative oracle 계약과 오프라인 판정기만 추가한다.
 - TASK-012 제품 analyzer·CLI wiring: 미구현
 - live provider timeout/rate-limit 반례: 미실행
 - Alchemy 독립 trace 실패: 미해결
+- timestamp 입력→block number 변환 oracle: 미실행
 
 합성 oracle 통과는 raw provider replay나 독립 trace를 대체하지 않는다.
 `confirmed` 승격은 credential 회전, 필요한 독립 trace, package 참조

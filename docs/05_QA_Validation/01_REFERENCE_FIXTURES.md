@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 04:16
+> Last Updated: 2026-07-29 04:25
 > Status: Approved 1.1 · Phase 2 Verifying Pack
 
 ## 1. 문서 목적
@@ -296,7 +296,7 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 확정 전 증거 | Publicnode TX·receipt·block, dRPC historical code |
 | 부분·실패 | RPC/code 누락은 partial; malformed 강제 변환·gas limit fee 계산은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE`; `DS-EXPLORER-EVM`은 보조 |
-| 승격 잔여 | checksum 반례, consumer contract |
+| 승격 잔여 | offline checksum 분류 통과, consumer contract 승인 |
 | 마지막 확인 | 2026-07-29 03:55 |
 
 ---
@@ -336,7 +336,7 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 확정 전 증거 | raw receipt Transfer + Blockscout ascending token-transfer range |
 | 부분·실패 | event만 있고 첫 순서 미입증은 partial; token/from/order 오선택은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` 또는 범위 logs archive |
-| 승격 잔여 | zero-value·다중 로그·pagination 반례 |
+| 승격 잔여 | offline 반례 통과, 검색·정렬·pagination consumer contract 승인 |
 | 마지막 확인 | 2026-07-29 03:55 |
 
 ---
@@ -356,7 +356,7 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 확정 전 증거 | Publicnode outer TX·Withdrawal, Blockscout internal call, DEX raw replay의 call index |
 | 부분·실패 | trace 누락은 partial; outer value만 답·실패 call 합산은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` 또는 trace RPC |
-| 승격 잔여 | 다른 독립 trace, 실패·복수 call 반례 |
+| 승격 잔여 | offline 실패·복수 call 반례 통과, 다른 독립 trace·consumer contract 승인 |
 | 마지막 확인 | 2026-07-29 03:55 |
 
 ## 7. 승격 기준
