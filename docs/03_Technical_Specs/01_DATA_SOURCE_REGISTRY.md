@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 02:35
+> Last Updated: 2026-07-29 02:56
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -339,6 +339,8 @@ secret 환경에만 두고 source record에는 논리 provider ID, method, block
    반환했으므로 raw 범위 로그 독립 재현 전에는 후보 상태를 유지한다.
 10. `PROVIDER-EVM-PRIMARY/VERIFY` 후보는 문서 비교만 완료했다. 실제 endpoint와
     secret 구성 없이 capability smoke·2차 재현·trace 독립성은 미실행이다.
+11. 기본 network 0건인 opt-in smoke runner를 준비했다. Rules `allowed`와
+    역할별 HTTPS endpoint가 없으면 실제 adapter 호출 전에 중단한다.
 
 ## 10. Related Documents
 
@@ -360,3 +362,4 @@ secret 환경에만 두고 source record에는 논리 provider ID, method, block
 - **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - source 실패·offline 불변·보안 통합 회귀
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - EVM Core 1차 재조회와 source 장애
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 계정 smoke·독립성·반례
+- **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - dry-run·보안·미실행 경계

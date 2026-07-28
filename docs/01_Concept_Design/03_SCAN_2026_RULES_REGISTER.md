@@ -1,6 +1,6 @@
 # SCAN 2026 공식 규정 Register
 > Created: 2026-07-26 19:24
-> Last Updated: 2026-07-28 10:24
+> Last Updated: 2026-07-29 02:56
 > Status: Baseline Confirmed 1.0 · Active Official-Information Watch
 
 ## 1. 문서 목적
@@ -9,7 +9,7 @@
 한곳에서 추적한다. 일정 안내와 실제 경기 규정을 구분하고, 공개되지 않은
 항목을 관행이나 추측으로 채우지 않는다.
 
-현재 스냅샷은 사전등록이 열린 뒤인 2026-07-27 15:52 KST 기준이다. CTFd
+현재 스냅샷은 사전등록이 열린 뒤인 2026-07-29 02:50 KST 기준이다. CTFd
 회원가입과 팀 생성은 정상 작동하고 로그인한 Challenge 화면은 대회 시작 전
 상태로 잠겨 있다. 로그인 계정의 Notification, 공개 Rules 페이지와 공식
 사이트에서 API·자동화·AI·사전 제작 도구·상용 서비스·제출 형식에 관한
@@ -45,8 +45,8 @@ Register다.
 
 | ID | 출처 | 권위 | 게시·공개 시각 | 조회 시각 | 확인 범위 |
 |:---|:---|:---|:---|:---|:---|
-| `SRC-SCAN-SITE` | [SCAN 2026 공식 사이트](https://scan.sx/) | 공식 이벤트 | 페이지에 게시 시각 없음 | 2026-07-27 12:10 KST | 등록 시작, 예선 시작, 본선·시상 일정, 장소, 상금, 주최·파트너; 정오 이후 별도 세부 Rules 미노출 |
-| `SRC-SCAN-CTFD` | [SCAN 2026 CTFd](https://scan2026.ctfd.io/) | 공식 운영 플랫폼 | 페이지에 게시 시각 없음 | 2026-07-27 12:10 KST | 등록·팀 생성 작동, Challenges 시작 전 잠금, 공개 Rules 미노출 |
+| `SRC-SCAN-SITE` | [SCAN 2026 공식 사이트](https://scan.sx/) | 공식 이벤트 | 페이지에 게시 시각 없음 | 2026-07-29 02:50 KST | 등록 시작, 예선 시작, 본선·시상 일정, 장소, 상금, 주최·파트너; 별도 세부 Rules 미노출 |
+| `SRC-SCAN-CTFD` | [SCAN 2026 CTFd](https://scan2026.ctfd.io/) | 공식 운영 플랫폼 | 페이지에 게시 시각 없음 | 2026-07-29 02:50 KST | 공개 home은 2026-08-02 09:00 KST online qualifier만 표시, 공개 Rules 미노출 |
 | `SRC-SCAN-CTFD-AUTH` | 로그인한 CTFd 화면 | 공식 운영 플랫폼의 인증 화면 | 해당 없음 | 2026-07-27 12:10 KST | 팀 생성 완료, 팀 최대 4명 안내, Notification 없음, Challenges `has not started yet` |
 | `SRC-DA-PRESS` | [디애셋 보도자료](https://www.digitalasset.works/news/articleView.html?idxno=42082) | 주최사 발행 | 2026-07-22 10:15 KST | 2026-07-26 19:23 KST | 24시간 예선, 상위 20팀, 최대 4명, 참가 대상, 대회 성격 |
 | `SRC-FN-CROSSCHECK` | [파이낸셜뉴스 전재](https://v.daum.net/v/20260722104928237) | 보조 교차확인 | 2026-07-22 10:49 KST | 2026-07-26 19:23 KST | 주최사 보도자료의 일정·팀·상위 20팀 내용 교차확인 |
@@ -100,7 +100,7 @@ automation 관련 공개 문구를 찾지 못했다. 이는 허용을 뜻하지 
 
 ## 5. 도구·데이터·협업 규정 상태
 
-2026-07-27 15:52 KST 기준 아래 항목을 명시적으로 허용하거나 금지하는 공식 Rules를
+2026-07-29 02:50 KST 기준 아래 항목을 명시적으로 허용하거나 금지하는 공식 Rules를
 찾지 못했다. 온라인 예선과 본선 모두 `unclear`로 유지한다.
 
 | 규정 ID | 항목 | 온라인 예선 | 본선 | 확인이 필요한 범위 |

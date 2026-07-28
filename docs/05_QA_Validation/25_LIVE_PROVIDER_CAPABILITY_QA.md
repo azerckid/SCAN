@@ -1,7 +1,7 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 02:46
-> Status: Proposed 0.1 · Not Executed
+> Last Updated: 2026-07-29 02:56
+> Status: Runner Prepared · Live Not Executed
 
 ## 1. 목적
 
@@ -9,6 +9,9 @@
 AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하는 실행
 체크리스트다. 문서 작성 시점에는 API key를 구성하거나 live 호출을 실행하지
 않았으므로 모든 결과는 `not_executed`다.
+
+`scripts/smoke_live_provider.py`와 offline unit/dry-run 검증은 준비됐지만,
+이는 아래 capability 결과를 `pass`로 바꾸지 않는다.
 
 ## 2. 실행 전 보안 Gate
 
@@ -111,3 +114,4 @@ fixture는 candidate로 둔다. `pass`도 TASK-012 구현 승인을 자동으로
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - Gate 실행 순서
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - automated 승격 기준
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 재현 대상 4개
+- **QA_Validation**: [Smoke Runner 준비 보고서](./26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - 코드·dry-run·network 0건 검증

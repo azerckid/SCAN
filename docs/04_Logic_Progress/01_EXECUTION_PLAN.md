@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 02:35
+> Last Updated: 2026-07-29 02:56
 > Status: Proposed 0.1 · No Implementation Approval
 
 ## 1. 목적
@@ -39,6 +39,7 @@
 
 - [x] `TASK-012` TX·state·ERC-20·native flow fixture 후보 4개를 선정한다.
 - [x] primary·independent·supporting provider 후보 topology와 smoke 계약을 문서화한다.
+- [x] 기본 network 0건·Rules/endpoint opt-in capability runner를 준비한다.
 - [ ] secret을 로컬 환경에만 구성하고 실제 계정·plan을 확인한다.
 - [ ] TX·receipt·block·filtered logs·historical state·trace capability smoke를 실행한다.
 - [ ] 네 후보를 독립 재현·반례로 `confirmed` 승격한다.
@@ -120,3 +121,4 @@
 - **QA_Validation**: [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 3/6/21 기준선
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - Wave 1 후보 4개와 잔여 Gate
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - smoke·secret·independence 체크
+- **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - runner·dry-run·미실행 경계
