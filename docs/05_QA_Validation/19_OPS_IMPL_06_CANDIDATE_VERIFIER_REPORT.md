@@ -1,6 +1,6 @@
 # OPS-IMPL-06 Candidate·Independent Verifier 검증 보고서
 > Created: 2026-07-28 15:29
-> Last Updated: 2026-07-28 15:29
+> Last Updated: 2026-07-28 16:26
 > Status: Passed · QA-OPS-VERIFY-001 / QA-OPS-CONFLICT-001 Passed
 
 ## 1. 목적과 범위
@@ -122,6 +122,13 @@ confidence는 이 조건을 대체하지 않는다.
 다음 구현 단위는 별도 승인 후 `OPS-IMPL-07`
 OperationsSnapshot·command result·local CLI view다.
 
+OPS-IMPL-07에서 초기 리뷰 P2를 후속 회귀로 보강했다. chain ID는 상수
+비교가 아니라 original↔independent replay 비교로 바꿨고, 공식 fact와
+heuristic label 충돌, verify/promote 교차 problem 차단을 추가했다.
+adapter 호출 실패와 invalid/reused response도 서로 다른 안전 사유로
+분리했다. 이 후속 3개 test를 포함한 전체 결과는
+[OPS-IMPL-07 보고서](./20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md)에 기록한다.
+
 ## 8. 365 글로벌 평가 기준
 
 | 기준 | 판정 | 증거·경계 |
@@ -140,3 +147,4 @@ OperationsSnapshot·command result·local CLI view다.
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - OPS-IMPL 상태
 - **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - VERIFY·CONFLICT 시나리오
 - **QA_Validation**: [OPS-IMPL-05 Evidence Worker 보고서](./18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - raw evidence worker 기준선
+- **QA_Validation**: [OPS-IMPL-07 OperationsSnapshot 보고서](./20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - P2 후속 회귀와 local view 검증

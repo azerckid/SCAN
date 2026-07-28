@@ -57,6 +57,7 @@ from scan_tool.domain.operations import (
     ProblemRecord,
     ProblemStatus,
     Recommendation,
+    VerificationRecord,
     VerificationStatus,
 )
 from scan_tool.ports.evidence import EvidenceAdapterResponse
@@ -382,6 +383,25 @@ def test_candidate_builder_rejects_cross_problem_evidence() -> None:
     assert execution.error.details == {"reason": "evidence_problem_mismatch"}
 
 
+def test_verifier_rejects_cross_problem_evidence_before_adapter() -> None:
+    scenario = _scenario("dex")
+    other_problem = _scenario("auth")
+    candidate = _candidate(scenario)
+    port = StaticEvidencePort(_response(other_problem.evidence_run.result))
+    command = replace(
+        _verification_command(scenario, candidate),
+        evidence_runs=(other_problem.evidence_run,),
+    )
+
+    execution = asyncio.run(IndependentVerifier(port, clock=lambda: NOW).verify(command))
+
+    assert execution.verification is None
+    assert execution.adapter_calls == 0
+    assert port.calls == 0
+    assert execution.error is not None
+    assert execution.error.details == {"reason": "evidence_problem_mismatch"}
+
+
 def test_independent_dex_replay_passes_all_present_checks(tmp_path: Path) -> None:
     scenario = _scenario()
     candidate = _candidate(scenario)
@@ -596,6 +616,39 @@ def test_unknown_candidate_reference_is_rejected_without_crashing(tmp_path: Path
     assert promoted.error.details == {"reason": "candidate_scope_rejected"}
 
 
+def test_promotion_rejects_cross_problem_evidence() -> None:
+    scenario = _scenario("dex")
+    other_problem = _scenario("auth")
+    candidate = _candidate(scenario)
+    verification = VerificationRecord(
+        verification_id="VER-DEX-CROSS-PROBLEM",
+        problem_id=scenario.problem.problem_id,
+        candidate_id=candidate.candidate_id,
+        verifier_job_id=scenario.verifier_job.job_id,
+        status=VerificationStatus.INCOMPLETE,
+        required_checks=["independent_replay"],
+        check_results=[],
+        independent_from_job_ids=[
+            scenario.reporter_job.job_id,
+            scenario.evidence_run.job.job_id,
+        ],
+        conflicts=[],
+        missing_evidence=list(candidate.evidence_refs),
+        created_at=NOW,
+        finished_at=NOW,
+    )
+    command = replace(
+        _promotion_command(scenario, candidate, verification),
+        evidence_runs=(other_problem.evidence_run,),
+    )
+
+    promoted = CandidatePromotionGate(clock=lambda: NOW).promote(command)
+
+    assert promoted.candidate is None
+    assert promoted.error is not None
+    assert promoted.error.details == {"reason": "evidence_plan_mismatch"}
+
+
 def test_conflicting_replay_is_preserved_and_not_promoted() -> None:
     scenario = _scenario()
     candidate = _candidate(scenario)
@@ -620,6 +673,52 @@ def test_conflicting_replay_is_preserved_and_not_promoted() -> None:
     assert promoted.candidate is not None
     assert promoted.candidate.status is CandidateStatus.REVIEW_REQUIRED
     assert promoted.candidate.recommendation is Recommendation.INVESTIGATE
+
+
+def test_official_and_heuristic_labels_are_not_silently_merged() -> None:
+    scenario = _scenario("auth")
+    document = copy.deepcopy(scenario.evidence_run.result.to_contract_dict())
+    heuristic = copy.deepcopy(document["results"][-1])  # type: ignore[index]
+    heuristic.update(
+        {
+            "result_id": "RES-AUTH-HEURISTIC-LABEL",
+            "result_type": "address_label",
+            "classification": "heuristic",
+            "value": {"label": "suspected_spender_cluster"},
+        }
+    )
+    document["results"].append(heuristic)  # type: ignore[union-attr]
+    dual_label_result = validate_analysis_result(document)
+    evidence_run = replace(scenario.evidence_run, result=dual_label_result)
+    scenario = replace(scenario, evidence_run=evidence_run)
+    candidate = _candidate(
+        scenario,
+        selected_result_ids=(
+            "RES-AUTH-APPROVAL",
+            "RES-AUTH-HEURISTIC-LABEL",
+        ),
+    )
+
+    verification_execution = asyncio.run(
+        IndependentVerifier(
+            StaticEvidencePort(_response(_result("auth"))),
+            clock=lambda: NOW,
+        ).verify(_verification_command(scenario, candidate))
+    )
+    assert verification_execution.verification is not None
+    promoted = CandidatePromotionGate(clock=lambda: NOW).promote(
+        _promotion_command(
+            scenario,
+            candidate,
+            verification_execution.verification,
+        )
+    )
+
+    assert "RES-AUTH-APPROVAL" in candidate.answer_value
+    assert "RES-AUTH-HEURISTIC-LABEL" in candidate.answer_value
+    assert verification_execution.verification.status is VerificationStatus.CONFLICT
+    assert promoted.candidate is not None
+    assert promoted.candidate.status is CandidateStatus.REVIEW_REQUIRED
 
 
 def test_missing_replay_evidence_is_incomplete_and_not_promoted() -> None:
@@ -687,7 +786,7 @@ def test_reused_evidence_result_is_not_independent_verification() -> None:
     assert execution.verification is not None
     assert execution.verification.status is VerificationStatus.INCOMPLETE
     assert execution.error is not None
-    assert execution.error.details == {"reason": "independent_replay_failed"}
+    assert execution.error.details == {"reason": "independent_response_invalid"}
 
 
 def test_uncertainty_keeps_passing_candidate_in_review(tmp_path: Path) -> None:
@@ -794,6 +893,7 @@ def test_verifier_adapter_failure_is_safe_incomplete_record() -> None:
     assert execution.verification is not None
     assert execution.verification.status is VerificationStatus.INCOMPLETE
     assert execution.error is not None
+    assert execution.error.details == {"reason": "independent_adapter_failed"}
     assert secret not in serialized
     assert str(ROOT) not in serialized
 

@@ -77,11 +77,11 @@ def test_help_describes_all_approved_commands() -> None:
     assert "Evidence-first blockchain forensic tools" in result.stdout
     assert "\x1b" not in result.stdout
     assert max(len(line) for line in result.stdout.splitlines()) <= 80
-    for command in ("analyze", "validate", "resume", "show"):
+    for command in ("analyze", "validate", "resume", "show", "operations"):
         assert command in result.stdout
 
 
-@pytest.mark.parametrize("command", ("analyze", "validate", "resume", "show"))
+@pytest.mark.parametrize("command", ("analyze", "validate", "resume", "show", "operations"))
 def test_each_approved_command_has_help(command: str) -> None:
     result = runner.invoke(app, [command, "--help"])
 
