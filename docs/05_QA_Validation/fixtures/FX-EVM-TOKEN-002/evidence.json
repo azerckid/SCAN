@@ -1,0 +1,97 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-TOKEN-002",
+  "status": "candidate",
+  "captured_at": "2026-07-28T17:08:25Z",
+  "event_evidence": [
+    {
+      "evidence_id": "EV-TOKEN-INTERNAL-WITHDRAWAL",
+      "evidence_type": "withdrawal_event",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+      "log_index": 279,
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "sender": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "value_raw": "14449515027026387018",
+      "role": "amount_cross_check_only"
+    }
+  ],
+  "call_evidence": [
+    {
+      "evidence_id": "EV-TOKEN-INTERNAL-TX",
+      "evidence_type": "rpc_transaction_lookup",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "method": "eth_getTransactionByHash",
+      "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+      "from": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "to": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "value_hex": "0x0",
+      "receipt_status": "0x1"
+    },
+    {
+      "evidence_id": "EV-TOKEN-INTERNAL-ETH",
+      "evidence_type": "internal_eth_transfer",
+      "source_id": "DS-EXPLORER-EVM",
+      "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+      "index": 17,
+      "call_type": "call",
+      "from": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "to": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "value_wei": "14449515027026387018",
+      "input": "0x",
+      "is_error": "0"
+    }
+  ],
+  "state_evidence": [],
+  "context_evidence": [],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Outer transaction, receipt status, and WETH withdrawal cross-check"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Successful internal native ETH transfer path and value"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider": "ethereum.publicnode.com",
+      "endpoint": "https://ethereum.publicnode.com",
+      "methods": [
+        "eth_getTransactionByHash",
+        "eth_getTransactionReceipt"
+      ],
+      "retrieved_at": "2026-07-28T17:08:25Z",
+      "reuse_artifact": "FX-SVC-DEX-001/raw-replay.json"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "provider": "Blockscout compatibility API",
+      "api": true,
+      "endpoint": "https://eth.blockscout.com/api?module=account&action=txlistinternal&txhash=0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+      "retrieved_at": "2026-07-28T17:08:25Z",
+      "replay_artifact": "FX-SVC-DEX-001/raw-replay.json",
+      "replay_artifact_captured_at": "2026-07-27T15:15:26Z",
+      "notes": "The compatibility API reconfirmed the successful transfer value and endpoints. Detailed call index 17 comes from the confirmed replay artifact."
+    }
+  ],
+  "consistency_checks": {
+    "outer_value_is_zero": true,
+    "internal_call_is_successful": true,
+    "internal_recipient_matches_interest_address": true,
+    "internal_amount_matches_withdrawal": true
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": "Independent debug trace replay and failed/multiple-call negative cases"
+  },
+  "provenance_notes": "The internal call is the scoring evidence for native ETH inflow. The WETH withdrawal event is retained only as an amount cross-check."
+}

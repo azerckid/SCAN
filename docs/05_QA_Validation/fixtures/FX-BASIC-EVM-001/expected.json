@@ -1,0 +1,98 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-BASIC-EVM-001",
+  "status": "candidate",
+  "objects": [
+    {
+      "label": "subject_eoa",
+      "object_type": "address",
+      "checksum_valid": true,
+      "code_at_block": "0x",
+      "account_kind": "eoa"
+    },
+    {
+      "label": "router_contract",
+      "object_type": "address",
+      "checksum_valid": true,
+      "account_kind": "contract"
+    },
+    {
+      "label": "transaction_hash",
+      "object_type": "transaction_hash",
+      "block_number": 16642512,
+      "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+      "from": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "to": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "value_wei": "0",
+      "nonce": 54,
+      "transaction_index": 104,
+      "status": "success",
+      "gas_used": "136992",
+      "effective_gas_price_wei": "59239415945",
+      "fee_paid_wei": "8115326069137440"
+    },
+    {
+      "label": "block_hash",
+      "object_type": "block_hash",
+      "block_number": 16642512,
+      "timestamp": 1676565263
+    },
+    {
+      "label": "block_number",
+      "object_type": "block_number",
+      "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+      "timestamp": 1676565263
+    },
+    {
+      "label": "malformed",
+      "object_type": "invalid",
+      "reason_code": "invalid_length"
+    }
+  ],
+  "partial_conditions": [
+    "RPC object lookup unavailable after the lexical type is identified",
+    "Historical eth_getCode unavailable for one or more address inputs"
+  ],
+  "failed_conditions": [
+    "Transaction or block is reported as existing without RPC evidence",
+    "Malformed input is silently coerced into an address or hash",
+    "Transaction fee is calculated from gas limit instead of gas used"
+  ],
+  "tolerance": {
+    "integer_raw": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-BASIC-EVM-OBJECT-TYPES",
+        "description": "All six inputs must be classified without coercing the malformed value.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-BASIC-EVM-TX",
+          "EV-BASIC-EVM-BLOCK",
+          "EV-BASIC-EVM-EOA-CODE",
+          "EV-BASIC-EVM-CONTRACT-CODE"
+        ]
+      },
+      {
+        "requirement_id": "REQ-BASIC-EVM-TX-SUMMARY",
+        "description": "Transaction, receipt, and fee fields must match raw RPC values exactly.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-BASIC-EVM-TX",
+          "EV-BASIC-EVM-RECEIPT"
+        ]
+      },
+      {
+        "requirement_id": "REQ-BASIC-EVM-BLOCK-LINK",
+        "description": "Block hash and decimal/hex block number must resolve to the same block.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-BASIC-EVM-BLOCK"
+        ]
+      }
+    ]
+  }
+}

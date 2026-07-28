@@ -1,0 +1,129 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-BASIC-EVM-001",
+  "status": "candidate",
+  "captured_at": "2026-07-28T17:08:25Z",
+  "event_evidence": [],
+  "call_evidence": [
+    {
+      "evidence_id": "EV-BASIC-EVM-TX",
+      "evidence_type": "rpc_transaction_lookup",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "method": "eth_getTransactionByHash",
+      "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+      "block_number_hex": "0xfdf1d0",
+      "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+      "from": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "to": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "value_hex": "0x0",
+      "nonce_hex": "0x36",
+      "transaction_index_hex": "0x68"
+    },
+    {
+      "evidence_id": "EV-BASIC-EVM-RECEIPT",
+      "evidence_type": "rpc_receipt_lookup",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "method": "eth_getTransactionReceipt",
+      "status_hex": "0x1",
+      "gas_used_hex": "0x21720",
+      "effective_gas_price_hex": "0xdcaf1c089",
+      "recomputed_fee_wei": "8115326069137440"
+    },
+    {
+      "evidence_id": "EV-BASIC-EVM-BLOCK",
+      "evidence_type": "rpc_block_lookup",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "method": "eth_getBlockByNumber",
+      "block_number_hex": "0xfdf1d0",
+      "block_number": 16642512,
+      "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+      "timestamp_hex": "0x63ee5b0f",
+      "timestamp": 1676565263
+    }
+  ],
+  "state_evidence": [
+    {
+      "evidence_id": "EV-BASIC-EVM-EOA-CODE",
+      "evidence_type": "historical_code",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "method": "eth_getCode",
+      "address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "block_tag": "0xfdf1d0",
+      "result": "0x"
+    },
+    {
+      "evidence_id": "EV-BASIC-EVM-CONTRACT-CODE",
+      "evidence_type": "historical_code",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "method": "eth_getCode",
+      "address": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "block_tag": "0xfdf1d0",
+      "result_rule": "non_empty_bytecode",
+      "result_prefix": "0x6080604052"
+    }
+  ],
+  "context_evidence": [],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Transaction, receipt, and block object fields"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "role": "scoring",
+      "required": true,
+      "purpose": "EOA versus contract code at the fixture block"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "role": "supporting",
+      "required": false,
+      "purpose": "Checksum and object UI cross-check"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider": "ethereum.publicnode.com",
+      "endpoint": "https://ethereum.publicnode.com",
+      "methods": [
+        "eth_getTransactionByHash",
+        "eth_getTransactionReceipt",
+        "eth_getBlockByNumber"
+      ],
+      "retrieved_at": "2026-07-28T17:08:25Z"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "dRPC",
+      "endpoint": "https://eth.drpc.org",
+      "methods": [
+        "eth_getCode"
+      ],
+      "retrieved_at": "2026-07-28T17:08:25Z"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "provider": "Blockscout",
+      "api": true,
+      "endpoint": "https://eth.blockscout.com/api/v2/transactions/0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+      "retrieved_at": "2026-07-28T17:08:25Z"
+    }
+  ],
+  "consistency_checks": {
+    "transaction_block_hash_matches_block": true,
+    "receipt_matches_transaction": true,
+    "fee_recomputed_from_receipt": true,
+    "eoa_code_empty": true,
+    "router_code_non_empty": true
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": "Independent second-provider replay and checksum negative case"
+  },
+  "provenance_notes": "The candidate reuses a confirmed public transaction as a common benchmark point but derives BASIC-EVM answers from RPC object and historical code lookups."
+}

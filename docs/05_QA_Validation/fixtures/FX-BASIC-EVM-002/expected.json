@@ -1,0 +1,71 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-BASIC-EVM-002",
+  "status": "candidate",
+  "block": {
+    "number": 16642512,
+    "tag": "0xfdf1d0",
+    "timestamp": 1676565263,
+    "timestamp_iso": "2023-02-16T16:34:23Z",
+    "state_semantics": "post_state"
+  },
+  "native_balance": {
+    "symbol": "ETH",
+    "decimals": 18,
+    "amount_raw": "148897435437879000853",
+    "display": "148.897435437879000853"
+  },
+  "token_balances": [
+    {
+      "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "symbol": "USDC",
+      "decimals": 6,
+      "amount_raw": "26470158088",
+      "display": "26470.158088"
+    }
+  ],
+  "partial_conditions": [
+    "Historical native or token state is unavailable at the requested block",
+    "Token decimals is unavailable while the raw balance remains available"
+  ],
+  "failed_conditions": [
+    "Latest state is substituted for historical state",
+    "The block tag or post-state semantics is omitted",
+    "Raw integer precision is lost during decimal conversion"
+  ],
+  "tolerance": {
+    "native_amount_raw": 0,
+    "token_amount_raw": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-BASIC-STATE-BLOCK",
+        "description": "The response must identify block 16642512 and post-state semantics.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-BASIC-STATE-BLOCK"
+        ]
+      },
+      {
+        "requirement_id": "REQ-BASIC-STATE-NATIVE",
+        "description": "ETH balance must match eth_getBalance at the historical block exactly.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-BASIC-STATE-ETH"
+        ]
+      },
+      {
+        "requirement_id": "REQ-BASIC-STATE-USDC",
+        "description": "USDC balance and decimals must match historical eth_call values exactly.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-BASIC-STATE-USDC-BALANCE",
+          "EV-BASIC-STATE-USDC-DECIMALS"
+        ]
+      }
+    ]
+  }
+}

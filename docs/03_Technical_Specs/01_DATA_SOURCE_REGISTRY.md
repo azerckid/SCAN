@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-28 02:34
+> Last Updated: 2026-07-29 02:08
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -198,6 +198,10 @@
 
 | Fixture / 문제 ID | 최소 필요 소스 | 없으면 영향 |
 |:---|:---|:---|
+| BASIC-EVM-001 | `DS-EVM-RPC-PUBLIC`, historical code 사용 시 `DS-EVM-RPC-ARCHIVE` | 객체 존재·TX fee·EOA/contract 구분 불가 |
+| BASIC-EVM-002 | `DS-EVM-RPC-ARCHIVE`, `DS-EVM-RPC-PUBLIC` | 기준 블록 잔액·timestamp 고정 불가 |
+| EVM-TOKEN-001 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` 또는 범위 logs 지원 archive | 이벤트 또는 첫 전송 순서 입증 불가 |
+| EVM-TOKEN-002 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` 또는 trace 지원 RPC | top-level과 internal native 유입 분리 불가 |
 | FLOW-EVM-001 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-LABEL-PUBLIC` | 경로·라벨 검증 불가 |
 | SVC-DEX-001 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-DEX-META` | in/out 복원 불가 |
 | SVC-BRG-001 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` | 양단 매칭 실패 |
@@ -315,6 +319,9 @@
 7. TASK-009에서 세 source 경계와 failure matrix를 통합 회귀했다.
 8. TASK-010과 live source는 공식 Rules·명시적 opt-in·별도 승인 전까지
    비활성 상태를 유지한다.
+9. TASK-012 candidate 4개는 Publicnode·dRPC·Blockscout으로 1차 재조회했다.
+   historical `eth_getLogs` 공급자 2곳이 각각 token 필요·route 실패를
+   반환했으므로 raw 범위 로그 독립 재현 전에는 후보 상태를 유지한다.
 
 ## 10. Related Documents
 
@@ -333,3 +340,4 @@
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - public/archive/trace/explorer raw source·재조회·정합 검증
 - **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - public/archive/explorer/issuer/OFAC source·재조회·정합 검증
 - **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - source 실패·offline 불변·보안 통합 회귀
+- **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - EVM Core 1차 재조회와 source 장애
