@@ -1,6 +1,6 @@
 # SCAN 2026 Competition Operations Board
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 10:11
+> Last Updated: 2026-07-28 10:24
 > Status: Draft 1 · AI-Native Interactive Preview · User Review Pending · Rules-Gated
 
 ## 1. 문서 목적
@@ -218,13 +218,14 @@ CTA를 만들지 않는다. 제출 완료는 `Mark submitted`로 명확히 구�
 ### 9.3 Empty
 
 - 문제 0건: `CTFd 문제를 등록하십시오`와 Rules 확인 CTA
-- worker 0건: AI 제한·CLI only·설정 누락을 구분
+- worker 0건: AI mode 대기·Python evidence worker 설정 누락·source 부족을 구분
 - submission 0건: `검증 완료 후보 없음`, 실패로 표시하지 않음
 
 ### 9.4 Partial·error
 
 - provider 장애는 영향받는 job·problem만 표시한다.
-- 전역 Rules 차단과 개별 source 실패를 구분한다.
+- AI mode의 `rules_gated` 대기·`rule_restricted` 호출 거부·개별 source
+  실패를 구분한다.
 - 이미 확보한 evidence·candidate를 숨기지 않는다.
 - stale 상태에는 마지막 갱신 시각을 표시한다.
 
@@ -232,6 +233,8 @@ CTA를 만들지 않는다. 제출 완료는 `Mark submitted`로 명확히 구�
 
 - AI 규정이 `unclear`이면 AI Planner job은 유지하되 provider·model·외부
   전송을 `rules_gated`로 대기시킨다.
+- 요청한 mode가 공식적으로 금지·제한되면 해당 호출을 `rule_restricted`로
+  거부하고 다른 공식 허용 AI mode만 선택할 수 있게 한다.
 - 이유, 규정 ID, 재확인 시각과 허용 mode 선택 조건을 표시한다.
 - UI toggle만으로 제한을 우회할 수 없어야 한다.
 
@@ -266,6 +269,8 @@ CTA를 만들지 않는다. 제출 완료는 `Mark submitted`로 명확히 구�
 - assignment·fallback·verification 축약 Activity Log
 - human approval, answer 복사, `Mark submitted`, CTFd 응답·시각 기록의 분리
 - AI Planner `REQUIRED / RULES GATED`, auto-submit `OFF`
+- provider·model·data boundary·tool mode와 `rules_gated`/`rule_restricted`
+  의미를 보여 주는 AI Execution Mode panel
 - 전체 12개 중 현재 6개 표시 범위
 - problem row 선택에 따른 Detail 본문 전환
 - selector로 Loading·Empty·Stale·Rules unavailable 상태 확인

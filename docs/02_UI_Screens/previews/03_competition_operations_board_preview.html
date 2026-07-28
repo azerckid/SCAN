@@ -94,6 +94,35 @@
     .step:last-child::after { content: ""; margin: 0; }
     .step.active { color: var(--cyan); }
     .state-tools { display: flex; gap: 7px; align-items: center; }
+    .mode-panel {
+      margin: 0 0 14px;
+      padding: 13px 14px;
+      background: rgba(16, 27, 43, .82);
+    }
+    .mode-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .mode-head h2 { margin: 0; font-size: 13px; }
+    .mode-head p { margin: 3px 0 0; color: var(--muted); font-size: 10px; }
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .mode-cell {
+      min-width: 0;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #0b1524;
+    }
+    .mode-cell span { display: block; color: var(--muted); font-size: 9px; }
+    .mode-cell strong { display: block; margin-top: 4px; font-size: 11px; overflow-wrap: anywhere; }
+    .mode-cell strong.wait { color: var(--amber); }
     .metric {
       padding: 13px 15px;
       border: 1px solid var(--line);
@@ -371,6 +400,7 @@
       .layout { grid-template-columns: 1.4fr .8fr; }
       .stack { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; }
       .summary { grid-template-columns: repeat(3, 1fr); }
+      .mode-grid { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 800px) {
       .app { padding: 10px; }
@@ -378,6 +408,8 @@
       .clock, .rules { text-align: left; justify-content: flex-start; }
       .layout, .stack, .detail-grid, .form-grid, .triage-summary { grid-template-columns: 1fr; }
       .workflow { grid-template-columns: 1fr; }
+      .mode-head { align-items: flex-start; flex-direction: column; }
+      .mode-grid { grid-template-columns: 1fr; }
       .form-grid .wide { grid-column: auto; }
       .summary { grid-template-columns: repeat(2, 1fr); }
       .table-wrap { overflow-x: auto; }
@@ -438,6 +470,23 @@
       </div>
     </section>
     <div class="state-banner" id="state-banner" role="status" aria-live="polite" hidden></div>
+
+    <section class="panel mode-panel" aria-labelledby="ai-mode-title">
+      <div class="mode-head">
+        <div>
+          <h2 id="ai-mode-title">AI Execution Mode</h2>
+          <p>AI Planner는 필수이며 Rules Gate가 허용 실행 mode만 선택합니다.</p>
+        </div>
+        <span class="pill warn">rules_gated · EXTERNAL I/O 0</span>
+      </div>
+      <div class="mode-grid">
+        <div class="mode-cell"><span>Provider</span><strong class="wait">PENDING OFFICIAL RULES</strong></div>
+        <div class="mode-cell"><span>Model</span><strong class="wait">PENDING OFFICIAL RULES</strong></div>
+        <div class="mode-cell"><span>Data boundary</span><strong>NO EXTERNAL TRANSMISSION</strong></div>
+        <div class="mode-cell"><span>Tool mode</span><strong>PYTHON EVIDENCE · OFFLINE</strong></div>
+        <div class="mode-cell"><span>State semantics</span><strong>GATED = WAIT · RESTRICTED = REJECT</strong></div>
+      </div>
+    </section>
 
     <section class="layout">
       <section class="panel" aria-labelledby="problem-title">
@@ -678,7 +727,7 @@
               <select id="new-priority"><option>critical</option><option selected>high</option><option>normal</option><option>deferred</option></select>
             </label>
             <label class="form-field">Assigned role
-              <select id="new-role"><option selected>Flow Tracer + Verifier</option><option>EVM Analyst + Verifier</option><option>Human / CLI fallback</option></select>
+              <select id="new-role"><option selected>Flow Tracer + Verifier</option><option>EVM Analyst + Verifier</option><option>Python Evidence Worker</option></select>
             </label>
           </div>
           <div class="notice">유형·난이도·도구·leaf job은 AI Planner의 운영 가설입니다. Operator 승인 후 Python 도구가 실행하며, 원본 evidence가 없는 AI 출력은 정답으로 승격되지 않습니다.</div>
@@ -1041,8 +1090,8 @@
     });
     document.querySelector("#reassign-job").addEventListener("click", () => {
       const row = rows.find(item => item.dataset.id === selectedProblem);
-      row.cells[4].textContent = "Operator · Human / CLI fallback";
-      addActivity("REASSIGNED", `${selectedProblem} moved to Human / CLI fallback.`);
+      row.cells[4].textContent = "Operator · Python Evidence Worker";
+      addActivity("REASSIGNED", `${selectedProblem} moved to Python Evidence Worker under the existing AI plan.`);
       notify("Reassigned without changing other problem states.");
     });
 

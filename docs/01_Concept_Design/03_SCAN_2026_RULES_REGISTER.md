@@ -1,6 +1,6 @@
 # SCAN 2026 공식 규정 Register
 > Created: 2026-07-26 19:24
-> Last Updated: 2026-07-27 15:52
+> Last Updated: 2026-07-28 10:24
 > Status: Baseline Confirmed 1.0 · Active Official-Information Watch
 
 ## 1. 문서 목적
@@ -127,14 +127,21 @@ automation 관련 공개 문구를 찾지 못했다. 이는 허용을 뜻하지 
 아래는 공식 규정이 아니라 규정 확인 전 프로젝트 내부 안전 원칙이다.
 
 1. `unclear`를 `allowed`로 표시하지 않는다.
-2. 분석 도구는 수동 검증·source provenance·원본 증거 보존 경로를 유지한다.
-3. 자동 제출, 자격증명 공유, challenge brute force 기능은 준비 범위에서 제외한다.
-4. 사전 제작 도구는 대회 규정 확인 후 기능별로 켜고 끌 수 있어야 한다.
-5. 제한이 확인되면 `rule_restricted`로 외부 조회 전에 차단한다.
-6. 공개 전 문제·답안·개인정보를 저장소나 외부 AI 서비스에 전송하지 않는다.
-7. agent orchestration은 `RULE-AI-001`, `RULE-AGENT-001`,
-   `RULE-COLLAB-001`, `RULE-PROBLEM-EXTERNAL-001` 확인 후 기능별로
-   활성화한다.
+2. AI Planner/Coordinator는 모든 문제에 해결 방법 가설과 leaf job 계획을
+   만드는 SCAN의 필수 내부 아키텍처다. 공식 Rules는 AI 사용 여부가 아니라
+   허용 provider·model·data boundary·tool mode를 결정한다.
+3. 허용 mode가 미확정이면 AI planning job을 제거하지 않고 `rules_gated`로
+   대기시키며 외부 호출은 0건으로 유지한다.
+4. 요청한 mode가 공식 Rules에 의해 금지·제한되면 해당 호출을 I/O 전에
+   `rule_restricted`로 거부한다. 다른 AI mode는 공식적으로 허용된 경우에만
+   선택한다.
+5. 허용되는 AI mode가 하나도 없으면 AI-native Operations 전체를 완료한
+   것으로 표시하지 않고 규정 충돌을 Operator에게 알린다.
+6. Python 증거 도구는 허용된 offline 준비·재현을 계속할 수 있지만,
+   `TASK-010` 전체 흐름에서 AI Planner를 대신하지 않는다.
+7. 분석 도구는 수동 검증·source provenance·원본 증거 보존 경로를 유지한다.
+8. 자동 제출, 자격증명 공유, challenge brute force 기능은 준비 범위에서 제외한다.
+9. 공개 전 문제·답안·개인정보를 승인되지 않은 외부 AI 서비스에 전송하지 않는다.
 
 ## 6. 문제·제출 형식 미확정 등록부
 
@@ -212,14 +219,17 @@ Watch`로 계속 갱신한다.
 | `old_status`, `new_status` | allowed/restricted/unclear |
 | `effective_at` | 즉시 또는 지정 시각 |
 | `affected_documents` | 역반영 대상 |
-| `feature_gate_action` | keep_disabled/disable/approval_required |
+| `feature_gate_action` | wait_for_mode/select_allowed_mode/block_restricted_call/approval_required |
 | `verification` | 실행한 문서·Schema·fixture 검증 |
 
 ### 8.2 미공지 상태의 운영
 
 - Notification이 없다는 이유로 준비 작업을 중단하지 않는다.
 - DB Schema·README·OSS 결정·offline fixture 검증은 계속 진행한다.
-- 규정 의존 기능은 `unclear` 상태와 human/CLI fallback을 유지한다.
+- AI Planner job은 유지하되 허용 mode가 확정될 때까지 `rules_gated`로
+  대기시키며 외부 전송은 0건으로 유지한다.
+- 허용된 offline Python 증거 준비는 계속할 수 있지만, 이를 AI-native
+  Operations의 완료나 AI Planner 대체로 표시하지 않는다.
 - 자동 감시는 현재 구현되어 있지 않으므로 로그인 Notification·가입 이메일·
   공식 사이트를 수동 재확인한다.
 
@@ -233,6 +243,7 @@ Watch`로 계속 갱신한다.
 | 2026-07-27 00:54 KST | agent orchestration·외부 AI 문제 데이터 전송 항목 추가 | 내부 운영 설계 | `RULE-AGENT-001`, `RULE-PROBLEM-EXTERNAL-001` 확인 전 비활성 |
 | 2026-07-27 12:10 KST | 등록 후 1차 확인 | `SRC-SCAN-SITE`, `SRC-SCAN-CTFD`, `SRC-SCAN-CTFD-AUTH` | 등록·팀 생성 작동, Challenge 잠금, Notification·상세 Rules 없음 |
 | 2026-07-27 15:52 KST | Notification Intake와 미공지 운영 절차 확정 | 사용자 승인·내부 문서 검토 | 공지 대응과 독립 문서 작업을 병렬화 |
+| 2026-07-28 10:24 KST | AI-native 내부 실행 계약 동기화 (공식 규정 변경 아님) | 사용자 결정·내부 운영 설계 | AI Planner 필수, Rules Gate는 mode 선택, `rules_gated` 대기와 `rule_restricted` 호출 거부 분리 |
 
 변경 이력에는 페이지가 그대로였다는 사실이 아니라, 이전 기준선과 달라진
 규정·운영 정보만 추가한다.

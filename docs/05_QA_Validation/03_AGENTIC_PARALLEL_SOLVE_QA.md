@@ -1,7 +1,7 @@
 # SCAN 2026 Agentic Parallel Solve QA
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 10:11
-> Status: Draft 1 · AI-Native Scope Approved · Interactive Preview Updated · Runtime Not Executed · Rules-Gated
+> Last Updated: 2026-07-28 10:24
+> Status: Draft 2 · AI-Native Contract Draft · Interactive Preview Updated · Runtime Not Executed · User Review Pending · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -106,8 +106,8 @@
   2. Rules Gate를 `allowed` fake/local mode로 전환해 해결 방법·leaf job
      hypothesis를 생성한다.
   3. AI plan에 따라 Python evidence tool을 실행하고 result·evidence를 연결한다.
-  4. external provider가 `restricted`일 때 허용 adapter 교체 또는
-     `rules_gated` 차단을 확인한다.
+  4. external provider가 `restricted`일 때 해당 호출의
+     `rule_restricted` 거부와 공식 허용 adapter로만 교체되는지 확인한다.
   5. AI가 evidence 없는 정답 문장과 높은 confidence를 반환하도록 주입한다.
 - **Expected**:
   - AI planning job은 모든 문제에 존재하며 `unclear`에서는 허용 mode를
@@ -138,6 +138,8 @@
 
 - [ ] 문제 원문·ID·배점·답 형식·파일·URL을 입력하고 AI Planner의 방법 가설을 검토할 수 있다.
 - [ ] AI Planner가 필수이며 Rules Gate가 provider·model·data mode를 선택하는 것으로 표시된다.
+- [ ] provider·model·data boundary·tool mode와 현재 `rules_gated` 상태가 한 화면에 보인다.
+- [ ] `rules_gated` 대기와 `rule_restricted` 호출 거부의 의미가 구분된다.
 - [ ] Operator가 leaf job·사람 우선순위를 승인한 후에만 Queue로 이동한다.
 - [ ] 6개 이상의 문제 상태를 한 화면에서 구분할 수 있다.
 - [ ] problem row는 `Tab`·`Enter`·`Space`, worker는

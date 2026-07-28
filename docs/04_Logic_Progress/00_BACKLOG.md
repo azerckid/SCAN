@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 10:11
-> Status: Approved 2.0 · TASK-001~009 Done · TASK-010 AI-Native Contract
+> Last Updated: 2026-07-28 10:24
+> Status: TASK-001~009 Approved/Done · TASK-010 AI-Native Contract Draft · User Review Pending
 
 ## 1. 문서 목적
 

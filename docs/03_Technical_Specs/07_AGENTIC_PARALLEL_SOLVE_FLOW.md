@@ -1,6 +1,6 @@
 # SCAN 2026 Agentic Parallel Solve Flow
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 10:11
+> Last Updated: 2026-07-28 10:24
 > Status: Draft 1 · AI-Native · Rules-Gated · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -236,6 +236,12 @@ Competition Operations Board는 다음을 한 화면에서 보여야 한다.
 
 ## 10. 보안·규정·윤리 Gate
 
+| 실행 상태 | 의미 | 허용 행동 |
+|:---|:---|:---|
+| `allowed` | 선택한 provider·model·data boundary·tool mode가 공식적으로 허용됨 | AI Planner 실행과 승인된 Python evidence job 배정 |
+| `rules_gated` | 허용 mode가 미확정 | 필수 AI planning job을 대기시키고 외부 I/O 0건 유지 |
+| `rule_restricted` | 요청한 mode가 공식적으로 금지·제한됨 | 해당 호출을 I/O 전에 거부하고 구조화 오류 보존; 다른 공식 허용 AI mode만 선택 |
+
 - `RULE-AI-001`, `RULE-PREBUILT-TOOL-001`, `RULE-DATA-001`은 AI 사용
   여부가 아니라 허용 provider·model·전송 데이터·도구 mode를 결정한다.
 - 허용 AI mode가 확정되기 전에는 AI Planner job을 제거하지 않고
@@ -286,7 +292,8 @@ Degraded Mode에서도 Analysis I/O·evidence·source·human submission 계약�
 - 일부 worker·source 실패에도 확보한 증거가 있으면 문제는 `partial` 또는
   `review_required`가 될 수 있다.
 - 필수 정답 필드에 결정적 증거가 없으면 `submission_ready`가 될 수 없다.
-- Rules Gate가 제한하면 해당 기능은 실행 전에 `rule_restricted`로 차단한다.
+- Rules가 아직 미확정이면 job은 `rules_gated`로 대기하고, 요청한 mode의
+  제한이 확정되면 해당 호출은 실행 전에 `rule_restricted`로 거부한다.
 - 문제·worker 상태가 교착되거나 다른 문제의 데이터를 혼합하면 실패다.
 
 ## 13. 365 글로벌 평가 기준
