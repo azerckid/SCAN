@@ -1,6 +1,6 @@
 # SCAN 2026 Agentic Parallel Solve Flow
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 11:28
+> Last Updated: 2026-07-28 11:53
 > Status: AI-Native Contract Approved 1.0 · UI-First Gate Passed · Rules-Gated · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -311,11 +311,12 @@ Degraded Mode에서도 Analysis I/O·evidence·source·human submission 계약�
 
 - [ ] 공식 Rules에서 AI Planner에 사용할 provider·model·data·도구 mode를 확인했다.
 - [x] Operations Board HTML Preview를 사용자가 검토했다.
-- [ ] TASK-010 Pre-Code Technical Brief를 검토·승인했다.
-- [ ] 운영 manifest·verification·candidate persistence 범위를 승인했다.
-- [ ] worker 수·provider별 concurrency 기본값을 측정·승인했다.
+- [x] TASK-010 Pre-Code Technical Brief를 검토·승인했다.
+- [x] 운영 manifest·verification·candidate persistence 범위를 승인했다.
+- [x] Draft 1 offline QA concurrency 기본값을 승인했다.
+- [ ] live worker 수·provider별 concurrency를 측정·승인했다.
 - [ ] agent adapter 없이 Python CLI만으로 같은 leaf 분석이 가능하다.
-- [ ] 자동 제출·credential 저장이 범위 밖임을 확인했다.
+- [x] 자동 제출·credential 저장이 범위 밖임을 확인했다.
 - [ ] Backlog `TASK-010`의 Implementation Preconditions를 통과했다.
 - [ ] 구현 착수를 별도로 승인했다.
 

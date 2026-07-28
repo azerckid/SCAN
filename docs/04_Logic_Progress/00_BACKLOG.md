@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 11:28
-> Status: TASK-001~009 Approved/Done · TASK-010 AI-Native Contract Approved · UI-First Gate Passed · Implementation ToDo
+> Last Updated: 2026-07-28 11:53
+> Status: TASK-001~009 Approved/Done · TASK-010 Pre-Code Brief Approved · Implementation ToDo
 
 ## 1. 문서 목적
 
@@ -593,15 +593,17 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - 병렬성·격리·독립 검증·규정·수동 제출
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - leaf 분석 24개 기존 기준선
 - Implementation Preconditions:
-  - [ ] 관련 Concept·UI·Preview·Technical·QA 문서를 다시 읽었다.
+  - [x] 관련 Concept·UI·Preview·Technical·QA 문서를 다시 읽었다.
   - [x] Operations Board Preview를 사용자가 확인하고 피드백을 승인했다.
-  - [ ] TASK-010 Pre-Code Technical Brief를 검토·승인했다.
+  - [x] TASK-010 Pre-Code Technical Brief를 검토·승인했다.
   - [ ] 공식 Rules에서 AI Planner용 provider·model·data·사전 도구 mode를 확인했다.
-  - [ ] 필수 AI Planner와 활성화할 role·source·Python evidence worker를 승인했다.
-  - [ ] 운영 manifest·verification·candidate 최소 필드와 mutation을 승인했다.
-  - [ ] 전체 job·provider·AI worker concurrency budget을 측정·승인했다.
-  - [ ] loading·empty·partial·failed·stale·rules unavailable 상태를 확인했다.
-  - [ ] CTFd credential·자동 제출·brute force가 범위 밖임을 확인했다.
+  - [x] 필수 AI Planner·role·Python evidence worker 구조를 승인했다.
+  - [ ] 공식 Rules에 따라 실제 활성화할 source·AI mode를 승인했다.
+  - [x] 운영 manifest·verification·candidate 최소 필드와 mutation을 승인했다.
+  - [x] Draft 1 offline QA concurrency 기본값을 승인했다.
+  - [ ] live job·provider·AI worker concurrency budget을 측정·승인했다.
+  - [x] loading·empty·partial·failed·stale·rules unavailable 상태를 확인했다.
+  - [x] CTFd credential·자동 제출·brute force가 범위 밖임을 확인했다.
   - [ ] `TASK-010` 구현 착수를 별도로 승인받았다.
 - Acceptance Criteria:
   - [ ] 두 개 이상의 문제를 동시에 처리하며 상태·결과·candidate가 격리된다.

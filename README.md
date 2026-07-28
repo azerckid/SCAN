@@ -24,7 +24,7 @@ keeping current sanctions and criminal intent `not_assessed`. `TASK-009` closes 
 offline P0·V1 integration gate with deterministic replay, the 11-code error matrix,
 repository traceability, and security scans; all 24 P0·V1 QA scenarios pass.
 The mandatory AI Planner contract and Operations Board UI-First Gate are approved.
-`TASK-010` runtime is not implemented; its Pre-Code Technical Brief is under review.
+`TASK-010` runtime is not implemented; its Pre-Code Technical Brief is approved.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`, so external execution modes remain `rules_gated` until
 an authoritative notice is recorded.

@@ -1,7 +1,7 @@
 # TASK-010 Pre-Code Technical Brief
 > Created: 2026-07-28 11:28
-> Last Updated: 2026-07-28 11:43
-> Status: Draft 1 · Review Pending · Runtime Not Implemented · Rules-Gated
+> Last Updated: 2026-07-28 11:53
+> Status: Approved 1.0 · Runtime Not Implemented · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -596,12 +596,12 @@ Analysis I/O와 fixture 회귀는 기존 133개 테스트·Schema/fixture PASS 3
 
 ## 15. 구현 승격 Gate
 
-- [ ] 이 Pre-Code Technical Brief를 사용자가 검토·승인했다.
-- [ ] operations 최소 필드·상태·mutation을 승인했다.
-- [ ] SQLite v2 additive migration 방향을 승인했다.
-- [ ] Draft 1 offline QA concurrency 값을 승인했다.
-- [ ] AI adapter 단계와 data boundary를 승인했다.
-- [ ] OperationsSnapshot 최소 필드를 승인했다.
+- [x] 이 Pre-Code Technical Brief를 사용자가 검토·승인했다.
+- [x] operations 최소 필드·상태·mutation을 승인했다.
+- [x] SQLite v2 additive migration 방향을 승인했다.
+- [x] Draft 1 offline QA concurrency 값을 승인했다.
+- [x] AI adapter 단계와 data boundary를 승인했다.
+- [x] OperationsSnapshot 최소 필드를 승인했다.
 - [ ] 공식 Rules에서 실제 사용할 AI provider·model·data·tool mode를 확인했다.
 - [ ] `OPS-IMPL-01` 구현 착수를 별도로 승인했다.
 

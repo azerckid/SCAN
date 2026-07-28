@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-28 11:28
-> Status: Approved 1.7 · Document Completion Gate Passed · TASK-009 Done · TASK-010 UI-First Gate Passed
+> Last Updated: 2026-07-28 11:53
+> Status: Approved 1.8 · Document Completion Gate Passed · TASK-009 Done · TASK-010 Pre-Code Brief Approved
 
 ## 1. 문서 목적
 
@@ -81,7 +81,7 @@
 | [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Contract Approved 0.1 · TASK-002·005·006·007·008·009 Applied | 11-code·참조·Schema probe PASS 유지 |
 | [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) | Approved 1.0 · P0/V1 Closed | 이후 단계 그룹은 Deferred |
 | [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) | AI-Native Contract Approved 1.0 · UI-First Gate Passed · Rules-Gated | 구현은 `TASK-010` 별도 승인 |
-| [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) | Draft 1 · Review Pending · Runtime Not Implemented | 최소 필드·mutation·SQLite v2·동시성·adapter 승인 후 `OPS-IMPL-01` |
+| [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) | Approved 1.0 · Runtime Not Implemented · Rules-Gated | 공식 Rules 확인과 `OPS-IMPL-01` 별도 승인 |
 
 ### 3.4 Logic Progress
 
