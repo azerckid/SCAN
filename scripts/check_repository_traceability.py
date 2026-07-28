@@ -9,6 +9,7 @@ DOCS = ROOT / "docs"
 LINK_PATTERN = re.compile(r"\[[^\]]*]\(([^)]+)\)")
 TASK_PATTERN = re.compile(r"^### \[[ x]] (TASK-\d{3}):", re.MULTILINE)
 QA_PATTERN = re.compile(r"^### (QA-[A-Z]+-\d{3})", re.MULTILINE)
+EXPANSION_QA_PATTERN = re.compile(r"\| (QA-EXP-[A-Z]+-\d{3}) \|")
 
 
 def _load(relative: str) -> dict[str, object]:
@@ -51,10 +52,11 @@ def check_links() -> int:
 def check_ids() -> tuple[int, int]:
     backlog = (DOCS / "04_Logic_Progress/00_BACKLOG.md").read_text()
     scenarios = (DOCS / "05_QA_Validation/01_TEST_SCENARIOS.md").read_text()
+    expansion = (DOCS / "05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md").read_text()
     task_ids = TASK_PATTERN.findall(backlog)
-    qa_ids = QA_PATTERN.findall(scenarios)
-    assert len(task_ids) == len(set(task_ids)) == 11, "TASK IDs must be unique TASK-001~011"
-    assert len(qa_ids) == len(set(qa_ids)) == 24, "QA IDs must be 24 unique definitions"
+    qa_ids = [*QA_PATTERN.findall(scenarios), *EXPANSION_QA_PATTERN.findall(expansion)]
+    assert len(task_ids) == len(set(task_ids)) == 19, "TASK IDs must be unique TASK-001~019"
+    assert len(qa_ids) == len(set(qa_ids)) == 36, "QA IDs must be 36 unique definitions"
     return len(task_ids), len(qa_ids)
 
 
