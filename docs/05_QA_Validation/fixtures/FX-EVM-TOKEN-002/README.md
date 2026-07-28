@@ -1,7 +1,7 @@
 # Fixture: FX-EVM-TOKEN-002
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 02:08
-> Status: Candidate
+> Last Updated: 2026-07-29 03:55
+> Status: Verifying
 
 ## 1. 목적
 
@@ -18,7 +18,7 @@ ETH를 internal call 기준으로 복원한다.
 | top-level value | `0` wei |
 | internal path | Universal Router → 관심 주소 |
 | 실제 유입 | `14449515027026387018` wei |
-| 상태 | `candidate` — 독립 trace 재현 전 |
+| 상태 | `verifying` — primary trace 성공, 독립 trace 실패 |
 
 이 사례는 top-level value만 합산하면 `0`이라는 오답이 되고, 성공 internal
 call을 포함해야 실제 유입을 얻는 명확한 반례다.
@@ -32,9 +32,13 @@ call을 포함해야 실제 유입을 얻는 명확한 반례다.
 
 ## 4. 승격 전 잔여
 
-1. `debug_traceTransaction` 또는 다른 trace 공급자로 internal path를 재현한다.
-2. 실패 internal call과 복수 유입 합산 반례를 추가한다.
-3. trace 누락 `partial`과 raw internal call 모델을 승인한다.
+1. [x] QuickNode `debug_traceTransaction`으로 internal path를 재현했다.
+2. [ ] Alchemy trace는 HTTP 400이므로 다른 독립 trace 공급자를 확보한다.
+3. [ ] 실패 internal call과 복수 유입 합산 반례를 추가한다.
+4. [ ] trace 누락 `partial`과 raw internal call 모델을 승인한다.
+
+Primary raw SHA-256과 독립 trace 실패는
+[provider-replay.json](./provider-replay.json)에 함께 기록했다.
 
 ## 5. Related Documents
 

@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-BASIC-EVM-001",
+  "captured_at": "2026-07-28T18:54:34.101826+00:00",
+  "status": "verifying",
+  "providers": [
+    {
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "role": "primary",
+      "observations": {
+        "transaction": "6d0ff67719c3d7c6471087e68c91ac28baade066d6e3d5e4681f423fee3cade2",
+        "receipt": "1a5a170db087224043bef248655e9bc12de6f00ebe4f0585b85f899dbd655de2",
+        "block": "0b8baa86c824ccf6259637a71b175c705ddad1d03cc8b492c3a6d619796069ff",
+        "subject_code": "656254440c28512a72ff80afa27e5cd8669c5df940e00ee605f06ef0eef567e2",
+        "router_code": "811ead8138186ed7ede24553dc9d1433fcf12f3ab24d113b8a3fa8c3dd4428b1"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "role": "independent",
+      "observations": {
+        "transaction": "a164a23b2937d1179f59821ccfdcf6c0ee9f9c86e3a2121339305370a965b2ab",
+        "receipt": "97224c41e3f3e51ac304263095ab9587470810f058a2d13058bacc1f3c9f47e2",
+        "block": "16a860b61b13061fd6cb771bd0630c09acfb4d4d2b1260bb98a500eb7f5da96e",
+        "subject_code": "693e8930e72658ce36bc3e1df09149339c713fea3a1175042642cd57d690de71",
+        "router_code": "7b734a26a8b83f8aae18947679abef9ef76dfaf5ecf53cb9b78f5f36c97cb147"
+      }
+    }
+  ],
+  "decoded_match": {
+    "transaction": true,
+    "receipt": true,
+    "block": true,
+    "subject_code_empty": true,
+    "router_code_non_empty": true,
+    "router_code_byte_length": 17465
+  },
+  "remaining_gate": [
+    "checksum positive and negative oracle",
+    "fixture consumer contract approval"
+  ]
+}

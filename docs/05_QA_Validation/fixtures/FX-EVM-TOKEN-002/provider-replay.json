@@ -1,0 +1,34 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-EVM-TOKEN-002",
+  "captured_at": "2026-07-28T18:54:32.580829+00:00",
+  "status": "verifying",
+  "primary_trace": {
+    "provider_id": "PROVIDER-EVM-PRIMARY",
+    "method": "debug_traceTransaction",
+    "raw_sha256": "56c4b128151cc689f2b742833cf6bf1838ada6918d5de50532f8b69aacfe56c0",
+    "root_value_wei": "0",
+    "matching_successful_inflows": [
+      {
+        "path": [8],
+        "from": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+        "to": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+        "value_wei": "14449515027026387018",
+        "error": null
+      }
+    ]
+  },
+  "independent_trace": {
+    "provider_id": "PROVIDER-EVM-TRACE-VERIFY",
+    "method": "debug_traceTransaction",
+    "outcome": "failed",
+    "http_status": 400,
+    "failure_kind": "permanent",
+    "raw_sha256": null
+  },
+  "remaining_gate": [
+    "independent trace provider",
+    "failed internal call negative oracle",
+    "multiple inflow summation oracle"
+  ]
+}

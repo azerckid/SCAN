@@ -1,19 +1,21 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 03:39
-> Status: EVM Common Smoke Passed · Overall Partial
+> Last Updated: 2026-07-29 04:08
+> Status: EVM Fixture Common Replay Passed · Overall Partial
 
 ## 1. 목적
 
-이 문서는 TASK-012 fixture 4개의 독립 재현 전에 EVM read-only 공급자와
-AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하는 실행
-체크리스트다. 사용자가 승인한 대회 전 공급자 준비 점검으로 primary 7건,
-verify 6건의 read-only 호출을 실행했다. 이는 공식 대회 Rules를 `allowed`로
-확정한 것이 아니며 대회 중 live mode는 계속 `rules_gated`다.
+이 문서는 TASK-012 fixture 4개의 독립 재현과 EVM read-only 공급자·AI
+Planner가 필요한 능력을 제공하는지 검증하는 실행 체크리스트다. 사용자가
+승인한 대회 전 공급자 준비 점검으로 primary 7건·verify 6건 smoke와,
+네 fixture를 위한 primary 10건·verify 9건의 read-only replay를 실행했다.
+이는 공식 대회 Rules를 `allowed`로 확정한 것이 아니며 대회 중 live mode는
+계속 `rules_gated`다.
 
-공통 6개 capability와 primary trace는 성공했다. credential 회전, 독립
-trace, rate/timeout 반례와 AI Planner capability는 아직 미실행이므로 최종
-상태는 `partial`이다.
+fixture 공통 9개 decoded summary와 primary trace는 성공했다. Alchemy의
+독립 trace는 HTTP 400으로 실패했다. credential 회전, rate/timeout·negative
+oracle 반례와 AI Planner capability는 아직 미실행이므로 최종 상태는
+`partial`이다.
 
 ## 2. 실행 전 보안 Gate
 
@@ -39,11 +41,25 @@ trace, rate/timeout 반례와 AI Planner capability는 아직 미실행이므로
 | block | pass | pass | number·hash·timestamp 일치 |
 | filtered logs | pass | pass | USDC Transfer 23건·첫 5개 요약 일치 |
 | historical call/state | pass | pass | block `0xfdf1d0`, decimals `6` 일치 |
-| trace | pass | not_executed/conditional | primary callTracer 성공, 독립 trace 미선정 |
+| trace | pass | failed/conditional | primary callTracer 성공, Alchemy HTTP 400·대체 독립 trace 미선정 |
 | rate/timeout | not_executed | not_executed | outcome·safe code·retry |
 
 결과는 provider 문서의 지원 표시가 아니라 실제 계정과 대상 block에서
 관찰한 값으로 채운다. 무료·유료 plan 차이도 실제 계정 범위만 기록한다.
+
+### 3.1 TASK-012 fixture replay
+
+| 항목 | Primary | Independent | 판정 |
+|:---|:---:|:---:|:---|
+| 고정 TX·receipt·block | pass | pass | decoded 일치 |
+| subject/router historical code | pass | pass | empty/non-empty·byte length 일치 |
+| historical native balance | pass | pass | raw wei 일치 |
+| historical USDC balance·decimals | pass | pass | raw 값 일치 |
+| address·topic·block 제한 USDC logs | pass | pass | 1건·TX/log index·amount 일치 |
+| internal native inflow trace | pass | failed | Alchemy HTTP 400, 독립 trace unresolved |
+
+공통 9개 조회는 두 공급자의 raw response에서 각각 decode했다. 네 fixture는
+`verifying`으로 올렸지만, 위 trace와 §5 반례가 남아 `confirmed`는 아니다.
 
 ## 4. 독립성·정확성 판정
 
@@ -52,7 +68,8 @@ trace, rate/timeout 반례와 AI Planner capability는 아직 미실행이므로
 - [x] block tag, address, topics와 calldata가 재현 가능하다.
 - [x] raw artifact는 configured secret 검사를 거쳐 SHA-256으로 고정됐다.
 - [x] decoded 값은 raw response에서 다시 계산됐다.
-- [x] 두 공급자의 공통 6개 decoded summary가 모두 일치했다.
+- [x] capability smoke에서 두 공급자의 공통 6개 decoded summary가 모두 일치했다.
+- [x] TASK-012 fixture replay에서 두 공급자의 공통 9개 decoded summary가 모두 일치했다.
 - [ ] mismatch·unsupported·timeout·fallback 반례를 실행한다.
 - [ ] supporting explorer는 제3의 교차확인이고 독립 RPC 대체물이 아니다.
 
@@ -96,9 +113,10 @@ AI Planner의 품질은 정답 문장과의 유사도로 채점하지 않는다.
 | failed | secret 노출, chain mismatch, raw 불일치, mutation method, 증거 없는 성공 |
 | not_executed | 계정·Rules·승인 또는 live 호출 전 |
 
-`partial`이면 가능한 fixture만 계속 검증하고 부족한 capability에 의존하는
-fixture는 candidate로 둔다. `pass`도 TASK-012 구현 승인을 자동으로 뜻하지
-않으며 fixture confirmed와 Context Receipt가 별도로 필요하다.
+`partial`이면 가능한 fixture만 계속 검증하고, 공통 replay를 통과한 것은
+`verifying`, 부족한 capability 때문에 재현하지 못한 것은 `candidate`로
+둔다. `pass`도 TASK-012 구현 승인을 자동으로 뜻하지 않으며 fixture
+`confirmed`와 Context Receipt가 별도로 필요하다.
 
 ## 8. 365 글로벌 평가 기준
 

@@ -7,6 +7,7 @@ import pytest
 
 from scan_tool.application.provider_smoke import (
     READ_ONLY_METHODS,
+    SMOKE_METHODS,
     TASK_012_TX_HASH,
     dry_run_plan,
     require_execution_allowed,
@@ -78,7 +79,7 @@ def test_verify_role_does_not_request_trace() -> None:
     methods = {request.method for request in smoke_requests("verify")}
 
     assert "debug_traceTransaction" not in methods
-    assert methods == READ_ONLY_METHODS - {"debug_traceTransaction"}
+    assert methods == SMOKE_METHODS - {"debug_traceTransaction"}
 
 
 def test_mock_smoke_writes_hashed_artifacts_and_redacted_report(tmp_path) -> None:

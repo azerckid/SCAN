@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 03:46
+> Last Updated: 2026-07-29 03:59
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -849,8 +849,10 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
     - [x] 기본 network 0건·Rules/endpoint opt-in smoke runner를 준비했다.
     - [x] QuickNode primary 공통 6개+trace와 Alchemy verifier 공통 6개
       read-only smoke를 실행했다.
+    - [x] 네 fixture의 공통 9개 조회를 QuickNode·Alchemy에서 독립 재현하고
+      decoded 값 일치를 확인해 `verifying`으로 승격했다.
     - [ ] 노출 credential 회전·독립 trace·rate/timeout 반례를 통과해 Provider Gate를 닫는다.
-    - [ ] 독립 2차 재현·반례를 통과해 `confirmed`로 승격한다.
+    - [ ] negative oracle·독립 trace를 통과한 fixture만 `confirmed`로 승격한다.
   - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 고정한다.
   - [ ] 기존 source/cache/decode/reconciliation을 재사용한 Analysis type을 설계한다.
   - [ ] complete·partial·failed와 negative oracle을 구현·검증한다.
@@ -899,7 +901,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Document Sync Check:
   - [ ] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - candidate 4개와 primary/verify pre-event smoke 완료, credential 회전·독립 trace·반례·독립 재현·Schema·UI·사용자 구현 승인 전 착수 금지
+  - Status: PENDING - verifying 4개와 primary/verify 공통 9개 독립 재현 완료,
+    credential 회전·독립 trace·반례·Schema·UI·사용자 구현 승인 전 착수 금지
   - Required References Read: 위 Related 문서 전체
   - Constraints: exact raw 수량, historical state block 고정, 귀속 미평가
   - Conflicts: None known

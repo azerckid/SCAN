@@ -3,8 +3,9 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-BASIC-EVM-002",
-  "status": "candidate",
-  "captured_at": "2026-07-28T17:08:25Z",
+  "status": "verifying",
+  "captured_at": "2026-07-28T18:54:34.101826Z",
+  "provider_replay_file": "provider-replay.json",
   "event_evidence": [],
   "call_evidence": [
     {
@@ -73,6 +74,20 @@
   "sources": [
     {
       "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "PROVIDER-EVM-PRIMARY",
+      "methods": ["eth_getBlockByNumber", "eth_getBalance", "eth_call"],
+      "retrieved_at": "2026-07-28T18:54:32.388051Z",
+      "replay_manifest": "provider-replay.json"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "PROVIDER-EVM-VERIFY",
+      "methods": ["eth_getBlockByNumber", "eth_getBalance", "eth_call"],
+      "retrieved_at": "2026-07-28T18:54:33.990309Z",
+      "replay_manifest": "provider-replay.json"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
       "provider": "dRPC",
       "endpoint": "https://eth.drpc.org",
       "methods": [
@@ -98,8 +113,9 @@
     "token_decimals_applied_exactly": true
   },
   "uncertainty": {
-    "candidate_only": true,
-    "remaining": "Independent archive replay and timestamp-to-block negative case"
+    "candidate_only": false,
+    "verifying": true,
+    "remaining": "Independent archive replay passed; timestamp-to-block negative oracle remains"
   },
   "provenance_notes": "All state values are historical post-state values at block 16642512. Latest balances are not acceptable substitutes."
 }

@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 03:39
+> Last Updated: 2026-07-29 03:59
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -89,14 +89,15 @@
 
 | 논리 역할 | 후보 | 문서상 capability | 미확정 사항 | 상태 |
 |:---|:---|:---|:---|:---:|
-| `PROVIDER-EVM-PRIMARY` | QuickNode Ethereum | archive·Debug·Trace·Ethereum JSON-RPC | 7/7 smoke 성공; credential 회전·rate/timeout 반례 | verifying |
-| `PROVIDER-EVM-VERIFY` | Alchemy Ethereum | 기본 RPC·historical archive·filtered logs | 6/6 공통 smoke 성공; credential 회전·독립 trace·rate/timeout 반례 | verifying |
+| `PROVIDER-EVM-PRIMARY` | QuickNode Ethereum | archive·Debug·Trace·Ethereum JSON-RPC | smoke 7/7·fixture replay 10/10; credential 회전·rate/timeout 반례 | verifying |
+| `PROVIDER-EVM-VERIFY` | Alchemy Ethereum | 기본 RPC·historical archive·filtered logs | smoke 6/6·fixture replay 9/9; trace HTTP 400·credential 회전·반례 | verifying |
 | `PROVIDER-EVM-EXPLORER` | Blockscout | transaction·log·internal transaction 교차확인 | 원본 RPC·독립 trace 대체 불가 | supporting |
 | `PROVIDER-EVM-TRACE-VERIFY` | 미선정 | trace-dependent fixture 독립 검증 | 공급자·plan·비용 | unresolved |
 
-이 topology는 채택 기록이 아니다. primary 7건·verify 6건의 pre-event
-read-only smoke에서 공통 decoded summary가 모두 일치했고 primary trace도
-성공했다. 독립 trace·rate behavior·fixture별 독립 재현은 미완료다.
+이 topology는 채택 기록이 아니다. pre-event read-only smoke 이후 TASK-012
+fixture 공통 9개 조회도 두 공급자에서 독립 실행해 decoded summary가 모두
+일치했고 primary trace도 성공했다. Alchemy의 `debug_traceTransaction`은
+HTTP 400으로 실패했으므로 독립 trace·rate behavior·반례는 미완료다.
 설정 중 대화에 노출된 credential은 대회 사용과 후속 지속 호출 전 회전해야 한다. 회전한
 endpoint·API key는 로컬 secret 환경에만 두고 source record에는 논리
 provider ID, method, block tag, 조회 시각, 안전한 오류 코드, raw SHA-256만
@@ -337,11 +338,13 @@ provider ID, method, block tag, 조회 시각, 안전한 오류 코드, raw SHA-
 7. TASK-009에서 세 source 경계와 failure matrix를 통합 회귀했다.
 8. TASK-010과 live source는 공식 Rules·명시적 opt-in·별도 승인 전까지
    비활성 상태를 유지한다.
-9. TASK-012 candidate 4개는 Publicnode·dRPC·Blockscout으로 1차 재조회했다.
-   historical `eth_getLogs` 공급자 2곳이 각각 token 필요·route 실패를
-   반환했으므로 raw 범위 로그 독립 재현 전에는 후보 상태를 유지한다.
-10. `PROVIDER-EVM-PRIMARY/VERIFY` 후보는 문서 비교만 완료했다. 실제 endpoint와
-    secret 구성 없이 capability smoke·2차 재현·trace 독립성은 미실행이다.
+9. TASK-012 fixture 4개는 QuickNode·Alchemy로 TX·receipt·block·historical
+   code/balance/call·범위 지정 `eth_getLogs`를 독립 재현해 공통 9개 decoded
+   값이 일치했다. 상태는 `verifying`이며 provider별 raw SHA와 조회 시각은
+   로컬 artifact, 재현 요약은 fixture `provider-replay.json`에 보존한다.
+10. primary trace는 성공했지만 Alchemy 독립 trace는 HTTP 400으로 실패했다.
+    negative oracle·rate/timeout 반례와 독립 trace가 끝나기 전에는
+    `confirmed` 또는 provider `adopted`로 올리지 않는다.
 11. 기본 network 0건인 opt-in smoke runner를 준비했다. Rules `allowed`와
     역할별 HTTPS endpoint가 없으면 실제 adapter 호출 전에 중단한다.
 

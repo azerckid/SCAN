@@ -3,8 +3,9 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-TOKEN-001",
-  "status": "candidate",
-  "captured_at": "2026-07-28T17:08:25Z",
+  "status": "verifying",
+  "captured_at": "2026-07-28T18:54:34.101826Z",
+  "provider_replay_file": "provider-replay.json",
   "event_evidence": [
     {
       "evidence_id": "EV-TOKEN-FIRST-TRANSFER",
@@ -61,6 +62,20 @@
   ],
   "sources": [
     {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "PROVIDER-EVM-PRIMARY",
+      "methods": ["eth_getLogs"],
+      "retrieved_at": "2026-07-28T18:54:32.497784Z",
+      "replay_manifest": "provider-replay.json"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "PROVIDER-EVM-VERIFY",
+      "methods": ["eth_getLogs"],
+      "retrieved_at": "2026-07-28T18:54:34.100571Z",
+      "replay_manifest": "provider-replay.json"
+    },
+    {
       "source_id": "DS-EVM-RPC-PUBLIC",
       "provider": "ethereum.publicnode.com",
       "endpoint": "https://ethereum.publicnode.com",
@@ -85,8 +100,9 @@
     "amount_decodes_exactly": true
   },
   "uncertainty": {
-    "candidate_only": true,
-    "remaining": "Independent raw eth_getLogs replay and zero-value/multi-log negative cases"
+    "candidate_only": false,
+    "verifying": true,
+    "remaining": "Independent eth_getLogs replay passed; zero-value and multi-log negative oracles remain"
   },
   "provenance_notes": "The explorer range query establishes ordering while the raw receipt event establishes deterministic event fields. Neither source substitutes for the other."
 }

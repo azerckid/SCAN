@@ -3,7 +3,7 @@
 import json
 import os
 import tempfile
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -35,7 +35,7 @@ ROLE_PROVIDER_ID: Mapping[ProviderRole, str] = {
     "trace": "PROVIDER-EVM-TRACE-VERIFY",
 }
 SAFE_OUTPUT_RELATIVE_ROOT = Path(".scan/live-provider-smoke")
-READ_ONLY_METHODS = frozenset(
+SMOKE_METHODS = frozenset(
     {
         "eth_chainId",
         "eth_getTransactionByHash",
@@ -46,6 +46,8 @@ READ_ONLY_METHODS = frozenset(
         "debug_traceTransaction",
     }
 )
+READ_ONLY_METHODS = SMOKE_METHODS | {"eth_getCode", "eth_getBalance"}
+type SummaryDecoder = Callable[[JsonRpcSourceRequest, bytes], object]
 
 
 @dataclass(frozen=True, slots=True)
@@ -175,6 +177,28 @@ async def run_smoke(
     client: httpx.AsyncClient,
     configured_secrets: Sequence[str] = (),
 ) -> SmokeReport:
+    return await run_read_only_probe(
+        role=role,
+        endpoint=endpoint,
+        output_root=output_root,
+        client=client,
+        requests=smoke_requests(role),
+        summary_decoder=lambda request, raw: _decoded_summary(request.method, raw),
+        configured_secrets=configured_secrets,
+    )
+
+
+async def run_read_only_probe(
+    *,
+    role: ProviderRole,
+    endpoint: str,
+    output_root: Path,
+    client: httpx.AsyncClient,
+    requests: Sequence[JsonRpcSourceRequest],
+    summary_decoder: SummaryDecoder,
+    configured_secrets: Sequence[str] = (),
+) -> SmokeReport:
+    """Execute a bounded read-only request set with the smoke security contract."""
     provider_id = ROLE_PROVIDER_ID[role]
     guard = SensitiveDataGuard(
         (*_endpoint_secret_candidates(endpoint), *(value for value in configured_secrets if value))
@@ -189,7 +213,7 @@ async def run_smoke(
     )
     started_at = datetime.now(UTC)
     observations: list[SmokeObservation] = []
-    for request in smoke_requests(role):
+    for request in requests:
         if request.method not in READ_ONLY_METHODS:
             raise ValueError("smoke request contains a non-read-only method")
         started = monotonic()
@@ -205,7 +229,7 @@ async def run_smoke(
                 retrieved_at=payload.retrieved_at,
             )
             try:
-                decoded_summary = _decoded_summary(request.method, payload.raw_bytes)
+                decoded_summary = summary_decoder(request, payload.raw_bytes)
             except (KeyError, TypeError, ValueError):
                 observations.append(
                     SmokeObservation(

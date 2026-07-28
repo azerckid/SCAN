@@ -1,0 +1,38 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-BASIC-EVM-002",
+  "captured_at": "2026-07-28T18:54:34.101826+00:00",
+  "status": "verifying",
+  "providers": [
+    {
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "role": "primary",
+      "observations": {
+        "block": "0b8baa86c824ccf6259637a71b175c705ddad1d03cc8b492c3a6d619796069ff",
+        "native_balance": "e9970e8cda708c53a835e76ccfcb1319cb5a0511b92d2981a83fa14ded7fc215",
+        "usdc_balance": "65d743c09031130384619eabe3fc5b318c876e69e0f570e525d239f94468f780",
+        "usdc_decimals": "f470abc1e2ed21fbb5f74ae7897a7b902ed5e7b134d7f0cd5a5731ebff2690da"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "role": "independent",
+      "observations": {
+        "block": "16a860b61b13061fd6cb771bd0630c09acfb4d4d2b1260bb98a500eb7f5da96e",
+        "native_balance": "2363f40d13ba425af3db7a003fc60423bd452d21948cd7baf46f7353933bf5cb",
+        "usdc_balance": "198e98f5795de2451848bf400f4c4d5cdcda51b94a8f8161d28d50f1b9154c92",
+        "usdc_decimals": "0665affd45e46e65eca43e938fe63e22a8ceece0894abfa49d43d468655f681e"
+      }
+    }
+  ],
+  "decoded_match": {
+    "block_timestamp": 1676565263,
+    "native_balance_raw": "148897435437879000853",
+    "usdc_balance_raw": "26470158088",
+    "usdc_decimals": 6
+  },
+  "remaining_gate": [
+    "timestamp-to-block negative oracle",
+    "archive_required consumer contract approval"
+  ]
+}
