@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-28 14:51
-> Status: Approved 2.4 · TASK-001~009 · OPS-IMPL-01~05 Applied
+> Last Updated: 2026-07-28 15:29
+> Status: Approved 2.5 · TASK-001~009 · OPS-IMPL-01~06 Applied
 
 ## 1. 문서 목적
 
@@ -461,7 +461,9 @@ dist/
     격리, 재시도, idempotency dedup과 source capability request pool을 구현했다.
 21. `OPS-IMPL-05`에서 승인 plan의 input projection을 DEX·AUTH·FREEZE
     Python evidence worker, 문제별 workspace, Analysis I/O와 artifact에 연결했다.
-22. 후속 `OPS-IMPL-06`~`08`은 각각 별도 승인을 요구하며, live AI mode는
+22. `OPS-IMPL-06`에서 canonical candidate, fresh independent replay,
+    conflict 보존과 Application-only promotion Gate를 구현했다.
+23. 후속 `OPS-IMPL-07`~`08`은 각각 별도 승인을 요구하며, live AI mode는
     공식 Rules 확인 전까지 `rules_gated`다.
 
 ## 22. Related Documents
@@ -494,3 +496,4 @@ dist/
 - **QA_Validation**: [OPS-IMPL-03 AI Planner Gate 보고서](../05_QA_Validation/16_OPS_IMPL_03_PLANNER_REPORT.md) - fake QA·mode policy·artifact·budget·보안 검증
 - **QA_Validation**: [OPS-IMPL-04 bounded Queue 보고서](../05_QA_Validation/17_OPS_IMPL_04_BOUNDED_QUEUE_REPORT.md) - dependency·격리·재시도·dedup·동시성 검증
 - **QA_Validation**: [OPS-IMPL-05 Evidence Worker 보고서](../05_QA_Validation/18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - 승인 projection·세 vertical·workspace·artifact·checkpoint 검증
+- **QA_Validation**: [OPS-IMPL-06 Candidate·Verifier 보고서](../05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) - canonical answer·fresh replay·conflict·promotion 검증
