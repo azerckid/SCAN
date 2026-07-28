@@ -1,6 +1,6 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 04:32
+> Last Updated: 2026-07-29 06:14
 > Status: EVM Fixture Common Replay Passed · Overall Partial
 
 ## 1. 목적
@@ -43,7 +43,7 @@ live rate/timeout 반례, 독립 trace와 AI Planner capability는 아직
 | filtered logs | pass | pass | USDC Transfer 23건·첫 5개 요약 일치 |
 | historical call/state | pass | pass | block `0xfdf1d0`, decimals `6` 일치 |
 | trace | pass | failed/conditional | primary callTracer 성공, Alchemy HTTP 400·대체 독립 trace 미선정 |
-| rate/timeout | not_executed | not_executed | outcome·safe code·retry |
+| rate/timeout | offline injected pass | live not_executed | timeout·429·unsupported·malformed 구조화, 실제 provider 측정 잔여 |
 
 결과는 provider 문서의 지원 표시가 아니라 실제 계정과 대상 block에서
 관찰한 값으로 채운다. 무료·유료 plan 차이도 실제 계정 범위만 기록한다.
@@ -74,6 +74,8 @@ credential 회전, live rate/timeout·fallback 검증이 남아 `confirmed`는
 - [x] capability smoke에서 두 공급자의 공통 6개 decoded summary가 모두 일치했다.
 - [x] TASK-012 fixture replay에서 두 공급자의 공통 9개 decoded summary가 모두 일치했다.
 - [ ] mismatch·unsupported·timeout·fallback 반례를 실행한다.
+  - [x] timeout·429·method not found·malformed JSON offline 주입 검증
+  - [ ] live provider rate/timeout·dialect unsupported 검증
 - [ ] supporting explorer는 제3의 교차확인이고 독립 RPC 대체물이 아니다.
 
 ## 5. TASK-012 반례
@@ -148,3 +150,4 @@ AI Planner의 품질은 정답 문장과의 유사도로 채점하지 않는다.
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 재현 대상 4개
 - **QA_Validation**: [Smoke Runner 준비 보고서](./26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - 코드·dry-run·network 0건 검증
 - **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 24개 offline 반례·결정성
+- **QA_Validation**: [TASK-012 Provider Gate 준비 보고서](./29_TASK_012_PROVIDER_GATE_PREPARATION_REPORT.md) - Trace dialect·offline failure Gate

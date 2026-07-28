@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Fixture 후보 선정 보고서
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 05:58
+> Last Updated: 2026-07-29 06:14
 > Status: Provider Replay Passed · Four Fixtures Verifying · Implementation Not Started
 
 ## 1. 목적과 판정
@@ -73,7 +73,8 @@ historical state, token transfer range, internal call에서 별도로 계산한�
 실패한 공급자를 성공으로 기록하지 않으며, 대체 소스 사용 사실을 provenance에
 남긴다. 이후 §5.1에서 QuickNode·Alchemy의 exact block/filter
 `eth_getLogs`가 일치했으므로 raw 범위 로그 독립 재현 blocker는 닫혔다.
-현재 blocker는 §7의 반례와 TOKEN-002 독립 trace다.
+offline 반례와 Trace dialect 정규화는 통과했다. 현재 blocker는 credential
+회전, TOKEN-002 독립 trace 실제 성공, live rate/timeout이다.
 
 ### 5.1 Provider 2차 재현
 
@@ -160,3 +161,4 @@ Schema 편입 여부는 `confirmed` 승격 전 후속 계약으로 결정한다.
 - **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 24개 offline 반례
 - **QA_Validation**: [TASK-012 Analysis Contract Examples](./examples/task-012/README.md) - 네 fixture complete·partial·failed 12개 제안 사례
 - **QA_Validation**: [TASK-012 UI Preview 보고서](./28_TASK_012_UI_PREVIEW_REPORT.md) - Gate 7 자동·브라우저·사용자 검토
+- **QA_Validation**: [TASK-012 Provider Gate 준비 보고서](./29_TASK_012_PROVIDER_GATE_PREPARATION_REPORT.md) - 독립 Trace 재시도·offline failure 검증
