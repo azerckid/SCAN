@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Analysis Contract 제안
 > Created: 2026-07-29 04:46
-> Last Updated: 2026-07-29 05:12
+> Last Updated: 2026-07-29 05:58
 > Status: Proposed 0.2 Draft · Analysis I/O 0.1 Unchanged · Runtime Not Implemented
 
 ## 1. 목적과 판정
@@ -140,7 +140,7 @@ uv run python scripts/check_task_012_analysis_contract_proposal.py
 
 - [ ] 사용자 계약 승인
 - [x] TASK-012 전용 HTML Preview 작성·정적 검증
-- [ ] CLI Preview의 네 query 입력·complete·partial·failed 사용자 검토
+- [x] CLI Preview의 네 query 입력·complete·partial·failed 사용자 검토
 - [ ] Analysis I/O 0.2 정식 Schema·Pydantic 모델 승인
 - [ ] credential 회전·독립 trace·live rate/timeout Gate
 - [ ] fixture conditional confirmed

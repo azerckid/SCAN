@@ -1,7 +1,7 @@
 # SCAN 2026 CLI Prototype Review
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-29 05:12
-> Status: Approved 1.5 · V1 Gate Passed · TASK-012 Separate Review Pending
+> Last Updated: 2026-07-29 05:58
+> Status: Approved 1.6 · V1·TASK-012 UI Gates Passed
 
 ## 1. HTML UI Preview
 
@@ -178,7 +178,8 @@ Preview는 변경하지 않았으며 의도하지 않은 차이는 없었다.
 TASK-012의 `evm_core` `0.2-draft`는 이 승인된 V1 Preview를 변경하지 않는다.
 별도 [EVM Core Preview](./previews/04_task_012_evm_core_cli_preview.html)와
 [UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md)에서
-사용자 확인을 새로 받는다.
+2026-07-29 05:58 KST에 사용자 확인을 새로 받았다. 이는 UI Gate 승인이고
+정식 Schema·provider·제품 analyzer 구현 승인은 아니다.
 
 ## 9. Gate 판정
 
@@ -231,4 +232,4 @@ backlog와 QA 시나리오 Draft로 전환했다. Python project 초기화는 �
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - Preview AUTH partial·resume·scope 실제 대조
 - **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - Preview FREEZE rule block·partial·scope 실제 대조
 - **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - 세 vertical·오류 행렬·Preview 통합 재대조
-- **QA_Validation**: [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) - 사용자 확인 대기
+- **QA_Validation**: [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) - 사용자 확인·P2 반영 완료

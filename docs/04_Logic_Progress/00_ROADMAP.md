@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-29 05:18
+> Last Updated: 2026-07-29 05:58
 > Status: Approved 2.7 Baseline · Phase 2 Coverage Expansion Proposed
 
 ## 1. 문서 목적
@@ -60,7 +60,7 @@
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
 | [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) | UI-First Gate Passed · TASK-008 Applied | DEX·AUTH·FREEZE complete·partial·resume 연결 |
-| [TASK-012 EVM Core UI](../02_UI_Screens/05_TASK_012_EVM_CORE_UI.md) | Draft 0.1 · Browser Check Passed · User Review Pending | 4 query × 3상태, runtime 미구현 |
+| [TASK-012 EVM Core UI](../02_UI_Screens/05_TASK_012_EVM_CORE_UI.md) | Draft 0.2 · UI-First Gate Passed | 4 query × 3상태, runtime 미구현 |
 | [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) | UI-First Gate Passed · TASK-008 Applied | FREEZE confirmed와 external context scope 분리 |
 | [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) | TASK-009 Regression Compared | 세 vertical·오류·resume와 실제 terminal 재대조 |
 | [Web Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) | Draft 1 · Non-Blocking UX Track | 정적 Preview 사용자 검토, 구현 승격은 Python 엔진 안정화 후 별도 승인 |
@@ -110,7 +110,7 @@
 | [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) | EVM Common Smoke Passed · Overall Partial | credential 회전·독립 trace·반례·AI Planner Gate |
 | [TASK-012 Negative Oracle](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) | Offline 24 Passed Twice | live rate/timeout·독립 trace는 별도 |
 | [TASK-012 Analysis Contract Examples](../05_QA_Validation/examples/task-012/README.md) | Proposal 12 Cases · 14 Probes Passed | 제품 analyzer·fixture confirmed 성과로 계산 금지 |
-| [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) | Draft · Browser Check Passed · User Review Pending | 사용자 Gate 후 구현 승인 검토 |
+| [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) | UI Gate Passed · Runtime Not Implemented | 정식 contract·provider·구현 승인 대기 |
 | [Live Provider Smoke 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) | Pre-event Smoke Executed · Overall Partial | fixture별 재현·독립 trace·rate behavior |
 | [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | Pass | 문서 검증 증거·Known Issue·승인 경계 |
 | DEX·AUTH·FREEZE fixture | Confirmed | V1 기준값으로 동결, 정답 임의 변경 금지 |

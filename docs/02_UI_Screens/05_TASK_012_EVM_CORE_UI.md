@@ -1,7 +1,7 @@
 # TASK-012 EVM Core CLI UI
 > Created: 2026-07-29 05:08
-> Last Updated: 2026-07-29 05:18
-> Status: Draft 0.1 · Browser Check Passed · User Review Pending · Runtime Not Implemented
+> Last Updated: 2026-07-29 05:58
+> Status: Draft 0.2 · UI-First Gate Passed · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -122,10 +122,17 @@ Preview는 외부 요청, 파일 읽기, SQLite mutation, clipboard 외 데이�
 - [x] loading·empty·stale·Rules 재사용 경계 정의
 - [x] HTML Preview 작성
 - [x] 브라우저 정적·상호작용 검증
-- [ ] 사용자 Preview 확인
-- [ ] 사용자 피드백 반영
+- [x] 사용자 Preview 확인
+- [x] 사용자 피드백 반영
 
-위 마지막 세 항목이 닫히기 전에는 TASK-012 runtime 구현을 승인하지 않는다.
+사용자는 2026-07-29 05:58 KST에 네 query 구분, 필수 입력, partial·failed,
+raw·evidence·next action, 정보량을 확인하고 UI-First Gate를 승인했다.
+피드백에 따라 fixture의 `verifying`과 혼동될 수 있는 `CONFIRMED RESULT`를
+`COMPLETE RESULT`로 바꾸고, Preview가 계약 예제의 12개 case ID·raw 값·오류
+code/stage와 어긋나면 실패하도록 checker를 강화했다.
+
+UI Gate 통과는 정적 화면 계약 승인이다. 정식 Schema·provider·fixture와 별도
+제품 analyzer 구현 승인 전에는 TASK-012 runtime을 구현하지 않는다.
 
 ## 9. 365 글로벌 평가 기준
 
@@ -134,7 +141,7 @@ Preview는 외부 요청, 파일 읽기, SQLite mutation, clipboard 외 데이�
 | Functionality | Draft | 4 query × 3 상태 전환 Preview |
 | Potential Impact | Planned | 범용 EVM 네 문제를 같은 UX로 처리 |
 | Novelty | Draft | raw proof·completeness·failed null 분리 |
-| UX | Review Pending | 한 화면 입력·결과·오류·다음 행동 |
+| UX | Pass | 사용자 확인 완료, 한 화면 입력·결과·오류·다음 행동 |
 | Open-source | Pass | 단일 HTML·외부 dependency 없음 |
 | Business Plan | N/A | 대회 준비용 CLI 계약 검토 |
 

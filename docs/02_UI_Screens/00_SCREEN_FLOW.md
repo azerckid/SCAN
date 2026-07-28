@@ -1,7 +1,7 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-29 05:12
-> Status: Approved 1.4 · V1 UI-First Gate Passed · TASK-012 Draft Review Pending
+> Last Updated: 2026-07-29 05:58
+> Status: Approved 1.5 · V1·TASK-012 UI-First Gates Passed
 
 ## 1. 문서 목적
 
@@ -380,8 +380,8 @@ flowchart LR
 - query별 최소 입력과 complete·partial·failed를 총 12개 사례로 표시한다.
 - failed는 `data: null`, partial은 확보 결과와 오류·다음 행동을 함께 표시한다.
 - ERC-20 token address, fee, range, trace completeness를 화면 경계로 보여준다.
-- 정적 Preview 작성·자동 검증은 완료했지만 사용자 확인과 runtime 구현은
-  아직 승인되지 않았다.
+- 정적 Preview·자동 검증·사용자 UI 확인은 완료했다. 정식 Schema·provider와
+  runtime 구현은 아직 승인되지 않았다.
 
 ## 17. Related Documents
 

@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 05:18
+> Last Updated: 2026-07-29 05:58
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -898,10 +898,11 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
     - [ ] credential 회전·독립 trace·rate/timeout 반례가 남아 전체 상태는 partial이다.
   - [ ] API key·endpoint가 저장소·DB·fixture·로그에 없음을 검증한다.
   - [ ] confirmed fixture와 reference answer를 확보한다.
-  - [ ] CLI Preview 재검토와 사용자 구현 승인을 기록한다.
+  - [x] CLI Preview 재검토와 사용자 UI 승인을 기록한다.
     - [x] TASK-012 전용 UI 문서·HTML Preview·정적 checker를 작성했다.
     - [x] 브라우저에서 12개 조합·방향키·모바일·console을 검증했다.
-    - [ ] 사용자 Preview 확인을 기록한다.
+    - [x] 사용자 Preview 확인과 P2 2건 반영을 기록했다.
+  - [ ] TASK-012 제품 analyzer 구현 승인을 별도로 기록한다.
   - [ ] CLI 진입·전환·이탈과 loading·empty·partial·failed 표시를 확인한다.
   - [ ] source 최소 필드·mutation 없음·checkpoint 상태 관리를 승인한다.
   - [ ] Analysis I/O version·source·storage mutation 영향을 승인한다.

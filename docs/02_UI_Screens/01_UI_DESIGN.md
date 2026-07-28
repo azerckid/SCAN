@@ -1,7 +1,7 @@
 # SCAN 2026 CLI Terminal UI Design
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-29 05:12
-> Status: Approved 1.4 · V1 UI-First Gate Passed · TASK-012 Draft Review Pending
+> Last Updated: 2026-07-29 05:58
+> Status: Approved 1.5 · V1·TASK-012 UI-First Gates Passed
 
 ## 1. 문서 목적
 

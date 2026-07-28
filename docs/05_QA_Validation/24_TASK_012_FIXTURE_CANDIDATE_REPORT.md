@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Fixture 후보 선정 보고서
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 05:18
+> Last Updated: 2026-07-29 05:58
 > Status: Provider Replay Passed · Four Fixtures Verifying · Implementation Not Started
 
 ## 1. 목적과 판정
@@ -116,10 +116,10 @@ Schema 편입 여부는 `confirmed` 승격 전 후속 계약으로 결정한다.
    - [x] 격리된 `evm_core` `0.2-draft`·4개 query kind·12개 사례·14개
      Schema probe를 작성하고 기존 `0.1` 비변경을 확인
    - [ ] 정식 version·runtime model·migration 사용자 승인
-7. [ ] CLI Preview의 complete·partial·failed 표시 재검토
+7. [x] CLI Preview의 complete·partial·failed 표시 재검토
    - [x] TASK-012 전용 UI 문서·HTML Preview·정적 checker 작성
    - [x] 브라우저 12개 조합·키보드·모바일·console 검증
-   - [ ] 사용자 확인
+   - [x] 사용자 확인과 P2 피드백 반영
 8. [ ] TASK-012 Context Receipt `PASS`
 9. [ ] 사용자 구현 착수 승인
 

@@ -1,7 +1,7 @@
 # TASK-012 EVM Core UI Preview 보고서
 > Created: 2026-07-29 05:08
-> Last Updated: 2026-07-29 05:18
-> Status: Draft · Browser Check Passed · User Review Pending · Runtime Not Implemented
+> Last Updated: 2026-07-29 05:58
+> Status: UI Gate Passed · Runtime Not Implemented
 
 ## 1. 범위
 
@@ -58,19 +58,26 @@ uv run python scripts/check_task_012_ui_preview.py
 ## 4. 사용자 확인
 
 - 확인자: 사용자
-- 확인 일시: Pending
+- 확인 일시: 2026-07-29 05:58 KST
 - 확인 URL:
   `http://127.0.0.1:8766/docs/02_UI_Screens/previews/04_task_012_evm_core_cli_preview.html`
-- Gate 상태: Pending
+- Gate 상태: Passed
 
 확인 질문:
 
-- [ ] 네 query의 차이가 첫 화면에서 이해되는가
-- [ ] 필수 입력과 고정 block·trace·range 조건이 충분히 보이는가
-- [ ] partial이 complete로 오해되지 않는가
-- [ ] failed가 빈 결과가 아니라 구조화 실패로 이해되는가
-- [ ] raw 값과 evidence/source, 다음 행동의 우선순위가 적절한가
-- [ ] 정보량이 과하거나 부족하지 않은가
+- [x] 네 query의 차이가 첫 화면에서 이해되는가
+- [x] 필수 입력과 고정 block·trace·range 조건이 충분히 보이는가
+- [x] partial이 complete로 오해되지 않는가
+- [x] failed가 빈 결과가 아니라 구조화 실패로 이해되는가
+- [x] raw 값과 evidence/source, 다음 행동의 우선순위가 적절한가
+- [x] 정보량이 과하거나 부족하지 않은가
+
+반영 피드백:
+
+| ID | 우선순위 | 피드백 | 반영 |
+|:---|:---:|:---|:---|
+| UI-FB-012-001 | P2 | fixture `verifying`과 `CONFIRMED RESULT` 혼동 가능 | `COMPLETE RESULT`로 변경 |
+| UI-FB-012-002 | P2 | Preview JS와 계약 예제의 값 drift 가능 | checker가 12개 case ID·matrix·raw·오류를 제안 JSON과 직접 대조 |
 
 ## 5. 365 글로벌 평가 기준
 
@@ -79,7 +86,7 @@ uv run python scripts/check_task_012_ui_preview.py
 | Functionality | Pass | 브라우저 4 query × 3 상태 전환 |
 | Potential Impact | Planned | 범용 EVM 4문항 공통 입력 UX |
 | Novelty | Draft | raw proof·completeness·failed null 분리 |
-| UX | Partial | 브라우저·모바일·키보드 통과, 사용자 검토 전 |
+| UX | Pass | 브라우저·모바일·키보드와 사용자 검토 통과 |
 | Open-source | Pass | 단일 HTML·외부 dependency 없음 |
 | Business Plan | N/A | 대회 준비 QA 범위 |
 
