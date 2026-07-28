@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-28 13:55
-> Status: Approved 2.1 · TASK-009 Done · TASK-010 OPS-IMPL-01~03 Done
+> Last Updated: 2026-07-28 14:23
+> Status: Approved 2.2 · TASK-009 Done · TASK-010 OPS-IMPL-01~04 Done
 
 ## 1. 문서 목적
 
@@ -72,7 +72,7 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Approved 2.2 · OPS-IMPL-01~03 Applied | offline 품질·보안·Planner Gate 적용 |
+| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Approved 2.3 · OPS-IMPL-01~04 Applied | offline 품질·보안·Planner·Queue Gate 적용 |
 | [SQLite 논리 DB Schema](../03_Technical_Specs/01_DB_SCHEMA.md) | Approved 1.3 · Schema v2 Applied | 실제 사용자 DB migration은 별도 승인 |
 | [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) | Draft · Approved Baseline | 규정·provider plan·rate limit은 live 사용 전 갱신 |
 | [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) | Confirmed 0.1 | fixture schema 변경 요구가 생길 때만 개정 |
@@ -81,13 +81,13 @@
 | [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Contract Approved 0.1 · TASK-002·005·006·007·008·009 Applied | 11-code·참조·Schema probe PASS 유지 |
 | [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) | Approved 1.0 · P0/V1 Closed | 이후 단계 그룹은 Deferred |
 | [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) | AI-Native Contract Approved 1.0 · UI-First Gate Passed · Rules-Gated | 구현은 `TASK-010` 별도 승인 |
-| [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) | Approved 1.3 · OPS-IMPL-01~03 Implemented · Rules-Gated | `OPS-IMPL-04` 별도 승인 |
+| [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) | Approved 1.4 · OPS-IMPL-01~04 Implemented · Rules-Gated | `OPS-IMPL-05` 별도 승인 |
 
 ### 3.4 Logic Progress
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~009 Done · TASK-010 OPS-IMPL-01~03 Done | 후속 OPS-IMPL-04~08 별도 승인 |
+| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~009 Done · TASK-010 OPS-IMPL-01~04 Done | 후속 OPS-IMPL-05~08 별도 승인 |
 | 이 문서 | Approved 2.1 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
 | `01_EXECUTION_PLAN.md` | 조건부 미작성 | 구현 일정이 필요할 때 Backlog를 날짜·담당자로 전환 |
 | `02_ROADMAP_BACKLOG_SYNC.md` | 조건부 미작성 | 구현 시작 전 Roadmap↔Backlog 상태 동기화 규칙 작성 |
@@ -98,8 +98,8 @@
 |:---|:---|:---|
 | [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.0 · Fixture Scope Closed | 후보 5개 Deferred 결정; 단계별 승격 조건 유지 |
 | [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Approved 1.9 · Integration Passed | 24 pass·0 partial·0 not_executed |
-| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 2.4 · OPS-IMPL-01~03 Passed | 후속 Operations scheduler·integration QA 미실행 |
-| [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Contract Approved · OPS-IMPL-03 Runtime Partial | scheduler·evidence·Verifier·live Rules 필요 |
+| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 2.5 · OPS-IMPL-01~04 Passed | 후속 evidence·Verifier·Operations integration QA 미실행 |
+| [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Contract Approved · OPS-IMPL-04 Runtime Partial | evidence·Verifier·live Rules 필요 |
 | [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | Pass | 문서 검증 증거·Known Issue·승인 경계 |
 | DEX·AUTH·FREEZE fixture | Confirmed | V1 기준값으로 동결, 정답 임의 변경 금지 |
 

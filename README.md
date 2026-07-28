@@ -25,9 +25,12 @@ offline P0·V1 integration gate with deterministic replay, the 11-code error mat
 repository traceability, and security scans; all 24 P0·V1 QA scenarios pass.
 The mandatory AI Planner contract and Operations Board UI-First Gate are approved.
 `OPS-IMPL-01` now implements the `TASK-010` public operations contract, generated
-JSON Schema, cross-record invariants, and state-transition validator. Planner,
-scheduler, persistence v2, live AI, and the Operations Board runtime remain
-unimplemented.
+JSON Schema, cross-record invariants, and state-transition validator.
+`OPS-IMPL-02` adds explicit SQLite v2 persistence, `OPS-IMPL-03` adds the
+rules-gated AI Planner, and `OPS-IMPL-04` adds the bounded in-process scheduler,
+job DAG, failure isolation, retry, idempotency dedup, and source-capability request
+pool. Evidence worker integration, independent verification, live AI, and the
+Operations Board runtime remain unimplemented.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`, so external execution modes remain `rules_gated` until
 an authoritative notice is recorded.
@@ -67,6 +70,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-007 evidence | [`11_TASK_007_AUTH_REPORT.md`](docs/05_QA_Validation/11_TASK_007_AUTH_REPORT.md) | raw AUTH replay, allowance lifecycle, delegated consumption, partial/failure, resume, and AUTH-security evidence |
 | TASK-008 evidence | [`12_TASK_008_FREEZE_REPORT.md`](docs/05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) | raw FREEZE replay, state transitions, official context boundaries, partial/failure, resume, and security evidence |
 | TASK-009 evidence | [`13_TASK_009_INTEGRATION_REPORT.md`](docs/05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) | deterministic V1 regression, error matrix, traceability, UI comparison, and security evidence |
+| OPS-IMPL-04 evidence | [`17_OPS_IMPL_04_BOUNDED_QUEUE_REPORT.md`](docs/05_QA_Validation/17_OPS_IMPL_04_BOUNDED_QUEUE_REPORT.md) | bounded scheduling, dependency, isolation, retry, dedup, and capability-limit evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
