@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 10:24
-> Status: TASK-001~009 Approved/Done · TASK-010 AI-Native Contract Draft · User Review Pending
+> Last Updated: 2026-07-28 11:05
+> Status: TASK-001~009 Approved/Done · TASK-010 AI-Native Contract Approved · UI-First Gate Passed · Implementation ToDo
 
 ## 1. 문서 목적
 
@@ -593,7 +593,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - leaf 분석 24개 기존 기준선
 - Implementation Preconditions:
   - [ ] 관련 Concept·UI·Preview·Technical·QA 문서를 다시 읽었다.
-  - [ ] Operations Board Preview를 사용자가 확인하고 피드백을 승인했다.
+  - [x] Operations Board Preview를 사용자가 확인하고 피드백을 승인했다.
   - [ ] 공식 Rules에서 AI Planner용 provider·model·data·사전 도구 mode를 확인했다.
   - [ ] 필수 AI Planner와 활성화할 role·source·Python evidence worker를 승인했다.
   - [ ] 운영 manifest·verification·candidate 최소 필드와 mutation을 승인했다.

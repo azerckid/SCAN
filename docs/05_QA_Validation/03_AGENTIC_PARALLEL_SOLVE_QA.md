@@ -1,7 +1,7 @@
 # SCAN 2026 Agentic Parallel Solve QA
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 10:24
-> Status: Draft 2 · AI-Native Contract Draft · Interactive Preview Updated · Runtime Not Executed · User Review Pending · Rules-Gated
+> Last Updated: 2026-07-28 11:05
+> Status: AI-Native Contract Approved 1.0 · UI Preview Gate Passed · Runtime Not Executed · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -136,24 +136,24 @@
 
 ## 6. UI Preview Gate
 
-- [ ] 문제 원문·ID·배점·답 형식·파일·URL을 입력하고 AI Planner의 방법 가설을 검토할 수 있다.
-- [ ] AI Planner가 필수이며 Rules Gate가 provider·model·data mode를 선택하는 것으로 표시된다.
-- [ ] provider·model·data boundary·tool mode와 현재 `rules_gated` 상태가 한 화면에 보인다.
-- [ ] `rules_gated` 대기와 `rule_restricted` 호출 거부의 의미가 구분된다.
-- [ ] Operator가 leaf job·사람 우선순위를 승인한 후에만 Queue로 이동한다.
-- [ ] 6개 이상의 문제 상태를 한 화면에서 구분할 수 있다.
-- [ ] problem row는 `Tab`·`Enter`·`Space`, worker는
+- [x] 문제 원문·ID·배점·답 형식·파일·URL을 입력하고 AI Planner의 방법 가설을 검토할 수 있다.
+- [x] AI Planner가 필수이며 Rules Gate가 provider·model·data mode를 선택하는 것으로 표시된다.
+- [x] provider·model·data boundary·tool mode와 현재 `rules_gated` 상태가 한 화면에 보인다.
+- [x] `rules_gated` 대기와 `rule_restricted` 호출 거부의 의미가 구분된다.
+- [x] Operator가 leaf job·사람 우선순위를 승인한 후에만 Queue로 이동한다.
+- [x] 6개 이상의 문제 상태를 한 화면에서 구분할 수 있다.
+- [x] problem row는 `Tab`·`Enter`·`Space`, worker는
   `Tab`·`Shift+Tab`·`Enter`·`Space`로 탐색할 수 있다.
-- [ ] priority 변경, pause·resume, 재배정이 다른 문제 상태를 변경하지 않는다.
-- [ ] Rules Gate·auto-submit off가 첫 화면에 보인다.
-- [ ] `review_required`와 `submission_ready`가 색상 없이 구분된다.
-- [ ] candidate의 전체 answer·format·confidence·uncertainty·recommendation과 evidence 이동 경로가 있다.
-- [ ] independent verifier ID·check 수·evidence refs·conflict가 표시된다.
-- [ ] human approval 전 `Mark submitted`가 비활성이고 승인 후 수동 결과·시각을 기록할 수 있다.
-- [ ] selector에서 loading·empty·stale·Rules unavailable 상태를 확인할 수 있다.
-- [ ] Problem Board 행에서 partial·failed 상태와 다음 행동을 확인할 수 있다.
-- [ ] Workbench 이동 후 선택 problem과 filter가 복원된다.
-- [ ] Preview의 숫자가 실측 성능·정확도로 오인되지 않는다.
+- [x] priority 변경, pause·resume, 재배정이 다른 문제 상태를 변경하지 않는다.
+- [x] Rules Gate·auto-submit off가 첫 화면에 보인다.
+- [x] `review_required`와 `submission_ready`가 색상 없이 구분된다.
+- [x] candidate의 전체 answer·format·confidence·uncertainty·recommendation과 evidence 이동 경로가 있다.
+- [x] independent verifier ID·check 수·evidence refs·conflict가 표시된다.
+- [x] human approval 전 `Mark submitted`가 비활성이고 승인 후 수동 결과·시각을 기록할 수 있다.
+- [x] selector에서 loading·empty·stale·Rules unavailable 상태를 확인할 수 있다.
+- [x] Problem Board 행에서 partial·failed 상태와 다음 행동을 확인할 수 있다.
+- [x] Workbench 이동 후 선택 problem과 filter가 복원된다.
+- [x] Preview의 숫자가 실측 성능·정확도로 오인되지 않는다.
 
 체크박스는 사용자 브라우저 검토 또는 자동화된 UI QA 실행 후에만 닫는다.
 HTML에 demo interaction이 존재한다는 사실만으로 `TASK-010` runtime QA를
@@ -182,7 +182,7 @@ HTML에 demo interaction이 존재한다는 사실만으로 `TASK-010` runtime Q
 ## 9. 승인과 실행 Gate
 
 - [ ] 사용자가 6개 운영 QA 시나리오를 승인했다.
-- [ ] Operations Board Preview를 사용자가 확인했다.
+- [x] Operations Board Preview를 사용자가 확인했다.
 - [ ] 공식 Rules에서 AI provider·model·data mode와 worker·source 범위를 확인했다.
 - [ ] `TASK-010` 구현을 별도로 승인했다.
 - [ ] 구현된 시나리오만 `pass / partial / fail / blocked`로 기록한다.

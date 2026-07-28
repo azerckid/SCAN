@@ -1,7 +1,7 @@
 # SCAN 2026 Competition Operations Board
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 10:24
-> Status: Draft 1 · AI-Native Interactive Preview · User Review Pending · Rules-Gated
+> Last Updated: 2026-07-28 11:05
+> Status: Approved 1.0 · AI-Native Interactive Preview · UI-First Gate Passed · Runtime Not Executed · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -284,18 +284,20 @@ demo data이며 성능·정확도 측정값이 아니다. 이 Preview 보강은 
 
 ## 12. 사용자 확인 Gate
 
-- [ ] Operations Board Preview를 브라우저에서 확인했다.
-- [ ] 여러 문제의 우선순위와 상태를 한 화면에서 판독할 수 있다.
-- [ ] worker 역할·현재 job·대기 이유를 구분할 수 있다.
-- [ ] `review_required`와 `submission_ready`가 혼동되지 않는다.
-- [ ] 답 복사와 CTFd 제출 완료 기록이 분리되어 있다.
-- [ ] AI Planner 필수 상태와 Rules가 선택하는 provider·model·data mode가 보인다.
-- [ ] selector에서 loading·empty·stale·Rules unavailable 상태가 확인된다.
-- [ ] Problem Board에서 partial·failed 상태와 다음 행동이 확인된다.
-- [ ] Workbench로 증거를 열고 돌아오는 흐름이 이해된다.
+- [x] Operations Board Preview를 브라우저에서 확인했다.
+- [x] 여러 문제의 우선순위와 상태를 한 화면에서 판독할 수 있다.
+- [x] worker 역할·현재 job·대기 이유를 구분할 수 있다.
+- [x] `review_required`와 `submission_ready`가 혼동되지 않는다.
+- [x] 답 복사와 CTFd 제출 완료 기록이 분리되어 있다.
+- [x] AI Planner 필수 상태와 Rules가 선택하는 provider·model·data mode가 보인다.
+- [x] selector에서 loading·empty·stale·Rules unavailable 상태가 확인된다.
+- [x] Problem Board에서 partial·failed 상태와 다음 행동이 확인된다.
+- [x] Workbench로 증거를 열고 돌아오는 흐름이 이해된다.
 
-사용자 확인 전에는 UI-First Gate를 통과하지 않으며 `TASK-010` 구현을
-시작하지 않는다.
+2026-07-28 11:05 KST 사용자 브라우저 검토와 PR
+[#27](https://github.com/azerckid/SCAN/pull/27) 병합 승인으로 UI-First Gate를
+통과했다. 이 승인은 화면 계약에 대한 것이며 `TASK-010` runtime 실행이나
+외부 AI·RPC·CTFd 호출 승인을 뜻하지 않는다.
 
 ## 13. 365 글로벌 평가 기준
 
