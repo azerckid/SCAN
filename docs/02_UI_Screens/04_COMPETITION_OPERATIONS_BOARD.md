@@ -1,7 +1,7 @@
 # SCAN 2026 Competition Operations Board
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 09:56
-> Status: Draft 1 · Interactive Preview Updated · User Review Pending · Rules-Gated
+> Last Updated: 2026-07-28 10:11
+> Status: Draft 1 · AI-Native Interactive Preview · User Review Pending · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -19,12 +19,12 @@
 
 - 문제 등록·분류·우선순위와 상태 확인
 - 문제 간·문제 내부 job의 진행 상태
-- Coordinator·EVM·Tracer·OSINT·Verifier·Reporter 역할 표시
+- AI Planner/Coordinator·EVM·Tracer·OSINT·Verifier·Reporter 역할 표시
 - worker·provider health와 Queue depth
 - 결과 충돌·누락·검증 상태
 - 제출 후보의 답 형식·신뢰도·증거·불확실성
 - 사람이 제출 완료를 기록하는 흐름
-- AI·자동화·source 규정 상태와 비활성화 표시
+- 필수 AI Planner와 허용 provider·model·data mode의 Rules Gate 표시
 
 ### 2.2 제외
 
@@ -32,15 +32,15 @@
 - 정답 자동 제출과 brute force
 - UI에서 직접 온체인 계산
 - 범용 팀 채팅·프로젝트 관리
-- 외부 서비스로 문제 원문 자동 전송
-- 공식 규정 확인 전 AI worker 기본 활성화
+- 외부 서비스로 문제 원문 무단 전송
+- 공식 규정과 무관한 provider·model·data mode 임의 활성화
 
 ## 3. 사용자와 역할
 
 ### 3.1 주요 사용자
 
 - 여러 문제를 분류하고 우선순위를 정하는 Operator
-- 에이전트 또는 Python worker의 진행을 관찰하는 Coordinator
+- AI Planner가 만든 방법 가설과 Python worker 실행을 관찰하는 Operator
 - 정답 후보와 결정적 증거를 최종 확인하는 제출자
 
 한 사람이 세 역할을 모두 수행할 수 있다. 다른 사람 또는 agent가 분석에
@@ -50,7 +50,7 @@
 
 | 역할 | UI 표시 | 주요 행동 |
 |:---|:---|:---|
-| Coordinator | 문제 유형·추천 파이프라인·배정 | triage 승인·우선순위 변경 |
+| AI Planner / Coordinator | 문제 유형·해결 방법·추천 파이프라인·배정 가설 | plan 검토·우선순위 변경 |
 | EVM | TX·log·call·state stage | 분석 상세 열기 |
 | Tracer | hop·branch·destination stage | 경로 상세 열기 |
 | OSINT | label·source·retrieved time | 출처 검토 |
@@ -86,7 +86,7 @@ Operations Board는 graph·timeline을 축약 복제하지 않는다. Workbench�
 ```mermaid
 flowchart LR
     CAPTURE["문제 등록"] --> TRIAGE["유형·답 형식·규정 확인"]
-    TRIAGE --> PLAN["job 계획과 우선순위"]
+    TRIAGE --> PLAN["AI 해결 방법·leaf job 계획"]
     PLAN --> RUN["병렬 worker 실행"]
     RUN --> PARTIAL["partial·conflict·missing"]
     RUN --> VERIFY["독립 검증"]
@@ -101,9 +101,14 @@ flowchart LR
 ### 5.1 문제 등록
 
 1. Operator가 CTFd 문제 원문·ID·배점·요구 답 형식을 입력한다.
-2. 외부 AI 전송 전 Rules Gate 상태를 확인한다.
-3. Coordinator가 유형·난이도·필요 도구를 가설로 제안한다.
+2. Rules Gate에서 사용할 AI provider·model·전송 범위를 확인한다.
+3. 필수 AI Planner가 유형·난이도·해결 방법·필요 도구를 가설로 제안한다.
 4. Operator가 실행할 job과 우선순위를 승인한다.
+
+AI 사용은 SCAN의 제품 요구사항이다. Rules Gate는 AI를 사용할지 결정하지
+않고, 공식 규정 안에서 어떤 provider·model·데이터 범위로 실행할지 결정한다.
+AI가 생성한 자연어 답이나 confidence는 증거가 아니며, 승인된 계획을 Python
+도구로 실행해 생성한 result·evidence를 독립 Verifier가 재확인해야 한다.
 
 ### 5.2 병렬 실행
 
@@ -225,8 +230,9 @@ CTA를 만들지 않는다. 제출 완료는 `Mark submitted`로 명확히 구�
 
 ### 9.5 Permission·Rules unavailable
 
-- AI·자동화가 `unclear`이면 관련 worker는 disabled다.
-- 이유, 규정 ID, 재확인 시각과 CLI·human fallback을 표시한다.
+- AI 규정이 `unclear`이면 AI Planner job은 유지하되 provider·model·외부
+  전송을 `rules_gated`로 대기시킨다.
+- 이유, 규정 ID, 재확인 시각과 허용 mode 선택 조건을 표시한다.
 - UI toggle만으로 제한을 우회할 수 없어야 한다.
 
 ## 10. 반응형·접근성
@@ -247,7 +253,8 @@ CTA를 만들지 않는다. 제출 완료는 `Mark submitted`로 명확히 구�
 다음을 로컬 demo state로 시연한다.
 
 - 문제 원문·ID·배점·답 형식·URL·첨부 파일명 접수와 문제 상세 연결
-- Rules Gate 확인 후 Coordinator 가설·선택 leaf job·사람 우선순위 승인
+- Rules Gate가 선택한 실행 mode에서 필수 AI Planner의 방법 가설·선택 leaf
+  job·사람 우선순위 승인
 - 6개 문제의 서로 다른 상태
 - 6개 역할 worker의 병렬 실행
 - 문제 우선순위 변경, plan 승인, pause·resume, role 재배정
@@ -258,7 +265,7 @@ CTA를 만들지 않는다. 제출 완료는 `Mark submitted`로 명확히 구�
 - candidate ID·answer format·confidence·evidence·uncertainty·recommendation
 - assignment·fallback·verification 축약 Activity Log
 - human approval, answer 복사, `Mark submitted`, CTFd 응답·시각 기록의 분리
-- AI `unclear`, auto-submit `OFF`
+- AI Planner `REQUIRED / RULES GATED`, auto-submit `OFF`
 - 전체 12개 중 현재 6개 표시 범위
 - problem row 선택에 따른 Detail 본문 전환
 - selector로 Loading·Empty·Stale·Rules unavailable 상태 확인
@@ -266,7 +273,7 @@ CTA를 만들지 않는다. 제출 완료는 `Mark submitted`로 명확히 구�
 - Investigation Workbench 이동과 Operations 선택 상태 복원
 
 입력·우선순위·승인·제출 기록은 브라우저 메모리의 demo state만 변경한다.
-실제 RPC·AI·CTFd·DB 호출과 credential 저장은 없다. 표시 숫자는 UX 검토용
+Preview의 실제 RPC·AI·CTFd·DB 호출과 credential 저장은 없다. 표시 숫자는 UX 검토용
 demo data이며 성능·정확도 측정값이 아니다. 이 Preview 보강은 `TASK-010`
 오케스트레이션 구현 완료를 의미하지 않는다.
 
@@ -277,7 +284,7 @@ demo data이며 성능·정확도 측정값이 아니다. 이 Preview 보강은 
 - [ ] worker 역할·현재 job·대기 이유를 구분할 수 있다.
 - [ ] `review_required`와 `submission_ready`가 혼동되지 않는다.
 - [ ] 답 복사와 CTFd 제출 완료 기록이 분리되어 있다.
-- [ ] AI·자동화 Rules 차단과 fallback이 보인다.
+- [ ] AI Planner 필수 상태와 Rules가 선택하는 provider·model·data mode가 보인다.
 - [ ] selector에서 loading·empty·stale·Rules unavailable 상태가 확인된다.
 - [ ] Problem Board에서 partial·failed 상태와 다음 행동이 확인된다.
 - [ ] Workbench로 증거를 열고 돌아오는 흐름이 이해된다.

@@ -400,7 +400,7 @@
       </div>
       <div class="top-actions">
         <div class="rules" aria-label="Rules status">
-          <span class="pill warn">AI RULE: UNCLEAR</span>
+          <span class="pill warn">AI MODE: RULES GATED</span>
           <span class="pill warn">PREBUILT: UNCLEAR</span>
           <span class="pill off">AUTO-SUBMIT: OFF</span>
         </div>
@@ -420,7 +420,7 @@
     <section class="workflow" aria-label="Problem solving workflow">
       <div class="steps">
         <span class="step active">1 Capture</span>
-        <span class="step">2 Triage</span>
+        <span class="step">2 AI plan</span>
         <span class="step">3 Approve plan</span>
         <span class="step">4 Run</span>
         <span class="step">5 Verify</span>
@@ -500,12 +500,12 @@
           <span class="pill">QUEUE 7</span>
         </div>
         <div class="workers">
-          <button class="worker" type="button" data-worker="Coordinator" data-detail="triage Q07 · plan 2 jobs · queue 1 · healthy"><div class="avatar">C</div><div><strong>Coordinator</strong><span>triage Q07 · plan 2 jobs</span></div><i class="health" role="status" aria-label="healthy"></i></button>
+          <button class="worker" type="button" data-worker="AI Planner / Coordinator" data-detail="Q07 method hypothesis · plan 2 jobs · provider mode rules-gated"><div class="avatar">A</div><div><strong>AI Planner / Coordinator</strong><span>Q07 · method plan 2 jobs</span></div><i class="health wait" role="status" aria-label="waiting for permitted AI mode"></i></button>
           <button class="worker" type="button" data-worker="EVM Analyst" data-detail="Q03 · archive state · 06:42 · retry 0"><div class="avatar">E</div><div><strong>EVM Analyst</strong><span>Q03 · archive state</span></div><i class="health" role="status" aria-label="healthy"></i></button>
           <button class="worker" type="button" data-worker="Flow Tracer" data-detail="Q02 · hop 12 / 40 · dependency 2 waiting"><div class="avatar">T</div><div><strong>Flow Tracer</strong><span>Q02 · hop 12 / 40</span></div><i class="health" role="status" aria-label="healthy"></i></button>
           <button class="worker" type="button" data-worker="OSINT Analyst" data-detail="Q05 · official source check · RULE-OSINT allowed"><div class="avatar">O</div><div><strong>OSINT Analyst</strong><span>Q05 · official source check</span></div><i class="health" role="status" aria-label="healthy"></i></button>
           <button class="worker" type="button" data-worker="Verifier" data-detail="Q03 · 5 / 6 checks · independent run VER-Q03-002"><div class="avatar">V</div><div><strong>Verifier</strong><span>Q03 · 5 / 6 checks</span></div><i class="health" role="status" aria-label="healthy"></i></button>
-          <button class="worker" type="button" data-worker="Reporter" data-detail="waiting · RULE-AI-001 unclear · human/CLI fallback"><div class="avatar">R</div><div><strong>Reporter</strong><span>waiting · Rules Gate</span></div><i class="health wait" role="status" aria-label="waiting for rules"></i></button>
+          <button class="worker" type="button" data-worker="Reporter" data-detail="waiting · permitted AI mode · evidence-backed candidate only"><div class="avatar">R</div><div><strong>Reporter</strong><span>waiting · Rules Gate</span></div><i class="health wait" role="status" aria-label="waiting for rules"></i></button>
         </div>
       </section>
 
@@ -604,7 +604,7 @@
           </div>
         </div>
         <div class="input-summary" id="input-summary"><b>Captured input</b> · fixture-backed demo request · answer format address</div>
-        <div class="notice">AI·사전 제작 도구 규정은 현재 UNCLEAR demo 상태입니다. 실제 실행에서는 Rules Gate가 관련 worker를 차단하며, 이 Preview는 RPC·AI·CTFd를 호출하지 않습니다.</div>
+        <div class="notice">AI Planner는 SCAN 실행 구조의 필수 계층입니다. Rules Gate는 AI 사용 여부가 아니라 허용된 provider·모델·전송 범위를 선택합니다. AI 계획은 가설이며 Python 도구 실행과 독립 증거 검증을 통과해야 합니다. 이 Preview는 RPC·AI·CTFd를 호출하지 않습니다.</div>
       </div>
     </section>
 
@@ -614,7 +614,7 @@
         <div class="source"><strong>EVM Public RPC · HEALTHY</strong><span>2 / 4 concurrent · p95 not measured</span></div>
         <div class="source"><strong>Archive RPC · THROTTLED</strong><span>1 / 1 concurrent · retry in 12s</span></div>
         <div class="source"><strong>Explorer API · HEALTHY</strong><span>cache hit 18 · request dedup 4</span></div>
-        <div class="source"><strong>External AI · DISABLED</strong><span>RULE-AI-001 unclear · human fallback</span></div>
+        <div class="source"><strong>AI Planner · REQUIRED / GATED</strong><span>provider·model·data boundary pending Rules · Preview call 0</span></div>
       </div>
     </section>
 
@@ -650,18 +650,18 @@
             <label class="form-field">Provided file<input id="problem-file" type="file"></label>
             <div class="choice-list">
               <strong>Rules Gate before external transfer</strong>
-              <label><input type="checkbox" disabled> External AI — disabled (`RULE-AI-001` unclear)</label>
-              <label><input type="checkbox" checked> Local Python/CLI fallback</label>
+              <label><input type="checkbox" checked disabled> AI Planner — required; execution mode selected by Rules Gate</label>
+              <label><input type="checkbox" checked> Python/CLI evidence tool execution</label>
             </div>
           </div>
-          <div class="notice">원문·URL·첨부 파일명은 생성된 문제 상세의 로컬 demo state에 연결됩니다. 파일 내용은 읽거나 업로드하지 않으며 외부 AI·RPC·CTFd 호출은 0건입니다.</div>
+          <div class="notice">원문·URL·첨부 파일명은 생성된 문제 상세의 로컬 demo state에 연결됩니다. AI Planner는 해결 방법을 설계하지만 이 Preview에서는 파일 내용 읽기·업로드와 AI·RPC·CTFd 호출이 모두 0건입니다.</div>
           <div class="dialog-actions">
             <button class="action primary" id="review-triage" type="button">Review triage</button>
           </div>
         </section>
         <section id="triage-step" hidden>
           <div class="triage-summary">
-            <div><span>Coordinator hypothesis</span><b>FLOW · destination trace</b></div>
+            <div><span>AI method hypothesis</span><b>FLOW · destination trace</b></div>
             <div><span>Difficulty</span><b>medium · hypothesis</b></div>
             <div><span>Answer format</span><b id="triage-format">address</b></div>
           </div>
@@ -681,7 +681,7 @@
               <select id="new-role"><option selected>Flow Tracer + Verifier</option><option>EVM Analyst + Verifier</option><option>Human / CLI fallback</option></select>
             </label>
           </div>
-          <div class="notice">유형·난이도·도구는 Coordinator의 운영 가설입니다. Operator 승인 전에는 실행되지 않습니다.</div>
+          <div class="notice">유형·난이도·도구·leaf job은 AI Planner의 운영 가설입니다. Operator 승인 후 Python 도구가 실행하며, 원본 evidence가 없는 AI 출력은 정답으로 승격되지 않습니다.</div>
           <div class="dialog-actions">
             <button class="action" id="back-capture" type="button">Back</button>
             <button class="action primary" id="queue-problem" type="submit">Approve & queue</button>
@@ -911,7 +911,7 @@
         stateBanner.textContent = "STALE · Archive RPC last updated 22:40:11 · retry at 22:42:00 · cached evidence remains visible.";
       } else if (state === "rules") {
         stateBanner.classList.add("error");
-        stateBanner.textContent = "RULES UNAVAILABLE · RULE-AI-001 / RULE-PREBUILT-001 unclear · recheck 12:15 KST · local Python/CLI and human fallback only.";
+        stateBanner.textContent = "RULES UNAVAILABLE · AI Planner required · provider/model/data mode pending RULE-AI-001 · recheck 12:15 KST · no external transmission.";
       }
     });
 
@@ -985,7 +985,7 @@
       document.querySelector("#problem-rows").insertBefore(row, emptyRow);
       problemDetails[id] = {
         title: `${id} Detail · PLAN-${id}-FLOW-001`,
-        jobs: ["original problem preserved", "Coordinator hypothesis approved", ...selectedJobs.map(job => `${job} · queued`)],
+        jobs: ["original problem preserved", "AI method hypothesis approved", ...selectedJobs.map(job => `${job} · queued`)],
         evidence: ["0 evidence refs · execution not started", "Rules Gate checked", "duplicate request guard active"],
         recommendation: ["recommendation: run approved jobs", `answer format: ${format}`, "CTFd action: hold"],
         dependencies,

@@ -1,7 +1,7 @@
 # SCAN 2026 Agentic Parallel Solve QA
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 09:56
-> Status: Draft 1 · Scope Approved · Interactive Preview Updated · Runtime Not Executed · Rules-Gated
+> Last Updated: 2026-07-28 10:11
+> Status: Draft 1 · AI-Native Scope Approved · Interactive Preview Updated · Runtime Not Executed · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -15,7 +15,9 @@
 ## 2. QA 원칙
 
 - 기본 실행은 `offline` 또는 `fault-injection`이다.
-- 실제 AI·RPC·CTFd 호출은 명시적 `live` 승인 없이는 0건이어야 한다.
+- `TASK-010`은 AI Planner를 필수로 사용한다. offline QA는 fake/local AI
+  adapter를 사용하고 실제 external AI·RPC·CTFd 호출은 명시적 `live`
+  승인 없이는 0건이어야 한다.
 - 문제 원문·답안·credential을 외부 서비스에 전송하지 않는다.
 - agent의 자연어 결론은 결정적 증거가 아니다.
 - 같은 worker가 만든 후보를 같은 실행이 독립 검증했다고 표시하지 않는다.
@@ -92,20 +94,28 @@
 
 ## 5. 규정·제출 Gate
 
-### QA-OPS-RULE-001 — AI·외부 전송 사전 차단
+### QA-OPS-RULE-001 — 필수 AI Planner와 실행 mode Gate
 
 - **Mode**: offline
 - **Backlog**: `TASK-010`
 - **Requirements**: `REQ-OPS-IN-002`, `REQ-NFR-008`
-- **Preconditions**: `RULE-AI-001=unclear`, 비공개 문제 원문, AI worker enabled 요청
+- **Preconditions**: 필수 AI Planner, 비공개 문제 원문, fake/local·external
+  AI adapter, `RULE-AI-001` 상태 전환
 - **Steps**:
-  1. 문제를 등록하고 AI worker 배정을 요청한다.
-  2. 외부 tool 호출 수와 저장 prompt를 검사한다.
-  3. human·Python CLI fallback을 선택한다.
+  1. `unclear`에서 문제를 등록하고 AI planning job 생성 여부를 확인한다.
+  2. Rules Gate를 `allowed` fake/local mode로 전환해 해결 방법·leaf job
+     hypothesis를 생성한다.
+  3. AI plan에 따라 Python evidence tool을 실행하고 result·evidence를 연결한다.
+  4. external provider가 `restricted`일 때 허용 adapter 교체 또는
+     `rules_gated` 차단을 확인한다.
+  5. AI가 evidence 없는 정답 문장과 높은 confidence를 반환하도록 주입한다.
 - **Expected**:
-  - 외부 AI 호출은 0건이고 `rule_restricted` 또는 rules-gated 상태다.
-  - 비공개 원문이 외부 prompt·artifact에 없다.
-  - 문제는 폐기되지 않고 human·CLI 경로로 재배정할 수 있다.
+  - AI planning job은 모든 문제에 존재하며 `unclear`에서는 허용 mode를
+    기다리는 `rules_gated`다.
+  - fake/local mode에서 AI method hypothesis와 leaf plan이 생성되고 Python
+    도구 result·evidence로 이어진다.
+  - 허용되지 않은 external AI 호출과 비공개 원문 전송은 0건이다.
+  - evidence 없는 AI 답은 `review_required`이며 `submission_ready`가 아니다.
 
 ### QA-OPS-SUBMIT-001 — 사람 제출 통제와 credential 비보존
 
@@ -126,7 +136,8 @@
 
 ## 6. UI Preview Gate
 
-- [ ] 문제 원문·ID·배점·답 형식·파일·URL을 입력하고 Coordinator 가설을 검토할 수 있다.
+- [ ] 문제 원문·ID·배점·답 형식·파일·URL을 입력하고 AI Planner의 방법 가설을 검토할 수 있다.
+- [ ] AI Planner가 필수이며 Rules Gate가 provider·model·data mode를 선택하는 것으로 표시된다.
 - [ ] Operator가 leaf job·사람 우선순위를 승인한 후에만 Queue로 이동한다.
 - [ ] 6개 이상의 문제 상태를 한 화면에서 구분할 수 있다.
 - [ ] problem row는 `Tab`·`Enter`·`Space`, worker는
@@ -159,7 +170,7 @@ HTML에 demo interaction이 존재한다는 사실만으로 `TASK-010` runtime Q
 
 ## 8. Originality & Ethics Check
 
-- [ ] 외부 AI·API에 전송한 데이터와 Rules 근거가 감사 가능하다.
+- [ ] AI Planner의 method hypothesis·실행 mode·전송 데이터와 Rules 근거가 감사 가능하다.
 - [ ] agent 결과를 제3자 범죄·신원 확정으로 자동 승격하지 않는다.
 - [ ] 공식·외부 맥락과 heuristic을 분리한다.
 - [ ] 문제·답안·credential을 허용되지 않은 서비스에 저장하지 않는다.
@@ -170,7 +181,7 @@ HTML에 demo interaction이 존재한다는 사실만으로 `TASK-010` runtime Q
 
 - [ ] 사용자가 6개 운영 QA 시나리오를 승인했다.
 - [ ] Operations Board Preview를 사용자가 확인했다.
-- [ ] 공식 Rules에서 활성화할 worker·source 범위를 확인했다.
+- [ ] 공식 Rules에서 AI provider·model·data mode와 worker·source 범위를 확인했다.
 - [ ] `TASK-010` 구현을 별도로 승인했다.
 - [ ] 구현된 시나리오만 `pass / partial / fail / blocked`로 기록한다.
 - [ ] 실행하지 않은 시나리오는 `not_executed`로 유지한다.

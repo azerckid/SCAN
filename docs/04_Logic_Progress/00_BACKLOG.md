@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 02:34
-> Status: Approved 1.9 · TASK-001~009 Done
+> Last Updated: 2026-07-28 10:11
+> Status: Approved 2.0 · TASK-001~009 Done · TASK-010 AI-Native Contract
 
 ## 1. 문서 목적
 
@@ -546,7 +546,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] 구현 완료 상태를 Backlog·QA·기술 문서에 동기화했다.
   - [x] 잔여 위험·미평가·공식 규정 제한을 최종 보고서에 기록했다.
 
-### [ ] TASK-010: Rules-gated 병렬 문제풀이 Operations 구현
+### [ ] TASK-010: AI-native Rules-gated 병렬 문제풀이 Operations 구현
 
 - Status: ToDo · Rules-Gated · Separate Approval Required
 - Priority: Tournament Operations · Conditional
@@ -557,9 +557,12 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   `REQ-OPS-SUBMIT-001`~`REQ-OPS-SUBMIT-004`
 - Atomic Tasks:
   - [ ] problem·job·analysis·verification·candidate ID와 상태 model을 정의한다.
+  - [ ] AI Planner/Coordinator를 모든 문제의 필수 planning 단계로 구현한다.
+  - [ ] Rules Gate가 AI 사용 여부가 아니라 provider·model·data·tool mode를 선택하게 한다.
+  - [ ] AI가 해결 방법·leaf dependency·도구 계획을 구조화된 hypothesis로 생성하게 한다.
   - [ ] problem Queue와 dependency-aware job Queue를 분리한다.
-  - [ ] Coordinator·EVM·Tracer·OSINT·Verifier·Reporter role adapter를 정의한다.
-  - [ ] agent 없이 human·Python CLI worker로 같은 job을 실행하는 fallback을 만든다.
+  - [ ] AI Planner/Coordinator·EVM·Tracer·OSINT·Verifier·Reporter role adapter를 정의한다.
+  - [ ] AI plan에 따라 human-approved Python CLI worker가 evidence job을 실행하게 한다.
   - [ ] 문제 간 workspace·result·checkpoint·candidate를 격리한다.
   - [ ] 문제 내부 독립 leaf job을 제한된 동시성으로 실행한다.
   - [ ] source request idempotency·dedup·provider별 concurrency budget을 구현한다.
@@ -591,8 +594,8 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - Implementation Preconditions:
   - [ ] 관련 Concept·UI·Preview·Technical·QA 문서를 다시 읽었다.
   - [ ] Operations Board Preview를 사용자가 확인하고 피드백을 승인했다.
-  - [ ] 공식 Rules에서 AI·agent·자동화·사전 도구·외부 전송 범위를 확인했다.
-  - [ ] 활성화할 role·source와 human·CLI fallback을 승인했다.
+  - [ ] 공식 Rules에서 AI Planner용 provider·model·data·사전 도구 mode를 확인했다.
+  - [ ] 필수 AI Planner와 활성화할 role·source·Python evidence worker를 승인했다.
   - [ ] 운영 manifest·verification·candidate 최소 필드와 mutation을 승인했다.
   - [ ] 전체 job·provider·AI worker concurrency budget을 측정·승인했다.
   - [ ] loading·empty·partial·failed·stale·rules unavailable 상태를 확인했다.
@@ -600,6 +603,9 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [ ] `TASK-010` 구현 착수를 별도로 승인받았다.
 - Acceptance Criteria:
   - [ ] 두 개 이상의 문제를 동시에 처리하며 상태·결과·candidate가 격리된다.
+  - [ ] 모든 문제에 AI method hypothesis와 승인된 leaf job plan이 존재한다.
+  - [ ] AI 자연어 답·confidence만으로 candidate가 `submission_ready`가 되지 않는다.
+  - [ ] AI plan을 Python 도구로 실행한 result·evidence가 candidate의 결정적 필드와 연결된다.
   - [ ] 한 문제의 독립 leaf 두 개 이상이 병렬 실행되고 dependency 뒤에 정합된다.
   - [ ] 동일 source request가 dedup되고 provider 동시성 제한을 초과하지 않는다.
   - [ ] worker 하나의 실패가 다른 문제의 완료·제출 상태를 변경하지 않는다.
