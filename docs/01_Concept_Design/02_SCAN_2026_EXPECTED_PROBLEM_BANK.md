@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 은행
 > Created: 2026-07-24 01:20
-> Last Updated: 2026-07-29 01:16
+> Last Updated: 2026-07-29 01:35
 > Status: Draft 2 Approved · Benchmark 0.1 Applied · Challenge Pack Deferred
 
 ## 1. 문서 목적
@@ -2521,10 +2521,14 @@ N홉 이후 어느 주소로 이동했는지 추적하라.
    determinism을 계속 회귀한다.
 2. assisted 6문항은 전용 fixture·analyzer가 생기기 전까지 자동 성공으로
    계산하지 않는다.
-3. unsupported 21문항의 공통 병목 중 `PATH`, `LABEL`, `OSINT`와 기초 EVM
-   query를 다음 기능 우선순위 입력으로 사용한다.
-4. 후보 fixture 5개와 Challenge Pack 추가 사례는 해당 기능 승격 전까지 Deferred다.
-5. 공식 규정 변경 시 지원 체인·정답·증거 형식과 기능 허용 범위를 갱신한다.
+3. `GENERIC-QUERY`·`GENERIC-STATE`·`TOKEN-TRANSFER`를 묶어 기초 EVM
+   3문항 자동화를 다음 구현 후보로 둔다.
+4. `PATH`·graph reconciliation을 구현한 뒤 `LABEL`·`OSINT`를 확정 사실과
+   heuristic으로 분리해 연결한다.
+5. `XCHAIN/BRIDGE`·`BTC-UTXO`·전문 decoder는 confirmed fixture가 확보된
+   순서로 승격한다.
+6. 후보 fixture 5개와 Challenge Pack 추가 사례는 해당 기능 승격 전까지 Deferred다.
+7. 공식 규정 변경 시 지원 체인·정답·증거 형식과 기능 허용 범위를 갱신한다.
 
 ## 10. Draft 2 채택 기록
 

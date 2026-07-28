@@ -56,6 +56,7 @@ APPROVED_EXPECTED_PROBLEM_IDS = frozenset(
         "SVC-MIX-001",
     }
 )
+APPROVED_AUTOMATED_PROBLEM_IDS = frozenset({"EVM-AUTH-001", "EVM-FREEZE-001", "SVC-DEX-001"})
 
 
 class CoverageLevel(StrEnum):
@@ -126,6 +127,11 @@ class ExpectedProblemBenchmarkManifest(ContractModel):
             raise ValueError("benchmark manifest must not contain duplicate expected problems")
         if set(problem_ids) != APPROVED_EXPECTED_PROBLEM_IDS:
             raise ValueError("benchmark manifest must contain the approved expected-problem bank")
+        automated_ids = {
+            item.problem_id for item in self.cases if item.coverage is CoverageLevel.AUTOMATED
+        }
+        if automated_ids != APPROVED_AUTOMATED_PROBLEM_IDS:
+            raise ValueError("benchmark manifest must use the approved automated problem set")
         return self
 
 

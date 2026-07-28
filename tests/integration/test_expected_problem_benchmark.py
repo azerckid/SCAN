@@ -35,6 +35,9 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
         CoverageLevel.ASSISTED: 6,
         CoverageLevel.UNSUPPORTED: 21,
     }
+    assert {
+        item.problem_id for item in manifest.cases if item.coverage is CoverageLevel.AUTOMATED
+    } == {"EVM-AUTH-001", "EVM-FREEZE-001", "SVC-DEX-001"}
 
 
 def test_confirmed_expected_problems_match_answers_evidence_and_requirements() -> None:

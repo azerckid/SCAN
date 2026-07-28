@@ -116,6 +116,8 @@ PASS repository security scan: 67 runtime/evidence files
 ```
 
 The installed package exposes the approved analysis and local operations command surface:
+Run the expected-problem benchmark command from the repository root because its
+manifest and reviewed replay files are intentionally restricted to that repository.
 
 ```bash
 uv run scan --help
