@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-28 02:34
-> Status: Approved 1.9 · TASK-009 Integration Passed
+> Last Updated: 2026-07-28 11:05
+> Status: Approved 2.0 · TASK-009 Integration Passed · TASK-010 UI-First Gate Passed
 
 ## 1. 문서 목적
 
@@ -161,13 +161,14 @@ ID는 24개 집계에서 한 번만 센다.
 ### 6.6 TASK-010 병렬 문제풀이 운영
 
 - [ ] 공식 Rules에서 AI·agent·자동화·외부 문제 데이터 전송 범위를 확인한다.
-- [ ] Operations Board Preview를 사용자가 확인하고 피드백을 기록한다.
+- [x] Operations Board Preview를 사용자가 확인하고 피드백을 기록한다.
 - [ ] 문제 간 상태·result·checkpoint·candidate가 격리된다.
 - [ ] 문제 내부 leaf job dependency와 source request dedup이 일치한다.
 - [ ] provider·worker별 동시성 제한과 Queue age가 표시된다.
 - [ ] worker 하나의 실패가 다른 문제 상태로 전파되지 않는다.
 - [ ] 독립 검증 없는 후보와 충돌 후보가 `submission_ready`가 아니다.
-- [ ] AI 제한 시 human·Python CLI fallback이 동작한다.
+- [ ] AI mode 미확정 시 `rules_gated`, 금지 mode 호출 시
+  `rule_restricted`, 공식 허용 adapter 교체만 동작한다.
 - [ ] CTFd 자동 제출·credential·session·brute force가 0건이다.
 - [ ] Agentic Parallel Solve QA 6개의 구현된 범위를 실행·기록한다.
 
