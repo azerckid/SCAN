@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 04:48
+> Last Updated: 2026-07-29 04:58
 > Status: Approved 1.1 · Phase 2 Verifying Pack
 
 ## 1. 문서 목적
@@ -421,8 +421,8 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 10. TASK-012 네 fixture의 합성 negative oracle 24개를 두 번 실행해
     complete·partial·failed 결정성을 통과했다. 독립 trace와 제품 Analysis
     type 승인은 별도다.
-11. 네 fixture를 소비할 `evm_core` `0.2-draft` request/result 제안 8개와
-    Schema probe 5개를 통과했다. 이는 consumer contract 검토 증거이며,
+11. 네 fixture를 소비할 `evm_core` `0.2-draft` request/result 제안 12개와
+    Schema probe 14개를 통과했다. 이는 consumer contract 검토 증거이며,
     정식 Analysis I/O 승인·제품 analyzer·fixture `confirmed`를 뜻하지 않는다.
 
 ## 10. Related Documents
@@ -446,5 +446,5 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - EVM Core 후보 4개와 승격 전 잔여 Gate
 - **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 계정 smoke·secret·독립성
 - **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 네 verifying fixture의 24개 offline 반례
-- **QA_Validation**: [TASK-012 Analysis Contract Examples](./examples/task-012/README.md) - complete·partial 8개 제안 사례와 검증 명령
+- **QA_Validation**: [TASK-012 Analysis Contract Examples](./examples/task-012/README.md) - complete·partial·failed 12개 제안 사례와 검증 명령
 - **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 사전 fixture·cache와 source 허용 범위

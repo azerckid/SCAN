@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Analysis Contract 제안
 > Created: 2026-07-29 04:46
-> Last Updated: 2026-07-29 04:46
+> Last Updated: 2026-07-29 04:58
 > Status: Proposed 0.2 Draft · Analysis I/O 0.1 Unchanged · Runtime Not Implemented
 
 ## 1. 목적과 판정
@@ -63,14 +63,25 @@ JSON Schema의 조건부 구조로 분리해 서로의 필드가 섞이지 않�
 `range_complete: false`와 `partial`을 반환한다. `native_inflow`는
 top-level value와 internal sum을 절대 합치지 않는다.
 
+조건부 불변조건:
+
+- `historical_balance`의 `erc20` asset은 `token_address`가 필수이며
+  `native` asset에는 넣지 않는다.
+- `include_transaction_fee: true`인 complete/partial 결과에는
+  `fee_paid_wei`가 필수이고, `false`이면 해당 필드를 넣지 않는다.
+- `first_token_transfer`의 complete는 `range_complete: true`, partial은
+  `false`다.
+- `native_inflow`의 complete는 `trace_complete: true`, partial은
+  `false`다.
+
 ## 5. Partial·Failed 오류 매핑
 
-| query_kind | 대표 partial | 오류 코드 |
-|:---|:---|:---|
-| `object_summary` | historical code source 부재 | `source_unavailable` |
-| `historical_balance` | 고정 block archive state 부재 | `archive_required` |
-| `first_token_transfer` | pagination/range 완결성 부재 | `evidence_incomplete` |
-| `native_inflow` | raw trace 부재 | `trace_unavailable` |
+| query_kind | 대표 partial | 대표 failed | 오류 코드 |
+|:---|:---|:---|:---|
+| `object_summary` | historical code 일부 부재 | object 조회 전체 실패 | `source_unavailable` |
+| `historical_balance` | 일부 asset archive state 부재 | 고정 block state 전체 부재 | `archive_required` |
+| `first_token_transfer` | pagination/range 불완전 | transfer log scan 전체 실패 | `evidence_incomplete` / `source_unavailable` |
+| `native_inflow` | 보조 trace 불완전 | 필수 trace 전체 부재 | `trace_unavailable` |
 
 negative oracle이 검출한 latest 대체, gas limit fee, 잘못된 token/순서,
 실패 call 합산은 `failed` 또는 실행 전 계약 거부다. 구체 stage와 공개
@@ -106,12 +117,14 @@ HTML Preview 변경은 이 제안의 승인 후 별도 UI-First Gate로 처리�
 ## 8. 검증 증거
 
 - proposal Schema Draft 2020-12 자체 검증
-- 네 fixture × complete/partial = 8 case
+- 네 fixture × complete/partial/failed = 12 case
 - query별 input/result 조건, status/error 조건
+- ERC-20 token address·fee 요청·range/trace completeness 조건
 - request/result ID·type·chain·query 일치
 - source order 부분집합
 - fixture exact raw 값 drift 검사
-- extra field·wrong input·complete error·partial no-error·failed envelope 5 probes
+- extra field·wrong input·status/error·failed null/error·ERC-20·fee·range·trace
+  조건을 다루는 14 probes
 - 현재 Analysis I/O 0.1 Schema와 runtime enum 미변경 검사
 
 실행:
@@ -147,5 +160,5 @@ uv run python scripts/check_task_012_analysis_contract_proposal.py
 - **Technical_Specs**: [Live Provider Readiness](./10_LIVE_PROVIDER_READINESS.md) - source·Trace Gate
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012 Context Lock
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 네 verifying fixture
-- **QA_Validation**: [제안 예제](../05_QA_Validation/examples/task-012/README.md) - 8개 contract case
+- **QA_Validation**: [제안 예제](../05_QA_Validation/examples/task-012/README.md) - 12개 contract case
 - **QA_Validation**: [Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 24개 offline 반례

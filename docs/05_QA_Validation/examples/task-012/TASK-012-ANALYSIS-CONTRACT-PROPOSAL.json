@@ -516,6 +516,197 @@
           "SRC-EVM-INFLOW-TRACE-FAILED"
         ]
       }
+    },
+    {
+      "case_id": "CASE-EVM-OBJECT-FAILED",
+      "fixture_id": "FX-BASIC-EVM-001",
+      "scenario": "failed",
+      "request": {
+        "analysis_id": "AN-EVM-OBJECT-FAILED",
+        "analysis_type": "evm_core",
+        "chain_id": 1,
+        "query_kind": "object_summary",
+        "inputs": {
+          "values": [
+            "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5"
+          ],
+          "block_number": 16642512,
+          "include_transaction_fee": true
+        },
+        "source_policy": {
+          "rule_status": "allowed",
+          "allowed_source_ids": [
+            "DS-EVM-RPC-PUBLIC"
+          ],
+          "source_order": [
+            "DS-EVM-RPC-PUBLIC"
+          ],
+          "allow_fallback": false,
+          "offline_mode": true
+        }
+      },
+      "result": {
+        "analysis_id": "AN-EVM-OBJECT-FAILED",
+        "analysis_type": "evm_core",
+        "chain_id": 1,
+        "query_kind": "object_summary",
+        "status": "failed",
+        "data": null,
+        "errors": [
+          {
+            "code": "source_unavailable",
+            "stage": "object_lookup",
+            "retryable": true
+          }
+        ],
+        "evidence_refs": [],
+        "source_record_refs": []
+      }
+    },
+    {
+      "case_id": "CASE-EVM-BALANCE-FAILED",
+      "fixture_id": "FX-BASIC-EVM-002",
+      "scenario": "failed",
+      "request": {
+        "analysis_id": "AN-EVM-BALANCE-FAILED",
+        "analysis_type": "evm_core",
+        "chain_id": 1,
+        "query_kind": "historical_balance",
+        "inputs": {
+          "subject_address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+          "block_number": 16642512,
+          "block_timestamp": 1676565263,
+          "state_semantics": "post_state",
+          "assets": [
+            {
+              "asset_type": "erc20",
+              "symbol": "USDC",
+              "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+            }
+          ]
+        },
+        "source_policy": {
+          "rule_status": "allowed",
+          "allowed_source_ids": [
+            "DS-EVM-RPC-ARCHIVE"
+          ],
+          "source_order": [
+            "DS-EVM-RPC-ARCHIVE"
+          ],
+          "allow_fallback": false,
+          "offline_mode": true
+        }
+      },
+      "result": {
+        "analysis_id": "AN-EVM-BALANCE-FAILED",
+        "analysis_type": "evm_core",
+        "chain_id": 1,
+        "query_kind": "historical_balance",
+        "status": "failed",
+        "data": null,
+        "errors": [
+          {
+            "code": "archive_required",
+            "stage": "historical_state",
+            "retryable": false
+          }
+        ],
+        "evidence_refs": [],
+        "source_record_refs": []
+      }
+    },
+    {
+      "case_id": "CASE-EVM-TRANSFER-FAILED",
+      "fixture_id": "FX-EVM-TOKEN-001",
+      "scenario": "failed",
+      "request": {
+        "analysis_id": "AN-EVM-TRANSFER-FAILED",
+        "analysis_type": "evm_core",
+        "chain_id": 1,
+        "query_kind": "first_token_transfer",
+        "inputs": {
+          "subject_address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+          "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "start_block": 16642512,
+          "direction": "outgoing",
+          "exclude_zero": true,
+          "require_success": true,
+          "ordering": "block_transaction_log_asc"
+        },
+        "source_policy": {
+          "rule_status": "allowed",
+          "allowed_source_ids": [
+            "DS-EVM-RPC-ARCHIVE"
+          ],
+          "source_order": [
+            "DS-EVM-RPC-ARCHIVE"
+          ],
+          "allow_fallback": false,
+          "offline_mode": true
+        }
+      },
+      "result": {
+        "analysis_id": "AN-EVM-TRANSFER-FAILED",
+        "analysis_type": "evm_core",
+        "chain_id": 1,
+        "query_kind": "first_token_transfer",
+        "status": "failed",
+        "data": null,
+        "errors": [
+          {
+            "code": "source_unavailable",
+            "stage": "transfer_log_scan",
+            "retryable": true
+          }
+        ],
+        "evidence_refs": [],
+        "source_record_refs": []
+      }
+    },
+    {
+      "case_id": "CASE-EVM-INFLOW-FAILED",
+      "fixture_id": "FX-EVM-TOKEN-002",
+      "scenario": "failed",
+      "request": {
+        "analysis_id": "AN-EVM-INFLOW-FAILED",
+        "analysis_type": "evm_core",
+        "chain_id": 1,
+        "query_kind": "native_inflow",
+        "inputs": {
+          "interest_address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+          "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+          "require_trace": true,
+          "exclude_reverted": true
+        },
+        "source_policy": {
+          "rule_status": "allowed",
+          "allowed_source_ids": [
+            "DS-EVM-RPC-ARCHIVE"
+          ],
+          "source_order": [
+            "DS-EVM-RPC-ARCHIVE"
+          ],
+          "allow_fallback": false,
+          "offline_mode": true
+        }
+      },
+      "result": {
+        "analysis_id": "AN-EVM-INFLOW-FAILED",
+        "analysis_type": "evm_core",
+        "chain_id": 1,
+        "query_kind": "native_inflow",
+        "status": "failed",
+        "data": null,
+        "errors": [
+          {
+            "code": "trace_unavailable",
+            "stage": "internal_call_trace",
+            "retryable": false
+          }
+        ],
+        "evidence_refs": [],
+        "source_record_refs": []
+      }
     }
   ]
 }

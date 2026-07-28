@@ -1,6 +1,6 @@
 # 예상문제 Coverage 확장 QA 계획
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 04:48
+> Last Updated: 2026-07-29 04:58
 > Status: Proposed 0.1 · Not Executed
 
 ## 1. 목적
@@ -98,7 +98,7 @@
 | Open-source | Planned | 공개 Schema·fixture·재현 명령·license provenance |
 | Business Plan | N/A | 대회 준비 범위, 제품화는 별도 승인 |
 
-TASK-012의 `evm_core` 계약 제안 8개와 Schema probe 5개는 통과했지만,
+TASK-012의 `evm_core` 계약 제안 12개와 Schema probe 14개는 통과했지만,
 이는 계약 Draft의 정합성만 검증한다. 제품 analyzer와 QA-EXP-EVM-001/002는
 계속 `not_executed`이며 fixture도 `verifying` 상태다.
 
@@ -125,4 +125,4 @@ TASK-012의 `evm_core` 계약 제안 8개와 Schema probe 5개는 통과했지�
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 4개 candidate와 1차 source 재조회
 - **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·독립성·반례
 - **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 제품 analyzer 전 24개 fixture 반례
-- **QA_Validation**: [TASK-012 Analysis Contract Examples](./examples/task-012/README.md) - 8개 계약 사례·5개 Schema probe
+- **QA_Validation**: [TASK-012 Analysis Contract Examples](./examples/task-012/README.md) - 12개 계약 사례·14개 Schema probe

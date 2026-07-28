@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 04:48
+> Last Updated: 2026-07-29 04:58
 > Status: Proposed 0.1 · No Implementation Approval
 
 ## 1. 목적
@@ -45,8 +45,9 @@
 - [x] 네 fixture의 공통 9개 조회를 두 공급자에서 재현하고 decoded 일치를
   확인해 `verifying`으로 승격한다.
 - [x] 네 fixture의 합성 negative oracle 24개를 두 번 실행해 결정성을 고정한다.
-- [x] 격리된 `evm_core` `0.2-draft`의 4개 query kind와 complete·partial
-  8개 사례·5개 Schema probe를 작성하고 Analysis I/O `0.1` 비변경을 확인한다.
+- [x] 격리된 `evm_core` `0.2-draft`의 4개 query kind와
+  complete·partial·failed 12개 사례·14개 Schema probe를 작성하고
+  Analysis I/O `0.1` 비변경을 확인한다.
 - [ ] 독립 trace와 rate-limit·timeout·unsupported 반례를 실행한다.
 - [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만 `confirmed` 승격한다.
 - [ ] 네 문제 입력·정답 필드와 partial 조건 제안을 승인한다.

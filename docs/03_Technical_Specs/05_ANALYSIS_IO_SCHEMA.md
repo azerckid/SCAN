@@ -1,6 +1,6 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-29 04:48
+> Last Updated: 2026-07-29 04:58
 > Status: Contract Approved 0.1 · TASK-002·005·006·007·008·009 Applied
 > Schema Version: 0.1
 
@@ -322,8 +322,9 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
     result 결정성, result→evidence→source 참조를 회귀했다.
 17. 계약 변경이 없어 Schema 버전은 `0.1`을 유지한다.
 18. `TASK-012`는 기존 `0.1`을 암묵적으로 확장하지 않고, 격리된
-    `evm_core` `0.2-draft` 제안과 4개 query kind·8개 complete/partial
-    사례·5개 Schema probe를 작성했다. 명시적 승인 전에는 `0.1` 계약과
+    `evm_core` `0.2-draft` 제안과 4개 query kind·12개
+    complete/partial/failed 사례·14개 Schema probe를 작성했다. 명시적 승인
+    전에는 `0.1` 계약과
     runtime `AnalysisType`을 변경하지 않는다.
 
 ## 12. Related Documents

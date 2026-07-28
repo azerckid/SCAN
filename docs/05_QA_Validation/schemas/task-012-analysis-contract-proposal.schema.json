@@ -21,7 +21,7 @@
     },
     "cases": {
       "type": "array",
-      "minItems": 8,
+      "minItems": 12,
       "items": {
         "$ref": "#/$defs/case"
       }
@@ -218,6 +218,44 @@
                 "$ref": "#/$defs/address"
               }
             },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "asset_type": {
+                      "const": "erc20"
+                    }
+                  },
+                  "required": [
+                    "asset_type"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "token_address"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "asset_type": {
+                      "const": "native"
+                    }
+                  },
+                  "required": [
+                    "asset_type"
+                  ]
+                },
+                "then": {
+                  "not": {
+                    "required": [
+                      "token_address"
+                    ]
+                  }
+                }
+              }
+            ],
             "additionalProperties": false
           }
         }
@@ -817,6 +855,114 @@
               }
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "query_kind": {
+                "const": "first_token_transfer"
+              },
+              "status": {
+                "const": "complete"
+              }
+            },
+            "required": [
+              "query_kind",
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "range_complete": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "query_kind": {
+                "const": "first_token_transfer"
+              },
+              "status": {
+                "const": "partial"
+              }
+            },
+            "required": [
+              "query_kind",
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "range_complete": {
+                    "const": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "query_kind": {
+                "const": "native_inflow"
+              },
+              "status": {
+                "const": "complete"
+              }
+            },
+            "required": [
+              "query_kind",
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "trace_complete": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "query_kind": {
+                "const": "native_inflow"
+              },
+              "status": {
+                "const": "partial"
+              }
+            },
+            "required": [
+              "query_kind",
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "trace_complete": {
+                    "const": false
+                  }
+                }
+              }
+            }
+          }
         }
       ],
       "additionalProperties": false
@@ -841,7 +987,8 @@
         "scenario": {
           "enum": [
             "complete",
-            "partial"
+            "partial",
+            "failed"
           ]
         },
         "request": {
@@ -851,6 +998,124 @@
           "$ref": "#/$defs/result"
         }
       },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "request": {
+                "properties": {
+                  "query_kind": {
+                    "const": "object_summary"
+                  },
+                  "inputs": {
+                    "properties": {
+                      "include_transaction_fee": {
+                        "const": true
+                      }
+                    },
+                    "required": [
+                      "include_transaction_fee"
+                    ]
+                  }
+                },
+                "required": [
+                  "query_kind",
+                  "inputs"
+                ]
+              },
+              "result": {
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "complete",
+                      "partial"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "request",
+              "result"
+            ]
+          },
+          "then": {
+            "properties": {
+              "result": {
+                "properties": {
+                  "data": {
+                    "required": [
+                      "fee_paid_wei"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "request": {
+                "properties": {
+                  "query_kind": {
+                    "const": "object_summary"
+                  },
+                  "inputs": {
+                    "properties": {
+                      "include_transaction_fee": {
+                        "const": false
+                      }
+                    },
+                    "required": [
+                      "include_transaction_fee"
+                    ]
+                  }
+                },
+                "required": [
+                  "query_kind",
+                  "inputs"
+                ]
+              },
+              "result": {
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "complete",
+                      "partial"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "request",
+              "result"
+            ]
+          },
+          "then": {
+            "properties": {
+              "result": {
+                "properties": {
+                  "data": {
+                    "not": {
+                      "required": [
+                        "fee_paid_wei"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
       "additionalProperties": false
     }
   }
