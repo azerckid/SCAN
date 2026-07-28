@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 03:32
+> Last Updated: 2026-07-29 03:39
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -89,14 +89,15 @@
 
 | 논리 역할 | 후보 | 문서상 capability | 미확정 사항 | 상태 |
 |:---|:---|:---|:---|:---:|
-| `PROVIDER-EVM-PRIMARY` | QuickNode Ethereum | archive·Debug·Trace·Ethereum JSON-RPC | credential 회전·실제 plan·rate limit·timeout·대상 block smoke | candidate/configured |
-| `PROVIDER-EVM-VERIFY` | Alchemy Ethereum | 기본 RPC·historical archive·filtered logs | credential 회전·실제 plan·capability·독립 trace 경로 | candidate/configured |
+| `PROVIDER-EVM-PRIMARY` | QuickNode Ethereum | archive·Debug·Trace·Ethereum JSON-RPC | 7/7 smoke 성공; credential 회전·rate/timeout 반례 | verifying |
+| `PROVIDER-EVM-VERIFY` | Alchemy Ethereum | 기본 RPC·historical archive·filtered logs | 6/6 공통 smoke 성공; credential 회전·독립 trace·rate/timeout 반례 | verifying |
 | `PROVIDER-EVM-EXPLORER` | Blockscout | transaction·log·internal transaction 교차확인 | 원본 RPC·독립 trace 대체 불가 | supporting |
 | `PROVIDER-EVM-TRACE-VERIFY` | 미선정 | trace-dependent fixture 독립 검증 | 공급자·plan·비용 | unresolved |
 
-이 topology는 채택 기록이 아니다. primary·verify endpoint의 로컬 구성과
-network 0건 dry-run만 완료했으며 live smoke·독립 재현은 실행하지 않았다.
-설정 중 대화에 노출된 credential은 live 실행 전 회전해야 한다. 회전한
+이 topology는 채택 기록이 아니다. primary 7건·verify 6건의 pre-event
+read-only smoke에서 공통 decoded summary가 모두 일치했고 primary trace도
+성공했다. 독립 trace·rate behavior·fixture별 독립 재현은 미완료다.
+설정 중 대화에 노출된 credential은 대회 사용과 후속 지속 호출 전 회전해야 한다. 회전한
 endpoint·API key는 로컬 secret 환경에만 두고 source record에는 논리
 provider ID, method, block tag, 조회 시각, 안전한 오류 코드, raw SHA-256만
 남긴다. 상세 Gate와 공식 근거는

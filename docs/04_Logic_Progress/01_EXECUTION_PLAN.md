@@ -41,7 +41,8 @@
 - [x] primary·independent·supporting provider 후보 topology와 smoke 계약을 문서화한다.
 - [x] 기본 network 0건·Rules/endpoint opt-in capability runner를 준비한다.
 - [ ] 노출 credential을 회전하고 새 secret을 로컬 환경에만 구성한 뒤 실제 계정·plan을 확인한다.
-- [ ] TX·receipt·block·filtered logs·historical state·trace capability smoke를 실행한다.
+- [x] QuickNode primary·Alchemy verify의 TX·receipt·block·filtered logs·historical state와 primary trace smoke를 실행한다.
+- [ ] 독립 trace와 rate-limit·timeout·unsupported 반례를 실행한다.
 - [ ] 네 후보를 독립 재현·반례로 `confirmed` 승격한다.
 - [ ] 네 문제 입력·정답 필드와 partial 조건을 승인한다.
 - [ ] 기존 EVM decoder·source·cache 재사용 범위를 확인한다.

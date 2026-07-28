@@ -1,7 +1,7 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 03:32
-> Status: Endpoints Configured Locally · Credential Rotation Required · Live Smoke Rules-Gated
+> Last Updated: 2026-07-29 03:39
+> Status: Pre-event Smoke Partial Pass · Credential Rotation Pending · Competition Rules Unclear
 
 ## 1. 목적
 
@@ -29,7 +29,7 @@
 | 자동 실증 완료 | DEX·AUTH·FREEZE 3문항 |
 | Phase 2 준비 대상 | 나머지 27문항 |
 | 직접 준비 중 | EVM Core 4문항의 candidate fixture |
-| EVM 공급자 topology | QuickNode primary·Alchemy verifier 로컬 endpoint 구성, credential 회전·plan·smoke 미확정 |
+| EVM 공급자 topology | QuickNode primary 7/7·Alchemy verifier 6/6 smoke 성공, credential 회전·독립 trace·rate behavior 미완료 |
 | AI Planner 공급자 | 필수 역할 확정, provider/model/비용 smoke 미실행 |
 | TASK-012 구현 | 미승인·미시작 |
 | 안전한 smoke runner | 준비 완료, 기본 network 0건 |
@@ -43,8 +43,8 @@
 
 | 역할 | 후보 | 공식 문서로 확인한 능력 | 현재 제약 | 상태 |
 |:---|:---|:---|:---|:---:|
-| Primary | QuickNode Ethereum | archive, Ethereum JSON-RPC, Debug API, Trace API를 문서화 | 로컬 endpoint 구성 완료, 실제 한도·대상 method smoke 미확인 | candidate/configured |
-| Independent verifier | Alchemy Ethereum | 기본 RPC·`eth_getLogs`·historical archive state 지원 | 로컬 endpoint 구성 완료, plan·실제 capability와 독립 trace 미확인 | candidate/configured |
+| Primary | QuickNode Ethereum | archive, Ethereum JSON-RPC, Debug API, Trace API를 문서화 | 대상 method 7/7 성공, rate/timeout·credential 회전 미완료 | verifying |
+| Independent verifier | Alchemy Ethereum | 기본 RPC·`eth_getLogs`·historical archive state 지원 | 대상 공통 method 6/6 성공, 독립 trace·rate/timeout·credential 회전 미완료 | verifying |
 | Supporting explorer | Blockscout | 거래·로그·internal transaction 교차확인에 기존 fixture에서 사용 | 원본 RPC·독립 trace 대체물이 아님 | verifying/supporting |
 | Independent trace | 미선정 | primary와 독립된 trace가 필요할 때 사용 | 공급자·plan·비용 미결정 | unresolved |
 
@@ -130,15 +130,25 @@ uv run python scripts/smoke_live_provider.py --role primary
 JSON-RPC adapter·content-addressed artifact·secret guard를 재사용하며
 `eth_sendRawTransaction`이나 서명 method를 포함하지 않는다.
 
-두 endpoint credential은 설정 과정에서 대화 채널에 노출됐으므로 live 실행
-전에 모두 회전해야 한다. 현재 값이 `.env.local`과 Git ignore 경계 안에
-있다는 사실은 이미 노출된 credential을 안전한 것으로 되돌리지 않는다.
+두 endpoint credential은 설정 과정에서 대화 채널에 노출됐다. 사용자는
+대회 전 capability smoke 1회 실행을 승인하고 이후 credential을 직접
+회전하기로 했다. 현재 값이 `.env.local`과 Git ignore 경계 안에 있다는
+사실은 이미 노출된 credential을 안전한 것으로 되돌리지 않으므로 대회
+사용과 후속 지속 호출 전에는 회전 상태를 다시 확인한다.
 
-동일 시각 primary·verify dry-run은 각각 `status=not_executed`,
+03:32 KST primary·verify dry-run은 각각 `status=not_executed`,
 `network_calls=0`으로 끝났고, endpoint가 구성된 상태에서도
 `--execute --rules-status unclear`는 실제 호출 전에 `rule_restricted`
 (exit `5`)로 차단됐다. endpoint 값과 token은 조회 결과·문서·Git에 남기지
 않았다.
+
+03:39 KST 사용자가 승인한 **대회 전 공급자 준비 점검**으로 primary 7건과
+verify 6건을 실행했다. 이때 CLI의 `--rules-status allowed`는 해당 pre-event
+점검에 대한 operator 실행 허가로 사용했으며, `RULE-API-001`을 공식
+`allowed`로 바꾸지 않는다. 두 공급자는 chain ID·TX·receipt·block·filtered
+logs·historical call에서 동일 decoded summary를 반환했고, primary의
+`debug_traceTransaction`도 성공했다. 독립 trace와 rate/timeout 동작은 아직
+검증하지 않았으므로 전체 Gate는 `partial`이다.
 
 `--output-root`는 저장소 `.scan/live-provider-smoke/`와 그 하위만 허용한다.
 URL userinfo는 거부하고 URL path/query token 및 composition root가 전달한
