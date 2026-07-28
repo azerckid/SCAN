@@ -1,6 +1,6 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 04:25
+> Last Updated: 2026-07-29 04:32
 > Status: EVM Fixture Common Replay Passed · Overall Partial
 
 ## 1. 목적
@@ -14,7 +14,7 @@ Planner가 필요한 능력을 제공하는지 검증하는 실행 체크리스�
 
 fixture 공통 9개 decoded summary와 primary trace는 성공했다. Alchemy의
 독립 trace는 HTTP 400으로 실패했다. credential 회전, rate/timeout·negative
-oracle 19개는 합성 offline 입력으로 두 번 통과했다. credential 회전,
+oracle 24개는 합성 offline 입력으로 두 번 통과했다. credential 회전,
 live rate/timeout 반례, 독립 trace와 AI Planner capability는 아직
 미실행이므로 최종 상태는 `partial`이다.
 
@@ -91,7 +91,7 @@ credential 회전, live rate/timeout·fallback 검증이 남아 `confirmed`는
 [TASK-012 Fixture 후보 보고서 §7](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md)에
 기록된 반례의 합집합이 최소 실행 범위다.
 
-합집합을 확장한 19개 oracle은
+합집합을 확장한 24개 oracle은
 [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md)에
 고정했다. 이는 live provider의 timeout·rate-limit 또는 독립 trace 실행을
 대체하지 않는다.
@@ -147,4 +147,4 @@ AI Planner의 품질은 정답 문장과의 유사도로 채점하지 않는다.
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - automated 승격 기준
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 재현 대상 4개
 - **QA_Validation**: [Smoke Runner 준비 보고서](./26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - 코드·dry-run·network 0건 검증
-- **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 19개 offline 반례·결정성
+- **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 24개 offline 반례·결정성

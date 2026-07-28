@@ -12,6 +12,7 @@ type OracleCategory = Literal[
     "object_classification",
     "transaction_fee",
     "historical_state",
+    "timestamp_to_block",
     "token_transfer",
     "native_inflow",
 ]
@@ -26,6 +27,11 @@ REQUIRED_ORACLE_IDS = frozenset(
         "OR-BASIC-STATE-BLOCK-MISMATCH",
         "OR-BASIC-STATE-DECIMALS",
         "OR-BASIC-STATE-PRECISION",
+        "OR-TIME-EXACT",
+        "OR-TIME-BETWEEN",
+        "OR-TIME-BEFORE-RANGE",
+        "OR-TIME-AFTER-RANGE",
+        "OR-TIME-WRONG-SELECTION",
         "OR-TOKEN-FAILED-TX",
         "OR-TOKEN-UNRELATED-LOG",
         "OR-TOKEN-DIFFERENT-ASSET",
@@ -80,6 +86,8 @@ def evaluate_case(case: NegativeOracleCase) -> dict[str, Any]:
             return _evaluate_fee(case.facts)
         case "historical_state":
             return _evaluate_state(case.facts)
+        case "timestamp_to_block":
+            return _evaluate_timestamp_to_block(case.facts)
         case "token_transfer":
             return _evaluate_transfer(case.facts)
         case "native_inflow":
@@ -130,6 +138,44 @@ def _evaluate_state(facts: dict[str, Any]) -> dict[str, Any]:
     if not _boolean(facts, "precision_preserved"):
         return {"outcome": "failed", "amount_raw": amount_raw}
     return {"outcome": "complete", "amount_raw": amount_raw}
+
+
+def _evaluate_timestamp_to_block(facts: dict[str, Any]) -> dict[str, Any]:
+    headers = facts.get("headers")
+    if not isinstance(headers, list) or len(headers) < 2:
+        raise ValueError("timestamp_to_block headers must contain at least two blocks")
+    normalized: list[tuple[int, int]] = []
+    for header in headers:
+        if not isinstance(header, dict):
+            raise ValueError("timestamp_to_block header must be an object")
+        number = header.get("number")
+        timestamp = header.get("timestamp")
+        if (
+            not isinstance(number, int)
+            or isinstance(number, bool)
+            or not isinstance(timestamp, int)
+            or isinstance(timestamp, bool)
+        ):
+            raise ValueError("timestamp_to_block number and timestamp must be integers")
+        normalized.append((number, timestamp))
+    ordered = sorted(normalized)
+    if ordered != normalized or any(
+        ordered[index + 1][0] != ordered[index][0] + 1 or ordered[index + 1][1] <= ordered[index][1]
+        for index in range(len(ordered) - 1)
+    ):
+        return {"outcome": "failed", "block_number": None}
+
+    target = _integer(facts, "target_timestamp")
+    if target < ordered[0][1] or target > ordered[-1][1]:
+        return {"outcome": "partial", "block_number": None}
+    selected = max(number for number, timestamp in ordered if timestamp <= target)
+    reported = facts.get("reported_block_number")
+    if reported is not None:
+        if not isinstance(reported, int) or isinstance(reported, bool):
+            raise ValueError("reported_block_number must be an integer")
+        if reported != selected:
+            return {"outcome": "failed", "block_number": selected}
+    return {"outcome": "complete", "block_number": selected}
 
 
 def _evaluate_transfer(facts: dict[str, Any]) -> dict[str, Any]:

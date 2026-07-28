@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 04:16
+> Last Updated: 2026-07-29 04:32
 > Status: Proposed 0.1 · No Implementation Approval
 
 ## 1. 목적
@@ -44,7 +44,7 @@
 - [x] QuickNode primary·Alchemy verify의 TX·receipt·block·filtered logs·historical state와 primary trace smoke를 실행한다.
 - [x] 네 fixture의 공통 9개 조회를 두 공급자에서 재현하고 decoded 일치를
   확인해 `verifying`으로 승격한다.
-- [x] 네 fixture의 합성 negative oracle 19개를 두 번 실행해 결정성을 고정한다.
+- [x] 네 fixture의 합성 negative oracle 24개를 두 번 실행해 결정성을 고정한다.
 - [ ] 독립 trace와 rate-limit·timeout·unsupported 반례를 실행한다.
 - [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만 `confirmed` 승격한다.
 - [ ] 네 문제 입력·정답 필드와 partial 조건을 승인한다.

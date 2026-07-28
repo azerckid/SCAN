@@ -19,7 +19,7 @@ def test_repository_manifest_verifies_all_required_oracles() -> None:
 
     verified = verify_manifest(manifest)
 
-    assert len(verified) == 19
+    assert len(verified) == 24
     assert len(verified) == len(set(verified))
 
 
@@ -38,6 +38,13 @@ def test_trace_unavailable_is_partial() -> None:
     case = next(item for item in manifest.cases if item.oracle_id == "OR-NATIVE-TRACE-UNAVAILABLE")
 
     assert evaluate_case(case) == {"outcome": "partial", "amount_wei": "0"}
+
+
+def test_timestamp_between_blocks_selects_the_preceding_block() -> None:
+    manifest = load_negative_oracle_manifest(MANIFEST)
+    case = next(item for item in manifest.cases if item.oracle_id == "OR-TIME-BETWEEN")
+
+    assert evaluate_case(case) == {"outcome": "complete", "block_number": 101}
 
 
 def test_manifest_requires_the_complete_oracle_set() -> None:

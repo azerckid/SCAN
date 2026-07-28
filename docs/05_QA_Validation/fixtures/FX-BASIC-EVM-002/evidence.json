@@ -115,7 +115,7 @@
   "uncertainty": {
     "candidate_only": false,
     "verifying": true,
-    "remaining": "Independent archive replay passed; timestamp-to-block negative oracle remains"
+    "remaining": "Independent archive replay and offline timestamp-to-block oracles passed; state consumer contract remains"
   },
   "provenance_notes": "All state values are historical post-state values at block 16642512. Latest balances are not acceptable substitutes."
 }
