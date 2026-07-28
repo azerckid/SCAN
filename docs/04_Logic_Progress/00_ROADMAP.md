@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-28 11:05
+> Last Updated: 2026-07-28 11:15
 > Status: Approved 1.7 · Document Completion Gate Passed · TASK-009 Done · TASK-010 UI-First Gate Passed
 
 ## 1. 문서 목적
@@ -97,7 +97,7 @@
 |:---|:---|:---|
 | [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.0 · Fixture Scope Closed | 후보 5개 Deferred 결정; 단계별 승격 조건 유지 |
 | [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Approved 1.9 · Integration Passed | 24 pass·0 partial·0 not_executed |
-| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 1.9 · Integration Passed | offline P0·V1 Gate 완료 |
+| [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 2.0 · TASK-009 Integration Passed · TASK-010 UI-First Gate Passed | offline P0·V1 Gate와 Operations Preview 검토 완료 |
 | [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Contract Approved · UI Preview Gate Passed · Runtime Not Executed | `TASK-010` 별도 구현 승인과 Rules 필요 |
 | [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | Pass | 문서 검증 증거·Known Issue·승인 경계 |
 | DEX·AUTH·FREEZE fixture | Confirmed | V1 기준값으로 동결, 정답 임의 변경 금지 |

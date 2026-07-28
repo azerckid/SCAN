@@ -1,6 +1,6 @@
 # SCAN 2026 Agentic Parallel Solve QA
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 11:05
+> Last Updated: 2026-07-28 11:15
 > Status: AI-Native Contract Approved 1.0 · UI Preview Gate Passed · Runtime Not Executed · Rules-Gated
 
 ## 1. 문서 목적
@@ -155,9 +155,9 @@
 - [x] Workbench 이동 후 선택 problem과 filter가 복원된다.
 - [x] Preview의 숫자가 실측 성능·정확도로 오인되지 않는다.
 
-체크박스는 사용자 브라우저 검토 또는 자동화된 UI QA 실행 후에만 닫는다.
-HTML에 demo interaction이 존재한다는 사실만으로 `TASK-010` runtime QA를
-`pass`로 변경하지 않는다.
+UI Preview 체크박스는 2026-07-28 사용자 브라우저 검토와 승인 후 닫았다.
+이는 화면 계약의 통과 기록이며, HTML에 demo interaction이 존재한다는
+사실만으로 `TASK-010` runtime QA를 `pass`로 변경하지 않는다.
 
 ## 7. 365 글로벌 평가 기준
 
@@ -166,7 +166,7 @@ HTML에 demo interaction이 존재한다는 사실만으로 `TASK-010` runtime Q
 | Functionality | Not Executed | 문제·leaf 병렬성, 격리, dedup, dependency 시나리오 |
 | Potential Impact | Not Executed | 제한 시간 내 복수 문제 처리량과 Queue age 측정 |
 | Novelty | Not Executed | evidence-first 독립 검증과 role fallback |
-| UX | Not Executed | Operations Board 상태 판독·키보드·수동 제출 |
+| UX | Preview Passed / Runtime Not Executed | 사용자 브라우저 검토 통과; runtime 상태 판독·키보드·수동 제출은 미실행 |
 | Open-source | Not Executed | 교체 가능한 worker·CLI·Analysis I/O 계약 |
 | Business Plan | N/A | 대회 운영 QA이며 수익 모델 검증 범위 아님 |
 
