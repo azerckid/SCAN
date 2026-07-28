@@ -34,6 +34,7 @@ ROLE_PROVIDER_ID: Mapping[ProviderRole, str] = {
     "verify": "PROVIDER-EVM-VERIFY",
     "trace": "PROVIDER-EVM-TRACE-VERIFY",
 }
+SAFE_OUTPUT_RELATIVE_ROOT = Path(".scan/live-provider-smoke")
 READ_ONLY_METHODS = frozenset(
     {
         "eth_chainId",
@@ -153,7 +154,17 @@ def require_execution_allowed(
     parts = urlsplit(endpoint)
     if parts.scheme != "https" or not parts.netloc:
         raise ValueError(f"{endpoint_name} must be an absolute HTTPS URL")
+    if parts.username is not None or parts.password is not None:
+        raise ValueError(f"{endpoint_name} must not contain URL userinfo")
     return endpoint
+
+
+def resolve_output_root(requested: Path, repository_root: Path) -> Path:
+    safe_root = (repository_root / SAFE_OUTPUT_RELATIVE_ROOT).resolve()
+    candidate = (requested if requested.is_absolute() else repository_root / requested).resolve()
+    if candidate != safe_root and safe_root not in candidate.parents:
+        raise ValueError("output root must stay under .scan/live-provider-smoke")
+    return candidate
 
 
 async def run_smoke(
@@ -162,9 +173,12 @@ async def run_smoke(
     endpoint: str,
     output_root: Path,
     client: httpx.AsyncClient,
+    configured_secrets: Sequence[str] = (),
 ) -> SmokeReport:
     provider_id = ROLE_PROVIDER_ID[role]
-    guard = SensitiveDataGuard(_endpoint_secret_candidates(endpoint))
+    guard = SensitiveDataGuard(
+        (*_endpoint_secret_candidates(endpoint), *(value for value in configured_secrets if value))
+    )
     artifacts = ArtifactStore(output_root, guard=guard)
     adapter = JsonRpcSourceAdapter(
         source_id="DS-EVM-RPC-ARCHIVE",
@@ -186,7 +200,7 @@ async def run_smoke(
                 payload.raw_bytes,
                 media_type=payload.media_type or "application/json",
                 artifact_kind="live_provider_smoke",
-                redaction_status="verified_no_configured_secret",
+                redaction_status="checked_configured_secrets",
                 source_id=adapter.source_id,
                 retrieved_at=payload.retrieved_at,
             )

@@ -1,5 +1,6 @@
 import asyncio
 import json
+from pathlib import Path
 
 import httpx
 import pytest
@@ -9,6 +10,7 @@ from scan_tool.application.provider_smoke import (
     TASK_012_TX_HASH,
     dry_run_plan,
     require_execution_allowed,
+    resolve_output_root,
     run_smoke,
     smoke_requests,
     write_report,
@@ -50,6 +52,26 @@ def test_execute_requires_role_endpoint_and_https() -> None:
             environment={"SCAN_EVM_VERIFY_RPC_URL": "http://rpc.example"},
             role="verify",
         )
+    with pytest.raises(ValueError, match="must not contain URL userinfo"):
+        require_execution_allowed(
+            execute=True,
+            rules_status="allowed",
+            environment={"SCAN_EVM_VERIFY_RPC_URL": "https://user:secret@rpc.example"},
+            role="verify",
+        )
+
+
+def test_output_root_must_stay_under_repository_scan_directory(tmp_path) -> None:
+    repository_root = tmp_path / "repository"
+    safe_root = repository_root / ".scan" / "live-provider-smoke"
+
+    assert resolve_output_root(Path(".scan/live-provider-smoke"), repository_root) == safe_root
+    assert (
+        resolve_output_root(Path(".scan/live-provider-smoke/run-1"), repository_root)
+        == safe_root / "run-1"
+    )
+    with pytest.raises(ValueError, match="must stay under"):
+        resolve_output_root(Path("../outside"), repository_root)
 
 
 def test_verify_role_does_not_request_trace() -> None:
@@ -150,6 +172,31 @@ def test_provider_echoing_endpoint_secret_is_blocked_before_artifact_write(tmp_p
                 endpoint=f"https://rpc.example/v2/{secret}",
                 output_root=tmp_path,
                 client=client,
+            )
+
+    with pytest.raises(SensitiveDataError, match="forbidden value"):
+        asyncio.run(execute())
+    assert not (tmp_path / "artifacts").exists()
+
+
+def test_configured_header_secret_is_guarded_even_when_url_has_no_token(tmp_path) -> None:
+    secret = "header-secret-canary-9012"
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.headers["X-API-Key"] == secret
+        return httpx.Response(200, json={"jsonrpc": "2.0", "id": 1, "result": secret})
+
+    async def execute():
+        async with httpx.AsyncClient(
+            transport=httpx.MockTransport(handler),
+            headers={"X-API-Key": secret},
+        ) as client:
+            return await run_smoke(
+                role="trace",
+                endpoint="https://rpc.example/",
+                output_root=tmp_path,
+                client=client,
+                configured_secrets=(secret,),
             )
 
     with pytest.raises(SensitiveDataError, match="forbidden value"):

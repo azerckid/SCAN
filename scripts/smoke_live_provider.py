@@ -13,9 +13,13 @@ from scan_tool.application.provider_smoke import (
     ProviderRole,
     dry_run_plan,
     require_execution_allowed,
+    resolve_output_root,
     run_smoke,
     write_report,
 )
+from scan_tool.application.security import SensitiveDataError
+
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
 def parse_args() -> argparse.Namespace:
@@ -48,6 +52,7 @@ async def async_main() -> int:
             environment=os.environ,
             role=role,
         )
+        output_root = resolve_output_root(args.output_root, REPOSITORY_ROOT)
     except PermissionError as error:
         print(json.dumps({"status": "rule_restricted", "message": str(error)}))
         return 5
@@ -56,14 +61,25 @@ async def async_main() -> int:
         return 2
     if endpoint is None:
         raise RuntimeError("execute mode requires an endpoint")
-    async with httpx.AsyncClient() as client:
-        report = await run_smoke(
-            role=role,
-            endpoint=endpoint,
-            output_root=args.output_root,
-            client=client,
+    try:
+        async with httpx.AsyncClient() as client:
+            report = await run_smoke(
+                role=role,
+                endpoint=endpoint,
+                output_root=output_root,
+                client=client,
+            )
+        report_path = write_report(report, output_root)
+    except SensitiveDataError:
+        print(
+            json.dumps(
+                {
+                    "status": "security_blocked",
+                    "message": "provider response contained configured secret material",
+                }
+            )
         )
-    report_path = write_report(report, args.output_root)
+        return 4
     print(
         json.dumps(
             {

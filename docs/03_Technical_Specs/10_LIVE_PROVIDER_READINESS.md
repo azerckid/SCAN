@@ -1,6 +1,6 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 02:56
+> Last Updated: 2026-07-29 03:06
 > Status: Runner Prepared · Smoke Not Executed · Secrets Not Configured
 
 ## 1. 목적
@@ -128,6 +128,13 @@ uv run python scripts/smoke_live_provider.py --role primary
 환경변수가 없으므로 live smoke는 실행하지 않았다. runner는 기존 HTTPX
 JSON-RPC adapter·content-addressed artifact·secret guard를 재사용하며
 `eth_sendRawTransaction`이나 서명 method를 포함하지 않는다.
+
+`--output-root`는 저장소 `.scan/live-provider-smoke/`와 그 하위만 허용한다.
+URL userinfo는 거부하고 URL path/query token 및 composition root가 전달한
+header secret을 저장 전 guard한다. 이 검사는 구성해 전달한 secret만
+대상으로 하므로 artifact 상태도 `checked_configured_secrets`로 기록한다.
+보안 guard가 차단하면 traceback이나 원문을 출력하지 않고
+`security_blocked`, exit `4`로 종료한다.
 
 ## 6. Smoke·재현 증거 레코드
 

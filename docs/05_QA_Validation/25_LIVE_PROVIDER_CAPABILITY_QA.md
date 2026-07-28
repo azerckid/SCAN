@@ -1,6 +1,6 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 02:56
+> Last Updated: 2026-07-29 03:06
 > Status: Runner Prepared · Live Not Executed
 
 ## 1. 목적
@@ -21,6 +21,9 @@ AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하�
 - [ ] EVM method allowlist는 read-only이고 signing·send method가 없다.
 - [ ] canary secret이 성공·실패·timeout·fallback 출력에 나타나지 않는다.
 - [ ] provider별 논리 ID와 실제 endpoint mapping은 로컬 설정에서만 존재한다.
+- [ ] output은 저장소 `.scan/live-provider-smoke/` 하위에만 생성된다.
+- [ ] URL userinfo는 거부되고 구성된 URL/header secret이 guard에 전달된다.
+- [ ] secret 차단은 원문·traceback 없이 `security_blocked`로 종료된다.
 
 하나라도 실패하면 smoke를 시작하지 않는다.
 
