@@ -1,6 +1,6 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-28 02:34
+> Last Updated: 2026-07-28 11:28
 > Status: Contract Approved 0.1 · TASK-002·005·006·007·008·009 Applied
 > Schema Version: 0.1
 
@@ -334,6 +334,7 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 공통 입출력·오류 규범
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - Pydantic·artifact·adapter 결정
 - **Technical_Specs**: [Agentic Parallel Solve Flow](./07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - leaf analysis와 운영 manifest의 경계
+- **Technical_Specs**: [TASK-010 Pre-Code Technical Brief](./08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) - Analysis I/O 0.1을 유지하는 운영 model·storage 경계
 - **UI_Screens**: [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 여러 leaf result의 운영 상태 표시
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - model·Schema 구현 작업과 완료 기준
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 변환 대상 confirmed fixture

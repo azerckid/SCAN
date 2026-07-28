@@ -1,6 +1,6 @@
 # SCAN 2026 SQLite 논리 DB Schema
 > Created: 2026-07-27 15:52
-> Last Updated: 2026-07-27 23:32
+> Last Updated: 2026-07-28 11:28
 > Status: Approved 1.2 · SQLite Schema Version 1 · CLI Composition Applied
 
 ## 1. 문서 목적
@@ -399,6 +399,7 @@ event evidence에는 calldata를 섞지 않고 call evidence로 분리한다. co
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - source·provider ID와 보존 제약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - SQLite·WAL·artifact 결정
 - **Technical_Specs**: [공통 분석 I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - request·result·evidence·source 공개 계약
+- **Technical_Specs**: [TASK-010 Pre-Code Technical Brief](./08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) - additive schema v2 운영 테이블 제안
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - `TASK-004` DDL·migration 구현
 - **QA_Validation**: [P0·V1 QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 저장·복구·보안 Gate
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - DDL·cache·checkpoint·artifact·export 검증

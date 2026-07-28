@@ -1,6 +1,6 @@
 # SCAN 2026 Competition Operations Board
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 11:05
+> Last Updated: 2026-07-28 11:28
 > Status: Approved 1.0 · AI-Native Interactive Preview · UI-First Gate Passed · Runtime Not Executed · Rules-Gated
 
 ## 1. 문서 목적
@@ -320,6 +320,7 @@ demo data이며 성능·정확도 측정값이 아니다. 이 Preview 보강은 
 - **UI_Screens**: [Operations Board Preview](./previews/03_competition_operations_board_preview.html) - 브라우저 확인용 정적 Preview
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·Queue·검증·제출 기술 계약
 - **Technical_Specs**: [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - leaf result source of truth
+- **Technical_Specs**: [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) - OperationsSnapshot·command·persistence 제안
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - `TASK-010` Preconditions·Acceptance Criteria
 - **Logic_Progress**: [Roadmap](../04_Logic_Progress/00_ROADMAP.md) - Rules-gated 비차단 운영 UI 트랙
 - **QA_Validation**: [QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 병렬 상태·독립 검증·수동 제출 검증

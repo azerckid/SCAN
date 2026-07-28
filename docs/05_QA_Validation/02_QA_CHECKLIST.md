@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-28 11:05
-> Status: Approved 2.0 · TASK-009 Integration Passed · TASK-010 UI-First Gate Passed
+> Last Updated: 2026-07-28 11:53
+> Status: Approved 2.1 · TASK-009 Integration Passed · TASK-010 Pre-Code Brief Approved
 
 ## 1. 문서 목적
 
@@ -162,6 +162,7 @@ ID는 24개 집계에서 한 번만 센다.
 
 - [ ] 공식 Rules에서 AI·agent·자동화·외부 문제 데이터 전송 범위를 확인한다.
 - [x] Operations Board Preview를 사용자가 확인하고 피드백을 기록한다.
+- [x] TASK-010 Pre-Code Technical Brief의 model·mutation·SQLite v2·동시성을 승인한다.
 - [ ] 문제 간 상태·result·checkpoint·candidate가 격리된다.
 - [ ] 문제 내부 leaf job dependency와 source request dedup이 일치한다.
 - [ ] provider·worker별 동시성 제한과 Queue age가 표시된다.
@@ -342,6 +343,7 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **Technical_Specs**: [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - request·result·error 계약
 - **Technical_Specs**: [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - dependency·재사용·직접 구현 검증 Gate
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·Queue·격리·독립 검증·수동 제출 요구사항
+- **Technical_Specs**: [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) - 구현 전 model·storage·scheduler·adapter Gate
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - DOC-M3와 구현 분리 Gate
 - **Logic_Progress**: [P0·V1 Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK별 책임과 Preconditions
 - **QA_Validation**: [P0·V1 QA 시나리오](./01_TEST_SCENARIOS.md) - 24개 상세 검증 절차

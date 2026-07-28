@@ -1,6 +1,6 @@
 # SCAN 2026 Agentic Parallel Solve QA
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 11:15
+> Last Updated: 2026-07-28 11:53
 > Status: AI-Native Contract Approved 1.0 · UI Preview Gate Passed · Runtime Not Executed · Rules-Gated
 
 ## 1. 문서 목적
@@ -183,6 +183,7 @@ UI Preview 체크박스는 2026-07-28 사용자 브라우저 검토와 승인 �
 
 - [ ] 사용자가 6개 운영 QA 시나리오를 승인했다.
 - [x] Operations Board Preview를 사용자가 확인했다.
+- [x] TASK-010 Pre-Code Technical Brief의 QA 추적을 승인했다.
 - [ ] 공식 Rules에서 AI provider·model·data mode와 worker·source 범위를 확인했다.
 - [ ] `TASK-010` 구현을 별도로 승인했다.
 - [ ] 구현된 시나리오만 `pass / partial / fail / blocked`로 기록한다.
@@ -194,6 +195,7 @@ UI Preview 체크박스는 2026-07-28 사용자 브라우저 검토와 승인 �
 - **UI_Screens**: [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 화면 상태·사용자 흐름
 - **UI_Screens**: [Operations Board Preview](../02_UI_Screens/previews/03_competition_operations_board_preview.html) - 정적 UI 검토
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - `REQ-OPS-*` 규범
+- **Technical_Specs**: [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) - 구현 model·mutation·동시성·adapter 제안
 - **Technical_Specs**: [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - leaf result 계약
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - `TASK-010` 책임
 - **Logic_Progress**: [Roadmap](../04_Logic_Progress/00_ROADMAP.md) - Rules-gated 비차단 운영 트랙
