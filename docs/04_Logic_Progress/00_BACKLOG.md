@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 04:58
+> Last Updated: 2026-07-29 05:58
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -873,8 +873,10 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - EVM-TX/STATE/LOG/TRACE 우선 근거
 - Related UI Docs:
   - [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - 공통 analyze·partial·failed 흐름
+  - [TASK-012 EVM Core UI](../02_UI_Screens/05_TASK_012_EVM_CORE_UI.md) - 4 query·12개 상태·입력·다음 행동
 - Related HTML Preview:
   - [CLI Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - 기존 terminal 결과 구조
+  - [TASK-012 EVM Core Preview](../02_UI_Screens/previews/04_task_012_evm_core_cli_preview.html) - 0.2 Draft 전용 사용자 검토 화면
 - Related Technical Docs:
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-EVM-CORE 계약
   - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - Schema 변경 Gate
@@ -888,6 +890,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
   - [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·secret·독립성·반례
   - [TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 24개 offline 반례·결정성
   - [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - 미실행 경계·unit·dry-run
+  - [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) - 자동·브라우저·사용자 Gate
 - Implementation Preconditions:
   - [ ] 관련 문서와 네 문제의 입력·출력·상태를 확인한다.
   - [ ] primary·independent 공급자와 필요 시 독립 trace 역할의 capability smoke를 통과한다.
@@ -895,7 +898,11 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
     - [ ] credential 회전·독립 trace·rate/timeout 반례가 남아 전체 상태는 partial이다.
   - [ ] API key·endpoint가 저장소·DB·fixture·로그에 없음을 검증한다.
   - [ ] confirmed fixture와 reference answer를 확보한다.
-  - [ ] CLI Preview 재검토와 사용자 구현 승인을 기록한다.
+  - [x] CLI Preview 재검토와 사용자 UI 승인을 기록한다.
+    - [x] TASK-012 전용 UI 문서·HTML Preview·정적 checker를 작성했다.
+    - [x] 브라우저에서 12개 조합·방향키·모바일·console을 검증했다.
+    - [x] 사용자 Preview 확인과 P2 2건 반영을 기록했다.
+  - [ ] TASK-012 제품 analyzer 구현 승인을 별도로 기록한다.
   - [ ] CLI 진입·전환·이탈과 loading·empty·partial·failed 표시를 확인한다.
   - [ ] source 최소 필드·mutation 없음·checkpoint 상태 관리를 승인한다.
   - [ ] Analysis I/O version·source·storage mutation 영향을 승인한다.

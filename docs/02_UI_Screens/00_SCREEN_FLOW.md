@@ -1,7 +1,7 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-28 01:59
-> Status: Approved 1.4 · UI-First Gate Passed · TASK-008 FREEZE Applied
+> Last Updated: 2026-07-29 05:58
+> Status: Approved 1.5 · V1·TASK-012 UI-First Gates Passed
 
 ## 1. 문서 목적
 
@@ -370,6 +370,19 @@ flowchart LR
 - unblacklist 또는 historical state가 없으면 blacklist 전이와 공식 맥락을
   보존한 `PARTIAL`을 출력하며 누락 전이를 확정하지 않는다.
 
+## 16.4 TASK-012 EVM Core Draft
+
+[TASK-012 EVM Core UI](./05_TASK_012_EVM_CORE_UI.md)는 기존 Analysis I/O
+`0.1`과 CLI V1 화면을 변경하지 않는 별도 `0.2-draft` 검토 트랙이다.
+
+- `object_summary`, `historical_balance`, `first_token_transfer`,
+  `native_inflow` 네 query를 하나의 `evm_core` 화면 골격에서 전환한다.
+- query별 최소 입력과 complete·partial·failed를 총 12개 사례로 표시한다.
+- failed는 `data: null`, partial은 확보 결과와 오류·다음 행동을 함께 표시한다.
+- ERC-20 token address, fee, range, trace completeness를 화면 경계로 보여준다.
+- 정적 Preview·자동 검증·사용자 UI 확인은 완료했다. 정식 Schema·provider와
+  runtime 구현은 아직 승인되지 않았다.
+
 ## 17. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위
@@ -380,13 +393,17 @@ flowchart LR
 - **UI_Screens**: [HTML Terminal Preview](./previews/01_cli_terminal_preview.html) - 브라우저 확인용 화면
 - **UI_Screens**: [HTML Workbench Preview](./previews/02_investigation_workbench_preview.html) - 그래프·타임라인·증거 화면 초안
 - **UI_Screens**: [Operations Board Preview](./previews/03_competition_operations_board_preview.html) - 병렬 운영 화면 Draft
+- **UI_Screens**: [TASK-012 EVM Core UI](./05_TASK_012_EVM_CORE_UI.md) - 네 query·12개 상태 계약
+- **UI_Screens**: [TASK-012 EVM Core Preview](./previews/04_task_012_evm_core_cli_preview.html) - 0.2 Draft 사용자 검토 화면
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·Queue·독립 검증·수동 제출 계약
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - CLI·log·보안 경계
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 상태·오류·완료 기준
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 요청·결과·오류 계약
+- **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - EVM Core 0.2 Draft
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - CLI·vertical slice 구현 순서
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 명령·상태·종료 코드 검증
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - preview 기준값
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - 실제 complete·partial·resume 화면 대조
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - AUTH complete·partial·scope·resume 화면 대조
 - **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - FREEZE transition·context·partial·resume 화면 대조
+- **QA_Validation**: [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) - 자동·브라우저·사용자 Gate
