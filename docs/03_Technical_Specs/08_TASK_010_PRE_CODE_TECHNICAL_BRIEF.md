@@ -1,7 +1,7 @@
 # TASK-010 Pre-Code Technical Brief
 > Created: 2026-07-28 11:28
-> Last Updated: 2026-07-28 13:45
-> Status: Approved 1.2 · OPS-IMPL-01~02 Implemented · Rules-Gated
+> Last Updated: 2026-07-28 13:55
+> Status: Approved 1.3 · OPS-IMPL-01~03 Implemented · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -579,7 +579,7 @@ cross-record·lifecycle·상태 전이는 Python validator가 규범이다.
 |:---|:---|:---|
 | `OPS-IMPL-01` | operations domain model·공개 Schema·state validator | **Done** · 29 unit tests + 17 runtime/Schema probes |
 | `OPS-IMPL-02` | SQLite v2 additive migration·repository·event log | **Done** · 10 integration tests + 전체 172 tests |
-| `OPS-IMPL-03` | Planner port·fake QA adapter·AI mode Gate | QA-OPS-RULE-001 offline |
+| `OPS-IMPL-03` | Planner port·fake QA adapter·AI mode Gate | **Done** · 12 unit tests · QA-OPS-RULE-001 partial |
 | `OPS-IMPL-04` | bounded Queue·dependency·isolation·dedup | QA-OPS-PAR/INTRA-001 |
 | `OPS-IMPL-05` | DEX·AUTH·FREEZE evidence worker adapter | Analysis I/O pair·artifact link |
 | `OPS-IMPL-06` | candidate builder·independent Verifier Gate | QA-OPS-VERIFY/CONFLICT-001 |
@@ -612,6 +612,7 @@ Analysis I/O와 fixture 회귀는 기존 133개 테스트·Schema/fixture PASS 3
 - [ ] 공식 Rules에서 실제 사용할 AI provider·model·data·tool mode를 확인했다.
 - [x] `OPS-IMPL-01` 구현 착수를 별도로 승인했다.
 - [x] `OPS-IMPL-02` 구현 착수를 별도로 승인했다.
+- [x] `OPS-IMPL-03` 구현 착수를 별도로 승인했다.
 
 공식 Rules가 미확정이어도 fake adapter 기반 contract·scheduler QA 구현은
 별도 승인 후 시작할 수 있다. 실제 대회 문제에 사용할 AI adapter와 external
@@ -653,3 +654,4 @@ data 전송은 `allowed` mode가 확정되기 전까지 `rules_gated`다.
 - **QA_Validation**: [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 대회 전 Gate
 - **QA_Validation**: [OPS-IMPL-01 계약 보고서](../05_QA_Validation/14_OPS_IMPL_01_CONTRACT_REPORT.md) - 공개 Schema·runtime invariant·state transition 검증
 - **QA_Validation**: [OPS-IMPL-02 SQLite v2 보고서](../05_QA_Validation/15_OPS_IMPL_02_SQLITE_REPORT.md) - backup·migration rollback·repository·event log 검증
+- **QA_Validation**: [OPS-IMPL-03 AI Planner Gate 보고서](../05_QA_Validation/16_OPS_IMPL_03_PLANNER_REPORT.md) - fake QA·mode policy·artifact·budget·보안 검증

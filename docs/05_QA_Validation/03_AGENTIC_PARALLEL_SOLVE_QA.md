@@ -1,7 +1,7 @@
 # SCAN 2026 Agentic Parallel Solve QA
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 11:53
-> Status: AI-Native Contract Approved 1.0 · UI Preview Gate Passed · Runtime Not Executed · Rules-Gated
+> Last Updated: 2026-07-28 13:55
+> Status: AI-Native Contract Approved 1.1 · OPS-IMPL-03 Runtime Partial · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -163,7 +163,7 @@ UI Preview 체크박스는 2026-07-28 사용자 브라우저 검토와 승인 �
 
 | Criterion | Status | Draft 검증 증거 |
 |:---|:---:|:---|
-| Functionality | Not Executed | 문제·leaf 병렬성, 격리, dedup, dependency 시나리오 |
+| Functionality | Partial | Planner mode Gate·fake QA leaf plan 통과; 병렬성·격리·dedup 미실행 |
 | Potential Impact | Not Executed | 제한 시간 내 복수 문제 처리량과 Queue age 측정 |
 | Novelty | Not Executed | evidence-first 독립 검증과 role fallback |
 | UX | Preview Passed / Runtime Not Executed | 사용자 브라우저 검토 통과; runtime 상태 판독·키보드·수동 제출은 미실행 |

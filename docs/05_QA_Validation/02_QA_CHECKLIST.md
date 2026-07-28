@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-28 13:31
-> Status: Approved 2.3 · TASK-009 Passed · TASK-010 OPS-IMPL-01~02 Passed
+> Last Updated: 2026-07-28 13:55
+> Status: Approved 2.4 · TASK-009 Passed · TASK-010 OPS-IMPL-01~03 Passed
 
 ## 1. 문서 목적
 
@@ -166,6 +166,8 @@ ID는 24개 집계에서 한 번만 센다.
 - [x] OPS-IMPL-01 공개 Schema·cross-record invariant·상태 전이 probe가 통과한다.
 - [x] OPS-IMPL-02 v1 backup·v2 additive migration·rollback·event append-only
   integration test가 통과한다.
+- [x] OPS-IMPL-03 fake QA Planner·mode pre-call Gate·raw artifact·budget·secret
+  test가 통과한다.
 - [ ] 문제 간 상태·result·checkpoint·candidate가 격리된다.
 - [ ] 문제 내부 leaf job dependency와 source request dedup이 일치한다.
 - [ ] provider·worker별 동시성 제한과 Queue age가 표시된다.
