@@ -34,6 +34,10 @@ COMMANDS = (
         sys.executable,
         "scripts/check_repository_security.py",
     ),
+    (
+        sys.executable,
+        "scripts/verify_task_012_negative_oracles.py",
+    ),
 )
 
 

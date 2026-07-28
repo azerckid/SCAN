@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Fixture 후보 선정 보고서
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 04:08
+> Last Updated: 2026-07-29 04:16
 > Status: Provider Replay Passed · Four Fixtures Verifying · Implementation Not Started
 
 ## 1. 목적과 판정
@@ -108,16 +108,17 @@ Schema 편입 여부는 `confirmed` 승격 전 후속 계약으로 결정한다.
 1. [x] primary·independent·supporting provider 후보 topology와 smoke 계약 문서화
 2. [x] 로컬 secret 구성 후 read-only capability smoke 통과
 3. [x] 네 패키지의 공통 필드 독립 공급자 2차 재현
-4. [ ] Readiness §7·Capability QA §5와 이 보고서의
+4. [x] Readiness §7·Capability QA §5와 이 보고서의
    checksum·timestamp→block·zero-value Transfer·failed internal call 반례
-   **합집합** 통과
+   **합집합** 19개를 synthetic offline으로 두 번 통과
 5. [ ] Analysis I/O version 영향과 네 result type 승인
 6. [ ] CLI Preview의 complete·partial·failed 표시 재검토
 7. [ ] TASK-012 Context Receipt `PASS`
 8. [ ] 사용자 구현 착수 승인
 
-이 여덟 조건 전에는 `TASK-012`를 `In Progress`로 바꾸거나 코드를 작성하지
-않는다.
+이 여덟 조건 전에는 `TASK-012`를 `In Progress`로 바꾸거나 제품 분석기
+코드를 작성하지 않는다. fixture QA runner·negative oracle은 제품 분석기
+구현이 아니며 이 Gate의 검증 증거다.
 
 ## 8. 365 글로벌 평가 기준
 
@@ -148,3 +149,4 @@ Schema 편입 여부는 `confirmed` 승격 전 후속 계약으로 결정한다.
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - fixture 공통 생명주기
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-EVM-001/002
 - **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·독립성·반례
+- **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 19개 offline 반례

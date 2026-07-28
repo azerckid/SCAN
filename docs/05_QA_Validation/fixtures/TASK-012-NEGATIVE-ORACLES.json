@@ -1,0 +1,441 @@
+{
+  "schema_version": "0.1",
+  "status": "verified",
+  "execution_mode": "synthetic_offline",
+  "cases": [
+    {
+      "oracle_id": "OR-BASIC-OBJECT-MALFORMED",
+      "fixture_id": "FX-BASIC-EVM-001",
+      "category": "object_classification",
+      "facts": {
+        "lexical_type": "malformed",
+        "reported_type": "invalid",
+        "rpc_available": false,
+        "code_available": false
+      },
+      "expected": {
+        "outcome": "complete",
+        "classification": "invalid"
+      }
+    },
+    {
+      "oracle_id": "OR-BASIC-OBJECT-RPC-UNAVAILABLE",
+      "fixture_id": "FX-BASIC-EVM-001",
+      "category": "object_classification",
+      "facts": {
+        "lexical_type": "address",
+        "reported_type": "address",
+        "rpc_available": false,
+        "code_available": false
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "address"
+      }
+    },
+    {
+      "oracle_id": "OR-BASIC-OBJECT-CHECKSUM",
+      "fixture_id": "FX-BASIC-EVM-001",
+      "category": "object_classification",
+      "facts": {
+        "lexical_type": "malformed",
+        "reported_type": "address",
+        "rpc_available": false,
+        "code_available": false
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "address"
+      }
+    },
+    {
+      "oracle_id": "OR-BASIC-FEE-GAS-LIMIT",
+      "fixture_id": "FX-BASIC-EVM-001",
+      "category": "transaction_fee",
+      "facts": {
+        "gas_used": 136992,
+        "gas_limit": 300000,
+        "effective_gas_price": 59239415945,
+        "reported_fee": 17771824783500000
+      },
+      "expected": {
+        "outcome": "failed",
+        "fee_paid_wei": "17771824783500000"
+      }
+    },
+    {
+      "oracle_id": "OR-BASIC-STATE-LATEST",
+      "fixture_id": "FX-BASIC-EVM-002",
+      "category": "historical_state",
+      "facts": {
+        "requested_block_tag": "0xfdf1d0",
+        "observed_block_tag": "latest",
+        "amount_raw": "26470158088",
+        "raw_available": true,
+        "decimals_available": true,
+        "precision_preserved": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "amount_raw": "26470158088"
+      }
+    },
+    {
+      "oracle_id": "OR-BASIC-STATE-DECIMALS",
+      "fixture_id": "FX-BASIC-EVM-002",
+      "category": "historical_state",
+      "facts": {
+        "requested_block_tag": "0xfdf1d0",
+        "observed_block_tag": "0xfdf1d0",
+        "amount_raw": "26470158088",
+        "raw_available": true,
+        "decimals_available": false,
+        "precision_preserved": true
+      },
+      "expected": {
+        "outcome": "partial",
+        "amount_raw": "26470158088"
+      }
+    },
+    {
+      "oracle_id": "OR-BASIC-STATE-BLOCK-MISMATCH",
+      "fixture_id": "FX-BASIC-EVM-002",
+      "category": "historical_state",
+      "facts": {
+        "requested_block_tag": "0xfdf1d0",
+        "observed_block_tag": "0xfdf1cf",
+        "amount_raw": "26470158088",
+        "raw_available": true,
+        "decimals_available": true,
+        "precision_preserved": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "amount_raw": "26470158088"
+      }
+    },
+    {
+      "oracle_id": "OR-BASIC-STATE-PRECISION",
+      "fixture_id": "FX-BASIC-EVM-002",
+      "category": "historical_state",
+      "facts": {
+        "requested_block_tag": "0xfdf1d0",
+        "observed_block_tag": "0xfdf1d0",
+        "amount_raw": "26470158000",
+        "raw_available": true,
+        "decimals_available": true,
+        "precision_preserved": false
+      },
+      "expected": {
+        "outcome": "failed",
+        "amount_raw": "26470158000"
+      }
+    },
+    {
+      "oracle_id": "OR-TOKEN-FAILED-TX",
+      "fixture_id": "FX-EVM-TOKEN-001",
+      "category": "token_transfer",
+      "facts": {
+        "target_token": "usdc",
+        "target_sender": "subject",
+        "pagination_complete": true,
+        "candidates": [
+          {
+            "event_id": "failed-first",
+            "token": "usdc",
+            "sender": "subject",
+            "amount_raw": 1,
+            "receipt_status": "failed",
+            "block_number": 1,
+            "transaction_index": 0,
+            "log_index": 0
+          },
+          {
+            "event_id": "valid-next",
+            "token": "usdc",
+            "sender": "subject",
+            "amount_raw": 25000000000,
+            "receipt_status": "success",
+            "block_number": 2,
+            "transaction_index": 0,
+            "log_index": 1
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "complete",
+        "selected_id": "valid-next"
+      }
+    },
+    {
+      "oracle_id": "OR-TOKEN-UNRELATED-LOG",
+      "fixture_id": "FX-EVM-TOKEN-001",
+      "category": "token_transfer",
+      "facts": {
+        "target_token": "usdc",
+        "target_sender": "subject",
+        "pagination_complete": true,
+        "candidates": [
+          {
+            "event_id": "unrelated-signature",
+            "token": "unrelated-contract",
+            "sender": "subject",
+            "amount_raw": 9,
+            "receipt_status": "success",
+            "block_number": 1,
+            "transaction_index": 0,
+            "log_index": 0
+          },
+          {
+            "event_id": "valid-usdc",
+            "token": "usdc",
+            "sender": "subject",
+            "amount_raw": 10,
+            "receipt_status": "success",
+            "block_number": 1,
+            "transaction_index": 1,
+            "log_index": 1
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "complete",
+        "selected_id": "valid-usdc"
+      }
+    },
+    {
+      "oracle_id": "OR-TOKEN-DIFFERENT-ASSET",
+      "fixture_id": "FX-EVM-TOKEN-001",
+      "category": "token_transfer",
+      "facts": {
+        "target_token": "usdc",
+        "target_sender": "subject",
+        "pagination_complete": true,
+        "candidates": [
+          {
+            "event_id": "dai-first",
+            "token": "dai",
+            "sender": "subject",
+            "amount_raw": 20,
+            "receipt_status": "success",
+            "block_number": 1,
+            "transaction_index": 0,
+            "log_index": 0
+          },
+          {
+            "event_id": "usdc-next",
+            "token": "usdc",
+            "sender": "subject",
+            "amount_raw": 30,
+            "receipt_status": "success",
+            "block_number": 1,
+            "transaction_index": 1,
+            "log_index": 1
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "complete",
+        "selected_id": "usdc-next"
+      }
+    },
+    {
+      "oracle_id": "OR-TOKEN-ZERO-VALUE",
+      "fixture_id": "FX-EVM-TOKEN-001",
+      "category": "token_transfer",
+      "facts": {
+        "target_token": "usdc",
+        "target_sender": "subject",
+        "pagination_complete": true,
+        "candidates": [
+          {
+            "event_id": "zero-first",
+            "token": "usdc",
+            "sender": "subject",
+            "amount_raw": 0,
+            "receipt_status": "success",
+            "block_number": 1,
+            "transaction_index": 0,
+            "log_index": 0
+          },
+          {
+            "event_id": "positive-next",
+            "token": "usdc",
+            "sender": "subject",
+            "amount_raw": 1,
+            "receipt_status": "success",
+            "block_number": 1,
+            "transaction_index": 1,
+            "log_index": 1
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "complete",
+        "selected_id": "positive-next"
+      }
+    },
+    {
+      "oracle_id": "OR-TOKEN-PAGINATION",
+      "fixture_id": "FX-EVM-TOKEN-001",
+      "category": "token_transfer",
+      "facts": {
+        "target_token": "usdc",
+        "target_sender": "subject",
+        "pagination_complete": false,
+        "candidates": [
+          {
+            "event_id": "visible-match",
+            "token": "usdc",
+            "sender": "subject",
+            "amount_raw": 1,
+            "receipt_status": "success",
+            "block_number": 2,
+            "transaction_index": 0,
+            "log_index": 0
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "partial",
+        "selected_id": "visible-match"
+      }
+    },
+    {
+      "oracle_id": "OR-NATIVE-TRACE-UNAVAILABLE",
+      "fixture_id": "FX-EVM-TOKEN-002",
+      "category": "native_inflow",
+      "facts": {
+        "target": "subject",
+        "trace_available": false,
+        "trace_truncated": false,
+        "calls": []
+      },
+      "expected": {
+        "outcome": "partial",
+        "amount_wei": "0"
+      }
+    },
+    {
+      "oracle_id": "OR-NATIVE-NO-VALUE",
+      "fixture_id": "FX-EVM-TOKEN-002",
+      "category": "native_inflow",
+      "facts": {
+        "target": "subject",
+        "trace_available": true,
+        "trace_truncated": false,
+        "calls": [
+          {
+            "to": "subject",
+            "value_wei": 0,
+            "status": "success"
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "complete",
+        "amount_wei": "0"
+      }
+    },
+    {
+      "oracle_id": "OR-NATIVE-FAILED-CALL",
+      "fixture_id": "FX-EVM-TOKEN-002",
+      "category": "native_inflow",
+      "facts": {
+        "target": "subject",
+        "trace_available": true,
+        "trace_truncated": false,
+        "calls": [
+          {
+            "to": "subject",
+            "value_wei": 99,
+            "status": "failed"
+          },
+          {
+            "to": "subject",
+            "value_wei": 7,
+            "status": "success"
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "complete",
+        "amount_wei": "7"
+      }
+    },
+    {
+      "oracle_id": "OR-NATIVE-MULTIPLE-INFLOWS",
+      "fixture_id": "FX-EVM-TOKEN-002",
+      "category": "native_inflow",
+      "facts": {
+        "target": "subject",
+        "trace_available": true,
+        "trace_truncated": false,
+        "calls": [
+          {
+            "to": "subject",
+            "value_wei": 5,
+            "status": "success"
+          },
+          {
+            "to": "other",
+            "value_wei": 100,
+            "status": "success"
+          },
+          {
+            "to": "subject",
+            "value_wei": 8,
+            "status": "success"
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "complete",
+        "amount_wei": "13"
+      }
+    },
+    {
+      "oracle_id": "OR-NATIVE-TRUNCATED",
+      "fixture_id": "FX-EVM-TOKEN-002",
+      "category": "native_inflow",
+      "facts": {
+        "target": "subject",
+        "trace_available": true,
+        "trace_truncated": true,
+        "calls": [
+          {
+            "to": "subject",
+            "value_wei": 11,
+            "status": "success"
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "partial",
+        "amount_wei": "11"
+      }
+    },
+    {
+      "oracle_id": "OR-NATIVE-TOP-LEVEL-SUBSTITUTION",
+      "fixture_id": "FX-EVM-TOKEN-002",
+      "category": "native_inflow",
+      "facts": {
+        "target": "subject",
+        "trace_available": true,
+        "trace_truncated": false,
+        "reported_amount_wei": 0,
+        "calls": [
+          {
+            "to": "subject",
+            "value_wei": 7,
+            "status": "success"
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "failed",
+        "amount_wei": "7"
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 03:59
+> Last Updated: 2026-07-29 04:16
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -851,8 +851,10 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
       read-only smoke를 실행했다.
     - [x] 네 fixture의 공통 9개 조회를 QuickNode·Alchemy에서 독립 재현하고
       decoded 값 일치를 확인해 `verifying`으로 승격했다.
+    - [x] 네 fixture의 합성 negative oracle 19개를 두 번 실행해 결정성을 확인했다.
     - [ ] 노출 credential 회전·독립 trace·rate/timeout 반례를 통과해 Provider Gate를 닫는다.
-    - [ ] negative oracle·독립 trace를 통과한 fixture만 `confirmed`로 승격한다.
+    - [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만
+      `confirmed`로 승격한다.
   - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 고정한다.
   - [ ] 기존 source/cache/decode/reconciliation을 재사용한 Analysis type을 설계한다.
   - [ ] complete·partial·failed와 negative oracle을 구현·검증한다.
@@ -874,6 +876,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
   - [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - Assisted 4개 기준선
   - [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 후보 4개·reference answer·source 장애
   - [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·secret·독립성·반례
+  - [TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 19개 offline 반례·결정성
   - [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - 미실행 경계·unit·dry-run
 - Implementation Preconditions:
   - [ ] 관련 문서와 네 문제의 입력·출력·상태를 확인한다.
@@ -901,8 +904,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Document Sync Check:
   - [ ] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - verifying 4개와 primary/verify 공통 9개 독립 재현 완료,
-    credential 회전·독립 trace·반례·Schema·UI·사용자 구현 승인 전 착수 금지
+  - Status: PENDING - verifying 4개·공통 9개 독립 재현·offline oracle 19개 완료,
+    credential 회전·독립 trace·Schema·UI·사용자 구현 승인 전 착수 금지
   - Required References Read: 위 Related 문서 전체
   - Constraints: exact raw 수량, historical state block 고정, 귀속 미평가
   - Conflicts: None known

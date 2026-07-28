@@ -1,13 +1,13 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 03:46
+> Last Updated: 2026-07-29 04:16
 > Status: Pre-event Smoke Partial Pass · Credential Rotation Pending · Competition Rules Unclear
 
 ## 1. 목적
 
 이 문서는 Phase 2의 비자동 27문항을 준비할 때 공통으로 사용할 EVM 데이터
 공급자와 AI Planner 공급자의 최소 준비·검증 Gate를 정의한다. 첫 적용 대상은
-`TASK-012`의 candidate fixture 4개지만, 통과한 source·provenance·fallback
+`TASK-012`의 verifying fixture 4개지만, 통과한 source·provenance·fallback
 계약은 뒤의 PATH·Service·Case Work Package에서도 재사용한다.
 
 이번 QuickNode·Alchemy·Blockscout topology는 **Ethereum 계열 source
@@ -28,7 +28,7 @@
 | 예상문제 전체 | 30문항 |
 | 자동 실증 완료 | DEX·AUTH·FREEZE 3문항 |
 | Phase 2 준비 대상 | 나머지 27문항 |
-| 직접 준비 중 | EVM Core 4문항의 candidate fixture |
+| 직접 준비 중 | EVM Core 4문항의 verifying fixture |
 | EVM 공급자 topology | QuickNode primary 7/7·Alchemy verifier 6/6 smoke 성공, credential 회전·독립 trace·rate behavior 미완료 |
 | AI Planner 공급자 | 필수 역할 확정, provider/model/비용 smoke 미실행 |
 | TASK-012 구현 | 미승인·미시작 |
@@ -181,7 +181,7 @@ hash 계산 전후 모두 artifact에 들어가면 안 된다.
 
 ## 7. TASK-012 독립 재현 Gate
 
-네 candidate는 아래를 모두 만족할 때만 `confirmed`로 승격한다.
+네 `verifying` fixture는 아래를 모두 만족할 때만 `confirmed`로 승격한다.
 
 1. primary와 independent provider가 TX·receipt·block 핵심 값을 일치시킨다.
 2. `eth_getLogs`를 receipt와 독립적으로 조회해 address·topic·block·log index를
@@ -210,6 +210,10 @@ hash 계산 전후 모두 artifact에 들어가면 안 된다.
 독립 trace를 확보하지 못하면 trace-dependent 항목은 `partial` 또는
 `candidate`를 유지한다. supporting explorer 일치는 독립 RPC 일치를
 대체하지 않는다.
+
+합성 offline 반례 19개는 두 번 실행해 결정성을 통과했다. 실행 근거는
+[TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md)다.
+live rate/timeout 반례와 독립 trace는 이 결과로 대체할 수 없다.
 
 ## 8. AI Planner Provider Gate
 
@@ -263,5 +267,6 @@ Verifier가 없는 결과는 `submission_ready`가 될 수 없다.
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012 Context Lock
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - 공급자 Gate 이후 순서
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실행 전 체크와 기록 형식
-- **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - candidate 4개
+- **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - verifying 4개
+- **QA_Validation**: [TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 19개 offline 반례
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - network 0건·Gate·테스트 증거
