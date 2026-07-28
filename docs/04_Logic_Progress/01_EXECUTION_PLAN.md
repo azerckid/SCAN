@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 01:55
+> Last Updated: 2026-07-29 02:08
 > Status: Proposed 0.1 · No Implementation Approval
 
 ## 1. 목적
@@ -36,7 +36,8 @@
 
 ### [ ] Wave 1 — 범용 EVM
 
-- [ ] `TASK-012` TX·state·ERC-20·native flow fixture 후보를 확정한다.
+- [x] `TASK-012` TX·state·ERC-20·native flow fixture 후보 4개를 선정한다.
+- [ ] 네 후보를 독립 재현·반례로 `confirmed` 승격한다.
 - [ ] 네 문제 입력·정답 필드와 partial 조건을 승인한다.
 - [ ] 기존 EVM decoder·source·cache 재사용 범위를 확인한다.
 - [ ] 네 문제를 하나의 범용 엔진으로 처리할 최소 Analysis type을 결정한다.
@@ -111,3 +112,4 @@
 - **Logic_Progress**: [Backlog](./00_BACKLOG.md) - TASK-012~019 상태
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 승격 검증 기준
 - **QA_Validation**: [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 3/6/21 기준선
+- **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - Wave 1 후보 4개와 잔여 Gate

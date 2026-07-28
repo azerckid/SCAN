@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 02:01
+> Last Updated: 2026-07-29 02:08
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -844,6 +844,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Target Problems: `BASIC-EVM-001/002`, `EVM-TOKEN-001/002`
 - Atomic Tasks:
   - [ ] 네 문제의 공개 사례·reference answer·partial 조건을 확정한다.
+    - [x] 후보 패키지 4개와 1차 재조회 결과를 작성했다.
+    - [ ] 독립 2차 재현·반례를 통과해 `confirmed`로 승격한다.
   - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 고정한다.
   - [ ] 기존 source/cache/decode/reconciliation을 재사용한 Analysis type을 설계한다.
   - [ ] complete·partial·failed와 negative oracle을 구현·검증한다.
@@ -862,6 +864,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Related QA Docs:
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-EVM-001/002
   - [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - Assisted 4개 기준선
+  - [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 후보 4개·reference answer·source 장애
 - Implementation Preconditions:
   - [ ] 관련 문서와 네 문제의 입력·출력·상태를 확인한다.
   - [ ] confirmed fixture와 reference answer를 확보한다.
@@ -884,7 +887,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Document Sync Check:
   - [ ] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - fixture·Schema·사용자 구현 승인 전 착수 금지
+  - Status: PENDING - candidate 4개 선정 완료, 독립 재현·Schema·UI·사용자 구현 승인 전 착수 금지
   - Required References Read: 위 Related 문서 전체
   - Constraints: exact raw 수량, historical state block 고정, 귀속 미평가
   - Conflicts: None known

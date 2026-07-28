@@ -1,13 +1,14 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-27 15:52
-> Status: Approved 1.0 · Fixture Scope Closed
+> Last Updated: 2026-07-29 02:08
+> Status: Approved 1.1 · Phase 2 Candidate Pack Added
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
-있는 reference fixture를 관리한다. 현재 8개 중 3개는 `확정`, 5개는
-DOC-M3 결정에 따라 `Deferred` 후보로 관리한다.
+있는 reference fixture를 관리한다. 현재 12개 중 3개는 `확정`, 5개는
+DOC-M3 결정에 따라 `Deferred`, 4개는 TASK-012 Phase 2 `candidate`로
+관리한다.
 
 입력 문서:
 
@@ -88,6 +89,10 @@ DOC-M3 결정에 따라 `Deferred` 후보로 관리한다.
 | FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | V1 기준선 | FREEZE, state/logs |
 | FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | Deferred | RECON, PRICE, 다주소 집계 |
 | FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | Deferred | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
+| [FX-BASIC-EVM-001](./fixtures/FX-BASIC-EVM-001/README.md) | BASIC-EVM-001 | 1 | 후보 | Phase 2 candidate | EVM-TX, block, code |
+| [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 후보 | Phase 2 candidate | EVM-STATE, decimals |
+| [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 후보 | Phase 2 candidate | EVM-LOG, first ordering |
+| [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | EVM-TOKEN-002 | 1 | 후보 | Phase 2 candidate | EVM-TRACE, native sum |
 
 ## 6. Fixture 상세
 
@@ -323,6 +328,8 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
    기록했다.
 6. Document Completion Gate를 통과했으며 구현 회귀 자동화는 별도 구현 승인 후 진행한다.
 7. P2 승격에 필요한 BRIDGE·BTC fixture는 Deferred 승격 조건에 따라 선정한다.
+8. TASK-012용 EVM Core 후보 4개는 공개 DEX 기준점을 재사용해 패키지화했으며,
+   독립 2차 재현·반례·Schema/UI/구현 승인 전에는 `candidate`를 유지한다.
 
 ## 10. Related Documents
 
@@ -340,4 +347,5 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 - **QA_Validation**: [QA Checklist](./02_QA_CHECKLIST.md) - 문서·구현·회귀 실행 Gate
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - confirmed fixture 3개의 요청·결과 변환 예
 - **QA_Validation**: [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) - 우선 구축 fixture 패키지
+- **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - EVM Core 후보 4개와 승격 전 잔여 Gate
 - **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 사전 fixture·cache와 source 허용 범위

@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Technical Brief
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 02:01
+> Last Updated: 2026-07-29 02:08
 > Status: Proposed 0.1 · Implementation Not Started
 
 ## 1. 목적
@@ -74,6 +74,8 @@ Analysis I/O 변경 검토와 별도 작업 승인을 통과한 뒤 시작한다
   실패 TX와 누락 trace 분리
 - 금지: 주소 소유자·범죄 의도 자동 판정
 - fixture Gate: 네 직접 대상 문제의 공개 사례와 exact raw answer
+- 후보 상태: 동일한 confirmed DEX 기준점을 재사용한 4개 candidate package를
+  선정했다. 독립 2차 재현·반례·Schema/UI/구현 승인 전에는 Gate 미통과다.
 
 ### 5.2 WP-EVM-SPECIAL
 
@@ -200,3 +202,4 @@ Analysis I/O 변경 검토와 별도 작업 승인을 통과한 뒤 시작한다
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 Context Lock
 - **QA_Validation**: [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 3/6/21 기준선
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - package별 승격 조건
+- **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - WP-EVM-CORE 후보와 source 장애

@@ -1,0 +1,41 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-BASIC-EVM-001",
+  "problem_id": "BASIC-EVM-001",
+  "status": "candidate",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "objects": [
+    {
+      "label": "subject_eoa",
+      "value": "0xA406bC6E319cbe7AB2822Cc55Fa8376E9c3A7FDF"
+    },
+    {
+      "label": "router_contract",
+      "value": "0xEf1c6E67703c7BD7107eed8303Fbe6EC2554BF6B"
+    },
+    {
+      "label": "transaction_hash",
+      "value": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5"
+    },
+    {
+      "label": "block_hash",
+      "value": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644"
+    },
+    {
+      "label": "block_number",
+      "value": "16642512"
+    },
+    {
+      "label": "malformed",
+      "value": "0x1234"
+    }
+  ],
+  "state_block": 16642512,
+  "reuse_of_fixture_id": "FX-SVC-DEX-001",
+  "selection_notes": "One confirmed public transaction supplies address, transaction, block, and malformed-input classification cases without changing the DEX fixture."
+}

@@ -1,0 +1,72 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-TOKEN-002",
+  "status": "candidate",
+  "transaction": {
+    "hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+    "block_number": 16642512,
+    "status": "success",
+    "top_level_from": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+    "top_level_to": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+    "top_level_value_wei": "0"
+  },
+  "native_inflow": {
+    "interest_address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+    "amount_wei": "14449515027026387018",
+    "successful_call_count": 1,
+    "paths": [
+      {
+        "index": 17,
+        "call_type": "call",
+        "from": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+        "to": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+        "value_wei": "14449515027026387018",
+        "is_error": false
+      }
+    ]
+  },
+  "why_top_level_is_wrong": "The outer call sends zero ETH to the router; the router unwraps WETH and sends native ETH to the interest address in an internal call.",
+  "partial_conditions": [
+    "Transaction and receipt are available but internal call or trace data is unavailable",
+    "Some trace branches are truncated while confirmed inflows are preserved"
+  ],
+  "failed_conditions": [
+    "Top-level value zero is reported as the user's final inflow",
+    "Failed or reverted internal calls are included in the sum",
+    "WETH event output is substituted for native ETH call evidence"
+  ],
+  "tolerance": {
+    "native_amount_raw": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-TOKEN-INTERNAL-OUTER",
+        "description": "The outer transaction must be shown as successful with zero top-level value.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-TOKEN-INTERNAL-TX"
+        ]
+      },
+      {
+        "requirement_id": "REQ-TOKEN-INTERNAL-INFLOW",
+        "description": "The successful router-to-user internal ETH call and exact sum must be reported.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-TOKEN-INTERNAL-ETH"
+        ]
+      },
+      {
+        "requirement_id": "REQ-TOKEN-INTERNAL-CROSS-CHECK",
+        "description": "WETH withdrawal may cross-check the amount but must remain separate from call evidence.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-TOKEN-INTERNAL-WITHDRAWAL",
+          "EV-TOKEN-INTERNAL-ETH"
+        ]
+      }
+    ]
+  }
+}

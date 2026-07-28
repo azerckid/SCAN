@@ -1,0 +1,105 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-BASIC-EVM-002",
+  "status": "candidate",
+  "captured_at": "2026-07-28T17:08:25Z",
+  "event_evidence": [],
+  "call_evidence": [
+    {
+      "evidence_id": "EV-BASIC-STATE-BLOCK",
+      "evidence_type": "rpc_block_lookup",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "method": "eth_getBlockByNumber",
+      "block_number": 16642512,
+      "block_tag": "0xfdf1d0",
+      "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+      "timestamp": 1676565263
+    }
+  ],
+  "state_evidence": [
+    {
+      "evidence_id": "EV-BASIC-STATE-ETH",
+      "evidence_type": "historical_native_balance",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "method": "eth_getBalance",
+      "address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "block_tag": "0xfdf1d0",
+      "result_hex": "0x8125df4a3696fff15",
+      "decoded_raw": "148897435437879000853"
+    },
+    {
+      "evidence_id": "EV-BASIC-STATE-USDC-BALANCE",
+      "evidence_type": "historical_contract_call",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "method": "eth_call",
+      "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "signature": "balanceOf(address)",
+      "selector": "0x70a08231",
+      "address_argument": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "block_tag": "0xfdf1d0",
+      "result_hex": "0x0000000000000000000000000000000000000000000000000000000629be8f08",
+      "decoded_raw": "26470158088"
+    },
+    {
+      "evidence_id": "EV-BASIC-STATE-USDC-DECIMALS",
+      "evidence_type": "historical_contract_call",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "method": "eth_call",
+      "to": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "signature": "decimals()",
+      "selector": "0x313ce567",
+      "block_tag": "0xfdf1d0",
+      "result_hex": "0x0000000000000000000000000000000000000000000000000000000000000006",
+      "decoded": 6
+    }
+  ],
+  "context_evidence": [],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Historical ETH balance, USDC balanceOf, and decimals at one block"
+    },
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "role": "supporting",
+      "required": true,
+      "purpose": "Block hash and timestamp that pin the state query"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "dRPC",
+      "endpoint": "https://eth.drpc.org",
+      "methods": [
+        "eth_getBalance",
+        "eth_call"
+      ],
+      "retrieved_at": "2026-07-28T17:08:25Z"
+    },
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider": "ethereum.publicnode.com",
+      "endpoint": "https://ethereum.publicnode.com",
+      "methods": [
+        "eth_getBlockByNumber"
+      ],
+      "retrieved_at": "2026-07-28T17:08:25Z"
+    }
+  ],
+  "consistency_checks": {
+    "block_hash_matches_reused_transaction": true,
+    "native_balance_decoded_exactly": true,
+    "token_balance_decoded_exactly": true,
+    "token_decimals_applied_exactly": true
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": "Independent archive replay and timestamp-to-block negative case"
+  },
+  "provenance_notes": "All state values are historical post-state values at block 16642512. Latest balances are not acceptable substitutes."
+}

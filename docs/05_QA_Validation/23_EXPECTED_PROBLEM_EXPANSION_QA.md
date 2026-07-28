@@ -1,6 +1,6 @@
 # 예상문제 Coverage 확장 QA 계획
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 01:55
+> Last Updated: 2026-07-29 02:08
 > Status: Proposed 0.1 · Not Executed
 
 ## 1. 목적
@@ -43,6 +43,7 @@
 
 ### 4.1 EVM Core
 
+- 네 공개 fixture 패키지는 `candidate`이며 QA 상태 `not_executed`를 유지한다.
 - raw uint256과 decimals를 분리한다.
 - failed transaction을 성공 이동에서 제외한다.
 - historical state에 `latest`를 사용하지 않는다.
@@ -110,3 +111,4 @@
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - Wave 순서와 Stop/Go
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 Context Lock
 - **QA_Validation**: [Offline Benchmark](./22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 coverage 기준선
+- **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 4개 candidate와 1차 source 재조회

@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-TOKEN-002",
+  "problem_id": "EVM-TOKEN-002",
+  "status": "candidate",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+  "interest_address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+  "include_call_types": [
+    "call"
+  ],
+  "exclude_failed_calls": true,
+  "reuse_of_fixture_id": "FX-SVC-DEX-001",
+  "selection_notes": "The confirmed DEX transaction has zero top-level value and one successful router-to-user internal ETH transfer after WETH withdrawal."
+}
