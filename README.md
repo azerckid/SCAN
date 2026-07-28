@@ -23,9 +23,11 @@ calls, events, four historical states, and official Circle/OFAC context while
 keeping current sanctions and criminal intent `not_assessed`. `TASK-009` closes the
 offline P0·V1 integration gate with deterministic replay, the 11-code error matrix,
 repository traceability, and security scans; all 24 P0·V1 QA scenarios pass.
+The mandatory AI Planner contract and Operations Board UI-First Gate are approved.
+`TASK-010` runtime is not implemented; its Pre-Code Technical Brief is under review.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
-submission remain `unclear`; related features stay disabled until an authoritative
-notice is recorded.
+submission remain `unclear`, so external execution modes remain `rules_gated` until
+an authoritative notice is recorded.
 
 ## What is planned
 
@@ -49,6 +51,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | Technical | [`03_SCAN_2026_TOOL_REQUIREMENTS.md`](docs/03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) | P0 and V1 requirements |
 | Database | [`01_DB_SCHEMA.md`](docs/03_Technical_Specs/01_DB_SCHEMA.md) | SQLite logical schema and mutation boundaries |
 | Operations | [`07_AGENTIC_PARALLEL_SOLVE_FLOW.md`](docs/03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) | rules-gated parallel solving |
+| TASK-010 brief | [`08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md`](docs/03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) | operations models, SQLite v2, scheduler, AI modes, and implementation gates |
 | Roadmap | [`00_ROADMAP.md`](docs/04_Logic_Progress/00_ROADMAP.md) | document and implementation gates |
 | Backlog | [`00_BACKLOG.md`](docs/04_Logic_Progress/00_BACKLOG.md) | atomic implementation tasks |
 | QA | [`02_QA_CHECKLIST.md`](docs/05_QA_Validation/02_QA_CHECKLIST.md) | pre-code, PR, regression, competition gates |
@@ -82,7 +85,7 @@ Expected final outputs include:
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
-PASS repository traceability: 692 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
+PASS repository traceability: 711 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
 PASS repository security scan: 51 runtime/evidence files
 ```
 

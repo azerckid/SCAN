@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 11:05
+> Last Updated: 2026-07-28 11:28
 > Status: TASK-001~009 Approved/Done · TASK-010 AI-Native Contract Approved · UI-First Gate Passed · Implementation ToDo
 
 ## 1. 문서 목적
@@ -586,6 +586,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - evidence drill-down 경계
 - Related Technical Docs:
   - [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·상태·Queue·검증·수동 제출 규범
+  - [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) - 최소 필드·mutation·SQLite v2·동시성·구현 분할 제안
   - [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - leaf 분석 단일 source of truth
   - [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - Python core·source·cache·evidence 계약
 - Related QA Docs:
@@ -594,6 +595,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - Implementation Preconditions:
   - [ ] 관련 Concept·UI·Preview·Technical·QA 문서를 다시 읽었다.
   - [x] Operations Board Preview를 사용자가 확인하고 피드백을 승인했다.
+  - [ ] TASK-010 Pre-Code Technical Brief를 검토·승인했다.
   - [ ] 공식 Rules에서 AI Planner용 provider·model·data·사전 도구 mode를 확인했다.
   - [ ] 필수 AI Planner와 활성화할 role·source·Python evidence worker를 승인했다.
   - [ ] 운영 manifest·verification·candidate 최소 필드와 mutation을 승인했다.
