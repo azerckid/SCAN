@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-29 00:41
-> Status: Approved 2.9 · TASK-009 Passed · TASK-010 Offline 6 QA Passed
+> Last Updated: 2026-07-29 01:16
+> Status: Approved 3.0 · TASK-010 Offline 6 QA · TASK-011 Benchmark Passed
 
 ## 1. 문서 목적
 
@@ -207,6 +207,19 @@ ID는 24개 집계에서 한 번만 센다.
   brute force가 0건이다.
 - [x] Agentic Parallel Solve QA 6개의 offline 범위를 실행·기록한다.
 
+### 6.7 TASK-011 예상문제 Offline Benchmark
+
+- [x] 예상문제 은행의 정확한 30개 ID가 benchmark manifest에 한 번씩 존재한다.
+- [x] 자동화 3·보조 6·미지원 21을 분리하고 보조·미지원 문항을 성공으로
+  계산하지 않는다.
+- [x] DEX·AUTH·FREEZE confirmed fixture를 기존 analyzer로 각각 두 번 실행한다.
+- [x] 자동화 3개 모두 정답값·evidence 참조·fixture requirement·결정성이
+  exact match다.
+- [x] 잘못된 oracle이 `answer_exact` 실패로 검출된다.
+- [x] CLI benchmark 실행 중 network call은 0건이다.
+- [x] 3/3은 자동화 범위 정확도이며 30문항 전체 해결률이 아님을 보고서에
+  명시한다.
+
 ## 7. PR·릴리스·대회 전 Gate
 
 ### 7.1 모든 문서 PR
@@ -402,3 +415,4 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **QA_Validation**: [OPS-IMPL-06 Candidate·Verifier 보고서](./19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) - canonical answer·fresh replay·conflict·promotion Gate 검증
 - **QA_Validation**: [OPS-IMPL-07 OperationsSnapshot 보고서](./20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - SQLite read-back·strict snapshot·local view 검증
 - **QA_Validation**: [OPS-IMPL-08 Final Integration 보고서](./21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - leaf 병렬·local submission·보안·6개 offline 운영 QA
+- **QA_Validation**: [예상문제 Offline Benchmark 보고서](./22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 30문항 분류·3개 exact 실행·결정성·기능 공백

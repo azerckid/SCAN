@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 은행
 > Created: 2026-07-24 01:20
-> Last Updated: 2026-07-27 15:52
-> Status: Draft 2 Approved · Challenge Pack Deferred
+> Last Updated: 2026-07-29 01:35
+> Status: Draft 2 Approved · Benchmark 0.1 Applied · Challenge Pack Deferred
 
 ## 1. 문서 목적
 
@@ -2517,10 +2517,18 @@ N홉 이후 어느 주소로 이동했는지 추적하라.
 
 ## 9. 다음 단계
 
-1. confirmed fixture 3개를 V1 구현 회귀 입력으로 유지한다.
-2. 후보 fixture 5개와 Challenge Pack 추가 사례는 해당 기능 승격 전까지 Deferred다.
-3. 공식 규정 변경 시 지원 체인·정답·증거 형식과 기능 허용 범위를 갱신한다.
-4. 별도 구현 승인 후 P0·V1 analyzer가 문제별 완료·부분·실패 조건을 충족하는지 검증한다.
+1. Offline Benchmark 0.1에서 automated 3문항의 exact answer·evidence·requirement·
+   determinism을 계속 회귀한다.
+2. assisted 6문항은 전용 fixture·analyzer가 생기기 전까지 자동 성공으로
+   계산하지 않는다.
+3. `GENERIC-QUERY`·`GENERIC-STATE`·`TOKEN-TRANSFER`를 묶어 기초 EVM
+   3문항 자동화를 다음 구현 후보로 둔다.
+4. `PATH`·graph reconciliation을 구현한 뒤 `LABEL`·`OSINT`를 확정 사실과
+   heuristic으로 분리해 연결한다.
+5. `XCHAIN/BRIDGE`·`BTC-UTXO`·전문 decoder는 confirmed fixture가 확보된
+   순서로 승격한다.
+6. 후보 fixture 5개와 Challenge Pack 추가 사례는 해당 기능 승격 전까지 Deferred다.
+7. 공식 규정 변경 시 지원 체인·정답·증거 형식과 기능 허용 범위를 갱신한다.
 
 ## 10. Draft 2 채택 기록
 
@@ -2640,4 +2648,4 @@ challenge 전용 규모·시간·부분 성공 필드가 필요하면 별도 sch
 - **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 요구사항 기반 기술 후보 비교
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - 후보 fixture 5개의 확정·보류 결정 Gate
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 대표 문제 검증 사례 후보
-- 후속 문서 후보: `./03_SCAN_2026_RULES_REGISTER.md`, 공통 작업·결과 JSON Schema
+- **QA_Validation**: [예상문제 Offline Benchmark 보고서](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 30문항 coverage와 automated 3문항 실측

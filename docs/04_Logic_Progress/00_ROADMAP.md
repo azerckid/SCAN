@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-29 00:41
-> Status: Approved 2.6 · TASK-009 Done · TASK-010 Offline V1 Gate Passed
+> Last Updated: 2026-07-29 01:16
+> Status: Approved 2.7 · TASK-010 Offline V1 · TASK-011 Benchmark Passed
 
 ## 1. 문서 목적
 
@@ -51,7 +51,7 @@
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
 | [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) | Draft · Approved Baseline | 공식 규정 변경 시에만 영향 항목 갱신 |
-| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 · Approved Baseline | 기본 30문항 유지, 추가 fixture는 단계별 Deferred |
+| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 · Benchmark 0.1 Applied | 30문항 중 자동화 3·보조 6·미지원 21; 공백 우선순위 유지 |
 | [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) | Baseline Confirmed 1.0 · Active Watch | Notification·이메일·공식 Rules 공개 시 Intake 실행 |
 | [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) | Draft 1 · Approved Baseline | 공식 규정 변경 시 위험 점수 갱신 |
 
@@ -72,7 +72,7 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Approved 2.7 · OPS-IMPL-01~08 Applied | offline 품질·보안·Evidence·Verifier·Submission Gate 적용 |
+| [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) | Approved 2.8 · TASK-011 Applied | confirmed fixture만 자동 채점하고 미지원 범위를 성공으로 계산하지 않음 |
 | [SQLite 논리 DB Schema](../03_Technical_Specs/01_DB_SCHEMA.md) | Approved 1.3 · Schema v2 Applied | 실제 사용자 DB migration은 별도 승인 |
 | [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) | Draft · Approved Baseline | 규정·provider plan·rate limit은 live 사용 전 갱신 |
 | [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) | Confirmed 0.1 | fixture schema 변경 요구가 생길 때만 개정 |
@@ -87,8 +87,8 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~009 Done · TASK-010 Offline V1 Gate Passed | live mode는 공식 Rules 대기 |
-| 이 문서 | Approved 2.6 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
+| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~009·011 Done · TASK-010 Offline V1 | live mode는 공식 Rules 대기 |
+| 이 문서 | Approved 2.7 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
 | `01_EXECUTION_PLAN.md` | 조건부 미작성 | 구현 일정이 필요할 때 Backlog를 날짜·담당자로 전환 |
 | `02_ROADMAP_BACKLOG_SYNC.md` | 조건부 미작성 | 구현 시작 전 Roadmap↔Backlog 상태 동기화 규칙 작성 |
 
@@ -101,6 +101,7 @@
 | [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 2.9 · OPS-IMPL-01~08 Offline Passed | live Rules·실대회 성능 미실행 |
 | [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Contract Approved · Offline 6 QA Passed | live Rules·실대회 성능 별도 |
 | [OPS-IMPL-08 Final Integration Report](../05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) | Passed · Offline Operations V1 | 수동 제출·보안·leaf 병렬·6 QA |
+| [예상문제 Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | Passed · 3 Automated / 6 Assisted / 21 Unsupported | 자동화 3개 exact·evidence·결정성 통과, 30문항 전체 정확도로 해석 금지 |
 | [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | Pass | 문서 검증 증거·Known Issue·승인 경계 |
 | DEX·AUTH·FREEZE fixture | Confirmed | V1 기준값으로 동결, 정답 임의 변경 금지 |
 
@@ -232,6 +233,7 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 10 | 완료 (2026-07-28) | Backlog `TASK-008` FREEZE vertical slice | blacklist lifecycle·context scope·partial·resume |
 | 11 | 완료 (2026-07-28) | Backlog `TASK-009` 통합 회귀·보안·문서 Gate | 24 QA·11-code·추적성·보안 통과 |
 | 12 | 완료 (2026-07-29, offline V1) | Backlog `TASK-010` 병렬 문제풀이 운영 | live mode는 공식 Rules·별도 승인 |
+| 13 | 완료 (2026-07-29) | Backlog `TASK-011` 예상문제 Offline Benchmark | 자동화 3/3 실증, 보조 6·미지원 21 공백 기록 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.
 `DOC-M2`~`DOC-M5`나 `TASK-001`의 선행 조건으로 추가하지 않는다. 실제 웹
@@ -328,5 +330,6 @@ offline 검증 같은 독립 작업을 막지 않는다.
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 24개 수용·회귀 기준
 - **QA_Validation**: [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 문서·구현·회귀 실행 Gate
 - **QA_Validation**: [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - 별도 6개 운영 QA
+- **QA_Validation**: [예상문제 Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 30문항 coverage·실행 채점·우선 공백
 - **QA_Validation**: [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) - DOC-M5 검증 결과와 후속 경계
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - raw replay·정합·partial·resume 검증

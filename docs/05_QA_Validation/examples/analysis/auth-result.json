@@ -70,7 +70,7 @@
       "classification": "not_assessed",
       "value": {
         "theft_or_phishing_claim": false,
-        "reason": "The onchain fixture proves authorization consumption only."
+        "reason": "The onchain replay proves authorization consumption only."
       },
       "tool_requirement_ids": ["REQ-V1-AUTH-007"],
       "fixture_requirement_ids": [],

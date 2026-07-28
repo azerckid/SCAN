@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-29 00:41
-> Status: Approved 2.7 · TASK-001~009 · OPS-IMPL-01~08 Applied
+> Last Updated: 2026-07-29 01:16
+> Status: Approved 2.8 · TASK-001~011 · OPS-IMPL-01~08 Applied
 
 ## 1. 문서 목적
 
@@ -469,6 +469,10 @@ dist/
     explicit SQLite Board input과 사람 확인 수동 제출 기록을 구현했다.
 25. live AI mode와 CTFd network submission은 공식 Rules·별도 승인 전까지
     `rules_gated` 또는 미구현 상태다.
+26. `TASK-011` benchmark는 confirmed fixture와 전용 analyzer가 모두 있는
+    문항만 자동 채점한다. 재사용 primitive만 있는 문항은 `assisted`, 핵심
+    기능이 없는 문항은 `unsupported`로 유지하며 어느 쪽도 통과율 분모에
+    숨겨 넣지 않는다.
 
 ## 22. Related Documents
 
@@ -503,3 +507,4 @@ dist/
 - **QA_Validation**: [OPS-IMPL-06 Candidate·Verifier 보고서](../05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) - canonical answer·fresh replay·conflict·promotion 검증
 - **QA_Validation**: [OPS-IMPL-07 OperationsSnapshot 보고서](../05_QA_Validation/20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - SQLite read-back·strict snapshot·local view 검증
 - **QA_Validation**: [OPS-IMPL-08 Final Integration 보고서](../05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - leaf 병렬·수동 제출·보안·6개 운영 QA
+- **QA_Validation**: [예상문제 Offline Benchmark 보고서](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - confirmed fixture 자동 채점과 미지원 범위 공개
