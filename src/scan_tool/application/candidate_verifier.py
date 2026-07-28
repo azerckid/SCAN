@@ -11,7 +11,7 @@ from pydantic.experimental.missing_sentinel import MISSING
 
 from scan_tool.application.evidence_worker import ApprovedReplay
 from scan_tool.application.security import SensitiveDataError, SensitiveDataGuard
-from scan_tool.domain import validate_analysis_pair
+from scan_tool.domain import ContractViolation, validate_analysis_pair
 from scan_tool.domain.analysis_request import AnalysisRequest
 from scan_tool.domain.analysis_result import (
     AnalysisResult,
@@ -247,6 +247,13 @@ class IndependentVerifier:
                     replay_body=run.approved_replay.body,
                     replay_sha256=run.approved_replay.sha256,
                 )
+            except Exception:
+                return self._incomplete(
+                    command,
+                    reason="independent_adapter_failed",
+                    adapter_calls=adapter_calls,
+                )
+            try:
                 if response.reused:
                     raise ValueError("independent verifier cannot reuse an existing result")
                 validate_analysis_pair(
@@ -254,10 +261,10 @@ class IndependentVerifier:
                     response.result.to_contract_dict(),
                 )
                 replayed.append(response.result)
-            except Exception:
+            except (ContractViolation, ValueError):
                 return self._incomplete(
                     command,
-                    reason="independent_replay_failed",
+                    reason="independent_response_invalid",
                     adapter_calls=adapter_calls,
                 )
 
@@ -268,6 +275,7 @@ class IndependentVerifier:
             original_evidence=original_evidence,
             replay_results=replay_results,
             replay_evidence=replay_evidence,
+            replay_documents={item.root.analysis_id: item for item in replayed},
             finished_at=self._clock(),
         )
         return VerificationExecution(
@@ -651,6 +659,7 @@ def _build_verification(
     original_evidence: dict[str, Evidence],
     replay_results: dict[str, ResultItem],
     replay_evidence: dict[str, Evidence],
+    replay_documents: dict[str, AnalysisResult],
     finished_at: datetime,
 ) -> VerificationRecord:
     selected_results = _select_results(
@@ -683,7 +692,12 @@ def _build_verification(
         "answer_format": command.candidate.answer_format == command.problem.answer_format,
         "answer_value": bool(replay_selected_results)
         and command.candidate.answer_value == _canonical_answer(replay_selected_results),
-        "chain_id": all(run.result.root.chain_id == 1 for run in command.evidence_runs),
+        "chain_id": all(
+            run.result.root.analysis_id in replay_documents
+            and run.result.root.chain_id
+            == replay_documents[run.result.root.analysis_id].root.chain_id
+            for run in command.evidence_runs
+        ),
         "result_values": result_matches,
         "evidence": evidence_matches,
         "address": result_matches,

@@ -1,5 +1,6 @@
 """Command-line entry point for the SCAN tool."""
 
+import hashlib
 import json
 import sqlite3
 import sys
@@ -14,6 +15,8 @@ from scan_tool.application.cli_runtime import (
     AnalysisUnavailable,
     CliRuntime,
 )
+from scan_tool.application.operations_snapshot import OperationsSnapshotBuilder
+from scan_tool.application.operations_terminal import render_operations_snapshot
 from scan_tool.application.terminal import (
     EXIT_FAILED,
     EXIT_INPUT,
@@ -30,6 +33,7 @@ from scan_tool.domain import (
     validate_analysis_id,
     validate_analysis_request,
     validate_analysis_result,
+    validate_operations_document,
 )
 from scan_tool.domain.analysis_request import AnalysisRequest, RuleStatus
 
@@ -220,6 +224,43 @@ def show(analysis_id: Annotated[str, typer.Argument(help="Existing analysis ID."
             export_uris=result.export_uris,
         )
     )
+
+
+@app.command()
+def operations(
+    bundle: Annotated[
+        Path,
+        typer.Option("--bundle", help="Validated Operations contract 0.1 JSON bundle."),
+    ],
+    elapsed_seconds: Annotated[
+        int,
+        typer.Option("--elapsed-seconds", min=0, help="Elapsed competition time."),
+    ] = 0,
+    remaining_seconds: Annotated[
+        int,
+        typer.Option("--remaining-seconds", min=0, help="Remaining competition time."),
+    ] = 0,
+    output: Annotated[
+        str,
+        typer.Option("--output", help="Snapshot output: terminal or json."),
+    ] = "terminal",
+) -> None:
+    """Render a local, read-only Competition Operations snapshot."""
+    if output not in {"terminal", "json"}:
+        _fail_input("invalid_input", "output must be terminal or json")
+    try:
+        document = validate_operations_document(_read_json(bundle))
+        manifest = document.root.manifest
+        snapshot_suffix = hashlib.sha256(manifest.competition_id.encode()).hexdigest()[:16].upper()
+        snapshot = OperationsSnapshotBuilder().build(
+            document,
+            snapshot_id=f"SNAP-LOCAL-{snapshot_suffix}",
+            elapsed_seconds=elapsed_seconds,
+            remaining_seconds=remaining_seconds,
+        )
+        render_operations_snapshot(snapshot, sys.stdout, output_format=output)
+    except ContractViolation as error:
+        _fail_input(error.code.value, "; ".join(error.issues))
 
 
 def _validate_request_file(path: Path) -> AnalysisRequest:

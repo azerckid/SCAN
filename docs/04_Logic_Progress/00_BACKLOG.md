@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 15:29
-> Status: TASK-001~009 Done · TASK-010 OPS-IMPL-01~06 Done · OPS-IMPL-07~08 ToDo
+> Last Updated: 2026-07-28 16:26
+> Status: TASK-001~009 Done · TASK-010 OPS-IMPL-01~07 Done · OPS-IMPL-08 ToDo
 
 ## 1. 문서 목적
 
@@ -548,7 +548,8 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 
 ### [ ] TASK-010: AI-native Rules-gated 병렬 문제풀이 Operations 구현
 
-- Status: Partial Implementation · OPS-IMPL-01~06 Done · Rules-Gated
+- Status: Partial Implementation · OPS-IMPL-01~07 Done · Rules-Gated
+- Work Type: code
 - Priority: Tournament Operations · Conditional
 - Depends On: TASK-005, TASK-009, Operations Board Preview 승인;
   live AI mode만 공식 Rules 확인 필요
@@ -571,7 +572,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] worker 실패를 해당 job·dependency에만 전파한다.
   - [x] conflict·missing evidence·self-check를 `review_required`로 보낸다.
   - [x] 독립 Verifier가 raw evidence를 재조회한 뒤에만 candidate를 승격한다.
-  - [ ] Operations Board의 problem·worker·verification·submission 상태를 연결한다.
+  - [x] Operations Board의 problem·worker·verification·submission 상태를 read-only snapshot으로 연결한다.
   - [ ] 답 전체 복사와 사람 `Mark submitted`를 분리한다.
   - [ ] CTFd 자동 제출·credential·session·brute force 경로가 없음을 검증한다.
   - [ ] 6개 Agentic Parallel Solve QA 시나리오를 자동화한다.
@@ -596,6 +597,15 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - leaf 분석 24개 기존 기준선
   - [OPS-IMPL-05 Evidence Worker 보고서](../05_QA_Validation/18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - 세 vertical·Queue·workspace·artifact·checkpoint 검증
   - [OPS-IMPL-06 Candidate·Verifier 보고서](../05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) - canonical answer·fresh replay·conflict·promotion Gate 검증
+  - [OPS-IMPL-07 OperationsSnapshot 보고서](../05_QA_Validation/20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - SQLite read-back·strict snapshot·local view 검증
+- Component & Library Plan:
+  - shadcn/ui: N/A - OPS-IMPL-07은 승인된 HTML Preview를 바꾸지 않는 Python local read model이다.
+  - Custom components: strict `OperationsSnapshot`, plain terminal/JSON renderer, SQLite v2 read-back.
+  - Reused components: Pydantic v2 contract model, Typer CLI, stdlib `sqlite3`·`hashlib`, 기존 Operations contract validator.
+  - New libraries: 없음 - 승인된 dependency와 lockfile을 유지한다.
+  - Excluded libraries: React graph/table·웹 상태관리·CTFd SDK - 웹 runtime과 자동 제출은 후속 별도 범위다.
+  - State management: persisted OperationsDocument를 검증한 뒤 immutable snapshot 한 개를 terminal/JSON에 공통 투영한다.
+  - shadcn preset: N/A - UI component 구현이 아닌 local CLI projection이다.
 - Implementation Preconditions:
   - [x] 관련 Concept·UI·Preview·Technical·QA 문서를 다시 읽었다.
   - [x] Operations Board Preview를 사용자가 확인하고 피드백을 승인했다.
@@ -614,6 +624,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] 후속 `OPS-IMPL-04` 구현 착수를 별도로 승인받았다.
   - [x] 후속 `OPS-IMPL-05` 구현 착수를 별도로 승인받았다.
   - [x] 후속 `OPS-IMPL-06` 구현 착수를 별도로 승인받았다.
+  - [x] 후속 `OPS-IMPL-07` 구현 착수를 별도로 승인받았다.
 - Acceptance Criteria:
   - [ ] 두 개 이상의 문제를 동시에 처리하며 상태·결과·candidate가 격리된다.
   - [ ] 모든 문제에 AI method hypothesis와 승인된 leaf job plan이 존재한다.
@@ -623,13 +634,69 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [ ] 동일 source request가 dedup되고 provider 동시성 제한을 초과하지 않는다.
   - [ ] worker 하나의 실패가 다른 문제의 완료·제출 상태를 변경하지 않는다.
   - [x] 독립 검증 없는 후보와 충돌 후보가 `submission_ready`가 아니다.
-  - [ ] Operations Board와 Analysis I/O result·evidence·source 참조가 일치한다.
+  - [x] Operations Board snapshot과 persisted operations·candidate·verification 참조가 일치한다.
   - [ ] CTFd network call·credential 저장·brute force가 0건이다.
   - [ ] 6개 운영 QA의 구현된 범위가 통과하고 미실행 항목은 명시된다.
 - Document Sync Check:
-  - [x] OPS-IMPL-06 실제 상태·필드·승격 불변조건을 기술·QA 문서와 동기화했다.
+  - [x] OPS-IMPL-07 read model·상태 label·CLI·SQLite read-back을 UI·기술·QA 문서와 동기화했다.
   - [ ] Rules 변경 시 활성 role·source·fallback과 Known Issue를 갱신했다.
   - [ ] Preview와 실제 Operations UI의 의도하지 않은 차이가 0건이다.
+- Context Receipt:
+  - Status: PASS
+  - Required References Read:
+    - [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 대회 당일 병렬 운영과 사람 제출 경계를 확인했다.
+    - [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - AI mode와 CTFd 자동 제출 제한을 확인했다.
+    - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - leaf 분석 기능과 단계 제한을 확인했다.
+    - [Competition Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 화면 정보 계층과 상태 label을 확인했다.
+    - [Web Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - evidence drill-down 경계를 확인했다.
+    - [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - local 실행·partial·resume 계약을 확인했다.
+    - [Operations Board Preview](../02_UI_Screens/previews/03_competition_operations_board_preview.html) - 승인된 Board 구성을 확인했다.
+    - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - read-only evidence 화면 경계를 확인했다.
+    - [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - role·Queue·검증·수동 제출 규범을 확인했다.
+    - [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) - snapshot·command·SQLite·동시성 계약을 확인했다.
+    - [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - leaf 결과 단일 진실 원천을 확인했다.
+    - [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - source·cache·evidence 불변조건을 확인했다.
+    - [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - 병렬성·격리·Verifier·수동 제출 기준을 확인했다.
+    - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 기존 leaf 회귀 기준선을 확인했다.
+    - [OPS-IMPL-05 Evidence Worker 보고서](../05_QA_Validation/18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - replay pin·workspace 경계를 확인했다.
+    - [OPS-IMPL-06 Candidate·Verifier 보고서](../05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) - candidate·fresh replay 승격 기준을 확인했다.
+    - [OPS-IMPL-07 OperationsSnapshot 보고서](../05_QA_Validation/20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - 구현 범위와 검증 결과를 확인했다.
+  - Constraints:
+    - 동일 validated snapshot이 terminal과 JSON의 유일한 입력이어야 한다.
+    - live AI·RPC·CTFd·사용자 DB 자동 migration과 mutation은 포함하지 않는다.
+    - candidate 전체 답은 보존하되 independent verification 없이 submission-ready로 승격하지 않는다.
+  - Conflicts: None
+- Change Receipt:
+  - Files Changed:
+    - `src/scan_tool/application/operations_snapshot.py`
+    - `src/scan_tool/application/operations_terminal.py`
+    - `src/scan_tool/adapters/sqlite_operations.py`
+    - `src/scan_tool/application/candidate_verifier.py`
+    - `src/scan_tool/cli.py`
+    - `tests/integration/test_operations_snapshot.py`
+    - `tests/integration/test_candidate_verifier.py`
+    - OPS-IMPL-07 관련 UI·기술·Backlog·QA 문서
+  - Requirements Covered:
+    - SQLite v2 read-back, strict Board snapshot, terminal/JSON 공통 projection, 상태·격리·안전한 CLI.
+    - OPS-IMPL-06 chain·교차 문제·dual-label·adapter/response P2 회귀.
+  - Excluded Scope:
+    - live provider·웹 runtime·priority/pause/reassign mutation·CTFd 자동 제출.
+  - Basic Checks:
+    - `uv run python scripts/verify.py` - PASS - 260 tests, Schema·fixture·traceability·security Gate 통과.
+    - `uv run pytest tests/integration/test_operations_snapshot.py -q` - PASS - 12 passed.
+  - Remaining Risks:
+    - SQLite v2 candidate reference 순서는 insertion rowid에 의존하며 ordinal은 차기 명시적 migration 대상이다.
+- Verification Receipt:
+  - Status: PASS
+  - Commands and Results:
+    - `uv run python scripts/verify.py` - PASS - 260 tests, fixture·Analysis·Operations Schema, traceability, security 통과.
+    - `uv run pytest tests/integration/test_operations_snapshot.py -q` - PASS - 12 passed.
+    - 변경 관련 targeted tests - PASS - 69 passed.
+    - `git diff --check` - PASS - whitespace 오류 없음.
+  - Unrun Checks:
+    - N/A - 웹 runtime·live provider·submission mutation·성능·DDL migration은 OPS-IMPL-07 승인 범위 밖이다.
+  - Detailed Evidence:
+    - [OPS-IMPL-07 OperationsSnapshot 보고서](../05_QA_Validation/20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - 독립 검증 명령·상태 mapping·안전 경계·P2 기록.
 
 ## 5. In Progress
 

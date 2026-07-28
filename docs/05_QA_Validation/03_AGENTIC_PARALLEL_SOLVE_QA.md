@@ -1,7 +1,7 @@
 # SCAN 2026 Agentic Parallel Solve QA
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 15:29
-> Status: AI-Native Contract Approved 1.4 · OPS-IMPL-06 Runtime Partial · Rules-Gated
+> Last Updated: 2026-07-28 16:26
+> Status: AI-Native Contract Approved 1.5 · OPS-IMPL-07 Runtime Partial · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -31,7 +31,8 @@
 - **Result**: **partial** — 둘 이상의 문제 동시 실행·worker 예외 격리·
   global/problem/role concurrency와 DEX·AUTH·FREEZE Analysis
   workspace·result·checkpoint·artifact·candidate scope 격리는 통과,
-  전체 OperationsSnapshot 격리는 OPS-IMPL-07에서 연결
+  두 problem의 job·activity OperationsSnapshot 격리도 통과. 실제 대회
+  전체 end-to-end 실행은 OPS-IMPL-08에 남음
 - **Backlog**: `TASK-010`
 - **Requirements**: `REQ-OPS-QUEUE-001`~`REQ-OPS-QUEUE-006`
 - **Preconditions**: Q01 DEX, Q02 AUTH, Q03 FLOW 고정 request와 서로 다른 workspace
@@ -52,7 +53,8 @@
 - **Result**: **partial** — 독립 leaf 병렬성·dependency 대기·job idempotency·
   in-flight source request dedup·capability limit과 Queue→Analysis I/O
   worker→candidate→Verifier 연결은 통과, 실제 한 문제의 복수 evidence leaf
-  reconciliation·Snapshot 통합은 OPS-IMPL-07에서 실행
+  reconciliation end-to-end는 OPS-IMPL-08에서 실행. Snapshot은 job stage·
+  queue reason·attempt budget을 표시함
 - **Backlog**: `TASK-010`
 - **Requirements**: `REQ-OPS-QUEUE-001`, `REQ-OPS-QUEUE-002`,
   `REQ-OPS-QUEUE-003`, `REQ-OPS-QUEUE-006`
@@ -178,10 +180,10 @@ UI Preview 체크박스는 2026-07-28 사용자 브라우저 검토와 승인 �
 
 | Criterion | Status | Draft 검증 증거 |
 |:---|:---:|:---|
-| Functionality | Partial | Planner mode Gate·bounded Queue·세 vertical evidence·candidate·fresh Verifier 통과; Snapshot·submission 잔여 |
+| Functionality | Partial | Planner·Queue·세 vertical·candidate·fresh Verifier·strict Snapshot 통과; submission 잔여 |
 | Potential Impact | Not Executed | 제한 시간 내 복수 문제 처리량과 Queue age 측정 |
 | Novelty | Not Executed | evidence-first 독립 검증과 role fallback |
-| UX | Preview Passed / Runtime Not Executed | 사용자 브라우저 검토 통과; runtime 상태 판독·키보드·수동 제출은 미실행 |
+| UX | Preview + Local View Passed / Submission Not Executed | terminal/JSON 상태 판독 통과; 수동 제출 mutation은 미실행 |
 | Open-source | Not Executed | 교체 가능한 worker·CLI·Analysis I/O 계약 |
 | Business Plan | N/A | 대회 운영 QA이며 수익 모델 검증 범위 아님 |
 
@@ -200,7 +202,7 @@ UI Preview 체크박스는 2026-07-28 사용자 브라우저 검토와 승인 �
 - [x] Operations Board Preview를 사용자가 확인했다.
 - [x] TASK-010 Pre-Code Technical Brief의 QA 추적을 승인했다.
 - [ ] 공식 Rules에서 AI provider·model·data mode와 worker·source 범위를 확인했다.
-- [x] `OPS-IMPL-01`~`OPS-IMPL-06` 구현을 각각 별도로 승인했다.
+- [x] `OPS-IMPL-01`~`OPS-IMPL-07` 구현을 각각 별도로 승인했다.
 - [ ] 구현된 시나리오만 `pass / partial / fail / blocked`로 기록한다.
 - [ ] 실행하지 않은 시나리오는 `not_executed`로 유지한다.
 
@@ -218,3 +220,4 @@ UI Preview 체크박스는 2026-07-28 사용자 브라우저 검토와 승인 �
 - **QA_Validation**: [QA Checklist](./02_QA_CHECKLIST.md) - 운영 QA 승인·대회 전 실행 시점
 - **QA_Validation**: [OPS-IMPL-05 Evidence Worker 보고서](./18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - 세 vertical·Queue·workspace·artifact·checkpoint 검증
 - **QA_Validation**: [OPS-IMPL-06 Candidate·Verifier 보고서](./19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) - canonical candidate·fresh replay·conflict·promotion Gate 검증
+- **QA_Validation**: [OPS-IMPL-07 OperationsSnapshot 보고서](./20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - SQLite read-back·strict snapshot·local terminal/JSON view 검증

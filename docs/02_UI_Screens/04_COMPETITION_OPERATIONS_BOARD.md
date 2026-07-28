@@ -1,7 +1,7 @@
 # SCAN 2026 Competition Operations Board
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 11:28
-> Status: Approved 1.0 · AI-Native Interactive Preview · UI-First Gate Passed · Runtime Not Executed · Rules-Gated
+> Last Updated: 2026-07-28 16:26
+> Status: Approved 1.1 · AI-Native Interactive Preview · UI-First Gate Passed · OPS-IMPL-07 Local View Applied · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -281,6 +281,11 @@ CTA를 만들지 않는다. 제출 완료는 `Mark submitted`로 명확히 구�
 Preview의 실제 RPC·AI·CTFd·DB 호출과 credential 저장은 없다. 표시 숫자는 UX 검토용
 demo data이며 성능·정확도 측정값이 아니다. 이 Preview 보강은 `TASK-010`
 오케스트레이션 구현 완료를 의미하지 않는다.
+
+OPS-IMPL-07의 `scan operations` 명령은 같은 상태 label과 정보 계층을
+validated Operations contract에서 읽어 terminal 또는 JSON으로 표시한다.
+이 명령은 read-only local view이며 Preview의 mutation이나 CTFd 제출을
+실행하지 않는다.
 
 ## 12. 사용자 확인 Gate
 

@@ -11,7 +11,7 @@ the Analysis I/O 0.1 Pydantic models and semantic Schema check. `TASK-003`
 implemented the rules-gated HTTP source port, retry, and fallback orchestration.
 `TASK-004` implemented SQLite WAL storage, immutable cache, checkpoints,
 content-addressed artifacts, backup verification, and JSON/Markdown exports.
-`TASK-005` implemented the four-command CLI, terminal renderer, stable exit codes,
+`TASK-005` implemented the four analysis commands, terminal renderer, stable exit codes,
 local `.scan/` composition root, and persisted-result display. The
 `TASK-006` DEX slice now decodes raw Transfer·Swap·Withdrawal logs, reconciles
 USDC/WETH/native ETH outputs, preserves supporting metadata, and supports reviewed
@@ -33,8 +33,10 @@ pool. `OPS-IMPL-05` connects approved AI plan inputs to isolated offline
 DEX·AUTH·FREEZE Python evidence workers, Analysis I/O results, checkpoints, and
 content-addressed artifacts. `OPS-IMPL-06` builds canonical evidence-linked
 candidates, independently replays raw evidence, preserves conflicts, and allows
-only the Application Gate to mark a candidate submission-ready. Live AI,
-OperationsSnapshot/local UI, and submission-record integration remain unimplemented.
+only the Application Gate to mark a candidate submission-ready. `OPS-IMPL-07`
+adds SQLite v2 read-back, a strict OperationsSnapshot, shared JSON/terminal
+rendering, and the read-only local `operations` command. Live AI and
+submission-record mutation remain unimplemented.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`, so external execution modes remain `rules_gated` until
 an authoritative notice is recorded.
@@ -77,6 +79,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | OPS-IMPL-04 evidence | [`17_OPS_IMPL_04_BOUNDED_QUEUE_REPORT.md`](docs/05_QA_Validation/17_OPS_IMPL_04_BOUNDED_QUEUE_REPORT.md) | bounded scheduling, dependency, isolation, retry, dedup, and capability-limit evidence |
 | OPS-IMPL-05 evidence | [`18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md`](docs/05_QA_Validation/18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) | approved plan projection, DEX/AUTH/FREEZE replay, workspace isolation, artifact, and checkpoint evidence |
 | OPS-IMPL-06 evidence | [`19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md`](docs/05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) | canonical candidate, fresh independent replay, conflict preservation, and promotion-gate evidence |
+| OPS-IMPL-07 evidence | [`20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md`](docs/05_QA_Validation/20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) | SQLite read-back, strict snapshot, local terminal/JSON view, and Preview-state mapping evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -94,20 +97,22 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-162 passed
+260 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 720 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 53 runtime/evidence files
+PASS repository traceability: 793 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 65 runtime/evidence files
 ```
 
-The installed package exposes the approved TASK-005 command surface:
+The installed package exposes the approved analysis and local operations command surface:
 
 ```bash
 uv run scan --help
 uv run scan --version
+uv run scan operations --bundle docs/05_QA_Validation/examples/operations/rules-gated-bundle.json
+uv run scan operations --bundle docs/05_QA_Validation/examples/operations/rules-gated-bundle.json --output json
 uv run scan validate REQUEST.json
 uv run scan analyze --request REQUEST.json --evidence RAW_REPLAY.json
 uv run scan resume ANALYSIS_ID

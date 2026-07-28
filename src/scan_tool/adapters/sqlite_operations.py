@@ -374,6 +374,32 @@ class SQLiteOperationsRepository:
         with self._connection:
             self._insert_event(payload)
 
+    def load_document(self, competition_id: str) -> OperationsDocument | None:
+        """Reconstruct and validate one persisted operations bundle."""
+
+        manifest = self._connection.execute(
+            "SELECT * FROM competitions WHERE competition_id = ?",
+            (competition_id,),
+        ).fetchone()
+        if manifest is None:
+            return None
+        payload: dict[str, Any] = {
+            "$schema": "../../schemas/operations-contract.schema.json",
+            "operations_schema_version": manifest["operations_schema_version"],
+            "manifest": dict(manifest),
+            "problems": _load_problems(self._connection, competition_id),
+            "ai_modes": _load_modes(self._connection, competition_id),
+            "plans": _load_plans(self._connection, competition_id),
+            "jobs": _load_jobs(self._connection, competition_id),
+            "verifications": _load_verifications(self._connection, competition_id),
+            "candidates": _load_candidates(self._connection, competition_id),
+            "submissions": _load_submissions(self._connection, competition_id),
+            "events": _load_events(self._connection, competition_id),
+            "errors": _load_errors(self._connection, competition_id),
+        }
+        self._guard.check_text(_json(payload))
+        return OperationsDocument.model_validate(payload)
+
     def record_artifact(self, record: ArtifactRecord) -> None:
         """Insert immutable planner artifact metadata or verify an existing hash."""
 
@@ -728,6 +754,257 @@ class SQLiteOperationsRepository:
         ).fetchone()
         if row is None:
             raise ValueError("operations artifact must already exist in v1 artifacts")
+
+
+def _load_problems(
+    connection: sqlite3.Connection,
+    competition_id: str,
+) -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+    rows = connection.execute(
+        "SELECT * FROM problems WHERE competition_id = ? ORDER BY problem_id",
+        (competition_id,),
+    ).fetchall()
+    for row in rows:
+        record = dict(row)
+        record["provided_urls"] = _load_json(record.pop("provided_urls_json"))
+        original = connection.execute(
+            """
+            SELECT artifact_sha256 FROM problem_artifacts
+            WHERE problem_id = ? AND role = 'original_text'
+            """,
+            (record["problem_id"],),
+        ).fetchone()
+        if original is None:
+            raise ValueError("problem original artifact is missing")
+        record["original_text_artifact"] = _artifact_uri(original["artifact_sha256"])
+        files = connection.execute(
+            """
+            SELECT artifact_sha256, filename, media_type FROM problem_artifacts
+            WHERE problem_id = ? AND role = 'provided_file'
+            ORDER BY artifact_sha256
+            """,
+            (record["problem_id"],),
+        ).fetchall()
+        record["provided_file_artifacts"] = [
+            {
+                "filename": item["filename"],
+                "sha256": item["artifact_sha256"],
+                "media_type": item["media_type"],
+            }
+            for item in files
+        ]
+        _drop_none(record)
+        records.append(record)
+    return records
+
+
+def _load_modes(
+    connection: sqlite3.Connection,
+    competition_id: str,
+) -> list[dict[str, Any]]:
+    rows = connection.execute(
+        """
+        SELECT * FROM operation_ai_modes
+        WHERE competition_id = ? ORDER BY created_at, mode_id
+        """,
+        (competition_id,),
+    ).fetchall()
+    records = [dict(row) for row in rows]
+    for record in records:
+        record["affected_rule_ids"] = _load_json(record.pop("affected_rule_ids_json"))
+        _drop_none(record)
+    return records
+
+
+def _load_plans(
+    connection: sqlite3.Connection,
+    competition_id: str,
+) -> list[dict[str, Any]]:
+    rows = connection.execute(
+        """
+        SELECT plans.* FROM plans
+        JOIN problems USING(problem_id)
+        WHERE problems.competition_id = ?
+        ORDER BY plans.created_at, plans.plan_id
+        """,
+        (competition_id,),
+    ).fetchall()
+    records = [dict(row) for row in rows]
+    for record in records:
+        for field in ("assumptions", "missing_inputs", "leaf_job_specs"):
+            record[field] = _load_json(record.pop(f"{field}_json"))
+        raw_sha = record.pop("raw_output_artifact_sha256")
+        if raw_sha is not None:
+            record["raw_output_artifact"] = _artifact_uri(raw_sha)
+        _drop_none(record)
+    return records
+
+
+def _load_jobs(
+    connection: sqlite3.Connection,
+    competition_id: str,
+) -> list[dict[str, Any]]:
+    rows = connection.execute(
+        """
+        SELECT jobs.* FROM jobs
+        JOIN problems USING(problem_id)
+        WHERE problems.competition_id = ?
+        ORDER BY jobs.queued_at, jobs.job_id
+        """,
+        (competition_id,),
+    ).fetchall()
+    records = [dict(row) for row in rows]
+    for record in records:
+        _drop_none(record)
+    return records
+
+
+def _load_candidates(
+    connection: sqlite3.Connection,
+    competition_id: str,
+) -> list[dict[str, Any]]:
+    rows = connection.execute(
+        """
+        SELECT candidates.* FROM candidates
+        JOIN problems USING(problem_id)
+        WHERE problems.competition_id = ?
+        ORDER BY candidates.created_at, candidates.candidate_id
+        """,
+        (competition_id,),
+    ).fetchall()
+    records = [dict(row) for row in rows]
+    for record in records:
+        record["verification_refs"] = _load_json(record.pop("verification_refs_json"))
+        record["uncertainties"] = _load_json(record.pop("uncertainties_json"))
+        links = connection.execute(
+            """
+            SELECT ref_type, ref_id FROM candidate_result_links
+            WHERE candidate_id = ? ORDER BY rowid
+            """,
+            (record["candidate_id"],),
+        ).fetchall()
+        record["result_refs"] = [item["ref_id"] for item in links if item["ref_type"] == "result"]
+        record["evidence_refs"] = [
+            item["ref_id"] for item in links if item["ref_type"] == "evidence"
+        ]
+    return records
+
+
+def _load_verifications(
+    connection: sqlite3.Connection,
+    competition_id: str,
+) -> list[dict[str, Any]]:
+    rows = connection.execute(
+        """
+        SELECT verifications.* FROM verifications
+        JOIN problems USING(problem_id)
+        WHERE problems.competition_id = ?
+        ORDER BY verifications.created_at, verifications.verification_id
+        """,
+        (competition_id,),
+    ).fetchall()
+    records = [dict(row) for row in rows]
+    for record in records:
+        for field in (
+            "required_checks",
+            "independent_from_job_ids",
+            "conflicts",
+            "missing_evidence",
+        ):
+            record[field] = _load_json(record.pop(f"{field}_json"))
+        checks = connection.execute(
+            """
+            SELECT * FROM verification_checks
+            WHERE verification_id = ? ORDER BY check_name
+            """,
+            (record["verification_id"],),
+        ).fetchall()
+        record["check_results"] = [
+            {
+                "check": item["check_name"],
+                "passed": bool(item["passed"]),
+                "result_refs": _load_json(item["result_refs_json"]),
+                "evidence_refs": _load_json(item["evidence_refs_json"]),
+            }
+            for item in checks
+        ]
+        _drop_none(record)
+    return records
+
+
+def _load_submissions(
+    connection: sqlite3.Connection,
+    competition_id: str,
+) -> list[dict[str, Any]]:
+    rows = connection.execute(
+        """
+        SELECT submissions.* FROM submissions
+        JOIN candidates USING(candidate_id)
+        JOIN problems USING(problem_id)
+        WHERE problems.competition_id = ?
+        ORDER BY submissions.submitted_at, submissions.submission_id
+        """,
+        (competition_id,),
+    ).fetchall()
+    records = [dict(row) for row in rows]
+    for record in records:
+        record["operator_confirmed"] = bool(record["operator_confirmed"])
+        note_sha = record.pop("note_artifact_sha256")
+        if note_sha is not None:
+            record["note_artifact"] = _artifact_uri(note_sha)
+    return records
+
+
+def _load_events(
+    connection: sqlite3.Connection,
+    competition_id: str,
+) -> list[dict[str, Any]]:
+    rows = connection.execute(
+        """
+        SELECT * FROM operation_events
+        WHERE competition_id = ? ORDER BY created_at, event_id
+        """,
+        (competition_id,),
+    ).fetchall()
+    records = [dict(row) for row in rows]
+    for record in records:
+        record["safe_details_json"] = _load_json(record.pop("safe_details_json"))
+        _drop_none(record)
+    return records
+
+
+def _load_errors(
+    connection: sqlite3.Connection,
+    competition_id: str,
+) -> list[dict[str, Any]]:
+    rows = connection.execute(
+        """
+        SELECT * FROM operation_errors
+        WHERE competition_id = ? ORDER BY error_id
+        """,
+        (competition_id,),
+    ).fetchall()
+    records = [dict(row) for row in rows]
+    for record in records:
+        record.pop("competition_id")
+        record["retryable"] = bool(record["retryable"])
+        record["details"] = _load_json(record.pop("details_json"))
+        _drop_none(record)
+    return records
+
+
+def _artifact_uri(sha256: str) -> str:
+    return f"artifact://sha256/{sha256}"
+
+
+def _load_json(value: str) -> Any:
+    return json.loads(value)
+
+
+def _drop_none(record: dict[str, Any]) -> None:
+    for key in [key for key, value in record.items() if value is None]:
+        record.pop(key)
 
 
 def _connect(path: Path) -> sqlite3.Connection:

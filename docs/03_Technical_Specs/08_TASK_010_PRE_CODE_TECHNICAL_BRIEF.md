@@ -1,7 +1,7 @@
 # TASK-010 Pre-Code Technical Brief
 > Created: 2026-07-28 11:28
-> Last Updated: 2026-07-28 15:29
-> Status: Approved 1.6 · OPS-IMPL-01~06 Implemented · Rules-Gated
+> Last Updated: 2026-07-28 16:26
+> Status: Approved 1.7 · OPS-IMPL-01~07 Implemented · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -588,7 +588,7 @@ cross-record·lifecycle·상태 전이는 Python validator가 규범이다.
 | `OPS-IMPL-04` | bounded Queue·dependency·isolation·dedup | **Done** · 19 unit tests · QA-OPS-PAR/INTRA-001 partial |
 | `OPS-IMPL-05` | DEX·AUTH·FREEZE evidence worker adapter | **Done** · 19 integration tests · 전체 225 tests · problem workspace lock · QA-OPS-PAR/INTRA/RULE partial |
 | `OPS-IMPL-06` | candidate builder·independent Verifier Gate | **Done** · 19 integration tests · 전체 244 tests · QA-OPS-VERIFY/CONFLICT-001 pass |
-| `OPS-IMPL-07` | OperationsSnapshot·command result·local CLI view | Preview state mapping test |
+| `OPS-IMPL-07` | OperationsSnapshot·command result·local CLI view | **Done** · 12 integration tests · 전체 260 tests · SQLite read-back·Preview state mapping |
 | `OPS-IMPL-08` | security·submission record·integration report | QA-OPS-SUBMIT-001, full verify |
 
 각 단위는 별도 승인·branch·검증 보고서를 사용한다. `OPS-IMPL-01` 전에는
@@ -603,7 +603,7 @@ runtime 파일을 만들지 않는다.
 | `REQ-OPS-VERIFY-001`~`006` | §5.6~5.7, §10 | `QA-OPS-VERIFY-001`, `QA-OPS-CONFLICT-001` |
 | `REQ-OPS-SUBMIT-001`~`004` | §5.7, §6.2, §12 | `QA-OPS-SUBMIT-001` |
 
-Analysis I/O와 fixture 회귀는 현재 244개 테스트·Schema/fixture PASS 3 기준을
+Analysis I/O와 fixture 회귀는 현재 260개 테스트·Schema/fixture PASS 3 기준을
 후퇴시키지 않는다.
 
 ## 15. 구현 승격 Gate
@@ -621,6 +621,7 @@ Analysis I/O와 fixture 회귀는 현재 244개 테스트·Schema/fixture PASS 3
 - [x] `OPS-IMPL-04` 구현 착수를 별도로 승인했다.
 - [x] `OPS-IMPL-05` 구현 착수를 별도로 승인했다.
 - [x] `OPS-IMPL-06` 구현 착수를 별도로 승인했다.
+- [x] `OPS-IMPL-07` 구현 착수를 별도로 승인했다.
 
 공식 Rules가 미확정이어도 fake adapter 기반 contract·scheduler QA 구현은
 별도 승인 후 시작할 수 있다. 실제 대회 문제에 사용할 AI adapter와 external
@@ -666,3 +667,4 @@ data 전송은 `allowed` mode가 확정되기 전까지 `rules_gated`다.
 - **QA_Validation**: [OPS-IMPL-04 bounded Queue 보고서](../05_QA_Validation/17_OPS_IMPL_04_BOUNDED_QUEUE_REPORT.md) - job DAG·격리·재시도·dedup·source capability 제한 검증
 - **QA_Validation**: [OPS-IMPL-05 Evidence Worker 보고서](../05_QA_Validation/18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - 승인 projection·DEX/AUTH/FREEZE·workspace·artifact·checkpoint 검증
 - **QA_Validation**: [OPS-IMPL-06 Candidate·Verifier 보고서](../05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) - canonical answer·fresh replay·conflict·promotion Gate 검증
+- **QA_Validation**: [OPS-IMPL-07 OperationsSnapshot 보고서](../05_QA_Validation/20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - SQLite read-back·strict snapshot·local terminal/JSON view 검증
