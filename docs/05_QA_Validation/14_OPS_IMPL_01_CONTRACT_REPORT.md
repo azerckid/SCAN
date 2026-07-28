@@ -29,8 +29,8 @@
 | `src/scan_tool/domain/operations.py` | 순수 operations model·참조·상태 규칙 |
 | `operations-contract.schema.json` | 공개 구조 계약 `0.1` |
 | `rules-gated-bundle.json` | 공식 Rules 미확정 초기 상태 예제 |
-| `scripts/check_operations_schema.py` | 생성 Schema drift·12개 contract probe |
-| `tests/unit/test_operations_contract.py` | 상태·보안·참조 불변조건 21개 test |
+| `scripts/check_operations_schema.py` | 생성 Schema drift·17개 contract probe |
+| `tests/unit/test_operations_contract.py` | 상태·보안·참조 불변조건 29개 test |
 
 ## 3. 확인된 불변조건
 
@@ -44,16 +44,22 @@
 - problem·plan·job·candidate·verification의 cross-problem 참조를 거부한다.
 - 실행 중 evidence job은 승인된 plan을 요구한다.
 - candidate creator와 verifier job은 독립적이어야 한다.
+- `independent_from_job_ids`는 존재하며 같은 문제에 속한 job만 참조한다.
+- passing verification은 한 개 이상의 required check와 그 check들의 통과를
+  요구한다.
 - `submission_ready`는 result·evidence·passing verification을 요구한다.
+- event는 manifest competition과, error의 problem/job은 같은 problem과
+  일치해야 한다.
+- `rules_gated` plan의 planner job은 `waiting`이어야 한다.
 - terminal entity의 역방향 상태 전이를 거부한다.
 
 ## 4. 검증 결과
 
 | 검증 | 결과 |
 |:---|:---:|
-| operations unit tests | PASS 21 |
-| runtime/generated Schema probes | PASS 12 |
-| 전체 pytest | PASS 154 |
+| operations unit tests | PASS 29 |
+| runtime/generated Schema probes | PASS 17 |
+| 전체 pytest | PASS 162 |
 | fixture·Analysis I/O·generated Analysis Schema | PASS 3 / PASS 3 / PASS 3 |
 | repository traceability | PASS 720 links |
 | repository security scan | PASS 53 files |
@@ -68,6 +74,8 @@ JSON Schema는 구조·형식 검증을 담당한다. cross-record reference, li
 
 - 공식 Rules의 AI provider·model·data·tool mode는 아직 미확정이다.
 - `OPS-IMPL-02` SQLite v2 migration·repository는 별도 승인이 필요하다.
+- `rule_restricted` mode의 adapter 호출 전 차단은 `OPS-IMPL-03` application
+  Gate에서 구현한다. 현재 계약은 mode snapshot과 safe error를 표현한다.
 - 실제 AI Planner·scheduler·Verifier는 각각 후속 구현 단위다.
 
 ## 6. Related Documents

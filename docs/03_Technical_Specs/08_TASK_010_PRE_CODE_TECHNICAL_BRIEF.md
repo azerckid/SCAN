@@ -576,7 +576,7 @@ cross-record·lifecycle·상태 전이는 Python validator가 규범이다.
 
 | 단위 | 범위 | 완료 증거 |
 |:---|:---|:---|
-| `OPS-IMPL-01` | operations domain model·공개 Schema·state validator | **Done** · 21 unit tests + 12 runtime/Schema probes |
+| `OPS-IMPL-01` | operations domain model·공개 Schema·state validator | **Done** · 29 unit tests + 17 runtime/Schema probes |
 | `OPS-IMPL-02` | SQLite v2 additive migration·repository·event log | v1→v2 rollback·integrity test |
 | `OPS-IMPL-03` | Planner port·fake QA adapter·AI mode Gate | QA-OPS-RULE-001 offline |
 | `OPS-IMPL-04` | bounded Queue·dependency·isolation·dedup | QA-OPS-PAR/INTRA-001 |

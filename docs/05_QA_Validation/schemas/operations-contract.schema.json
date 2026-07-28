@@ -483,6 +483,15 @@
       "title": "LeafJobSpec",
       "type": "object"
     },
+    "NonEmptyUniqueList_Annotated_str__StringConstraints__": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9_]{1,63}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
     "OperationError": {
       "additionalProperties": false,
       "properties": {
@@ -1131,7 +1140,7 @@
           "type": "string"
         },
         "required_checks": {
-          "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____3"
+          "$ref": "#/$defs/NonEmptyUniqueList_Annotated_str__StringConstraints__"
         },
         "status": {
           "$ref": "#/$defs/VerificationStatus"

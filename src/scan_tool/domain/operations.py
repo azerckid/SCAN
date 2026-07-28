@@ -16,6 +16,7 @@ from scan_tool.domain._types import (
     EvidenceId,
     JsonObject,
     NonEmptyString,
+    NonEmptyUniqueList,
     NonNegativeInt,
     ProviderId,
     ResultId,
@@ -490,7 +491,7 @@ class VerificationRecord(ContractModel):
     candidate_id: CandidateId
     verifier_job_id: JobId
     status: VerificationStatus
-    required_checks: UniqueList[SnakeName]
+    required_checks: NonEmptyUniqueList[SnakeName]
     check_results: list[VerificationCheck]
     independent_from_job_ids: UniqueList[JobId]
     conflicts: UniqueList[NonEmptyString]
@@ -692,6 +693,11 @@ class OperationsContractBundle(ContractModel):
                     "schema_invalid",
                     "rules_gated plan requires a rules_gated AI mode",
                 )
+            if plan.status is PlanStatus.RULES_GATED and planner.status is not JobStatus.WAITING:
+                raise PydanticCustomError(
+                    "schema_invalid",
+                    "rules_gated plan requires a waiting planner job",
+                )
         for job in self.jobs:
             _require_ref(problems, job.problem_id, "job.problem_id")
             plan = _require_ref(plans, job.plan_id, "job.plan_id")
@@ -752,6 +758,13 @@ class OperationsContractBundle(ContractModel):
                     "schema_invalid",
                     "verification must declare independence from candidate creator",
                 )
+            for independent_job_id in verification.independent_from_job_ids:
+                independent_job = _require_ref(
+                    jobs,
+                    independent_job_id,
+                    "verification.independent_from_job_ids",
+                )
+                _require_same_problem(verification.problem_id, independent_job.problem_id)
         for submission in self.submissions:
             candidate = _require_ref(candidates, submission.candidate_id, "submission.candidate_id")
             if candidate.status is not CandidateStatus.SUBMITTED:
@@ -759,6 +772,22 @@ class OperationsContractBundle(ContractModel):
                     "schema_invalid",
                     "submission record requires submitted candidate",
                 )
+        for event in self.events:
+            if event.competition_id != manifest.competition_id:
+                raise PydanticCustomError(
+                    "schema_invalid",
+                    "event belongs to another competition",
+                )
+            if event.problem_id is not MISSING:
+                _require_ref(problems, event.problem_id, "event.problem_id")
+        for error in self.errors:
+            error_problem = None
+            if error.problem_id is not MISSING:
+                error_problem = _require_ref(problems, error.problem_id, "error.problem_id")
+            if error.job_id is not MISSING:
+                error_job = _require_ref(jobs, error.job_id, "error.job_id")
+                if error_problem is not None:
+                    _require_same_problem(error_problem.problem_id, error_job.problem_id)
 
         return self
 

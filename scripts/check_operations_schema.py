@@ -7,11 +7,12 @@ import copy
 import json
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
 from jsonschema import Draft202012Validator, FormatChecker
 from pydantic import ValidationError
 
-from scan_tool.domain.operations import OperationsDocument
+from scan_tool.domain.operations import OperationsDocument, VerificationRecord
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = REPOSITORY_ROOT / "docs/05_QA_Validation/schemas/operations-contract.schema.json"
@@ -25,6 +26,7 @@ class Probe:
     document: dict[str, object]
     runtime_expected: bool
     schema_expected: bool
+    model_kind: Literal["bundle", "verification"] = "bundle"
 
 
 def generated_schema() -> dict[str, object]:
@@ -69,6 +71,27 @@ def without(
 
 
 def probes(example: dict[str, object]) -> list[Probe]:
+    valid_verification = {
+        "verification_id": "VER-Q01-001",
+        "problem_id": "PROB-Q01",
+        "candidate_id": "CAND-Q01-001",
+        "verifier_job_id": "JOB-Q01-VERIFIER",
+        "status": "pass",
+        "required_checks": ["answer_format"],
+        "check_results": [
+            {
+                "check": "answer_format",
+                "passed": True,
+                "result_refs": ["RES-Q01-001"],
+                "evidence_refs": ["EV-Q01-001"],
+            }
+        ],
+        "independent_from_job_ids": ["JOB-Q01-REPORTER"],
+        "conflicts": [],
+        "missing_evidence": [],
+        "created_at": "2026-07-28T03:02:00Z",
+        "finished_at": "2026-07-28T03:02:20Z",
+    }
     return [
         Probe("rules-gated bundle", example, True, True),
         Probe("top-level extra", {**example, "credential": "forbidden"}, False, False),
@@ -160,6 +183,69 @@ def probes(example: dict[str, object]) -> list[Probe]:
             True,
         ),
         Probe(
+            "event competition mismatch",
+            changed(
+                example,
+                "events",
+                0,
+                "competition_id",
+                value="COMP-OTHER-2026",
+            ),
+            False,
+            True,
+        ),
+        Probe(
+            "rules-gated planner running",
+            changed(
+                changed(example, "jobs", 0, "status", value="running"),
+                "jobs",
+                0,
+                "started_at",
+                value="2026-07-28T03:00:10Z",
+            ),
+            False,
+            True,
+        ),
+        Probe(
+            "unknown error job",
+            changed(
+                example,
+                "errors",
+                value=[
+                    {
+                        "error_id": "OERR-PLANNER-001",
+                        "code": "planner_failed",
+                        "message": "Planner output failed contract validation.",
+                        "stage": "planner",
+                        "retryable": False,
+                        "problem_id": "PROB-Q01",
+                        "job_id": "JOB-Q01-UNKNOWN",
+                        "details": {},
+                    }
+                ],
+            ),
+            False,
+            True,
+        ),
+        Probe(
+            "verification with required check",
+            valid_verification,
+            True,
+            True,
+            "verification",
+        ),
+        Probe(
+            "passing verification without required checks",
+            changed(
+                valid_verification,
+                "required_checks",
+                value=[],
+            ),
+            False,
+            False,
+            "verification",
+        ),
+        Probe(
             "backward state is not a document field",
             {**example, "transition": {"entity": "job", "from": "complete", "to": "running"}},
             False,
@@ -168,9 +254,15 @@ def probes(example: dict[str, object]) -> list[Probe]:
     ]
 
 
-def document_is_valid(document: dict[str, object]) -> bool:
+def document_is_valid(
+    document: dict[str, object],
+    model_kind: Literal["bundle", "verification"],
+) -> bool:
     try:
-        OperationsDocument.model_validate(document)
+        if model_kind == "verification":
+            VerificationRecord.model_validate(document)
+        else:
+            OperationsDocument.model_validate(document)
     except ValidationError:
         return False
     return True
@@ -198,10 +290,22 @@ def main() -> None:
 
     Draft202012Validator.check_schema(public)
     validator = Draft202012Validator(public, format_checker=FormatChecker())
+    verification_schema = {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$defs": public["$defs"],
+        "$ref": "#/$defs/VerificationRecord",
+    }
+    verification_validator = Draft202012Validator(
+        verification_schema,
+        format_checker=FormatChecker(),
+    )
     probe_items = probes(load_json(EXAMPLE_PATH))
     for probe in probe_items:
-        runtime_valid = document_is_valid(probe.document)
-        schema_valid = validator.is_valid(probe.document)
+        runtime_valid = document_is_valid(probe.document, probe.model_kind)
+        schema_validator = (
+            verification_validator if probe.model_kind == "verification" else validator
+        )
+        schema_valid = schema_validator.is_valid(probe.document)
         if runtime_valid != probe.runtime_expected or schema_valid != probe.schema_expected:
             raise SystemExit(
                 f"FAIL {probe.name}: runtime_expected={probe.runtime_expected} "
