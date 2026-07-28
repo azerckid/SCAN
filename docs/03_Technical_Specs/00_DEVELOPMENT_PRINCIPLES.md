@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-28 02:34
-> Status: Approved 1.9 · TASK-001~009 Applied
+> Last Updated: 2026-07-28 12:20
+> Status: Approved 2.0 · TASK-001~009 · OPS-IMPL-01 Applied
 
 ## 1. 문서 목적
 
@@ -451,8 +451,10 @@ dist/
     issuer·OFAC context, global pause, 현재 상태 미평가를 분리했다.
 16. `TASK-009`에서 133개 test, 세 Schema `PASS 3`, 저장소 추적성·보안
     검사를 dependency 추가 없이 통합 Gate에 연결했다.
-17. 다음 구현 후보 `TASK-010`은 공식 Rules·Preview·별도 승인을 모두
-    요구하는 비차단 운영 트랙이다.
+17. `OPS-IMPL-01`에서 operations contract `0.1`, 생성 JSON Schema,
+    cross-record 불변조건, 상태 전이 validator를 구현했다.
+18. 후속 `OPS-IMPL-02`~`08`은 각각 별도 승인을 요구하며, live AI mode는
+    공식 Rules 확인 전까지 `rules_gated`다.
 
 ## 22. Related Documents
 
@@ -480,3 +482,4 @@ dist/
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - allowance·trace·scope·partial·checkpoint·보안 검증
 - **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - 상태 전이·context·partial·checkpoint·보안 검증
 - **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - 24 QA·결정성·오류·추적성·보안 검증
+- **QA_Validation**: [OPS-IMPL-01 계약 보고서](../05_QA_Validation/14_OPS_IMPL_01_CONTRACT_REPORT.md) - operations model·Schema·상태 validator 검증

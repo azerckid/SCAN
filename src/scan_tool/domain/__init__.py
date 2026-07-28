@@ -8,6 +8,11 @@ from scan_tool.domain.analysis_result import (
     Classification,
     EvidenceType,
 )
+from scan_tool.domain.operations import (
+    OperationsDocument,
+    StateEntity,
+    StateTransition,
+)
 from scan_tool.domain.validation import (
     ContractViolation,
     validate_analysis_error,
@@ -15,6 +20,8 @@ from scan_tool.domain.validation import (
     validate_analysis_pair,
     validate_analysis_request,
     validate_analysis_result,
+    validate_operations_document,
+    validate_state_transition,
 )
 
 __all__ = [
@@ -27,9 +34,14 @@ __all__ = [
     "ContractViolation",
     "ErrorCode",
     "EvidenceType",
+    "OperationsDocument",
+    "StateEntity",
+    "StateTransition",
     "validate_analysis_error",
     "validate_analysis_id",
     "validate_analysis_pair",
     "validate_analysis_request",
     "validate_analysis_result",
+    "validate_operations_document",
+    "validate_state_transition",
 ]

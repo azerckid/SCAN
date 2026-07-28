@@ -1,0 +1,1241 @@
+{
+  "$comment": "Cross-record references, lifecycle conditions, and state transitions require the Python operations validator.",
+  "$defs": {
+    "AIExecutionMode": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_kind": {
+          "$ref": "#/$defs/AdapterKind"
+        },
+        "affected_rule_ids": {
+          "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____1"
+        },
+        "competition_id": {
+          "pattern": "^COMP-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Competition Id",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Created At",
+          "type": "string"
+        },
+        "data_boundary": {
+          "$ref": "#/$defs/DataBoundary"
+        },
+        "mode_id": {
+          "pattern": "^MODE-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Mode Id",
+          "type": "string"
+        },
+        "model_id": {
+          "minLength": 1,
+          "title": "Model Id",
+          "type": "string"
+        },
+        "provider_id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]{1,63}$",
+          "title": "Provider Id",
+          "type": "string"
+        },
+        "rule_state": {
+          "$ref": "#/$defs/AIRuleState"
+        },
+        "rules_snapshot_ref": {
+          "minLength": 1,
+          "title": "Rules Snapshot Ref",
+          "type": "string"
+        },
+        "tool_mode": {
+          "$ref": "#/$defs/AIToolMode"
+        }
+      },
+      "required": [
+        "mode_id",
+        "competition_id",
+        "adapter_kind",
+        "data_boundary",
+        "tool_mode",
+        "rule_state",
+        "affected_rule_ids",
+        "rules_snapshot_ref",
+        "created_at"
+      ],
+      "title": "AIExecutionMode",
+      "type": "object"
+    },
+    "AIRuleState": {
+      "enum": [
+        "allowed",
+        "rules_gated",
+        "rule_restricted"
+      ],
+      "title": "AIRuleState",
+      "type": "string"
+    },
+    "AIToolMode": {
+      "enum": [
+        "planning_only",
+        "planning_and_approved_tools"
+      ],
+      "title": "AIToolMode",
+      "type": "string"
+    },
+    "ActorType": {
+      "enum": [
+        "operator",
+        "ai",
+        "worker",
+        "system"
+      ],
+      "title": "ActorType",
+      "type": "string"
+    },
+    "AdapterKind": {
+      "enum": [
+        "fake_qa",
+        "local",
+        "external"
+      ],
+      "title": "AdapterKind",
+      "type": "string"
+    },
+    "AnalysisType": {
+      "enum": [
+        "dex_swap",
+        "auth_consumption",
+        "address_freeze"
+      ],
+      "title": "AnalysisType",
+      "type": "string"
+    },
+    "CandidateRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "answer_format": {
+          "minLength": 1,
+          "title": "Answer Format",
+          "type": "string"
+        },
+        "answer_value": {
+          "minLength": 1,
+          "title": "Answer Value",
+          "type": "string"
+        },
+        "candidate_id": {
+          "pattern": "^CAND-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "integer"
+        },
+        "confidence_basis": {
+          "minLength": 1,
+          "title": "Confidence Basis",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by_job_id": {
+          "pattern": "^JOB-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Created By Job Id",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____5"
+        },
+        "problem_id": {
+          "pattern": "^PROB-[A-Z0-9][A-Z0-9-]{1,63}$",
+          "title": "Problem Id",
+          "type": "string"
+        },
+        "recommendation": {
+          "$ref": "#/$defs/Recommendation"
+        },
+        "result_refs": {
+          "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____4"
+        },
+        "status": {
+          "$ref": "#/$defs/CandidateStatus"
+        },
+        "uncertainties": {
+          "$ref": "#/$defs/UniqueList_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata__MinLen_min_length_1_____AfterValidator__"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "verification_refs": {
+          "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____6"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "problem_id",
+        "answer_format",
+        "answer_value",
+        "status",
+        "result_refs",
+        "evidence_refs",
+        "verification_refs",
+        "confidence",
+        "confidence_basis",
+        "uncertainties",
+        "recommendation",
+        "created_by_job_id",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "CandidateRecord",
+      "type": "object"
+    },
+    "CandidateStatus": {
+      "enum": [
+        "draft",
+        "review_required",
+        "submission_ready",
+        "submitted",
+        "rejected"
+      ],
+      "title": "CandidateStatus",
+      "type": "string"
+    },
+    "CompetitionEnvironment": {
+      "enum": [
+        "live",
+        "synthetic_test"
+      ],
+      "title": "CompetitionEnvironment",
+      "type": "string"
+    },
+    "CompetitionManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "competition_id": {
+          "pattern": "^COMP-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Competition Id",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Created At",
+          "type": "string"
+        },
+        "environment": {
+          "$ref": "#/$defs/CompetitionEnvironment"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "operations_schema_version": {
+          "const": "0.1",
+          "title": "Operations Schema Version",
+          "type": "string"
+        },
+        "phase": {
+          "$ref": "#/$defs/CompetitionPhase"
+        },
+        "rules_snapshot_ref": {
+          "minLength": 1,
+          "title": "Rules Snapshot Ref",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CompetitionStatus"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "competition_id",
+        "operations_schema_version",
+        "name",
+        "phase",
+        "environment",
+        "rules_snapshot_ref",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "CompetitionManifest",
+      "type": "object"
+    },
+    "CompetitionPhase": {
+      "enum": [
+        "qualifier",
+        "final"
+      ],
+      "title": "CompetitionPhase",
+      "type": "string"
+    },
+    "CompetitionStatus": {
+      "enum": [
+        "setup",
+        "active",
+        "paused",
+        "closed"
+      ],
+      "title": "CompetitionStatus",
+      "type": "string"
+    },
+    "DataBoundary": {
+      "enum": [
+        "synthetic_only",
+        "local_only",
+        "redacted_external",
+        "approved_problem_data"
+      ],
+      "title": "DataBoundary",
+      "type": "string"
+    },
+    "JobRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "analysis_id": {
+          "pattern": "^AN-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Analysis Id",
+          "type": "string"
+        },
+        "assigned_worker_id": {
+          "pattern": "^WORKER-[A-Z0-9][A-Z0-9-]{1,63}$",
+          "title": "Assigned Worker Id",
+          "type": "string"
+        },
+        "attempt": {
+          "minimum": 0,
+          "title": "Attempt",
+          "type": "integer"
+        },
+        "checkpoint_ref": {
+          "minLength": 1,
+          "title": "Checkpoint Ref",
+          "type": "string"
+        },
+        "error_code": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Error Code",
+          "type": "string"
+        },
+        "finished_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Finished At",
+          "type": "string"
+        },
+        "idempotency_key": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "job_id": {
+          "pattern": "^JOB-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Job Id",
+          "type": "string"
+        },
+        "job_type": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Job Type",
+          "type": "string"
+        },
+        "max_attempts": {
+          "minimum": 1,
+          "title": "Max Attempts",
+          "type": "integer"
+        },
+        "plan_id": {
+          "pattern": "^PLAN-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/$defs/ProblemPriority"
+        },
+        "problem_id": {
+          "pattern": "^PROB-[A-Z0-9][A-Z0-9-]{1,63}$",
+          "title": "Problem Id",
+          "type": "string"
+        },
+        "queued_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Queued At",
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/$defs/JobRole"
+        },
+        "started_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/JobStatus"
+        }
+      },
+      "required": [
+        "job_id",
+        "problem_id",
+        "plan_id",
+        "role",
+        "job_type",
+        "status",
+        "priority",
+        "idempotency_key",
+        "attempt",
+        "max_attempts",
+        "queued_at"
+      ],
+      "title": "JobRecord",
+      "type": "object"
+    },
+    "JobRole": {
+      "enum": [
+        "planner",
+        "evidence",
+        "verifier",
+        "reporter"
+      ],
+      "title": "JobRole",
+      "type": "string"
+    },
+    "JobStatus": {
+      "enum": [
+        "queued",
+        "running",
+        "waiting",
+        "complete",
+        "partial",
+        "failed",
+        "cancelled"
+      ],
+      "title": "JobStatus",
+      "type": "string"
+    },
+    "JsonValue": {},
+    "LeafJobSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "analysis_type": {
+          "$ref": "#/$defs/AnalysisType"
+        },
+        "depends_on": {
+          "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____2"
+        },
+        "expected_output": {
+          "minLength": 1,
+          "title": "Expected Output",
+          "type": "string"
+        },
+        "inputs_projection": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Inputs Projection",
+          "type": "object"
+        },
+        "leaf_job_id": {
+          "pattern": "^JOB-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Leaf Job Id",
+          "type": "string"
+        },
+        "purpose": {
+          "minLength": 1,
+          "title": "Purpose",
+          "type": "string"
+        },
+        "required_capabilities": {
+          "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____3"
+        },
+        "role": {
+          "$ref": "#/$defs/JobRole"
+        }
+      },
+      "required": [
+        "leaf_job_id",
+        "role",
+        "purpose",
+        "analysis_type",
+        "inputs_projection",
+        "depends_on",
+        "required_capabilities",
+        "expected_output"
+      ],
+      "title": "LeafJobSpec",
+      "type": "object"
+    },
+    "NonEmptyUniqueList_Annotated_str__StringConstraints__": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9_]{1,63}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "OperationError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/OperationErrorCode"
+        },
+        "details": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Details",
+          "type": "object"
+        },
+        "error_id": {
+          "pattern": "^OERR-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Error Id",
+          "type": "string"
+        },
+        "job_id": {
+          "pattern": "^JOB-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Job Id",
+          "type": "string"
+        },
+        "message": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "problem_id": {
+          "pattern": "^PROB-[A-Z0-9][A-Z0-9-]{1,63}$",
+          "title": "Problem Id",
+          "type": "string"
+        },
+        "retryable": {
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "stage": {
+          "$ref": "#/$defs/OperationErrorStage"
+        }
+      },
+      "required": [
+        "error_id",
+        "code",
+        "message",
+        "stage",
+        "retryable",
+        "details"
+      ],
+      "title": "OperationError",
+      "type": "object"
+    },
+    "OperationErrorCode": {
+      "enum": [
+        "invalid_operations_input",
+        "rules_gated",
+        "rule_restricted",
+        "planner_failed",
+        "dependency_cycle",
+        "budget_exhausted",
+        "evidence_worker_failed",
+        "verification_failed",
+        "submission_record_failed"
+      ],
+      "title": "OperationErrorCode",
+      "type": "string"
+    },
+    "OperationErrorStage": {
+      "enum": [
+        "operations_input",
+        "ai_mode_policy",
+        "planner",
+        "scheduler",
+        "evidence_worker",
+        "verification",
+        "submission_record"
+      ],
+      "title": "OperationErrorStage",
+      "type": "string"
+    },
+    "OperationEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "minLength": 1,
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "actor_type": {
+          "$ref": "#/$defs/ActorType"
+        },
+        "competition_id": {
+          "pattern": "^COMP-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Competition Id",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Created At",
+          "type": "string"
+        },
+        "entity_id": {
+          "minLength": 1,
+          "title": "Entity Id",
+          "type": "string"
+        },
+        "entity_type": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Entity Type",
+          "type": "string"
+        },
+        "event_id": {
+          "pattern": "^OEV-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "from_status": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "From Status",
+          "type": "string"
+        },
+        "problem_id": {
+          "pattern": "^PROB-[A-Z0-9][A-Z0-9-]{1,63}$",
+          "title": "Problem Id",
+          "type": "string"
+        },
+        "safe_details_json": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Safe Details Json",
+          "type": "object"
+        },
+        "to_status": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "To Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "competition_id",
+        "entity_type",
+        "entity_id",
+        "event_type",
+        "actor_type",
+        "actor_id",
+        "safe_details_json",
+        "created_at"
+      ],
+      "title": "OperationEvent",
+      "type": "object"
+    },
+    "OperationsContractBundle": {
+      "additionalProperties": false,
+      "description": "Versioned public export containing operations records and safe errors.",
+      "properties": {
+        "$schema": {
+          "pattern": "operations-contract\\.schema\\.json$",
+          "title": "$Schema",
+          "type": "string"
+        },
+        "ai_modes": {
+          "items": {
+            "$ref": "#/$defs/AIExecutionMode"
+          },
+          "title": "Ai Modes",
+          "type": "array"
+        },
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/CandidateRecord"
+          },
+          "title": "Candidates",
+          "type": "array"
+        },
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/OperationError"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "events": {
+          "items": {
+            "$ref": "#/$defs/OperationEvent"
+          },
+          "title": "Events",
+          "type": "array"
+        },
+        "jobs": {
+          "items": {
+            "$ref": "#/$defs/JobRecord"
+          },
+          "title": "Jobs",
+          "type": "array"
+        },
+        "manifest": {
+          "$ref": "#/$defs/CompetitionManifest"
+        },
+        "operations_schema_version": {
+          "const": "0.1",
+          "title": "Operations Schema Version",
+          "type": "string"
+        },
+        "plans": {
+          "items": {
+            "$ref": "#/$defs/PlanHypothesis"
+          },
+          "title": "Plans",
+          "type": "array"
+        },
+        "problems": {
+          "items": {
+            "$ref": "#/$defs/ProblemRecord"
+          },
+          "title": "Problems",
+          "type": "array"
+        },
+        "submissions": {
+          "items": {
+            "$ref": "#/$defs/SubmissionRecord"
+          },
+          "title": "Submissions",
+          "type": "array"
+        },
+        "verifications": {
+          "items": {
+            "$ref": "#/$defs/VerificationRecord"
+          },
+          "title": "Verifications",
+          "type": "array"
+        }
+      },
+      "required": [
+        "$schema",
+        "operations_schema_version",
+        "manifest",
+        "problems",
+        "ai_modes",
+        "plans",
+        "jobs",
+        "verifications",
+        "candidates",
+        "submissions",
+        "events",
+        "errors"
+      ],
+      "title": "OperationsContractBundle",
+      "type": "object"
+    },
+    "PlanHypothesis": {
+      "additionalProperties": false,
+      "properties": {
+        "assumptions": {
+          "$ref": "#/$defs/UniqueList_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata__MinLen_min_length_1_____AfterValidator__"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Created At",
+          "type": "string"
+        },
+        "decided_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Decided At",
+          "type": "string"
+        },
+        "leaf_job_specs": {
+          "items": {
+            "$ref": "#/$defs/LeafJobSpec"
+          },
+          "title": "Leaf Job Specs",
+          "type": "array"
+        },
+        "method_hypothesis": {
+          "minLength": 1,
+          "title": "Method Hypothesis",
+          "type": "string"
+        },
+        "missing_inputs": {
+          "$ref": "#/$defs/UniqueList_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata__MinLen_min_length_1_____AfterValidator__"
+        },
+        "mode_id": {
+          "pattern": "^MODE-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Mode Id",
+          "type": "string"
+        },
+        "plan_id": {
+          "pattern": "^PLAN-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "planner_job_id": {
+          "pattern": "^JOB-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Planner Job Id",
+          "type": "string"
+        },
+        "problem_id": {
+          "pattern": "^PROB-[A-Z0-9][A-Z0-9-]{1,63}$",
+          "title": "Problem Id",
+          "type": "string"
+        },
+        "problem_type_hypothesis": {
+          "minLength": 1,
+          "title": "Problem Type Hypothesis",
+          "type": "string"
+        },
+        "raw_output_artifact": {
+          "pattern": "^artifact://sha256/[a-f0-9]{64}$",
+          "title": "Raw Output Artifact",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/PlanStatus"
+        }
+      },
+      "required": [
+        "plan_id",
+        "problem_id",
+        "mode_id",
+        "planner_job_id",
+        "status",
+        "problem_type_hypothesis",
+        "method_hypothesis",
+        "assumptions",
+        "missing_inputs",
+        "leaf_job_specs",
+        "created_at"
+      ],
+      "title": "PlanHypothesis",
+      "type": "object"
+    },
+    "PlanStatus": {
+      "enum": [
+        "rules_gated",
+        "proposed",
+        "approved",
+        "rejected",
+        "superseded"
+      ],
+      "title": "PlanStatus",
+      "type": "string"
+    },
+    "PrioritySource": {
+      "enum": [
+        "human",
+        "derived"
+      ],
+      "title": "PrioritySource",
+      "type": "string"
+    },
+    "ProblemPriority": {
+      "enum": [
+        "critical",
+        "high",
+        "normal",
+        "deferred"
+      ],
+      "title": "ProblemPriority",
+      "type": "string"
+    },
+    "ProblemRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "active_plan_id": {
+          "pattern": "^PLAN-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Active Plan Id",
+          "type": "string"
+        },
+        "answer_format": {
+          "minLength": 1,
+          "title": "Answer Format",
+          "type": "string"
+        },
+        "competition_id": {
+          "pattern": "^COMP-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Competition Id",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Created At",
+          "type": "string"
+        },
+        "original_text_artifact": {
+          "pattern": "^artifact://sha256/[a-f0-9]{64}$",
+          "title": "Original Text Artifact",
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/$defs/ProblemPriority"
+        },
+        "priority_source": {
+          "$ref": "#/$defs/PrioritySource"
+        },
+        "problem_id": {
+          "pattern": "^PROB-[A-Z0-9][A-Z0-9-]{1,63}$",
+          "title": "Problem Id",
+          "type": "string"
+        },
+        "provided_file_artifacts": {
+          "items": {
+            "$ref": "#/$defs/ProvidedFileArtifact"
+          },
+          "title": "Provided File Artifacts",
+          "type": "array"
+        },
+        "provided_urls": {
+          "$ref": "#/$defs/UniqueList_AnyUrl_"
+        },
+        "score": {
+          "minimum": 0,
+          "title": "Score",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/ProblemStatus"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "problem_id",
+        "competition_id",
+        "title",
+        "original_text_artifact",
+        "provided_urls",
+        "provided_file_artifacts",
+        "score",
+        "answer_format",
+        "priority",
+        "priority_source",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "ProblemRecord",
+      "type": "object"
+    },
+    "ProblemStatus": {
+      "enum": [
+        "captured",
+        "triaged",
+        "queued",
+        "running",
+        "partial",
+        "verifying",
+        "review_required",
+        "submission_ready",
+        "submitted"
+      ],
+      "title": "ProblemStatus",
+      "type": "string"
+    },
+    "ProvidedFileArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "filename": {
+          "minLength": 1,
+          "title": "Filename",
+          "type": "string"
+        },
+        "media_type": {
+          "minLength": 1,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "filename",
+        "sha256",
+        "media_type"
+      ],
+      "title": "ProvidedFileArtifact",
+      "type": "object"
+    },
+    "Recommendation": {
+      "enum": [
+        "hold",
+        "investigate",
+        "submit"
+      ],
+      "title": "Recommendation",
+      "type": "string"
+    },
+    "SubmissionRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "pattern": "^CAND-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "note_artifact": {
+          "pattern": "^artifact://sha256/[a-f0-9]{64}$",
+          "title": "Note Artifact",
+          "type": "string"
+        },
+        "operator_confirmed": {
+          "const": true,
+          "title": "Operator Confirmed",
+          "type": "boolean"
+        },
+        "response": {
+          "$ref": "#/$defs/SubmissionResponse"
+        },
+        "submission_id": {
+          "pattern": "^SUB-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Submission Id",
+          "type": "string"
+        },
+        "submitted_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Submitted At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "submission_id",
+        "candidate_id",
+        "operator_confirmed",
+        "response",
+        "submitted_at"
+      ],
+      "title": "SubmissionRecord",
+      "type": "object"
+    },
+    "SubmissionResponse": {
+      "enum": [
+        "correct",
+        "incorrect",
+        "unknown"
+      ],
+      "title": "SubmissionResponse",
+      "type": "string"
+    },
+    "UniqueList_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata__MinLen_min_length_1_____AfterValidator__": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "UniqueList_AnyUrl_": {
+      "items": {
+        "format": "uri",
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "VerificationCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "check": {
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "title": "Check",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____5"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "result_refs": {
+          "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____4"
+        }
+      },
+      "required": [
+        "check",
+        "passed",
+        "result_refs",
+        "evidence_refs"
+      ],
+      "title": "VerificationCheck",
+      "type": "object"
+    },
+    "VerificationRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "pattern": "^CAND-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "check_results": {
+          "items": {
+            "$ref": "#/$defs/VerificationCheck"
+          },
+          "title": "Check Results",
+          "type": "array"
+        },
+        "conflicts": {
+          "$ref": "#/$defs/UniqueList_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata__MinLen_min_length_1_____AfterValidator__"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Created At",
+          "type": "string"
+        },
+        "finished_at": {
+          "format": "date-time",
+          "pattern": "Z$",
+          "title": "Finished At",
+          "type": "string"
+        },
+        "independent_from_job_ids": {
+          "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____2"
+        },
+        "missing_evidence": {
+          "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____5"
+        },
+        "problem_id": {
+          "pattern": "^PROB-[A-Z0-9][A-Z0-9-]{1,63}$",
+          "title": "Problem Id",
+          "type": "string"
+        },
+        "required_checks": {
+          "$ref": "#/$defs/NonEmptyUniqueList_Annotated_str__StringConstraints__"
+        },
+        "status": {
+          "$ref": "#/$defs/VerificationStatus"
+        },
+        "verification_id": {
+          "pattern": "^VER-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Verification Id",
+          "type": "string"
+        },
+        "verifier_job_id": {
+          "pattern": "^JOB-[A-Z0-9][A-Z0-9-]{2,63}$",
+          "title": "Verifier Job Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "verification_id",
+        "problem_id",
+        "candidate_id",
+        "verifier_job_id",
+        "status",
+        "required_checks",
+        "check_results",
+        "independent_from_job_ids",
+        "conflicts",
+        "missing_evidence",
+        "created_at"
+      ],
+      "title": "VerificationRecord",
+      "type": "object"
+    },
+    "VerificationStatus": {
+      "enum": [
+        "queued",
+        "running",
+        "pass",
+        "fail",
+        "conflict",
+        "incomplete"
+      ],
+      "title": "VerificationStatus",
+      "type": "string"
+    },
+    "scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____1": {
+      "items": {
+        "pattern": "^RULE-[A-Z0-9-]+$",
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____2": {
+      "items": {
+        "pattern": "^JOB-[A-Z0-9][A-Z0-9-]{2,63}$",
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____3": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9_]{1,63}$",
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____4": {
+      "items": {
+        "pattern": "^RES-[A-Z0-9][A-Z0-9-]{2,127}$",
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____5": {
+      "items": {
+        "pattern": "^EV-[A-Z0-9][A-Z0-9-]{2,127}$",
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____6": {
+      "items": {
+        "pattern": "^VER-[A-Z0-9][A-Z0-9-]{2,63}$",
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "$id": "https://scan.local/schemas/operations-contract.schema.json",
+  "$ref": "#/$defs/OperationsContractBundle",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Validation entry point for the operations public contract.",
+  "title": "SCAN Operations Contract 0.1"
+}

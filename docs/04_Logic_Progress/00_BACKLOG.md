@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 11:53
-> Status: TASK-001~009 Approved/Done · TASK-010 Pre-Code Brief Approved · Implementation ToDo
+> Last Updated: 2026-07-28 12:20
+> Status: TASK-001~009 Done · TASK-010 OPS-IMPL-01 Done · OPS-IMPL-02~08 ToDo
 
 ## 1. 문서 목적
 
@@ -548,15 +548,16 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 
 ### [ ] TASK-010: AI-native Rules-gated 병렬 문제풀이 Operations 구현
 
-- Status: ToDo · Rules-Gated · Separate Approval Required
+- Status: Partial Implementation · OPS-IMPL-01 Done · Rules-Gated
 - Priority: Tournament Operations · Conditional
-- Depends On: TASK-005, TASK-009, 공식 Rules 확인, Operations Board Preview 승인
+- Depends On: TASK-005, TASK-009, Operations Board Preview 승인;
+  live AI mode만 공식 Rules 확인 필요
 - Requirement IDs: `REQ-OPS-IN-001`~`REQ-OPS-IN-004`,
   `REQ-OPS-QUEUE-001`~`REQ-OPS-QUEUE-006`,
   `REQ-OPS-VERIFY-001`~`REQ-OPS-VERIFY-006`,
   `REQ-OPS-SUBMIT-001`~`REQ-OPS-SUBMIT-004`
 - Atomic Tasks:
-  - [ ] problem·job·analysis·verification·candidate ID와 상태 model을 정의한다.
+  - [x] problem·job·analysis·verification·candidate ID와 상태 model을 정의한다.
   - [ ] AI Planner/Coordinator를 모든 문제의 필수 planning 단계로 구현한다.
   - [ ] Rules Gate가 AI 사용 여부가 아니라 provider·model·data·tool mode를 선택하게 한다.
   - [ ] AI가 해결 방법·leaf dependency·도구 계획을 구조화된 hypothesis로 생성하게 한다.
@@ -604,7 +605,8 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [ ] live job·provider·AI worker concurrency budget을 측정·승인했다.
   - [x] loading·empty·partial·failed·stale·rules unavailable 상태를 확인했다.
   - [x] CTFd credential·자동 제출·brute force가 범위 밖임을 확인했다.
-  - [ ] `TASK-010` 구현 착수를 별도로 승인받았다.
+  - [x] `OPS-IMPL-01` 구현 착수를 별도로 승인받았다.
+  - [ ] 후속 `OPS-IMPL-02` 구현 착수를 별도로 승인받았다.
 - Acceptance Criteria:
   - [ ] 두 개 이상의 문제를 동시에 처리하며 상태·결과·candidate가 격리된다.
   - [ ] 모든 문제에 AI method hypothesis와 승인된 leaf job plan이 존재한다.

@@ -8,6 +8,7 @@ from scan_tool.domain._types import AnalysisId
 from scan_tool.domain.analysis_error import AnalysisError, ErrorCode
 from scan_tool.domain.analysis_request import AnalysisRequest
 from scan_tool.domain.analysis_result import AnalysisResult
+from scan_tool.domain.operations import OperationsDocument, StateTransition
 
 
 class ContractViolation(ValueError):
@@ -56,6 +57,28 @@ def validate_analysis_error(data: object) -> AnalysisError:
     """Validate a standalone structured error."""
     try:
         return AnalysisError.model_validate(data)
+    except ValidationError as error:
+        raise ContractViolation(
+            ErrorCode.SCHEMA_INVALID,
+            _redacted_issues(error),
+        ) from None
+
+
+def validate_operations_document(data: object) -> OperationsDocument:
+    """Validate the OPS-IMPL-01 public contract and cross-record invariants."""
+    try:
+        return OperationsDocument.model_validate(data)
+    except ValidationError as error:
+        raise ContractViolation(
+            ErrorCode.SCHEMA_INVALID,
+            _redacted_issues(error),
+        ) from None
+
+
+def validate_state_transition(data: object) -> StateTransition:
+    """Validate one operations entity state transition."""
+    try:
+        return StateTransition.model_validate(data)
     except ValidationError as error:
         raise ContractViolation(
             ErrorCode.SCHEMA_INVALID,
