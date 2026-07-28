@@ -503,7 +503,7 @@ source·security 범위와 세 regression 시나리오를 닫아 전체 24개를
   - 깨진 상대 링크·중복 TASK·QA ID가 0건이다.
   - DEX·AUTH·FREEZE hardcode 값이 fixture와 일치한다.
   - 구현 변경 시 관련 Concept·UI·Technical·QA 문서가 동기화된다.
-- **Result**: `pass` — docs 상대 링크 674개, 고유 TASK ID 10개, 고유 QA ID
+- **Result**: `pass` — docs 상대 링크 692개, 고유 TASK ID 10개, 고유 QA ID
   24개와 DEX·AUTH·FREEZE fixture→analysis mapping 3개를 자동 검증했다.
 
 ## 11. 365 글로벌 평가 기준

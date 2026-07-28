@@ -20,10 +20,19 @@ def _result_values(name: str) -> dict[str, dict[str, object]]:
     return {item["result_type"]: item["value"] for item in document["results"]}  # type: ignore[index]
 
 
-def _assert_subset(expected: dict[str, object], actual: dict[str, object]) -> None:
-    for key, value in expected.items():
-        if key in actual:
-            assert actual[key] == value, f"{key} differs: {actual[key]!r} != {value!r}"
+def _assert_fields_equal(
+    expected: dict[str, object],
+    actual: dict[str, object],
+    fields: tuple[str, ...],
+) -> None:
+    missing_expected = tuple(field for field in fields if field not in expected)
+    missing_actual = tuple(field for field in fields if field not in actual)
+    assert not missing_expected, f"expected fixture fields are missing: {missing_expected}"
+    assert not missing_actual, f"analysis result fields are missing: {missing_actual}"
+    for field in fields:
+        assert actual[field] == expected[field], (
+            f"{field} differs: {actual[field]!r} != {expected[field]!r}"
+        )
 
 
 def check_links() -> int:
@@ -52,13 +61,30 @@ def check_ids() -> tuple[int, int]:
 def check_fixture_values() -> None:
     dex_expected = _load("docs/05_QA_Validation/fixtures/FX-SVC-DEX-001/expected.json")
     dex = _result_values("dex")
-    _assert_subset(dex_expected["asset_in"], dex["asset_in"])  # type: ignore[arg-type,index]
-    _assert_subset(dex_expected["pool_output"], dex["pool_output"])  # type: ignore[arg-type,index]
-    _assert_subset(dex_expected["user_net_output"], dex["user_net_output"])  # type: ignore[arg-type,index]
+    asset_fields = ("token_address", "symbol", "decimals", "amount_raw")
+    _assert_fields_equal(  # type: ignore[arg-type,index]
+        dex_expected["asset_in"],
+        dex["asset_in"],
+        asset_fields,
+    )
+    _assert_fields_equal(  # type: ignore[arg-type,index]
+        dex_expected["pool_output"],
+        dex["pool_output"],
+        asset_fields,
+    )
+    _assert_fields_equal(  # type: ignore[arg-type,index]
+        dex_expected["user_net_output"],
+        dex["user_net_output"],
+        (*asset_fields, "asset_type", "from", "to"),
+    )
 
     auth_expected = _load("docs/05_QA_Validation/fixtures/FX-EVM-AUTH-001/expected.json")
     auth = _result_values("auth")
-    _assert_subset(auth_expected["approval"], auth["approval"])  # type: ignore[arg-type,index]
+    _assert_fields_equal(  # type: ignore[arg-type,index]
+        auth_expected["approval"],
+        auth["approval"],
+        ("type", "owner", "spender", "amount_raw"),
+    )
     allowance = auth_expected["allowance"]  # type: ignore[assignment]
     assert auth["allowance_lifecycle"] == {
         "before_approval_raw": allowance["before_approval"]["amount_raw"],  # type: ignore[index]
@@ -67,9 +93,10 @@ def check_fixture_values() -> None:
         "after_consumption_raw": allowance["after_consumption"]["amount_raw"],  # type: ignore[index]
         "consumed_delta_raw": allowance["consumed_delta_raw"],  # type: ignore[index]
     }
-    _assert_subset(
+    _assert_fields_equal(
         auth_expected["consumption"],  # type: ignore[arg-type,index]
         auth["authorization_consumption"],
+        ("method", "from", "to", "amount_raw"),
     )
     assert auth["theft_or_phishing_attribution"]["theft_or_phishing_claim"] is False
 
@@ -93,9 +120,10 @@ def check_fixture_values() -> None:
     assert scope["ofac_address_specific"] is True
     assert scope["current_sanctions_status"] == "not_assessed"
     assert scope["criminal_intent"] == "not_assessed"
-    _assert_subset(
-        scope["global_pause"],  # type: ignore[arg-type]
+    _assert_fields_equal(
         freeze_expected["token_pause"],  # type: ignore[arg-type,index]
+        scope["global_pause"],  # type: ignore[arg-type]
+        ("applicable",),
     )
 
 
