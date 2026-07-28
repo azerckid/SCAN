@@ -1,6 +1,6 @@
 # TASK-010 Pre-Code Technical Brief
 > Created: 2026-07-28 11:28
-> Last Updated: 2026-07-28 13:31
+> Last Updated: 2026-07-28 13:45
 > Status: Approved 1.2 · OPS-IMPL-01~02 Implemented · Rules-Gated
 
 ## 1. 문서 목적
@@ -356,6 +356,7 @@ Problem을 `triaged`로 올리는 것은 구조화 plan이 생성된 뒤다.
 | `verification_checks` | 필수 check 결과 |
 | `submissions` | 사람 제출 결과 기록 |
 | `operation_events` | append-only audit |
+| `operation_errors` | 공개 계약의 safe operations error 보존 |
 
 ### 7.2 기존 v1 연결
 
@@ -577,7 +578,7 @@ cross-record·lifecycle·상태 전이는 Python validator가 규범이다.
 | 단위 | 범위 | 완료 증거 |
 |:---|:---|:---|
 | `OPS-IMPL-01` | operations domain model·공개 Schema·state validator | **Done** · 29 unit tests + 17 runtime/Schema probes |
-| `OPS-IMPL-02` | SQLite v2 additive migration·repository·event log | **Done** · 8 integration tests + 전체 170 tests |
+| `OPS-IMPL-02` | SQLite v2 additive migration·repository·event log | **Done** · 10 integration tests + 전체 172 tests |
 | `OPS-IMPL-03` | Planner port·fake QA adapter·AI mode Gate | QA-OPS-RULE-001 offline |
 | `OPS-IMPL-04` | bounded Queue·dependency·isolation·dedup | QA-OPS-PAR/INTRA-001 |
 | `OPS-IMPL-05` | DEX·AUTH·FREEZE evidence worker adapter | Analysis I/O pair·artifact link |

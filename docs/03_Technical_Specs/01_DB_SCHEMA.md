@@ -1,6 +1,6 @@
 # SCAN 2026 SQLite 논리 DB Schema
 > Created: 2026-07-27 15:52
-> Last Updated: 2026-07-28 13:31
+> Last Updated: 2026-07-28 13:45
 > Status: Approved 1.3 · SQLite Schema Version 2 · OPS-IMPL-02 Applied
 
 ## 1. 문서 목적
@@ -294,6 +294,34 @@ event evidence에는 calldata를 섞지 않고 call evidence로 분리한다. co
 | `created_at` | 예 | 생성 시각 |
 
 한 run의 JSON과 Markdown은 같은 result·evidence ID와 값을 사용해야 한다.
+
+### 5.11 Operations v2 신규 엔티티
+
+`OPS-IMPL-02`는 v1 엔티티를 유지하면서 다음 15개 `STRICT` table을
+additive migration으로 추가한다.
+
+| 테이블 | PK·핵심 FK | 책임 |
+|:---|:---|:---|
+| `competitions` | `competition_id` | 운영 세션·Rules snapshot |
+| `operation_ai_modes` | `mode_id`, competition FK | immutable provider/model/data/tool mode |
+| `problems` | `problem_id`, competition·active plan FK | 문제 metadata·상태 |
+| `problem_artifacts` | problem·artifact FK | 원문·첨부 artifact 역할 |
+| `plans` | `plan_id`, problem·mode·planner job FK | AI 방법 가설·승인 상태 |
+| `jobs` | `job_id`, problem·plan·analysis FK | worker 실행·idempotency·Analysis 연결 |
+| `job_dependencies` | job·dependency FK | 문제 내부 leaf DAG |
+| `problem_analysis_links` | problem·analysis·job FK | problem→Analysis I/O run 역할 |
+| `candidates` | `candidate_id`, problem·creator job FK | 답 후보·불확실성·추천 |
+| `candidate_result_links` | candidate·analysis FK | candidate→v1 result/evidence ID |
+| `verifications` | `verification_id`, candidate·verifier job FK | 독립 검증 수명주기 |
+| `verification_checks` | verification FK | 필수 check 결과·evidence 참조 |
+| `submissions` | `submission_id`, candidate·artifact FK | 사람 제출 결과 기록 |
+| `operation_events` | `event_id`, competition·problem FK | update/delete가 금지된 append-only audit |
+| `operation_errors` | `error_id`, competition·problem·job FK | 안전한 운영 오류 기록 |
+
+순환 관계인 active plan·planner job은 같은 transaction 안에서만 완성되도록
+deferred FK를 사용한다. `candidate_result_links.ref_id`는 result/evidence
+polymorphic ID이므로 repository가 v1 row를 조회해 실제 `analysis_id`와 함께
+저장한다.
 
 ## 6. 관계·삭제·mutation 경계
 

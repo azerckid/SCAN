@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-28 13:31
+> Last Updated: 2026-07-28 13:45
 > Status: Approved 2.0 · TASK-009 Done · TASK-010 OPS-IMPL-01~02 Done
 
 ## 1. 문서 목적
@@ -88,7 +88,7 @@
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
 | [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~009 Done · TASK-010 OPS-IMPL-01~02 Done | 후속 OPS-IMPL-03~08 별도 승인 |
-| 이 문서 | Approved 1.9 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
+| 이 문서 | Approved 2.0 | 승인 기준선 유지; 이후 Milestone 상태만 갱신 |
 | `01_EXECUTION_PLAN.md` | 조건부 미작성 | 구현 일정이 필요할 때 Backlog를 날짜·담당자로 전환 |
 | `02_ROADMAP_BACKLOG_SYNC.md` | 조건부 미작성 | 구현 시작 전 Roadmap↔Backlog 상태 동기화 규칙 작성 |
 

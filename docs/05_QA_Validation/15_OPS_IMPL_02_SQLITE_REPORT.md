@@ -1,6 +1,6 @@
 # OPS-IMPL-02 SQLite v2 검증 보고서
 > Created: 2026-07-28 13:31
-> Last Updated: 2026-07-28 13:31
+> Last Updated: 2026-07-28 13:45
 > Status: Passed · Offline Only · Explicit Migration
 
 ## 1. 범위
@@ -34,8 +34,9 @@ migration 순서는 다음과 같다.
 2. source `integrity_check=ok`를 확인한다.
 3. 지정한 새 경로에 backup하고 backup의 version·integrity를 확인한다.
 4. `BEGIN IMMEDIATE` transaction에서 신규 DDL만 실행한다.
-5. `foreign_key_check` 후 `user_version=2`를 commit한다.
-6. 실패하면 전체 DDL과 version 변경을 rollback한다.
+5. 같은 transaction에서 `user_version=2`를 설정한다.
+6. `foreign_key_check`가 통과하면 DDL과 version 변경을 함께 commit한다.
+7. 실패하면 전체 DDL과 version 변경을 rollback한다.
 
 backup 경로가 source와 같거나 이미 존재하면 migration 전에 거부한다. 자동
 migration, v1 table rewrite/drop, 사용자 경로 탐색은 구현하지 않았다.
@@ -62,8 +63,8 @@ API가 append만 제공하며 DB trigger도 update/delete를 거부한다.
 
 | 검증 | 결과 |
 |:---|:---:|
-| OPS-IMPL-02 integration tests | PASS 8 |
-| 전체 pytest | PASS 170 |
+| OPS-IMPL-02 integration tests | PASS 10 |
+| 전체 pytest | PASS 172 |
 | fixture·Analysis I/O·generated Analysis Schema | PASS 3 / PASS 3 / PASS 3 |
 | operations contract runtime/Schema probes | PASS 17 |
 | 신규 runtime dependency | 없음 |
@@ -80,6 +81,8 @@ API가 append만 제공하며 DB trigger도 update/delete를 거부한다.
 - event ID 중복·update·delete 차단
 - backup overwrite·미지원 schema version 거부
 - canary secret의 event 저장 전 차단
+- leaf job dependency·safe operation error·problem→Analysis link 저장
+- 존재하지 않는 Analysis FK로 인한 operations transaction 전체 rollback
 
 ## 5. 잔여 Gate
 
