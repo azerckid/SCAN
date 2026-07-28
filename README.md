@@ -24,7 +24,10 @@ keeping current sanctions and criminal intent `not_assessed`. `TASK-009` closes 
 offline P0·V1 integration gate with deterministic replay, the 11-code error matrix,
 repository traceability, and security scans; all 24 P0·V1 QA scenarios pass.
 The mandatory AI Planner contract and Operations Board UI-First Gate are approved.
-`TASK-010` runtime is not implemented; its Pre-Code Technical Brief is approved.
+`OPS-IMPL-01` now implements the `TASK-010` public operations contract, generated
+JSON Schema, cross-record invariants, and state-transition validator. Planner,
+scheduler, persistence v2, live AI, and the Operations Board runtime remain
+unimplemented.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`, so external execution modes remain `rules_gated` until
 an authoritative notice is recorded.
@@ -76,17 +79,18 @@ uv run python scripts/verify.py
 ```
 
 The gate runs Ruff lint and format checks, pytest, the existing Schema validators,
-the generated-Pydantic-Schema compatibility check, and repository traceability and
-security scans.
+the Analysis I/O and Operations generated-Schema compatibility checks, and
+repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-133 passed
+154 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
-PASS repository traceability: 713 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 51 runtime/evidence files
+PASS operations contract 0.1 generated Schema and runtime agree across 12 probes
+PASS repository traceability: 720 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 53 runtime/evidence files
 ```
 
 The installed package exposes the approved TASK-005 command surface:

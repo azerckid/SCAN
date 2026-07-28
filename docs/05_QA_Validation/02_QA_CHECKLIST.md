@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-28 11:53
-> Status: Approved 2.1 · TASK-009 Integration Passed · TASK-010 Pre-Code Brief Approved
+> Last Updated: 2026-07-28 12:20
+> Status: Approved 2.2 · TASK-009 Passed · TASK-010 OPS-IMPL-01 Passed
 
 ## 1. 문서 목적
 
@@ -163,6 +163,7 @@ ID는 24개 집계에서 한 번만 센다.
 - [ ] 공식 Rules에서 AI·agent·자동화·외부 문제 데이터 전송 범위를 확인한다.
 - [x] Operations Board Preview를 사용자가 확인하고 피드백을 기록한다.
 - [x] TASK-010 Pre-Code Technical Brief의 model·mutation·SQLite v2·동시성을 승인한다.
+- [x] OPS-IMPL-01 공개 Schema·cross-record invariant·상태 전이 probe가 통과한다.
 - [ ] 문제 간 상태·result·checkpoint·candidate가 격리된다.
 - [ ] 문제 내부 leaf job dependency와 source request dedup이 일치한다.
 - [ ] provider·worker별 동시성 제한과 Queue age가 표시된다.

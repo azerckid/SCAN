@@ -1,7 +1,7 @@
 # TASK-010 Pre-Code Technical Brief
 > Created: 2026-07-28 11:28
-> Last Updated: 2026-07-28 11:53
-> Status: Approved 1.0 · Runtime Not Implemented · Rules-Gated
+> Last Updated: 2026-07-28 12:20
+> Status: Approved 1.1 · OPS-IMPL-01 Implemented · Rules-Gated
 
 ## 1. 문서 목적
 
@@ -156,6 +156,7 @@ src/scan_tool/
 | `competition_id` | 예 | 운영 세션 ID |
 | `operations_schema_version` | 예 | 운영 공개 계약 `0.1` |
 | `name`, `phase` | 예 | 대회명과 qualifier/final |
+| `environment` | 예 | live/synthetic_test, fake QA 격리 기준 |
 | `rules_snapshot_ref` | 예 | 적용 Rules Register 기준 |
 | `status` | 예 | setup/active/paused/closed |
 | `created_at`, `updated_at` | 예 | UTC RFC 3339 |
@@ -373,7 +374,7 @@ Problem을 `triaged`로 올리는 것은 구조화 plan이 생성된 뒤다.
 - v2 DB를 v1 코드로 여는 동작은 명시적 version mismatch로 실패시킨다.
 - 임시 DB에서 v1→v2와 빈 DB→v2를 모두 테스트한다.
 
-정확한 DDL은 첫 구현 단위 `OPS-IMPL-01`에서 별도 검토한다. 이 Draft 승인만으로
+정확한 DDL은 구현 단위 `OPS-IMPL-02`에서 별도 검토한다. 이 Brief 승인만으로
 사용자 `.scan/` DB를 migration하지 않는다.
 
 ## 8. AI Planner와 Rules Gate
@@ -554,7 +555,12 @@ stage를 추가로 구분하되 공개 Analysis Schema를 변경하지 않는다
 | `submission_record` | 사람 확인 누락 |
 
 operations error code의 공개 JSON Schema는 `OPS-IMPL-01`에서 model과 함께
-승인한다.
+승인한다. 구현된 공개 code는 `invalid_operations_input`, `rules_gated`,
+`rule_restricted`, `planner_failed`, `dependency_cycle`, `budget_exhausted`,
+`evidence_worker_failed`, `verification_failed`, `submission_record_failed`다.
+구조 Schema는
+[`operations-contract.schema.json`](../05_QA_Validation/schemas/operations-contract.schema.json),
+cross-record·lifecycle·상태 전이는 Python validator가 규범이다.
 
 ### 12.2 secret·데이터 경계
 
@@ -570,7 +576,7 @@ operations error code의 공개 JSON Schema는 `OPS-IMPL-01`에서 model과 함�
 
 | 단위 | 범위 | 완료 증거 |
 |:---|:---|:---|
-| `OPS-IMPL-01` | operations domain model·공개 Schema·state validator | positive/negative contract probe |
+| `OPS-IMPL-01` | operations domain model·공개 Schema·state validator | **Done** · 21 unit tests + 12 runtime/Schema probes |
 | `OPS-IMPL-02` | SQLite v2 additive migration·repository·event log | v1→v2 rollback·integrity test |
 | `OPS-IMPL-03` | Planner port·fake QA adapter·AI mode Gate | QA-OPS-RULE-001 offline |
 | `OPS-IMPL-04` | bounded Queue·dependency·isolation·dedup | QA-OPS-PAR/INTRA-001 |
@@ -603,7 +609,7 @@ Analysis I/O와 fixture 회귀는 기존 133개 테스트·Schema/fixture PASS 3
 - [x] AI adapter 단계와 data boundary를 승인했다.
 - [x] OperationsSnapshot 최소 필드를 승인했다.
 - [ ] 공식 Rules에서 실제 사용할 AI provider·model·data·tool mode를 확인했다.
-- [ ] `OPS-IMPL-01` 구현 착수를 별도로 승인했다.
+- [x] `OPS-IMPL-01` 구현 착수를 별도로 승인했다.
 
 공식 Rules가 미확정이어도 fake adapter 기반 contract·scheduler QA 구현은
 별도 승인 후 시작할 수 있다. 실제 대회 문제에 사용할 AI adapter와 external
@@ -643,3 +649,4 @@ data 전송은 `allowed` mode가 확정되기 전까지 `rules_gated`다.
 - **Logic_Progress**: [Roadmap](../04_Logic_Progress/00_ROADMAP.md) - 비차단 운영 트랙
 - **QA_Validation**: [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - 6개 수용 시나리오
 - **QA_Validation**: [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 대회 전 Gate
+- **QA_Validation**: [OPS-IMPL-01 계약 보고서](../05_QA_Validation/14_OPS_IMPL_01_CONTRACT_REPORT.md) - 공개 Schema·runtime invariant·state transition 검증
