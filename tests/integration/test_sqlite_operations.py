@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -374,3 +375,41 @@ def test_unknown_analysis_fk_rolls_back_operations_document(tmp_path: Path) -> N
         assert repository.count("competitions") == 0
         assert repository.count("jobs") == 0
         assert repository.count("operation_errors") == 0
+
+
+def test_operations_repository_records_immutable_planner_artifact(
+    tmp_path: Path,
+) -> None:
+    database = tmp_path / "scan.sqlite3"
+    initialize_operations_database(database, backup_path=tmp_path / "backup.sqlite3")
+    record = ArtifactRecord(
+        sha256="f" * 64,
+        byte_length=24,
+        media_type="application/json",
+        relative_path="artifacts/ff/" + "f" * 64,
+        artifact_kind="planner_raw_output",
+        redaction_status="checked",
+        license_status="generated",
+        created_at=datetime(2026, 7, 28, 5, tzinfo=UTC),
+    )
+
+    with SQLiteOperationsRepository(database) as repository:
+        repository.record_artifact(record)
+        repository.record_artifact(record)
+        conflicts = (
+            replace(record, byte_length=25),
+            replace(record, media_type="text/plain"),
+            replace(record, artifact_kind="other_kind"),
+            replace(record, redaction_status="not_required"),
+            replace(record, license_status="unknown"),
+        )
+        for conflicting in conflicts:
+            with pytest.raises(ValueError, match="artifact hash conflicts"):
+                repository.record_artifact(conflicting)
+
+    with sqlite3.connect(database) as connection:
+        row = connection.execute(
+            "SELECT artifact_kind, redaction_status FROM artifacts WHERE sha256 = ?",
+            (record.sha256,),
+        ).fetchone()
+        assert row == ("planner_raw_output", "checked")

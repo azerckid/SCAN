@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-28 13:31
-> Status: Approved 2.1 · TASK-001~009 · OPS-IMPL-01~02 Applied
+> Last Updated: 2026-07-28 13:55
+> Status: Approved 2.2 · TASK-001~009 · OPS-IMPL-01~03 Applied
 
 ## 1. 문서 목적
 
@@ -455,7 +455,9 @@ dist/
     cross-record 불변조건, 상태 전이 validator를 구현했다.
 18. `OPS-IMPL-02`에서 명시적 SQLite v2 migration, v1 backup·rollback,
     operations repository와 append-only event log를 구현했다.
-19. 후속 `OPS-IMPL-03`~`08`은 각각 별도 승인을 요구하며, live AI mode는
+19. `OPS-IMPL-03`에서 Planner port, synthetic fake QA adapter, provider·
+    model·data·tool mode의 pre-call Gate와 raw output artifact를 구현했다.
+20. 후속 `OPS-IMPL-04`~`08`은 각각 별도 승인을 요구하며, live AI mode는
     공식 Rules 확인 전까지 `rules_gated`다.
 
 ## 22. Related Documents
@@ -485,3 +487,4 @@ dist/
 - **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - 상태 전이·context·partial·checkpoint·보안 검증
 - **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - 24 QA·결정성·오류·추적성·보안 검증
 - **QA_Validation**: [OPS-IMPL-01 계약 보고서](../05_QA_Validation/14_OPS_IMPL_01_CONTRACT_REPORT.md) - operations model·Schema·상태 validator 검증
+- **QA_Validation**: [OPS-IMPL-03 AI Planner Gate 보고서](../05_QA_Validation/16_OPS_IMPL_03_PLANNER_REPORT.md) - fake QA·mode policy·artifact·budget·보안 검증

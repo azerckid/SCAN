@@ -12,6 +12,7 @@ from scan_tool.adapters.sqlite_storage import SCHEMA_VERSION as ANALYSIS_STORAGE
 from scan_tool.adapters.sqlite_storage import SQLiteStorage
 from scan_tool.application.security import SensitiveDataGuard
 from scan_tool.domain.operations import OperationEvent, OperationsDocument
+from scan_tool.domain.storage import ArtifactRecord
 
 OPERATIONS_STORAGE_VERSION = 2
 
@@ -372,6 +373,51 @@ class SQLiteOperationsRepository:
         self._guard.check_text(_json(payload))
         with self._connection:
             self._insert_event(payload)
+
+    def record_artifact(self, record: ArtifactRecord) -> None:
+        """Insert immutable planner artifact metadata or verify an existing hash."""
+
+        with self._connection:
+            self._connection.execute(
+                """
+                INSERT INTO artifacts(
+                    sha256, byte_length, media_type, relative_path, artifact_kind,
+                    redaction_status, license_status, source_id, retrieved_at, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(sha256) DO NOTHING
+                """,
+                (
+                    record.sha256,
+                    record.byte_length,
+                    record.media_type,
+                    record.relative_path,
+                    record.artifact_kind,
+                    record.redaction_status,
+                    record.license_status,
+                    record.source_id,
+                    (None if record.retrieved_at is None else record.retrieved_at.isoformat()),
+                    record.created_at.isoformat(),
+                ),
+            )
+            existing = self._connection.execute(
+                """
+                SELECT
+                    byte_length, media_type, relative_path, artifact_kind,
+                    redaction_status, license_status
+                FROM artifacts
+                WHERE sha256 = ?
+                """,
+                (record.sha256,),
+            ).fetchone()
+            if (
+                existing["byte_length"] != record.byte_length
+                or existing["media_type"] != record.media_type
+                or existing["relative_path"] != record.relative_path
+                or existing["artifact_kind"] != record.artifact_kind
+                or existing["redaction_status"] != record.redaction_status
+                or existing["license_status"] != record.license_status
+            ):
+                raise ValueError("artifact hash conflicts with existing metadata")
 
     def list_events(self, competition_id: str) -> list[dict[str, Any]]:
         rows = self._connection.execute(
