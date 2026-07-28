@@ -1,6 +1,6 @@
 # 예상문제 Coverage 확장 QA 계획
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 04:32
+> Last Updated: 2026-07-29 04:48
 > Status: Proposed 0.1 · Not Executed
 
 ## 1. 목적
@@ -98,6 +98,10 @@
 | Open-source | Planned | 공개 Schema·fixture·재현 명령·license provenance |
 | Business Plan | N/A | 대회 준비 범위, 제품화는 별도 승인 |
 
+TASK-012의 `evm_core` 계약 제안 8개와 Schema probe 5개는 통과했지만,
+이는 계약 Draft의 정합성만 검증한다. 제품 analyzer와 QA-EXP-EVM-001/002는
+계속 `not_executed`이며 fixture도 `verifying` 상태다.
+
 ## 7. Originality·Ethics
 
 - [ ] 제3자 코드·ABI·데이터의 license와 출처를 기록한다.
@@ -114,9 +118,11 @@
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - package별 입력·출력·경계
 - **Technical_Specs**: [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - result·evidence 계약
 - **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - provider·secret·AI Planner Gate
+- **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - `evm_core` 0.2 Draft·partial 오류 매핑
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - Wave 순서와 Stop/Go
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 Context Lock
 - **QA_Validation**: [Offline Benchmark](./22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 coverage 기준선
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 4개 candidate와 1차 source 재조회
 - **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·독립성·반례
 - **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 제품 analyzer 전 24개 fixture 반례
+- **QA_Validation**: [TASK-012 Analysis Contract Examples](./examples/task-012/README.md) - 8개 계약 사례·5개 Schema probe

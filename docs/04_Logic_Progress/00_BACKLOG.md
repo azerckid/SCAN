@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 04:32
+> Last Updated: 2026-07-29 04:48
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -855,8 +855,16 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
     - [ ] 노출 credential 회전·독립 trace·rate/timeout 반례를 통과해 Provider Gate를 닫는다.
     - [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만
       `confirmed`로 승격한다.
-  - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 고정한다.
-  - [ ] 기존 source/cache/decode/reconciliation을 재사용한 Analysis type을 설계한다.
+  - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 승인한다.
+    - [x] 네 query kind의 최소 입력과 complete·partial 결과 제안 8개를 작성했다.
+    - [ ] 제안 필드와 오류 매핑을 사용자 승인 후 정식 계약으로 고정한다.
+  - [ ] 기존 source/cache/decode/reconciliation을 재사용한 Analysis type을 승인한다.
+    - [x] 격리된 `evm_core` `0.2-draft`와
+      `object_summary`·`historical_balance`·`first_token_transfer`·
+      `native_inflow` query kind를 제안했다.
+    - [x] 제안 Schema 5개 probe와 8개 사례를 검증하고 기존 Analysis I/O
+      `0.1`·runtime `AnalysisType` 비변경을 검사했다.
+    - [ ] 정식 Analysis I/O version·runtime model·migration을 별도 승인한다.
   - [ ] complete·partial·failed와 negative oracle을 구현·검증한다.
   - [ ] 네 문제의 Benchmark 승격 여부를 독립 검증한다.
 - Related Concept Docs:
@@ -871,6 +879,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
   - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - Schema 변경 Gate
   - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - build/wrap 결정
   - [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - archive·logs·trace·AI Planner 선행 Gate
+  - [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - `evm_core` 0.2 Draft·8개 사례·0.1 비변경
 - Related QA Docs:
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-EVM-001/002
   - [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - Assisted 4개 기준선
@@ -904,8 +913,9 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Document Sync Check:
   - [ ] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - verifying 4개·공통 9개 독립 재현·offline oracle 24개 완료,
-    credential 회전·독립 trace·Schema·UI·사용자 구현 승인 전 착수 금지
+  - Status: PENDING - verifying 4개·공통 9개 독립 재현·offline oracle 24개와
+    계약 제안 8개·Schema probe 5개 완료, credential 회전·독립 trace·정식
+    Schema·UI·사용자 구현 승인 전 착수 금지
   - Required References Read: 위 Related 문서 전체
   - Constraints: exact raw 수량, historical state block 고정, 귀속 미평가
   - Conflicts: None known
@@ -1379,6 +1389,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - **Technical_Specs**: [SQLite 논리 DB Schema](../03_Technical_Specs/01_DB_SCHEMA.md) - `TASK-004` 저장·artifact·resume 논리 계약
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - `TASK-010` 역할·Queue·검증·제출 요구사항
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - `TASK-012~019` 엔진·fixture·계약 경계
+- **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - EVM Core 0.2 Draft와 승인 경계
 - **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - Phase 2 source·AI Planner capability Gate
 - **Logic_Progress**: [문서 완료 Roadmap](./00_ROADMAP.md) - 구현보다 먼저 통과할 문서 Gate
 - **Logic_Progress**: [Coverage 확장 Execution Plan](./01_EXECUTION_PLAN.md) - Wave·Stop/Go·진척 측정

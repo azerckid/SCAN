@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Fixture 후보 선정 보고서
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 04:32
+> Last Updated: 2026-07-29 04:48
 > Status: Provider Replay Passed · Four Fixtures Verifying · Implementation Not Started
 
 ## 1. 목적과 판정
@@ -113,6 +113,9 @@ Schema 편입 여부는 `confirmed` 승격 전 후속 계약으로 결정한다.
    offline으로 두 번 통과
 5. [x] timestamp exact·between·범위 밖·오선택 oracle 5개 통과
 6. [ ] Analysis I/O version 영향과 네 result type 승인
+   - [x] 격리된 `evm_core` `0.2-draft`·4개 query kind·8개 사례·5개
+     Schema probe를 작성하고 기존 `0.1` 비변경을 확인
+   - [ ] 정식 version·runtime model·migration 사용자 승인
 7. [ ] CLI Preview의 complete·partial·failed 표시 재검토
 8. [ ] TASK-012 Context Receipt `PASS`
 9. [ ] 사용자 구현 착수 승인
@@ -146,8 +149,10 @@ Schema 편입 여부는 `confirmed` 승격 전 후속 계약으로 결정한다.
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - source 역할과 장애 기록
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-EVM-CORE 계약
 - **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - 공급자 후보·secret·smoke 계약
+- **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - 0.2 Draft와 정식 승인 전 잠금
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012 Context Lock
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - fixture 공통 생명주기
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-EVM-001/002
 - **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·독립성·반례
 - **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 24개 offline 반례
+- **QA_Validation**: [TASK-012 Analysis Contract Examples](./examples/task-012/README.md) - 네 fixture complete·partial 8개 제안 사례
