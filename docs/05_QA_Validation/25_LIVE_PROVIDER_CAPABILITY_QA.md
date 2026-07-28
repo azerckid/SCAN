@@ -1,6 +1,6 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 03:59
+> Last Updated: 2026-07-29 04:08
 > Status: EVM Fixture Common Replay Passed · Overall Partial
 
 ## 1. 목적
@@ -41,7 +41,7 @@ oracle 반례와 AI Planner capability는 아직 미실행이므로 최종 상�
 | block | pass | pass | number·hash·timestamp 일치 |
 | filtered logs | pass | pass | USDC Transfer 23건·첫 5개 요약 일치 |
 | historical call/state | pass | pass | block `0xfdf1d0`, decimals `6` 일치 |
-| trace | pass | not_executed/conditional | primary callTracer 성공, 독립 trace 미선정 |
+| trace | pass | failed/conditional | primary callTracer 성공, Alchemy HTTP 400·대체 독립 trace 미선정 |
 | rate/timeout | not_executed | not_executed | outcome·safe code·retry |
 
 결과는 provider 문서의 지원 표시가 아니라 실제 계정과 대상 block에서
@@ -68,7 +68,8 @@ oracle 반례와 AI Planner capability는 아직 미실행이므로 최종 상�
 - [x] block tag, address, topics와 calldata가 재현 가능하다.
 - [x] raw artifact는 configured secret 검사를 거쳐 SHA-256으로 고정됐다.
 - [x] decoded 값은 raw response에서 다시 계산됐다.
-- [x] 두 공급자의 공통 6개 decoded summary가 모두 일치했다.
+- [x] capability smoke에서 두 공급자의 공통 6개 decoded summary가 모두 일치했다.
+- [x] TASK-012 fixture replay에서 두 공급자의 공통 9개 decoded summary가 모두 일치했다.
 - [ ] mismatch·unsupported·timeout·fallback 반례를 실행한다.
 - [ ] supporting explorer는 제3의 교차확인이고 독립 RPC 대체물이 아니다.
 
@@ -112,9 +113,10 @@ AI Planner의 품질은 정답 문장과의 유사도로 채점하지 않는다.
 | failed | secret 노출, chain mismatch, raw 불일치, mutation method, 증거 없는 성공 |
 | not_executed | 계정·Rules·승인 또는 live 호출 전 |
 
-`partial`이면 가능한 fixture만 계속 검증하고 부족한 capability에 의존하는
-fixture는 candidate로 둔다. `pass`도 TASK-012 구현 승인을 자동으로 뜻하지
-않으며 fixture confirmed와 Context Receipt가 별도로 필요하다.
+`partial`이면 가능한 fixture만 계속 검증하고, 공통 replay를 통과한 것은
+`verifying`, 부족한 capability 때문에 재현하지 못한 것은 `candidate`로
+둔다. `pass`도 TASK-012 구현 승인을 자동으로 뜻하지 않으며 fixture
+`confirmed`와 Context Receipt가 별도로 필요하다.
 
 ## 8. 365 글로벌 평가 기준
 

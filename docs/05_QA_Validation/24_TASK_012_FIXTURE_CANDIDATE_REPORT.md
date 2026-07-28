@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Fixture 후보 선정 보고서
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 03:55
+> Last Updated: 2026-07-29 04:08
 > Status: Provider Replay Passed · Four Fixtures Verifying · Implementation Not Started
 
 ## 1. 목적과 판정
@@ -57,21 +57,23 @@ historical state, token transfer range, internal call에서 별도로 계산한�
 
 조회 시각은 `2026-07-28T17:08:25Z`다.
 
-## 5. 소스 실패와 후보 상태 유지 이유
+## 5. 1차 재조회 source 장애 이력
 
 - Publicnode의 historical `eth_getLogs`는 개인 token이 필요한 archive
   요청으로 거부됐다.
 - dRPC의 같은 `eth_getLogs`는 free route에서 suitable provider를 찾지
   못했다.
-- 따라서 `EVM-TOKEN-001`의 “첫 전송”은 현재 raw receipt event +
-  Blockscout ascending range의 조합이다. 독립 raw log 범위 재현 전에는
-  `confirmed`로 올리지 않는다.
+- 이 두 실패는 1차 재조회 당시의 provenance다. 당시 `EVM-TOKEN-001`의
+  “첫 전송”은 raw receipt event + Blockscout ascending range의 조합으로만
+  확인했다.
 - Blockscout v2 internal endpoint는 이번 재조회에서 응답이 지연돼,
   호환 API로 성공 internal call을 재확인했다. 기존 confirmed DEX replay의
   상세 call index는 후보 증거로만 재사용한다.
 
 실패한 공급자를 성공으로 기록하지 않으며, 대체 소스 사용 사실을 provenance에
-남긴다.
+남긴다. 이후 §5.1에서 QuickNode·Alchemy의 exact block/filter
+`eth_getLogs`가 일치했으므로 raw 범위 로그 독립 재현 blocker는 닫혔다.
+현재 blocker는 §7의 반례와 TOKEN-002 독립 trace다.
 
 ### 5.1 Provider 2차 재현
 
@@ -86,6 +88,11 @@ QuickNode callTracer는 Router→EOA의 성공 native inflow
 `debug_traceTransaction`은 HTTP 400/permanent였으므로 TOKEN-002는 독립
 trace Gate가 남는다. Provider별 raw SHA-256은 각 패키지의
 `provider-replay.json`에 고정했다.
+
+`provider-replay.json`은 현재 Reference Fixture Schema 0.1의 직접 검증
+대상이 아닌 보조 provenance 파일이다. `input/expected/evidence`의
+`verifying` 상태와 source 참조가 규범적이며, replay 파일의 package
+Schema 편입 여부는 `confirmed` 승격 전 후속 계약으로 결정한다.
 
 ## 6. 문제별 partial·failed 조건
 
@@ -116,7 +123,7 @@ trace Gate가 남는다. Provider별 raw SHA-256은 각 패키지의
 
 | 기준 | 판정 | 증거 |
 |:---|:---:|:---|
-| Functionality | Partial | 공개 원자료 1차 재조회, 구현·2차 재현은 미실행 |
+| Functionality | Partial | 공통 9개 공급자 2차 재현 완료, 독립 trace·반례·분석기 구현 미완료 |
 | Potential Impact | Planned | 네 예상문항과 후속 PATH/INTEL 공통 입력 기반 |
 | Novelty | Planned | 한 블록의 object/state/event/trace 교차 fixture |
 | UX | Not Executed | CLI complete·partial·failed 재검토 전 |

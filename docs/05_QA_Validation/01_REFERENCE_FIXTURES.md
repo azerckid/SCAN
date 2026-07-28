@@ -1,13 +1,13 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 02:35
-> Status: Approved 1.1 · Phase 2 Candidate Pack Added
+> Last Updated: 2026-07-29 04:08
+> Status: Approved 1.1 · Phase 2 Verifying Pack
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
 있는 reference fixture를 관리한다. 현재 12개 중 3개는 `확정`, 5개는
-DOC-M3 결정에 따라 `Deferred`, 4개는 TASK-012 Phase 2 `candidate`로
+DOC-M3 결정에 따라 `Deferred`, 4개는 TASK-012 Phase 2 `검증 중`으로
 관리한다.
 
 입력 문서:
@@ -96,10 +96,11 @@ DOC-M3 결정에 따라 `Deferred`, 4개는 TASK-012 Phase 2 `candidate`로
 
 ## 6. Fixture 상세
 
-`후보`에는 두 종류가 있다. DOC-M3 Deferred 후보는 필드 골격과 `TBD`만
-가질 수 있고, Phase 2 candidate는 공개 값과 1차 provenance가 채워졌어도
-독립 재현·반례·승격 Gate가 남아 있다. `검증 중` fixture는 패키지의 JSON과
-raw replay를 기준 정답·provenance 원본으로 사용한다.
+DOC-M3 Deferred `후보`는 필드 골격과 `TBD`만 가질 수 있다. TASK-012
+Phase 2 네 패키지는 공개 값·1차 provenance·두 공급자 공통 replay를
+확보해 `검증 중`이며, 반례·독립 trace·승격 Gate가 남아 있다. `검증 중`
+fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본으로
+사용한다.
 
 ---
 
@@ -362,7 +363,7 @@ raw replay를 기준 정답·provenance 원본으로 사용한다.
 
 | 상태 | 조건 |
 |:---|:---|
-| 후보 | Deferred 골격/TBD 또는 공개 값이 채워졌지만 독립 재현·반례가 남은 Phase 2 candidate |
+| 후보 | Deferred 골격/TBD 또는 아직 독립 재현 전인 공개 사례 |
 | 검증 중 | 공개 데이터·raw replay 확보, 수동 재현 1회 성공, 필요 소스 등록부에 연결 |
 | 확정 | 기준 정답·허용 오차 수치 고정, 동일 입력 재현 성공, 출처·저작권 기록 완료 |
 | 폐기 | 데이터 삭제·비공개 전환·중복·규정 위반 위험 |
@@ -411,11 +412,12 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
    기록했다.
 6. Document Completion Gate를 통과했으며 구현 회귀 자동화는 별도 구현 승인 후 진행한다.
 7. P2 승격에 필요한 BRIDGE·BTC fixture는 Deferred 승격 조건에 따라 선정한다.
-8. TASK-012용 EVM Core 후보 4개는 공개 DEX 기준점을 재사용해 패키지화했으며,
-   독립 2차 재현·반례·Schema/UI/구현 승인 전에는 `candidate`를 유지한다.
-9. 독립 2차 재현 전 primary archive·trace와 independent
-   TX·receipt·block·filtered logs·historical state capability smoke를
-   통과한다. endpoint·API key는 fixture·artifact·DB에 저장하지 않는다.
+8. TASK-012용 EVM Core 4개는 공개 DEX 기준점을 재사용해 패키지화하고,
+   QuickNode·Alchemy 공통 9개 replay 일치로 `검증 중`까지 승격했다.
+   반례·독립 trace·Schema/UI/구현 승인 전에는 `confirmed`로 올리지 않는다.
+9. primary archive·trace와 independent TX·receipt·block·filtered
+   logs·historical state capability smoke를 통과했다. endpoint·API key는
+   fixture·artifact·DB에 저장하지 않으며 credential 회전은 후속 Gate다.
 
 ## 10. Related Documents
 
