@@ -1,7 +1,7 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 03:06
-> Status: Runner Prepared · Smoke Not Executed · Secrets Not Configured
+> Last Updated: 2026-07-29 03:32
+> Status: Endpoints Configured Locally · Credential Rotation Required · Live Smoke Rules-Gated
 
 ## 1. 목적
 
@@ -29,7 +29,7 @@
 | 자동 실증 완료 | DEX·AUTH·FREEZE 3문항 |
 | Phase 2 준비 대상 | 나머지 27문항 |
 | 직접 준비 중 | EVM Core 4문항의 candidate fixture |
-| EVM 공급자 topology | 후보 선정, 계정·plan·smoke 미확정 |
+| EVM 공급자 topology | QuickNode primary·Alchemy verifier 로컬 endpoint 구성, credential 회전·plan·smoke 미확정 |
 | AI Planner 공급자 | 필수 역할 확정, provider/model/비용 smoke 미실행 |
 | TASK-012 구현 | 미승인·미시작 |
 | 안전한 smoke runner | 준비 완료, 기본 network 0건 |
@@ -43,8 +43,8 @@
 
 | 역할 | 후보 | 공식 문서로 확인한 능력 | 현재 제약 | 상태 |
 |:---|:---|:---|:---|:---:|
-| Primary | QuickNode Ethereum | archive, Ethereum JSON-RPC, Debug API, Trace API를 문서화 | 계정 plan·실제 한도·대상 method smoke 미확인 | candidate |
-| Independent verifier | Alchemy Ethereum | 기본 RPC·`eth_getLogs`·historical archive state 지원 | Free는 Debug/Trace 미지원, 독립 trace는 유료 plan 또는 다른 공급자 필요 | candidate |
+| Primary | QuickNode Ethereum | archive, Ethereum JSON-RPC, Debug API, Trace API를 문서화 | 로컬 endpoint 구성 완료, 실제 한도·대상 method smoke 미확인 | candidate/configured |
+| Independent verifier | Alchemy Ethereum | 기본 RPC·`eth_getLogs`·historical archive state 지원 | 로컬 endpoint 구성 완료, plan·실제 capability와 독립 trace 미확인 | candidate/configured |
 | Supporting explorer | Blockscout | 거래·로그·internal transaction 교차확인에 기존 fixture에서 사용 | 원본 RPC·독립 trace 대체물이 아님 | verifying/supporting |
 | Independent trace | 미선정 | primary와 독립된 trace가 필요할 때 사용 | 공급자·plan·비용 미결정 | unresolved |
 
@@ -124,10 +124,21 @@ uv run python scripts/smoke_live_provider.py --role primary
 ```
 
 실제 호출은 `--execute`, `--rules-status allowed`, 역할별 endpoint 환경변수가
-모두 있어야 열린다. 현재 공식 Rules가 `unclear`이고 세 EVM endpoint
-환경변수가 없으므로 live smoke는 실행하지 않았다. runner는 기존 HTTPX
+모두 있어야 열린다. primary·verify endpoint는 2026-07-29 03:32 KST에 로컬
+`.env.local`로 구성됐지만 공식 Rules가 `unclear`이므로 live smoke는
+실행하지 않았다. trace endpoint는 아직 미설정이다. runner는 기존 HTTPX
 JSON-RPC adapter·content-addressed artifact·secret guard를 재사용하며
 `eth_sendRawTransaction`이나 서명 method를 포함하지 않는다.
+
+두 endpoint credential은 설정 과정에서 대화 채널에 노출됐으므로 live 실행
+전에 모두 회전해야 한다. 현재 값이 `.env.local`과 Git ignore 경계 안에
+있다는 사실은 이미 노출된 credential을 안전한 것으로 되돌리지 않는다.
+
+동일 시각 primary·verify dry-run은 각각 `status=not_executed`,
+`network_calls=0`으로 끝났고, endpoint가 구성된 상태에서도
+`--execute --rules-status unclear`는 실제 호출 전에 `rule_restricted`
+(exit `5`)로 차단됐다. endpoint 값과 token은 조회 결과·문서·Git에 남기지
+않았다.
 
 `--output-root`는 저장소 `.scan/live-provider-smoke/`와 그 하위만 허용한다.
 URL userinfo는 거부하고 URL path/query token 및 composition root가 전달한
@@ -214,7 +225,7 @@ Verifier가 없는 결과는 `submission_ready`가 될 수 없다.
 
 | 조건 | 판정 |
 |:---|:---|
-| key가 repo·DB·fixture·로그에 노출 | Stop · 폐기/회전 후 보안 재검증 |
+| key가 repo·DB·fixture·로그·대화 등 외부 채널에 노출 | Stop · 폐기/회전 후 보안 재검증 |
 | archive 또는 filtered logs 미지원 | 해당 역할 제외 또는 fallback |
 | trace 필요 fixture에 검증 trace 없음 | candidate/partial 유지 |
 | 두 provider 값 불일치 | conflict 보존, confirmed 금지 |

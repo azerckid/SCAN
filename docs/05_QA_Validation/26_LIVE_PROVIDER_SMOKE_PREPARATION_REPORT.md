@@ -1,13 +1,13 @@
 # Live Provider Capability Smoke Runner 준비 보고서
 > Created: 2026-07-29 02:56
-> Last Updated: 2026-07-29 03:06
-> Status: Prepared · Live Not Executed · Rules Unclear
+> Last Updated: 2026-07-29 03:32
+> Status: Endpoints Configured Locally · Credential Rotation Required · Live Blocked by Rules
 
 ## 1. 목적과 판정
 
-PR #41의 Live Provider Gate를 실제 실행할 최소 runner를 준비하고, 공식
-Rules와 endpoint가 없는 현재 상태에서 네트워크 호출이 열리지 않는지
-검증했다.
+PR #41의 Live Provider Gate를 실제 실행할 최소 runner로 준비하고, primary와
+verify endpoint를 로컬에 구성한 상태에서도 공식 Rules가 `unclear`이면
+네트워크 호출이 열리지 않는지 검증했다.
 
 **판정: runner 준비 완료, capability smoke와 provider 채택은 미완료다.**
 
@@ -15,16 +15,18 @@ Rules와 endpoint가 없는 현재 상태에서 네트워크 호출이 열리지
 
 | 항목 | 결과 |
 |:---|:---|
-| SCAN 공식 사이트 | 2026-07-29 02:50 KST 재확인, 상세 Rules 없음 |
+| SCAN 공식 사이트 | 2026-07-29 03:32 KST 재확인, 상세 Rules 없음 |
 | CTFd 공개 home | 예선 2026-08-02 09:00 KST 표시, 공개 Rules 없음 |
 | `RULE-API-001` / `RULE-AI-001` | `unclear` 유지 |
-| `SCAN_EVM_PRIMARY_RPC_URL` | 미설정 |
-| `SCAN_EVM_VERIFY_RPC_URL` | 미설정 |
+| `SCAN_EVM_PRIMARY_RPC_URL` | 로컬 설정 완료, 대화 노출로 live 전 회전 필요 |
+| `SCAN_EVM_VERIFY_RPC_URL` | 로컬 설정 완료, 대화 노출로 live 전 회전 필요 |
 | `SCAN_EVM_TRACE_RPC_URL` | 미설정 |
 | live EVM calls | 0 |
 | live LLM calls | 0 |
 
-secret 값은 조회·출력·문서화하지 않았다.
+secret 값은 저장소·검증 출력·문서에 기록하지 않았다. 다만 설정 과정에서
+두 credential이 대화에 노출됐으므로 현재 값으로 live 호출하지 않고, 회전된
+값을 로컬에서 직접 구성한 뒤 보안 Gate를 다시 확인한다.
 
 ## 3. 구현 범위
 
@@ -62,6 +64,7 @@ ruff: PASS
 unit: 9 passed
 dry-run: status=not_executed
 dry-run network_calls=0
+rules unclear execute attempt: rule_restricted, exit 5, network calls 0
 primary methods:
   eth_chainId
   eth_getTransactionByHash
@@ -87,10 +90,11 @@ security scan: PASS 84 files
 ## 6. 미실행·차단 조건
 
 1. 공식 Rules에서 API·AI mode가 허용 또는 조건부 허용으로 확인돼야 한다.
-2. primary·verify endpoint를 로컬 secret 환경에 구성해야 한다.
-3. trace-dependent `EVM-TOKEN-002`를 위해 독립 trace 역할을 정해야 한다.
-4. 실제 계정 plan·rate limit·timeout을 확인해야 한다.
-5. 사용자 승인 뒤 `--execute --rules-status allowed`로 역할별 실행한다.
+2. 노출된 primary·verify credential을 회전하고 새 값을 로컬에서 직접 구성해야 한다.
+3. 실제 plan·한도는 smoke로 확인해야 한다.
+4. trace-dependent `EVM-TOKEN-002`를 위해 독립 trace 역할을 정해야 한다.
+5. 실제 계정 plan·rate limit·timeout을 확인해야 한다.
+6. 사용자 승인 뒤 `--execute --rules-status allowed`로 역할별 실행한다.
 
 이 조건 전에는 capability 표를 `pass`로 바꾸거나 fixture를 `confirmed`로
 승격하지 않는다.

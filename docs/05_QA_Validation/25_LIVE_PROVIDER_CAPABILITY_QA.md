@@ -1,14 +1,15 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 03:06
-> Status: Runner Prepared · Live Not Executed
+> Last Updated: 2026-07-29 03:32
+> Status: Endpoint Gate Prepared · Credential Rotation Required · Live Not Executed
 
 ## 1. 목적
 
 이 문서는 TASK-012 fixture 4개의 독립 재현 전에 EVM read-only 공급자와
 AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하는 실행
-체크리스트다. 문서 작성 시점에는 API key를 구성하거나 live 호출을 실행하지
-않았으므로 모든 결과는 `not_executed`다.
+체크리스트다. primary·verify endpoint는 로컬 secret 환경에 구성했지만
+공식 Rules가 `unclear`이므로 live 호출은 실행하지 않았다. capability
+결과는 모두 `not_executed`다.
 
 `scripts/smoke_live_provider.py`와 offline unit/dry-run 검증은 준비됐지만,
 이는 아래 capability 결과를 `pass`로 바꾸지 않는다.
@@ -16,11 +17,11 @@ AI Planner 공급자가 실제로 필요한 능력을 제공하는지 검증하�
 ## 2. 실행 전 보안 Gate
 
 - [ ] 공식 Rules의 provider·model·data·tool mode가 허용 상태다.
-- [ ] 실제 secret은 로컬 환경에만 있고 저장소·SQLite·fixture·artifact에 없다.
+- [ ] primary·verify credential을 회전하고 새 값이 로컬 환경에만 있으며 저장소·SQLite·fixture·artifact·대화에 없다.
 - [ ] endpoint query token과 Authorization header를 기록·출력하지 않는다.
 - [ ] EVM method allowlist는 read-only이고 signing·send method가 없다.
 - [ ] canary secret이 성공·실패·timeout·fallback 출력에 나타나지 않는다.
-- [ ] provider별 논리 ID와 실제 endpoint mapping은 로컬 설정에서만 존재한다.
+- [ ] 회전된 provider endpoint mapping이 로컬 설정에만 존재한다.
 - [ ] output은 저장소 `.scan/live-provider-smoke/` 하위에만 생성된다.
 - [ ] URL userinfo는 거부되고 구성된 URL/header secret이 guard에 전달된다.
 - [ ] secret 차단은 원문·traceback 없이 `security_blocked`로 종료된다.
