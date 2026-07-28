@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Technical Brief
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 01:55
+> Last Updated: 2026-07-29 02:01
 > Status: Proposed 0.1 · Implementation Not Started
 
 ## 1. 목적
@@ -57,6 +57,11 @@ Analysis I/O 변경 검토와 별도 작업 승인을 통과한 뒤 시작한다
 
 문제 매핑은 구현 순서와 coverage 책임을 뜻한다. 공통 엔진을 구현했다는
 이유만으로 해당 문제를 automated로 바꾸지 않는다.
+
+`MIXED-XCHAIN-001`의 양단 chain·bridge/service 정합과 직접 Benchmark 책임은
+`WP-SERVICE`가 단독으로 가진다. `WP-CASE`는 그 결과가 더 큰 사건의 입력으로
+주어질 때 timeline·evidence bundle 조합만 담당하며 이 문제를 중복 소유하지
+않는다.
 
 ## 5. Work Package별 최소 계약
 

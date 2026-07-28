@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 01:55
+> Last Updated: 2026-07-29 02:01
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -35,11 +35,15 @@ Benchmark 0.1 이후 Coverage 확장 `TASK-012`~`TASK-019`는 사용자 요청�
 - DEX·AUTH·FREEZE vertical slice
 - confirmed fixture 3개 회귀와 UI·보안 Gate
 - Rules-gated 복수 문제 Queue·worker·독립 검증·수동 제출 운영
+- Coverage 확장 `TASK-012`~`TASK-019`의 문서화된 계획 범위
+  (구현·fixture·Context Receipt 승인은 미완료)
 
 ### 2.2 제외 범위
 
-- P1 PATH·LABEL·VIZ 범용 기능
-- Bitcoin·브리지·일반 OSINT·휴리스틱
+- P0·V1 구현 기준선에서는 PATH·LABEL·VIZ 범용 기능과
+  Bitcoin·브리지·일반 OSINT·휴리스틱을 제외한다. 이 기능들은 Phase 2
+  `TASK-014`~`TASK-018`의 **계획 범위에만** 포함되며, fixture·Context
+  Receipt·개별 구현 승인 전에는 현재 구현 범위로 간주하지 않는다.
 - Web Investigation Workbench 구현·노트북·그래프 DB
 - 서명·거래 전송·private key 입력
 - 새로운 fixture 정답·증거 변경
