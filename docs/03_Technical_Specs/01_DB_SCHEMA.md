@@ -1,7 +1,7 @@
 # SCAN 2026 SQLite 논리 DB Schema
 > Created: 2026-07-27 15:52
-> Last Updated: 2026-07-28 11:28
-> Status: Approved 1.2 · SQLite Schema Version 1 · CLI Composition Applied
+> Last Updated: 2026-07-28 13:45
+> Status: Approved 1.3 · SQLite Schema Version 2 · OPS-IMPL-02 Applied
 
 ## 1. 문서 목적
 
@@ -295,6 +295,34 @@ event evidence에는 calldata를 섞지 않고 call evidence로 분리한다. co
 
 한 run의 JSON과 Markdown은 같은 result·evidence ID와 값을 사용해야 한다.
 
+### 5.11 Operations v2 신규 엔티티
+
+`OPS-IMPL-02`는 v1 엔티티를 유지하면서 다음 15개 `STRICT` table을
+additive migration으로 추가한다.
+
+| 테이블 | PK·핵심 FK | 책임 |
+|:---|:---|:---|
+| `competitions` | `competition_id` | 운영 세션·Rules snapshot |
+| `operation_ai_modes` | `mode_id`, competition FK | immutable provider/model/data/tool mode |
+| `problems` | `problem_id`, competition·active plan FK | 문제 metadata·상태 |
+| `problem_artifacts` | problem·artifact FK | 원문·첨부 artifact 역할 |
+| `plans` | `plan_id`, problem·mode·planner job FK | AI 방법 가설·승인 상태 |
+| `jobs` | `job_id`, problem·plan·analysis FK | worker 실행·idempotency·Analysis 연결 |
+| `job_dependencies` | job·dependency FK | 문제 내부 leaf DAG |
+| `problem_analysis_links` | problem·analysis·job FK | problem→Analysis I/O run 역할 |
+| `candidates` | `candidate_id`, problem·creator job FK | 답 후보·불확실성·추천 |
+| `candidate_result_links` | candidate·analysis FK | candidate→v1 result/evidence ID |
+| `verifications` | `verification_id`, candidate·verifier job FK | 독립 검증 수명주기 |
+| `verification_checks` | verification FK | 필수 check 결과·evidence 참조 |
+| `submissions` | `submission_id`, candidate·artifact FK | 사람 제출 결과 기록 |
+| `operation_events` | `event_id`, competition·problem FK | update/delete가 금지된 append-only audit |
+| `operation_errors` | `error_id`, competition·problem·job FK | 안전한 운영 오류 기록 |
+
+순환 관계인 active plan·planner job은 같은 transaction 안에서만 완성되도록
+deferred FK를 사용한다. `candidate_result_links.ref_id`는 result/evidence
+polymorphic ID이므로 repository가 v1 row를 조회해 실제 `analysis_id`와 함께
+저장한다.
+
 ## 6. 관계·삭제·mutation 경계
 
 | 동작 | 허용 범위 |
@@ -379,6 +407,24 @@ event evidence에는 calldata를 섞지 않고 call evidence로 분리한다. co
 실행했으며 기존 DB의
 삭제·reset·migration은 수행하지 않았다.
 
+### 10.2 OPS-IMPL-02 운영 확장 기준선
+
+| 항목 | 적용 |
+|:---|:---|
+| 구현 | `src/scan_tool/adapters/sqlite_operations.py` |
+| Schema | 명시적 SQLite `PRAGMA user_version = 2`, operations `STRICT` tables 15개 |
+| 보존 | v1 tables 11개를 rewrite/drop하지 않고 그대로 재사용 |
+| Migration | source integrity → 새 v1 backup → `BEGIN IMMEDIATE` additive DDL → FK check → v2 commit |
+| 실패 | 전체 v2 DDL·version 변경 rollback, v1 코드로 재개방 가능 |
+| v1 경계 | 기존 `SQLiteStorage`는 v2를 자동 변경하지 않고 version mismatch로 거부 |
+| Repository | 검증된 `OperationsDocument`를 단일 transaction으로 저장 |
+| Artifact | 문제 원문·첨부·plan raw·submission note는 기존 `artifacts.sha256` 선행 참조 |
+| Analysis | job·candidate가 기존 analysis run·result·evidence row를 재사용 |
+| Audit | `operation_events` API는 append-only, trigger가 update/delete를 차단 |
+
+빈 DB와 데이터가 있는 v1 DB, 중간 DDL 오류를 모두 pytest 임시 경로에서
+검증했다. 실제 사용자 `.scan/scan.sqlite3`에는 migration을 실행하지 않았다.
+
 ## 11. 365 글로벌 평가 기준 연결
 
 | 기준 | DB Schema 기여 |
@@ -404,3 +450,4 @@ event evidence에는 calldata를 섞지 않고 call evidence로 분리한다. co
 - **QA_Validation**: [P0·V1 QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 저장·복구·보안 Gate
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - DDL·cache·checkpoint·artifact·export 검증
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - `.scan/` composition·show 조회·종료 상태 검증
+- **QA_Validation**: [OPS-IMPL-02 SQLite v2 보고서](../05_QA_Validation/15_OPS_IMPL_02_SQLITE_REPORT.md) - additive migration·rollback·repository·event log 검증

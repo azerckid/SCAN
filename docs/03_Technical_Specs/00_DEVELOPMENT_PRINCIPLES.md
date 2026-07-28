@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-28 12:20
-> Status: Approved 2.0 · TASK-001~009 · OPS-IMPL-01 Applied
+> Last Updated: 2026-07-28 13:31
+> Status: Approved 2.1 · TASK-001~009 · OPS-IMPL-01~02 Applied
 
 ## 1. 문서 목적
 
@@ -453,7 +453,9 @@ dist/
     검사를 dependency 추가 없이 통합 Gate에 연결했다.
 17. `OPS-IMPL-01`에서 operations contract `0.1`, 생성 JSON Schema,
     cross-record 불변조건, 상태 전이 validator를 구현했다.
-18. 후속 `OPS-IMPL-02`~`08`은 각각 별도 승인을 요구하며, live AI mode는
+18. `OPS-IMPL-02`에서 명시적 SQLite v2 migration, v1 backup·rollback,
+    operations repository와 append-only event log를 구현했다.
+19. 후속 `OPS-IMPL-03`~`08`은 각각 별도 승인을 요구하며, live AI mode는
     공식 Rules 확인 전까지 `rules_gated`다.
 
 ## 22. Related Documents

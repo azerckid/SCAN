@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 12:20
-> Status: TASK-001~009 Done · TASK-010 OPS-IMPL-01 Done · OPS-IMPL-02~08 ToDo
+> Last Updated: 2026-07-28 13:31
+> Status: TASK-001~009 Done · TASK-010 OPS-IMPL-01~02 Done · OPS-IMPL-03~08 ToDo
 
 ## 1. 문서 목적
 
@@ -548,7 +548,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 
 ### [ ] TASK-010: AI-native Rules-gated 병렬 문제풀이 Operations 구현
 
-- Status: Partial Implementation · OPS-IMPL-01 Done · Rules-Gated
+- Status: Partial Implementation · OPS-IMPL-01~02 Done · Rules-Gated
 - Priority: Tournament Operations · Conditional
 - Depends On: TASK-005, TASK-009, Operations Board Preview 승인;
   live AI mode만 공식 Rules 확인 필요
@@ -606,7 +606,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] loading·empty·partial·failed·stale·rules unavailable 상태를 확인했다.
   - [x] CTFd credential·자동 제출·brute force가 범위 밖임을 확인했다.
   - [x] `OPS-IMPL-01` 구현 착수를 별도로 승인받았다.
-  - [ ] 후속 `OPS-IMPL-02` 구현 착수를 별도로 승인받았다.
+  - [x] 후속 `OPS-IMPL-02` 구현 착수를 별도로 승인받았다.
 - Acceptance Criteria:
   - [ ] 두 개 이상의 문제를 동시에 처리하며 상태·결과·candidate가 격리된다.
   - [ ] 모든 문제에 AI method hypothesis와 승인된 leaf job plan이 존재한다.
