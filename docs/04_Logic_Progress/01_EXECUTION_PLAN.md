@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 02:08
+> Last Updated: 2026-07-29 02:35
 > Status: Proposed 0.1 · No Implementation Approval
 
 ## 1. 목적
@@ -24,6 +24,7 @@
 
 - [ ] 대상 문제와 답 형식을 한 문장으로 고정한다.
 - [ ] 공개 사례 후보와 사용 조건·license·조회 시각을 기록한다.
+- [ ] 필요한 live source 역할을 고정하고 read-only capability smoke를 통과한다.
 - [ ] reference answer와 완료·부분·실패 조건을 작성한다.
 - [ ] fixture를 `candidate → verifying → confirmed`로 승격한다.
 - [ ] 오픈소스 후보를 조사하고 `ADOPT/WRAP/BORROW/BUILD/REJECT`를 결정한다.
@@ -37,6 +38,9 @@
 ### [ ] Wave 1 — 범용 EVM
 
 - [x] `TASK-012` TX·state·ERC-20·native flow fixture 후보 4개를 선정한다.
+- [x] primary·independent·supporting provider 후보 topology와 smoke 계약을 문서화한다.
+- [ ] secret을 로컬 환경에만 구성하고 실제 계정·plan을 확인한다.
+- [ ] TX·receipt·block·filtered logs·historical state·trace capability smoke를 실행한다.
 - [ ] 네 후보를 독립 재현·반례로 `confirmed` 승격한다.
 - [ ] 네 문제 입력·정답 필드와 partial 조건을 승인한다.
 - [ ] 기존 EVM decoder·source·cache 재사용 범위를 확인한다.
@@ -85,6 +89,7 @@
 | 조건 | 판정 |
 |:---|:---|
 | fixture·reference answer 없음 | Stop — 구현 금지 |
+| 필수 live capability smoke 미통과 | Stop — fixture 재현·구현 승인 금지 |
 | 공식 Rules가 source/AI 사용을 제한 | Stop 또는 offline 축소 |
 | 새 dependency가 기존 기능보다 이점 없음 | Stop — 기존 코드/stdlib 사용 |
 | 한 engine이 두 문제 이상 공통 병목을 해소 | Go 우선 |
@@ -109,7 +114,9 @@
 - **UI_Screens**: [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - path·timeline UX 후보
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - Work Package 계약
 - **Technical_Specs**: [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 공개 계약 변경 Gate
+- **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - Wave 1 source·AI Planner 선행 Gate
 - **Logic_Progress**: [Backlog](./00_BACKLOG.md) - TASK-012~019 상태
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 승격 검증 기준
 - **QA_Validation**: [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 3/6/21 기준선
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - Wave 1 후보 4개와 잔여 Gate
+- **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - smoke·secret·independence 체크

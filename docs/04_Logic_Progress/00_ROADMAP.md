@@ -1,6 +1,6 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-29 01:55
+> Last Updated: 2026-07-29 02:35
 > Status: Approved 2.7 Baseline · Phase 2 Coverage Expansion Proposed
 
 ## 1. 문서 목적
@@ -83,6 +83,7 @@
 | [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) | AI-Native Contract Approved 1.0 · UI-First Gate Passed · Rules-Gated | 구현은 `TASK-010` 별도 승인 |
 | [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) | Approved 1.8 · OPS-IMPL-01~08 Offline Implemented | live mode는 Rules-Gated |
 | [Coverage 확장 Technical Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) | Proposed 0.1 | TASK-012~019 개별 fixture·Context·구현 승인 필요 |
+| [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) | Proposed 0.1 · Smoke Not Executed | TASK-012 전 실제 계정·plan·read-only capability 확인 |
 
 ### 3.4 Logic Progress
 
@@ -97,13 +98,14 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.0 · Fixture Scope Closed | 후보 5개 Deferred 결정; 단계별 승격 조건 유지 |
+| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.1 · Phase 2 Candidate Pack Added | confirmed 3·TASK-012 candidate 4·Deferred 5의 승격 조건 유지 |
 | [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Approved 1.9 · Integration Passed | 24 pass·0 partial·0 not_executed |
 | [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 2.9 · OPS-IMPL-01~08 Offline Passed | live Rules·실대회 성능 미실행 |
 | [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Contract Approved · Offline 6 QA Passed | live Rules·실대회 성능 별도 |
 | [OPS-IMPL-08 Final Integration Report](../05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) | Passed · Offline Operations V1 | 수동 제출·보안·leaf 병렬·6 QA |
 | [예상문제 Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | Passed · 3 Automated / 6 Assisted / 21 Unsupported | 자동화 3개 exact·evidence·결정성 통과, 30문항 전체 정확도로 해석 금지 |
 | [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) | Proposed 0.1 · Not Executed | TASK-012~019 승격·반례·통합 Gate |
+| [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) | Proposed 0.1 · Not Executed | EVM source·AI Planner smoke·secret·독립성 Gate |
 | [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | Pass | 문서 검증 증거·Known Issue·승인 경계 |
 | DEX·AUTH·FREEZE fixture | Confirmed | V1 기준값으로 동결, 정답 임의 변경 금지 |
 

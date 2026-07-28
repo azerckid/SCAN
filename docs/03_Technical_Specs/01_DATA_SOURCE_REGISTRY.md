@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 02:08
+> Last Updated: 2026-07-29 02:35
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -84,6 +84,21 @@
 | 상태 | 검증 중 | 검증 중 |
 | 마지막 확인 | 2026-07-25 15:25 | 2026-07-25 15:25 |
 | 비고 | `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`에 `https://ethereum.publicnode.com` 사용. receipt/logs·TX 또는 최신 상태 확인. Publicnode archive 호출은 개인 토큰 필요 | `FX-EVM-AUTH-001`의 allowance 4지점·trace, `FX-EVM-FREEZE-001`의 blacklist 4지점·이벤트, `FX-SVC-DEX-001`의 거래 시점 Factory `getPair`를 `https://eth.drpc.org`에서 확인. FREEZE 확정 재현 중 프리티어 일시 timeout/internal error는 재시도로 복구 |
+
+#### 5.1.1 Phase 2 live provider 후보
+
+| 논리 역할 | 후보 | 문서상 capability | 미확정 사항 | 상태 |
+|:---|:---|:---|:---|:---:|
+| `PROVIDER-EVM-PRIMARY` | QuickNode Ethereum | archive·Debug·Trace·Ethereum JSON-RPC | 실제 계정 plan·rate limit·timeout·대상 block smoke | candidate |
+| `PROVIDER-EVM-VERIFY` | Alchemy Ethereum | 기본 RPC·historical archive·filtered logs | Free plan에는 Debug/Trace 없음, 독립 trace 경로 | candidate |
+| `PROVIDER-EVM-EXPLORER` | Blockscout | transaction·log·internal transaction 교차확인 | 원본 RPC·독립 trace 대체 불가 | supporting |
+| `PROVIDER-EVM-TRACE-VERIFY` | 미선정 | trace-dependent fixture 독립 검증 | 공급자·plan·비용 | unresolved |
+
+이 topology는 채택 기록이 아니다. 공식 문서 비교만 완료했으며 secret
+구성·live smoke·독립 재현은 실행하지 않았다. endpoint·API key는 로컬
+secret 환경에만 두고 source record에는 논리 provider ID, method, block tag,
+조회 시각, 안전한 오류 코드, raw SHA-256만 남긴다. 상세 Gate와 공식 근거는
+[Live Provider Readiness](./10_LIVE_PROVIDER_READINESS.md)를 따른다.
 
 ### 5.2 탐색기 API
 
@@ -322,6 +337,8 @@
 9. TASK-012 candidate 4개는 Publicnode·dRPC·Blockscout으로 1차 재조회했다.
    historical `eth_getLogs` 공급자 2곳이 각각 token 필요·route 실패를
    반환했으므로 raw 범위 로그 독립 재현 전에는 후보 상태를 유지한다.
+10. `PROVIDER-EVM-PRIMARY/VERIFY` 후보는 문서 비교만 완료했다. 실제 endpoint와
+    secret 구성 없이 capability smoke·2차 재현·trace 독립성은 미실행이다.
 
 ## 10. Related Documents
 
@@ -332,6 +349,7 @@
 - **Technical_Specs**: [SQLite 논리 DB Schema](./01_DB_SCHEMA.md) - source attempt·cache·artifact 보존 구조
 - **Technical_Specs**: [P0·V1 분석 도구 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - source policy·cache·fallback·오류 계약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](./04_SCAN_2026_TECHNOLOGY_DECISION.md) - HTTP transport·source adapter·저장 경계
+- **Technical_Specs**: [Live Provider Readiness](./10_LIVE_PROVIDER_READINESS.md) - Phase 2 후보 topology·secret·capability Gate
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 소스 검증용 대표 사례
 - **QA_Validation**: [TASK-003 Source 보고서](../05_QA_Validation/07_TASK_003_SOURCE_REPORT.md) - source transport·policy·retry·fallback 검증
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - source attempt·cache·artifact 저장 검증
@@ -341,3 +359,4 @@
 - **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - public/archive/explorer/issuer/OFAC source·재조회·정합 검증
 - **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - source 실패·offline 불변·보안 통합 회귀
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - EVM Core 1차 재조회와 source 장애
+- **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 계정 smoke·독립성·반례

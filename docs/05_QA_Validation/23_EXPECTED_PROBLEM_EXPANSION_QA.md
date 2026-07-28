@@ -1,6 +1,6 @@
 # 예상문제 Coverage 확장 QA 계획
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 02:08
+> Last Updated: 2026-07-29 02:35
 > Status: Proposed 0.1 · Not Executed
 
 ## 1. 목적
@@ -13,6 +13,7 @@
 
 - [ ] 문제 ID와 Analysis type의 관계가 명시돼 있다.
 - [ ] confirmed fixture와 reference answer가 있다.
+- [ ] 실제 provider capability와 독립성 smoke가 통과했다.
 - [ ] raw source/replay에서 답을 계산하고 expected 값을 복사하지 않는다.
 - [ ] complete·partial·failed가 각각 검증된다.
 - [ ] result→evidence→source 참조가 완전하다.
@@ -48,6 +49,8 @@
 - failed transaction을 성공 이동에서 제외한다.
 - historical state에 `latest`를 사용하지 않는다.
 - trace unavailable은 숨기지 않고 partial로 남긴다.
+- filtered `eth_getLogs`는 receipt 복사가 아니라 독립 filter 요청으로 재현한다.
+- endpoint·API key는 repo·DB·fixture·artifact·로그에 저장하지 않는다.
 
 ### 4.2 NFT·Proxy
 
@@ -108,7 +111,9 @@
 - **UI_Screens**: [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - path·timeline UX 후보
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - package별 입력·출력·경계
 - **Technical_Specs**: [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - result·evidence 계약
+- **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - provider·secret·AI Planner Gate
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - Wave 순서와 Stop/Go
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 Context Lock
 - **QA_Validation**: [Offline Benchmark](./22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 coverage 기준선
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 4개 candidate와 1차 source 재조회
+- **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·독립성·반례

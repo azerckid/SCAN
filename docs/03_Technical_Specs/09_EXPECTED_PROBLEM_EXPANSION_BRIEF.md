@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Technical Brief
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 02:08
+> Last Updated: 2026-07-29 02:35
 > Status: Proposed 0.1 · Implementation Not Started
 
 ## 1. 목적
@@ -76,6 +76,9 @@ Analysis I/O 변경 검토와 별도 작업 승인을 통과한 뒤 시작한다
 - fixture Gate: 네 직접 대상 문제의 공개 사례와 exact raw answer
 - 후보 상태: 동일한 confirmed DEX 기준점을 재사용한 4개 candidate package를
   선정했다. 독립 2차 재현·반례·Schema/UI/구현 승인 전에는 Gate 미통과다.
+- provider Gate: primary archive·trace와 독립 TX·receipt·block·filtered
+  logs·historical state 공급자의 capability smoke를 먼저 통과한다.
+  trace-dependent answer에는 독립 trace 또는 명시적인 partial 판정이 필요하다.
 
 ### 5.2 WP-EVM-SPECIAL
 
@@ -198,8 +201,10 @@ Analysis I/O 변경 검토와 별도 작업 승인을 통과한 뒤 시작한다
 - **Technical_Specs**: [P0·V1 요구사항](./03_SCAN_2026_TOOL_REQUIREMENTS.md) - 기존 기반과 제외 범위
 - **Technical_Specs**: [Analysis I/O](./05_ANALYSIS_IO_SCHEMA.md) - 공개 요청·결과·증거 계약
 - **Technical_Specs**: [오픈소스 포렌식 사전조사](./06_OPEN_SOURCE_FORENSICS_REVIEW.md) - build/wrap/borrow 결정 Gate
+- **Technical_Specs**: [Live Provider Readiness](./10_LIVE_PROVIDER_READINESS.md) - WP-EVM-CORE 선행 source·AI Gate
 - **Logic_Progress**: [Phase 2 Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - 구현 순서와 승인 Gate
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 Context Lock
 - **QA_Validation**: [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 3/6/21 기준선
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - package별 승격 조건
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - WP-EVM-CORE 후보와 source 장애
+- **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - smoke·독립성·반례
