@@ -1,7 +1,7 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-28 01:59
-> Status: Contract Approved 0.1 · TASK-002·005·006·007·008 Applied
+> Last Updated: 2026-07-28 02:34
+> Status: Contract Approved 0.1 · TASK-002·005·006·007·008·009 Applied
 > Schema Version: 0.1
 
 ## 1. 문서 목적
@@ -318,7 +318,9 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
     authorization consumption·`not_assessed` attribution 결과를 생성한다.
 15. `TASK-008` FREEZE analyzer가 Schema 변경 없이 blacklist·unblacklist
     transition과 `external_context` scope를 생성한다.
-16. 다음 구현은 별도 승인 후 `TASK-009` 통합 Gate로 진행한다.
+16. `TASK-009`에서 공개 오류 enum 11개 전체의 status·exit code, 세 fixture
+    result 결정성, result→evidence→source 참조를 회귀했다.
+17. 계약 변경이 없어 Schema 버전은 `0.1`을 유지한다.
 
 ## 12. Related Documents
 
@@ -344,3 +346,4 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - Schema 0.1 DEX runtime 결과·참조 무결성
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - Schema 0.1 AUTH runtime 결과·참조 무결성
 - **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - Schema 0.1 FREEZE runtime 결과·참조 무결성
+- **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - Schema 0.1 통합 결정성·오류 행렬·추적성

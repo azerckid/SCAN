@@ -19,9 +19,10 @@ offline replay with checkpoint resume. `TASK-007` AUTH now reconciles Approval,
 approve calldata, four historical allowance states, transferFrom trace, Transfer
 event, and three reverted intermediate transactions while keeping theft or phishing
 attribution `not_assessed`. `TASK-008` FREEZE reconciles blacklist and unblacklist
-calls, events, four
-historical states, and official Circle/OFAC context while keeping current sanctions
-and criminal intent `not_assessed`.
+calls, events, four historical states, and official Circle/OFAC context while
+keeping current sanctions and criminal intent `not_assessed`. `TASK-009` closes the
+offline P0·V1 integration gate with deterministic replay, the 11-code error matrix,
+repository traceability, and security scans; all 24 P0·V1 QA scenarios pass.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`; related features stay disabled until an authoritative
 notice is recorded.
@@ -59,6 +60,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-006 evidence | [`10_TASK_006_DEX_REPORT.md`](docs/05_QA_Validation/10_TASK_006_DEX_REPORT.md) | raw DEX replay, exact reconciliation, partial/failure, resume, and DEX-security evidence |
 | TASK-007 evidence | [`11_TASK_007_AUTH_REPORT.md`](docs/05_QA_Validation/11_TASK_007_AUTH_REPORT.md) | raw AUTH replay, allowance lifecycle, delegated consumption, partial/failure, resume, and AUTH-security evidence |
 | TASK-008 evidence | [`12_TASK_008_FREEZE_REPORT.md`](docs/05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) | raw FREEZE replay, state transitions, official context boundaries, partial/failure, resume, and security evidence |
+| TASK-009 evidence | [`13_TASK_009_INTEGRATION_REPORT.md`](docs/05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) | deterministic V1 regression, error matrix, traceability, UI comparison, and security evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -70,15 +72,18 @@ uv sync --locked
 uv run python scripts/verify.py
 ```
 
-The gate runs Ruff lint and format checks, pytest, and both existing Schema
-validators, followed by the generated-Pydantic-Schema compatibility check.
+The gate runs Ruff lint and format checks, pytest, the existing Schema validators,
+the generated-Pydantic-Schema compatibility check, and repository traceability and
+security scans.
 Expected final outputs include:
 
 ```text
-117 passed
+133 passed
 PASS 3 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
+PASS repository traceability: 692 links, 10 TASK IDs, 24 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 51 runtime/evidence files
 ```
 
 The installed package exposes the approved TASK-005 command surface:
@@ -106,11 +111,11 @@ A supported request without `--evidence` stops explicitly with
 
 ## Implementation boundary
 
-`TASK-001` through `TASK-008` are complete. The next eligible task is `TASK-009`
-(integration gate) and still requires separate implementation approval. No live
-provider configuration exists; live transport also
-requires `rule_status: allowed`. AI/agent execution and CTFd automation remain
-unimplemented.
+`TASK-001` through `TASK-009` are complete. The offline P0·V1 baseline is closed.
+`TASK-010` is a separate rules-gated operations track and requires authoritative
+rules, Operations Board review, and separate implementation approval. No live
+provider configuration exists; live transport also requires
+`rule_status: allowed`. AI/agent execution and CTFd automation remain unimplemented.
 
 ## License
 

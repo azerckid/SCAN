@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 QA 시나리오
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 02:22
-> Status: Approved 1.8 · TASK-008 FREEZE Scope Passed
+> Last Updated: 2026-07-28 02:34
+> Status: Approved 1.9 · TASK-009 Integration Passed
 
 ## 1. 문서 목적
 
@@ -12,18 +12,16 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
 시나리오는 backlog의 Acceptance Criteria를 구체화한다. `TASK-001` 완료로
 `QA-BOOT-001`, `TASK-002` 완료로 `QA-SCHEMA-001`과
 `QA-SCHEMA-002`를 실행·통과했다. `TASK-003` 완료로 `QA-RETRY-001`,
-`QA-FALLBACK-001`은 통과했고, `QA-RULE-001`과 `QA-SOURCE-001`은 source
-범위만 통과해 `partial`이다. `TASK-004` 완료로 `QA-CACHE-001`,
-`QA-EXPORT-001`, `QA-ARTIFACT-001`은 통과했고 `QA-SEC-001`은 storage
-범위를 통과했다. `TASK-005` 완료로 `QA-CLI-001`~`003`과
-`QA-RULE-001`은 통과했고 `QA-CLI-004`, `QA-SOURCE-001`,
-`QA-SEC-001`은 vertical·통합 범위가 남아 `partial`이다. `TASK-006`으로
+`QA-FALLBACK-001`은 통과했고, `TASK-004` 완료로 `QA-CACHE-001`,
+`QA-EXPORT-001`, `QA-ARTIFACT-001`을 통과했다. `TASK-005` 완료로
+`QA-CLI-001`~`004`와 `QA-RULE-001`을 통과했다. `TASK-006`으로
 `QA-DEX-001`, `QA-DEX-002`, 실제 DEX checkpoint를 포함한 `QA-CLI-004`가
 통과했다. `TASK-007`로 `QA-AUTH-001`, `QA-AUTH-002`가 통과했고,
-`TASK-008`로 `QA-FREEZE-001`, `QA-FREEZE-002`가 통과했다.
+`TASK-008`로 `QA-FREEZE-001`, `QA-FREEZE-002`가 통과했다. `TASK-009`는
+source·security 범위와 세 regression 시나리오를 닫아 전체 24개를 통과했다.
 
 현재 정의된 시나리오는 24개이며 승인 상태는 `Scope Approved`, 실행 상태는
-`19 pass / 2 partial / 3 not_executed`다. 작업별·통합 실행 시점은
+`24 pass / 0 partial / 0 not_executed`다. 작업별·통합 실행 시점은
 [QA Checklist](./02_QA_CHECKLIST.md)에서 관리한다.
 
 병렬 문제풀이 `TASK-010`의 6개 시나리오는
@@ -84,7 +82,8 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - package import와 `scan --help`가 성공한다.
   - Git 추적 파일에 `.scan/`, DB, cache, secret이 없다.
 - **Result**: `pass` — TASK-001 이후 모든 PR에서 공통 offline Gate를
-  재실행했고 TASK-008 기준 Ruff·117 tests·세 Schema 검증이 통과했다.
+  재실행했고 TASK-009 기준 Ruff·133 tests·세 Schema 검증과 저장소
+  추적성·보안 검사가 통과했다.
 
 ### QA-SCHEMA-001 — 유효한 request·result round-trip
 
@@ -227,12 +226,12 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 외부 호출은 0건이다.
   - 필수 결과가 없으면 `failed`, 일부 저장 결과가 있으면 `partial`이다.
   - 오류에 `source_unavailable`, stage, retryable=false가 기록된다.
-- **Result**: `partial` — offline cache hit는 source 재호출 0건으로 통과했고,
+- **Result**: `pass` — offline cache hit는 source 재호출 0건으로 통과했고,
   빈 cache의 offline transport도 attempt 0건과 `source_unavailable`, stage,
   `retryable=false`를 반환했다. TASK-005 CLI의 unavailable 경로는 exit code
   `4`다. DEX·AUTH·FREEZE의 offline complete·partial Result 연결은
-  통과했으며 세 vertical과 cache miss를 함께 묶는 최종 행렬은
-  `TASK-009`에서 재검증한다.
+  통과했다. TASK-009에서 세 vertical의 complete·partial·failed와 cache
+  miss 행렬을 함께 재검증했다.
 
 ### QA-RETRY-001 — 제한 재시도
 
@@ -328,11 +327,12 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 사용자 이름이 포함된 로컬 절대 경로는 stdout·stderr·error·export에서 0건이다.
   - endpoint query secret은 redacted 형태로만 남는다.
   - 테스트는 사용자 실제 `.scan/`을 읽거나 변경하지 않는다.
-- **Result**: `partial` — TASK-004 storage 범위에서 canary secret과
+- **Result**: `pass` — TASK-004 storage 범위에서 canary secret과
   macOS/Linux/Windows 사용자 홈 절대 경로를 DB·cache·checkpoint·artifact·
   export 전에 차단했고 Markdown 외부 문자열 escape를 확인했다. TASK-005는
-  CLI stdout·stderr·오류에서 canary와 절대 경로 0건을 확인했다. vertical
-  성공·retry·fallback 전체 통합 검색은 TASK-009에서 재검증한다.
+  CLI stdout·stderr·오류에서 canary와 절대 경로 0건을 확인했다. TASK-009는
+  성공·retry·fallback·failed 경계와 runtime/evidence 51개 파일을 통합
+  검색해 private key·secret·Authorization·사용자 절대 경로 0건을 확인했다.
 
 ## 7. DEX Vertical Slice
 
@@ -470,6 +470,9 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 채점 raw 값·boolean·classification·evidence 연결이 byte-stable하다.
   - 두 번째 실행은 외부 호출이 0건이다.
   - fixture·analysis 기존 검증기는 계속 `PASS 3`이다.
+- **Result**: `pass` — 세 confirmed fixture를 socket network 차단 상태에서
+  각각 두 번 실행해 contract dict와 JSON이 같았다. 허용된 live source
+  실패 전후에도 offline DEX 결과는 동일했다.
 
 ### QA-REG-002 — 오류 코드·상태·종료 코드 행렬
 
@@ -483,6 +486,8 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - partial 가능 오류도 입증 결과가 없으면 failed로 내려간다.
   - mandatory requirement 누락 결과는 complete가 아니다.
   - error의 evidence·source 참조가 존재하거나 명시적으로 비어 있다.
+- **Result**: `pass` — 공개 ErrorCode enum 11개 전체를 승인된 status와
+  process exit에 대조했고 enum 누락·추가가 없음을 자동 확인했다.
 
 ### QA-REG-003 — 문서·Schema·fixture 추적성
 
@@ -498,6 +503,8 @@ Analysis I/O Schema `0.1`, CLI UI-First Gate, confirmed fixture 3개에 대조�
   - 깨진 상대 링크·중복 TASK·QA ID가 0건이다.
   - DEX·AUTH·FREEZE hardcode 값이 fixture와 일치한다.
   - 구현 변경 시 관련 Concept·UI·Technical·QA 문서가 동기화된다.
+- **Result**: `pass` — docs 상대 링크 692개, 고유 TASK ID 10개, 고유 QA ID
+  24개와 DEX·AUTH·FREEZE fixture→analysis mapping 3개를 자동 검증했다.
 
 ## 11. 365 글로벌 평가 기준
 
@@ -529,7 +536,7 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 3. 별도 구현 승인 후 `TASK-001`부터 각 작업의 Preconditions를 다시 확인한다.
 4. unit → integration → regression 순서로 관련 QA ID를 자동화한다.
 5. `live` 검증은 명시적으로 분리하고 offline 결과를 필수 Gate로 유지한다.
-6. `TASK-009`에서 전 시나리오와 문서 동기화를 통과해야 P0·V1 완료로 판정한다.
+6. `TASK-009`에서 전 시나리오와 문서 동기화를 통과해 P0·V1을 완료했다.
 
 ## 14. Related Documents
 
@@ -554,6 +561,7 @@ QA 계층은 6개 기준을 모두 검증 대상으로 둔다.
 - **QA_Validation**: [TASK-006 DEX 보고서](./10_TASK_006_DEX_REPORT.md) - raw decode·정합·partial·resume 증거
 - **QA_Validation**: [TASK-007 AUTH 보고서](./11_TASK_007_AUTH_REPORT.md) - Approval·allowance·transferFrom·scope·resume 증거
 - **QA_Validation**: [TASK-008 FREEZE 보고서](./12_TASK_008_FREEZE_REPORT.md) - blacklist 생명주기·공식 맥락·partial·resume 증거
+- **QA_Validation**: [TASK-009 통합 보고서](./13_TASK_009_INTEGRATION_REPORT.md) - 결정성·11-code 행렬·추적성·보안 증거
 - **QA_Validation**: [Agentic Parallel Solve QA](./03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 병렬성·격리·독립 검증·수동 제출 QA
 - **QA_Validation**: [분석 I/O 예제](./examples/analysis/README.md) - request·result 기준
 - **QA_Validation**: [DEX fixture](./fixtures/FX-SVC-DEX-001/README.md), [AUTH fixture](./fixtures/FX-EVM-AUTH-001/README.md), [FREEZE fixture](./fixtures/FX-EVM-FREEZE-001/README.md) - exact-match 원본

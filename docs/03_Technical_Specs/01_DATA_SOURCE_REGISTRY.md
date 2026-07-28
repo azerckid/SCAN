@@ -1,7 +1,7 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-28 01:59
-> Status: Draft · TASK-008 FREEZE Offline Replay Applied · Rules Unclear
+> Last Updated: 2026-07-28 02:34
+> Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
 
@@ -312,7 +312,9 @@
 4. TASK-004 cache·attempt 저장 기준선을 TASK-005 CLI composition root에 주입했다.
 5. live source가 제한되면 offline fixture·cache·human fallback을 사용한다.
 6. TASK-006~008 세 offline replay source 기준선을 유지한다.
-7. 다음은 TASK-009에서 세 source 경계와 failure matrix를 통합 회귀한다.
+7. TASK-009에서 세 source 경계와 failure matrix를 통합 회귀했다.
+8. TASK-010과 live source는 공식 Rules·명시적 opt-in·별도 승인 전까지
+   비활성 상태를 유지한다.
 
 ## 10. Related Documents
 
@@ -330,3 +332,4 @@
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - reviewed raw source·재조회·정합 검증
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - public/archive/trace/explorer raw source·재조회·정합 검증
 - **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - public/archive/explorer/issuer/OFAC source·재조회·정합 검증
+- **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - source 실패·offline 불변·보안 통합 회귀

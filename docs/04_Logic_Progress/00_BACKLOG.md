@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 01:59
-> Status: Approved 1.8 · TASK-001~008 Done
+> Last Updated: 2026-07-28 02:34
+> Status: Approved 1.9 · TASK-001~009 Done
 
 ## 1. 문서 목적
 
@@ -9,8 +9,8 @@
 CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업으로
 전환한다.
 
-Backlog 범위와 `TASK-001`~`TASK-008` 구현은 별도로 승인되었다. 여덟 작업은
-완료됐고 나머지 작업은 `ToDo`다. 후속 작업은 각각 별도 승인 전에는
+Backlog 범위와 `TASK-001`~`TASK-009` 구현은 별도로 승인되었다. 아홉 작업은
+완료됐고 Rules-gated `TASK-010`은 `ToDo`다. 후속 작업은 별도 승인 전에는
 `In Progress`로 이동하지 않는다.
 
 `TASK-010`은 공식 Rules·Operations Board Preview·별도 구현 승인에 의존하는
@@ -495,23 +495,23 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] 실제 context source와 라이선스·조회 시각을 등록부와 대조했다.
   - [x] FREEZE 결과를 fixture·Schema 예제·UI와 동기화했다.
 
-### [ ] TASK-009: 통합 회귀·보안·문서 동기화 Gate
+### [x] TASK-009: 통합 회귀·보안·문서 동기화 Gate
 
-- Status: ToDo
+- Status: Done
 - Priority: V1 · High
 - Depends On: TASK-005, TASK-006, TASK-007, TASK-008
 - Requirement IDs: `REQ-NFR-001`~`REQ-NFR-008`, `TEST-SCHEMA-001`,
   `TEST-CACHE-001`, `TEST-RETRY-001`, `TEST-FALLBACK-001`,
   `TEST-EXPORT-001`, `TEST-DEX-001`, `TEST-AUTH-001`, `TEST-FREEZE-001`
 - Atomic Tasks:
-  - [ ] unit·integration·regression suite를 네트워크 없이 실행한다.
-  - [ ] confirmed fixture 3개 exact-match를 반복 실행한다.
-  - [ ] cold·warm·resume와 400ms 첫 피드백을 측정한다.
-  - [ ] timeout·429·5xx·malformed JSON·정합 실패를 주입한다.
-  - [ ] secret·로컬 절대 경로·private key 문구를 scan한다.
-  - [ ] JSON·Markdown·terminal result 값을 교차 비교한다.
-  - [ ] UI Preview와 실제 CLI snapshot 차이를 검토한다.
-  - [ ] 365 rubric·Originality·Ethics와 공식 규정 상태를 기록한다.
+  - [x] unit·integration·regression suite를 네트워크 없이 실행한다.
+  - [x] confirmed fixture 3개 exact-match를 반복 실행한다.
+  - [x] cold·warm·resume와 400ms 첫 피드백을 측정한다.
+  - [x] timeout·429·5xx·malformed JSON·정합 실패를 주입한다.
+  - [x] secret·로컬 절대 경로·private key 문구를 scan한다.
+  - [x] JSON·Markdown·terminal result 값을 교차 비교한다.
+  - [x] UI Preview와 실제 CLI snapshot 차이를 검토한다.
+  - [x] 365 rubric·Originality·Ethics와 공식 규정 상태를 기록한다.
 - Related Concept Docs:
   - [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 빠르고 정확한 문제 해결 목표
   - [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 완료 기준
@@ -527,23 +527,24 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - Related QA Docs:
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 통합 실행 기준
   - [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - confirmed fixture 상태
+  - [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - 결정성·오류 행렬·추적성·보안 증거
 - Implementation Preconditions:
-  - [ ] 모든 선행 작업과 관련 문서를 다시 확인했다.
-  - [ ] HTML Preview·사용자 확인·FB-001 반영 여부를 확인했다.
-  - [ ] 전체 데이터 흐름·상태·오류·resume 경계를 확인했다.
-  - [ ] live test는 명시적 opt-in이며 기본 suite는 network 0건이다.
-  - [ ] 공식 규정·dependency·source license 상태를 확인했다.
-  - [ ] 미완료 항목을 성공으로 표시하지 않는다.
+  - [x] 모든 선행 작업과 관련 문서를 다시 확인했다.
+  - [x] HTML Preview·사용자 확인·FB-001 반영 여부를 확인했다.
+  - [x] 전체 데이터 흐름·상태·오류·resume 경계를 확인했다.
+  - [x] live test는 명시적 opt-in이며 기본 suite는 network 0건이다.
+  - [x] 공식 규정·dependency·source license 상태를 확인했다.
+  - [x] 미완료 항목을 성공으로 표시하지 않는다.
 - Acceptance Criteria:
-  - [ ] lint·format·unit·integration·regression이 모두 통과한다.
-  - [ ] fixture·analysis Schema 검증이 `PASS 3`이다.
-  - [ ] DEX·AUTH·FREEZE exact-match와 오류 주입 시나리오가 통과한다.
-  - [ ] secret·인증 header·로컬 사용자 절대 경로가 0건이다.
-  - [ ] actual CLI와 Preview의 의도하지 않은 차이가 0건이다.
-  - [ ] 문서·코드·Schema·fixture version이 서로 일치한다.
+  - [x] lint·format·unit·integration·regression이 모두 통과한다.
+  - [x] fixture·analysis Schema 검증이 `PASS 3`이다.
+  - [x] DEX·AUTH·FREEZE exact-match와 오류 주입 시나리오가 통과한다.
+  - [x] secret·인증 header·로컬 사용자 절대 경로가 0건이다.
+  - [x] actual CLI와 Preview의 의도하지 않은 차이가 0건이다.
+  - [x] 문서·코드·Schema·fixture version이 서로 일치한다.
 - Document Sync Check:
-  - [ ] 구현 완료 상태를 Backlog·QA·기술 문서에 동기화했다.
-  - [ ] 잔여 위험·미평가·공식 규정 제한을 최종 보고서에 기록했다.
+  - [x] 구현 완료 상태를 Backlog·QA·기술 문서에 동기화했다.
+  - [x] 잔여 위험·미평가·공식 규정 제한을 최종 보고서에 기록했다.
 
 ### [ ] TASK-010: Rules-gated 병렬 문제풀이 Operations 구현
 
@@ -633,6 +634,8 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   ([검증 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md))
 - `TASK-008` — blacklist lifecycle 정합, global pause·공식 맥락·현재 상태 분리
   ([검증 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md))
+- `TASK-009` — 결정적 3-slice 회귀, 11-code 행렬, 추적성·보안 통합 Gate
+  ([검증 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md))
 
 ## 7. Backlog 승인 Gate
 
@@ -646,6 +649,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-006 DEX vertical slice 구현을 별도로 승인
 - [x] TASK-007 AUTH vertical slice 구현을 별도로 승인
 - [x] TASK-008 FREEZE vertical slice 구현을 별도로 승인
+- [x] TASK-009 통합 회귀·보안·문서 동기화 Gate를 별도로 승인
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
@@ -657,6 +661,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-006 승인 후 `codex/task-006-dex-vertical-slice` branch 사용
 - [x] TASK-007 승인 후 `codex/task-007-auth-vertical-slice` branch 사용
 - [x] TASK-008 승인 후 `codex/task-008-freeze-vertical-slice` branch 사용
+- [x] TASK-009 승인 후 `codex/task-009-integration-gate` branch 사용
 
 ## 8. 365 글로벌 평가 기준
 
@@ -687,3 +692,4 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 수용·회귀 기준
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - exact-match 입력
 - **QA_Validation**: [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 6개 QA
+- **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - P0·V1 최종 통합 Gate 증거

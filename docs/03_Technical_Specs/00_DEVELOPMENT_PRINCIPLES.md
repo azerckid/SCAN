@@ -1,7 +1,7 @@
 # SCAN 2026 Python 개발 원칙
 > Created: 2026-07-26 13:20
-> Last Updated: 2026-07-28 01:59
-> Status: Approved 1.8 · TASK-001~008 Applied
+> Last Updated: 2026-07-28 02:34
+> Status: Approved 1.9 · TASK-001~009 Applied
 
 ## 1. 문서 목적
 
@@ -449,7 +449,10 @@ dist/
     엄격히 정합하고 attribution을 `not_assessed`로 분리했다.
 15. `TASK-008`에서 blacklist·unBlacklist call/event와 네 state를 정합하고
     issuer·OFAC context, global pause, 현재 상태 미평가를 분리했다.
-16. 다음 구현은 별도 승인 후 `TASK-009` 통합 Gate로 진행한다.
+16. `TASK-009`에서 133개 test, 세 Schema `PASS 3`, 저장소 추적성·보안
+    검사를 dependency 추가 없이 통합 Gate에 연결했다.
+17. 다음 구현 후보 `TASK-010`은 공식 Rules·Preview·별도 승인을 모두
+    요구하는 비차단 운영 트랙이다.
 
 ## 22. Related Documents
 
@@ -476,3 +479,4 @@ dist/
 - **QA_Validation**: [TASK-006 DEX 보고서](../05_QA_Validation/10_TASK_006_DEX_REPORT.md) - raw replay·정합·partial·checkpoint·dependency 검증
 - **QA_Validation**: [TASK-007 AUTH 보고서](../05_QA_Validation/11_TASK_007_AUTH_REPORT.md) - allowance·trace·scope·partial·checkpoint·보안 검증
 - **QA_Validation**: [TASK-008 FREEZE 보고서](../05_QA_Validation/12_TASK_008_FREEZE_REPORT.md) - 상태 전이·context·partial·checkpoint·보안 검증
+- **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - 24 QA·결정성·오류·추적성·보안 검증
