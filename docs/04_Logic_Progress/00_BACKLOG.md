@@ -1,18 +1,22 @@
-# SCAN 2026 P0·V1 및 대회 운영 Backlog
+# SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 01:16
-> Status: TASK-001~009·011 Done · TASK-010 Offline V1 Gate Passed · Live Mode Rules-Gated
+> Last Updated: 2026-07-29 02:01
+> Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
 
-이 문서는 승인된 P0·V1 요구사항, Analysis I/O Schema `0.1`, Python 개발 원칙,
-CLI UI-First Gate와 confirmed fixture 3개를 구현 가능한 원자적 작업으로
-전환한다.
+이 문서는 승인된 P0·V1 요구사항과 Benchmark 이후 Coverage 확장 계획,
+Analysis I/O Schema, Python 개발 원칙, UI-First Gate와 fixture를 구현 가능한
+원자적 작업으로 전환한다.
 
 Backlog 범위와 `TASK-001`~`TASK-009` 구현은 별도로 승인되었다. 아홉 작업과
 예상문제 benchmark `TASK-011`은 완료됐고 Rules-gated `TASK-010`은 offline
 V1 범위가 완료됐다. live 후속 작업은 별도 승인 전에는 `In Progress`로
 이동하지 않는다.
+
+Benchmark 0.1 이후 Coverage 확장 `TASK-012`~`TASK-019`는 사용자 요청에
+따라 계획됐지만 모두 `ToDo`다. fixture·Context Receipt·개별 구현 승인을
+통과하기 전에는 코드를 작성하지 않는다.
 
 `TASK-010`은 공식 Rules·Operations Board Preview·별도 구현 승인에 의존하는
 비차단 운영 트랙이다. `TASK-001`~`TASK-009`의 P0·V1 의존 순서와 완료 Gate를
@@ -31,11 +35,15 @@ V1 범위가 완료됐다. live 후속 작업은 별도 승인 전에는 `In Pro
 - DEX·AUTH·FREEZE vertical slice
 - confirmed fixture 3개 회귀와 UI·보안 Gate
 - Rules-gated 복수 문제 Queue·worker·독립 검증·수동 제출 운영
+- Coverage 확장 `TASK-012`~`TASK-019`의 문서화된 계획 범위
+  (구현·fixture·Context Receipt 승인은 미완료)
 
 ### 2.2 제외 범위
 
-- P1 PATH·LABEL·VIZ 범용 기능
-- Bitcoin·브리지·일반 OSINT·휴리스틱
+- P0·V1 구현 기준선에서는 PATH·LABEL·VIZ 범용 기능과
+  Bitcoin·브리지·일반 OSINT·휴리스틱을 제외한다. 이 기능들은 Phase 2
+  `TASK-014`~`TASK-018`의 **계획 범위에만** 포함되며, fixture·Context
+  Receipt·개별 구현 승인 전에는 현재 구현 범위로 간주하지 않는다.
 - Web Investigation Workbench 구현·노트북·그래프 DB
 - 서명·거래 전송·private key 입력
 - 새로운 fixture 정답·증거 변경
@@ -87,6 +95,24 @@ flowchart LR
     T7 --> T9
     T8 --> T9
     T9 -. "Rules·Preview·별도 승인" .-> T10["TASK-010 Parallel Operations"]
+    T9 --> T11["TASK-011 Coverage Benchmark"]
+    T11 --> T12["TASK-012 EVM Core"]
+    T12 --> T13["TASK-013 NFT·Proxy"]
+    T12 --> T14["TASK-014 PATH"]
+    T12 --> T15["TASK-015 Intel"]
+    T14 --> T16["TASK-016 Service·XChain"]
+    T15 --> T16
+    T11 --> T17["TASK-017 Bitcoin"]
+    T14 --> T18["TASK-018 Crime·Case"]
+    T15 --> T18
+    T16 --> T18
+    T12 --> T19["TASK-019 Expansion Gate"]
+    T13 --> T19
+    T14 --> T19
+    T15 --> T19
+    T16 --> T19
+    T17 --> T19
+    T18 --> T19
 ```
 
 TASK-002와 TASK-003은 TASK-001 뒤에 병렬 진행할 수 있다. TASK-004는
@@ -94,6 +120,9 @@ TASK-002와 TASK-003은 TASK-001 뒤에 병렬 진행할 수 있다. TASK-004는
 TASK-002·003·004 모두에 의존한다. DEX·AUTH·FREEZE는 공통 계약을 재사용하되
 서로의 내부 구현에 의존하지 않는다.
 TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차단하지 않는다.
+TASK-012~019는 TASK-011의 3/6/21 측정 이후 별도 Phase 2다. TASK-012와
+TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-019는
+실제로 승인·완료된 package만 통합한다.
 
 ## 4. Task Register
 
@@ -806,6 +835,450 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - Detailed Evidence:
     - [예상문제 Offline Benchmark 보고서](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 채점 기준·30문항 coverage·우선 공백.
 
+### [ ] TASK-012: 범용 EVM Query·State·Transfer 엔진
+
+- Status: ToDo
+- Work Type: code
+- Priority: Phase 2 · P0
+- Depends On: TASK-011
+- Target Problems: `BASIC-EVM-001/002`, `EVM-TOKEN-001/002`
+- Atomic Tasks:
+  - [ ] 네 문제의 공개 사례·reference answer·partial 조건을 확정한다.
+  - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 고정한다.
+  - [ ] 기존 source/cache/decode/reconciliation을 재사용한 Analysis type을 설계한다.
+  - [ ] complete·partial·failed와 negative oracle을 구현·검증한다.
+  - [ ] 네 문제의 Benchmark 승격 여부를 독립 검증한다.
+- Related Concept Docs:
+  - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 직접 대상 4문항
+  - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - EVM-TX/STATE/LOG/TRACE 우선 근거
+- Related UI Docs:
+  - [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - 공통 analyze·partial·failed 흐름
+- Related HTML Preview:
+  - [CLI Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - 기존 terminal 결과 구조
+- Related Technical Docs:
+  - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-EVM-CORE 계약
+  - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - Schema 변경 Gate
+  - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - build/wrap 결정
+- Related QA Docs:
+  - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-EVM-001/002
+  - [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - Assisted 4개 기준선
+- Implementation Preconditions:
+  - [ ] 관련 문서와 네 문제의 입력·출력·상태를 확인한다.
+  - [ ] confirmed fixture와 reference answer를 확보한다.
+  - [ ] CLI Preview 재검토와 사용자 구현 승인을 기록한다.
+  - [ ] CLI 진입·전환·이탈과 loading·empty·partial·failed 표시를 확인한다.
+  - [ ] source 최소 필드·mutation 없음·checkpoint 상태 관리를 승인한다.
+  - [ ] Analysis I/O version·source·storage mutation 영향을 승인한다.
+- Component & Library Plan:
+  - shadcn/ui: N/A - Python CLI leaf 분석기다.
+  - Custom components: 범용 EVM request/analyzer/result projector.
+  - Reused components: source port, cache, artifact, checkpoint, terminal renderer.
+  - New libraries: N/A - OSS bake-off 전 설치 금지.
+  - Libraries intentionally not added: graph DB·dataframe - 이 task에 불필요.
+  - shadcn preset: N/A - 웹 UI 변경 없음.
+- Acceptance Criteria:
+  - [ ] 네 fixture의 exact answer·evidence·determinism이 통과한다.
+  - [ ] failed TX·archive/trace 누락이 partial/failed로 보존된다.
+  - [ ] 입력 기대값 복사 없이 raw evidence에서 계산한다.
+  - [ ] Benchmark가 실제 승격 수만 반영한다.
+- Document Sync Check:
+  - [ ] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
+- Context Receipt:
+  - Status: PENDING - fixture·Schema·사용자 구현 승인 전 착수 금지
+  - Required References Read: 위 Related 문서 전체
+  - Constraints: exact raw 수량, historical state block 고정, 귀속 미평가
+  - Conflicts: None known
+- Change Receipt:
+  - N/A - 구현 미시작
+- Verification Receipt:
+  - N/A - 구현 미시작
+
+### [ ] TASK-013: NFT·Proxy 결정적 Decoder
+
+- Status: ToDo
+- Work Type: code
+- Priority: Phase 2 · P1
+- Depends On: TASK-012
+- Target Problems: `EVM-NFT-001`, `EVM-PROXY-001`
+- Atomic Tasks:
+  - [ ] ERC-721/1155와 EIP-1967 공개 fixture를 각각 확정한다.
+  - [ ] event/state/slot decode와 block별 implementation 정합을 설계한다.
+  - [ ] 표준·반례·decode failure를 검증한다.
+  - [ ] 두 문제의 Benchmark 승격 여부를 기록한다.
+- Related Concept Docs:
+  - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - NFT·Proxy 문제
+  - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P3 전문 기능 승격 조건
+- Related UI Docs:
+  - [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - decode 결과·오류 표시
+- Related HTML Preview:
+  - [CLI Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - terminal 결과 기준
+- Related Technical Docs:
+  - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-EVM-SPECIAL 계약
+  - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 유형별 결과 확장
+  - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - ABI·slot 도구 조사
+- Related QA Docs:
+  - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-SPECIAL-001
+- Implementation Preconditions:
+  - [ ] 관련 문서·fixture·반례·UI 출력을 확인한다.
+  - [ ] TASK-012 공통 EVM 입력이 안정됐다.
+  - [ ] CLI 진입·전환·이탈과 loading·empty·partial·failed 표시를 확인한다.
+  - [ ] log/state 최소 필드·mutation 없음·decode 상태 관리를 승인한다.
+  - [ ] OSS/license와 Analysis I/O 변경을 승인한다.
+  - [ ] 사용자 구현 승인을 기록한다.
+- Component & Library Plan:
+  - shadcn/ui: N/A - Python CLI 분석기.
+  - Custom components: NFT decoder, proxy slot/event resolver.
+  - Reused components: EVM logs/state, provenance, artifact, renderer.
+  - New libraries: N/A - OSS bake-off 전 설치 금지.
+  - Libraries intentionally not added: 범용 ABI framework - fixture 요구 이상 금지.
+  - shadcn preset: N/A - 웹 UI 변경 없음.
+- Acceptance Criteria:
+  - [ ] NFT 표준·token ID·amount와 proxy implementation이 raw evidence에 연결된다.
+  - [ ] 잘못된 표준·slot·block은 decode 실패 또는 partial이다.
+  - [ ] 두 문제의 automated 승격은 confirmed fixture가 있을 때만 일어난다.
+- Document Sync Check:
+  - [ ] Analysis I/O·fixture·Benchmark·QA를 동기화한다.
+- Context Receipt:
+  - Status: PENDING - fixture·사용자 구현 승인 전 착수 금지
+  - Required References Read: 위 Related 문서 전체
+  - Constraints: 소유권 분쟁·안전성 자동 판정 금지
+  - Conflicts: None known
+- Change Receipt:
+  - N/A - 구현 미시작
+- Verification Receipt:
+  - N/A - 구현 미시작
+
+### [ ] TASK-014: PATH Graph·금액 정합 엔진
+
+- Status: ToDo
+- Work Type: code
+- Priority: Phase 2 · P0
+- Depends On: TASK-012
+- Target Problems: `FLOW-EVM-001/002`, `FLOW-MULTI-001` 및 후속 범죄·복합 문제
+- Atomic Tasks:
+  - [ ] 단일 path와 분기·재병합 공개 fixture를 확정한다.
+  - [ ] bounded node/edge·hop/time·asset conservation 계약을 설계한다.
+  - [ ] cycle·unrelated fund·residual·budget partial을 구현한다.
+  - [ ] path artifact와 read-only graph 출력 경계를 검증한다.
+- Related Concept Docs:
+  - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - FLOW 3문항
+  - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - PATH 18개 필수 근거
+- Related UI Docs:
+  - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - graph·timeline read-only UX
+  - [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - partial·export 흐름
+- Related HTML Preview:
+  - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - path 검토 화면 후보
+- Related Technical Docs:
+  - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-PATH 계약
+  - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - path evidence 봉투
+- Related QA Docs:
+  - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-PATH-001/002
+- Implementation Preconditions:
+  - [ ] 두 종류 path fixture와 exclusion 정답을 확정한다.
+  - [ ] graph artifact·메모리 budget·partial 상태를 승인한다.
+  - [ ] CLI/Workbench 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
+  - [ ] edge 최소 필드·artifact mutation·bounded graph 상태 관리를 승인한다.
+  - [ ] Workbench Preview의 사용자 검토 필요 여부를 결정한다.
+  - [ ] graph DB 미도입과 사용자 구현 승인을 기록한다.
+- Component & Library Plan:
+  - shadcn/ui: N/A - Python engine 우선.
+  - Custom components: bounded graph, path finder, reconciliation ledger.
+  - Reused components: EVM core, cache, artifact, Operations Queue.
+  - New libraries: N/A - stdlib 구조로 fixture 규모를 먼저 측정.
+  - Libraries intentionally not added: graph DB/networkx - 측정된 필요 전 금지.
+  - shadcn preset: N/A - 웹 runtime 구현 없음.
+- Acceptance Criteria:
+  - [ ] 경로·분기·재병합·cycle·residual이 exact evidence로 재현된다.
+  - [ ] budget 초과는 중단 위치를 가진 partial이다.
+  - [ ] label 없이도 path 사실이 독립적으로 성립한다.
+- Document Sync Check:
+  - [ ] Analysis I/O·Workbench·fixture·Benchmark·QA를 동기화한다.
+- Context Receipt:
+  - Status: PENDING - fixture·UI·사용자 구현 승인 전 착수 금지
+  - Required References Read: 위 Related 문서 전체
+  - Constraints: bounded traversal, unrelated fund 분리, graph DB YAGNI
+  - Conflicts: None known
+- Change Receipt:
+  - N/A - 구현 미시작
+- Verification Receipt:
+  - N/A - 구현 미시작
+
+### [ ] TASK-015: Label·OSINT·Actor Intelligence 엔진
+
+- Status: ToDo
+- Work Type: code
+- Priority: Phase 2 · P1
+- Depends On: TASK-012
+- Target Problems: `OSINT-LBL/SAN/ENS-001`, `ACTOR-REL-001/002`
+- Atomic Tasks:
+  - [ ] official/provider/public/heuristic source role과 Terms Gate를 확정한다.
+  - [ ] 주소 명시·조회 시각·충돌·폐기 라벨 fixture를 만든다.
+  - [ ] actor relation 후보와 반례를 검증한다.
+  - [ ] AI 가설과 Python/source 증명을 분리한다.
+- Related Concept Docs:
+  - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - OSINT·Actor 5문항
+  - [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 외부 전송·API Rules
+- Related UI Docs:
+  - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - label provenance·충돌 표시
+- Related HTML Preview:
+  - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - source inspector 후보
+- Related Technical Docs:
+  - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-INTEL 계약
+  - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - source role·Terms
+- Related QA Docs:
+  - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001
+- Implementation Preconditions:
+  - [ ] 공식 Rules·Terms·privacy와 source 최소 필드를 확인한다.
+  - [ ] 충돌·주소 비명시·폐기 라벨 fixture를 확정한다.
+  - [ ] Workbench 진입·전환·이탈과 loading·empty·conflict·failed를 확인한다.
+  - [ ] label 최소 필드·append-only provenance mutation·상태 관리를 승인한다.
+  - [ ] Workbench source 표시를 사용자 확인한다.
+  - [ ] live mode와 사용자 구현 승인을 별도로 기록한다.
+- Component & Library Plan:
+  - shadcn/ui: N/A - Python source/intelligence core 우선.
+  - Custom components: source-role registry, label assertion/conflict model.
+  - Reused components: provenance, context evidence, Planner mode Gate.
+  - New libraries: N/A - provider 확정 전 설치 금지.
+  - Libraries intentionally not added: scraping/LLM framework - Rules·Terms 전 금지.
+  - shadcn preset: N/A - 웹 runtime 미구현.
+- Acceptance Criteria:
+  - [ ] source role·주소 명시·조회 시각·충돌이 보존된다.
+  - [ ] heuristic/AI 가설이 confirmed fact로 자동 승격되지 않는다.
+  - [ ] 다섯 문제의 승격은 문제별 confirmed fixture로 제한된다.
+- Document Sync Check:
+  - [ ] Rules·source registry·Workbench·Benchmark·QA를 동기화한다.
+- Context Receipt:
+  - Status: PENDING - Rules·fixture·사용자 구현 승인 전 착수 금지
+  - Required References Read: 위 Related 문서 전체
+  - Constraints: privacy, Terms, attribution 비단정
+  - Conflicts: official Rules unresolved
+- Change Receipt:
+  - N/A - 구현 미시작
+- Verification Receipt:
+  - N/A - 구현 미시작
+
+### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
+
+- Status: ToDo
+- Work Type: code
+- Priority: Phase 2 · P2
+- Depends On: TASK-014, TASK-015
+- Target Problems: `SVC-BRG/CEX/MIX/LEND-001`, `MIXED-XCHAIN-001`
+- Atomic Tasks:
+  - [ ] confirmed fixture가 있는 전문 adapter만 구현 대상으로 선택한다.
+  - [ ] 양단 chain/message/asset/amount 또는 서비스 휴리스틱 계약을 확정한다.
+  - [ ] adapter별 exact·partial·conflict를 검증한다.
+  - [ ] Benchmark를 실제 완료 문제만 승격한다.
+- Related Concept Docs:
+  - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 서비스·크로스체인 5문항
+  - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P2/P3 승격 조건
+- Related UI Docs:
+  - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - 다중 체인 graph·evidence
+- Related HTML Preview:
+  - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - 다중 source 검토 후보
+- Related Technical Docs:
+  - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-SERVICE 계약
+  - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - chain/provider source
+  - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - adapter 재사용 Gate
+- Related QA Docs:
+  - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-SERVICE-001
+- Implementation Preconditions:
+  - [ ] adapter별 confirmed fixture·official ABI/address를 확보한다.
+  - [ ] PATH·INTEL 결과 계약이 안정됐다.
+  - [ ] Workbench 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
+  - [ ] chain/message 최소 필드·artifact mutation·adapter 상태 관리를 승인한다.
+  - [ ] chain/source/Rules·UI·Schema 영향을 승인한다.
+  - [ ] adapter별 사용자 구현 승인을 기록한다.
+- Component & Library Plan:
+  - shadcn/ui: N/A - Python adapter 우선.
+  - Custom components: 선택된 bridge/service/lending adapter.
+  - Reused components: PATH, INTEL, source port, reconciliation.
+  - New libraries: N/A - adapter별 OSS 결정 전 설치 금지.
+  - Libraries intentionally not added: 범용 multi-chain SDK - 범위 폭발 방지.
+  - shadcn preset: N/A - 웹 runtime 미구현.
+- Acceptance Criteria:
+  - [ ] 선택 adapter의 결정적 사실과 heuristic이 분리된다.
+  - [ ] 양단·금액·시간 누락은 partial/conflict로 보존된다.
+  - [ ] 서비스 귀속·불법성을 자동 단정하지 않는다.
+- Document Sync Check:
+  - [ ] source·ABI·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
+- Context Receipt:
+  - Status: PENDING - adapter별 fixture·승인 전 착수 금지
+  - Required References Read: 위 Related 문서 전체
+  - Constraints: confirmed adapter only, multi-chain bounded scope
+  - Conflicts: source/Rules unresolved
+- Change Receipt:
+  - N/A - 구현 미시작
+- Verification Receipt:
+  - N/A - 구현 미시작
+
+### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
+
+- Status: ToDo
+- Work Type: code
+- Priority: Phase 2 · P2
+- Depends On: TASK-011
+- Target Problems: `BTC-UTXO-001/002`, `BTC-CJ-001`
+- Atomic Tasks:
+  - [ ] UTXO·change·CoinJoin 후보/반례 fixture를 확정한다.
+  - [ ] prevout·input/output·fee·script·satoshi 계약을 설계한다.
+  - [ ] UTXO graph와 heuristic 경계를 구현한다.
+  - [ ] 세 문제의 Benchmark 승격 여부를 기록한다.
+- Related Concept Docs:
+  - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - BTC 3문항
+  - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - BTC-UTXO 승격 조건
+- Related UI Docs:
+  - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - UTXO graph UX 후보
+- Related HTML Preview:
+  - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - graph 검토 후보
+- Related Technical Docs:
+  - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-BTC 계약
+  - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - Bitcoin source
+  - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - parser 재사용 Gate
+- Related QA Docs:
+  - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-BTC-001/002
+- Implementation Preconditions:
+  - [ ] 공개 BTC source·fixture·반례를 확보한다.
+  - [ ] chain-specific request/result와 공통 evidence 호환을 승인한다.
+  - [ ] Workbench 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
+  - [ ] prevout 최소 필드·artifact mutation·UTXO graph 상태 관리를 승인한다.
+  - [ ] UTXO graph UI 필요성을 검토한다.
+  - [ ] 사용자 구현 승인을 기록한다.
+- Component & Library Plan:
+  - shadcn/ui: N/A - Python engine 우선.
+  - Custom components: BTC parser projection, UTXO ledger, heuristic classifier.
+  - Reused components: provenance, artifact, bounded graph, Verifier.
+  - New libraries: N/A - OSS/parser bake-off 전 설치 금지.
+  - Libraries intentionally not added: full node/indexer - fixture 단계 범위 밖.
+  - shadcn preset: N/A - 웹 runtime 미구현.
+- Acceptance Criteria:
+  - [ ] prevout·outputs·fee가 exact satoshi로 정합된다.
+  - [ ] change/CoinJoin은 heuristic과 반례를 포함한다.
+  - [ ] 세 문제의 승격은 confirmed fixture로 제한된다.
+- Document Sync Check:
+  - [ ] source·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
+- Context Receipt:
+  - Status: PENDING - fixture·source·사용자 구현 승인 전 착수 금지
+  - Required References Read: 위 Related 문서 전체
+  - Constraints: satoshi exact, heuristic 비단정
+  - Conflicts: Bitcoin source selection unresolved
+- Change Receipt:
+  - N/A - 구현 미시작
+- Verification Receipt:
+  - N/A - 구현 미시작
+
+### [ ] TASK-018: 범죄·복합 사건 Reconciliation
+
+- Status: ToDo
+- Work Type: code
+- Priority: Phase 2 · P2
+- Depends On: TASK-014, TASK-015, 필요 시 TASK-016
+- Target Problems: `CRIME-PHISH/POISON/EXP/RUG-001`, `MIXED-CASE-001`
+- Atomic Tasks:
+  - [ ] 사건별 공개 사례·reference answer·반례를 확정한다.
+  - [ ] seed discovery·timeline·unrelated fund exclusion 계약을 설계한다.
+  - [ ] 기존 엔진 결과를 evidence ref로 조합한다.
+  - [ ] 기술 사실·외부 귀속·범죄 의도를 분리 검증한다.
+- Related Concept Docs:
+  - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 범죄·복합 5문항
+- Related UI Docs:
+  - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - 사건 graph·timeline·inspector
+  - [Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 복수 leaf·독립 검증
+- Related HTML Preview:
+  - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - 사건 검토 화면
+- Related Technical Docs:
+  - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-CASE 계약
+  - [Agentic Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - Planner·worker·Verifier 경계
+- Related QA Docs:
+  - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-CASE-001
+- Implementation Preconditions:
+  - [ ] 사건별 fixture·정답·attribution scope를 확정한다.
+  - [ ] PATH·INTEL과 필요한 전문 adapter가 검증됐다.
+  - [ ] Workbench 진입·전환·이탈과 loading·empty·conflict·failed를 확인한다.
+  - [ ] case 최소 필드·bundle mutation·timeline 상태 관리를 승인한다.
+  - [ ] Workbench 사용자 동선·상태·충돌 표시를 확인한다.
+  - [ ] 사용자 구현 승인을 기록한다.
+- Component & Library Plan:
+  - shadcn/ui: N/A - Python case reconciler 우선.
+  - Custom components: seed resolver, timeline, case evidence bundle.
+  - Reused components: PATH, INTEL, vertical results, Candidate/Verifier.
+  - New libraries: N/A - 기존 계약으로 먼저 구현.
+  - Libraries intentionally not added: 범용 case-management framework - 범위 밖.
+  - shadcn preset: N/A - 웹 runtime 별도 승인.
+- Acceptance Criteria:
+  - [ ] 사건 결과가 실제 evidence ref와 timeline에 연결된다.
+  - [ ] 관련 없는 자금·충돌·미확정 귀속을 보존한다.
+  - [ ] 범죄 의도는 증거 범위 밖이면 not_assessed다.
+- Document Sync Check:
+  - [ ] Workbench·Operations·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
+- Context Receipt:
+  - Status: PENDING - 선행 엔진·fixture·UI·사용자 승인 전 착수 금지
+  - Required References Read: 위 Related 문서 전체
+  - Constraints: attribution/intent 비단정, evidence-only composition
+  - Conflicts: None known
+- Change Receipt:
+  - N/A - 구현 미시작
+- Verification Receipt:
+  - N/A - 구현 미시작
+
+### [ ] TASK-019: Coverage Expansion 통합 Gate
+
+- Status: ToDo
+- Work Type: code
+- Priority: Phase 2 · Final Gate
+- Depends On: TASK-012~018 중 실제 승인·완료된 package
+- Target Problems: 예상문제 30개 전체
+- Atomic Tasks:
+  - [ ] 새 confirmed fixture와 automated manifest mapping을 검증한다.
+  - [ ] 전체 automated 사례를 두 번 replay하고 exact/evidence/determinism을 채점한다.
+  - [ ] assisted·unsupported 잔여와 기능 공백을 다시 계산한다.
+  - [ ] bounded Operations Queue에서 복수 문제 격리·Verifier를 검증한다.
+  - [ ] regression·security·traceability·Rules Gate를 실행한다.
+- Related Concept Docs:
+  - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 전체 coverage 기준
+  - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - 구현 결과 재점수화
+- Related UI Docs:
+  - [Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 병렬 실행·검증·수동 제출
+- Related HTML Preview:
+  - [Operations Preview](../02_UI_Screens/previews/03_competition_operations_board_preview.html) - 운영 상태 기준
+- Related Technical Docs:
+  - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - 전체 package 계약
+  - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 공개 계약
+  - [Agentic Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 병렬·Verifier Gate
+- Related QA Docs:
+  - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-REG/SEC
+  - [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 3/6/21 기준선
+- Implementation Preconditions:
+  - [ ] 완료 package의 Verification Receipt를 모두 확인한다.
+  - [ ] Benchmark·Operations Preview와 사용자 동선을 확인한다.
+  - [ ] Operations 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
+  - [ ] snapshot 최소 필드·submission mutation·Queue 상태 관리를 재확인한다.
+  - [ ] 새 Schema·fixture·source·Rules 상태를 동결한다.
+  - [ ] 통합 Gate 실행 승인을 기록한다.
+- Component & Library Plan:
+  - shadcn/ui: N/A - offline integration Gate.
+  - Custom components: Benchmark manifest/report 확장.
+  - Reused components: 모든 승인 analyzer, Queue, Candidate, Verifier, scripts/verify.py.
+  - New libraries: 없음 - 통합 Gate에서 dependency 추가 금지.
+  - Libraries intentionally not added: benchmark/CI framework - 기존 pytest/script 재사용.
+  - shadcn preset: N/A - 새 UI 없음.
+- Acceptance Criteria:
+  - [ ] 전체 automated 사례가 exact·evidence·determinism을 통과한다.
+  - [ ] 남은 assisted·unsupported를 성공으로 계산하지 않는다.
+  - [ ] 문제 간 workspace·result·artifact가 격리된다.
+  - [ ] 독립 검증 없는 후보와 conflict 후보는 submission-ready가 아니다.
+- Document Sync Check:
+  - [ ] 문제은행·우선순위·Roadmap·README·QA·Benchmark를 동기화한다.
+- Context Receipt:
+  - Status: PENDING - 선행 package·사용자 통합 승인 전 착수 금지
+  - Required References Read: 위 Related 문서 전체
+  - Constraints: no automatic submission, no coverage overstatement
+  - Conflicts: official live Rules unresolved
+- Change Receipt:
+  - N/A - 구현 미시작
+- Verification Receipt:
+  - N/A - 구현 미시작
+
 ## 5. In Progress
 
 없음. 후속 작업은 별도 구현 승인 전에는 `In Progress`로 이동하지 않는다.
@@ -844,6 +1317,8 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - [x] TASK-007 AUTH vertical slice 구현을 별도로 승인
 - [x] TASK-008 FREEZE vertical slice 구현을 별도로 승인
 - [x] TASK-009 통합 회귀·보안·문서 동기화 Gate를 별도로 승인
+- [x] TASK-012~019 Coverage 확장 계획 문서 작성을 승인
+- [ ] TASK-012~019 각 code task의 fixture·Context Receipt·구현을 별도로 승인
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
@@ -882,8 +1357,11 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - **Technical_Specs**: [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - 구현 전 재사용·직접 구현 결정 Gate
 - **Technical_Specs**: [SQLite 논리 DB Schema](../03_Technical_Specs/01_DB_SCHEMA.md) - `TASK-004` 저장·artifact·resume 논리 계약
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - `TASK-010` 역할·Queue·검증·제출 요구사항
+- **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - `TASK-012~019` 엔진·fixture·계약 경계
 - **Logic_Progress**: [문서 완료 Roadmap](./00_ROADMAP.md) - 구현보다 먼저 통과할 문서 Gate
+- **Logic_Progress**: [Coverage 확장 Execution Plan](./01_EXECUTION_PLAN.md) - Wave·Stop/Go·진척 측정
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 수용·회귀 기준
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - exact-match 입력
 - **QA_Validation**: [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - `TASK-010` 별도 6개 QA
 - **QA_Validation**: [TASK-009 통합 보고서](../05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) - P0·V1 최종 통합 Gate 증거
+- **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 새 분석기의 자동화 승격 Gate

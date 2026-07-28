@@ -1,7 +1,7 @@
 # SCAN 2026 분석 도구 기능 우선순위
 > Created: 2026-07-25 15:49
-> Last Updated: 2026-07-27 15:52
-> Status: Draft 1 · Approved Baseline
+> Last Updated: 2026-07-29 01:55
+> Status: Approved 1.0 Baseline · Benchmark 0.1 Measured · Phase 2 Proposed
 
 ## 1. 문서 목적
 
@@ -191,6 +191,16 @@ LABEL과 VIZ는 증거가 아니라 판단 지원 화면이다. 원본 TX·출�
 7. PATH·LABEL·VIZ·TRACE 요구사항을 문제별 완료 조건과 연결한다.
 8. P2 fixture 확보 후 BTC·브리지·휴리스틱 범위를 확장한다.
 
+Benchmark 0.1 실측 후 Phase 2 순서는 다음으로 구체화됐다.
+
+1. 범용 EVM Query·State·Transfer
+2. NFT·Proxy와 PATH fixture 준비
+3. PATH Graph·금액 정합
+4. Label·OSINT·Actor Intelligence
+5. confirmed fixture가 있는 Service·Bitcoin adapter
+6. 범죄·복합 사건 reconciliation
+7. 전체 Benchmark·Operations 통합 Gate
+
 ## 8. P0·V1 완료 기준
 
 - 동일 fixture를 반복 실행해 expected의 결정적 값이 exact match한다.
@@ -222,8 +232,11 @@ LABEL과 VIZ는 증거가 아니라 판단 지원 화면이다. 원본 TX·출�
 5. P0·V1 `OSS-*` 재사용·직접 구현 경계를 확정했다.
 6. Document Completion Gate를 통과했다.
 7. 공식 규정은 Active Watch로 유지하고 `unclear` 기능을 비활성화한다.
-8. 별도 승인 후 Python project 초기화를 시작한다.
-9. P2 승격 시 BRIDGE·BTC fixture와 OSS 결정을 다시 연다.
+8. TASK-001~011의 승인된 offline 기준선을 완료했다.
+9. [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md)와
+   [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md)에 TASK-012~019를
+   계획했다.
+10. 각 task는 fixture·Context Receipt·별도 구현 승인 후 시작한다.
 
 ## 11. Related Documents
 
@@ -234,10 +247,13 @@ LABEL과 VIZ는 증거가 아니라 판단 지원 화면이다. 원본 TX·출�
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 입력·출력·오류·캐시·vertical slice 계약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 런타임·adapter·저장·검증 기술 결정
 - **Technical_Specs**: [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - 기능별 재사용·직접 구현 결정 Gate
+- **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - Benchmark 공백의 엔진 묶음
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - 공식 규정·문서 승인·구현 분리 Gate
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - P0·V1 원자 작업과 의존 순서
+- **Logic_Progress**: [Coverage 확장 Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - TASK-012~019 실행 Wave
 - **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - confirmed fixture와 승격 기준
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 기능별 통과·부분·실패 검증
 - **QA_Validation**: [DEX fixture](../05_QA_Validation/fixtures/FX-SVC-DEX-001/README.md) - DEX vertical slice
 - **QA_Validation**: [AUTH fixture](../05_QA_Validation/fixtures/FX-EVM-AUTH-001/README.md) - AUTH vertical slice
 - **QA_Validation**: [FREEZE fixture](../05_QA_Validation/fixtures/FX-EVM-FREEZE-001/README.md) - FREEZE vertical slice
+- **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 새 분석기 자동화 승격 기준

@@ -1,7 +1,7 @@
-# SCAN 2026 P0·V1 QA Checklist
+# SCAN 2026 P0·V1 및 Coverage 확장 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-29 01:16
-> Status: Approved 3.0 · TASK-010 Offline 6 QA · TASK-011 Benchmark Passed
+> Last Updated: 2026-07-29 01:55
+> Status: Approved 3.0 Baseline · Phase 2 Coverage QA Proposed / Not Executed
 
 ## 1. 문서 목적
 
@@ -220,6 +220,15 @@ ID는 24개 집계에서 한 번만 센다.
 - [x] 3/3은 자동화 범위 정확도이며 30문항 전체 해결률이 아님을 보고서에
   명시한다.
 
+### 6.8 TASK-012~019 Coverage 확장
+
+- [x] 비자동 27문항을 EVM Core·NFT/Proxy·PATH·Intel·Service·BTC·Case로 묶었다.
+- [x] 엔진별 직접 대상 문제와 dependency를 기록했다.
+- [x] 공통 fixture-first·Analysis I/O·Verifier·Benchmark 승격 Gate를 작성했다.
+- [ ] TASK-012~019 개별 fixture와 Context Receipt를 승인한다.
+- [ ] QA-EXP-* 12개 시나리오를 실행한다.
+- [ ] 새 automated 집계와 잔여 assisted·unsupported를 기록한다.
+
 ## 7. PR·릴리스·대회 전 Gate
 
 ### 7.1 모든 문서 PR
@@ -416,3 +425,4 @@ Deferred는 폐기가 아니며 V1 완료 조건도 아니다. 구체 소스·�
 - **QA_Validation**: [OPS-IMPL-07 OperationsSnapshot 보고서](./20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - SQLite read-back·strict snapshot·local view 검증
 - **QA_Validation**: [OPS-IMPL-08 Final Integration 보고서](./21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - leaf 병렬·local submission·보안·6개 offline 운영 QA
 - **QA_Validation**: [예상문제 Offline Benchmark 보고서](./22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 30문항 분류·3개 exact 실행·결정성·기능 공백
+- **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - TASK-012~019 승격·반례·통합 계획

@@ -1,6 +1,6 @@
 # 예상문제 Offline Benchmark 0.1 검증 보고서
 > Created: 2026-07-29 01:16
-> Last Updated: 2026-07-29 01:16
+> Last Updated: 2026-07-29 01:55
 > Status: Passed · 3 Automated / 6 Assisted / 21 Unsupported
 
 ## 1. 목적과 판정 경계
@@ -109,8 +109,8 @@ BENCHMARK 3/3 automated cases passed · network_mode offline
 포렌식 문제 해결기는 아니다. 30문항 coverage를 가장 크게 늘리는 순서는
 아래와 같다.
 
-1. `GENERIC-QUERY`·`GENERIC-STATE`·`TOKEN-TRANSFER`를 묶어 기초 EVM 3문항을
-   자동화한다.
+1. `GENERIC-QUERY`·`GENERIC-STATE`·`TOKEN-TRANSFER`·`NATIVE-FLOW`를 묶어
+   기초 EVM 4문항을 자동화한다.
 2. `PATH`와 graph reconciliation을 구현해 FLOW·CRIME·MIXED의 공통 병목을
    해소한다.
 3. `LABEL`·`OSINT`를 확정 사실과 heuristic으로 분리해 연결한다.
@@ -147,7 +147,10 @@ BENCHMARK 3/3 automated cases passed · network_mode offline
 - **Concept_Design**: [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - Draft 2 30문항과 완료·부분·실패 기준
 - **Concept_Design**: [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - 기능 빈도와 구현 단계
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - fixture-first·최소 구현·offline 검증 원칙
+- **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - 27개 비자동 문항의 엔진 묶음
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-011 구현·검증 기록
+- **Logic_Progress**: [Coverage 확장 Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - TASK-012~019 실행 Wave
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed DEX·AUTH·FREEZE 기준선
 - **QA_Validation**: [TASK-009 통합 보고서](./13_TASK_009_INTEGRATION_REPORT.md) - 기존 vertical 회귀와 보안 Gate
 - **QA_Validation**: [OPS-IMPL-08 보고서](./21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - 병렬 운영과 수동 제출 기준선
+- **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 새 분석기 승격·반례·통합 Gate
