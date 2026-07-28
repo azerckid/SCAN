@@ -90,7 +90,7 @@ class EvidenceWorkerService:
 
         try:
             response = await self._adapter.analyze(
-                workspace_key=command.problem.problem_id,
+                workspace_key=f"{command.problem.problem_id}/{command.job.job_id}",
                 request=command.request,
                 replay_body=command.approved_replay.body,
                 replay_sha256=command.approved_replay.sha256,

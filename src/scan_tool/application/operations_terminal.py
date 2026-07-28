@@ -43,6 +43,10 @@ def _render_header(snapshot: OperationsSnapshot, stream: TextIO) -> None:
         f"OPERATIONS {snapshot.competition.competition_id} · "
         f"{snapshot.view_state.value.upper()} · snapshot {snapshot.snapshot_id}\n"
     )
+    if snapshot.alerts:
+        stream.write(
+            "ALERTS     " + " · ".join(item.value.upper() for item in snapshot.alerts) + "\n"
+        )
     stream.write(
         "TIME       "
         f"elapsed {snapshot.competition.elapsed_seconds}s · "

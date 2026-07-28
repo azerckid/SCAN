@@ -9,14 +9,17 @@ from time import monotonic
 from typing import Annotated, NoReturn
 
 import typer
+from pydantic import ValidationError
 
 from scan_tool import __version__
+from scan_tool.adapters.sqlite_operations import SQLiteOperationsRepository
 from scan_tool.application.cli_runtime import (
     AnalysisUnavailable,
     CliRuntime,
 )
 from scan_tool.application.operations_snapshot import OperationsSnapshotBuilder
 from scan_tool.application.operations_terminal import render_operations_snapshot
+from scan_tool.application.submission import SubmissionCommand, SubmissionRecorder
 from scan_tool.application.terminal import (
     EXIT_FAILED,
     EXIT_INPUT,
@@ -36,6 +39,7 @@ from scan_tool.domain import (
     validate_operations_document,
 )
 from scan_tool.domain.analysis_request import AnalysisRequest, RuleStatus
+from scan_tool.domain.operations import OperationsDocument, SubmissionResponse
 
 DATA_ROOT = Path(".scan")
 
@@ -229,9 +233,17 @@ def show(analysis_id: Annotated[str, typer.Argument(help="Existing analysis ID."
 @app.command()
 def operations(
     bundle: Annotated[
-        Path,
+        Path | None,
         typer.Option("--bundle", help="Validated Operations contract 0.1 JSON bundle."),
-    ],
+    ] = None,
+    database: Annotated[
+        Path | None,
+        typer.Option("--database", help="Explicit SQLite v2 database path."),
+    ] = None,
+    competition_id: Annotated[
+        str | None,
+        typer.Option("--competition-id", help="Competition ID for SQLite read-back."),
+    ] = None,
     elapsed_seconds: Annotated[
         int,
         typer.Option("--elapsed-seconds", min=0, help="Elapsed competition time."),
@@ -248,8 +260,18 @@ def operations(
     """Render a local, read-only Competition Operations snapshot."""
     if output not in {"terminal", "json"}:
         _fail_input("invalid_input", "output must be terminal or json")
+    if (bundle is None) == (database is None):
+        _fail_input("invalid_input", "provide exactly one of --bundle or --database")
+    if database is not None and competition_id is None:
+        _fail_input("invalid_input", "--competition-id is required with --database")
+    if bundle is not None and competition_id is not None:
+        _fail_input("invalid_input", "--competition-id is valid only with --database")
     try:
-        document = validate_operations_document(_read_json(bundle))
+        document = _load_operations_document(
+            bundle=bundle,
+            database=database,
+            competition_id=competition_id,
+        )
         manifest = document.root.manifest
         snapshot_suffix = hashlib.sha256(manifest.competition_id.encode()).hexdigest()[:16].upper()
         snapshot = OperationsSnapshotBuilder().build(
@@ -261,6 +283,74 @@ def operations(
         render_operations_snapshot(snapshot, sys.stdout, output_format=output)
     except ContractViolation as error:
         _fail_input(error.code.value, "; ".join(error.issues))
+
+
+@app.command("mark-submitted")
+def mark_submitted(
+    database: Annotated[
+        Path,
+        typer.Option("--database", help="Explicit SQLite v2 database path."),
+    ],
+    competition_id: Annotated[str, typer.Option("--competition-id")],
+    candidate_id: Annotated[str, typer.Option("--candidate-id")],
+    response: Annotated[SubmissionResponse, typer.Option("--response")],
+    confirm: Annotated[
+        bool,
+        typer.Option("--confirm", help="Confirm the answer was submitted manually in CTFd."),
+    ] = False,
+    actor_id: Annotated[str, typer.Option("--actor-id")] = "operator-local",
+) -> None:
+    """Record a manual CTFd response locally without making a network call."""
+    if not confirm:
+        _fail_input("invalid_input", "--confirm is required after manual submission")
+    try:
+        with SQLiteOperationsRepository(database) as repository:
+            document = repository.load_document(competition_id)
+            if document is None:
+                _fail_input("invalid_input", "competition was not found in the local database")
+            execution = SubmissionRecorder().record(
+                document,
+                SubmissionCommand(
+                    competition_id=competition_id,
+                    candidate_id=candidate_id,
+                    response=response,
+                    operator_confirmed=True,
+                    actor_id=actor_id,
+                ),
+            )
+            repository.apply_submission(
+                execution.document,
+                execution.submission,
+                execution.event,
+            )
+    except typer.Exit:
+        raise
+    except (OSError, sqlite3.Error, ValidationError, ValueError):
+        _fail_input("submission_record_failed", "manual submission record was not stored")
+    typer.echo(
+        f"RECORDED {execution.submission.submission_id} · "
+        f"{candidate_id} · response {response.value} · network_calls 0"
+    )
+
+
+def _load_operations_document(
+    *,
+    bundle: Path | None,
+    database: Path | None,
+    competition_id: str | None,
+) -> OperationsDocument:
+    if bundle is not None:
+        return validate_operations_document(_read_json(bundle))
+    if database is None or competition_id is None:
+        raise ValueError("operations input is incomplete")
+    try:
+        with SQLiteOperationsRepository(database) as repository:
+            document = repository.load_document(competition_id)
+    except (OSError, sqlite3.Error, ValueError):
+        _fail_input("source_unavailable", "cannot read the explicit operations database")
+    if document is None:
+        _fail_input("source_unavailable", "competition was not found in the local database")
+    return document
 
 
 def _validate_request_file(path: Path) -> AnalysisRequest:

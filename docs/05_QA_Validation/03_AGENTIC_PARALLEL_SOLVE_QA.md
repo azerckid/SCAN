@@ -1,7 +1,7 @@
 # SCAN 2026 Agentic Parallel Solve QA
 > Created: 2026-07-27 00:54
-> Last Updated: 2026-07-28 16:26
-> Status: AI-Native Contract Approved 1.5 · OPS-IMPL-07 Runtime Partial · Rules-Gated
+> Last Updated: 2026-07-29 00:41
+> Status: AI-Native Contract Approved 1.6 · Offline 6 QA Passed · Live Rules-Gated
 
 ## 1. 문서 목적
 
@@ -28,11 +28,10 @@
 ### QA-OPS-PAR-001 — 문제 간 병렬 실행과 격리
 
 - **Mode**: fault-injection
-- **Result**: **partial** — 둘 이상의 문제 동시 실행·worker 예외 격리·
+- **Result**: **pass / offline** — 둘 이상의 문제 동시 실행·worker 예외 격리·
   global/problem/role concurrency와 DEX·AUTH·FREEZE Analysis
-  workspace·result·checkpoint·artifact·candidate scope 격리는 통과,
-  두 problem의 job·activity OperationsSnapshot 격리도 통과. 실제 대회
-  전체 end-to-end 실행은 OPS-IMPL-08에 남음
+  workspace·result·checkpoint·artifact·candidate scope 격리, 두 problem의
+  job·activity OperationsSnapshot 격리와 최종 offline 통합 Gate가 통과했다.
 - **Backlog**: `TASK-010`
 - **Requirements**: `REQ-OPS-QUEUE-001`~`REQ-OPS-QUEUE-006`
 - **Preconditions**: Q01 DEX, Q02 AUTH, Q03 FLOW 고정 request와 서로 다른 workspace
@@ -50,11 +49,11 @@
 ### QA-OPS-INTRA-001 — 문제 내부 leaf job 병렬성과 dependency
 
 - **Mode**: fault-injection
-- **Result**: **partial** — 독립 leaf 병렬성·dependency 대기·job idempotency·
+- **Result**: **pass / offline** — 독립 leaf 병렬성·dependency 대기·job idempotency·
   in-flight source request dedup·capability limit과 Queue→Analysis I/O
-  worker→candidate→Verifier 연결은 통과, 실제 한 문제의 복수 evidence leaf
-  reconciliation end-to-end는 OPS-IMPL-08에서 실행. Snapshot은 job stage·
-  queue reason·attempt budget을 표시함
+  worker→candidate→Verifier 연결이 통과했다. 같은 문제의 두 evidence leaf는
+  별도 workspace에서 실제로 겹쳐 실행되고 Reporter는 두 dependency 뒤에
+  reconciliation한다. Snapshot은 job stage·queue reason·attempt budget을 표시한다.
 - **Backlog**: `TASK-010`
 - **Requirements**: `REQ-OPS-QUEUE-001`, `REQ-OPS-QUEUE-002`,
   `REQ-OPS-QUEUE-003`, `REQ-OPS-QUEUE-006`
@@ -113,9 +112,10 @@
 - **Mode**: offline
 - **Backlog**: `TASK-010`
 - **Requirements**: `REQ-OPS-IN-002`, `REQ-NFR-008`
-- **Result**: **partial** — fake QA Planner·pre-call mode Gate와 scheduler는
-  통과하고 승인 plan projection의 offline Python evidence worker까지 실행,
-  공식 허용 실제 local/external adapter는 미실행
+- **Result**: **pass / offline** — fake QA Planner·pre-call mode Gate와 scheduler를
+  통과하고 승인 plan projection의 offline Python evidence worker까지 실행했으며,
+  `rules_gated` 대기와 `rule_restricted` 호출 차단을 검증했다. 실제 external
+  adapter 허용 여부와 호출은 공식 Rules 확인 전 계속 미실행이다.
 - **Preconditions**: 필수 AI Planner, 비공개 문제 원문, fake/local·external
   AI adapter, `RULE-AI-001` 상태 전환
 - **Steps**:
@@ -137,6 +137,9 @@
 ### QA-OPS-SUBMIT-001 — 사람 제출 통제와 credential 비보존
 
 - **Mode**: fault-injection
+- **Result**: **pass / offline** — 명시적 사람 확인 뒤 local SQLite 상태·
+  submission·event를 원자적으로 기록하고 CTFd network call·credential·
+  session·brute force가 0건임을 검증했다.
 - **Backlog**: `TASK-010`
 - **Requirements**: `REQ-OPS-SUBMIT-001`~`REQ-OPS-SUBMIT-004`
 - **Preconditions**: 검증 완료 후보, 가짜 CTFd endpoint·credential canary
@@ -180,31 +183,31 @@ UI Preview 체크박스는 2026-07-28 사용자 브라우저 검토와 승인 �
 
 | Criterion | Status | Draft 검증 증거 |
 |:---|:---:|:---|
-| Functionality | Partial | Planner·Queue·세 vertical·candidate·fresh Verifier·strict Snapshot 통과; submission 잔여 |
+| Functionality | Pass / Offline | Planner·Queue·세 vertical·candidate·fresh Verifier·strict Snapshot·local submission 통과 |
 | Potential Impact | Not Executed | 제한 시간 내 복수 문제 처리량과 Queue age 측정 |
-| Novelty | Not Executed | evidence-first 독립 검증과 role fallback |
-| UX | Preview + Local View Passed / Submission Not Executed | terminal/JSON 상태 판독 통과; 수동 제출 mutation은 미실행 |
+| Novelty | Pass / Offline Contract | evidence-first 독립 검증·role fallback·사람 제출 경계 구현 |
+| UX | Preview + Local Operations Passed | terminal/JSON 상태 판독과 explicit local submission 기록 통과 |
 | Open-source | Not Executed | 교체 가능한 worker·CLI·Analysis I/O 계약 |
 | Business Plan | N/A | 대회 운영 QA이며 수익 모델 검증 범위 아님 |
 
 ## 8. Originality & Ethics Check
 
-- [ ] AI Planner의 method hypothesis·실행 mode·전송 데이터와 Rules 근거가 감사 가능하다.
-- [ ] agent 결과를 제3자 범죄·신원 확정으로 자동 승격하지 않는다.
-- [ ] 공식·외부 맥락과 heuristic을 분리한다.
-- [ ] 문제·답안·credential을 허용되지 않은 서비스에 저장하지 않는다.
-- [ ] CTFd 자동 제출·brute force·팀 외부 답안 공유 기능이 없다.
-- [ ] 사람이 최종 제출 책임과 불확실성을 확인한다.
+- [x] AI Planner의 method hypothesis·실행 mode·전송 데이터와 Rules 근거가 감사 가능하다.
+- [x] agent 결과를 제3자 범죄·신원 확정으로 자동 승격하지 않는다.
+- [x] 공식·외부 맥락과 heuristic을 분리한다.
+- [x] 문제·답안·credential을 허용되지 않은 서비스에 저장하지 않는다.
+- [x] CTFd 자동 제출·brute force·팀 외부 답안 공유 기능이 없다.
+- [x] 사람이 최종 제출 책임과 불확실성을 확인한다.
 
 ## 9. 승인과 실행 Gate
 
-- [ ] 사용자가 6개 운영 QA 시나리오를 승인했다.
+- [x] 사용자가 6개 운영 QA 시나리오를 승인했다.
 - [x] Operations Board Preview를 사용자가 확인했다.
 - [x] TASK-010 Pre-Code Technical Brief의 QA 추적을 승인했다.
 - [ ] 공식 Rules에서 AI provider·model·data mode와 worker·source 범위를 확인했다.
-- [x] `OPS-IMPL-01`~`OPS-IMPL-07` 구현을 각각 별도로 승인했다.
-- [ ] 구현된 시나리오만 `pass / partial / fail / blocked`로 기록한다.
-- [ ] 실행하지 않은 시나리오는 `not_executed`로 유지한다.
+- [x] `OPS-IMPL-01`~`OPS-IMPL-08` 구현을 각각 별도로 승인했다.
+- [x] 구현된 시나리오만 `pass / partial / fail / blocked`로 기록한다.
+- [x] 실행하지 않은 live·실대회 성능 범위는 `not_executed`로 유지한다.
 
 ## 10. Related Documents
 
@@ -221,3 +224,4 @@ UI Preview 체크박스는 2026-07-28 사용자 브라우저 검토와 승인 �
 - **QA_Validation**: [OPS-IMPL-05 Evidence Worker 보고서](./18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - 세 vertical·Queue·workspace·artifact·checkpoint 검증
 - **QA_Validation**: [OPS-IMPL-06 Candidate·Verifier 보고서](./19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) - canonical candidate·fresh replay·conflict·promotion Gate 검증
 - **QA_Validation**: [OPS-IMPL-07 OperationsSnapshot 보고서](./20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) - SQLite read-back·strict snapshot·local terminal/JSON view 검증
+- **QA_Validation**: [OPS-IMPL-08 Final Integration 보고서](./21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - leaf 병렬·local submission·보안·6개 offline QA

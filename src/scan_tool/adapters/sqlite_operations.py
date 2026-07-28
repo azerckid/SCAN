@@ -11,7 +11,16 @@ from typing import Any
 from scan_tool.adapters.sqlite_storage import SCHEMA_VERSION as ANALYSIS_STORAGE_VERSION
 from scan_tool.adapters.sqlite_storage import SQLiteStorage
 from scan_tool.application.security import SensitiveDataGuard
-from scan_tool.domain.operations import OperationEvent, OperationsDocument
+from scan_tool.domain.operations import (
+    ActorType,
+    CandidateRecord,
+    CandidateStatus,
+    OperationEvent,
+    OperationsDocument,
+    ProblemRecord,
+    ProblemStatus,
+    SubmissionRecord,
+)
 from scan_tool.domain.storage import ArtifactRecord
 
 OPERATIONS_STORAGE_VERSION = 2
@@ -399,6 +408,81 @@ class SQLiteOperationsRepository:
         }
         self._guard.check_text(_json(payload))
         return OperationsDocument.model_validate(payload)
+
+    def apply_submission(
+        self,
+        document: OperationsDocument,
+        submission_record: SubmissionRecord,
+        event_record: OperationEvent,
+    ) -> OperationsDocument:
+        """Atomically persist one validated human-confirmed submission transition."""
+
+        bundle = document.root
+        submission = submission_record.model_dump(mode="json")
+        event = event_record.model_dump(mode="json")
+        if submission_record not in bundle.submissions or event_record not in bundle.events:
+            raise ValueError("submission transition records are outside the validated document")
+        candidate = next(
+            (
+                item
+                for item in bundle.candidates
+                if item.candidate_id == submission_record.candidate_id
+            ),
+            None,
+        )
+        if candidate is None:
+            raise ValueError("submission candidate is outside the validated document")
+        problem = next(
+            (item for item in bundle.problems if item.problem_id == candidate.problem_id),
+            None,
+        )
+        if problem is None:
+            raise ValueError("submission problem is outside the validated document")
+        _validate_submission_transition(
+            document,
+            submission_record,
+            event_record,
+            candidate,
+            problem,
+        )
+        self._guard.check_text(_json(document.to_contract_dict()))
+
+        with self._connection:
+            candidate_update = self._connection.execute(
+                """
+                UPDATE candidates SET status = ?, updated_at = ?
+                WHERE candidate_id = ? AND status = 'submission_ready'
+                """,
+                (candidate.status.value, candidate.updated_at.isoformat(), candidate.candidate_id),
+            )
+            problem_update = self._connection.execute(
+                """
+                UPDATE problems SET status = ?, updated_at = ?
+                WHERE problem_id = ? AND status = 'submission_ready'
+                """,
+                (problem.status.value, problem.updated_at.isoformat(), problem.problem_id),
+            )
+            manifest_update = self._connection.execute(
+                """
+                UPDATE competitions SET updated_at = ?
+                WHERE competition_id = ? AND status = 'active'
+                """,
+                (bundle.manifest.updated_at.isoformat(), bundle.manifest.competition_id),
+            )
+            if (
+                candidate_update.rowcount != 1
+                or problem_update.rowcount != 1
+                or manifest_update.rowcount != 1
+            ):
+                raise sqlite3.IntegrityError("submission transition precondition failed")
+            self._insert_submission(submission)
+            self._insert_event(event)
+            loaded = self.load_document(bundle.manifest.competition_id)
+            if loaded is None or loaded.to_contract_dict() != document.to_contract_dict():
+                raise sqlite3.IntegrityError(
+                    "persisted submission does not match validated document"
+                )
+        return loaded
 
     def record_artifact(self, record: ArtifactRecord) -> None:
         """Insert immutable planner artifact metadata or verify an existing hash."""
@@ -1000,6 +1084,48 @@ def _artifact_uri(sha256: str) -> str:
 
 def _load_json(value: str) -> Any:
     return json.loads(value)
+
+
+def _validate_submission_transition(
+    document: OperationsDocument,
+    submission: SubmissionRecord,
+    event: OperationEvent,
+    candidate: CandidateRecord,
+    problem: ProblemRecord,
+) -> None:
+    """Reject semantically inconsistent records before opening a write transaction."""
+
+    bundle = document.root
+    expected_time = submission.submitted_at
+    if candidate.status is not CandidateStatus.SUBMITTED:
+        raise ValueError("submission candidate is not submitted")
+    if problem.status is not ProblemStatus.SUBMITTED:
+        raise ValueError("submission problem is not submitted")
+    if (
+        event.competition_id != bundle.manifest.competition_id
+        or event.problem_id != problem.problem_id
+        or event.entity_type != "submission"
+        or event.entity_id != submission.submission_id
+        or event.event_type != "submission_recorded"
+        or event.actor_type is not ActorType.OPERATOR
+        or event.from_status != CandidateStatus.SUBMISSION_READY.value
+        or event.to_status != CandidateStatus.SUBMITTED.value
+    ):
+        raise ValueError("submission event does not match transition")
+    expected_details = {
+        "candidate_id": candidate.candidate_id,
+        "response": submission.response.value,
+        "external_submission": "human_confirmed",
+    }
+    if event.safe_details_json != expected_details:
+        raise ValueError("submission event details do not match transition")
+    if (
+        event.created_at != expected_time
+        or candidate.updated_at != expected_time
+        or problem.updated_at != expected_time
+        or bundle.manifest.updated_at != expected_time
+    ):
+        raise ValueError("submission transition timestamps do not match")
 
 
 def _drop_none(record: dict[str, Any]) -> None:
