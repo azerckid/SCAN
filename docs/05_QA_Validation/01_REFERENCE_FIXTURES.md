@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 04:32
+> Last Updated: 2026-07-29 04:36
 > Status: Approved 1.1 · Phase 2 Verifying Pack
 
 ## 1. 문서 목적
@@ -316,8 +316,8 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 확정 전 증거 | dRPC `eth_getBalance`, historical `balanceOf`, `decimals`; Publicnode block |
 | 부분·실패 | archive/decimals 누락은 partial; latest 대체·정밀도 손실은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-ARCHIVE`, `DS-EVM-RPC-PUBLIC` |
-| 승격 잔여 | offline timestamp→block 통과, archive_required consumer contract 승인 |
-| 마지막 확인 | 2026-07-29 03:55 |
+| 승격 잔여 | archive_required consumer contract 승인 |
+| 마지막 확인 | 2026-07-29 04:36 |
 
 ---
 
