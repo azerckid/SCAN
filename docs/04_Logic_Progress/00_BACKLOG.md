@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-28 14:23
-> Status: TASK-001~009 Done · TASK-010 OPS-IMPL-01~04 Done · OPS-IMPL-05~08 ToDo
+> Last Updated: 2026-07-28 14:51
+> Status: TASK-001~009 Done · TASK-010 OPS-IMPL-01~05 Done · OPS-IMPL-06~08 ToDo
 
 ## 1. 문서 목적
 
@@ -548,7 +548,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 
 ### [ ] TASK-010: AI-native Rules-gated 병렬 문제풀이 Operations 구현
 
-- Status: Partial Implementation · OPS-IMPL-01~04 Done · Rules-Gated
+- Status: Partial Implementation · OPS-IMPL-01~05 Done · Rules-Gated
 - Priority: Tournament Operations · Conditional
 - Depends On: TASK-005, TASK-009, Operations Board Preview 승인;
   live AI mode만 공식 Rules 확인 필요
@@ -563,8 +563,9 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] AI가 해결 방법·leaf dependency·도구 계획을 구조화된 hypothesis로 생성하게 한다.
   - [ ] problem Queue와 dependency-aware job Queue를 분리한다.
   - [ ] AI Planner/Coordinator·EVM·Tracer·OSINT·Verifier·Reporter role adapter를 정의한다.
-  - [ ] AI plan에 따라 human-approved Python CLI worker가 evidence job을 실행하게 한다.
-  - [ ] 문제 간 workspace·result·checkpoint·candidate를 격리한다.
+  - [x] AI plan에 따라 human-approved Python worker가 evidence job을 실행하게 한다.
+  - [x] 문제 간 workspace·result·checkpoint를 격리한다.
+  - [ ] 문제 간 candidate를 격리한다.
   - [x] 문제 내부 독립 leaf job을 제한된 동시성으로 실행한다.
   - [x] source request idempotency·in-flight dedup·capability별 concurrency budget을 구현한다.
   - [x] worker 실패를 해당 job·dependency에만 전파한다.
@@ -593,6 +594,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 - Related QA Docs:
   - [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) - 병렬성·격리·독립 검증·규정·수동 제출
   - [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - leaf 분석 24개 기존 기준선
+  - [OPS-IMPL-05 Evidence Worker 보고서](../05_QA_Validation/18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) - 세 vertical·Queue·workspace·artifact·checkpoint 검증
 - Implementation Preconditions:
   - [x] 관련 Concept·UI·Preview·Technical·QA 문서를 다시 읽었다.
   - [x] Operations Board Preview를 사용자가 확인하고 피드백을 승인했다.
@@ -609,6 +611,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [x] 후속 `OPS-IMPL-02` 구현 착수를 별도로 승인받았다.
   - [x] 후속 `OPS-IMPL-03` 구현 착수를 별도로 승인받았다.
   - [x] 후속 `OPS-IMPL-04` 구현 착수를 별도로 승인받았다.
+  - [x] 후속 `OPS-IMPL-05` 구현 착수를 별도로 승인받았다.
 - Acceptance Criteria:
   - [ ] 두 개 이상의 문제를 동시에 처리하며 상태·결과·candidate가 격리된다.
   - [ ] 모든 문제에 AI method hypothesis와 승인된 leaf job plan이 존재한다.
@@ -622,7 +625,7 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
   - [ ] CTFd network call·credential 저장·brute force가 0건이다.
   - [ ] 6개 운영 QA의 구현된 범위가 통과하고 미실행 항목은 명시된다.
 - Document Sync Check:
-  - [ ] 실제 상태·필드·concurrency 기본값을 기술·UI·QA 문서와 동기화했다.
+  - [x] OPS-IMPL-05 실제 상태·필드·concurrency 기본값을 기술·QA 문서와 동기화했다.
   - [ ] Rules 변경 시 활성 role·source·fallback과 Known Issue를 갱신했다.
   - [ ] Preview와 실제 Operations UI의 의도하지 않은 차이가 0건이다.
 
