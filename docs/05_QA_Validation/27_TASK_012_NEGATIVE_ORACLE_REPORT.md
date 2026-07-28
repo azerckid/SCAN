@@ -1,7 +1,7 @@
 # TASK-012 Negative Oracle 검증 보고서
 > Created: 2026-07-29 04:16
-> Last Updated: 2026-07-29 04:25
-> Status: Offline 19 Passed Twice · Independent Trace Pending
+> Last Updated: 2026-07-29 04:32
+> Status: Offline 24 Passed Twice · Independent Trace Pending
 
 ## 1. 목적과 판정
 
@@ -10,7 +10,7 @@ complete·partial·failed 경계를 합성 반례로 고정한다. 이 작업은
 Analysis type이나 live adapter를 구현하지 않고, fixture 승격에 사용할
 negative oracle 계약과 오프라인 판정기만 추가한다.
 
-**판정: 19개 oracle을 동일 입력으로 두 번 실행해 모두 같은 결과를 얻었다.
+**판정: 24개 oracle을 동일 입력으로 두 번 실행해 모두 같은 결과를 얻었다.
 독립 trace와 credential 회전은 미완료이므로 fixture는 계속
 `verifying`이다.**
 
@@ -19,15 +19,15 @@ negative oracle 계약과 오프라인 판정기만 추가한다.
 | Fixture | Oracle 수 | 검증 범위 | 결과 |
 |:---|---:|:---|:---:|
 | `FX-BASIC-EVM-001` | 4 | malformed/checksum, RPC 부재, gas limit fee 오용 | pass |
-| `FX-BASIC-EVM-002` | 4 | latest 대체, block mismatch, decimals 부재, precision 손실 | pass |
+| `FX-BASIC-EVM-002` | 9 | state 4개 + timestamp exact/between/range/wrong selection 5개 | pass |
 | `FX-EVM-TOKEN-001` | 5 | 실패 TX, 무관 signature, 다른 token, zero value, pagination | pass |
 | `FX-EVM-TOKEN-002` | 6 | trace 부재, value 부재, 실패 call, 복수 inflow, truncation, top-level 대체 | pass |
-| **합계** | **19** | synthetic offline · deterministic 2회 | **pass** |
+| **합계** | **24** | synthetic offline · deterministic 2회 | **pass** |
 
 ## 3. 산출물
 
 - `fixtures/TASK-012-NEGATIVE-ORACLES.json`
-  - strict manifest, 19개 고유 oracle ID, expected outcome
+  - strict manifest, 24개 고유 oracle ID, expected outcome
 - `src/scan_tool/application/task_012_negative_oracles.py`
   - 외부 I/O가 없는 순수 판정기와 필수 ID 집합
 - `scripts/verify_task_012_negative_oracles.py`
@@ -45,7 +45,6 @@ negative oracle 계약과 오프라인 판정기만 추가한다.
 - TASK-012 제품 analyzer·CLI wiring: 미구현
 - live provider timeout/rate-limit 반례: 미실행
 - Alchemy 독립 trace 실패: 미해결
-- timestamp 입력→block number 변환 oracle: 미실행
 
 합성 oracle 통과는 raw provider replay나 독립 trace를 대체하지 않는다.
 `confirmed` 승격은 credential 회전, 필요한 독립 trace, package 참조
@@ -63,7 +62,7 @@ negative oracle 계약과 오프라인 판정기만 추가한다.
 
 | 기준 | 판정 |
 |:---|:---|
-| Functionality | 19개 complete·partial·failed 반례 결정성 통과 |
+| Functionality | 24개 complete·partial·failed 반례 결정성 통과 |
 | Potential Impact | 네 문제와 후속 EVM/PATH 분석기의 공통 실패 경계 |
 | Novelty | AI 추론이 아니라 raw 조건을 실증하는 negative oracle |
 | UX | partial·failed 이유를 명시적 상태로 보존 |

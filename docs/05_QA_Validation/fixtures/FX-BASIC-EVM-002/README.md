@@ -1,6 +1,6 @@
 # Fixture: FX-BASIC-EVM-002
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 04:25
+> Last Updated: 2026-07-29 04:32
 > Status: Verifying
 
 ## 1. 목적
@@ -31,7 +31,7 @@ historical state로 조회하고 raw 정수와 decimals 적용값을 함께 검�
 ## 4. 승격 전 잔여
 
 1. [x] QuickNode·Alchemy에서 ETH·USDC·decimals를 재현했다.
-2. [ ] block timestamp 입력을 block number로 변환하는 별도 반례를 추가한다.
+2. [x] timestamp exact·between·범위 밖·오선택 합성 oracle을 검증했다.
 3. [ ] state 결과 계약과 `archive_required` 오류를 승인한다.
 
 Provider별 raw SHA-256과 일치 결과는 [provider-replay.json](./provider-replay.json)에

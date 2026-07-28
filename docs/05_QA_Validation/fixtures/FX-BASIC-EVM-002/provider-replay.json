@@ -32,7 +32,6 @@
     "usdc_decimals": 6
   },
   "remaining_gate": [
-    "timestamp-to-block negative oracle",
     "archive_required consumer contract approval"
   ]
 }

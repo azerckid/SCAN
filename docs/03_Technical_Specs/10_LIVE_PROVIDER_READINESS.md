@@ -1,6 +1,6 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 04:16
+> Last Updated: 2026-07-29 04:32
 > Status: Pre-event Smoke Partial Pass · Credential Rotation Pending · Competition Rules Unclear
 
 ## 1. 목적
@@ -211,7 +211,7 @@ hash 계산 전후 모두 artifact에 들어가면 안 된다.
 `candidate`를 유지한다. supporting explorer 일치는 독립 RPC 일치를
 대체하지 않는다.
 
-합성 offline 반례 19개는 두 번 실행해 결정성을 통과했다. 실행 근거는
+합성 offline 반례 24개는 두 번 실행해 결정성을 통과했다. 실행 근거는
 [TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md)다.
 live rate/timeout 반례와 독립 trace는 이 결과로 대체할 수 없다.
 
@@ -268,5 +268,5 @@ Verifier가 없는 결과는 `submission_ready`가 될 수 없다.
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - 공급자 Gate 이후 순서
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실행 전 체크와 기록 형식
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - verifying 4개
-- **QA_Validation**: [TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 19개 offline 반례
+- **QA_Validation**: [TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 24개 offline 반례
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - network 0건·Gate·테스트 증거

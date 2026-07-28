@@ -132,6 +132,139 @@
       }
     },
     {
+      "oracle_id": "OR-TIME-EXACT",
+      "fixture_id": "FX-BASIC-EVM-002",
+      "category": "timestamp_to_block",
+      "facts": {
+        "target_timestamp": 1012,
+        "reported_block_number": 101,
+        "headers": [
+          {
+            "number": 100,
+            "timestamp": 1000
+          },
+          {
+            "number": 101,
+            "timestamp": 1012
+          },
+          {
+            "number": 102,
+            "timestamp": 1024
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "complete",
+        "block_number": 101
+      }
+    },
+    {
+      "oracle_id": "OR-TIME-BETWEEN",
+      "fixture_id": "FX-BASIC-EVM-002",
+      "category": "timestamp_to_block",
+      "facts": {
+        "target_timestamp": 1018,
+        "reported_block_number": 101,
+        "headers": [
+          {
+            "number": 100,
+            "timestamp": 1000
+          },
+          {
+            "number": 101,
+            "timestamp": 1012
+          },
+          {
+            "number": 102,
+            "timestamp": 1024
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "complete",
+        "block_number": 101
+      }
+    },
+    {
+      "oracle_id": "OR-TIME-BEFORE-RANGE",
+      "fixture_id": "FX-BASIC-EVM-002",
+      "category": "timestamp_to_block",
+      "facts": {
+        "target_timestamp": 999,
+        "headers": [
+          {
+            "number": 100,
+            "timestamp": 1000
+          },
+          {
+            "number": 101,
+            "timestamp": 1012
+          },
+          {
+            "number": 102,
+            "timestamp": 1024
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "partial",
+        "block_number": null
+      }
+    },
+    {
+      "oracle_id": "OR-TIME-AFTER-RANGE",
+      "fixture_id": "FX-BASIC-EVM-002",
+      "category": "timestamp_to_block",
+      "facts": {
+        "target_timestamp": 1025,
+        "headers": [
+          {
+            "number": 100,
+            "timestamp": 1000
+          },
+          {
+            "number": 101,
+            "timestamp": 1012
+          },
+          {
+            "number": 102,
+            "timestamp": 1024
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "partial",
+        "block_number": null
+      }
+    },
+    {
+      "oracle_id": "OR-TIME-WRONG-SELECTION",
+      "fixture_id": "FX-BASIC-EVM-002",
+      "category": "timestamp_to_block",
+      "facts": {
+        "target_timestamp": 1018,
+        "reported_block_number": 102,
+        "headers": [
+          {
+            "number": 100,
+            "timestamp": 1000
+          },
+          {
+            "number": 101,
+            "timestamp": 1012
+          },
+          {
+            "number": 102,
+            "timestamp": 1024
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "failed",
+        "block_number": 101
+      }
+    },
+    {
       "oracle_id": "OR-TOKEN-FAILED-TX",
       "fixture_id": "FX-EVM-TOKEN-001",
       "category": "token_transfer",

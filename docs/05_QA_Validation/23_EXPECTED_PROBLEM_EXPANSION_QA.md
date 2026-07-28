@@ -1,6 +1,6 @@
 # 예상문제 Coverage 확장 QA 계획
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 04:16
+> Last Updated: 2026-07-29 04:32
 > Status: Proposed 0.1 · Not Executed
 
 ## 1. 목적
@@ -46,7 +46,7 @@
 
 - 네 공개 fixture 패키지는 `verifying`이며 제품 analyzer QA는
   `not_executed`를 유지한다. 별도 fixture Gate에서 합성 negative oracle
-  19개는 두 번 통과했다.
+  24개는 두 번 통과했다.
 - raw uint256과 decimals를 분리한다.
 - failed transaction을 성공 이동에서 제외한다.
 - historical state에 `latest`를 사용하지 않는다.
@@ -119,4 +119,4 @@
 - **QA_Validation**: [Offline Benchmark](./22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 coverage 기준선
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 4개 candidate와 1차 source 재조회
 - **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·독립성·반례
-- **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 제품 analyzer 전 19개 fixture 반례
+- **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 제품 analyzer 전 24개 fixture 반례
