@@ -31,8 +31,10 @@ rules-gated AI Planner, and `OPS-IMPL-04` adds the bounded in-process scheduler,
 job DAG, failure isolation, retry, idempotency dedup, and source-capability request
 pool. `OPS-IMPL-05` connects approved AI plan inputs to isolated offline
 DEX·AUTH·FREEZE Python evidence workers, Analysis I/O results, checkpoints, and
-content-addressed artifacts. Candidate construction, independent verification,
-live AI, and the Operations Board runtime remain unimplemented.
+content-addressed artifacts. `OPS-IMPL-06` builds canonical evidence-linked
+candidates, independently replays raw evidence, preserves conflicts, and allows
+only the Application Gate to mark a candidate submission-ready. Live AI,
+OperationsSnapshot/local UI, and submission-record integration remain unimplemented.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`, so external execution modes remain `rules_gated` until
 an authoritative notice is recorded.
@@ -74,6 +76,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-009 evidence | [`13_TASK_009_INTEGRATION_REPORT.md`](docs/05_QA_Validation/13_TASK_009_INTEGRATION_REPORT.md) | deterministic V1 regression, error matrix, traceability, UI comparison, and security evidence |
 | OPS-IMPL-04 evidence | [`17_OPS_IMPL_04_BOUNDED_QUEUE_REPORT.md`](docs/05_QA_Validation/17_OPS_IMPL_04_BOUNDED_QUEUE_REPORT.md) | bounded scheduling, dependency, isolation, retry, dedup, and capability-limit evidence |
 | OPS-IMPL-05 evidence | [`18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md`](docs/05_QA_Validation/18_OPS_IMPL_05_EVIDENCE_WORKER_REPORT.md) | approved plan projection, DEX/AUTH/FREEZE replay, workspace isolation, artifact, and checkpoint evidence |
+| OPS-IMPL-06 evidence | [`19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md`](docs/05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) | canonical candidate, fresh independent replay, conflict preservation, and promotion-gate evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
