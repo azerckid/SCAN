@@ -1,7 +1,7 @@
 # SCAN 2026 SQLite 논리 DB Schema
 > Created: 2026-07-27 15:52
-> Last Updated: 2026-07-28 11:28
-> Status: Approved 1.2 · SQLite Schema Version 1 · CLI Composition Applied
+> Last Updated: 2026-07-28 13:31
+> Status: Approved 1.3 · SQLite Schema Version 2 · OPS-IMPL-02 Applied
 
 ## 1. 문서 목적
 
@@ -379,6 +379,24 @@ event evidence에는 calldata를 섞지 않고 call evidence로 분리한다. co
 실행했으며 기존 DB의
 삭제·reset·migration은 수행하지 않았다.
 
+### 10.2 OPS-IMPL-02 운영 확장 기준선
+
+| 항목 | 적용 |
+|:---|:---|
+| 구현 | `src/scan_tool/adapters/sqlite_operations.py` |
+| Schema | 명시적 SQLite `PRAGMA user_version = 2`, operations `STRICT` tables 15개 |
+| 보존 | v1 tables 11개를 rewrite/drop하지 않고 그대로 재사용 |
+| Migration | source integrity → 새 v1 backup → `BEGIN IMMEDIATE` additive DDL → FK check → v2 commit |
+| 실패 | 전체 v2 DDL·version 변경 rollback, v1 코드로 재개방 가능 |
+| v1 경계 | 기존 `SQLiteStorage`는 v2를 자동 변경하지 않고 version mismatch로 거부 |
+| Repository | 검증된 `OperationsDocument`를 단일 transaction으로 저장 |
+| Artifact | 문제 원문·첨부·plan raw·submission note는 기존 `artifacts.sha256` 선행 참조 |
+| Analysis | job·candidate가 기존 analysis run·result·evidence row를 재사용 |
+| Audit | `operation_events` API는 append-only, trigger가 update/delete를 차단 |
+
+빈 DB와 데이터가 있는 v1 DB, 중간 DDL 오류를 모두 pytest 임시 경로에서
+검증했다. 실제 사용자 `.scan/scan.sqlite3`에는 migration을 실행하지 않았다.
+
 ## 11. 365 글로벌 평가 기준 연결
 
 | 기준 | DB Schema 기여 |
@@ -404,3 +422,4 @@ event evidence에는 calldata를 섞지 않고 call evidence로 분리한다. co
 - **QA_Validation**: [P0·V1 QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) - 저장·복구·보안 Gate
 - **QA_Validation**: [TASK-004 Storage 보고서](../05_QA_Validation/08_TASK_004_STORAGE_REPORT.md) - DDL·cache·checkpoint·artifact·export 검증
 - **QA_Validation**: [TASK-005 CLI 보고서](../05_QA_Validation/09_TASK_005_CLI_REPORT.md) - `.scan/` composition·show 조회·종료 상태 검증
+- **QA_Validation**: [OPS-IMPL-02 SQLite v2 보고서](../05_QA_Validation/15_OPS_IMPL_02_SQLITE_REPORT.md) - additive migration·rollback·repository·event log 검증
