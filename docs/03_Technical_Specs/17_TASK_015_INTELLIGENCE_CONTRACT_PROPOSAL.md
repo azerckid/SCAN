@@ -1,7 +1,7 @@
 # TASK-015 Label·OSINT·Actor Intelligence 계약 제안
 > Created: 2026-07-30 02:37
-> Last Updated: 2026-07-30 03:07
-> Status: Proposed 0.1 · Docs-only · Candidate Research 4 Viable / 1 Source-Blocked · Runtime Not Implemented
+> Last Updated: 2026-07-30 03:27
+> Status: Proposed 0.1 · Docs-only · Source Resolution 5 Viable · Snapshot Basis Recorded · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -269,8 +269,9 @@ Python worker는 다음을 수행한다.
 
 - [ ] source role·claim·conflict 계약 사용자 승인
 - [x] TASK-015 UI Preview 사용자 검토·피드백 — 2026-07-30 02:52 승인
-- [x] 공개 fixture 5개 후보 bounded 조사 — 4 viable, 1 source-blocked
-- [ ] label conflict open-license 제2 source와 다섯 raw fixture package 확정
+- [x] 공개 fixture 5개 후보 bounded 조사·source blocker 교체 — 5 viable
+- [x] 다섯 후보의 pinned locator·raw snapshot SHA 기준선 기록
+- [ ] selected raw artifact를 포함한 다섯 fixture package 확정
 - [ ] source별 Rules·Terms·privacy·license 확인
 - [ ] raw/source snapshot·negative oracle·독립 Verifier
 - [ ] Analysis I/O 대안 B 정식 승인
@@ -287,3 +288,4 @@ Python worker는 다음을 수행한다.
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) - Context Lock·구현 승인
 - **QA_Validation**: [TASK-015 Fixture·Contract Gate](../05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) - Stop/Go 기준
 - **QA_Validation**: [TASK-015 공개 Source·Fixture 후보 조사](../05_QA_Validation/46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) - Terms·privacy·후보 판정
+- **QA_Validation**: [Source 교체·Raw Snapshot 기준선](../05_QA_Validation/47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) - replacement·snapshot hash

@@ -1,7 +1,7 @@
 # TASK-015 공개 Source·Fixture 후보 조사 보고서
 > Created: 2026-07-30 03:07
-> Last Updated: 2026-07-30 03:07
-> Status: Candidate Research Complete · 4 Viable · 1 Source-Blocked · No Fixture Packages · Runtime Not Implemented
+> Last Updated: 2026-07-30 03:27
+> Status: Historical Candidate Baseline · Source Blocker Resolved by Report 47 · No Fixture Packages
 
 ## 1. 목적과 경계
 
@@ -13,6 +13,12 @@ fixture package, raw snapshot, negative oracle, 독립 Verifier, Analysis I/O
 공개 페이지에 주소가 보인다는 사실만으로 자동 수집·재배포·AI dataset
 사용이 허용되는 것은 아니다. 이용조건이 허용하지 않는 source는 관찰
 가능하더라도 fixture source에서 제외한다.
+
+후속 조사에서 label subject를 `0xc387...d267`로 교체해 OpenRAIL
+research/testing sample과 MIT Tornado config·onchain ENS의 category
+conflict로 재구성했다. 현재 판정은
+[Source 교체·Raw Snapshot 기준선](./47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md)을
+따른다. 이 문서의 4 viable·1 source-blocked는 교체 전 역사적 판정이다.
 
 ## 2. Source 이용조건·privacy 판정
 
@@ -177,3 +183,4 @@ oracle·독립 Verifier가 없으므로 package 생성과 `verifying` 승격은 
 - **Technical_Specs**: [TASK-015 계약](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md) - assertion·timeline·relation 계약
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) - Context Lock
 - **QA_Validation**: [TASK-015 Fixture·Contract Gate](./45_TASK_015_FIXTURE_CONTRACT_GATE.md) - 승격 Stop/Go
+- **QA_Validation**: [Source 교체·Raw Snapshot 기준선](./47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) - blocker 해소·5 viable 판정

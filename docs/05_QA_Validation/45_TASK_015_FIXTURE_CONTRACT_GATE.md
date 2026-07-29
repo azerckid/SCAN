@@ -1,7 +1,7 @@
 # TASK-015 Label·OSINT·Actor Fixture·Contract Gate
 > Created: 2026-07-30 02:37
-> Last Updated: 2026-07-30 03:07
-> Status: Preview User Review Passed · Candidate Research 4 Viable / 1 Source-Blocked · No Fixture Packages · Runtime Not Implemented
+> Last Updated: 2026-07-30 03:27
+> Status: Preview Passed · Source Resolution 5 Viable · Snapshot Basis Recorded · No Fixture Packages · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -16,23 +16,24 @@ relation 반례, UI 승인, Analysis I/O 계약, 독립 Verifier 및 Benchmark
 
 | 문제 | 제안 Fixture | 현재 coverage | Gate 상태 |
 |:---|:---|:---:|:---:|
-| OSINT-LBL-001 | `FX-OSINT-LABEL-CONFLICT-001` | unsupported | source-blocked |
+| OSINT-LBL-001 | `FX-OSINT-LABEL-CONFLICT-001` | unsupported | viable replacement |
 | OSINT-SAN-001 | `FX-OSINT-SANCTIONS-HISTORY-001` | unsupported | viable candidate |
 | OSINT-ENS-001 | `FX-OSINT-ENS-CONFLICT-001` | unsupported | viable candidate |
 | ACTOR-REL-001 | `FX-ACTOR-COMMON-FUNDER-001` | unsupported | viable candidate |
 | ACTOR-REL-002 | `FX-ACTOR-RELATION-HUB-001` | unsupported | viable candidate |
 
-`FX-OSINT-LABEL-CONFLICT-001`은 공식 OFAC timeline 후보는 있으나,
-관찰된 Etherscan label을 Terms상 fixture/AI dataset source로 재사용할 수
-없어 `source-blocked`다. open-license 제2 label source 선정 전 package
-생성을 금지한다.
+`FX-OSINT-LABEL-CONFLICT-001`은 Etherscan을 사용하지 않는다. OpenRAIL
+research/testing sample의 `Mixer;Sanctioned` assertion과 MIT Tornado
+config·onchain ENS의 `team4 vesting` 역할을 보존하는 새 subject로 교체했다.
+package 생성 전 제2 ENS replay와 conflict oracle이 필요하다.
 
 ## 3. Fixture Gate
 
-- [x] bounded 후보 주소·source·관찰 시점 조사 — 4 viable, 1 source-blocked
+- [x] bounded 후보 주소·source·관찰 시점 조사 — 5 viable
 - [x] 후보 source Terms·license·privacy·재배포 가능 범위 조사
-- [ ] 다섯 fixture의 최종 공개 주소·bounded onchain scope 선정
-- [ ] source snapshot hash·locator·retrieved_at 고정
+- [x] 다섯 fixture의 subject와 bounded raw snapshot 기준선 선정
+- [x] source locator·고정 commit 또는 snapshot SHA-256 기록
+- [ ] 다섯 fixture package에 selected raw artifact·retrieved_at 고정
 - [ ] 주소 직접 명시와 주소 비명시 claim 분리
 - [ ] official/first-party/provider/public-report/heuristic role 분리
 - [ ] 충돌·stale·withdrawn·정정 claim 보존
@@ -113,9 +114,8 @@ relation 반례, UI 승인, Analysis I/O 계약, 독립 Verifier 및 Benchmark
 
 ## 9. Stop/Go
 
-현재 판정은 **GO for raw snapshot planning on four viable candidates,
-STOP for the source-blocked label candidate, fixture package promotion and
-implementation**이다.
+현재 판정은 **GO for candidate package construction on five viable
+candidates, STOP for fixture promotion and implementation**이다.
 
 Fixture 선정 전:
 
@@ -126,15 +126,16 @@ Fixture 선정 전:
 
 Context Receipt `PASS` 전:
 
-4. viable 후보 4개 raw scope 확정 + label conflict의 open-license 제2 source 선정
-5. snapshot/replay·negative oracle·독립 Verifier
-6. Analysis I/O `intel_context` 대안 B 정식 승인
-7. 문제별 complete/partial/failed와 UI 재검토
+4. ~~다섯 후보 source·raw scope 기준선 확정~~ → 2026-07-30 완료
+5. 다섯 candidate package에 selected artifact·retrieved_at 연결
+6. snapshot/replay·negative oracle·독립 Verifier
+7. Analysis I/O `intel_context` 대안 B 정식 승인
+8. 문제별 complete/partial/failed와 UI 재검토
 
 코드 착수 전:
 
-8. Context Receipt `PASS`
-9. 사용자 analyzer 구현 명시 승인
+9. Context Receipt `PASS`
+10. 사용자 analyzer 구현 명시 승인
 
 ## 10. Related Documents
 
@@ -147,3 +148,4 @@ Context Receipt `PASS` 전:
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) - Context Lock·Acceptance Criteria
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001 상위 Gate
 - **QA_Validation**: [TASK-015 공개 Source·Fixture 후보 조사](./46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) - 4 viable·1 source-blocked 판정
+- **QA_Validation**: [Source 교체·Raw Snapshot 기준선](./47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) - 5 viable·snapshot hash 판정
