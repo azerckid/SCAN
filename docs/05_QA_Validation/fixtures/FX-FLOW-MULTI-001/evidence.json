@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-FLOW-MULTI-001",
-  "status": "candidate",
+  "status": "verifying",
   "captured_at": "2026-07-29T14:25:33Z",
   "event_evidence": [],
   "call_evidence": [
@@ -73,12 +73,18 @@
     "single_exit_node": true,
     "transaction_hashes_unique": true,
     "deduplicated_total_recomputed": true,
-    "two_provider_decoded_match": false,
-    "independent_verifier_pass": false
+    "two_provider_decoded_match": true,
+    "raw_sha256_recorded_per_capability": true,
+    "independent_verifier_pass": true
+  },
+  "verification_provenance": {
+    "negative_oracle_report": "../../41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md",
+    "independent_verifier_report": "../../42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md",
+    "calculated_fact_sha256": "8e80cb1a34bcdf1308073b56ca15fd05bc0c04826abf83ae986cfcf2078a2f79"
   },
   "uncertainty": {
-    "candidate_only": true,
-    "remaining": "Primary-provider replay, raw SHA-256 artifacts, origin-set completeness decision, negative oracle, and independent Verifier. Historical price remains separate context."
+    "candidate_only": false,
+    "remaining": "Product analyzer and final fixture promotion remain pending. Historical price stays separate context and is not part of raw contribution scoring."
   },
   "provenance_notes": "Raw on-chain contributions are scoring facts. Common ownership, criminal intent, victim status, and fiat value are explicitly not assessed."
 }

@@ -112,7 +112,9 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-014 PATH contract | [`15_TASK_014_PATH_CONTRACT_PROPOSAL.md`](docs/03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) | proposed bounded graph, exclusion, reconciliation, and error contract |
 | TASK-014 PATH UI | [`08_TASK_014_PATH_UI.md`](docs/02_UI_Screens/08_TASK_014_PATH_UI.md) | docs-only query/state Preview with user review passed |
 | TASK-014 PATH Gate | [`39_TASK_014_FIXTURE_CONTRACT_GATE.md`](docs/05_QA_Validation/39_TASK_014_FIXTURE_CONTRACT_GATE.md) | fixture, oracle, Verifier, and UI Stop/Go criteria |
-| TASK-014 PATH candidates | [`40_TASK_014_FIXTURE_CANDIDATE_REPORT.md`](docs/05_QA_Validation/40_TASK_014_FIXTURE_CANDIDATE_REPORT.md) | three public Euler scopes selected as candidate; replay/oracle/Verifier pending |
+| TASK-014 PATH candidates | [`40_TASK_014_FIXTURE_CANDIDATE_REPORT.md`](docs/05_QA_Validation/40_TASK_014_FIXTURE_CANDIDATE_REPORT.md) | historical candidate selection; three packages are now verifying |
+| TASK-014 replay/oracle | [`41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md`](docs/05_QA_Validation/41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md) | two-provider selected-scope replay and 18 deterministic counterexamples |
+| TASK-014 verifier | [`42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md`](docs/05_QA_Validation/42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md) | raw-first graph/ledger recalculation for three verifying fixtures |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -130,17 +132,19 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-427 passed
+436 passed
 PASS 13 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 44 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 1430 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 147 runtime/evidence files
+PASS repository traceability: 1442 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 157 runtime/evidence files
 PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)
 PASS TASK-013 independent Verifier: 3 fixtures (confirmed), 7 requirements, 13 evidence values, 2 deterministic runs
 PASS TASK-013 analyzer independent verification: 3 fixtures, 4 subject-scoped requests, canonical result hash matches the independent verifier, 2 deterministic runs
+PASS 18 TASK-014 negative oracles twice (offline deterministic)
+PASS TASK-014 independent Verifier: 3 fixtures, 6 requirements, 2 deterministic runs
 ```
 
 The installed package exposes the approved analysis and local operations command surface:

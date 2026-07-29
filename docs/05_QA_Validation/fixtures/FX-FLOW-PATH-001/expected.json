@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-FLOW-PATH-001",
-  "status": "candidate",
+  "status": "verifying",
   "query_kind": "trace_path",
   "graph": {
     "node_count": 4,

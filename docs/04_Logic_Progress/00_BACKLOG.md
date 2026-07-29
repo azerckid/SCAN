@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 23:25
+> Last Updated: 2026-07-30 00:08
 > Status: TASK-001~013 Done · WP-INPUT Done · TASK-014~019 Proposed
 
 ## 1. 문서 목적
@@ -1123,7 +1123,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] `flow_path` Analysis type 대안·bounded graph·ledger·오류 계약을 작성한다.
   - [x] single·remerge·multi-origin × complete·partial·failed HTML Preview를 작성한다.
   - [x] 단일 path·분기/재병합·multi-origin 공개 사례를 `candidate`로 선정한다.
-  - [ ] 세 공개 fixture를 replay·oracle·Verifier 후 확정한다.
+  - [x] 세 공개 fixture를 replay·oracle·Verifier 후 `verifying`으로 올린다.
   - [ ] `flow_path` 대안 B와 bounded node/edge·hop/time·asset conservation 계약을 승인한다.
   - [ ] cycle·unrelated fund·residual·budget partial을 구현한다.
   - [ ] path artifact와 read-only graph 출력 경계를 검증한다.
@@ -1146,7 +1146,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-PATH-001/002
 - Implementation Preconditions:
   - [x] 세 종류 path 공개 후보와 1차 exclusion·residual 정답 골격을 작성한다.
-  - [ ] 세 fixture의 두 공급자 replay·negative oracle·독립 Verifier를 통과한다.
+  - [x] 세 fixture의 두 공급자 replay·negative oracle·독립 Verifier를 통과한다.
   - [ ] graph artifact·메모리 budget·partial 상태를 승인한다.
   - [ ] CLI/Workbench 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
   - [ ] edge 최소 필드·artifact mutation·bounded graph 상태 관리를 승인한다.
@@ -1167,7 +1167,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] Analysis I/O·Workbench·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - fixture candidate는 선정됐으나 replay·oracle·Verifier·사용자 구현 승인 전 착수 금지
+  - Status: PENDING - fixture는 verifying이나 Analysis I/O 정식 승인·graph 상태 계약·사용자 구현 승인 전 착수 금지
   - Required References Read: 위 Related 문서 전체
   - Constraints: bounded traversal, unrelated fund 분리, graph DB YAGNI
   - Conflicts: None known

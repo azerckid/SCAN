@@ -1,0 +1,133 @@
+{
+  "schema_version": "0.1",
+  "status": "verified",
+  "execution_mode": "synthetic_offline",
+  "cases": [
+    {
+      "oracle_id": "OR-PATH-CYCLE",
+      "fixture_id": "FX-FLOW-PATH-001",
+      "category": "path",
+      "facts": {"asset_matches": true, "cycle_detected": true, "endpoints_join": true, "unrelated_edge_included": false, "internal_trace_available": true, "budget_complete": true},
+      "expected": {"outcome": "failed", "classification": "cycle_detected"}
+    },
+    {
+      "oracle_id": "OR-PATH-ENDPOINT-DISCONTINUITY",
+      "fixture_id": "FX-FLOW-PATH-001",
+      "category": "path",
+      "facts": {"asset_matches": true, "cycle_detected": false, "endpoints_join": false, "unrelated_edge_included": false, "internal_trace_available": true, "budget_complete": true},
+      "expected": {"outcome": "failed", "classification": "path_reconciliation_failed"}
+    },
+    {
+      "oracle_id": "OR-PATH-UNRELATED-EDGE",
+      "fixture_id": "FX-FLOW-PATH-001",
+      "category": "path",
+      "facts": {"asset_matches": true, "cycle_detected": false, "endpoints_join": true, "unrelated_edge_included": true, "internal_trace_available": true, "budget_complete": true},
+      "expected": {"outcome": "failed", "classification": "unrelated_edge_included"}
+    },
+    {
+      "oracle_id": "OR-PATH-BUDGET-TRUNCATED",
+      "fixture_id": "FX-FLOW-PATH-001",
+      "category": "path",
+      "facts": {"asset_matches": true, "cycle_detected": false, "endpoints_join": true, "unrelated_edge_included": false, "internal_trace_available": true, "budget_complete": false},
+      "expected": {"outcome": "partial", "classification": "budget_exhausted"}
+    },
+    {
+      "oracle_id": "OR-PATH-INTERNAL-TRACE-MISSING",
+      "fixture_id": "FX-FLOW-PATH-001",
+      "category": "path",
+      "facts": {"asset_matches": true, "cycle_detected": false, "endpoints_join": true, "unrelated_edge_included": false, "internal_trace_available": false, "budget_complete": true},
+      "expected": {"outcome": "partial", "classification": "trace_unavailable"}
+    },
+    {
+      "oracle_id": "OR-PATH-ASSET-MISMATCH",
+      "fixture_id": "FX-FLOW-PATH-001",
+      "category": "path",
+      "facts": {"asset_matches": false, "cycle_detected": false, "endpoints_join": true, "unrelated_edge_included": false, "internal_trace_available": true, "budget_complete": true},
+      "expected": {"outcome": "failed", "classification": "asset_mismatch"}
+    },
+    {
+      "oracle_id": "OR-REMERGE-DUPLICATE-EDGE",
+      "fixture_id": "FX-FLOW-REMERGE-001",
+      "category": "remerge",
+      "facts": {"cycle_detected": false, "duplicate_edge": true, "external_inflow_in_seed_ledger": false, "residual_raw": 1600000000000000000, "all_branches_available": true, "budget_complete": true},
+      "expected": {"outcome": "failed", "classification": "duplicate_edge"}
+    },
+    {
+      "oracle_id": "OR-REMERGE-EXTERNAL-INFLOW-INCLUDED",
+      "fixture_id": "FX-FLOW-REMERGE-001",
+      "category": "remerge",
+      "facts": {"cycle_detected": false, "duplicate_edge": false, "external_inflow_in_seed_ledger": true, "residual_raw": 1600000000000000000, "all_branches_available": true, "budget_complete": true},
+      "expected": {"outcome": "failed", "classification": "external_inflow_contamination"}
+    },
+    {
+      "oracle_id": "OR-REMERGE-BRANCH-MISSING",
+      "fixture_id": "FX-FLOW-REMERGE-001",
+      "category": "remerge",
+      "facts": {"cycle_detected": false, "duplicate_edge": false, "external_inflow_in_seed_ledger": false, "residual_raw": 1600000000000000000, "all_branches_available": false, "budget_complete": true},
+      "expected": {"outcome": "partial", "classification": "branch_unavailable"}
+    },
+    {
+      "oracle_id": "OR-REMERGE-NEGATIVE-RESIDUAL",
+      "fixture_id": "FX-FLOW-REMERGE-001",
+      "category": "remerge",
+      "facts": {"cycle_detected": false, "duplicate_edge": false, "external_inflow_in_seed_ledger": false, "residual_raw": -1, "all_branches_available": true, "budget_complete": true},
+      "expected": {"outcome": "failed", "classification": "negative_residual"}
+    },
+    {
+      "oracle_id": "OR-REMERGE-CYCLE",
+      "fixture_id": "FX-FLOW-REMERGE-001",
+      "category": "remerge",
+      "facts": {"cycle_detected": true, "duplicate_edge": false, "external_inflow_in_seed_ledger": false, "residual_raw": 1600000000000000000, "all_branches_available": true, "budget_complete": true},
+      "expected": {"outcome": "failed", "classification": "cycle_detected"}
+    },
+    {
+      "oracle_id": "OR-REMERGE-BUDGET-TRUNCATED",
+      "fixture_id": "FX-FLOW-REMERGE-001",
+      "category": "remerge",
+      "facts": {"cycle_detected": false, "duplicate_edge": false, "external_inflow_in_seed_ledger": false, "residual_raw": 1600000000000000000, "all_branches_available": true, "budget_complete": false},
+      "expected": {"outcome": "partial", "classification": "budget_exhausted"}
+    },
+    {
+      "oracle_id": "OR-MULTI-DUPLICATE-TRANSACTION",
+      "fixture_id": "FX-FLOW-MULTI-001",
+      "category": "multi",
+      "facts": {"duplicate_transaction": true, "all_exit_nodes_match": true, "unrequested_origin": false, "raw_integer_preserved": true, "all_origins_available": true},
+      "expected": {"outcome": "failed", "classification": "duplicate_contribution"}
+    },
+    {
+      "oracle_id": "OR-MULTI-ORIGIN-MISSING",
+      "fixture_id": "FX-FLOW-MULTI-001",
+      "category": "multi",
+      "facts": {"duplicate_transaction": false, "all_exit_nodes_match": true, "unrequested_origin": false, "raw_integer_preserved": true, "all_origins_available": false},
+      "expected": {"outcome": "partial", "classification": "origin_unavailable"}
+    },
+    {
+      "oracle_id": "OR-MULTI-WRONG-EXIT",
+      "fixture_id": "FX-FLOW-MULTI-001",
+      "category": "multi",
+      "facts": {"duplicate_transaction": false, "all_exit_nodes_match": false, "unrequested_origin": false, "raw_integer_preserved": true, "all_origins_available": true},
+      "expected": {"outcome": "failed", "classification": "exit_mismatch"}
+    },
+    {
+      "oracle_id": "OR-MULTI-PRICE-ABSENT",
+      "fixture_id": "FX-FLOW-MULTI-001",
+      "category": "multi",
+      "facts": {"duplicate_transaction": false, "all_exit_nodes_match": true, "unrequested_origin": false, "raw_integer_preserved": true, "all_origins_available": true, "price_available": false},
+      "expected": {"outcome": "complete", "classification": "aggregate_origins"}
+    },
+    {
+      "oracle_id": "OR-MULTI-ROUNDED-AMOUNT",
+      "fixture_id": "FX-FLOW-MULTI-001",
+      "category": "multi",
+      "facts": {"duplicate_transaction": false, "all_exit_nodes_match": true, "unrequested_origin": false, "raw_integer_preserved": false, "all_origins_available": true},
+      "expected": {"outcome": "failed", "classification": "raw_amount_required"}
+    },
+    {
+      "oracle_id": "OR-MULTI-UNREQUESTED-ORIGIN",
+      "fixture_id": "FX-FLOW-MULTI-001",
+      "category": "multi",
+      "facts": {"duplicate_transaction": false, "all_exit_nodes_match": true, "unrequested_origin": true, "raw_integer_preserved": true, "all_origins_available": true},
+      "expected": {"outcome": "failed", "classification": "origin_scope_mismatch"}
+    }
+  ]
+}

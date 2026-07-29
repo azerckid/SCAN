@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-FLOW-PATH-001",
-  "status": "candidate",
+  "status": "verifying",
   "captured_at": "2026-07-29T14:25:33Z",
   "event_evidence": [],
   "call_evidence": [
@@ -94,14 +94,19 @@
     "selected_transactions_exist": true,
     "receipt_status_success": true,
     "ordered_endpoints_join": true,
-    "two_provider_decoded_match": false,
-    "raw_sha256_recorded_per_capability": false,
+    "two_provider_decoded_match": true,
+    "raw_sha256_recorded_per_capability": true,
     "continuous_gap_scanned": false,
-    "independent_verifier_pass": false
+    "independent_verifier_pass": true
+  },
+  "verification_provenance": {
+    "negative_oracle_report": "../../41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md",
+    "independent_verifier_report": "../../42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md",
+    "calculated_fact_sha256": "4035497ab47987952c12732ea45806b1ec4830df7e5b7b4c9e46cf41391367fe"
   },
   "uncertainty": {
-    "candidate_only": true,
-    "remaining": "Primary-provider replay, independent trace for the internal edge, raw SHA-256 artifacts, continuous-scope decision, negative oracle, and independent Verifier."
+    "candidate_only": false,
+    "remaining": "Product analyzer and final fixture promotion remain pending. Continuous gaps and the seed's complete output ledger are outside this selected-transaction scope."
   },
   "provenance_notes": "All scoring values are public on-chain facts. Euler's article is context only; labels, criminal intent, victim status, and common control are not assessed."
 }

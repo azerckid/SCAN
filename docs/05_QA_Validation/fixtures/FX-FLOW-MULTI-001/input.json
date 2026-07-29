@@ -4,7 +4,7 @@
   "fixture_version": "0.1",
   "fixture_id": "FX-FLOW-MULTI-001",
   "problem_id": "FLOW-MULTI-001",
-  "status": "candidate",
+  "status": "verifying",
   "chain": {
     "name": "ethereum",
     "chain_id": 1
