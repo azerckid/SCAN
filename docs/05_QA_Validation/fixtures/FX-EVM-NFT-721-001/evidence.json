@@ -1,0 +1,82 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-NFT-721-001",
+  "status": "candidate",
+  "captured_at": "2026-07-29T05:38:10Z",
+  "event_evidence": [
+    {
+      "evidence_id": "EV-NFT721-OPERATOR-APPROVAL",
+      "evidence_type": "erc721_approval_for_all",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "transaction_hash": "0x4501b47b05689704ee2c2524bc9cb69bcbea0ca3ab71f2a4fc6db97d71af9379",
+      "block_number": 25008826,
+      "log_index": 971,
+      "topic0": "0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31",
+      "owner": "0x28dda46bdc0aeb3b4e58e6a9a3774875729367a0",
+      "operator": "0xf41b389e0c1950dc0b16c9498eae77131cc08a56",
+      "approved": true
+    },
+    {
+      "evidence_id": "EV-NFT721-TOKEN-APPROVAL-RESET",
+      "evidence_type": "erc721_approval",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "transaction_hash": "0x07ae8c28ff8109cbe3051308ecd00568ee5539d40c72154ad3412bbe14a727d7",
+      "block_number": 25023516,
+      "log_index": 417,
+      "topic0": "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925",
+      "owner": "0x28dda46bdc0aeb3b4e58e6a9a3774875729367a0",
+      "approved_address": "0x0000000000000000000000000000000000000000",
+      "token_id_raw": "9110"
+    },
+    {
+      "evidence_id": "EV-NFT721-TRANSFER",
+      "evidence_type": "erc721_transfer",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "transaction_hash": "0x07ae8c28ff8109cbe3051308ecd00568ee5539d40c72154ad3412bbe14a727d7",
+      "block_number": 25023516,
+      "log_index": 418,
+      "topic0": "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+      "from": "0x28dda46bdc0aeb3b4e58e6a9a3774875729367a0",
+      "to": "0xe445283d46d814af9ab554d5afb40afb28b91935",
+      "token_id_raw": "9110"
+    }
+  ],
+  "call_evidence": [],
+  "state_evidence": [],
+  "context_evidence": [],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Successful receipts and exact ERC-721 event fields"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "PROVIDER-EVM-PRIMARY",
+      "retrieved_at": "2026-07-29T05:38:10Z",
+      "methods": ["eth_getTransactionReceipt"]
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "PROVIDER-EVM-VERIFY",
+      "retrieved_at": "2026-07-29T05:38:10Z",
+      "methods": ["eth_getTransactionReceipt"]
+    }
+  ],
+  "consistency_checks": {
+    "two_provider_decoded_match": true,
+    "receipt_status_success": true,
+    "subject_matches_all_selected_events": true,
+    "token_id_matches_approval_and_transfer": true
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": "Raw replay SHA-256, range-completeness replay, negative oracle, Schema/UI approval, and independent verifier are not complete"
+  },
+  "provenance_notes": "Etherscan was used only to discover public transaction candidates. Scoring values were independently read from two RPC receipts."
+}

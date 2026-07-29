@@ -109,6 +109,10 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   docs-only Draft로 고정한다.
 - [x] `TASK-013`의 전문 Analysis type 대안·결과·partial/failed 계약을
   docs-only Draft로 작성한다.
+- [x] `TASK-013` 공개 candidate 3개를 선정하고 두 공급자 receipt/storage
+  기본 일치를 기록한다.
+- [ ] `TASK-013` filtered range·raw/provider replay·negative oracle을
+  완성한다.
 - [ ] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 확정한다.
 - [ ] `TASK-013` Analysis I/O 대안과 전용 UI Preview를 승인한다.
 - [ ] `TASK-014` 단일 path와 분기·재병합 fixture를 확정한다.

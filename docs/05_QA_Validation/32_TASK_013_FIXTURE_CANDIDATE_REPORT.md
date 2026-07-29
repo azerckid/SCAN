@@ -1,24 +1,36 @@
 # TASK-013 NFT·Proxy Fixture 후보 보고서
 > Created: 2026-07-29
-> Last Updated: 2026-07-29
-> Status: Proposed · Public Cases Not Selected · Implementation Not Approved
+> Last Updated: 2026-07-29 14:50
+> Status: Candidate Cases Selected · Two-Provider Basic Match · Not Confirmed
 
 ## 1. 목적
 
 TASK-013의 코드를 만들기 전에 필요한 ERC-721, ERC-1155, EIP-1967
-fixture의 최소 구성을 확정한다. 이 보고서는 fixture package 자체나 공개
-사례를 확정하지 않는다.
+fixture의 공개 후보와 최소 구성을 기록한다. 세 package는 공개 사례와
+두 공급자 기본 재현까지 마쳤지만 raw replay·negative oracle·Verifier가
+남아 있어 `candidate`이며, fixture 확정이나 구현 승인을 뜻하지 않는다.
 
 ## 2. 후보 구성
 
 | Fixture ID | 문제 | 필수 범위 | 주소·TX | 상태 |
 |:---|:---|:---|:---|:---|
-| `FX-EVM-NFT-721-001` | EVM-NFT-001 | Transfer·Approval·ApprovalForAll, tokenId exact | TBD | proposed |
-| `FX-EVM-NFT-1155-001` | EVM-NFT-001 | TransferSingle·TransferBatch·ApprovalForAll, ids/values exact | TBD | proposed |
-| `FX-EVM-PROXY-001` | EVM-PROXY-001 | EIP-1967 implementation/admin 또는 beacon 변경 이력 | TBD | proposed |
+| [`FX-EVM-NFT-721-001`](./fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | BAYC ApprovalForAll·Approval reset·Transfer, token `9110` | blocks `25008826`·`25023516` | candidate |
+| [`FX-EVM-NFT-1155-001`](./fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | Rarible Single·Batch·ApprovalForAll, ids/values exact | blocks `23762140`·`24609794` | candidate |
+| [`FX-EVM-PROXY-001`](./fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | Aave V3 Pool implementation before/after·Upgraded·admin zero | block `25199939` | candidate |
 
 NFT 한 건만으로 ERC-721과 ERC-1155를 모두 검증했다고 주장하지 않는다.
 두 표준은 별도 package와 reference answer가 필요하다.
+
+### 2.1 두 공급자 기본 재현
+
+| Fixture | 재현 입력 | 일치한 값 | 미완료 |
+|:---|:---|:---|:---|
+| ERC-721 | 두 TX receipt | contract·block·log index·owner/operator·approved·from/to·tokenId | filtered range·raw SHA |
+| ERC-1155 | Single/approval TX와 Batch TX receipt | contract·block·log index·operator/from/to·ids·amounts | filtered range·raw SHA |
+| Proxy | upgrade receipt + before/after `eth_getStorageAt` | Upgraded implementation·implementation slot·admin zero | history 범위·raw SHA |
+
+공급자 endpoint와 credential은 저장하지 않고 `primary`·`verify` 논리 역할만
+사용했다. 탐색기 화면은 후보 발견 보조이며 scoring source가 아니다.
 
 ## 3. 선정 조건
 
@@ -47,12 +59,9 @@ NFT 한 건만으로 ERC-721과 ERC-1155를 모두 검증했다고 주장하지 
 
 ## 4. 패키지 최소 파일
 
-각 후보가 실제 사례로 선정되면 다음 파일을 추가한다.
+현재 candidate package에는 `README.md`, `input.json`, `expected.json`,
+`evidence.json`을 추가했다. 다음 파일은 승격 전에 추가한다.
 
-- `README.md`: 범위·상태·재현·승격 조건
-- `input.json`: 주소·block range·표준/pattern hint
-- `expected.json`: raw answer·complete/partial/failed 조건
-- `evidence.json`: event/state/source role과 requirement 연결
 - `raw-replay.json`: normalized evidence 원본과 SHA-256
 - `provider-replay.json`: provider별 method·params·retrieved_at·decoded match
 
@@ -101,16 +110,19 @@ endpoint·API key·credential·로컬 절대 경로는 어느 파일에도 넣�
 - [x] 세 fixture ID와 표준별 책임을 분리했다.
 - [x] 선정·reference answer·반례 기준을 문서화했다.
 - [x] 공식 EIP 근거와 자동 판정 금지 범위를 고정했다.
-- [ ] 공개 주소·TX·block을 선정했다.
-- [ ] package JSON과 raw replay를 작성했다.
-- [ ] provider 재현과 archive state를 통과했다.
+- [x] 공개 주소·TX·block을 선정했다.
+- [x] candidate package의 README·input·expected·evidence를 작성했다.
+- [x] 두 공급자 receipt와 필요한 historical storage의 decoded 값을 대조했다.
+- [ ] raw replay·SHA-256·provider replay provenance를 작성했다.
+- [ ] filtered range completeness와 proxy history 범위를 검증했다.
 - [ ] negative oracle을 실행했다.
-- [ ] fixture Schema를 통과했다.
+- [x] candidate package 3개를 포함한 fixture Schema 0.1을 통과했다.
 - [ ] Analysis I/O와 UI를 승인했다.
 - [ ] Context Receipt가 `PASS`다.
 - [ ] 사용자 구현 승인을 기록했다.
 
-따라서 현재 fixture 수와 Benchmark 자동화 수는 변하지 않는다.
+따라서 Schema 검증 package 수는 10개로 늘지만, confirmed fixture 7개와
+Benchmark 자동화 7문항은 변하지 않는다.
 
 ## 8. 위험과 완화
 
@@ -123,15 +135,30 @@ endpoint·API key·credential·로컬 절대 경로는 어느 파일에도 넣�
 | 최신 state 오용 | 모든 state에 block tag와 raw word 보존 |
 | 악성·소유권 추론 과장 | `not_assessed` 유지, 별도 공식 근거 요구 |
 
-## 9. 판정
+## 9. 365 Rubric 검증
 
-**Fixture·계약 설계 단계 통과, 공개 fixture 선정 단계 미실행.**
+| 기준 | 상태 | 이번 단계의 증거 | 잔여 |
+|:---|:---|:---|:---|
+| Functionality | Partial | 세 표준 후보의 공개 raw 값과 두 공급자 decoded match | raw replay·negative oracle·Verifier |
+| Potential Impact | Partial | NFT·Proxy 두 예상문제의 구현 입력을 구체화 | Benchmark 승격 전 |
+| Novelty | Partial | event와 historical slot을 분리하고 귀속을 판정하지 않음 | analyzer 비교 전 |
+| UX | N/A | UI·runtime 변경 없음 | 전용 Preview 승인 |
+| Open-source | Partial | 공식 EIP와 공개 온체인 자료만 사용 | 고정 replay provenance |
+| Business Plan | N/A | 대회 준비 fixture 단계 | 상용성 주장 안 함 |
 
-다음 작업은 공개 사례 후보 조사다. 사례와 reference answer가 확보된 뒤에도
-즉시 코드를 시작하지 않고, fixture 승격·UI·Context Receipt·사용자 구현
-승인을 순서대로 닫는다.
+공개 온체인 사실을 자체 재현해 요약했으며 제3자 구현 코드를 복제하지
+않았다. 주소 소유자·NFT 가치·거래 의도·upgrade의 악성 여부는
+`not_assessed`로 유지한다.
 
-## 10. Related Documents
+## 10. 판정
+
+**공개 candidate 선정과 두 공급자 기본 대조 통과, fixture 승격 미실행.**
+
+다음 작업은 filtered range·raw/provider replay·negative oracle 작성이다.
+그 뒤에도 즉시 코드를 시작하지 않고, fixture 승격·UI·Context Receipt·
+사용자 구현 승인을 순서대로 닫는다.
+
+## 11. Related Documents
 
 - [TASK-013 분석 계약 제안](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md)
 - [Reference Fixtures](./01_REFERENCE_FIXTURES.md)

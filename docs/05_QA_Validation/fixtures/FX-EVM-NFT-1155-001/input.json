@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-NFT-1155-001",
+  "problem_id": "EVM-NFT-001",
+  "status": "candidate",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "standard_hint": "erc1155",
+  "token_contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+  "transactions": {
+    "single_and_approval": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+    "multi_item_batch": "0x94fcb6337f5cae9223146caf50f92d9e1af4342ea7cb21bb16792d032e3a230e"
+  },
+  "selection_notes": "The Rarible ERC-1155 contract supplies atomic TransferSingle and ApprovalForAll events plus a separate two-item TransferBatch. Two RPC providers returned identical decoded fields."
+}

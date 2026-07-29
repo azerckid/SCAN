@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-PROXY-001",
+  "problem_id": "EVM-PROXY-001",
+  "status": "candidate",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "pattern_hint": "eip1967",
+  "proxy_address": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+  "upgrade_transaction": "0xe9949c36e86fc9f481897dbac8de33d655bff20b267955a303e2e5643fbc2b35",
+  "state_blocks": {
+    "before": 25199938,
+    "after": 25199939
+  },
+  "selection_notes": "Aave V3 Pool emitted Upgraded and changed the EIP-1967 implementation slot at the same block. Two archive RPC providers returned identical before and after storage words."
+}
