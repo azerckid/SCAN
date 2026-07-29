@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-BASIC-EVM-002",
+  "analysis_type": "evm_core",
+  "query_kind": "historical_balance",
+  "chain_id": 1,
+  "fixture_id": "FX-BASIC-EVM-002",
+  "requested_at": "2026-07-29T12:00:00+09:00",
+  "inputs": {
+    "subject_address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+    "block_number": 16642512,
+    "block_timestamp": 1676565263,
+    "state_semantics": "post_state",
+    "assets": [
+      {"asset_type": "native", "symbol": "ETH"},
+      {
+        "asset_type": "erc20",
+        "symbol": "USDC",
+        "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+      }
+    ]
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": ["DS-EVM-RPC-ARCHIVE"],
+    "source_order": ["DS-EVM-RPC-ARCHIVE"],
+    "allow_fallback": true,
+    "offline_mode": true
+  }
+}

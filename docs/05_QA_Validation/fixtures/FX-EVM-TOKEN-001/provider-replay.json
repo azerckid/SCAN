@@ -2,7 +2,7 @@
   "schema_version": "0.1",
   "fixture_id": "FX-EVM-TOKEN-001",
   "captured_at": "2026-07-28T18:54:34.101826+00:00",
-  "status": "verifying",
+  "status": "confirmed",
   "request_scope": {
     "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     "from_topic": "0x000000000000000000000000a406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
@@ -27,8 +27,5 @@
     "to": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
     "amount_raw": "25000000000"
   },
-  "remaining_gate": [
-    "zero-value transfer negative oracle",
-    "multiple-log ordering and pagination oracle"
-  ]
+  "remaining_gate": []
 }

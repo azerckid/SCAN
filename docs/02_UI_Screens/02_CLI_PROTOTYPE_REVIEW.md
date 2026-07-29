@@ -175,11 +175,11 @@ TASK-009에서 DEX·AUTH·FREEZE 반복 실행, 11개 오류의 상태·exit cod
 JSON·Markdown·terminal 값과 resume 경계를 통합 재검증했다. renderer와
 Preview는 변경하지 않았으며 의도하지 않은 차이는 없었다.
 
-TASK-012의 `evm_core` `0.2-draft`는 이 승인된 V1 Preview를 변경하지 않는다.
+TASK-012의 `evm_core` 0.2는 이 승인된 V1 Preview를 변경하지 않는다.
 별도 [EVM Core Preview](./previews/04_task_012_evm_core_cli_preview.html)와
 [UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md)에서
-2026-07-29 05:58 KST에 사용자 확인을 새로 받았다. 이는 UI Gate 승인이고
-정식 Schema·provider·제품 analyzer 구현 승인은 아니다.
+2026-07-29 05:58 KST에 사용자 확인을 새로 받았다. UI Gate 승인 뒤 정식
+Schema·fixture·제품 analyzer는 별도 TASK-012 Gate에서 적용됐다.
 
 ## 9. Gate 판정
 

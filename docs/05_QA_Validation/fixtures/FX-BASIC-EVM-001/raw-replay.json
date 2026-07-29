@@ -1,0 +1,57 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-BASIC-EVM-001",
+  "chain_id": 1,
+  "query_kind": "object_summary",
+  "captured_at": "2026-07-28T18:54:34.101826+00:00",
+  "transaction": {
+    "hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+    "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+    "block_number": "0xfdf1d0",
+    "from": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+    "to": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+    "value": "0x0",
+    "nonce": "0x36",
+    "transaction_index": "0x68"
+  },
+  "receipt": {
+    "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+    "block_hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+    "block_number": "0xfdf1d0",
+    "status": "0x1",
+    "transaction_index": "0x68",
+    "gas_used": "0x21720",
+    "effective_gas_price": "0xdcaf1c089"
+  },
+  "block": {
+    "hash": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+    "number": "0xfdf1d0",
+    "timestamp": "0x63ee5b0f"
+  },
+  "codes": [
+    {
+      "address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "block_number": "0xfdf1d0",
+      "code": "0x"
+    },
+    {
+      "address": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "block_number": "0xfdf1d0",
+      "code": "0x6080604052"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider_id": "provider-evm-primary",
+      "endpoint_host": "provider-primary.invalid",
+      "retrieved_at": "2026-07-28T18:54:34.101826+00:00"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "provider-evm-verify",
+      "endpoint_host": "provider-verify.invalid",
+      "retrieved_at": "2026-07-28T18:54:34.101826+00:00"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-"""Compare generated Pydantic schemas with the approved Analysis I/O 0.1 contract."""
+"""Compare generated Pydantic schemas with Analysis I/O 0.2 and 0.1 compatibility."""
 
 from __future__ import annotations
 
@@ -18,6 +18,9 @@ from scan_tool.domain.analysis_result import AnalysisResult
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_ROOT = REPOSITORY_ROOT / "docs/05_QA_Validation/schemas"
 EXAMPLE_ROOT = REPOSITORY_ROOT / "docs/05_QA_Validation/examples/analysis"
+EVM_EXAMPLE = (
+    REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-BASIC-EVM-001/analysis-request.json"
+)
 SCHEMA_FILES = {
     "request": "analysis-request.schema.json",
     "result": "analysis-result.schema.json",
@@ -134,16 +137,24 @@ def request_envelope_probes(
     dex_request: dict[str, object],
     auth_request: dict[str, object],
     freeze_request: dict[str, object],
+    evm_request: dict[str, object],
 ) -> list[Probe]:
     return [
         Probe("dex request", "request", dex_request, True),
         Probe("auth request", "request", auth_request, True),
         Probe("freeze request", "request", freeze_request, True),
+        Probe("evm core request", "request", evm_request, True),
         Probe("request top-level extra", "request", {**dex_request, "extra": True}, False),
         Probe(
             "request bad schema version",
             "request",
             changed(dex_request, "schema_version", value="0.2"),
+            False,
+        ),
+        Probe(
+            "evm core request legacy schema version",
+            "request",
+            changed(evm_request, "schema_version", value="0.1"),
             False,
         ),
         Probe(
@@ -165,6 +176,7 @@ def request_input_probes(
     dex_request: dict[str, object],
     auth_request: dict[str, object],
     freeze_request: dict[str, object],
+    evm_request: dict[str, object],
 ) -> list[Probe]:
     return [
         Probe(
@@ -242,6 +254,12 @@ def request_input_probes(
             ),
             False,
         ),
+        Probe(
+            "evm query input mismatch",
+            "request",
+            changed(evm_request, "query_kind", value="native_inflow"),
+            False,
+        ),
     ]
 
 
@@ -250,6 +268,7 @@ def result_status_probes(
     auth_result: dict[str, object],
     freeze_result: dict[str, object],
     error: dict[str, object],
+    evm_result: dict[str, object],
 ) -> list[Probe]:
     partial_result = changed(dex_result, "status", value="partial")
     partial_result["errors"] = [error]
@@ -262,6 +281,13 @@ def result_status_probes(
         Probe("dex result", "result", dex_result, True),
         Probe("auth result", "result", auth_result, True),
         Probe("freeze result", "result", freeze_result, True),
+        Probe("evm core result", "result", evm_result, True),
+        Probe(
+            "evm core result legacy schema version",
+            "result",
+            changed(evm_result, "schema_version", value="0.1"),
+            False,
+        ),
         Probe("partial result", "result", partial_result, True),
         Probe("failed result", "result", failed_result, True),
         Probe("result top-level extra", "result", {**dex_result, "extra": True}, False),
@@ -365,15 +391,18 @@ def build_probes() -> list[Probe]:
     dex_request = load_json(EXAMPLE_ROOT / "dex-request.json")
     auth_request = load_json(EXAMPLE_ROOT / "auth-request.json")
     freeze_request = load_json(EXAMPLE_ROOT / "freeze-request.json")
+    evm_request = load_json(EVM_EXAMPLE)
     dex_result = load_json(EXAMPLE_ROOT / "dex-result.json")
     auth_result = load_json(EXAMPLE_ROOT / "auth-result.json")
     freeze_result = load_json(EXAMPLE_ROOT / "freeze-result.json")
+    evm_result = changed(dex_result, "schema_version", value="0.2")
+    evm_result["analysis_type"] = "evm_core"
     error = valid_error()
 
     return [
-        *request_envelope_probes(dex_request, auth_request, freeze_request),
-        *request_input_probes(dex_request, auth_request, freeze_request),
-        *result_status_probes(dex_result, auth_result, freeze_result, error),
+        *request_envelope_probes(dex_request, auth_request, freeze_request, evm_request),
+        *request_input_probes(dex_request, auth_request, freeze_request, evm_request),
+        *result_status_probes(dex_result, auth_result, freeze_result, error, evm_result),
         *result_component_probes(dex_result),
         *error_probes(error),
     ]
@@ -407,7 +436,7 @@ def main() -> int:
         return 1
     print(
         "PASS 3 generated schemas are semantically compatible with "
-        f"Analysis I/O 0.1 across {len(build_probes())} probes"
+        f"Analysis I/O 0.2 (0.1 compatible) across {len(build_probes())} probes"
     )
     return 0
 

@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-29 09:50
-> Status: Approved 2.7 Baseline · Phase 2 Coverage Expansion Proposed
+> Last Updated: 2026-07-29 12:30
+> Status: Approved 2.8 Baseline · TASK-012 EVM Core Complete
 
 ## 1. 문서 목적
 
@@ -51,7 +51,7 @@
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
 | [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) | Draft · Approved Baseline | 공식 규정 변경 시에만 영향 항목 갱신 |
-| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 · Benchmark 0.1 Applied | 30문항 중 자동화 3·보조 6·미지원 21; 공백 우선순위 유지 |
+| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 · Benchmark 0.1 Applied | 30문항 중 자동화 7·보조 2·미지원 21; 공백 우선순위 유지 |
 | [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) | Baseline Confirmed 1.0 · Active Watch | Notification·이메일·공식 Rules 공개 시 Intake 실행 |
 | [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) | Draft 1 · Approved Baseline | 공식 규정 변경 시 위험 점수 갱신 |
 
@@ -60,7 +60,7 @@
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
 | [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) | UI-First Gate Passed · TASK-008 Applied | DEX·AUTH·FREEZE complete·partial·resume 연결 |
-| [TASK-012 EVM Core UI](../02_UI_Screens/05_TASK_012_EVM_CORE_UI.md) | Draft 0.2 · UI-First Gate Passed | 4 query × 3상태, runtime 미구현 |
+| [TASK-012 EVM Core UI](../02_UI_Screens/05_TASK_012_EVM_CORE_UI.md) | Approved 0.2 · Runtime Applied | 4 query × complete·partial·failed |
 | [CLI Terminal UI Design](../02_UI_Screens/01_UI_DESIGN.md) | UI-First Gate Passed · TASK-008 Applied | FREEZE confirmed와 external context scope 분리 |
 | [CLI Prototype Review](../02_UI_Screens/02_CLI_PROTOTYPE_REVIEW.md) | TASK-009 Regression Compared | 세 vertical·오류·resume와 실제 terminal 재대조 |
 | [Web Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) | Draft 1 · Non-Blocking UX Track | 정적 Preview 사용자 검토, 구현 승격은 Python 엔진 안정화 후 별도 승인 |
@@ -79,20 +79,20 @@
 | [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) | Confirmed 0.1 | fixture schema 변경 요구가 생길 때만 개정 |
 | [P0·V1 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) | Draft 1 · Approved Baseline | 공식 규정 변경은 source policy로 역반영 |
 | [기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) | Approved 1.9 · TASK-001~009 Applied | 통합 Gate는 stdlib script로 dependency 추가 없음 |
-| [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Contract Approved 0.1 · TASK-002·005·006·007·008·009 Applied | 11-code·참조·Schema probe PASS 유지 |
+| [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) | Contract Approved 0.2 · 0.1 Compatible · TASK-012 Applied | 11-code·참조·40 Schema probe PASS |
 | [오픈소스 포렌식 사전조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) | Approved 1.0 · P0/V1 Closed | 이후 단계 그룹은 Deferred |
 | [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) | AI-Native Contract Approved 1.0 · UI-First Gate Passed · Rules-Gated | 구현은 `TASK-010` 별도 승인 |
 | [TASK-010 Pre-Code Technical Brief](../03_Technical_Specs/08_TASK_010_PRE_CODE_TECHNICAL_BRIEF.md) | Approved 1.8 · OPS-IMPL-01~08 Offline Implemented | live mode는 Rules-Gated |
 | [Coverage 확장 Technical Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) | Proposed 0.1 | TASK-012~019 개별 fixture·Context·구현 승인 필요 |
 | [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) | Pre-event Smoke Partial Pass · Fixture Common 9/9 Match · Primary Trace Pass | TASK-012 전 credential 회전·독립 trace·반례 |
-| [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) | Proposed 0.2 Draft · 12 Cases · 14 Probes | Analysis I/O 0.1·runtime 비변경, 정식 계약·UI·구현 승인 대기 |
+| [TASK-012 Analysis Contract](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) | Approved 0.2 · 12 Cases · 14 Probes | runtime·Schema 적용, 0.1 세 type 호환 |
 
 ### 3.4 Logic Progress
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~009·011 Done · TASK-012~019 Proposed | Phase 2 code는 개별 승인 대기 |
-| 이 문서 | Approved 2.7 Baseline · Phase 2 Proposed | Phase 2 계획과 구현 승인 경계 유지 |
+| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~012 Done · TASK-013~019 Proposed | 후속 Phase 2 code는 개별 승인 대기 |
+| 이 문서 | Approved 2.8 Baseline · TASK-012 Complete | 후속 Phase 2 승인 경계 유지 |
 | [Coverage 확장 Execution Plan](./01_EXECUTION_PLAN.md) | Proposed 0.1 | fixture·dependency 기반 Wave, 날짜 약속 아님 |
 | `02_ROADMAP_BACKLOG_SYNC.md` | 조건부 미작성 | 구현 시작 전 Roadmap↔Backlog 상태 동기화 규칙 작성 |
 
@@ -100,17 +100,17 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.1 · Phase 2 Verifying Pack | confirmed 3·TASK-012 verifying 4·Deferred 5의 승격 조건 유지 |
+| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.2 · Phase 2 Confirmed Pack | confirmed 7·Deferred 5의 승격 조건 유지 |
 | [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Approved 1.9 · Integration Passed | 24 pass·0 partial·0 not_executed |
 | [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 2.9 · OPS-IMPL-01~08 Offline Passed | live Rules·실대회 성능 미실행 |
 | [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Contract Approved · Offline 6 QA Passed | live Rules·실대회 성능 별도 |
 | [OPS-IMPL-08 Final Integration Report](../05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) | Passed · Offline Operations V1 | 수동 제출·보안·leaf 병렬·6 QA |
-| [예상문제 Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | Passed · 3 Automated / 6 Assisted / 21 Unsupported | 자동화 3개 exact·evidence·결정성 통과, 30문항 전체 정확도로 해석 금지 |
+| [예상문제 Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | Passed · 7 Automated / 2 Assisted / 21 Unsupported | 자동화 7개 exact·evidence·결정성 통과, 30문항 전체 정확도로 해석 금지 |
 | [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) | Proposed 0.1 · Not Executed | TASK-012~019 승격·반례·통합 Gate |
 | [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) | EVM Common Passed · Alchemy Trace Two Dialects Failed · Overall Partial | 성공 가능한 독립 trace·live rate/timeout·AI Planner Gate |
 | [TASK-012 Negative Oracle](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) | Offline 24 Passed Twice | live rate/timeout·독립 trace는 별도 |
-| [TASK-012 Analysis Contract Examples](../05_QA_Validation/examples/task-012/README.md) | Proposal 12 Cases · 14 Probes Passed | 제품 analyzer·fixture confirmed 성과로 계산 금지 |
-| [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) | UI Gate Passed · Runtime Not Implemented | 정식 contract·provider·구현 승인 대기 |
+| [TASK-012 Analysis Contract Examples](../05_QA_Validation/examples/task-012/README.md) | Approved 12 Cases · 14 Probes Passed | runtime complete·partial·failed 기준 |
+| [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) | UI Gate Passed · Runtime Applied | 공통 terminal renderer로 구현 |
 | [TASK-012 Provider Gate 준비 보고서](../05_QA_Validation/29_TASK_012_PROVIDER_GATE_PREPARATION_REPORT.md) | Offline Passed · Live Trace Failed · Overall Partial | 성공 가능한 독립 trace·live rate/timeout |
 | [Live Provider Smoke 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) | Pre-event Smoke Executed · Overall Partial | fixture별 재현·독립 trace·rate behavior |
 | [Document Completion Report](../05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | Pass | 문서 검증 증거·Known Issue·승인 경계 |
@@ -244,8 +244,9 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 10 | 완료 (2026-07-28) | Backlog `TASK-008` FREEZE vertical slice | blacklist lifecycle·context scope·partial·resume |
 | 11 | 완료 (2026-07-28) | Backlog `TASK-009` 통합 회귀·보안·문서 Gate | 24 QA·11-code·추적성·보안 통과 |
 | 12 | 완료 (2026-07-29, offline V1) | Backlog `TASK-010` 병렬 문제풀이 운영 | live mode는 공식 Rules·별도 승인 |
-| 13 | 완료 (2026-07-29) | Backlog `TASK-011` 예상문제 Offline Benchmark | 자동화 3/3 실증, 보조 6·미지원 21 공백 기록 |
-| 14 | 계획 승인 대기 | `TASK-012~019` Coverage 확장 | fixture·Context Receipt·개별 code 승인 전 미착수 |
+| 13 | 완료 (2026-07-29) | Backlog `TASK-011` 예상문제 Offline Benchmark | 최초 자동화 3/3, 보조 6·미지원 21 기준선 |
+| 14 | 완료 (2026-07-29) | `TASK-012` EVM Core | 자동화 7/7, 보조 2·미지원 21 |
+| 15 | 계획 승인 대기 | `TASK-013~019` Coverage 확장 | fixture·Context Receipt·개별 code 승인 전 미착수 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.
 `DOC-M2`~`DOC-M5`나 `TASK-001`의 선행 조건으로 추가하지 않는다. 실제 웹

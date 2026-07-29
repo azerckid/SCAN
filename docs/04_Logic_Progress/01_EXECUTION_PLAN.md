@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 11:10
-> Status: Proposed 0.1 · No Implementation Approval
+> Last Updated: 2026-07-29 12:40
+> Status: Wave 1 TASK-012 Complete · Later Waves Proposed
 
 ## 1. 목적
 
@@ -14,9 +14,9 @@
 - [x] DEX·AUTH·FREEZE 3개가 automated로 실증됐다.
 - [x] assisted 6·unsupported 21의 기능 공백이 manifest에 기록됐다.
 - [x] 공통 source·storage·artifact·Queue·Verifier 기반이 있다.
-- [ ] 새로운 27문항용 confirmed fixture가 확보됐다.
-- [ ] 새로운 Analysis type과 Schema 변경이 승인됐다.
-- [ ] Phase 2 코드 구현이 승인됐다.
+- [x] Wave 1의 새 4문항용 confirmed fixture가 확보됐다.
+- [x] `evm_core` Analysis type과 Analysis I/O 0.2 변경이 승인됐다.
+- [x] TASK-012 Phase 2 코드 구현이 승인·완료됐다.
 
 ## 3. 공통 선행 Gate
 
@@ -61,7 +61,7 @@
 - [x] CLI·Operations input selection과 offline raw-artifact handoff를 승인·구현한다.
 - [ ] 실제 대회 artifact의 문제별 mapping은 문제 공개 뒤 별도 승인한다.
 
-### [ ] Wave 1 — 범용 EVM
+### [x] Wave 1 — 범용 EVM
 
 - [x] `TASK-012` TX·state·ERC-20·native flow fixture 후보 4개를 선정한다.
 - [x] primary·independent·supporting provider 후보 topology와 smoke 계약을 문서화한다.
@@ -71,13 +71,13 @@
 - [x] 네 fixture의 공통 9개 조회를 두 공급자에서 재현하고 decoded 일치를
   확인해 `verifying`으로 승격한다.
 - [x] 네 fixture의 합성 negative oracle 24개를 두 번 실행해 결정성을 고정한다.
-- [x] 격리된 `evm_core` `0.2-draft`의 4개 query kind와
+- [x] 격리된 `evm_core` 0.2의 4개 query kind와
   complete·partial·failed 12개 사례·14개 Schema probe를 작성하고
-  Analysis I/O `0.1` 비변경을 확인한다.
+  Analysis I/O 0.1 하위 호환을 확인한다.
 - [x] TASK-012 전용 HTML Preview의 12개 조합·방향키·모바일·console을
   브라우저에서 검증한다.
 - [x] 사용자가 TASK-012 HTML Preview를 확인하고 UI-First Gate를 승인한다.
-- [ ] 정식 contract·provider Gate 후 제품 analyzer 구현 승인을 별도로 기록한다.
+- [x] 정식 contract·provider Gate 후 제품 analyzer 구현 승인을 별도로 기록한다.
 - [ ] live rate-limit·timeout 반례를 실행한다. 독립 trace는 fixture의 엄격한
   승격을 위한 비차단 후속이며 실전 QuickNode 단일 Trace 경로를 막지 않는다.
   - [x] 두 Trace dialect 정규화·교차 동등성과 timeout·429·
@@ -87,12 +87,15 @@
   - [x] Chainstack Developer endpoint의 chain ID는 성공했지만 두 trace
     dialect가 HTTP 403으로 실패해 독립 trace 역할에서 제외했다.
   - [ ] 필요 시 성공 가능한 별도 독립 trace endpoint를 후속 검증한다.
-- [ ] offline oracle과 필수 source Gate를 만족한 fixture의 승격 수준을
+- [x] offline oracle과 필수 source Gate를 만족한 fixture의 승격 수준을
   provenance 정책에 따라 결정한다.
-- [ ] 네 문제 입력·정답 필드와 partial 조건 제안을 승인한다.
-- [ ] 기존 EVM decoder·source·cache 재사용 범위를 확인한다.
-- [ ] 제안된 `evm_core` Analysis type과 Analysis I/O 정식 version·migration을 승인한다.
-- [ ] exact·evidence·determinism·negative oracle 회귀를 통과한다.
+- [x] 네 문제 입력·정답 필드와 partial 조건을 승인한다.
+- [x] 기존 EVM decoder·source·cache 재사용 범위를 확인한다.
+- [x] `evm_core` Analysis type과 Analysis I/O 0.2·0.1 호환을 승인한다.
+- [x] exact·evidence·determinism·negative oracle 회귀를 통과한다.
+
+credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 live
+운영 Gate로 남으며, reviewed replay 기반 TASK-012 완료를 되돌리지 않는다.
 
 ### [ ] Wave 2 — Bitcoin Core
 

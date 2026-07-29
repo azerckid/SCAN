@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://azerckid.github.io/SCAN/schemas/analysis-request.schema.json",
-  "title": "SCAN Analysis Request 0.1",
+  "title": "SCAN Analysis Request 0.2 (0.1 compatible)",
   "type": "object",
   "required": [
     "$schema",
@@ -19,13 +19,16 @@
       "pattern": "analysis-request\\.schema\\.json$"
     },
     "schema_version": {
-      "const": "0.1"
+      "enum": ["0.1", "0.2"]
     },
     "analysis_id": {
       "$ref": "#/$defs/analysisId"
     },
     "analysis_type": {
       "$ref": "#/$defs/analysisType"
+    },
+    "query_kind": {
+      "enum": ["object_summary", "historical_balance", "first_token_transfer", "native_inflow"]
     },
     "chain_id": {
       "const": 1
@@ -56,7 +59,9 @@
         "required": ["analysis_type"]
       },
       "then": {
+        "not": {"required": ["query_kind"]},
         "properties": {
+          "schema_version": {"const": "0.1"},
           "inputs": {
             "$ref": "#/$defs/dexInputs"
           }
@@ -73,7 +78,9 @@
         "required": ["analysis_type"]
       },
       "then": {
+        "not": {"required": ["query_kind"]},
         "properties": {
+          "schema_version": {"const": "0.1"},
           "inputs": {
             "$ref": "#/$defs/authInputs"
           }
@@ -90,12 +97,52 @@
         "required": ["analysis_type"]
       },
       "then": {
+        "not": {"required": ["query_kind"]},
         "properties": {
+          "schema_version": {"const": "0.1"},
           "inputs": {
             "$ref": "#/$defs/freezeInputs"
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {"analysis_type": {"const": "evm_core"}},
+        "required": ["analysis_type"]
+      },
+      "then": {
+        "required": ["query_kind"],
+        "properties": {"schema_version": {"const": "0.2"}}
+      }
+    },
+    {
+      "if": {
+        "properties": {"query_kind": {"const": "object_summary"}},
+        "required": ["query_kind"]
+      },
+      "then": {"properties": {"inputs": {"$ref": "#/$defs/objectSummaryInputs"}}}
+    },
+    {
+      "if": {
+        "properties": {"query_kind": {"const": "historical_balance"}},
+        "required": ["query_kind"]
+      },
+      "then": {"properties": {"inputs": {"$ref": "#/$defs/historicalBalanceInputs"}}}
+    },
+    {
+      "if": {
+        "properties": {"query_kind": {"const": "first_token_transfer"}},
+        "required": ["query_kind"]
+      },
+      "then": {"properties": {"inputs": {"$ref": "#/$defs/firstTokenTransferInputs"}}}
+    },
+    {
+      "if": {
+        "properties": {"query_kind": {"const": "native_inflow"}},
+        "required": ["query_kind"]
+      },
+      "then": {"properties": {"inputs": {"$ref": "#/$defs/nativeInflowInputs"}}}
     }
   ],
   "additionalProperties": false,
@@ -105,7 +152,7 @@
       "pattern": "^AN-[A-Z0-9][A-Z0-9-]{2,63}$"
     },
     "analysisType": {
-      "enum": ["dex_swap", "auth_consumption", "address_freeze"]
+      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core"]
     },
     "address": {
       "type": "string",
@@ -266,6 +313,77 @@
           },
           "uniqueItems": true
         }
+      },
+      "additionalProperties": false
+    },
+    "balanceAsset": {
+      "type": "object",
+      "required": ["asset_type", "symbol"],
+      "properties": {
+        "asset_type": {"enum": ["native", "erc20"]},
+        "symbol": {"type": "string", "pattern": "^[A-Z0-9]{2,12}$"},
+        "token_address": {"$ref": "#/$defs/address"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"asset_type": {"const": "erc20"}}},
+          "then": {"required": ["token_address"]}
+        },
+        {
+          "if": {"properties": {"asset_type": {"const": "native"}}},
+          "then": {"not": {"required": ["token_address"]}}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "objectSummaryInputs": {
+      "type": "object",
+      "required": ["values", "block_number", "include_transaction_fee"],
+      "properties": {
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"anyOf": [{"type": "string"}, {"type": "integer", "minimum": 0}]}
+        },
+        "block_number": {"type": "integer", "minimum": 0},
+        "include_transaction_fee": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "historicalBalanceInputs": {
+      "type": "object",
+      "required": ["subject_address", "block_number", "block_timestamp", "state_semantics", "assets"],
+      "properties": {
+        "subject_address": {"$ref": "#/$defs/address"},
+        "block_number": {"type": "integer", "minimum": 0},
+        "block_timestamp": {"type": "integer", "minimum": 0},
+        "state_semantics": {"const": "post_state"},
+        "assets": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/balanceAsset"}}
+      },
+      "additionalProperties": false
+    },
+    "firstTokenTransferInputs": {
+      "type": "object",
+      "required": ["subject_address", "token_address", "start_block", "direction", "exclude_zero", "require_success", "ordering"],
+      "properties": {
+        "subject_address": {"$ref": "#/$defs/address"},
+        "token_address": {"$ref": "#/$defs/address"},
+        "start_block": {"type": "integer", "minimum": 0},
+        "direction": {"const": "outgoing"},
+        "exclude_zero": {"const": true},
+        "require_success": {"const": true},
+        "ordering": {"const": "block_transaction_log_asc"}
+      },
+      "additionalProperties": false
+    },
+    "nativeInflowInputs": {
+      "type": "object",
+      "required": ["interest_address", "transaction_hash", "require_trace", "exclude_reverted"],
+      "properties": {
+        "interest_address": {"$ref": "#/$defs/address"},
+        "transaction_hash": {"$ref": "#/$defs/transactionHash"},
+        "require_trace": {"const": true},
+        "exclude_reverted": {"const": true}
       },
       "additionalProperties": false
     },

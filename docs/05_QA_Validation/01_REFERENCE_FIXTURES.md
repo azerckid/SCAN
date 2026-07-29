@@ -7,7 +7,7 @@
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
 있는 reference fixture를 관리한다. 현재 12개 중 3개는 `확정`, 5개는
-DOC-M3 결정에 따라 `Deferred`, 4개는 TASK-012 Phase 2 `검증 중`으로
+DOC-M3 결정에 따라 `Deferred`, 4개는 TASK-012 Phase 2 `확정`으로
 관리한다.
 
 입력 문서:
@@ -89,10 +89,10 @@ DOC-M3 결정에 따라 `Deferred`, 4개는 TASK-012 Phase 2 `검증 중`으로
 | FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | V1 기준선 | FREEZE, state/logs |
 | FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | Deferred | RECON, PRICE, 다주소 집계 |
 | FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | Deferred | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
-| [FX-BASIC-EVM-001](./fixtures/FX-BASIC-EVM-001/README.md) | BASIC-EVM-001 | 1 | 검증 중 | Phase 2 provider replay pass | EVM-TX, block, code |
-| [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 검증 중 | Phase 2 provider replay pass | EVM-STATE, decimals |
-| [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 검증 중 | Phase 2 provider replay pass | EVM-LOG, first ordering |
-| [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | EVM-TOKEN-002 | 1 | 검증 중 | Primary trace pass, independent blocked | EVM-TRACE, native sum |
+| [FX-BASIC-EVM-001](./fixtures/FX-BASIC-EVM-001/README.md) | BASIC-EVM-001 | 1 | 확정 0.2 | provider replay·반례·consumer pass | EVM-TX, block, code |
+| [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 확정 0.2 | archive replay·반례·consumer pass | EVM-STATE, decimals |
+| [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 확정 0.2 | filtered logs·ordering·consumer pass | EVM-LOG, first ordering |
+| [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | EVM-TOKEN-002 | 1 | 확정 0.2 | primary trace·cross-check·consumer pass | EVM-TRACE, native sum |
 
 ## 6. Fixture 상세
 
@@ -440,7 +440,7 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 - **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 회귀 실행 기술과 저장·검증 경계
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - fixture 입력·정답·증거의 실행 계약 매핑
 - **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - TASK-012 독립 재현 선행 Gate
-- **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - 네 verifying fixture의 격리된 consumer contract Draft
+- **Technical_Specs**: [TASK-012 Analysis Contract](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - 네 confirmed fixture의 Analysis I/O 0.2 consumer contract
 - **Logic_Progress**: [문서 완료 Roadmap](../04_Logic_Progress/00_ROADMAP.md) - confirmed 3·후보 5 처리 방침 Gate
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - fixture별 구현 작업과 완료 기준
 - **QA_Validation**: [P0·V1 QA 시나리오](./01_TEST_SCENARIOS.md) - confirmed fixture exact-match·오류 주입 기준
@@ -449,6 +449,6 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 - **QA_Validation**: [FX-SVC-DEX-001](./fixtures/FX-SVC-DEX-001/README.md), [FX-EVM-AUTH-001](./fixtures/FX-EVM-AUTH-001/README.md), [FX-EVM-FREEZE-001](./fixtures/FX-EVM-FREEZE-001/README.md) - 우선 구축 fixture 패키지
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - EVM Core 후보 4개와 승격 전 잔여 Gate
 - **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 계정 smoke·secret·독립성
-- **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 네 verifying fixture의 24개 offline 반례
+- **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 네 confirmed fixture의 24개 offline 반례
 - **QA_Validation**: [TASK-012 Analysis Contract Examples](./examples/task-012/README.md) - complete·partial·failed 12개 제안 사례와 검증 명령
 - **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 사전 fixture·cache와 source 허용 범위

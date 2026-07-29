@@ -1,11 +1,11 @@
 # TASK-012 EVM Core CLI UI
 > Created: 2026-07-29 05:08
-> Last Updated: 2026-07-29 05:58
-> Status: Draft 0.2 · UI-First Gate Passed · Runtime Not Implemented
+> Last Updated: 2026-07-29 12:40
+> Status: Approved 0.2 · UI-First Gate Passed · Runtime Applied
 
 ## 1. 목적
 
-이 문서는 `TASK-012`의 격리된 `evm_core` `0.2-draft` 계약을 CLI에서
+이 문서는 `TASK-012`의 격리된 `evm_core` 0.2 계약을 CLI에서
 입력·검토하는 화면을 정의한다. 기존 DEX·AUTH·FREEZE Analysis I/O `0.1`
 Preview는 변경하지 않는다.
 
@@ -14,7 +14,7 @@ Preview는 변경하지 않는다.
 - 네 `query_kind`별 최소 입력이 구분되는가
 - complete·partial·failed가 같은 결과를 다르게 포장한 것처럼 보이지 않는가
 - raw 값, source, evidence completeness와 다음 행동이 충분히 보이는가
-- `0.2-draft`가 현재 실행 가능한 기능으로 오해되지 않는가
+- 0.2 실행 결과와 fixture·evidence 경계가 구분되는가
 
 ## 2. 화면 구조
 
@@ -29,7 +29,7 @@ flowchart LR
 
 한 화면의 정보 순서는 고정한다.
 
-1. Draft·runtime 미구현 경계
+1. 계약 version·reviewed replay 경계
 2. query 선택
 3. request 입력 요약
 4. complete·partial·failed 상태 선택
@@ -81,7 +81,7 @@ flowchart LR
 | 1 | query tab 선택 | 입력·설명·결과 계약 전환 | 다른 query 선택 |
 | 2 | request 요약 확인 | 필수 필드와 고정 조건 확인 | JSON 수정은 Preview 밖 |
 | 3 | 상태 선택 | complete·partial·failed 전환 | 상태 간 raw/오류 차이 비교 |
-| 4 | 결과·오류 확인 | Next action과 contract JSON 확인 | 구현 승인 전 실행 없음 |
+| 4 | 결과·오류 확인 | Next action과 contract JSON 확인 | reviewed replay CLI로 재현 |
 
 Query tab은 Tab으로 진입하고 좌우 방향키로 이동한다. 상태 버튼도 같은 키보드
 규칙을 사용한다. 색상과 함께 문자 label을 항상 표시한다.
@@ -109,8 +109,8 @@ TASK-012 구현 Brief에서 위 공통 상태 재사용을 다시 확인한다.
 - request 필드·raw 결과·오류·evidence/source·next action
 
 Preview는 외부 요청, 파일 읽기, SQLite mutation, clipboard 외 데이터 전송을
-하지 않는다. 표시값은 제안 예제에서 가져오며 제품 analyzer의 실행 결과가
-아니다.
+하지 않는다. 표시값은 계약 예제에서 가져오며 실제 제품 analyzer 검증은
+CLI 통합 테스트가 별도로 담당한다.
 
 ## 8. UI-First Gate
 
@@ -131,14 +131,14 @@ raw·evidence·next action, 정보량을 확인하고 UI-First Gate를 승인했
 `COMPLETE RESULT`로 바꾸고, Preview가 계약 예제의 12개 case ID·raw 값·오류
 code/stage와 어긋나면 실패하도록 checker를 강화했다.
 
-UI Gate 통과는 정적 화면 계약 승인이다. 정식 Schema·provider·fixture와 별도
-제품 analyzer 구현 승인 전에는 TASK-012 runtime을 구현하지 않는다.
+UI Gate 통과 뒤 정식 Schema·fixture·제품 analyzer가 별도 승인·구현됐다.
+Preview 자체는 계속 정적이며 live provider 호출을 수행하지 않는다.
 
 ## 9. 365 글로벌 평가 기준
 
 | 기준 | 현재 판정 | UI 근거 |
 |:---|:---:|:---|
-| Functionality | Draft | 4 query × 3 상태 전환 Preview |
+| Functionality | Pass | 4 query × 3 상태와 공통 terminal runtime |
 | Potential Impact | Planned | 범용 EVM 네 문제를 같은 UX로 처리 |
 | Novelty | Draft | raw proof·completeness·failed null 분리 |
 | UX | Pass | 사용자 확인 완료, 한 화면 입력·결과·오류·다음 행동 |
@@ -150,8 +150,8 @@ UI Gate 통과는 정적 화면 계약 승인이다. 정식 Schema·provider·fi
 - **UI_Screens**: [CLI Screen Flow](./00_SCREEN_FLOW.md) - 공통 명령·진입·종료 흐름
 - **UI_Screens**: [CLI Terminal UI Design](./01_UI_DESIGN.md) - 상태·정보 계층·접근성 기준
 - **UI_Screens**: [EVM Core HTML Preview](./previews/04_task_012_evm_core_cli_preview.html) - 사용자 검토 화면
-- **Technical_Specs**: [Analysis I/O 0.1](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 현재 승인 계약
-- **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - `evm_core` 0.2 Draft
-- **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012 구현 전 Gate
+- **Technical_Specs**: [Analysis I/O 0.2](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 현재 승인 계약과 0.1 호환
+- **Technical_Specs**: [TASK-012 Analysis Contract](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - `evm_core` 0.2
+- **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012 완료 기록
 - **QA_Validation**: [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) - 검증·사용자 확인 기록
 - **QA_Validation**: [TASK-012 Contract Examples](../05_QA_Validation/examples/task-012/README.md) - 12개 표시 기준

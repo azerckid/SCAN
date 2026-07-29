@@ -1,9 +1,9 @@
 {
   "$schema": "../../schemas/fixture-expected.schema.json",
   "schema_version": "0.1",
-  "fixture_version": "0.1",
+  "fixture_version": "0.2",
   "fixture_id": "FX-BASIC-EVM-002",
-  "status": "verifying",
+  "status": "confirmed",
   "block": {
     "number": 16642512,
     "tag": "0xfdf1d0",

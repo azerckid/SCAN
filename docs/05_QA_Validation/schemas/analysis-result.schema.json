@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://azerckid.github.io/SCAN/schemas/analysis-result.schema.json",
-  "title": "SCAN Analysis Result 0.1",
+  "title": "SCAN Analysis Result 0.2 (0.1 compatible)",
   "type": "object",
   "required": [
     "$schema",
@@ -24,7 +24,7 @@
       "pattern": "analysis-result\\.schema\\.json$"
     },
     "schema_version": {
-      "const": "0.1"
+      "enum": ["0.1", "0.2"]
     },
     "analysis_id": {
       "$ref": "#/$defs/analysisId"
@@ -76,6 +76,14 @@
     }
   },
   "allOf": [
+    {
+      "if": {
+        "properties": {"analysis_type": {"const": "evm_core"}},
+        "required": ["analysis_type"]
+      },
+      "then": {"properties": {"schema_version": {"const": "0.2"}}},
+      "else": {"properties": {"schema_version": {"const": "0.1"}}}
+    },
     {
       "if": {
         "properties": {
@@ -153,7 +161,7 @@
       "pattern": "^AN-[A-Z0-9][A-Z0-9-]{2,63}$"
     },
     "analysisType": {
-      "enum": ["dex_swap", "auth_consumption", "address_freeze"]
+      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core"]
     },
     "resultId": {
       "type": "string",
@@ -220,7 +228,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^REQ-(DEX|AUTH|FREEZE)-[A-Z0-9-]+$"
+            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN)-[A-Z0-9-]+$"
           },
           "uniqueItems": true
         },

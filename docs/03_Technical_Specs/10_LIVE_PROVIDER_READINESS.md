@@ -7,7 +7,7 @@
 
 이 문서는 Phase 2의 비자동 27문항을 준비할 때 공통으로 사용할 EVM 데이터
 공급자와 AI Planner 공급자의 최소 준비·검증 Gate를 정의한다. 첫 적용 대상은
-`TASK-012`의 verifying fixture 4개지만, 통과한 source·provenance·fallback
+`TASK-012`의 confirmed fixture 4개에서 시작했지만, 통과한 source·provenance·fallback
 계약은 뒤의 PATH·Service·Case Work Package에서도 재사용한다.
 
 이번 QuickNode·Alchemy·Blockscout topology는 **Ethereum 계열 source
@@ -32,14 +32,14 @@
 | 항목 | 현재 상태 |
 |:---|:---|
 | 예상문제 전체 | 30문항 |
-| 자동 실증 완료 | DEX·AUTH·FREEZE 3문항 |
-| Phase 2 준비 대상 | 나머지 27문항 |
-| 직접 준비 중 | EVM Core 4문항의 verifying fixture |
+| 자동 실증 완료 | DEX·AUTH·FREEZE·EVM Core 4종을 통한 7문항 |
+| Phase 2 잔여 대상 | 보조 2·미지원 21문항 |
+| 직접 준비 완료 | EVM Core 4문항의 confirmed fixture |
 | EVM 공급자 topology | QuickNode 일반 RPC+Debug Trace 주 경로·Alchemy 일반 RPC 교차검증, credential 회전·rate behavior 미완료 |
-| 대회 입력 경로 | contest RPC core adapter·JSON/JSONL/CSV importer 구현, CLI·Operations wiring 미구현 |
+| 대회 입력 경로 | contest RPC core adapter·JSON/JSONL/CSV importer와 CLI·Operations offline wiring 구현 |
 | 비EVM 범위 | Bitcoin·non-EVM·cross-chain 분석기 미구현 |
 | AI Planner 공급자 | 필수 역할 확정, provider/model/비용 smoke 미실행 |
-| TASK-012 구현 | 미승인·미시작 |
+| TASK-012 구현 | 승인·offline replay 구현 완료 |
 | 안전한 smoke runner | 준비 완료, 기본 network 0건 |
 
 `27문항 준비`는 27개의 개별 프로그램을 동시에 구현한다는 뜻이 아니다.
@@ -195,7 +195,7 @@ hash 계산 전후 모두 artifact에 들어가면 안 된다.
 
 ## 7. TASK-012 독립 재현 Gate
 
-네 `verifying` fixture는 아래를 모두 만족할 때만 `confirmed`로 승격한다.
+네 fixture는 아래 조건을 충족해 `confirmed 0.2`로 승격했다.
 
 1. primary와 independent provider가 TX·receipt·block 핵심 값을 일치시킨다.
 2. `eth_getLogs`를 receipt와 독립적으로 조회해 address·topic·block·log index를
@@ -221,8 +221,8 @@ hash 계산 전후 모두 artifact에 들어가면 안 된다.
 [TASK-012 Fixture 후보 보고서 §7](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md)의
 문제별 반례를 합친 **합집합**이다. 한 문서에만 적힌 반례도 생략할 수 없다.
 
-독립 trace를 확보하지 못하면 엄격한 교차검증 수준의 fixture는
-`verifying`을 유지한다. 실전 분석은 QuickNode raw Trace와 provenance로
+독립 trace는 더 강한 교차검증을 위한 비차단 후속이다. 실전 분석은
+QuickNode raw Trace와 provenance로
 수행할 수 있으며, 필요한 raw field가 모두 있으면 독립 공급자 부재만으로
 runtime 결과를 자동 `partial` 처리하지 않는다. supporting explorer 일치는
 독립 RPC 일치를 대체하지 않는다.

@@ -1,9 +1,9 @@
-"""Discriminated Analysis I/O 0.1 request models."""
+"""Discriminated Analysis I/O request models (0.1 compatibility + EVM Core 0.2)."""
 
 from enum import StrEnum
 from typing import Annotated, Literal
 
-from pydantic import AnyUrl, Field, RootModel, model_validator
+from pydantic import AnyUrl, ConfigDict, Field, RootModel, model_validator
 from pydantic.experimental.missing_sentinel import MISSING
 from pydantic_core import PydanticCustomError
 
@@ -27,6 +27,14 @@ class AnalysisType(StrEnum):
     DEX_SWAP = "dex_swap"
     AUTH_CONSUMPTION = "auth_consumption"
     ADDRESS_FREEZE = "address_freeze"
+    EVM_CORE = "evm_core"
+
+
+class EvmQueryKind(StrEnum):
+    OBJECT_SUMMARY = "object_summary"
+    HISTORICAL_BALANCE = "historical_balance"
+    FIRST_TOKEN_TRANSFER = "first_token_transfer"
+    NATIVE_INFLOW = "native_inflow"
 
 
 class RuleStatus(StrEnum):
@@ -96,12 +104,68 @@ class FreezeInputs(ContractModel):
     context_urls: UniqueList[AnyUrl] | MISSING = MISSING
 
 
+class ObjectSummaryInputs(ContractModel):
+    values: list[str | BlockNumber] = Field(min_length=1)
+    block_number: BlockNumber
+    include_transaction_fee: ContractBool
+
+
+class BalanceAsset(ContractModel):
+    asset_type: Literal["native", "erc20"]
+    symbol: Annotated[str, Field(pattern=r"^[A-Z0-9]{2,12}$")]
+    token_address: Address | MISSING = MISSING
+
+    @model_validator(mode="after")
+    def token_address_matches_asset_type(self) -> "BalanceAsset":
+        if self.asset_type == "erc20" and self.token_address is MISSING:
+            raise PydanticCustomError(
+                "invalid_input",
+                "erc20 assets require token_address",
+            )
+        if self.asset_type == "native" and self.token_address is not MISSING:
+            raise PydanticCustomError(
+                "invalid_input",
+                "native assets must not define token_address",
+            )
+        return self
+
+
+class HistoricalBalanceInputs(ContractModel):
+    subject_address: Address
+    block_number: BlockNumber
+    block_timestamp: BlockNumber
+    state_semantics: Literal["post_state"]
+    assets: list[BalanceAsset] = Field(min_length=1)
+
+
+class FirstTokenTransferInputs(ContractModel):
+    subject_address: Address
+    token_address: Address
+    start_block: BlockNumber
+    direction: Literal["outgoing"]
+    exclude_zero: Literal[True]
+    require_success: Literal[True]
+    ordering: Literal["block_transaction_log_asc"]
+
+
+class NativeInflowInputs(ContractModel):
+    interest_address: Address
+    transaction_hash: TransactionHash
+    require_trace: Literal[True]
+    exclude_reverted: Literal[True]
+
+
+EvmCoreInputs = (
+    ObjectSummaryInputs | HistoricalBalanceInputs | FirstTokenTransferInputs | NativeInflowInputs
+)
+
+
 class AnalysisRequestBase(ContractModel):
     schema_uri: Annotated[
         str,
         Field(alias="$schema", pattern=r"analysis-request\.schema\.json$"),
     ]
-    schema_version: Literal["0.1"]
+    schema_version: Literal["0.1", "0.2"]
     analysis_id: AnalysisId
     chain_id: Literal[1]
     fixture_id: FixtureId | MISSING = MISSING
@@ -110,22 +174,63 @@ class AnalysisRequestBase(ContractModel):
 
 
 class DexAnalysisRequest(AnalysisRequestBase):
+    schema_version: Literal["0.1"]
     analysis_type: Literal[AnalysisType.DEX_SWAP]
     inputs: DexInputs
 
 
 class AuthAnalysisRequest(AnalysisRequestBase):
+    schema_version: Literal["0.1"]
     analysis_type: Literal[AnalysisType.AUTH_CONSUMPTION]
     inputs: AuthInputs
 
 
 class FreezeAnalysisRequest(AnalysisRequestBase):
+    schema_version: Literal["0.1"]
     analysis_type: Literal[AnalysisType.ADDRESS_FREEZE]
     inputs: FreezeInputs
 
 
+class EvmCoreAnalysisRequest(AnalysisRequestBase):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "allOf": [
+                {
+                    "if": {"properties": {"query_kind": {"const": query_kind}}},
+                    "then": {"properties": {"inputs": {"required": required_fields}}},
+                }
+                for query_kind, required_fields in (
+                    ("object_summary", ["values"]),
+                    ("historical_balance", ["assets"]),
+                    ("first_token_transfer", ["token_address", "start_block"]),
+                    ("native_inflow", ["interest_address", "transaction_hash"]),
+                )
+            ]
+        }
+    )
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.EVM_CORE]
+    query_kind: EvmQueryKind
+    inputs: EvmCoreInputs
+
+    @model_validator(mode="after")
+    def inputs_match_query_kind(self) -> "EvmCoreAnalysisRequest":
+        expected = {
+            EvmQueryKind.OBJECT_SUMMARY: ObjectSummaryInputs,
+            EvmQueryKind.HISTORICAL_BALANCE: HistoricalBalanceInputs,
+            EvmQueryKind.FIRST_TOKEN_TRANSFER: FirstTokenTransferInputs,
+            EvmQueryKind.NATIVE_INFLOW: NativeInflowInputs,
+        }[self.query_kind]
+        if not isinstance(self.inputs, expected):
+            raise PydanticCustomError(
+                "invalid_input",
+                "inputs must match query_kind",
+            )
+        return self
+
+
 RequestVariant = Annotated[
-    DexAnalysisRequest | AuthAnalysisRequest | FreezeAnalysisRequest,
+    DexAnalysisRequest | AuthAnalysisRequest | FreezeAnalysisRequest | EvmCoreAnalysisRequest,
     Field(discriminator="analysis_type"),
 ]
 

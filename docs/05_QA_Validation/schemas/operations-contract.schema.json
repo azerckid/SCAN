@@ -105,7 +105,8 @@
       "enum": [
         "dex_swap",
         "auth_consumption",
-        "address_freeze"
+        "address_freeze",
+        "evm_core"
       ],
       "title": "AnalysisType",
       "type": "string"
