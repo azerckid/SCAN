@@ -97,14 +97,30 @@ Benchmark 자동화 승격은 [flow_path I/O 계약](../03_Technical_Specs/16_TA
 - `docs/05_QA_Validation/fixtures/FX-FLOW-*/analysis-request.json` — 신규
 - `docs/05_QA_Validation/fixtures/FX-FLOW-*/expected.json`·`evidence.json` — scope_status·hash 갱신
 - schema 3종·`check_analysis_schema.py`·`check_task_012_analysis_contract_proposal.py` — 갱신
-- `tests/unit/test_flow_path_slice.py`(18)·`tests/integration/test_flow_path_cli.py`(5)
+- `tests/unit/test_flow_path_slice.py`(25)·`tests/integration/test_flow_path_cli.py`(5)
 - `scripts/verify_task_014_analyzer_independent_verification.py` — verify.py 연결
+
+## 6.1 재검토(Request changes) P1 4건 정정
+
+PR #73 재검토에서 정상 변형 입력을 잘못 `complete`로 판정하는 계약 구멍
+4건이 발견돼 같은 브랜치에서 수정하고 회귀 테스트를 추가했다.
+
+| # | 결함 | 정정 후 |
+|:---:|:---|:---|
+| P1-1 | traversal budget(max_hops/nodes/edges) 미강제 → budget=1도 complete | 세 query 모두 budget 초과 시 `partial`·`evidence_incomplete`(stage `budget_traversal`). `_walk`가 `max_nodes`까지 강제하고, remerge/multi는 확정 ledger의 node/edge/hop 수를 budget과 대조 |
+| P1-2 | remerge `block_range` 미검증 → `1..1`도 complete | 선택 TX의 block이 모두 `block_range` 안인지 확인, 벗어나면 `reconciliation_failed`(stage `scope_validation`) |
+| P1-3 | `selected_transactions_complete=false`인데 trace_path가 complete | terminal 도달이어도 scope 미완료면 `partial`·`source_unavailable`(stage `scope_incomplete`) |
+| P1-4 | 동일 TX 해시를 다른 label로 복제하면 ledger 이중 집계 후 complete | dispatch 전 `_require_unique_transaction_hashes`로 중복 TX 해시를 `reconciliation_failed`(stage `edge_dedup`) 처리 |
+
+각 항목의 재현 시나리오를 `tests/unit/test_flow_path_slice.py`의 회귀
+테스트로 고정했다(budget 상한 3 query·block_range·scope 완전성·중복 TX).
+세 fixture의 정상 입력은 여전히 `complete`이고 canonical hash도 불변이다.
 
 ## 7. 상태 경계와 다음 Gate
 
 - Fixture 3개: `검증 중` 유지(확정 승격 안 함).
 - Benchmark: 9/9 유지(자동화 승격 안 함).
-- 전체 게이트: 459 tests PASS, fixture 13, traceability 1477 links, security
+- 전체 게이트: 459 tests PASS, fixture 13, traceability 1489 links, security
   162 files, TASK-014 negative oracle 18×2·독립 Verifier 3×2·analyzer 독립
   검증 3 fixtures PASS.
 - **다음: [단일-trace 하드 게이트](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md#7-단일-trace-의존성--confirmed-전-하드-게이트)를

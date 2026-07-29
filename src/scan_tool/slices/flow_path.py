@@ -88,6 +88,7 @@ def analyze_flow_path_replay(
     if binding_error is not None:
         return _failed(request, *binding_error, resumed, checkpoint_id)
     try:
+        _require_unique_transaction_hashes(replay)
         inputs = request.inputs
         if isinstance(inputs, TracePathInputs):
             return _trace_path(request, replay, resumed, checkpoint_id)
@@ -214,9 +215,38 @@ def _trace_path(
     edges = _internal_edges(replay) + _top_level_edges(replay)
     adjacency = _adjacency(edges)
 
-    walk, reached = _walk(adjacency, seed, terminal, budgets.max_hops, budgets.max_edges)
+    walk, reached = _walk(
+        adjacency, seed, terminal, budgets.max_hops, budgets.max_edges, budgets.max_nodes
+    )
     if reached:
+        if not replay.scope.selected_transactions_complete:
+            return _partial_trace_path(
+                request,
+                replay,
+                walk,
+                seed,
+                terminal,
+                "source_unavailable",
+                "scope_incomplete",
+                resumed,
+                checkpoint_id,
+            )
         return _complete_trace_path(request, replay, walk, terminal, resumed, checkpoint_id)
+
+    # Terminal reachable but the requested budget stopped the traversal -> partial.
+    _, unbounded_reached = _walk(adjacency, seed, terminal, _UNBOUNDED, _UNBOUNDED, _UNBOUNDED)
+    if unbounded_reached:
+        return _partial_trace_path(
+            request,
+            replay,
+            walk,
+            seed,
+            terminal,
+            "evidence_incomplete",
+            "budget_traversal",
+            resumed,
+            checkpoint_id,
+        )
 
     # Preserve any confirmed chain that still reaches the terminal even if the
     # seed's own connecting (internal) edge is missing from the replay.
@@ -239,7 +269,7 @@ def _trace_path(
             seed,
             terminal,
             "evidence_incomplete",
-            "budget_traversal",
+            "frontier_resolution",
             resumed,
             checkpoint_id,
         )
@@ -499,6 +529,24 @@ def _trace_remerge(
         ["REQ-FLOW-REMERGE-BRANCHES", "REQ-FLOW-REMERGE-LEDGER"],
         [item["evidence_id"] for item in evidence],
     )
+    # Budget counts the confirmed ledger only (seed + branches + merge, and the
+    # split+merge edges); excluded external inflows are context, not budget.
+    node_count = 2 + len({b["branch_node"] for b in branches})
+    edge_count = 2 * len(branches)
+    if _budget_partial(node_count, edge_count, 2, inputs.budgets):
+        errors = [
+            _error(
+                "evidence_incomplete",
+                "The confirmed remerge graph exceeds the requested traversal budget; "
+                "the confirmed branches and residual are preserved.",
+                "budget_traversal",
+                [item["evidence_id"] for item in evidence],
+                retryable=True,
+            )
+        ]
+        return _result(
+            request, replay, "partial", [result], evidence, errors, resumed, checkpoint_id
+        )
     if not available or not replay.scope.selected_transactions_complete:
         errors = [
             _error(
@@ -621,6 +669,21 @@ def _aggregate_origins(
         ["REQ-FLOW-MULTI-CONTRIBUTIONS", "REQ-FLOW-MULTI-TOTAL"],
         [item["evidence_id"] for item in evidence],
     )
+    node_count = len(seen_origins) + 1
+    if _budget_partial(node_count, len(contributions), 1, inputs.budgets):
+        errors = [
+            _error(
+                "evidence_incomplete",
+                "The confirmed origin set exceeds the requested traversal budget; "
+                "confirmed contributions are preserved.",
+                "budget_traversal",
+                [item["evidence_id"] for item in evidence],
+                retryable=True,
+            )
+        ]
+        return _result(
+            request, replay, "partial", [result], evidence, errors, resumed, checkpoint_id
+        )
     if seen_origins != origins or not replay.scope.selected_transactions_complete:
         errors = [
             _error(
@@ -671,6 +734,39 @@ def _require_remerge_scope(inputs: TraceRemergeInputs, replay: FlowPathReplay) -
             "Requested transactions do not match the reviewed replay set.",
             "scope_validation",
         )
+    low = inputs.scope.block_range.from_block
+    high = inputs.scope.block_range.to_block
+    if any(
+        not low <= int(item.transaction.block_number, 16) <= high for item in replay.transactions
+    ):
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Requested block_range does not cover the selected replay transactions.",
+            "scope_validation",
+        )
+
+
+def _require_unique_transaction_hashes(replay: FlowPathReplay) -> None:
+    hashes = [item.transaction.hash for item in replay.transactions]
+    if len(hashes) != len(set(hashes)):
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "A transaction hash is aggregated more than once in the reviewed replay.",
+            "edge_dedup",
+        )
+
+
+def _budget_partial(
+    node_count: int,
+    edge_count: int,
+    hop_count: int,
+    budgets: object,
+) -> bool:
+    return (
+        node_count > budgets.max_nodes  # type: ignore[attr-defined]
+        or edge_count > budgets.max_edges  # type: ignore[attr-defined]
+        or hop_count > budgets.max_hops  # type: ignore[attr-defined]
+    )
 
 
 def _require_aggregate_scope(inputs: AggregateOriginsInputs, replay: FlowPathReplay) -> None:
@@ -701,11 +797,17 @@ def _walk(
     terminal: str,
     max_hops: int,
     max_edges: int,
+    max_nodes: int,
 ) -> tuple[list[_Edge], bool]:
     path: list[_Edge] = []
     current = start
     visited = {start}
-    while current != terminal and len(path) < max_hops and len(path) < max_edges:
+    while (
+        current != terminal
+        and len(path) < max_hops
+        and len(path) < max_edges
+        and len(visited) < max_nodes
+    ):
         outgoing = adjacency.get(current, [])
         if len(outgoing) != 1:
             break
@@ -716,6 +818,9 @@ def _walk(
         current = edge.to_node
         visited.add(current)
     return path, current == terminal
+
+
+_UNBOUNDED = 1_000_000
 
 
 def _confirmed_chain_to_terminal(
@@ -732,8 +837,9 @@ def _confirmed_chain_to_terminal(
             adjacency,
             start,
             terminal,
-            budgets.max_hops,
+            budgets.max_hops,  # type: ignore[attr-defined]
             budgets.max_edges,  # type: ignore[attr-defined]
+            budgets.max_nodes,  # type: ignore[attr-defined]
         )
         if reached and len(walk) > len(best):
             best = walk

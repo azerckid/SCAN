@@ -216,6 +216,63 @@ def test_aggregate_unrequested_origin_is_failed_reconciliation() -> None:
     assert result.root.errors[0].code == "reconciliation_failed"
 
 
+@pytest.mark.parametrize("fixture_id", CASES)
+def test_traversal_budget_upper_bound_is_enforced(fixture_id: str) -> None:
+    """A budget of one node/edge/hop must never return complete for any query."""
+    request_document = _request_document(fixture_id)
+    budgets = cast(dict[str, int], cast(dict[str, object], request_document["inputs"])["budgets"])
+    budgets["max_nodes"] = 1
+    budgets["max_edges"] = 1
+    budgets["max_hops"] = 1
+    request = validate_analysis_request(request_document).root
+    assert isinstance(request, FlowPathAnalysisRequest)
+
+    result = analyze_flow_path_replay(request, json.dumps(_replay(fixture_id)).encode())
+
+    assert result.root.status == "partial"
+    assert result.root.errors[0].code == "evidence_incomplete"
+    assert result.root.errors[0].stage == "budget_traversal"
+
+
+def test_remerge_block_range_not_covering_replay_is_rejected() -> None:
+    fixture_id = "FX-FLOW-REMERGE-001"
+    request_document = _request_document(fixture_id)
+    scope = cast(dict[str, object], cast(dict[str, object], request_document["inputs"])["scope"])
+    scope["block_range"] = {"from": 1, "to": 1}
+    request = validate_analysis_request(request_document).root
+    assert isinstance(request, FlowPathAnalysisRequest)
+
+    result = analyze_flow_path_replay(request, json.dumps(_replay(fixture_id)).encode())
+
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_trace_path_incomplete_selected_scope_is_not_complete() -> None:
+    fixture_id = "FX-FLOW-PATH-001"
+    replay = _replay(fixture_id)
+    cast(dict[str, object], replay["scope"])["selected_transactions_complete"] = False
+
+    result = analyze_flow_path_replay(_request(fixture_id), json.dumps(replay).encode())
+
+    assert result.root.status == "partial"
+    assert result.root.errors[0].code == "source_unavailable"
+
+
+@pytest.mark.parametrize("fixture_id", ("FX-FLOW-REMERGE-001", "FX-FLOW-MULTI-001"))
+def test_duplicate_transaction_hash_is_failed_reconciliation(fixture_id: str) -> None:
+    replay = _replay(fixture_id)
+    transactions = cast(list[dict[str, object]], replay["transactions"])
+    clone = json.loads(json.dumps(transactions[0]))
+    clone["label"] = "duplicate_label"
+    transactions.append(clone)
+
+    result = analyze_flow_path_replay(_request(fixture_id), json.dumps(replay).encode())
+
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
 def test_restricted_source_policy_blocks_before_decode() -> None:
     fixture_id = "FX-FLOW-PATH-001"
     request_document = _request_document(fixture_id)

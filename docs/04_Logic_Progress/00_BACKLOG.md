@@ -1188,7 +1188,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     - [05 Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) — 0.2·0.1 하위호환·버전 규칙 / [02 예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) — FLOW-EVM-001/002·FLOW-MULTI-001 정의
     - [04 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md)(PATH 18개 필수 근거) · [03 Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md)·[00 CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md)(read-only graph 상위 UX·partial/export 흐름) · [09 Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md)(WP-PATH 상위 계약) · [23 Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md)(QA-EXP-PATH-001/002)
     - 세 fixture(`FX-FLOW-PATH/REMERGE/MULTI-001`)의 input·expected·evidence·raw-replay
-  - Verification: `scripts/verify.py` 전체 PASS — 436 tests, fixture 13 packages, traceability 1477 links, security 157 files (정독 시점 1471 → 본 정합 수정 후 1477, docs-only, analyzer 코드 변경 없음)
+  - Verification(Context Receipt 준비, PR #72 시점): `scripts/verify.py` 전체 PASS — 436 tests, fixture 13 packages, traceability 1477 links, security 157 files (정독 시점 1471 → 정합 수정 후 1477, docs-only). analyzer 구현 이후 최신 수치는 아래 TASK-014 analyzer Verification Receipt를 따른다.
   - Constraints:
     - Bounded traversal(`max_hops`/`max_nodes`/`max_edges`), 상한 도달=`partial`, 무제한 BFS·graph DB 확장·Rules 밖 live 탐색 금지
     - external inflow/무관 자금은 seed ledger 보존식에서 분리(`excluded_edges` + external context), amount 유사성만으로 포함·제외 금지
@@ -1208,12 +1208,12 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     `src/scan_tool/slices/flow_path.py`, `src/scan_tool/application/{cli_runtime,task_014_independent_verifier}.py`,
     schema 3종, `check_analysis_schema.py`·`check_task_012_analysis_contract_proposal.py`,
     fixture 3개 `analysis-request.json`(신규)·`expected.json`·`evidence.json`(scope_status·hash),
-    `tests/unit/test_flow_path_slice.py`(18)·`tests/integration/test_flow_path_cli.py`(5),
+    `tests/unit/test_flow_path_slice.py`(25)·`tests/integration/test_flow_path_cli.py`(5),
     `scripts/verify_task_014_analyzer_independent_verification.py`(verify.py 연결).
   - 새 공개 `ErrorCode` 추가 없음(기존 enum + stage). `evm_core`·`evm_special`·
     기존 `0.1` 결과 불변.
 - Verification Receipt:
-  - 459 tests PASS, fixture 13, schema 48 probes, traceability 1477 links,
+  - 459 tests PASS, fixture 13, schema 48 probes, traceability 1489 links,
     security 162 files, TASK-014 negative oracle 18×2·독립 Verifier 3×2·
     **analyzer 독립 검증 3 fixtures canonical hash 일치** PASS.
     [TASK-014 Analyzer 검증 Receipt](../05_QA_Validation/43_TASK_014_ANALYZER_VERIFICATION_RECEIPT.md).
