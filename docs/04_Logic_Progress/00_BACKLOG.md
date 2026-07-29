@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 19:59
-> Status: TASK-001~012 Done · WP-INPUT Done · TASK-013~019 Proposed
+> Last Updated: 2026-07-29 20:19
+> Status: TASK-001~012 Done · WP-INPUT Done · TASK-013 In Progress · TASK-014~019 Proposed
 
 ## 1. 문서 목적
 
@@ -999,7 +999,8 @@ Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-013: NFT·Proxy 결정적 Decoder
 
-- Status: ToDo
+- Status: In Progress — 사용자 UI Preview·구현 승인 완료(2026-07-29 20:19),
+  Analyzer 구현 착수 대기
 - Work Type: code
 - Priority: Phase 2 · P1
 - Depends On: TASK-012
@@ -1053,10 +1054,11 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] Analysis I/O 대안을 B(`evm_special`)로 확정한다.
   - [x] CLI 진입·전환·이탈과 complete·partial·failed 표시를 Preview로
     작성한다. loading·empty·stale·Rules는 기존 CLI 경계를 재사용한다.
-  - [ ] 사용자가 UI Preview를 확인하고 승인한다.
-  - [ ] log/state 최소 필드·mutation 없음·decode 상태 관리를 승인한다.
-  - [ ] OSS/license를 확인한다.
-  - [ ] 사용자 구현 승인을 기록한다.
+  - [x] 사용자가 UI Preview를 확인하고 승인한다(2026-07-29 20:19).
+  - [ ] log/state 최소 필드·mutation 없음·decode 상태 관리를 승인한다
+    (analyzer 구현자가 착수 시 재확인).
+  - [ ] OSS/license를 확인한다(analyzer 구현자가 착수 시 재확인).
+  - [x] 사용자 구현 승인을 기록한다(2026-07-29 20:19).
 - Component & Library Plan:
   - shadcn/ui: N/A - Python CLI 분석기.
   - Custom components: NFT decoder, proxy slot/event resolver.
@@ -1071,18 +1073,22 @@ Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - 세 fixture가 `검증 중`으로 승격되고 Analysis I/O
-    대안 B·전용 UI Preview가 작성됐다. 사용자 Preview 확인·승인, Context
-    Receipt `PASS` 전환, 사용자 구현 승인 전 `In Progress` 착수 금지.
+  - Status: PASS — 세 fixture가 `검증 중`으로 승격되고(승격 검토 통과),
+    Analysis I/O 대안 B가 확정되고, 전용 UI Preview가 작성·브라우저
+    검증됐다(방향키·roving tabindex 포함). 사용자가 2026-07-29 20:19
+    "TASK-013 UI Preview를 승인합니다. Context Receipt PASS 전환과
+    analyzer 구현을 승인합니다." 요청에 "승인합니다"로 명시 승인했다.
   - Required References Read: 예상문제 은행·Coverage Brief·EIP-721/1155/1967·
     [TASK-013 Fixture 승격 검토](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)·
-    [TASK-013 NFT·Proxy UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md)
-  - Constraints: 소유권 분쟁·안전성 자동 판정 금지
+    [TASK-013 NFT·Proxy UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md)·
+    [TASK-013 분석 계약 제안](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md)
+  - Constraints: 소유권 분쟁·안전성 자동 판정 금지. analyzer 구현자는
+    착수 시 log/state 최소 필드·mutation 없음·OSS/license를 다시 확인한다.
   - Conflicts: None known
 - Change Receipt:
-  - N/A - 구현 미시작
+  - N/A - analyzer 구현 미착수. 문서 승인 Gate만 닫힘.
 - Verification Receipt:
-  - N/A - 구현 미시작
+  - N/A - analyzer 구현 미착수.
 
 ### [ ] TASK-014: PATH Graph·금액 정합 엔진
 

@@ -1,7 +1,7 @@
 # Fixture: FX-EVM-PROXY-001
 > Created: 2026-07-29 14:38
-> Last Updated: 2026-07-29 19:53
-> Status: Verifying 0.1 · Replay, Negative Oracle, and Verifier Gates Passed · UI 승인 대기
+> Last Updated: 2026-07-29 20:19
+> Status: Verifying 0.1 · UI 승인 완료(2026-07-29 20:19) · Analyzer 구현 대기
 
 ## 1. 목적
 
@@ -31,8 +31,9 @@ storage로 함께 입증하는 공개 후보다.
 - [x] 독립 Verifier와 두 번의 결정성
 - [x] 승격 검토 통과 · `candidate` → `verifying`
 - [x] Analysis I/O 대안 B(`evm_special`) 확정
-- [ ] UI Preview 사용자 승인
-- [ ] Context Receipt `PASS`·사용자 구현 승인
+- [x] UI Preview 사용자 승인(2026-07-29 20:19)
+- [x] Context Receipt `PASS`·사용자 구현 승인
+- [ ] NFT·Proxy analyzer 구현과 독립 Verification Receipt
 
 ## 4. Related Documents
 
