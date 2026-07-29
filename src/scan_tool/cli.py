@@ -159,14 +159,16 @@ def analyze(
     _progress("FEEDBACK", f"{(monotonic() - started) * 1000:.1f}ms")
     model = _validate_request_file(request)
     document = model.root
-    prepared_input = _prepare_analysis_input(
-        input_mode=input_mode,
-        chain_scope=chain_scope,
-        contest_rpc_endpoint_env=contest_rpc_endpoint_env,
-        artifact=artifact,
-        artifact_format=artifact_format,
-        evidence=evidence,
-    )
+    prepared_input = None
+    if document.source_policy.rule_status != RuleStatus.RESTRICTED:
+        prepared_input = _prepare_analysis_input(
+            input_mode=input_mode,
+            chain_scope=chain_scope,
+            contest_rpc_endpoint_env=contest_rpc_endpoint_env,
+            artifact=artifact,
+            artifact_format=artifact_format,
+            evidence=evidence,
+        )
     if prepared_input is not None:
         _progress(
             "INPUT",
