@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Fixture 후보 선정 보고서
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 09:50
+> Last Updated: 2026-07-29 11:00
 > Status: Provider Replay Passed · Four Fixtures Verifying · Implementation Not Started
 
 ## 1. 목적과 판정
@@ -10,8 +10,9 @@ TASK-012의 구현 전 첫 Gate로 `BASIC-EVM-001/002`,
 선정하고 QuickNode·Alchemy provider replay를 실행했다. 네 패키지는 Schema
 `0.1`, fixture `0.1`, 상태 `verifying`이다.
 
-**판정: 공통 provider 재현 완료, 반례·독립 trace·confirmed 승격과 구현
-착수는 미완료다.**
+**판정: 공통 provider 재현과 offline 반례는 완료했다. fixture
+`confirmed` 정책·정식 계약·Context Receipt·구현 착수는 미완료다. 독립
+Trace는 엄격한 fixture 교차검증을 위한 비차단 후속이다.**
 
 ## 2. 공통 기준점
 
@@ -73,8 +74,9 @@ historical state, token transfer range, internal call에서 별도로 계산한�
 실패한 공급자를 성공으로 기록하지 않으며, 대체 소스 사용 사실을 provenance에
 남긴다. 이후 §5.1에서 QuickNode·Alchemy의 exact block/filter
 `eth_getLogs`가 일치했으므로 raw 범위 로그 독립 재현 blocker는 닫혔다.
-offline 반례와 Trace dialect 정규화는 통과했다. 현재 blocker는 credential
-회전, TOKEN-002 독립 trace 실제 성공, live rate/timeout이다.
+offline 반례와 Trace dialect 정규화는 통과했다. 현재 필수 blocker는
+credential 회전, live rate/timeout, 정식 계약·Context Receipt다. TOKEN-002
+독립 Trace는 엄격한 fixture 교차검증을 위한 비차단 후속으로 관리한다.
 
 ### 5.1 Provider 2차 재현
 
@@ -87,9 +89,20 @@ log는 1건이며 기준 TX, transaction index `104`, log index `275`, raw
 QuickNode callTracer는 Router→EOA의 성공 native inflow
 `14449515027026387018` wei를 재현했다. Alchemy의 독립 debug·parity
 dialect는 2026-07-29 재실행에서도 각각 HTTP 400/permanent였으므로
-TOKEN-002는 성공 가능한 제3의 독립 trace Gate가 남는다. Provider별 raw
+독립 Trace 역할에서 제외했다. Chainstack Developer/Full endpoint도 chain
+ID `0x1`은 HTTP 200으로 반환했지만 두 dialect가 HTTP 403/permanent여서
+같은 역할에서 제외했다. 실행 근거는
+[Live Provider Capability QA §3.2](./25_LIVE_PROVIDER_CAPABILITY_QA.md)와
+[Live Provider Readiness §7](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md)에
+기록했다. Provider별 raw
 SHA-256은 각 패키지의
 `provider-replay.json`에 고정했다.
+
+QuickNode raw Trace로 필요한 값이 모두 확보되면 실전 runtime은 분석을
+수행할 수 있다. 이때의 `complete`는 필수 데이터가 있다는 실행 결과 상태다.
+fixture `confirmed`는 장기 기준 데이터의 provenance·교차검증 수준이므로
+별도로 판정하며, 독립 Trace 부재만으로 runtime을 자동 `partial` 처리하지
+않는다.
 
 `provider-replay.json`은 현재 Reference Fixture Schema 0.1의 직접 검증
 대상이 아닌 보조 provenance 파일이다. `input/expected/evidence`의
@@ -133,7 +146,7 @@ Schema 편입 여부는 `confirmed` 승격 전 후속 계약으로 결정한다.
 
 | 기준 | 판정 | 증거 |
 |:---|:---:|:---|
-| Functionality | Partial | 공통 9개 공급자 2차 재현 완료, 독립 trace·반례·분석기 구현 미완료 |
+| Functionality | Partial | 공통 9개 공급자 2차 재현·offline 반례 완료, 정식 계약·분석기 구현 미완료 |
 | Potential Impact | Planned | 네 예상문항과 후속 PATH/INTEL 공통 입력 기반 |
 | Novelty | Planned | 한 블록의 object/state/event/trace 교차 fixture |
 | UX | Not Executed | CLI complete·partial·failed 재검토 전 |

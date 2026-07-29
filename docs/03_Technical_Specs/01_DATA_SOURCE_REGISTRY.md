@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 09:50
+> Last Updated: 2026-07-29 10:38
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -92,17 +92,40 @@
 | `PROVIDER-EVM-PRIMARY` | QuickNode Ethereum | archive·Debug·Trace·Ethereum JSON-RPC | smoke 7/7·fixture replay 10/10; credential 회전·rate/timeout 반례 | verifying |
 | `PROVIDER-EVM-VERIFY` | Alchemy Ethereum | 기본 RPC·historical archive·filtered logs | smoke 6/6·fixture replay 9/9; debug·parity trace 모두 HTTP 400 | verifying / trace rejected |
 | `PROVIDER-EVM-EXPLORER` | Blockscout | transaction·log·internal transaction 교차확인 | 원본 RPC·독립 trace 대체 불가 | supporting |
-| `PROVIDER-EVM-TRACE-VERIFY` | 미선정 | trace-dependent fixture 독립 검증 | 공급자·plan·비용 | unresolved |
+| `PROVIDER-EVM-TRACE-VERIFY` | 비차단 후속 | 엄격한 fixture 승격용 독립 trace | Alchemy HTTP 400·Chainstack Developer HTTP 403 | deferred |
 
 이 topology는 채택 기록이 아니다. pre-event read-only smoke 이후 TASK-012
 fixture 공통 9개 조회도 두 공급자에서 독립 실행해 decoded summary가 모두
 일치했고 primary trace도 성공했다. Alchemy의 debug·parity trace는
 각각 HTTP 400으로 실패했으므로 독립 trace·rate behavior는 미완료다.
+Chainstack Developer/Full endpoint도 Ethereum Mainnet chain ID는 반환했지만
+두 trace dialect가 HTTP 403으로 거부되어 독립 Trace 역할에서 제외했다.
+실전 분석은 QuickNode raw Trace를 사용할 수 있고, 독립 Trace는 엄격한
+fixture 승격을 위한 비차단 후속으로 관리한다.
 설정 중 대화에 노출된 credential은 대회 사용과 후속 지속 호출 전 회전해야 한다. 회전한
 endpoint·API key는 로컬 secret 환경에만 두고 source record에는 논리
 provider ID, method, block tag, 조회 시각, 안전한 오류 코드, raw SHA-256만
 남긴다. 상세 Gate와 공식 근거는
 [Live Provider Readiness](./10_LIVE_PROVIDER_READINESS.md)를 따른다.
+
+#### 5.1.2 대회 제공 입력과 artifact
+
+| 논리 source | 입력 모드 | 제공 데이터 | 현재 상태 |
+|:---|:---|:---|:---:|
+| `DS-CONTEST-RPC` | `contest_rpc` | 주최 read-only RPC의 TX·receipt·block·state·logs·trace | adapter 미구현 |
+| `DS-CONTEST-ARTIFACT` | `provided_artifact` | 문제 첨부 JSON/JSONL/CSV/raw TX·receipt·logs·trace | 범용 importer 미구현 |
+| `DS-SELF-NODE` | `external_rpc` 또는 local source | 검증된 client가 제공하는 chain 원자료 | 운영·규정·비용 미결정 |
+
+외부 API가 금지되면 탐색기 API를 자동 대체재로 간주하지 않는다. RPC와
+Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules와 문제 제공
+형식에 따라 `DS-CONTEST-RPC` 또는 `DS-CONTEST-ARTIFACT`를 선택한다.
+세 입력 경로는 정규화 이후 동일 evidence 계약을 사용해야 한다.
+
+자체 노드는 가능한 source 후보지만 EVM 실행/Trace 엔진을 SCAN에서
+재구현한다는 뜻이 아니다. 검증된 client의 read-only 결과를 adapter로
+가져온다. 상세 계약은
+[다중 입력 모드와 체인 범위](./12_MULTI_SOURCE_INPUT_AND_CHAIN_SCOPE.md)를
+따른다.
 
 ### 5.2 탐색기 API
 

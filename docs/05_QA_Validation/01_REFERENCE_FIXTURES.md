@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 09:50
+> Last Updated: 2026-07-29 11:00
 > Status: Approved 1.1 · Phase 2 Verifying Pack
 
 ## 1. 문서 목적
@@ -98,7 +98,8 @@ DOC-M3 결정에 따라 `Deferred`, 4개는 TASK-012 Phase 2 `검증 중`으로
 
 DOC-M3 Deferred `후보`는 필드 골격과 `TBD`만 가질 수 있다. TASK-012
 Phase 2 네 패키지는 공개 값·1차 provenance·두 공급자 공통 replay를
-확보해 `검증 중`이며, 반례·독립 trace·승격 Gate가 남아 있다. `검증 중`
+확보해 `검증 중`이며, fixture 승격 정책·정식 계약 Gate가 남아 있다.
+독립 Trace는 엄격한 fixture 교차검증을 위한 비차단 후속이다. `검증 중`
 fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본으로
 사용한다.
 
@@ -346,7 +347,7 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-TOKEN-002 |
-| 상태 | 검증 중 — primary trace 성공, Alchemy debug·parity trace 모두 HTTP 400 |
+| 상태 | 검증 중 — QuickNode primary trace 성공, Alchemy HTTP 400·Chainstack HTTP 403 |
 | 패키지 | [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) |
 | 데이터 형태 | 공개 TX·receipt·internal call / JSON fixture |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -356,8 +357,8 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 확정 전 증거 | Publicnode outer TX·Withdrawal, Blockscout internal call, DEX raw replay의 call index |
 | 부분·실패 | trace 누락은 partial; outer value만 답·실패 call 합산은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` 또는 trace RPC |
-| 승격 잔여 | offline 실패·복수 call 반례 통과, 성공 가능한 다른 독립 trace·consumer contract 승인 |
-| 마지막 확인 | 2026-07-29 09:50 |
+| 승격 잔여 | offline 실패·복수 call 반례 통과, consumer contract·provenance 승격 정책 승인; 독립 trace는 비차단 후속 |
+| 마지막 확인 | 2026-07-29 11:00 |
 
 ## 7. 승격 기준
 
@@ -414,13 +415,15 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 7. P2 승격에 필요한 BRIDGE·BTC fixture는 Deferred 승격 조건에 따라 선정한다.
 8. TASK-012용 EVM Core 4개는 공개 DEX 기준점을 재사용해 패키지화하고,
    QuickNode·Alchemy 공통 9개 replay 일치로 `검증 중`까지 승격했다.
-   반례·독립 trace·Schema/UI/구현 승인 전에는 `confirmed`로 올리지 않는다.
+   offline 반례는 통과했으며 정식 Schema·fixture provenance 정책·구현 승인
+   전에는 `confirmed`로 올리지 않는다. 독립 Trace는 비차단 후속이다.
 9. primary archive·trace와 independent TX·receipt·block·filtered
    logs·historical state capability smoke를 통과했다. endpoint·API key는
    fixture·artifact·DB에 저장하지 않으며 credential 회전은 후속 Gate다.
 10. TASK-012 네 fixture의 합성 negative oracle 24개를 두 번 실행해
-    complete·partial·failed 결정성을 통과했다. 독립 trace와 제품 Analysis
-    type 승인은 별도다.
+    complete·partial·failed 결정성을 통과했다. 제품 Analysis type 승인과
+    독립 Trace 후속 검증은 별도다. QuickNode raw Trace를 가진 runtime
+    `complete`와 fixture `confirmed`는 같은 상태가 아니다.
 11. 네 fixture를 소비할 `evm_core` `0.2-draft` request/result 제안 12개와
     Schema probe 14개를 통과했다. 이는 consumer contract 검토 증거이며,
     정식 Analysis I/O 승인·제품 analyzer·fixture `confirmed`를 뜻하지 않는다.
@@ -431,6 +434,7 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 - **Concept_Design**: [SCAN 2026 참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) - 준비 전략
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - confirmed fixture 기반 V1 경로와 P2 승격 조건
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - fixture별 필요 소스와 제약
+- **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - 실전 complete·fixture confirmed·독립 Trace 경계
 - **Technical_Specs**: [Reference Fixture Schema](../03_Technical_Specs/02_REFERENCE_FIXTURE_SCHEMA.md) - JSON 0.1 계약과 증거·소스 역할
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - fixture를 소비하는 분석 계약
 - **Technical_Specs**: [P0·V1 기술 선택 기록](../03_Technical_Specs/04_SCAN_2026_TECHNOLOGY_DECISION.md) - 회귀 실행 기술과 저장·검증 경계

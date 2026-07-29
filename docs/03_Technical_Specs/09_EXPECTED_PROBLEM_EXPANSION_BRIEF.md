@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Technical Brief
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 02:35
+> Last Updated: 2026-07-29 10:38
 > Status: Proposed 0.1 · Implementation Not Started
 
 ## 1. 목적
@@ -41,6 +41,11 @@ Analysis I/O 변경 검토와 별도 작업 승인을 통과한 뒤 시작한다
 6. 기존 source port·cache·artifact·checkpoint·Queue·Verifier를 재사용하고
    현재 요구가 없는 새 framework·DB·provider 추상화는 추가하지 않는다.
 7. live source는 공식 Rules와 source policy가 허용된 경우에만 별도 활성화한다.
+8. 입력은 `external_rpc | contest_rpc | provided_artifact`를 지원하는 공통
+   정규화 계층을 먼저 통과한다. Explorer를 금지 시 자동 fallback으로
+   가정하지 않는다.
+9. 체인 범위는 `evm | bitcoin | non_evm | cross_chain`으로 관리하고,
+   서로 다른 실행·상태 모델을 EVM decoder 하나로 일반화하지 않는다.
 
 ## 4. 엔진 묶음과 문제 매핑
 
@@ -57,6 +62,11 @@ Analysis I/O 변경 검토와 별도 작업 승인을 통과한 뒤 시작한다
 
 문제 매핑은 구현 순서와 coverage 책임을 뜻한다. 공통 엔진을 구현했다는
 이유만으로 해당 문제를 automated로 바꾸지 않는다.
+
+모든 package의 공통 선행 조건은 `WP-INPUT-GATE`다. 외부 RPC, 주최 RPC,
+제공 artifact를 normalized evidence로 변환한 뒤 같은 Python
+analyzer·Verifier가 소비해야 한다. 현재 contest RPC adapter와 범용 artifact
+importer는 미구현이다.
 
 `MIXED-XCHAIN-001`의 양단 chain·bridge/service 정합과 직접 Benchmark 책임은
 `WP-SERVICE`가 단독으로 가진다. `WP-CASE`는 그 결과가 더 큰 사건의 입력으로
@@ -78,7 +88,9 @@ Analysis I/O 변경 검토와 별도 작업 승인을 통과한 뒤 시작한다
   선정했다. 독립 2차 재현·반례·Schema/UI/구현 승인 전에는 Gate 미통과다.
 - provider Gate: primary archive·trace와 독립 TX·receipt·block·filtered
   logs·historical state 공급자의 capability smoke를 먼저 통과한다.
-  trace-dependent answer에는 독립 trace 또는 명시적인 partial 판정이 필요하다.
+  trace-dependent answer에는 raw Trace와 provenance가 필요하다. 독립 Trace는
+  엄격한 fixture 교차검증의 비차단 후속이며 runtime complete 여부를
+  단독으로 결정하지 않는다.
 
 ### 5.2 WP-EVM-SPECIAL
 
@@ -159,13 +171,14 @@ Analysis I/O 변경 검토와 별도 작업 승인을 통과한 뒤 시작한다
 
 ## 8. 구현 우선순위
 
-1. WP-EVM-CORE
-2. WP-EVM-SPECIAL과 WP-PATH 준비 fixture 병행
-3. WP-PATH
-4. WP-INTEL
-5. WP-SERVICE와 WP-BTC
-6. WP-CASE
-7. WP-INTEGRATION
+1. WP-INPUT-GATE — 공통 입력 mode·정규화·provenance
+2. WP-EVM-CORE
+3. WP-BTC
+4. WP-PATH와 WP-EVM-SPECIAL
+5. WP-SERVICE의 Cross-chain
+6. 출제가 확인된 비EVM 체인 adapter
+7. WP-INTEL·WP-CASE
+8. WP-INTEGRATION
 
 시간이 부족하면 전문 adapter 개수를 늘리기보다 EVM-CORE와 PATH의
 정확도·partial·증거 완결성을 우선한다.
@@ -202,6 +215,7 @@ Analysis I/O 변경 검토와 별도 작업 승인을 통과한 뒤 시작한다
 - **Technical_Specs**: [Analysis I/O](./05_ANALYSIS_IO_SCHEMA.md) - 공개 요청·결과·증거 계약
 - **Technical_Specs**: [오픈소스 포렌식 사전조사](./06_OPEN_SOURCE_FORENSICS_REVIEW.md) - build/wrap/borrow 결정 Gate
 - **Technical_Specs**: [Live Provider Readiness](./10_LIVE_PROVIDER_READINESS.md) - WP-EVM-CORE 선행 source·AI Gate
+- **Technical_Specs**: [다중 입력 모드와 체인 범위](./12_MULTI_SOURCE_INPUT_AND_CHAIN_SCOPE.md) - `WP-INPUT-GATE`와 체인별 엔진 경계
 - **Logic_Progress**: [Phase 2 Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - 구현 순서와 승인 Gate
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 Context Lock
 - **QA_Validation**: [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 3/6/21 기준선

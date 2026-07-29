@@ -1,6 +1,6 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 09:50
+> Last Updated: 2026-07-29 10:38
 > Status: Pre-event Smoke Partial Pass · Credential Rotation Pending · Competition Rules Unclear
 
 ## 1. 목적
@@ -21,6 +21,12 @@
 실행하는 문서가 아니다. 현재 단계에서 확정하는 것은 후보 topology, 비밀정보
 경계, smoke 항목, 증거 형식과 Stop/Go 기준이다.
 
+입력 source는 외부 공급자에 한정하지 않는다. 공식 규정과 문제 제공 형식에
+따라 `external_rpc | contest_rpc | provided_artifact` 중 하나를 선택한다.
+세 경로의 상세 정규화 계약과 `evm | bitcoin | non_evm | cross_chain` 범위는
+[다중 입력 모드와 체인 범위](./12_MULTI_SOURCE_INPUT_AND_CHAIN_SCOPE.md)에서
+관리한다.
+
 ## 2. 현재 범위와 정직한 상태
 
 | 항목 | 현재 상태 |
@@ -29,7 +35,9 @@
 | 자동 실증 완료 | DEX·AUTH·FREEZE 3문항 |
 | Phase 2 준비 대상 | 나머지 27문항 |
 | 직접 준비 중 | EVM Core 4문항의 verifying fixture |
-| EVM 공급자 topology | QuickNode primary 7/7·Alchemy verifier 6/6 smoke 성공, credential 회전·독립 trace·rate behavior 미완료 |
+| EVM 공급자 topology | QuickNode 일반 RPC+Debug Trace 주 경로·Alchemy 일반 RPC 교차검증, credential 회전·rate behavior 미완료 |
+| 대회 입력 경로 | contest RPC adapter·범용 artifact importer 미구현 |
+| 비EVM 범위 | Bitcoin·non-EVM·cross-chain 분석기 미구현 |
 | AI Planner 공급자 | 필수 역할 확정, provider/model/비용 smoke 미실행 |
 | TASK-012 구현 | 미승인·미시작 |
 | 안전한 smoke runner | 준비 완료, 기본 network 0건 |
@@ -44,9 +52,9 @@
 | 역할 | 후보 | 공식 문서로 확인한 능력 | 현재 제약 | 상태 |
 |:---|:---|:---|:---|:---:|
 | Primary | QuickNode Ethereum | archive, Ethereum JSON-RPC, Debug API, Trace API를 문서화 | 대상 method 7/7 성공, rate/timeout·credential 회전 미완료 | verifying |
-| Independent verifier | Alchemy Ethereum | 기본 RPC·`eth_getLogs`·historical archive state 지원 | 대상 공통 method 6/6 성공, 독립 trace·rate/timeout·credential 회전 미완료 | verifying |
+| Independent verifier | Alchemy Ethereum | 기본 RPC·`eth_getLogs`·historical archive state 지원 | 대상 공통 method 6/6 성공, 두 trace dialect HTTP 400, rate/timeout·credential 회전 미완료 | verifying / trace rejected |
 | Supporting explorer | Blockscout | 거래·로그·internal transaction 교차확인에 기존 fixture에서 사용 | 원본 RPC·독립 trace 대체물이 아님 | verifying/supporting |
-| Independent trace | 미선정 | primary와 독립된 trace가 필요할 때 사용 | 공급자·plan·비용 미결정 | unresolved |
+| Independent trace | 비차단 후속 | fixture 엄격 승격 시 primary와 독립된 trace에 사용 | Alchemy HTTP 400, Chainstack Developer HTTP 403; 실전 TASK-012 필수 실행 경로에서는 제외 | deferred |
 
 공식 근거:
 
@@ -62,6 +70,11 @@
 공식 문서의 지원 표시는 실제 계정 plan·rate limit·timeout 성공을 뜻하지
 않는다. `adopted` 또는 fixture `confirmed` 판정은 capability smoke와 독립
 재현 뒤에만 가능하다.
+
+QuickNode 단일 Trace는 실전 분석 입력으로 사용할 수 있다. 다만 독립
+Trace가 없는 결과는 provenance에 그 한계를 기록하고, fixture의 엄격한
+`confirmed` 승격과 실전 `complete/partial` 판정을 같은 것으로 취급하지
+않는다. Alchemy는 일반 RPC verifier 역할만 맡는다.
 
 ## 4. 비밀정보와 권한 경계
 
@@ -147,8 +160,9 @@ verify 6건을 실행했다. 이때 CLI의 `--rules-status allowed`는 해당 pr
 점검에 대한 operator 실행 허가로 사용했으며, `RULE-API-001`을 공식
 `allowed`로 바꾸지 않는다. 두 공급자는 chain ID·TX·receipt·block·filtered
 logs·historical call에서 동일 decoded summary를 반환했고, primary의
-`debug_traceTransaction`도 성공했다. 독립 trace와 rate/timeout 동작은 아직
-검증하지 않았으므로 전체 Gate는 `partial`이다.
+`debug_traceTransaction`도 성공했다. rate/timeout 동작은 아직 검증하지
+않았고 독립 Trace는 엄격한 fixture 승격의 비차단 후속이므로 전체 source
+Gate 상태는 `partial`이다.
 
 `--output-root`는 저장소 `.scan/live-provider-smoke/`와 그 하위만 허용한다.
 URL userinfo는 거부하고 URL path/query token 및 composition root가 전달한
@@ -207,9 +221,11 @@ hash 계산 전후 모두 artifact에 들어가면 안 된다.
 [TASK-012 Fixture 후보 보고서 §7](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md)의
 문제별 반례를 합친 **합집합**이다. 한 문서에만 적힌 반례도 생략할 수 없다.
 
-독립 trace를 확보하지 못하면 trace-dependent 항목은 `partial` 또는
-`candidate`를 유지한다. supporting explorer 일치는 독립 RPC 일치를
-대체하지 않는다.
+독립 trace를 확보하지 못하면 엄격한 교차검증 수준의 fixture는
+`verifying`을 유지한다. 실전 분석은 QuickNode raw Trace와 provenance로
+수행할 수 있으며, 필요한 raw field가 모두 있으면 독립 공급자 부재만으로
+runtime 결과를 자동 `partial` 처리하지 않는다. supporting explorer 일치는
+독립 RPC 일치를 대체하지 않는다.
 
 독립 Trace 재시도 계약은 `debug_traceTransaction(callTracer)`와
 `trace_transaction` 두 dialect를 동일한 성공 내부 inflow 구조로 정규화한다.
@@ -217,7 +233,15 @@ timeout·429·method not found·malformed JSON은 offline 주입 검증을 통�
 사용자가 노출 위험을 수용하고 read-only 실행을 승인해 Alchemy에서 두
 dialect를 각각 1회 호출했다. 둘 다 HTTP 400 `permanent`로 실패했으므로
 현재 endpoint는 독립 Trace 역할에 부적합하다. `trace_transaction`의 plan
-제한과 대체 공급자는 `unresolved`로 둔다.
+제한과 대체 공급자는 비차단 후속으로 둔다. Chainstack Developer/Full
+execution endpoint도 Ethereum Mainnet `eth_chainId`는 성공했지만
+`debug_traceTransaction`과 `trace_transaction`이 모두 HTTP 403이어서
+독립 Trace 역할에 사용할 수 없었다.
+
+공식 규정이 외부 API를 제한할 때 Explorer를 자동 fallback으로 사용하지
+않는다. Explorer도 외부 서비스 제한에 포함될 수 있으므로 주최 제공
+read-only RPC 또는 JSON/CSV/trace artifact를 사용한다. 두 입력은 아직
+정식 adapter/importer가 없으며 구현 전 별도 승인이 필요하다.
 
 합성 offline 반례 24개는 두 번 실행해 결정성을 통과했다. 실행 근거는
 [TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md)다.
@@ -253,7 +277,8 @@ Verifier가 없는 결과는 `submission_ready`가 될 수 없다.
 | 두 provider 값 불일치 | conflict 보존, confirmed 금지 |
 | plan/rate limit이 문서와 다름 | 실제 smoke 값을 등록부에 반영 |
 | Rules mode 미확정 | 외부 live/LLM 호출 대기 |
-| EVM smoke·반례·fixture Gate 통과 | TASK-012 구현 승인 요청 가능 |
+| 외부 API·Explorer 제한 | `contest_rpc` 또는 `provided_artifact`, 없으면 source-dependent 분석 대기 |
+| EVM 입력·반례·fixture Gate 통과 | TASK-012 구현 승인 요청 가능 |
 
 ## 10. 365 글로벌 평가 기준
 
@@ -272,6 +297,7 @@ Verifier가 없는 결과는 `submission_ready`가 될 수 없다.
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - 논리 source와 공급자 상태
 - **Technical_Specs**: [Agentic Parallel Solve Flow](./07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - AI Planner·Evidence·Verifier 역할
 - **Technical_Specs**: [Coverage 확장 Brief](./09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - 27문항 Work Package
+- **Technical_Specs**: [다중 입력 모드와 체인 범위](./12_MULTI_SOURCE_INPUT_AND_CHAIN_SCOPE.md) - 외부/대회 RPC·artifact 정규화와 체인별 경계
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012 Context Lock
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - 공급자 Gate 이후 순서
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실행 전 체크와 기록 형식

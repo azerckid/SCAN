@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 09:50
+> Last Updated: 2026-07-29 10:38
 > Status: Proposed 0.1 · No Implementation Approval
 
 ## 1. 목적
@@ -33,7 +33,31 @@
 - [ ] 최소 vertical을 구현하고 독립 Verification Receipt를 확보한다.
 - [ ] Benchmark coverage를 다시 실행해 승격·잔여 공백을 기록한다.
 
+### 3.1 WP-INPUT-GATE
+
+모든 새 분석기는 다음 docs-only 선행 계약을 따른다.
+
+- [x] 입력 모드를 `external_rpc | contest_rpc | provided_artifact`로 고정했다.
+- [x] 체인 범위를 `evm | bitcoin | non_evm | cross_chain`으로 고정했다.
+- [ ] contest RPC를 source port에 즉시 연결하는 adapter를 승인·구현한다.
+- [ ] JSON/JSONL/CSV/raw trace를 normalized evidence로 변환하는 importer를
+  승인·구현한다.
+- [ ] 같은 원자료의 RPC·artifact 입력이 같은 evidence와 분석 값을 만드는지
+  검증한다.
+- [ ] 외부 API·Explorer 제한 모드에서 외부 자동 fallback이 0건인지 검증한다.
+
+이 체크리스트는 설계 Gate다. 미완료 구현 항목은 별도 Context Receipt와
+사용자 승인을 받기 전 `In Progress`로 이동하지 않는다.
+
 ## 4. 실행 Wave
+
+### [ ] Wave 0 — 공통 입력 계층
+
+- [x] 입력 mode·chain scope·정규화·provenance 계약을 문서화한다.
+- [ ] contest RPC adapter의 source policy·secret·capability 계약을 승인한다.
+- [ ] provided artifact importer의 mapping·hash·오류 계약을 승인한다.
+- [ ] 최소 RPC↔artifact 동등성 fixture와 UI 영향 여부를 확인한다.
+- [ ] 별도 구현 승인과 Verification Receipt를 확보한다.
 
 ### [ ] Wave 1 — 범용 EVM
 
@@ -52,19 +76,29 @@
   브라우저에서 검증한다.
 - [x] 사용자가 TASK-012 HTML Preview를 확인하고 UI-First Gate를 승인한다.
 - [ ] 정식 contract·provider Gate 후 제품 analyzer 구현 승인을 별도로 기록한다.
-- [ ] 독립 trace와 rate-limit·timeout·method-not-found 반례를 실행한다.
+- [ ] live rate-limit·timeout 반례를 실행한다. 독립 trace는 fixture의 엄격한
+  승격을 위한 비차단 후속이며 실전 QuickNode 단일 Trace 경로를 막지 않는다.
   - [x] 두 Trace dialect 정규화·교차 동등성과 timeout·429·
     method-not-found(`invalid_response`)·malformed offline 주입 검증을 통과했다.
   - [x] 사용자 위험 수용 후 현재 Alchemy endpoint에서 두 dialect를 실행했으나
     모두 HTTP 400 `permanent`로 실패했다.
-  - [ ] 성공 가능한 별도 독립 trace endpoint와 live rate/timeout을 검증한다.
-- [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만 `confirmed` 승격한다.
+  - [x] Chainstack Developer endpoint의 chain ID는 성공했지만 두 trace
+    dialect가 HTTP 403으로 실패해 독립 trace 역할에서 제외했다.
+  - [ ] 필요 시 성공 가능한 별도 독립 trace endpoint를 후속 검증한다.
+- [ ] offline oracle과 필수 source Gate를 만족한 fixture의 승격 수준을
+  provenance 정책에 따라 결정한다.
 - [ ] 네 문제 입력·정답 필드와 partial 조건 제안을 승인한다.
 - [ ] 기존 EVM decoder·source·cache 재사용 범위를 확인한다.
 - [ ] 제안된 `evm_core` Analysis type과 Analysis I/O 정식 version·migration을 승인한다.
 - [ ] exact·evidence·determinism·negative oracle 회귀를 통과한다.
 
-### [ ] Wave 2 — NFT·Proxy와 PATH
+### [ ] Wave 2 — Bitcoin Core
+
+- [ ] `TASK-017` BTC UTXO·prevout·fee fixture를 확정한다.
+- [ ] change·CoinJoin heuristic과 deterministic 사실을 분리한다.
+- [ ] `contest_rpc`/artifact 입력의 Bitcoin normalized evidence를 승인한다.
+
+### [ ] Wave 3 — NFT·Proxy와 PATH
 
 - [ ] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 확정한다.
 - [ ] `TASK-014` 단일 path와 분기·재병합 fixture를 확정한다.
@@ -72,28 +106,34 @@
 - [ ] path 결과가 label/heuristic과 분리되는지 검증한다.
 - [ ] 기존 Workbench Preview 변경 필요 여부를 결정한다.
 
-### [ ] Wave 3 — Label·OSINT·Actor
+### [ ] Wave 4 — Label·OSINT·Actor
 
 - [ ] `TASK-015` official/provider/public/heuristic source role을 고정한다.
 - [ ] 주소 명시·조회 시각·충돌·폐기 라벨 보존 조건을 고정한다.
 - [ ] official과 heuristic의 상충 사례를 fixture에 포함한다.
 - [ ] AI가 만든 label 가설이 evidence 없는 confirmed fact가 되지 않게 한다.
 
-### [ ] Wave 4 — 서비스·Bitcoin
+### [ ] Wave 5 — 서비스·Cross-chain
 
 - [ ] `TASK-016` bridge/CEX/mixer/lending 중 confirmed fixture가 있는 adapter만 선택한다.
 - [ ] 양단 체인·message·amount 또는 서비스 휴리스틱 증거 계약을 승인한다.
-- [ ] `TASK-017` BTC UTXO·change·CoinJoin fixture와 반례를 확정한다.
 - [ ] EVM과 Bitcoin 결과가 같은 공통 evidence 봉투를 유지하는지 검증한다.
+- [ ] 양단 transaction·message·asset·amount 정합을 승인한다.
 
-### [ ] Wave 5 — 범죄·복합 사건
+### [ ] Wave 6 — 출제가 확인된 비EVM
+
+- [ ] 공식 문제에서 대상 chain과 제공 입력 형식을 확인한다.
+- [ ] chain별 instruction/message·account/state 계약과 fixture를 승인한다.
+- [ ] EVM analyzer로 잘못 일반화하지 않고 전용 decoder를 별도 승인한다.
+
+### [ ] Wave 7 — 범죄·복합 사건
 
 - [ ] `TASK-018` phishing/poison/exploit/rug/mixed case reference answer를 확정한다.
 - [ ] 기술적 사실·외부 귀속·범죄 의도·현재 상태를 분리한다.
 - [ ] seed discovery·관련 없는 자금 제외·사건 timeline 규칙을 승인한다.
 - [ ] 기존 엔진 결과를 복사하지 않고 evidence ref로 조합한다.
 
-### [ ] Wave 6 — 통합
+### [ ] Wave 8 — 통합
 
 - [ ] `TASK-019` 모든 새 automated 사례를 Benchmark manifest에 승격한다.
 - [ ] assisted·unsupported 잔여를 숨기지 않고 새 집계를 기록한다.
@@ -108,6 +148,7 @@
 | fixture·reference answer 없음 | Stop — 구현 금지 |
 | 필수 live capability smoke 미통과 | Stop — fixture 재현·구현 승인 금지 |
 | 공식 Rules가 source/AI 사용을 제한 | Stop 또는 offline 축소 |
+| 외부 API·Explorer가 제한되고 대회 입력도 없음 | Stop — source-dependent 분석 대기 |
 | 새 dependency가 기존 기능보다 이점 없음 | Stop — 기존 코드/stdlib 사용 |
 | 한 engine이 두 문제 이상 공통 병목을 해소 | Go 우선 |
 | 전문 adapter가 한 문제만 지원 | fixture·출제 중요도 확인 후 Go |

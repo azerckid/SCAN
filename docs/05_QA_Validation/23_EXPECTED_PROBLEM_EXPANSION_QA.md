@@ -1,6 +1,6 @@
 # 예상문제 Coverage 확장 QA 계획
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 04:58
+> Last Updated: 2026-07-29 10:38
 > Status: Proposed 0.1 · Not Executed
 
 ## 1. 목적
@@ -22,6 +22,8 @@
 - [ ] 잘못된 oracle·누락 evidence·source 장애가 검출된다.
 - [ ] 독립 Verifier가 필수 check를 새로 계산한다.
 - [ ] Benchmark 집계가 새 coverage를 과장 없이 반영한다.
+- [ ] 선택된 `input_mode`와 `chain_scope`가 provenance에 기록된다.
+- [ ] RPC·대회 RPC·artifact가 같은 normalized evidence 계약을 사용한다.
 
 ## 3. Work Package QA
 
@@ -78,6 +80,17 @@
 - input의 prevout과 output·fee를 exact satoshi로 정합한다.
 - change와 CoinJoin은 heuristic으로 분리하고 반례를 포함한다.
 
+### 4.6 입력 모드·체인 격리
+
+- 같은 원자료를 `external_rpc`, `contest_rpc`, `provided_artifact`로
+  제공했을 때 normalized evidence의 결정적 필드가 일치해야 한다.
+- Explorer가 제한된 mode에서는 Explorer 요청을 만들지 않는다.
+- artifact 원본 SHA-256과 record/row locator를 evidence에 연결한다.
+- 누락 trace·prevout·cross-chain 반대편 message는 complete가 아니다.
+- Bitcoin·비EVM 입력을 EVM analyzer로 전달하면 명시적 타입 오류다.
+- 현재 contest RPC adapter·artifact importer·Bitcoin/non-EVM analyzer는
+  미구현이므로 이 시나리오는 모두 `not_executed`다.
+
 ## 5. 통합·병렬성
 
 - [ ] 문제별 workspace·artifact·checkpoint가 격리된다.
@@ -118,6 +131,7 @@ TASK-012의 `evm_core` 계약 제안 12개와 Schema probe 14개는 통과했지
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - package별 입력·출력·경계
 - **Technical_Specs**: [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - result·evidence 계약
 - **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - provider·secret·AI Planner Gate
+- **Technical_Specs**: [다중 입력 모드와 체인 범위](../03_Technical_Specs/12_MULTI_SOURCE_INPUT_AND_CHAIN_SCOPE.md) - 입력 정규화·체인 격리 계약
 - **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - `evm_core` 0.2 Draft·partial 오류 매핑
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - Wave 순서와 Stop/Go
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 Context Lock
