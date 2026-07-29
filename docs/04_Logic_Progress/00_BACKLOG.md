@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-30
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015~019 Proposed
+> Last Updated: 2026-07-30 02:37
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 Docs Gate Draft · TASK-016~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1235,28 +1235,41 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Depends On: TASK-012
 - Target Problems: `OSINT-LBL/SAN/ENS-001`, `ACTOR-REL-001/002`
 - Atomic Tasks:
-  - [ ] official/provider/public/heuristic source role과 Terms Gate를 확정한다.
-  - [ ] 주소 명시·조회 시각·충돌·폐기 라벨 fixture를 만든다.
+  - [x] official/first-party/provider/public-report/heuristic source role과
+    Terms Gate 제안 계약을 docs-only로 작성한다.
+  - [x] 주소 명시·조회 시각·충돌·폐기 라벨의 proposed fixture ID 5개와
+    승격 Gate를 문서화한다.
+  - [x] label·sanctions·ENS·common funder·actor relation ×
+    complete·partial·failed HTML Preview를 작성한다.
+  - [ ] 공개 사례를 선정하고 fixture package를 만든다.
   - [ ] actor relation 후보와 반례를 검증한다.
   - [ ] AI 가설과 Python/source 증명을 분리한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - OSINT·Actor 5문항
   - [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 외부 전송·API Rules
 - Related UI Docs:
+  - [TASK-015 Intelligence UI](../02_UI_Screens/09_TASK_015_INTELLIGENCE_UI.md) - claim·conflict·direct/indirect·relation 화면
   - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - label provenance·충돌 표시
 - Related HTML Preview:
-  - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - source inspector 후보
+  - [TASK-015 Intelligence Preview](../02_UI_Screens/previews/08_task_015_intelligence_preview.html) - query 5개·상태 3개 사용자 검토 화면
+  - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - 상위 source inspector 흐름
 - Related Technical Docs:
+  - [TASK-015 Intelligence 계약](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md) - source role·claim·conflict·actor relation 제안
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-INTEL 계약
   - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - source role·Terms
 - Related QA Docs:
+  - [TASK-015 Fixture·Contract Gate](../05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) - fixture·oracle·UI Stop/Go
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001
 - Implementation Preconditions:
   - [ ] 공식 Rules·Terms·privacy와 source 최소 필드를 확인한다.
   - [ ] 충돌·주소 비명시·폐기 라벨 fixture를 확정한다.
-  - [ ] Workbench 진입·전환·이탈과 loading·empty·conflict·failed를 확인한다.
+  - [ ] TASK-015 Preview에서 진입·전환·이탈과
+    loading·empty·stale·Rules·conflict·failed를 확인한다.
   - [ ] label 최소 필드·append-only provenance mutation·상태 관리를 승인한다.
-  - [ ] Workbench source 표시를 사용자 확인한다.
+  - [ ] Intelligence Preview와 Workbench source 표시를 사용자 확인하고
+    피드백을 기록한다.
+  - [ ] `intel_context` Analysis I/O 대안과 source artifact 입력을 승인한다.
+  - [ ] 공개 source snapshot·negative oracle·독립 Verifier를 통과한다.
   - [ ] live mode와 사용자 구현 승인을 별도로 기록한다.
 - Component & Library Plan:
   - shadcn/ui: N/A - Python source/intelligence core 우선.
@@ -1267,19 +1280,29 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - shadcn preset: N/A - 웹 runtime 미구현.
 - Acceptance Criteria:
   - [ ] source role·주소 명시·조회 시각·충돌이 보존된다.
+  - [ ] direct/indirect, stale/withdrawn, onchain/heuristic이 분리된다.
   - [ ] heuristic/AI 가설이 confirmed fact로 자동 승격되지 않는다.
   - [ ] 다섯 문제의 승격은 문제별 confirmed fixture로 제한된다.
 - Document Sync Check:
   - [ ] Rules·source registry·Workbench·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - Rules·fixture·사용자 구현 승인 전 착수 금지
-  - Required References Read: 위 Related 문서 전체
-  - Constraints: privacy, Terms, attribution 비단정
-  - Conflicts: official Rules unresolved
+  - Status: PENDING - 사용자 Preview·공개 fixture·계약 정식 승인 전 PASS 금지
+  - Required References Read:
+    - [TASK-015 계약](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md)
+    - [TASK-015 UI](../02_UI_Screens/09_TASK_015_INTELLIGENCE_UI.md)와
+      [Preview](../02_UI_Screens/previews/08_task_015_intelligence_preview.html)
+    - [TASK-015 Gate](../05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md)
+    - 위 Related Concept·Technical·QA 문서 전체
+  - Constraints: privacy 최소 수집, Terms·Rules Gate, source assertion과
+    ownership/crime truth 분리, AI hypothesis 비승격
+  - Conflicts: 공식 Rules·실제 source Terms·공개 fixture 미확정
 - Change Receipt:
-  - N/A - 구현 미시작
+  - N/A - docs-only Gate, 구현 미시작
 - Verification Receipt:
-  - N/A - 구현 미시작
+  - Docs-only Gate: 468 tests PASS, fixture 13, schema 48 probes,
+    traceability 1538 links, security 162 files.
+  - Preview static check: query 5 × state 3, duplicate ID 0,
+    fetch/XHR/WebSocket/EventSource 0. 브라우저 사용자 검토·runtime은 미실행.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
