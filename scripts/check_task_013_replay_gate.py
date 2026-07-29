@@ -31,9 +31,10 @@ def _assert_common(fixture_id: str) -> tuple[dict[str, Any], ...]:
         )
     )
     assert all(item["fixture_id"] == fixture_id for item in documents)
-    assert documents[0]["status"] == documents[1]["status"] == "verifying"
+    assert documents[0]["status"] == documents[1]["status"] == "confirmed"
     provider = documents[4]
-    assert provider["status"] == "verifying"
+    assert provider["status"] == "confirmed"
+    assert provider["remaining_gate"] == []
     assert provider["decoded_match"] is True
     assert provider["request_scope"]["methods"]
     assert all(method.startswith("eth_get") for method in provider["request_scope"]["methods"])
@@ -134,7 +135,7 @@ def main() -> None:
     _check_1155()
     _check_proxy()
     print(
-        "PASS TASK-013 replay Gate: 3 fixtures (verifying), 2 providers, "
+        "PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, "
         "16 capabilities, exact scoped raw values"
     )
 

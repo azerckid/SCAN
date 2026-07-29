@@ -3,6 +3,12 @@
 > Last Updated: 2026-07-29 20:19
 > Status: Promoted to 검증 중 (Verifying) · UI 사용자 승인 완료 · Analyzer 구현 대기
 
+> **후속 상태:** 이 문서는 `candidate → verifying` 당시 판정을 보존한다.
+> 이후 analyzer remediation 재검토까지 통과해 세 fixture는 `confirmed`,
+> Benchmark는 9/9로 승격됐다. 현재 판정은
+> [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
+> 따른다.
+
 ## 1. 목적
 
 이 문서는 [TASK-013 Fixture 후보 보고서](./32_TASK_013_FIXTURE_CANDIDATE_REPORT.md)가
@@ -107,3 +113,4 @@ Gate가 남아 있다"는 조건으로 승격됐다(§9 TASK-012 항목). TASK-0
 - [TASK-013 분석 계약 제안](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - Analysis I/O 대안·UI 영향
 - [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - 상태 구분 정의와 fixture registry
 - [Backlog TASK-013](../04_Logic_Progress/00_BACKLOG.md) - Context Receipt·승인 Gate
+- [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md) - 후속 confirmed·Benchmark 9/9 판정

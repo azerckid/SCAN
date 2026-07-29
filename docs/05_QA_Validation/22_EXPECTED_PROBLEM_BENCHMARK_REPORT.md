@@ -1,7 +1,7 @@
 # 예상문제 Offline Benchmark 0.1 검증 보고서
 > Created: 2026-07-29 01:16
-> Last Updated: 2026-07-29 12:30
-> Status: Passed · 7 Automated / 2 Assisted / 21 Unsupported
+> Last Updated: 2026-07-29 22:13
+> Status: Passed · 9 Automated / 0 Assisted / 21 Unsupported
 
 ## 1. 목적과 판정 경계
 
@@ -17,7 +17,7 @@
 | `assisted` | 현재 deterministic primitive를 재사용할 수 있지만 전용 request·analyzer·reference fixture가 없어 사람이 정합 |
 | `unsupported` | 문제의 핵심 기능 자체가 없어 현재 프로그램으로 답을 도출할 수 없음 |
 
-따라서 `7/7 pass`는 automated 일곱 문제의 정확도이며 30문항 전체 정확도가
+따라서 `9/9 pass`는 automated 아홉 문제의 정확도이며 30문항 전체 정확도가
 아니다. Assisted와 Unsupported 문제를 성공으로 계산하지 않는다.
 
 ## 2. 실행 방법과 채점
@@ -46,27 +46,29 @@ integration test가 `socket.socket`을 실패하도록 바꾼 상태에서 동�
 ## 3. 실행 결과
 
 ```text
-EXPECTED PROBLEMS 30 · AUTOMATED 7 · ASSISTED 2 · UNSUPPORTED 21
+EXPECTED PROBLEMS 30 · AUTOMATED 9 · ASSISTED 0 · UNSUPPORTED 21
 PASS BASIC-EVM-001 · FX-BASIC-EVM-001
 PASS BASIC-EVM-002 · FX-BASIC-EVM-002
 PASS EVM-AUTH-001 · FX-EVM-AUTH-001
 PASS EVM-FREEZE-001 · FX-EVM-FREEZE-001
+PASS EVM-NFT-001 · FX-EVM-NFT-721-001
+PASS EVM-PROXY-001 · FX-EVM-PROXY-001
 PASS EVM-TOKEN-001 · FX-EVM-TOKEN-001
 PASS EVM-TOKEN-002 · FX-EVM-TOKEN-002
 PASS SVC-DEX-001 · FX-SVC-DEX-001
-BENCHMARK 7/7 automated cases passed · network_mode offline
+BENCHMARK 9/9 automated cases passed · network_mode offline
 ```
 
 | 항목 | 결과 |
 |:---|---:|
 | 전체 예상문제 | 30 |
-| 완전자동 | 7 |
-| 도구보조 | 2 |
+| 완전자동 | 9 |
+| 도구보조 | 0 |
 | 미지원 | 21 |
-| 자동 실행 | 7 |
-| 자동 통과 | 7 |
+| 자동 실행 | 9 |
+| 자동 통과 | 9 |
 | 자동 범위 정확도 | 100% |
-| 30문항 직접 자동화율 | 23.3% |
+| 30문항 직접 자동화율 | 30.0% |
 
 ## 4. 30문항 Coverage Matrix
 
@@ -80,9 +82,9 @@ BENCHMARK 7/7 automated cases passed · network_mode offline
 | BASIC-EVM-002 | Automated | EVM Core historical balance | 없음 |
 | EVM-TOKEN-001 | Automated | EVM Core first Transfer | 없음 |
 | EVM-TOKEN-002 | Automated | EVM Core native inflow | 없음 |
-| EVM-NFT-001 | Assisted | EVM-LOG·provenance | NFT-DECODE |
+| EVM-NFT-001 | Automated | ERC-721/1155 subject-scoped decoder | 없음 |
 | EVM-AUTH-001 | Automated | AUTH strict vertical | 없음 |
-| EVM-PROXY-001 | Assisted | EVM-STATE·EVM-LOG | PROXY |
+| EVM-PROXY-001 | Automated | EIP-1967 event·historical state 정합 | 없음 |
 | EVM-FREEZE-001 | Automated | FREEZE strict vertical | 없음 |
 | FLOW-EVM-001 | Unsupported | 공통 기반 | PATH·LABEL |
 | FLOW-EVM-002 | Unsupported | 공통 기반 | PATH·GRAPH-RECON |
@@ -109,8 +111,9 @@ BENCHMARK 7/7 automated cases passed · network_mode offline
 
 ## 5. 해석과 다음 구현 우선순위
 
-현재 프로그램은 세 vertical의 결정적 증명에는 강하지만 범용 블록체인
-포렌식 문제 해결기는 아니다. 30문항 coverage를 가장 크게 늘리는 순서는
+현재 프로그램은 기존 세 vertical, EVM Core 네 query, NFT·Proxy의 결정적
+증명에는 강하지만 범용 블록체인 포렌식 문제 해결기는 아니다. 30문항
+coverage를 가장 크게 늘리는 순서는
 아래와 같다.
 
 1. `PATH`와 graph reconciliation을 구현해 FLOW·CRIME·MIXED의 공통 병목을
@@ -126,7 +129,7 @@ BENCHMARK 7/7 automated cases passed · network_mode offline
 
 | 기준 | 판정 | 증거·경계 |
 |:---|:---:|:---|
-| Functionality | Partial | confirmed 7개 exact/evidence/requirement/determinism 통과, 23개 비자동 |
+| Functionality | Partial | automated 9개 exact/evidence/requirement/determinism 통과, 21개 비자동 |
 | Potential Impact | Partial | 공백이 큰 PATH·LABEL·OSINT 우선순위를 수치화, 실대회 효과 미측정 |
 | Novelty | Pass / Offline | 답 문자열이 아니라 answer→evidence→fixture requirement를 함께 채점 |
 | UX | Pass / CLI | 한 명령으로 coverage와 자동 사례 결과를 표시 |
@@ -135,11 +138,12 @@ BENCHMARK 7/7 automated cases passed · network_mode offline
 
 ## 7. Known Issues
 
-- automated 사례는 Ethereum mainnet DEX·AUTH·FREEZE와 EVM Core 네 query뿐이다.
+- automated 사례는 Ethereum mainnet DEX·AUTH·FREEZE, EVM Core 네 query,
+  NFT·Proxy에 한정된다.
 - fixture oracle은 reviewed 공개 사례에 고정되어 새로운 실전 입력의 일반화
   성능을 측정하지 않는다.
-- Assisted 분류는 재사용 가능한 primitive가 있다는 뜻이며 자동 답 생성을
-  뜻하지 않는다.
+- 현재 Assisted는 0개다. 핵심 분석기가 없는 21개는 Unsupported로 유지해
+  재사용 primitive만으로 지원을 과장하지 않는다.
 - Challenge Pack 10개에는 confirmed reference fixture가 없어 이번 0.1에서
   실행하지 않는다.
 - 실행 시간은 단일 로컬 관찰값이며 성능 benchmark로 사용하지 않는다.
@@ -152,7 +156,8 @@ BENCHMARK 7/7 automated cases passed · network_mode offline
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - 27개 비자동 문항의 엔진 묶음
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-011 구현·검증 기록
 - **Logic_Progress**: [Coverage 확장 Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - TASK-012~019 실행 Wave
-- **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed DEX·AUTH·FREEZE 기준선
+- **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed fixture 10개 기준선
+- **QA_Validation**: [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md) - NFT·Proxy confirmed·9/9 근거
 - **QA_Validation**: [TASK-009 통합 보고서](./13_TASK_009_INTEGRATION_REPORT.md) - 기존 vertical 회귀와 보안 Gate
 - **QA_Validation**: [OPS-IMPL-08 보고서](./21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - 병렬 운영과 수동 제출 기준선
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 새 분석기 승격·반례·통합 Gate

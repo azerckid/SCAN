@@ -1,13 +1,13 @@
 # 예상문제 Coverage 확장 QA 계획
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 12:40
-> Status: TASK-012 Passed · TASK-013~019 Not Executed
+> Last Updated: 2026-07-29 22:13
+> Status: TASK-012·013 Passed · TASK-014~019 Not Executed
 
 ## 1. 목적
 
 이 문서는 TASK-012~019가 새 예상문제를 automated로 승격할 때 적용할
-검증 기준을 정의한다. TASK-012 EVM Core는 통과했으며, TASK-013~019
-시나리오는 `not_executed`다.
+검증 기준을 정의한다. TASK-012 EVM Core와 TASK-013 NFT·Proxy는
+통과했으며, TASK-014~019 시나리오는 `not_executed`다.
 
 ## 2. 공통 자동화 승격 Gate
 
@@ -31,7 +31,7 @@
 |:---|:---|:---|:---:|
 | QA-EXP-EVM-001 | EVM Core | TX·receipt·block·state·ERC-20/native flow exact 정합 | pass |
 | QA-EXP-EVM-002 | EVM Core | failed TX·archive/trace 누락 partial | pass |
-| QA-EXP-SPECIAL-001 | NFT/Proxy | ERC-721/1155·EIP-1967 raw decode와 block state | not_executed |
+| QA-EXP-SPECIAL-001 | NFT/Proxy | ERC-721/1155·EIP-1967 raw decode와 block state | pass |
 | QA-EXP-PATH-001 | PATH | N홉 단일 경로·cycle·budget | not_executed |
 | QA-EXP-PATH-002 | PATH | 분기·재병합·unrelated fund·residual | not_executed |
 | QA-EXP-INTEL-001 | Intel | official/heuristic 충돌과 주소 비명시 | not_executed |
@@ -64,9 +64,12 @@
 - ERC-1155 Batch의 ids/values 길이·순서를 exact로 보존한다.
 - implementation·beacon·admin slot을 서로 대체하거나 합산하지 않는다.
 - contract·state·range가 누락되면 확인된 사실을 보존한 partial로 남긴다.
-- 세 package ID와 아직 공개 사례가 없다는 상태는
-  [TASK-013 Fixture 후보 보고서](./32_TASK_013_FIXTURE_CANDIDATE_REPORT.md)에
-  기록한다. `QA-EXP-SPECIAL-001`은 계속 `not_executed`다.
+- 세 공개 package는 두 공급자 replay·negative oracle·독립 Verifier·제품
+  analyzer 변형 회귀를 통과해 `confirmed`다.
+- `QA-EXP-SPECIAL-001`은
+  [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
+  근거로 `pass`다. Benchmark는 NFT·Proxy 두 문제를 automated로 집계하며
+  ERC-1155는 같은 NFT 문제군의 별도 confirmed 회귀 package로 유지한다.
 
 ### 4.3 PATH
 
@@ -111,7 +114,7 @@
 
 | 기준 | 현재 판정 | Phase 2 통과 증거 |
 |:---|:---:|:---|
-| Functionality | Not Executed | package별 confirmed fixture와 exact/partial/negative 회귀 |
+| Functionality | Partial | TASK-012·013 package의 confirmed fixture와 exact/partial/negative 회귀 |
 | Potential Impact | Planned | 자동화 문항 증가와 공통 엔진당 coverage |
 | Novelty | Planned | AI plan·Python proof·독립 Verifier 분리 |
 | UX | Planned | 공통 CLI와 bounded Operations Queue, 필요 시 read-only path view |
@@ -121,6 +124,11 @@
 TASK-012의 `evm_core` 계약 12개와 제안 checker 14개, 공개 Analysis I/O
 Schema probe 40개가 통과했다. 제품 analyzer와
 QA-EXP-EVM-001/002도 통과했으며 fixture는 `confirmed 0.2`다.
+
+TASK-013의 `evm_special` 제품 analyzer는 ERC-721·ERC-1155·EIP-1967
+fixture 3개를 raw-first로 재계산하고, 16개 negative oracle과 독립
+Verifier·변형 회귀를 통과했다. QA-EXP-SPECIAL-001은 `pass`이며 전체
+Benchmark 기준선은 automated 9·assisted 0·unsupported 21이다.
 
 ## 7. Originality·Ethics
 
@@ -145,6 +153,7 @@ QA-EXP-EVM-001/002도 통과했으며 fixture는 `confirmed 0.2`다.
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - Wave 순서와 Stop/Go
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 Context Lock
 - **QA_Validation**: [Offline Benchmark](./22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 coverage 기준선
+- **QA_Validation**: [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md) - confirmed fixture 3개·Benchmark 9/9 근거
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 4개 candidate와 1차 source 재조회
 - **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·독립성·반례
 - **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 제품 analyzer 전 24개 fixture 반례

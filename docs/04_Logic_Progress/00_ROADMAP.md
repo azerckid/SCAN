@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-29 15:38
-> Status: Approved 2.8 Baseline · TASK-012 EVM Core Complete
+> Last Updated: 2026-07-29 22:13
+> Status: Approved 2.9 Baseline · TASK-012 EVM Core·TASK-013 NFT/Proxy Complete
 
 ## 1. 문서 목적
 
@@ -51,7 +51,7 @@
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
 | [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) | Draft · Approved Baseline | 공식 규정 변경 시에만 영향 항목 갱신 |
-| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 · Benchmark 0.1 Applied | 30문항 중 자동화 7·보조 2·미지원 21; 공백 우선순위 유지 |
+| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 · Benchmark 0.1 Applied | 30문항 중 자동화 9·보조 0·미지원 21; 공백 우선순위 유지 |
 | [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) | Baseline Confirmed 1.0 · Active Watch | Notification·이메일·공식 Rules 공개 시 Intake 실행 |
 | [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) | Draft 1 · Approved Baseline | 공식 규정 변경 시 위험 점수 갱신 |
 
@@ -86,13 +86,13 @@
 | [Coverage 확장 Technical Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) | Proposed 0.1 | TASK-012~019 개별 fixture·Context·구현 승인 필요 |
 | [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) | Pre-event Smoke Partial Pass · Fixture Common 9/9 Match · Primary Trace Pass | TASK-012 전 credential 회전·독립 trace·반례 |
 | [TASK-012 Analysis Contract](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) | Approved 0.2 · 12 Cases · 14 Probes | runtime·Schema 적용, 0.1 세 type 호환 |
-| [TASK-013 NFT·Proxy Contract](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) | Candidate Replay·Negative·Verifier Gates Passed | fixture 확정·UI·Context·구현 승인 대기 |
+| [TASK-013 NFT·Proxy Contract](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) | Approved 1.0 · Runtime Applied | fixture 3 confirmed·Benchmark 9/9 |
 
 ### 3.4 Logic Progress
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~012 Done · TASK-013~019 Proposed | 후속 Phase 2 code는 개별 승인 대기 |
+| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~013 Done · TASK-014~019 Proposed | 후속 Phase 2 code는 개별 승인 대기 |
 | 이 문서 | Approved 2.8 Baseline · TASK-012 Complete | 후속 Phase 2 승인 경계 유지 |
 | [Coverage 확장 Execution Plan](./01_EXECUTION_PLAN.md) | Proposed 0.1 | fixture·dependency 기반 Wave, 날짜 약속 아님 |
 | `02_ROADMAP_BACKLOG_SYNC.md` | 조건부 미작성 | 구현 시작 전 Roadmap↔Backlog 상태 동기화 규칙 작성 |
@@ -101,12 +101,12 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.2 · Phase 2 Confirmed Pack | confirmed 7·Deferred 5의 승격 조건 유지 |
+| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.5 · Phase 2 Confirmed Pack | confirmed 10·Deferred 4의 승격 조건 유지 |
 | [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Approved 1.9 · Integration Passed | 24 pass·0 partial·0 not_executed |
 | [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 2.9 · OPS-IMPL-01~08 Offline Passed | live Rules·실대회 성능 미실행 |
 | [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Contract Approved · Offline 6 QA Passed | live Rules·실대회 성능 별도 |
 | [OPS-IMPL-08 Final Integration Report](../05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) | Passed · Offline Operations V1 | 수동 제출·보안·leaf 병렬·6 QA |
-| [예상문제 Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | Passed · 7 Automated / 2 Assisted / 21 Unsupported | 자동화 7개 exact·evidence·결정성 통과, 30문항 전체 정확도로 해석 금지 |
+| [예상문제 Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | Passed · 9 Automated / 0 Assisted / 21 Unsupported | 자동화 9개 exact·evidence·결정성 통과, 30문항 전체 정확도로 해석 금지 |
 | [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) | Proposed 0.1 · Not Executed | TASK-012~019 승격·반례·통합 Gate |
 | [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) | EVM Common Passed · Alchemy Trace Two Dialects Failed · Overall Partial | 성공 가능한 독립 trace·live rate/timeout·AI Planner Gate |
 | [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) | Candidate · Replay·Negative·Verifier Gates Passed | 별도 판단 후 조건부 승격 |
@@ -248,7 +248,7 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 12 | 완료 (2026-07-29, offline V1) | Backlog `TASK-010` 병렬 문제풀이 운영 | live mode는 공식 Rules·별도 승인 |
 | 13 | 완료 (2026-07-29) | Backlog `TASK-011` 예상문제 Offline Benchmark | 최초 자동화 3/3, 보조 6·미지원 21 기준선 |
 | 14 | 완료 (2026-07-29) | `TASK-012` EVM Core | 자동화 7/7, 보조 2·미지원 21 |
-| 15 | 계약 Draft 완료·구현 승인 대기 | `TASK-013` NFT·Proxy | 공개 fixture·UI·Context Receipt·개별 code 승인 전 미착수 |
+| 15 | 완료 (2026-07-29) | `TASK-013` NFT·Proxy | fixture 3 confirmed·remediation·자동화 9/9 |
 | 16 | 계획 승인 대기 | `TASK-014~019` Coverage 확장 | fixture·Context Receipt·개별 code 승인 전 미착수 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.

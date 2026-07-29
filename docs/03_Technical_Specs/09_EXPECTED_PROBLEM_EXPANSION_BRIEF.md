@@ -219,7 +219,7 @@ mapping은 미구현이다.
 - **Technical_Specs**: [다중 입력 모드와 체인 범위](./12_MULTI_SOURCE_INPUT_AND_CHAIN_SCOPE.md) - `WP-INPUT-GATE`와 체인별 엔진 경계
 - **Logic_Progress**: [Phase 2 Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - 구현 순서와 승인 Gate
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 Context Lock
-- **QA_Validation**: [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 3/6/21 기준선
+- **QA_Validation**: [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 최초 3/6/21, 현재 9/0/21 기준선
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - package별 승격 조건
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - WP-EVM-CORE 후보와 source 장애
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - smoke·독립성·반례

@@ -1,7 +1,7 @@
 # TASK-013 NFT·Proxy 분석 계약 제안
 > Created: 2026-07-29
-> Last Updated: 2026-07-29 21:40
-> Status: In Progress · `evm_special` 구현 완료, 리뷰에서 발견된 P1 5건 수정 반영 · Fixture `검증 중` 유지 · Benchmark 7 유지(재검토 대기)
+> Last Updated: 2026-07-29 22:13
+> Status: Approved 1.0 · `evm_special` 구현·remediation 완료 · Fixture 3 Confirmed · Benchmark 9/9
 
 ## 1. 목적
 
@@ -18,23 +18,22 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 | 항목 | 현재 상태 | 이 문서의 결정 |
 |:---|:---|:---|
 | TASK-012 EVM Core | Done · Analysis I/O 0.2 | raw log/state 입력 재사용 |
-| EVM-NFT-001 | Assisted | fixture·계약 후보만 정의 |
-| EVM-PROXY-001 | Assisted | fixture·계약 후보만 정의 |
-| NFT·Proxy fixture | 공개 사례 3개 · [승격 검토](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)로 `검증 중` 유지, `확정` 승격은 재검토 이후로 보류 | raw SHA·exact scope·16 oracle·7 requirement 재계산 통과, analyzer 재검증은 [P1 정정 Receipt](../05_QA_Validation/37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md) 이후 별도 판단 |
+| EVM-NFT-001 | Automated | confirmed ERC-721 대표 oracle과 ERC-1155 회귀 fixture |
+| EVM-PROXY-001 | Automated | confirmed EIP-1967 event/state oracle |
+| NFT·Proxy fixture | 공개 사례 3개 `confirmed` | raw SHA·exact scope·16 oracle·7 requirement·4 subject-scoped analyzer 재검증 통과 |
 | Analysis I/O | 0.2 적용, 0.1 호환 | 변경하지 않음. 신규 `evm_special` 대안 B를 §5에서 확정 |
-| Python runtime | NFT·Proxy analyzer 구현 완료 · 리뷰에서 발견된 subject/proxy 결합·receipt 정합 P1 5건 수정 반영, 재검토 대기 | [Analyzer 검증 Receipt](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)와 [P1 정정 Receipt](../05_QA_Validation/37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md) 참고 |
+| Python runtime | NFT·Proxy analyzer 구현·remediation·재검토 완료 | [최종 승격 Receipt](../05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md) 참고 |
 | UI | [TASK-013 전용 UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md)·[Preview](../02_UI_Screens/previews/06_task_013_nft_proxy_preview.html) 작성 | 사용자 확인·승인 완료(2026-07-29 20:19) |
 
 다음 항목이 모두 승인되어 TASK-013을 `In Progress`로 전환했다.
 
 1. ~~공개 사례와 reference answer가 채워진 fixture를 `confirmed`로 승격~~ →
-   [승격 검토](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)로
-   `검증 중` 완료, `확정`은 analyzer 구현·독립 검증 후 별도 판단
+   [최종 승격 Receipt](../05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md)로 완료
 2. ~~아래 Analysis I/O 대안 중 하나를 정식 선택~~ → **대안 B로 확정**(§5.1)
 3. ~~complete·partial·failed UI Preview 확인~~ → 작성·브라우저 검증 완료,
    사용자가 2026-07-29 20:19 승인
 4. ~~Context Receipt `PASS`~~ → Backlog에 기록 완료
-5. ~~사용자 구현 승인~~ → 완료. 다음 단계는 NFT·Proxy analyzer 구현.
+5. ~~사용자 구현 승인~~ → 완료. Analyzer 구현·remediation·최종 승격까지 완료.
 
 ## 3. 표준 근거와 해석 경계
 
@@ -82,9 +81,9 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 
 | Fixture ID | 문제 | 반드시 포함할 공개 사실 | 현재 상태 |
 |:---|:---|:---|:---|
-| [`FX-EVM-NFT-721-001`](../05_QA_Validation/fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | BAYC ApprovalForAll·Approval reset·Transfer와 token `9110` | 검증 중 |
-| [`FX-EVM-NFT-1155-001`](../05_QA_Validation/fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | Rarible TransferSingle·TransferBatch·ApprovalForAll과 ids/values exact 배열 | 검증 중 |
-| [`FX-EVM-PROXY-001`](../05_QA_Validation/fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | Aave V3 Pool EIP-1967 slot before/after·Upgraded event·admin zero | 검증 중 |
+| [`FX-EVM-NFT-721-001`](../05_QA_Validation/fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | BAYC ApprovalForAll·Approval reset·Transfer와 token `9110` | 확정 |
+| [`FX-EVM-NFT-1155-001`](../05_QA_Validation/fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | Rarible TransferSingle·TransferBatch·ApprovalForAll과 ids/values exact 배열 | 확정 |
+| [`FX-EVM-PROXY-001`](../05_QA_Validation/fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | Aave V3 Pool EIP-1967 slot before/after·Upgraded event·admin zero | 확정 |
 
 세 fixture 모두 공개 주소·TX·block과 expected/evidence 골격, 두 논리
 공급자의 raw SHA·receipt/log/storage replay 일치, negative oracle 16개,
@@ -94,6 +93,8 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 마쳤으나, 이후 리뷰에서 subject/proxy 결합 누락과 receipt·block 정합
 누락 등 P1 5건이 발견되어 `확정` 승격은 보류하고 수정·회귀 테스트를
 반영했다([P1 정정 Receipt](../05_QA_Validation/37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md)).
+재검토와 PR #66 병합 후 [최종 승격 Receipt](../05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md)에서
+세 fixture를 `확정`으로 승격하고 Benchmark 9/9를 재현했다.
 범위 완전성은 명시한 selected transaction·exact block window 또는
 selected upgrade·adjacent state에만 적용한다.
 
@@ -113,9 +114,9 @@ selected upgrade·adjacent state에만 적용한다.
 - [x] 승격 검토 통과 · `검증 중`으로 승격
 - [x] 사용자 UI Gate 통과
 - [x] NFT·Proxy analyzer 구현과 독립 Verification Receipt(canonical hash 일치)
-- [ ] 리뷰에서 발견된 P1 5건(subject/proxy 결합, receipt·block 정합,
+- [x] 리뷰에서 발견된 P1 5건(subject/proxy 결합, receipt·block 정합,
   Schema 교차 조합, fixture 형태 고정, beacon 미구현) 수정·회귀 테스트
-  반영 후 재검토 → `확정` 승격은 재검토 이후로 보류
+  반영 후 재검토와 `확정` 승격 완료
 
 ## 5. Analysis I/O 제안
 
@@ -258,14 +259,15 @@ storage snapshot은 명시 block tag와 함께 비교한다.
 5. ~~NFT·Proxy analyzer를 구현하고 독립 Verification Receipt를 확보한다.~~ →
    [Analyzer 검증 Receipt](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)
    완료(canonical hash 일치)
-6. **다음: 리뷰에서 발견된 P1 5건을 수정하고
+6. ~~리뷰에서 발견된 P1 5건을 수정하고
    [P1 정정 Receipt](../05_QA_Validation/37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md)의
    변형 회귀 테스트가 통과한 상태로 재검토를 받은 뒤에만 fixture `확정`
-   승격과 Benchmark automated 7 → 9 승격을 다시 판단한다. 그 전에는
-   PR을 병합하지 않는다.**
+   승격과 Benchmark automated 7 → 9 승격을 다시 판단한다.~~ →
+   PR #66 재검토·병합과 [최종 승격](../05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md) 완료.
 
-TASK-013은 analyzer 구현 자체는 완료했으나, 리뷰가 지적한 correctness
-문제를 수정하고 재검증받기 전까지 `In Progress`로 유지한다.
+TASK-013은 analyzer·correctness remediation·fixture confirmed·Benchmark
+9/9를 모두 완료해 `Done`으로 닫는다. 다음 작업은 별도 승인 Gate를 가진
+TASK-014 PATH다.
 
 ## 11. Related Documents
 
@@ -280,5 +282,6 @@ TASK-013은 analyzer 구현 자체는 완료했으나, 리뷰가 지적한 corre
 - [TASK-013 Fixture 승격 검토 보고서](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)
 - [TASK-013 Analyzer 검증 Receipt](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)
 - [TASK-013 Analyzer P1 정정 Receipt](../05_QA_Validation/37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md)
+- [TASK-013 최종 승격 Receipt](../05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md)
 - [TASK-013 NFT·Proxy UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md)
 - [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md)
