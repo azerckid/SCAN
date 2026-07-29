@@ -184,11 +184,15 @@ def _object_summary(
             },
         ),
     ]
+    evidence_id_counts: dict[str, int] = {}
     for index, code in enumerate(replay.codes):
+        base_evidence_id = (
+            "EV-BASIC-EVM-EOA-CODE" if code.code == "0x" else "EV-BASIC-EVM-CONTRACT-CODE"
+        )
         evidence.append(
             _evidence(
                 replay,
-                ("EV-BASIC-EVM-EOA-CODE" if code.code == "0x" else "EV-BASIC-EVM-CONTRACT-CODE"),
+                _next_evidence_id(base_evidence_id, evidence_id_counts),
                 "state",
                 "eth_getCode",
                 {"address": code.address, "code": code.code},
@@ -277,6 +281,7 @@ def _historical_balance(
         )
     states = {item.token_address: item for item in replay.token_states}
     missing_tokens: list[str] = []
+    evidence_id_counts: dict[str, int] = {}
     for asset in inputs.assets:
         if asset.asset_type != "erc20" or asset.token_address is MISSING:
             continue
@@ -298,14 +303,20 @@ def _historical_balance(
             [
                 _evidence(
                     replay,
-                    f"EV-BASIC-STATE-{asset.symbol}-BALANCE",
+                    _next_evidence_id(
+                        f"EV-BASIC-STATE-{asset.symbol}-BALANCE",
+                        evidence_id_counts,
+                    ),
                     "state",
                     "eth_call",
                     {"token_address": asset.token_address, "amount_raw": balance},
                 ),
                 _evidence(
                     replay,
-                    f"EV-BASIC-STATE-{asset.symbol}-DECIMALS",
+                    _next_evidence_id(
+                        f"EV-BASIC-STATE-{asset.symbol}-DECIMALS",
+                        evidence_id_counts,
+                    ),
                     "state",
                     "eth_call",
                     {"token_address": asset.token_address, "decimals": decimals},
@@ -528,6 +539,11 @@ def _native_inflow(
 
 def _topic_address(topic: str) -> str:
     return to_normalized_address("0x" + topic[-40:])
+
+
+def _next_evidence_id(base: str, counts: dict[str, int]) -> str:
+    counts[base] = counts.get(base, 0) + 1
+    return base if counts[base] == 1 else f"{base}-{counts[base]}"
 
 
 def _result_item(

@@ -33,6 +33,10 @@ def _replay(fixture_id: str) -> dict[str, object]:
     return json.loads((FIXTURES / fixture_id / "raw-replay.json").read_text())
 
 
+def _request_document(fixture_id: str) -> dict[str, object]:
+    return json.loads((FIXTURES / fixture_id / "analysis-request.json").read_text())
+
+
 @pytest.mark.parametrize("fixture_id", CASES)
 def test_complete_replays_are_deterministic(fixture_id: str) -> None:
     request = _request(fixture_id)
@@ -104,6 +108,56 @@ def test_multiple_internal_inflows_have_unique_evidence_ids() -> None:
     assert result.root.status == "complete"
     assert len(evidence_ids) == len(set(evidence_ids))
     assert "EV-TOKEN-INTERNAL-ETH-2" in evidence_ids
+
+
+def test_multiple_contract_codes_have_unique_evidence_ids() -> None:
+    fixture_id = "FX-BASIC-EVM-001"
+    second_contract = "0x1111111111111111111111111111111111111111"
+    request_document = _request_document(fixture_id)
+    request_inputs = cast(dict[str, object], request_document["inputs"])
+    cast(list[object], request_inputs["values"]).append(second_contract)
+    request = validate_analysis_request(request_document).root
+    assert isinstance(request, EvmCoreAnalysisRequest)
+    replay = _replay(fixture_id)
+    codes = cast(list[dict[str, object]], replay["codes"])
+    second_code = dict(codes[1])
+    second_code["address"] = second_contract
+    codes.append(second_code)
+
+    result = analyze_evm_core_replay(request, json.dumps(replay).encode())
+    evidence_ids = [item.evidence_id for item in result.root.evidence]
+
+    assert result.root.status == "complete"
+    assert "EV-BASIC-EVM-CONTRACT-CODE" in evidence_ids
+    assert "EV-BASIC-EVM-CONTRACT-CODE-2" in evidence_ids
+    assert len(evidence_ids) == len(set(evidence_ids))
+
+
+def test_duplicate_token_symbols_have_unique_evidence_ids() -> None:
+    fixture_id = "FX-BASIC-EVM-002"
+    second_token = "0x2222222222222222222222222222222222222222"
+    request_document = _request_document(fixture_id)
+    request_inputs = cast(dict[str, object], request_document["inputs"])
+    assets = cast(list[dict[str, object]], request_inputs["assets"])
+    second_asset = dict(assets[1])
+    second_asset["token_address"] = second_token
+    assets.append(second_asset)
+    request = validate_analysis_request(request_document).root
+    assert isinstance(request, EvmCoreAnalysisRequest)
+    replay = _replay(fixture_id)
+    token_states = cast(list[dict[str, object]], replay["token_states"])
+    second_state = dict(token_states[0])
+    second_state["token_address"] = second_token
+    token_states.append(second_state)
+
+    result = analyze_evm_core_replay(request, json.dumps(replay).encode())
+    evidence_ids = [item.evidence_id for item in result.root.evidence]
+
+    assert result.root.status == "complete"
+    assert "EV-BASIC-STATE-USDC-BALANCE" in evidence_ids
+    assert "EV-BASIC-STATE-USDC-BALANCE-2" in evidence_ids
+    assert "EV-BASIC-STATE-USDC-DECIMALS-2" in evidence_ids
+    assert len(evidence_ids) == len(set(evidence_ids))
 
 
 @pytest.mark.parametrize(
