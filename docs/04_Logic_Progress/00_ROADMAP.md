@@ -86,6 +86,7 @@
 | [Coverage 확장 Technical Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) | Proposed 0.1 | TASK-012~019 개별 fixture·Context·구현 승인 필요 |
 | [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) | Pre-event Smoke Partial Pass · Fixture Common 9/9 Match · Primary Trace Pass | TASK-012 전 credential 회전·독립 trace·반례 |
 | [TASK-012 Analysis Contract](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) | Approved 0.2 · 12 Cases · 14 Probes | runtime·Schema 적용, 0.1 세 type 호환 |
+| [TASK-013 NFT·Proxy Contract](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) | Proposed 0.1 · Docs Only | 공개 fixture·UI·Context·구현 승인 대기 |
 
 ### 3.4 Logic Progress
 
@@ -108,6 +109,7 @@
 | [예상문제 Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | Passed · 7 Automated / 2 Assisted / 21 Unsupported | 자동화 7개 exact·evidence·결정성 통과, 30문항 전체 정확도로 해석 금지 |
 | [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) | Proposed 0.1 · Not Executed | TASK-012~019 승격·반례·통합 Gate |
 | [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) | EVM Common Passed · Alchemy Trace Two Dialects Failed · Overall Partial | 성공 가능한 독립 trace·live rate/timeout·AI Planner Gate |
+| [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) | Proposed · Public Cases Not Selected | NFT 2종·Proxy 공개 사례와 reference answer 선정 |
 | [TASK-012 Negative Oracle](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) | Offline 24 Passed Twice | live rate/timeout·독립 trace는 별도 |
 | [TASK-012 Analysis Contract Examples](../05_QA_Validation/examples/task-012/README.md) | Approved 12 Cases · 14 Probes Passed | runtime complete·partial·failed 기준 |
 | [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) | UI Gate Passed · Runtime Applied | 공통 terminal renderer로 구현 |
@@ -246,7 +248,8 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 12 | 완료 (2026-07-29, offline V1) | Backlog `TASK-010` 병렬 문제풀이 운영 | live mode는 공식 Rules·별도 승인 |
 | 13 | 완료 (2026-07-29) | Backlog `TASK-011` 예상문제 Offline Benchmark | 최초 자동화 3/3, 보조 6·미지원 21 기준선 |
 | 14 | 완료 (2026-07-29) | `TASK-012` EVM Core | 자동화 7/7, 보조 2·미지원 21 |
-| 15 | 계획 승인 대기 | `TASK-013~019` Coverage 확장 | fixture·Context Receipt·개별 code 승인 전 미착수 |
+| 15 | 계약 Draft 완료·구현 승인 대기 | `TASK-013` NFT·Proxy | 공개 fixture·UI·Context Receipt·개별 code 승인 전 미착수 |
+| 16 | 계획 승인 대기 | `TASK-014~019` Coverage 확장 | fixture·Context Receipt·개별 code 승인 전 미착수 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.
 `DOC-M2`~`DOC-M5`나 `TASK-001`의 선행 조건으로 추가하지 않는다. 실제 웹

@@ -61,6 +61,12 @@
 - ERC-721과 ERC-1155를 signature·field 구조로 구분한다.
 - token ID와 amount 의미를 혼합하지 않는다.
 - proxy implementation은 명시 block의 slot/event로 입증한다.
+- ERC-1155 Batch의 ids/values 길이·순서를 exact로 보존한다.
+- implementation·beacon·admin slot을 서로 대체하거나 합산하지 않는다.
+- contract·state·range가 누락되면 확인된 사실을 보존한 partial로 남긴다.
+- 세 package ID와 아직 공개 사례가 없다는 상태는
+  [TASK-013 Fixture 후보 보고서](./32_TASK_013_FIXTURE_CANDIDATE_REPORT.md)에
+  기록한다. `QA-EXP-SPECIAL-001`은 계속 `not_executed`다.
 
 ### 4.3 PATH
 
