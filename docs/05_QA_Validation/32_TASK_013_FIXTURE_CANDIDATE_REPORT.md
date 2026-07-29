@@ -1,6 +1,6 @@
 # TASK-013 NFT·Proxy Fixture 후보 보고서
 > Created: 2026-07-29
-> Last Updated: 2026-07-29 15:17
+> Last Updated: 2026-07-29 15:25
 > Status: Candidate Replay and Negative Oracle Gates Passed · Verifier Pending
 
 ## 1. 목적
@@ -8,7 +8,7 @@
 TASK-013의 코드를 만들기 전에 필요한 ERC-721, ERC-1155, EIP-1967
 fixture의 공개 후보와 최소 구성을 기록한다. 세 package는 공개 사례,
 두 공급자 재현, capability별 raw SHA와 명시 scope의 filtered log/state
-Gate를 통과했다. negative oracle 15개도 두 번 통과했지만 독립 Verifier가
+Gate를 통과했다. negative oracle 16개도 두 번 통과했지만 독립 Verifier가
 남아 있어 `candidate`이며,
 fixture 확정이나 구현 승인을 뜻하지 않는다.
 
@@ -119,7 +119,8 @@ endpoint·API key·credential·로컬 절대 경로는 어느 파일에도 넣�
 | admin slot을 implementation으로 decode | failed |
 | 비표준 proxy | unsupported/failed, EIP-1967 단정 금지 |
 
-표준별 5개, 총 15개 oracle을 두 번 동일하게 실행해 모두 통과했다.
+ERC-721 5개, ERC-1155 5개, EIP-1967 6개, 총 16개 oracle을 두 번
+동일하게 실행해 모두 통과했다.
 expected 값은 제품 analyzer 입력으로 사용하지 않는다. 상세 결과는
 [TASK-013 Negative Oracle 보고서](./33_TASK_013_NEGATIVE_ORACLE_REPORT.md)에
 고정했다.
@@ -135,7 +136,7 @@ expected 값은 제품 analyzer 입력으로 사용하지 않는다. 상세 결�
 - [x] raw replay·SHA-256·provider replay provenance를 작성했다.
 - [x] selected TX·exact block window와 selected upgrade·adjacent state 범위를 검증했다.
 - [x] replay integrity checker가 raw topic/data/storage에서 expected 핵심 값을 재계산했다.
-- [x] negative oracle 15개를 두 번 실행해 결정성을 확인했다.
+- [x] negative oracle 16개를 두 번 실행해 결정성을 확인했다.
 - [x] candidate package 3개를 포함한 fixture Schema 0.1을 통과했다.
 - [ ] Analysis I/O와 UI를 승인했다.
 - [ ] Context Receipt가 `PASS`다.

@@ -26,6 +26,7 @@ REQUIRED_ORACLE_IDS = frozenset(
         "OR-PROXY-ADMIN-AS-IMPLEMENTATION",
         "OR-PROXY-EVENT-STATE-CONFLICT",
         "OR-PROXY-HISTORICAL-STATE-MISSING",
+        "OR-PROXY-IMPLEMENTATION-BEACON-CONFLICT",
         "OR-PROXY-PATTERN-UNSUPPORTED",
     }
 )
@@ -128,6 +129,10 @@ def _evaluate_erc1155(facts: dict[str, Any]) -> dict[str, Any]:
 def _evaluate_eip1967(facts: dict[str, Any]) -> dict[str, Any]:
     if _text(facts, "pattern") != "eip1967":
         return {"outcome": "failed", "classification": "pattern_unsupported"}
+    if _optional_boolean(facts, "implementation_claimed") and _optional_boolean(
+        facts, "beacon_claimed"
+    ):
+        return {"outcome": "failed", "classification": "proxy_route_conflict"}
     if not _boolean(facts, "historical_state_available"):
         return {"outcome": "partial", "classification": "state_unavailable"}
     if _text(facts, "before_block_tag") == "latest":
@@ -148,6 +153,13 @@ def _text(facts: dict[str, Any], key: str) -> str:
 
 def _boolean(facts: dict[str, Any], key: str) -> bool:
     value = facts.get(key)
+    if not isinstance(value, bool):
+        raise ValueError(f"{key} must be boolean")
+    return value
+
+
+def _optional_boolean(facts: dict[str, Any], key: str) -> bool:
+    value = facts.get(key, False)
     if not isinstance(value, bool):
         raise ValueError(f"{key} must be boolean")
     return value

@@ -1,6 +1,6 @@
 # Fixture: FX-EVM-PROXY-001
 > Created: 2026-07-29 14:38
-> Last Updated: 2026-07-29 15:17
+> Last Updated: 2026-07-29 15:25
 > Status: Candidate 0.1 · Replay and Negative Oracle Gate Passed
 
 ## 1. 목적
@@ -27,7 +27,7 @@ storage로 함께 입증하는 공개 후보다.
 ## 3. 승격 잔여
 
 - [x] 선정 upgrade receipt·filtered log·adjacent state·raw replay SHA-256
-- [x] latest-state 오용·admin 혼동·event/state conflict negative oracle
+- [x] latest-state 오용·admin 혼동·event/state·implementation/beacon conflict negative oracle
 - [ ] Analysis I/O·UI Preview 승인
 - [ ] 독립 Verifier와 결정성
 

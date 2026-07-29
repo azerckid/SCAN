@@ -247,6 +247,25 @@
       }
     },
     {
+      "oracle_id": "OR-PROXY-IMPLEMENTATION-BEACON-CONFLICT",
+      "fixture_id": "FX-EVM-PROXY-001",
+      "category": "eip1967",
+      "facts": {
+        "pattern": "eip1967",
+        "implementation_claimed": true,
+        "beacon_claimed": true,
+        "historical_state_available": true,
+        "before_block_tag": "0x1808542",
+        "decoded_slot_role": "implementation",
+        "event_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf",
+        "after_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf"
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "proxy_route_conflict"
+      }
+    },
+    {
       "oracle_id": "OR-PROXY-PATTERN-UNSUPPORTED",
       "fixture_id": "FX-EVM-PROXY-001",
       "category": "eip1967",

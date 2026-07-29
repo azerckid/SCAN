@@ -1,6 +1,6 @@
 # TASK-013 NFT·Proxy 분석 계약 제안
 > Created: 2026-07-29
-> Last Updated: 2026-07-29 15:17
+> Last Updated: 2026-07-29 15:25
 > Status: Candidate Replay and Negative Oracle Gates Passed · Implementation Not Approved
 
 ## 1. 목적
@@ -20,7 +20,7 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 | TASK-012 EVM Core | Done · Analysis I/O 0.2 | raw log/state 입력 재사용 |
 | EVM-NFT-001 | Assisted | fixture·계약 후보만 정의 |
 | EVM-PROXY-001 | Assisted | fixture·계약 후보만 정의 |
-| NFT·Proxy fixture | 공개 사례 3개 · replay·negative Gate 통과 · `candidate` | raw SHA·exact scope·15 oracle 통과, Verifier Gate 유지 |
+| NFT·Proxy fixture | 공개 사례 3개 · replay·negative Gate 통과 · `candidate` | raw SHA·exact scope·16 oracle 통과, Verifier Gate 유지 |
 | Analysis I/O | 0.2 적용, 0.1 호환 | 변경하지 않음 |
 | Python runtime | NFT·Proxy analyzer 없음 | 구현하지 않음 |
 | UI | 공통 CLI Preview 존재 | TASK-013 전용 Preview는 별도 승인 |
@@ -86,7 +86,7 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 `candidate`는 공개 주소·TX·block과 expected/evidence 골격, 두 논리
 공급자의 raw SHA·receipt/log/storage replay가 일치했다는 뜻이다.
 범위 완전성은 명시한 selected transaction·exact block window 또는
-selected upgrade·adjacent state에만 적용한다. negative oracle 15개는
+selected upgrade·adjacent state에만 적용한다. negative oracle 16개는
 두 번 결정적으로 통과했다. 독립
 Verifier, UI·계약 승인이 남아 있으므로 `verifying`이나 `confirmed`로
 부르지 않는다.

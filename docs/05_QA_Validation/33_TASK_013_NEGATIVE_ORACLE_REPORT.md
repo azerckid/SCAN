@@ -1,7 +1,7 @@
 # TASK-013 Negative Oracle 검증 보고서
 > Created: 2026-07-29 15:17
-> Last Updated: 2026-07-29 15:17
-> Status: Offline 15 Passed Twice · Fixture Candidate · Verifier Pending
+> Last Updated: 2026-07-29 15:25
+> Status: Offline 16 Passed Twice · Fixture Candidate · Verifier Pending
 
 ## 1. 목적과 판정
 
@@ -9,7 +9,8 @@ TASK-013 제품 decoder를 구현하기 전에 ERC-721, ERC-1155, EIP-1967의
 오분류·누락·충돌 경계를 합성 반례로 고정한다. 이 작업은 live RPC,
 Analysis I/O 변경, 제품 analyzer, UI 또는 fixture 승격을 포함하지 않는다.
 
-**판정: 표준별 5개, 총 15개 oracle을 동일 입력으로 두 번 실행해 모두
+**판정: ERC-721 5개, ERC-1155 5개, EIP-1967 6개, 총 16개 oracle을
+동일 입력으로 두 번 실행해 모두
 같은 결과를 얻었다. 세 fixture는 계속 `candidate`다.**
 
 ## 2. 실행 범위
@@ -18,8 +19,8 @@ Analysis I/O 변경, 제품 analyzer, UI 또는 fixture 승격을 포함하지 �
 |:---|---:|:---|:---:|
 | `FX-EVM-NFT-721-001` | 5 | ERC-20 혼동, 다른 contract, range 누락, tokenId 위치, topic 수 | pass |
 | `FX-EVM-NFT-1155-001` | 5 | Batch 길이, ABI truncation, 다른 contract, page·approval 누락 | pass |
-| `FX-EVM-PROXY-001` | 5 | latest 오용, admin 혼동, event/state 충돌, state 누락, 비표준 pattern | pass |
-| **합계** | **15** | synthetic offline · deterministic 2회 | **pass** |
+| `FX-EVM-PROXY-001` | 6 | latest 오용, admin 혼동, event/state·implementation/beacon 충돌, state 누락, 비표준 pattern | pass |
+| **합계** | **16** | synthetic offline · deterministic 2회 | **pass** |
 
 `complete`는 무관 contract를 정확히 제외한 경우에도 사용한다. `partial`은
 확인된 표준 사실은 있으나 지정 범위의 page·approval·historical state가
@@ -29,7 +30,7 @@ Analysis I/O 변경, 제품 analyzer, UI 또는 fixture 승격을 포함하지 �
 ## 3. 산출물
 
 - `fixtures/TASK-013-NEGATIVE-ORACLES.json`
-  - 고정된 15개 고유 oracle ID와 expected outcome
+  - 고정된 16개 고유 oracle ID와 expected outcome
 - `src/scan_tool/application/task_013_negative_oracles.py`
   - 외부 I/O 없는 strict manifest와 순수 판정기
 - `scripts/verify_task_013_negative_oracles.py`
@@ -68,7 +69,7 @@ oracle은 synthetic 반례의 결정적 상태 분류만 입증한다. provider 
 
 | 기준 | 판정 |
 |:---|:---|
-| Functionality | 15개 표준·범위·slot 반례가 두 번 동일하게 통과 |
+| Functionality | 16개 표준·범위·slot 반례가 두 번 동일하게 통과 |
 | Potential Impact | NFT·Proxy 문제에서 조용한 오답과 과대 완전성 주장을 차단 |
 | Novelty | AI 설명이 아니라 표준별 raw 구조·historical state 규칙으로 실증 |
 | UX | complete·partial·failed와 제외·충돌 이유를 구조화 |

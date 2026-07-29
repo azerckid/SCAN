@@ -19,7 +19,7 @@ def test_repository_manifest_verifies_all_required_oracles() -> None:
 
     verified = verify_manifest(manifest)
 
-    assert len(verified) == 15
+    assert len(verified) == 16
     assert len(verified) == len(set(verified))
     assert {case.category for case in manifest.cases} == {
         "erc721",
@@ -46,6 +46,10 @@ def test_repository_manifest_verifies_all_required_oracles() -> None:
         (
             "OR-PROXY-EVENT-STATE-CONFLICT",
             {"outcome": "failed", "classification": "event_state_conflict"},
+        ),
+        (
+            "OR-PROXY-IMPLEMENTATION-BEACON-CONFLICT",
+            {"outcome": "failed", "classification": "proxy_route_conflict"},
         ),
     ],
 )
