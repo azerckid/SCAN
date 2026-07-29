@@ -100,7 +100,7 @@ uv run python scripts/replay_task_012_trace.py \
 
 ## 7. 검증
 
-- trace dialect·정규화·교차 동등성·shape·failure unit: 11 cases
+- trace dialect·정규화·교차 동등성·shape·failure·report 보존 unit: 12 cases
 - provider smoke·candidate replay 관련 unit: 21 cases
 - 두 dialect dry-run: `not_executed`, `network_calls: 0`
 - 두 dialect live: 각 1회, HTTP 400 · `permanent`
