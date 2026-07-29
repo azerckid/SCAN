@@ -21,6 +21,9 @@ EXAMPLE_ROOT = REPOSITORY_ROOT / "docs/05_QA_Validation/examples/analysis"
 EVM_EXAMPLE = (
     REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-BASIC-EVM-001/analysis-request.json"
 )
+EVM_SPECIAL_EXAMPLE = (
+    REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-EVM-NFT-721-001/analysis-request.json"
+)
 SCHEMA_FILES = {
     "request": "analysis-request.schema.json",
     "result": "analysis-result.schema.json",
@@ -167,6 +170,40 @@ def request_envelope_probes(
             "request unknown analysis type",
             "request",
             changed(dex_request, "analysis_type", value="unknown"),
+            False,
+        ),
+    ]
+
+
+def evm_special_family_probes(evm_request: dict[str, object]) -> list[Probe]:
+    """Ensure analysis_type and query_kind cannot cross the evm_core/evm_special families."""
+    evm_special_request = load_json(EVM_SPECIAL_EXAMPLE)
+    return [
+        Probe("evm special request", "request", evm_special_request, True),
+        Probe(
+            "evm core request with evm_special query_kind",
+            "request",
+            changed(evm_request, "query_kind", value="nft_activity"),
+            False,
+        ),
+        Probe(
+            "evm special request with evm_core query_kind",
+            "request",
+            changed(evm_special_request, "query_kind", value="object_summary"),
+            False,
+        ),
+        Probe(
+            "evm special proxy request with include_beacon true",
+            "request",
+            changed(
+                load_json(
+                    REPOSITORY_ROOT
+                    / "docs/05_QA_Validation/fixtures/FX-EVM-PROXY-001/analysis-request.json"
+                ),
+                "inputs",
+                "include_beacon",
+                value=True,
+            ),
             False,
         ),
     ]
@@ -402,6 +439,7 @@ def build_probes() -> list[Probe]:
     return [
         *request_envelope_probes(dex_request, auth_request, freeze_request, evm_request),
         *request_input_probes(dex_request, auth_request, freeze_request, evm_request),
+        *evm_special_family_probes(evm_request),
         *result_status_probes(dex_result, auth_result, freeze_result, error, evm_result),
         *result_component_probes(dex_result),
         *error_probes(error),

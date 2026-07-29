@@ -236,7 +236,7 @@ adjacent state만 완전성을 주장한다.
 | 패키지 | [ERC-721](./fixtures/FX-EVM-NFT-721-001/README.md) · [ERC-1155](./fixtures/FX-EVM-NFT-1155-001/README.md) |
 | 데이터 형태 | 공개 EVM log·transaction |
 | 체인·주소·TX | Ethereum. BAYC `0xbc4ca0ed...a936f13d` 2 TX, Rarible `0xb66a603f...6518b8` 2 TX |
-| 기준 정답 | ERC-721 token `9110` 승인·이동, ERC-1155 Single/Batch ids·amounts·ApprovalForAll |
+| 기준 정답 | ERC-721 token `9110` 승인·이동, ERC-1155 Single/Batch ids·amounts·ApprovalForAll. ERC-1155 Single과 Batch는 서로 다른 대상 주소이므로 두 subject-scoped 요청으로 재현 |
 | 허용 오차 | 없음(raw integer·address·log order exact) |
 | 검증 중 사실 | 두 공급자 receipt/filtered log의 표준 event·raw SHA·indexed/data field decode 일치, 독립 Verifier가 raw에서 재계산 |
 | 휴리스틱 | NFT 가치·소유권 분쟁·거래 의도는 판정하지 않음 |

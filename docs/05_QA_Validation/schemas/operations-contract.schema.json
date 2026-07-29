@@ -106,7 +106,8 @@
         "dex_swap",
         "auth_consumption",
         "address_freeze",
-        "evm_core"
+        "evm_core",
+        "evm_special"
       ],
       "title": "AnalysisType",
       "type": "string"

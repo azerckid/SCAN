@@ -247,6 +247,21 @@ class EvmFailedAnalysisResult(FailedAnalysisResult):
     analysis_type: Literal[AnalysisType.EVM_CORE]
 
 
+class EvmSpecialCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.EVM_SPECIAL]
+
+
+class EvmSpecialPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.EVM_SPECIAL]
+
+
+class EvmSpecialFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.EVM_SPECIAL]
+
+
 ResultVariant = (
     LegacyCompleteAnalysisResult
     | LegacyPartialAnalysisResult
@@ -254,6 +269,9 @@ ResultVariant = (
     | EvmCompleteAnalysisResult
     | EvmPartialAnalysisResult
     | EvmFailedAnalysisResult
+    | EvmSpecialCompleteAnalysisResult
+    | EvmSpecialPartialAnalysisResult
+    | EvmSpecialFailedAnalysisResult
 )
 
 

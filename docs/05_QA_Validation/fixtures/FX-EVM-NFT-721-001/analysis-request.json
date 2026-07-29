@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-EVM-NFT-721-001",
+  "analysis_type": "evm_special",
+  "query_kind": "nft_activity",
+  "chain_id": 1,
+  "fixture_id": "FX-EVM-NFT-721-001",
+  "requested_at": "2026-07-29T12:00:00+09:00",
+  "inputs": {
+    "token_contract": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+    "subject_address": "0x28dda46bdc0aeb3b4e58e6a9a3774875729367a0",
+    "standard_hint": "erc721",
+    "include_approvals": true
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": ["DS-EVM-RPC-ARCHIVE"],
+    "source_order": ["DS-EVM-RPC-ARCHIVE"],
+    "allow_fallback": false,
+    "offline_mode": true
+  }
+}

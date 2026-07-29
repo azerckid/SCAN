@@ -1,7 +1,7 @@
 # Fixture: FX-EVM-NFT-1155-001
 > Created: 2026-07-29 14:38
-> Last Updated: 2026-07-29 20:19
-> Status: Verifying 0.1 · UI 승인 완료(2026-07-29 20:19) · Analyzer 구현 대기
+> Last Updated: 2026-07-29 21:40
+> Status: Verifying 0.1 · Analyzer 구현 완료·canonical hash 일치, 리뷰 P1 5건 수정 반영·재검토 대기(확정 보류)
 
 ## 1. 목적
 
@@ -22,6 +22,13 @@ Rarible ERC-1155 계약의 Single·Batch·ApprovalForAll을 raw ABI 순서로
 범위 완전성은 선정된 두 TX와 각각의 정확한 block window에만 적용한다.
 두 block 사이의 연속 구간 전체를 스캔했다는 뜻이 아니다.
 
+Single/Approval 사례와 Batch 사례의 대상 주소가 서로 다르므로 제품
+analyzer는 하나의 요청에서 두 주소의 사실을 합치지 않는다.
+`analysis-request.json`은 Single/Approval 대상 주소,
+`analysis-request-batch.json`은 Batch 대상 주소를 각각 고정한다. 독립
+검증 Gate만 두 subject-scoped 결과를 결합해 fixture 전체의 고정 hash와
+대조한다.
+
 ## 3. 승격 잔여
 
 - [x] 선정 TX receipt·정확한 block window filtered logs·raw replay SHA-256
@@ -31,7 +38,9 @@ Rarible ERC-1155 계약의 Single·Batch·ApprovalForAll을 raw ABI 순서로
 - [x] Analysis I/O 대안 B(`evm_special`) 확정
 - [x] UI Preview 사용자 승인(2026-07-29 20:19)
 - [x] Context Receipt `PASS`·사용자 구현 승인
-- [ ] NFT·Proxy analyzer 구현과 독립 Verification Receipt
+- [x] NFT·Proxy analyzer 구현과 독립 Verification Receipt(canonical hash 일치)
+- [x] ERC-1155 Single·Batch 주소별 요청 분리와 exact block-window↔receipt 정합
+- [ ] 리뷰 P1 5건 재검토 통과 후 `confirmed` 승격 (P1 수정·회귀 테스트는 반영 완료)
 
 ## 4. Related Documents
 

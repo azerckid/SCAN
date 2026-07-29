@@ -1,7 +1,7 @@
 # Fixture: FX-EVM-NFT-721-001
 > Created: 2026-07-29 14:38
-> Last Updated: 2026-07-29 20:19
-> Status: Verifying 0.1 · UI 승인 완료(2026-07-29 20:19) · Analyzer 구현 대기
+> Last Updated: 2026-07-29 21:40
+> Status: Verifying 0.1 · Analyzer 구현 완료·canonical hash 일치, 리뷰 P1 5건 수정 반영·재검토 대기(확정 보류)
 
 ## 1. 목적
 
@@ -31,7 +31,8 @@
 - [x] Analysis I/O 대안 B(`evm_special`) 확정
 - [x] UI Preview 사용자 승인(2026-07-29 20:19)
 - [x] Context Receipt `PASS`·사용자 구현 승인
-- [ ] NFT·Proxy analyzer 구현과 독립 Verification Receipt
+- [x] NFT·Proxy analyzer 구현과 독립 Verification Receipt(canonical hash 일치)
+- [ ] 리뷰 P1 5건 재검토 통과 후 `confirmed` 승격 (P1 수정·회귀 테스트는 반영 완료)
 
 ## 4. Related Documents
 
