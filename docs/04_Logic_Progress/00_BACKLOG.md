@@ -1124,7 +1124,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] single·remerge·multi-origin × complete·partial·failed HTML Preview를 작성한다.
   - [x] 단일 path·분기/재병합·multi-origin 공개 사례를 `candidate`로 선정한다.
   - [x] 세 공개 fixture를 replay·oracle·Verifier 후 `verifying`으로 올린다.
-  - [ ] `flow_path` 대안 B와 bounded node/edge·hop/time·asset conservation 계약을 승인한다.
+  - [x] `flow_path` 대안 B와 bounded node/edge·hop/time·asset conservation 계약을 승인한다.
+    (PR #71 검토·병합, [16_TASK_014_FLOW_PATH_IO_CONTRACT](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md)).
   - [ ] cycle·unrelated fund·residual·budget partial을 구현한다.
   - [ ] path artifact와 read-only graph 출력 경계를 검증한다.
 - Related Concept Docs:
@@ -1138,6 +1139,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [TASK-014 PATH Preview](../02_UI_Screens/previews/07_task_014_path_preview.html) - query 3개·상태 3개 사용자 검토 화면
 - Related Technical Docs:
   - [TASK-014 PATH 계약](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) - graph·ledger·상태·오류 계약
+  - [`flow_path` I/O 계약 확정안](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md) - 대안 B request/result/오류 매핑·scope_status·단일 trace 게이트(PR #71 병합)
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-PATH 계약
   - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - path evidence 봉투
 - Related QA Docs:
@@ -1167,14 +1169,37 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] Analysis I/O·Workbench·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - fixture는 verifying이나 Analysis I/O 정식 승인·graph 상태 계약·사용자 구현 승인 전 착수 금지
-  - Required References Read: 위 Related 문서 전체
-  - Constraints: bounded traversal, unrelated fund 분리, graph DB YAGNI
-  - Conflicts: None known
+  - Status: PREPARED — 참조 문서 정독·Constraints·Conflicts 확정 완료(2026-07-30).
+    `flow_path` 대안 B 계약(doc 16)은 PR #71로 병합됨. **`PASS` 전환과 사용자
+    analyzer 구현 승인은 사용자 명시 행위로 남긴다.** 그 전까지 코드 착수 금지.
+  - Required References Read:
+    - [15 PATH 계약 제안](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) — graph 불변조건, bounded traversal, exclusion·residual 보존식(§7)
+    - [16 flow_path I/O 계약 확정안](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md) — request/result variant, ErrorCode 재사용 매핑(§5), scope_status 필수(§8), 단일 trace 하드 게이트(§7), 구현 확장(§9)
+    - [08 PATH UI](../02_UI_Screens/08_TASK_014_PATH_UI.md) + [07 Preview](../02_UI_Screens/previews/07_task_014_path_preview.html) — query 3×상태 3 화면, edge/ledger/`not_assessed` 표현, 사용자 승인(2026-07-29 23:09)
+    - [39 Fixture·Contract Gate](../05_QA_Validation/39_TASK_014_FIXTURE_CONTRACT_GATE.md) — Fixture Gate 통과, 계약 QA 10건 대부분 `not_executed`(구현 후 실행)
+    - [40 후보 보고서](../05_QA_Validation/40_TASK_014_FIXTURE_CANDIDATE_REPORT.md) · [41 replay·oracle](../05_QA_Validation/41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md) · [42 독립 Verifier](../05_QA_Validation/42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md) — Euler 공개 사례, 단일 trace disclosure(41 §3), raw-first canonical hash
+    - [05 Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) — 0.2·0.1 하위호환·버전 규칙 / [02 예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) — FLOW-EVM-001/002·FLOW-MULTI-001 정의
+    - [04 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md)(PATH 18개 필수 근거) · [03 Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md)·[00 CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md)(read-only graph 상위 UX·partial/export 흐름) · [09 Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md)(WP-PATH 상위 계약) · [23 Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md)(QA-EXP-PATH-001/002)
+    - 세 fixture(`FX-FLOW-PATH/REMERGE/MULTI-001`)의 input·expected·evidence·raw-replay
+  - Verification: `scripts/verify.py` 전체 PASS — 436 tests, fixture 13 packages, traceability 1477 links, security 157 files (정독 시점 1471 → 본 정합 수정 후 1477, docs-only, analyzer 코드 변경 없음)
+  - Constraints:
+    - Bounded traversal(`max_hops`/`max_nodes`/`max_edges`), 상한 도달=`partial`, 무제한 BFS·graph DB 확장·Rules 밖 live 탐색 금지
+    - external inflow/무관 자금은 seed ledger 보존식에서 분리(`excluded_edges` + external context), amount 유사성만으로 포함·제외 금지
+    - **새 공개 `ErrorCode` 추가 금지** — 기존 enum + `stage`/`message`(doc 16 §5)
+    - `scope_status`는 필수 결과 필드 → 구현 시 세 fixture expected.json·독립 Verifier recompute·pinned hash 3개 재계산(doc 16 §9)
+    - `FixtureRequirementId`/정적 result schema에 `FLOW` 접두 추가 필요(NFT721/PROXY 선례)
+    - label·price·attribution = `not_assessed`/별도 context(채점 밖); graph DB·networkx YAGNI; 공개 온체인만·서명/mutation 0
+    - `confirmed`·Benchmark 승격 전 단일-trace 하드 게이트(doc 16 §7) 충족 필요
+  - Conflicts:
+    - (해소) `doc 39 §4 QA-PATH-FAILED-001`의 "data null"이 정정된 계약(`results: []`)과 불일치 → `results: []`로 수정
+    - (해소) `doc 08 PATH UI §4.3`의 failed `data: null` 표기 → 승인 후 계약 동기화로 `results: []` + 구조화 오류로 수정(화면 재설계 아님, UI 승인 유지)
+    - (해소) `doc 39 §8` Gate 순서 충돌(사용자 구현 승인을 Context Receipt PASS 선행 조건으로 둠) → PASS 조건(fixture·Verifier·계약·Preview)과 코드 착수 조건(PASS + 구현 승인)을 분리
+    - (경계 고지) 문제은행 `FLOW-EVM-001`(서비스 라벨 교차검증·최종 도착 서비스)·`FLOW-MULTI-001`(시점 가격 환산 피해액)은 문제 전체 형태이나, `flow_path` v1 fixture는 **raw-path subset만 채점**하고 label/price/서비스 귀속은 `not_assessed`로 유예한다(TASK-015 PRICE/LABEL 연계). 구현·승격 문서에서 이 채점 경계를 명시할 것
+    - (예정) doc 16 §9의 scope_status→fixture/verifier/hash 재계산은 구현 시 처리(현재 fixture·verifier는 scope_status 미보유)
 - Change Receipt:
-  - N/A - 구현 미시작
+  - N/A - analyzer 구현 미시작. 본 작업은 Context Receipt 준비(docs-only)와 doc 39 정합 수정에 한정.
 - Verification Receipt:
-  - N/A - 구현 미시작
+  - N/A - analyzer 구현 미시작.
 
 ### [ ] TASK-015: Label·OSINT·Actor Intelligence 엔진
 
