@@ -383,6 +383,20 @@ flowchart LR
 - 정적 Preview·자동 검증·사용자 UI 확인은 완료했다. 정식 Schema·provider와
   runtime 구현은 아직 승인되지 않았다.
 
+## 16.5 WP-INPUT 입력 소스 선택 Draft
+
+[입력 소스 선택 UI](./06_INPUT_SOURCE_SELECTION_UI.md)는 `external_rpc |
+contest_rpc | provided_artifact` 세 입력 모드와 네 체인 범위를 `scan analyze`
+공통 진입점에서 선택하는 별도 검토 트랙이다.
+
+- `--input-mode`·`--chain-scope`로 전환하며 기존 명령·종료 코드 계약을
+  변경하지 않는다.
+- 입력 출처(모드·체인·source·record·hash)를 `STARTING`·`INPUT` 진행으로 표시하고
+  endpoint 전체·API key는 표시하지 않는다.
+- 입력 경계 오류는 exit 2로, 필수 record 누락은 `PARTIAL`로 구분한다.
+- 정적 Preview는 작성했고 사용자 UI-First Gate 확인은 대기 중이다. CLI·
+  Operations wiring은 승인 전까지 구현하지 않는다.
+
 ## 17. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위
@@ -395,6 +409,9 @@ flowchart LR
 - **UI_Screens**: [Operations Board Preview](./previews/03_competition_operations_board_preview.html) - 병렬 운영 화면 Draft
 - **UI_Screens**: [TASK-012 EVM Core UI](./05_TASK_012_EVM_CORE_UI.md) - 네 query·12개 상태 계약
 - **UI_Screens**: [TASK-012 EVM Core Preview](./previews/04_task_012_evm_core_cli_preview.html) - 0.2 Draft 사용자 검토 화면
+- **UI_Screens**: [입력 소스 선택 UI](./06_INPUT_SOURCE_SELECTION_UI.md) - WP-INPUT 세 입력 모드·오류·partial 화면 계약
+- **UI_Screens**: [입력 소스 선택 Preview](./previews/05_input_source_selection_preview.html) - 세 입력 모드·체인 범위 검토 화면
+- **Technical_Specs**: [WP-INPUT-GATE CLI·Operations 연결 계약](../03_Technical_Specs/13_WP_INPUT_CLI_OPERATIONS_CONTRACT.md) - 명령·핸드오프·보안·QA 계약
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·Queue·독립 검증·수동 제출 계약
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - CLI·log·보안 경계
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 상태·오류·완료 기준

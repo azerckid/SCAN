@@ -190,6 +190,8 @@ CLI·Operations·실제 대회 artifact 시나리오는 `not_executed`다.
 - **Technical_Specs**: [Analysis I/O](./05_ANALYSIS_IO_SCHEMA.md) - 공통 evidence/result 봉투
 - **Technical_Specs**: [Coverage 확장 Brief](./09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - Work Package와 체인 엔진
 - **Technical_Specs**: [Live Provider Readiness](./10_LIVE_PROVIDER_READINESS.md) - 외부 RPC topology·Gate
+- **Technical_Specs**: [WP-INPUT-GATE CLI·Operations 연결 계약](./13_WP_INPUT_CLI_OPERATIONS_CONTRACT.md) - CLI·Queue wiring 설계 계약
+- **UI_Screens**: [입력 소스 선택 UI](../02_UI_Screens/06_INPUT_SOURCE_SELECTION_UI.md) - 입력 출처·오류·partial 화면 계약
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 승인 잠금
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - `WP-INPUT-GATE` 선행 순서
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 향후 동등성·격리 기준
