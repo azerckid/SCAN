@@ -1,0 +1,51 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-FLOW-PATH-001",
+  "problem_id": "FLOW-EVM-001",
+  "status": "candidate",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "analysis_candidate": "flow_path",
+  "query_kind": "trace_path",
+  "asset_scope": {
+    "kind": "native",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "seed_node": "0x036cec1a199234fc02f72d29e596a09440825f1c",
+  "terminal_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+  "direction": "outbound",
+  "budgets": {
+    "max_hops": 3,
+    "max_nodes": 4,
+    "max_edges": 3
+  },
+  "scope_kind": "selected_transactions_and_exact_blocks",
+  "block_windows": [
+    {"from": 16818102, "to": 16818102},
+    {"from": 16905356, "to": 16905356},
+    {"from": 16920430, "to": 16920430}
+  ],
+  "transactions": [
+    {
+      "role": "internal_seed_inflow",
+      "hash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+      "block_number": 16818102
+    },
+    {
+      "role": "seed_to_intermediate",
+      "hash": "0x79c10cf538667a0a7de40ce54d2444c9e9e17b5c62b321e739020df0015baeda",
+      "block_number": 16905356
+    },
+    {
+      "role": "intermediate_to_terminal",
+      "hash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+      "block_number": 16920430
+    }
+  ],
+  "selection_notes": "Euler's public incident timeline supplies a real three-hop native ETH path. Completeness applies only to the selected transactions and exact blocks; the long gaps and the seed's other outputs are not yet scanned."
+}

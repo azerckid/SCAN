@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 23:09
-> Status: TASK-012·013 Complete · TASK-014 Preview User Review Passed · Benchmark 9/9
+> Last Updated: 2026-07-29 23:25
+> Status: TASK-012·013 Complete · TASK-014 Fixture 3 Candidate · Benchmark 9/9
 
 ## 1. 목적
 
@@ -136,7 +136,10 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] `TASK-014` `flow_path` 대안·bounded graph·reconciliation ledger·
   partial/failed 계약을 작성한다.
 - [x] `TASK-014` query 3개 × 상태 3개 HTML Preview와 UI Gate를 작성한다.
-- [ ] `TASK-014` 단일 path와 분기·재병합 fixture를 확정한다.
+- [x] `TASK-014` 단일 path·분기/재병합·multi-origin 공개 사례를
+  `candidate` package로 작성한다.
+- [ ] `TASK-014` 세 fixture의 두 공급자 replay·negative oracle·독립
+  Verifier를 통과하고 승격을 판단한다.
 - [x] 사용자가 PATH Preview를 승인한다(2026-07-29 23:09).
 - [ ] 사용자가 `flow_path` 대안 B를 정식 승인한다.
 - [ ] graph node/edge·asset conservation·budget·partial 계약을 정식 승인한다.
@@ -224,5 +227,6 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - **Technical_Specs**: [TASK-014 PATH Contract](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) - bounded graph·ledger·오류 계약
 - **UI_Screens**: [TASK-014 PATH UI](../02_UI_Screens/08_TASK_014_PATH_UI.md) - query 3개·상태 3개 UI Gate
 - **QA_Validation**: [TASK-014 Fixture·Contract Gate](../05_QA_Validation/39_TASK_014_FIXTURE_CONTRACT_GATE.md) - fixture·oracle·Verifier Stop/Go
+- **QA_Validation**: [TASK-014 Fixture 후보 보고서](../05_QA_Validation/40_TASK_014_FIXTURE_CANDIDATE_REPORT.md) - 공개 3홉·재병합·multi-origin 선정 근거
 - **UI_Screens**: [TASK-013 NFT·Proxy UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md) - 표준 3개·상태 3개 화면 계약과 Preview
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - runner·dry-run·미실행 경계

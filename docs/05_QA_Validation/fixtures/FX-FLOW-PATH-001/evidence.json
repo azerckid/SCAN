@@ -1,0 +1,107 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-FLOW-PATH-001",
+  "status": "candidate",
+  "captured_at": "2026-07-29T14:25:33Z",
+  "event_evidence": [],
+  "call_evidence": [
+    {
+      "evidence_id": "EV-FLOW-PATH-INTERNAL",
+      "evidence_type": "native_internal_transfer",
+      "source_id": "DS-EXPLORER-EVM",
+      "transaction_hash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+      "block_number": 16818102,
+      "from": "0x036cec1a199234fc02f72d29e596a09440825f1c",
+      "to": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+      "amount_raw": "88752697459828535340019",
+      "trace_index": 1
+    },
+    {
+      "evidence_id": "EV-FLOW-PATH-HOP-2",
+      "evidence_type": "native_top_level_transfer",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "transaction_hash": "0x79c10cf538667a0a7de40ce54d2444c9e9e17b5c62b321e739020df0015baeda",
+      "block_number": 16905356,
+      "from": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+      "to": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "amount_raw": "7738250000000000000000",
+      "receipt_status": "0x1"
+    },
+    {
+      "evidence_id": "EV-FLOW-PATH-HOP-3",
+      "evidence_type": "native_top_level_transfer",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "transaction_hash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+      "block_number": 16920430,
+      "from": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "to": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+      "amount_raw": "7738050000000000000000",
+      "receipt_status": "0x1"
+    }
+  ],
+  "state_evidence": [],
+  "context_evidence": [
+    {
+      "evidence_id": "EV-FLOW-PATH-SCOPE",
+      "evidence_type": "public_incident_timeline",
+      "source_id": "DS-OSINT-WEB",
+      "url": "https://www.euler.finance/blog/war-peace-behind-the-scenes-of-eulers-240m-exploit-recovery",
+      "address_attribution_scored": false
+    }
+  ],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Selected top-level transactions, receipts, blocks, and raw ETH values"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Candidate discovery and the first internal ETH transfer pending independent trace replay"
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "role": "context",
+      "required": false,
+      "purpose": "Public incident chronology only; not address ownership scoring"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider": "PROVIDER-EVM-VERIFY",
+      "retrieved_at": "2026-07-29T14:25:33Z",
+      "methods": ["eth_getTransactionByHash", "eth_getTransactionReceipt", "eth_getBlockByNumber"]
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "provider": "Blockscout Ethereum API",
+      "retrieved_at": "2026-07-29T14:25:33Z",
+      "methods": ["account.txlistinternal"]
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "provider": "Euler Finance",
+      "retrieved_at": "2026-07-29T14:25:33Z"
+    }
+  ],
+  "consistency_checks": {
+    "selected_transactions_exist": true,
+    "receipt_status_success": true,
+    "ordered_endpoints_join": true,
+    "two_provider_decoded_match": false,
+    "raw_sha256_recorded_per_capability": false,
+    "continuous_gap_scanned": false,
+    "independent_verifier_pass": false
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": "Primary-provider replay, independent trace for the internal edge, raw SHA-256 artifacts, continuous-scope decision, negative oracle, and independent Verifier."
+  },
+  "provenance_notes": "All scoring values are public on-chain facts. Euler's article is context only; labels, criminal intent, victim status, and common control are not assessed."
+}

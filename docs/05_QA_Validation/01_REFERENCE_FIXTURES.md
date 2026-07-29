@@ -1,15 +1,19 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 22:13
-> Status: Approved 1.5 · Phase 2 Confirmed Pack · TASK-013 확정
+> Last Updated: 2026-07-29 23:25
+> Status: Approved 1.6 · Phase 2 Confirmed Pack · TASK-014 공개 후보 3개 선정
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
-있는 reference fixture를 관리한다. 현재 14개 중 10개는 `확정`, 4개는
-DOC-M3 결정에 따라 `Deferred`다. TASK-013 세 공개 사례는 remediation
+있는 reference fixture를 관리한다. 현재 15개 중 10개는 `확정`, 5개는
+후속 Gate가 남은 `후보`다. TASK-013 세 공개 사례는 remediation
 재검토와 [최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
 통과해 `확정`으로 관리한다.
+
+TASK-014 세 공개 PATH 사례는 Euler 공개 사건의 서로 다른 request scope를
+사용해 실제 TX·주소·raw 금액 골격을 고정했지만, 두 공급자 replay·negative
+oracle·독립 Verifier 전이므로 `후보`로 유지한다.
 
 입력 문서:
 
@@ -82,7 +86,8 @@ DOC-M3 결정에 따라 `Deferred`다. TASK-013 세 공개 사례는 remediation
 
 | Fixture ID | 문제 ID | Draft | 상태 | DOC-M3 결정 | 핵심 검증 기능 |
 |:---|:---|:---:|:---|:---|:---|
-| FX-FLOW-EVM-001 | FLOW-EVM-001 | 1 | 후보 | Deferred | 수집, PATH, LABEL, 증거 |
+| [FX-FLOW-PATH-001](./fixtures/FX-FLOW-PATH-001/README.md) | FLOW-EVM-001 | 1 | 후보 0.1 | 공개 3홉 선정 · replay pending | PATH, internal/top-level edge |
+| [FX-FLOW-REMERGE-001](./fixtures/FX-FLOW-REMERGE-001/README.md) | FLOW-EVM-002 | 1 | 후보 0.1 | 공개 4분기·재병합 선정 · replay pending | PATH, RECON, exclusion |
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
 | FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | Deferred | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | V1 기준선 | AUTH-DECODE, allowance 연결 |
@@ -90,7 +95,7 @@ DOC-M3 결정에 따라 `Deferred`다. TASK-013 세 공개 사례는 remediation
 | [FX-EVM-NFT-1155-001](./fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·subject 분리 | ERC-1155 Single·Batch |
 | [FX-EVM-PROXY-001](./fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | 2 | 확정 0.1 | 두 archive RPC·16 oracle·독립 Verifier·state 정합 | EIP-1967 slot·event |
 | FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | V1 기준선 | FREEZE, state/logs |
-| FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | Deferred | RECON, PRICE, 다주소 집계 |
+| [FX-FLOW-MULTI-001](./fixtures/FX-FLOW-MULTI-001/README.md) | FLOW-MULTI-001 | 2 | 후보 0.1 | 공개 4 origin→1 exit 선정 · replay pending | RECON, dedup, 다주소 집계 |
 | FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | Deferred | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
 | [FX-BASIC-EVM-001](./fixtures/FX-BASIC-EVM-001/README.md) | BASIC-EVM-001 | 1 | 확정 0.2 | provider replay·반례·consumer pass | EVM-TX, block, code |
 | [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 확정 0.2 | archive replay·반례·consumer pass | EVM-STATE, decimals |
@@ -115,24 +120,48 @@ adjacent state만 완전성을 주장한다.
 
 ---
 
-### FX-FLOW-EVM-001
+### FX-FLOW-PATH-001
 
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | FLOW-EVM-001 |
-| 상태 | 후보 |
-| DOC-M3 결정 | Deferred — P1 PATH·LABEL 요구사항 승인 전 재검토 |
-| 데이터 형태 | 공개 사건 + 공개 온체인 |
-| 체인 | TBD (EVM) |
-| 주소·TX | 피해 주소 A=TBD, 피해 시각 창=TBD, 근거 TX 목록=TBD |
-| 기준 정답 | 최종 도착 서비스/주소, 이동 금액, 홉별 TX |
-| 허용 오차 | 토큰/ETH raw 오차 0. 수수료는 별도 표기. 환전이 있으면 net 허용 범위를 fixture 확정 시 수치화 |
-| 확정 사실 | 각 홉의 TX·from/to·value |
-| 휴리스틱 | 미라벨 입금주소의 거래소 귀속 |
-| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-LABEL-PUBLIC` |
-| 재현 절차 | 1) A 출금 수집 2) 시간·금액 필터 3) N홉 추적 4) 라벨 교차검증 5) 증거 표 출력 |
-| 저작권·출처 | 공개 사건 보고서 URL=TBD. 본문 복제 없이 사실 요약만 |
-| 마지막 확인 | 2026-07-24 15:49 |
+| 상태 | 후보 0.1 — 공개 사례 선정, replay·oracle·Verifier pending |
+| DOC-M3 결정 | Phase 2 PATH 후보 — 구현 전 재검토 |
+| 패키지 | [FX-FLOW-PATH-001](./fixtures/FX-FLOW-PATH-001/README.md) |
+| 데이터 형태 | Euler 공개 사건 + Ethereum 공개 TX·internal transfer |
+| 체인 | Ethereum (`chain_id` 1) |
+| 주소·TX | `0x036cec...25f1c` → `0xb66cd9...995db` → `0xa1b44d...8e676` → `0xee009f...c8c5`; TX 3건 |
+| 기준 정답 | internal 1 + top-level 2의 ordered 3-hop path와 hop별 raw amount |
+| 허용 오차 | ETH raw 정수 오차 0. 홉별 금액을 임의로 같게 만들지 않음 |
+| 확인 사실 | 선택 TX·block·from/to·value·성공 receipt, 첫 internal edge |
+| 미결정 | 긴 block gap 연속 스캔·seed 전체 ledger·독립 trace |
+| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`; `DS-OSINT-WEB`은 context |
+| 재현 절차 | selected TX/trace 조회 → endpoint join → raw amount 보존 → terminal 확인 |
+| 저작권·출처 | Euler 공식 사건 글·공개 Ethereum/Blockscout. 본문 복제 없음 |
+| 마지막 확인 | 2026-07-29 23:25 |
+
+---
+
+### FX-FLOW-REMERGE-001
+
+| 필드 | 내용 |
+|:---|:---|
+| 연결 문제 ID | FLOW-EVM-002 |
+| 상태 | 후보 0.1 — 공개 사례 선정, replay·oracle·Verifier pending |
+| DOC-M3 결정 | Phase 2 PATH 후보 — 구현 전 재검토 |
+| 패키지 | [FX-FLOW-REMERGE-001](./fixtures/FX-FLOW-REMERGE-001/README.md) |
+| 데이터 형태 | Euler 공개 사건 + Ethereum 공개 TX |
+| 체인 | Ethereum (`chain_id` 1) |
+| 주소·TX | seed `0xb66cd9...995db` → branch 4 → merge `0xee009f...c8c5`; split/merge 8 TX |
+| 기준 정답 | split `30953000000000000000000`, merge `30951400000000000000000`, unresolved residual `1600000000000000000` wei |
+| Exclusion | 외부 주소→branch dust `1000000000000` wei는 seed ledger 밖 context |
+| 허용 오차 | ETH raw 정수 오차 0 |
+| 확인 사실 | 4개 동일 seed output·4개 공통 merge input·성공 receipt |
+| 미결정 | 연속 range·residual 분류·두 공급자 raw SHA |
+| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`; `DS-OSINT-WEB`은 context |
+| 재현 절차 | split 수집 → branch identity 보존 → merge 수집 → unrelated inflow 분리 → residual 계산 |
+| 저작권·출처 | Euler 공식 사건 글·공개 Ethereum. 본문 복제 없음 |
+| 마지막 확인 | 2026-07-29 23:25 |
 
 ---
 
@@ -274,19 +303,20 @@ adjacent state만 완전성을 주장한다.
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | FLOW-MULTI-001 |
-| 상태 | 후보 |
-| DOC-M3 결정 | Deferred — P3 PRICE·다주소 집계 요구사항 작성 전 재검토 |
-| 데이터 형태 | 공개 사건 또는 합성 집계 세트 |
-| 체인 | TBD |
-| 주소·TX | 출구/시드=TBD, 피해자 목록=TBD, 가격 기준 시각=TBD |
-| 기준 정답 | 피해자별 유입, 합계, 환산 피해액, 가격 출처 |
-| 허용 오차 | 유입 raw 오차 0. 환산액은 가격 소수점 N자리와 허용 절대/상대 오차를 fixture 확정 시 수치화 |
-| 확정 사실 | 피해자별 TX와 수량 |
-| 휴리스틱 | 사건 귀속 범위(포함/제외 피해자) |
-| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-PRICE` |
-| 재현 절차 | 1) 유입 수집 2) 정규화 3) 가격 조회 4) 합계·환산 5) 출구 연결 |
-| 저작권·출처 | 사건 보고서·가격 API 출처=TBD |
-| 마지막 확인 | 2026-07-24 16:03 |
+| 상태 | 후보 0.1 — 공개 사례 선정, replay·oracle·Verifier pending |
+| DOC-M3 결정 | Phase 2 PATH 후보 — 가격은 별도 context |
+| 패키지 | [FX-FLOW-MULTI-001](./fixtures/FX-FLOW-MULTI-001/README.md) |
+| 데이터 형태 | Euler 공개 사건 + Ethereum 공개 TX |
+| 체인 | Ethereum (`chain_id` 1) |
+| 주소·TX | origin 4개 → exit `0xee009f...c8c5`, 성공 TX 4건 |
+| 기준 정답 | origin별 raw contribution과 dedup 합계 `30951400000000000000000` wei |
+| 허용 오차 | native raw 오차 0 |
+| 확인 사실 | 각 TX의 from/to/value·block·성공 receipt |
+| 제외 | 가격·공통 소유·범죄·피해자 귀속은 `not_assessed` |
+| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`; `DS-OSINT-WEB`은 context |
+| 재현 절차 | origin별 TX 조회 → exit 일치 → hash dedup → raw 합계 |
+| 저작권·출처 | Euler 공식 사건 글·공개 Ethereum. 본문 복제 없음 |
+| 마지막 확인 | 2026-07-29 23:25 |
 
 ---
 
@@ -419,10 +449,11 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 
 | Fixture ID | 단계 | 필요 소스 | 승격 조건 | 재검토 시점 |
 |:---|:---:|:---|:---|:---|
-| `FX-FLOW-EVM-001` | P1 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-LABEL-PUBLIC` | 공개 사건 시드·N홉 TX·종착 후보를 확보하고 라벨을 확정 사실과 분리해 1회 재현 | P1 PATH·LABEL 요구사항 승인 전 |
+| `FX-FLOW-PATH-001` | P1 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` | primary replay·독립 internal trace·raw SHA·oracle·Verifier 통과 | TASK-014 구현 승인 전 |
+| `FX-FLOW-REMERGE-001` | P1 | `DS-EVM-RPC-PUBLIC` | 두 공급자 edge 일치·range 결정·residual 분류·oracle·Verifier 통과 | TASK-014 구현 승인 전 |
 | `FX-SVC-BRG-001` | P2 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` | 브리지 양단 TX·공식 이벤트 매칭 키·수수료 허용 범위를 고정하고 1회 재현 | P2 XCHAIN·BRIDGE 승격 전 |
 | `FX-EVM-PROXY-001` | P3 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM` | selected candidate의 raw replay·history 범위·반례를 완성해 upgrade TX·EIP-1967 슬롯 이력을 exact match로 재현 | TASK-013 fixture 승격 |
-| `FX-FLOW-MULTI-001` | P3 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-PRICE` | 피해자 포함 기준·유입 TX·시점 가격 공급자·환산 허용 오차를 고정 | P3 PRICE·다주소 집계 요구사항 작성 전 |
+| `FX-FLOW-MULTI-001` | P3 | `DS-EVM-RPC-PUBLIC` | origin set 범위·두 공급자 replay·dedup oracle·Verifier 통과. 가격은 별도 context | TASK-014 구현 승인 전 |
 | `FX-UNCERTAIN-001` | P2/P3 | BTC 분기 `DS-BTC-API`; 믹서 분기 `DS-LABEL-PUBLIC`과 EVM source | P2에서는 `BTC-CJ-001` 우선 여부를 결정하고, 한 문제 ID만 선택해 확정 사실·휴리스틱·반례 집합을 분리 | P2 HEUR 시작 전 또는 P3 MIXER 후보 검토 시 |
 
 ### 8.3 남은 미결정 사항
@@ -467,6 +498,9 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 14. TASK-013 analyzer remediation 재검토와 4개 subject-scoped request의
     canonical hash·결정성 검증을 통과해 세 package를 `confirmed`로
     승격했다. Benchmark는 EVM-NFT-001·EVM-PROXY-001을 포함해 9/9다.
+15. TASK-014는 Euler 공개 사건에서 단일 3홉·4분기 재병합·4 origin 공통
+    exit 사례를 선정해 세 package를 `candidate`로 작성했다. replay·oracle·
+    Verifier와 구현 승인은 남아 있다.
 
 ## 10. Related Documents
 

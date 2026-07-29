@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-FLOW-REMERGE-001",
+  "problem_id": "FLOW-EVM-002",
+  "status": "candidate",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "analysis_candidate": "flow_path",
+  "query_kind": "trace_remerge",
+  "asset_scope": {
+    "kind": "native",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "seed_node": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+  "merge_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+  "budgets": {
+    "max_hops": 2,
+    "max_nodes": 6,
+    "max_edges": 9
+  },
+  "scope_kind": "selected_transactions_and_exact_blocks",
+  "block_range": {"from": 16905356, "to": 16920507},
+  "selected_transactions": [
+    "0x79c10cf538667a0a7de40ce54d2444c9e9e17b5c62b321e739020df0015baeda",
+    "0xd4c7c88944783f3c39695bc5e6c5fcd8a399c0a103d822ac8bd96fad41a41866",
+    "0x03a06cfb99cf699dd5f61088fdf015e17b8c2f258a17882f6ff4de8607a3e46e",
+    "0x77720ab2ab2bb6550e9b4e1cb4b6c2033c2200ae3abb7ae51f89898f86ac1e2a",
+    "0xc9641dceab1311d219523e5d3914df31f6a97986d5e331db45387037ea06a07c",
+    "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+    "0x9f3edbd1eb404dec2e4d9aae93c739136f79c87f6382af25413ce705cc431f59",
+    "0x19f802affe24572bac3af47983f42bbec6055117c6a32c3fddc58bd7545e5240"
+  ],
+  "excluded_context_transactions": [
+    "0xcfec4f86f6d81c83b9b3520d6966936d17490988739a794bf1391562ecb909b6"
+  ],
+  "selection_notes": "Four equal seed outputs split to four branch addresses and later converge on one merge address. A 0.000001 ETH external inflow to one branch is retained as unrelated context, not seed-ledger input."
+}
