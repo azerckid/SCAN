@@ -11,10 +11,16 @@
   },
   "pattern_hint": "eip1967",
   "proxy_address": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
-  "upgrade_transaction": "0xe9949c36e86fc9f481897dbac8de33d655bff20b267955a303e2e5643fbc2b35",
-  "state_blocks": {
-    "before": 25199938,
-    "after": 25199939
-  },
-  "selection_notes": "Aave V3 Pool emitted Upgraded and changed the EIP-1967 implementation slot at the same block. Two archive RPC providers returned identical before and after storage words."
+  "scope_kind": "selected_upgrade_transaction_and_adjacent_state",
+  "block_windows": [
+    {"from": 25199938, "to": 25199939}
+  ],
+  "transactions": [
+    {
+      "role": "upgrade",
+      "hash": "0xe9949c36e86fc9f481897dbac8de33d655bff20b267955a303e2e5643fbc2b35",
+      "block_number": 25199939
+    }
+  ],
+  "selection_notes": "Aave V3 Pool emitted Upgraded and changed the EIP-1967 implementation slot at the same block. The selected scope contains the upgrade transaction and adjacent before/after state only. Two archive RPC providers returned identical storage words."
 }

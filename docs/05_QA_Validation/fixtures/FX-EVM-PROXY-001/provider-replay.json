@@ -52,7 +52,6 @@
   "adjacent_state_scope_complete": true,
   "wider_history_scanned": false,
   "remaining_gate": [
-    "negative oracle",
     "independent verifier",
     "Analysis I/O and UI approval"
   ]

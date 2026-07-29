@@ -50,6 +50,10 @@ COMMANDS = (
         sys.executable,
         "scripts/check_task_013_replay_gate.py",
     ),
+    (
+        sys.executable,
+        "scripts/verify_task_013_negative_oracles.py",
+    ),
 )
 
 

@@ -99,7 +99,7 @@
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Negative oracle, Analysis I/O/UI approval, and independent verifier are not complete. Wider upgrade history is outside this selected-upgrade fixture scope."
+    "remaining": "Analysis I/O/UI approval and independent verifier are not complete. Wider upgrade history is outside this selected-upgrade fixture scope."
   },
   "provenance_notes": "Etherscan was used only to discover the public upgrade transaction. Scoring event and storage values were independently read from two archive RPC providers."
 }
