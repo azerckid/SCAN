@@ -181,6 +181,7 @@ def _remerge(transactions: dict[str, dict[str, Any]]) -> dict[str, Any]:
                 "to_node": _text(dust, "to"),
                 "amount_raw": _hex_raw(dust, "value"),
                 "reason": "external_inflow_not_from_seed",
+                "scope_status": "excluded",
             }
         ],
     }
@@ -213,6 +214,12 @@ def _multi(transactions: dict[str, dict[str, Any]]) -> dict[str, Any]:
         "exit_node": exits.pop(),
         "contributions": contributions,
         "deduplicated_total_raw": str(sum(int(item["amount_raw"]) for item in contributions)),
+        "price_context": {"status": "not_assessed", "included_in_scoring": False},
+        "attribution": {
+            "common_control_claim": False,
+            "criminal_or_victim_claim": False,
+            "status": "not_assessed",
+        },
     }
 
 
@@ -246,6 +253,7 @@ def _edge_from_internal(
         "transaction_hash": _text(parent["transaction"], "hash"),
         "block_number": int(_text(parent["transaction"], "blockNumber"), 16),
         "transfer_kind": "native_internal",
+        "scope_status": "included",
     }
 
 
@@ -260,6 +268,7 @@ def _edge_from_transaction(edge_id: str, item: dict[str, Any]) -> dict[str, Any]
         "block_number": int(_text(transaction, "blockNumber"), 16),
         "transaction_index": int(_text(transaction, "transactionIndex"), 16),
         "transfer_kind": "native_top_level",
+        "scope_status": "included",
     }
 
 
@@ -280,6 +289,8 @@ def _expected_projection(fixture_id: str, expected: dict[str, Any]) -> dict[str,
         "exit_node": expected["exit_node"],
         "contributions": expected["contributions"],
         "deduplicated_total_raw": expected["deduplicated_total_raw"],
+        "price_context": expected["price_context"],
+        "attribution": expected["attribution"],
     }
 
 

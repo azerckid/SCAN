@@ -262,6 +262,21 @@ class EvmSpecialFailedAnalysisResult(FailedAnalysisResult):
     analysis_type: Literal[AnalysisType.EVM_SPECIAL]
 
 
+class FlowPathCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.FLOW_PATH]
+
+
+class FlowPathPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.FLOW_PATH]
+
+
+class FlowPathFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.FLOW_PATH]
+
+
 ResultVariant = (
     LegacyCompleteAnalysisResult
     | LegacyPartialAnalysisResult
@@ -272,6 +287,9 @@ ResultVariant = (
     | EvmSpecialCompleteAnalysisResult
     | EvmSpecialPartialAnalysisResult
     | EvmSpecialFailedAnalysisResult
+    | FlowPathCompleteAnalysisResult
+    | FlowPathPartialAnalysisResult
+    | FlowPathFailedAnalysisResult
 )
 
 

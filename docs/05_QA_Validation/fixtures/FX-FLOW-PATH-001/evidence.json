@@ -76,13 +76,19 @@
       "source_id": "DS-EVM-RPC-PUBLIC",
       "provider": "PROVIDER-EVM-VERIFY",
       "retrieved_at": "2026-07-29T14:25:33Z",
-      "methods": ["eth_getTransactionByHash", "eth_getTransactionReceipt", "eth_getBlockByNumber"]
+      "methods": [
+        "eth_getTransactionByHash",
+        "eth_getTransactionReceipt",
+        "eth_getBlockByNumber"
+      ]
     },
     {
       "source_id": "DS-EXPLORER-EVM",
       "provider": "Blockscout Ethereum API",
       "retrieved_at": "2026-07-29T14:25:33Z",
-      "methods": ["account.txlistinternal"]
+      "methods": [
+        "account.txlistinternal"
+      ]
     },
     {
       "source_id": "DS-OSINT-WEB",
@@ -102,7 +108,7 @@
   "verification_provenance": {
     "negative_oracle_report": "../../41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md",
     "independent_verifier_report": "../../42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md",
-    "calculated_fact_sha256": "4035497ab47987952c12732ea45806b1ec4830df7e5b7b4c9e46cf41391367fe"
+    "calculated_fact_sha256": "a836b7d10e8a5ee4c76ad74d18c65e79c2ddd518cfa60469ac552899641a71bc"
   },
   "uncertainty": {
     "candidate_only": false,

@@ -19,7 +19,10 @@
       "pattern": "analysis-request\\.schema\\.json$"
     },
     "schema_version": {
-      "enum": ["0.1", "0.2"]
+      "enum": [
+        "0.1",
+        "0.2"
+      ]
     },
     "analysis_id": {
       "$ref": "#/$defs/analysisId"
@@ -34,7 +37,10 @@
         "first_token_transfer",
         "native_inflow",
         "nft_activity",
-        "proxy_history"
+        "proxy_history",
+        "trace_path",
+        "trace_remerge",
+        "aggregate_origins"
       ]
     },
     "chain_id": {
@@ -63,12 +69,20 @@
             "const": "dex_swap"
           }
         },
-        "required": ["analysis_type"]
+        "required": [
+          "analysis_type"
+        ]
       },
       "then": {
-        "not": {"required": ["query_kind"]},
+        "not": {
+          "required": [
+            "query_kind"
+          ]
+        },
         "properties": {
-          "schema_version": {"const": "0.1"},
+          "schema_version": {
+            "const": "0.1"
+          },
           "inputs": {
             "$ref": "#/$defs/dexInputs"
           }
@@ -82,12 +96,20 @@
             "const": "auth_consumption"
           }
         },
-        "required": ["analysis_type"]
+        "required": [
+          "analysis_type"
+        ]
       },
       "then": {
-        "not": {"required": ["query_kind"]},
+        "not": {
+          "required": [
+            "query_kind"
+          ]
+        },
         "properties": {
-          "schema_version": {"const": "0.1"},
+          "schema_version": {
+            "const": "0.1"
+          },
           "inputs": {
             "$ref": "#/$defs/authInputs"
           }
@@ -101,12 +123,20 @@
             "const": "address_freeze"
           }
         },
-        "required": ["analysis_type"]
+        "required": [
+          "analysis_type"
+        ]
       },
       "then": {
-        "not": {"required": ["query_kind"]},
+        "not": {
+          "required": [
+            "query_kind"
+          ]
+        },
         "properties": {
-          "schema_version": {"const": "0.1"},
+          "schema_version": {
+            "const": "0.1"
+          },
           "inputs": {
             "$ref": "#/$defs/freezeInputs"
           }
@@ -115,13 +145,23 @@
     },
     {
       "if": {
-        "properties": {"analysis_type": {"const": "evm_core"}},
-        "required": ["analysis_type"]
+        "properties": {
+          "analysis_type": {
+            "const": "evm_core"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
       },
       "then": {
-        "required": ["query_kind"],
+        "required": [
+          "query_kind"
+        ],
         "properties": {
-          "schema_version": {"const": "0.2"},
+          "schema_version": {
+            "const": "0.2"
+          },
           "query_kind": {
             "enum": [
               "object_summary",
@@ -135,58 +175,174 @@
     },
     {
       "if": {
-        "properties": {"analysis_type": {"const": "evm_special"}},
-        "required": ["analysis_type"]
+        "properties": {
+          "analysis_type": {
+            "const": "evm_special"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
       },
       "then": {
-        "required": ["query_kind"],
+        "required": [
+          "query_kind"
+        ],
         "properties": {
-          "schema_version": {"const": "0.2"},
-          "query_kind": {"enum": ["nft_activity", "proxy_history"]}
+          "schema_version": {
+            "const": "0.2"
+          },
+          "query_kind": {
+            "enum": [
+              "nft_activity",
+              "proxy_history"
+            ]
+          }
         }
       }
     },
     {
       "if": {
-        "properties": {"query_kind": {"const": "object_summary"}},
-        "required": ["query_kind"]
+        "properties": {
+          "analysis_type": {
+            "const": "flow_path"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
       },
-      "then": {"properties": {"inputs": {"$ref": "#/$defs/objectSummaryInputs"}}}
+      "then": {
+        "required": [
+          "query_kind"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "0.2"
+          },
+          "query_kind": {
+            "enum": [
+              "trace_path",
+              "trace_remerge",
+              "aggregate_origins"
+            ]
+          }
+        }
+      }
     },
     {
       "if": {
-        "properties": {"query_kind": {"const": "historical_balance"}},
-        "required": ["query_kind"]
+        "properties": {
+          "query_kind": {
+            "const": "object_summary"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
       },
-      "then": {"properties": {"inputs": {"$ref": "#/$defs/historicalBalanceInputs"}}}
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/objectSummaryInputs"
+          }
+        }
+      }
     },
     {
       "if": {
-        "properties": {"query_kind": {"const": "first_token_transfer"}},
-        "required": ["query_kind"]
+        "properties": {
+          "query_kind": {
+            "const": "historical_balance"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
       },
-      "then": {"properties": {"inputs": {"$ref": "#/$defs/firstTokenTransferInputs"}}}
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/historicalBalanceInputs"
+          }
+        }
+      }
     },
     {
       "if": {
-        "properties": {"query_kind": {"const": "native_inflow"}},
-        "required": ["query_kind"]
+        "properties": {
+          "query_kind": {
+            "const": "first_token_transfer"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
       },
-      "then": {"properties": {"inputs": {"$ref": "#/$defs/nativeInflowInputs"}}}
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/firstTokenTransferInputs"
+          }
+        }
+      }
     },
     {
       "if": {
-        "properties": {"query_kind": {"const": "nft_activity"}},
-        "required": ["query_kind"]
+        "properties": {
+          "query_kind": {
+            "const": "native_inflow"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
       },
-      "then": {"properties": {"inputs": {"$ref": "#/$defs/nftActivityInputs"}}}
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/nativeInflowInputs"
+          }
+        }
+      }
     },
     {
       "if": {
-        "properties": {"query_kind": {"const": "proxy_history"}},
-        "required": ["query_kind"]
+        "properties": {
+          "query_kind": {
+            "const": "nft_activity"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
       },
-      "then": {"properties": {"inputs": {"$ref": "#/$defs/proxyHistoryInputs"}}}
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/nftActivityInputs"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "query_kind": {
+            "const": "proxy_history"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/proxyHistoryInputs"
+          }
+        }
+      }
     }
   ],
   "additionalProperties": false,
@@ -196,7 +352,14 @@
       "pattern": "^AN-[A-Z0-9][A-Z0-9-]{2,63}$"
     },
     "analysisType": {
-      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core", "evm_special"]
+      "enum": [
+        "dex_swap",
+        "auth_consumption",
+        "address_freeze",
+        "evm_core",
+        "evm_special",
+        "flow_path"
+      ]
     },
     "address": {
       "type": "string",
@@ -268,7 +431,9 @@
     },
     "dexInputs": {
       "type": "object",
-      "required": ["transaction_hash"],
+      "required": [
+        "transaction_hash"
+      ],
       "properties": {
         "transaction_hash": {
           "$ref": "#/$defs/transactionHash"
@@ -297,7 +462,11 @@
           "$ref": "#/$defs/address"
         },
         "approval_type": {
-          "enum": ["approve", "permit", "permit2"]
+          "enum": [
+            "approve",
+            "permit",
+            "permit2"
+          ]
         },
         "approval_transaction_hash": {
           "$ref": "#/$defs/transactionHash"
@@ -362,94 +531,239 @@
     },
     "balanceAsset": {
       "type": "object",
-      "required": ["asset_type", "symbol"],
+      "required": [
+        "asset_type",
+        "symbol"
+      ],
       "properties": {
-        "asset_type": {"enum": ["native", "erc20"]},
-        "symbol": {"type": "string", "pattern": "^[A-Z0-9]{2,12}$"},
-        "token_address": {"$ref": "#/$defs/address"}
+        "asset_type": {
+          "enum": [
+            "native",
+            "erc20"
+          ]
+        },
+        "symbol": {
+          "type": "string",
+          "pattern": "^[A-Z0-9]{2,12}$"
+        },
+        "token_address": {
+          "$ref": "#/$defs/address"
+        }
       },
       "allOf": [
         {
-          "if": {"properties": {"asset_type": {"const": "erc20"}}},
-          "then": {"required": ["token_address"]}
+          "if": {
+            "properties": {
+              "asset_type": {
+                "const": "erc20"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "token_address"
+            ]
+          }
         },
         {
-          "if": {"properties": {"asset_type": {"const": "native"}}},
-          "then": {"not": {"required": ["token_address"]}}
+          "if": {
+            "properties": {
+              "asset_type": {
+                "const": "native"
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "required": [
+                "token_address"
+              ]
+            }
+          }
         }
       ],
       "additionalProperties": false
     },
     "objectSummaryInputs": {
       "type": "object",
-      "required": ["values", "block_number", "include_transaction_fee"],
+      "required": [
+        "values",
+        "block_number",
+        "include_transaction_fee"
+      ],
       "properties": {
         "values": {
           "type": "array",
           "minItems": 1,
-          "items": {"anyOf": [{"type": "string"}, {"type": "integer", "minimum": 0}]}
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "minimum": 0
+              }
+            ]
+          }
         },
-        "block_number": {"type": "integer", "minimum": 0},
-        "include_transaction_fee": {"type": "boolean"}
+        "block_number": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "include_transaction_fee": {
+          "type": "boolean"
+        }
       },
       "additionalProperties": false
     },
     "historicalBalanceInputs": {
       "type": "object",
-      "required": ["subject_address", "block_number", "block_timestamp", "state_semantics", "assets"],
+      "required": [
+        "subject_address",
+        "block_number",
+        "block_timestamp",
+        "state_semantics",
+        "assets"
+      ],
       "properties": {
-        "subject_address": {"$ref": "#/$defs/address"},
-        "block_number": {"type": "integer", "minimum": 0},
-        "block_timestamp": {"type": "integer", "minimum": 0},
-        "state_semantics": {"const": "post_state"},
-        "assets": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/balanceAsset"}}
+        "subject_address": {
+          "$ref": "#/$defs/address"
+        },
+        "block_number": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "block_timestamp": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "state_semantics": {
+          "const": "post_state"
+        },
+        "assets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/balanceAsset"
+          }
+        }
       },
       "additionalProperties": false
     },
     "firstTokenTransferInputs": {
       "type": "object",
-      "required": ["subject_address", "token_address", "start_block", "direction", "exclude_zero", "require_success", "ordering"],
+      "required": [
+        "subject_address",
+        "token_address",
+        "start_block",
+        "direction",
+        "exclude_zero",
+        "require_success",
+        "ordering"
+      ],
       "properties": {
-        "subject_address": {"$ref": "#/$defs/address"},
-        "token_address": {"$ref": "#/$defs/address"},
-        "start_block": {"type": "integer", "minimum": 0},
-        "direction": {"const": "outgoing"},
-        "exclude_zero": {"const": true},
-        "require_success": {"const": true},
-        "ordering": {"const": "block_transaction_log_asc"}
+        "subject_address": {
+          "$ref": "#/$defs/address"
+        },
+        "token_address": {
+          "$ref": "#/$defs/address"
+        },
+        "start_block": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "direction": {
+          "const": "outgoing"
+        },
+        "exclude_zero": {
+          "const": true
+        },
+        "require_success": {
+          "const": true
+        },
+        "ordering": {
+          "const": "block_transaction_log_asc"
+        }
       },
       "additionalProperties": false
     },
     "nativeInflowInputs": {
       "type": "object",
-      "required": ["interest_address", "transaction_hash", "require_trace", "exclude_reverted"],
+      "required": [
+        "interest_address",
+        "transaction_hash",
+        "require_trace",
+        "exclude_reverted"
+      ],
       "properties": {
-        "interest_address": {"$ref": "#/$defs/address"},
-        "transaction_hash": {"$ref": "#/$defs/transactionHash"},
-        "require_trace": {"const": true},
-        "exclude_reverted": {"const": true}
+        "interest_address": {
+          "$ref": "#/$defs/address"
+        },
+        "transaction_hash": {
+          "$ref": "#/$defs/transactionHash"
+        },
+        "require_trace": {
+          "const": true
+        },
+        "exclude_reverted": {
+          "const": true
+        }
       },
       "additionalProperties": false
     },
     "nftActivityInputs": {
       "type": "object",
-      "required": ["token_contract", "subject_address", "standard_hint", "include_approvals"],
+      "required": [
+        "token_contract",
+        "subject_address",
+        "standard_hint",
+        "include_approvals"
+      ],
       "properties": {
-        "token_contract": {"$ref": "#/$defs/address"},
-        "subject_address": {"$ref": "#/$defs/address"},
-        "standard_hint": {"enum": ["erc721", "erc1155", "auto"]},
-        "include_approvals": {"type": "boolean"}
+        "token_contract": {
+          "$ref": "#/$defs/address"
+        },
+        "subject_address": {
+          "$ref": "#/$defs/address"
+        },
+        "standard_hint": {
+          "enum": [
+            "erc721",
+            "erc1155",
+            "auto"
+          ]
+        },
+        "include_approvals": {
+          "type": "boolean"
+        }
       },
       "additionalProperties": false
     },
     "proxyHistoryInputs": {
       "type": "object",
-      "required": ["proxy_address", "pattern_hint", "include_admin", "include_beacon"],
+      "required": [
+        "proxy_address",
+        "pattern_hint",
+        "include_admin",
+        "include_beacon"
+      ],
       "properties": {
-        "proxy_address": {"$ref": "#/$defs/address"},
-        "pattern_hint": {"enum": ["eip1967", "auto"]},
-        "include_admin": {"type": "boolean"},
-        "include_beacon": {"const": false}
+        "proxy_address": {
+          "$ref": "#/$defs/address"
+        },
+        "pattern_hint": {
+          "enum": [
+            "eip1967",
+            "auto"
+          ]
+        },
+        "include_admin": {
+          "type": "boolean"
+        },
+        "include_beacon": {
+          "const": false
+        }
       },
       "additionalProperties": false
     },
@@ -464,7 +778,11 @@
       ],
       "properties": {
         "rule_status": {
-          "enum": ["unconfirmed", "allowed", "restricted"]
+          "enum": [
+            "unconfirmed",
+            "allowed",
+            "restricted"
+          ]
         },
         "allowed_source_ids": {
           "type": "array",

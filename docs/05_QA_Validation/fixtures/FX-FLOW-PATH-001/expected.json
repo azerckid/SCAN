@@ -22,7 +22,8 @@
         "amount_raw": "88752697459828535340019",
         "transaction_hash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
         "block_number": 16818102,
-        "transfer_kind": "native_internal"
+        "transfer_kind": "native_internal",
+        "scope_status": "included"
       },
       {
         "edge_id": "EDGE-PATH-002",
@@ -32,7 +33,8 @@
         "transaction_hash": "0x79c10cf538667a0a7de40ce54d2444c9e9e17b5c62b321e739020df0015baeda",
         "block_number": 16905356,
         "transaction_index": 23,
-        "transfer_kind": "native_top_level"
+        "transfer_kind": "native_top_level",
+        "scope_status": "included"
       },
       {
         "edge_id": "EDGE-PATH-003",
@@ -42,13 +44,18 @@
         "transaction_hash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
         "block_number": 16920430,
         "transaction_index": 55,
-        "transfer_kind": "native_top_level"
+        "transfer_kind": "native_top_level",
+        "scope_status": "included"
       }
     ]
   },
   "path_candidates": [
     {
-      "ordered_edge_ids": ["EDGE-PATH-001", "EDGE-PATH-002", "EDGE-PATH-003"],
+      "ordered_edge_ids": [
+        "EDGE-PATH-001",
+        "EDGE-PATH-002",
+        "EDGE-PATH-003"
+      ],
       "hop_count": 3,
       "terminal_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
       "termination": "selected_terminal_reached"
@@ -78,13 +85,19 @@
         "requirement_id": "REQ-FLOW-PATH-ORDER",
         "description": "Three ETH edges must join in the documented order and terminate at the selected terminal address.",
         "mandatory": true,
-        "evidence_refs": ["EV-FLOW-PATH-INTERNAL", "EV-FLOW-PATH-HOP-2", "EV-FLOW-PATH-HOP-3"]
+        "evidence_refs": [
+          "EV-FLOW-PATH-INTERNAL",
+          "EV-FLOW-PATH-HOP-2",
+          "EV-FLOW-PATH-HOP-3"
+        ]
       },
       {
         "requirement_id": "REQ-FLOW-PATH-SCOPE",
         "description": "Selected-block scope and unresolved seed ledger must remain explicit.",
         "mandatory": true,
-        "evidence_refs": ["EV-FLOW-PATH-SCOPE"]
+        "evidence_refs": [
+          "EV-FLOW-PATH-SCOPE"
+        ]
       }
     ]
   }

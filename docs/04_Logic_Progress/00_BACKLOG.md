@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-30 00:08
-> Status: TASK-001~013 Done · WP-INPUT Done · TASK-014~019 Proposed
+> Last Updated: 2026-07-30
+> Status: TASK-001~013 Done · WP-INPUT Done · TASK-014 In Progress(analyzer 구현·독립 검증 완료, 확정 승격은 단일-trace 게이트 대기) · TASK-015~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1113,7 +1113,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-014: PATH Graph·금액 정합 엔진
 
-- Status: ToDo
+- Status: In Progress — Context Receipt PASS(2026-07-30)·사용자 analyzer 구현 승인(2026-07-30). `flow_path` analyzer 구현 중
 - Work Type: code
 - Priority: Phase 2 · P0
 - Depends On: TASK-012
@@ -1126,8 +1126,14 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] 세 공개 fixture를 replay·oracle·Verifier 후 `verifying`으로 올린다.
   - [x] `flow_path` 대안 B와 bounded node/edge·hop/time·asset conservation 계약을 승인한다.
     (PR #71 검토·병합, [16_TASK_014_FLOW_PATH_IO_CONTRACT](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md)).
-  - [ ] cycle·unrelated fund·residual·budget partial을 구현한다.
-  - [ ] path artifact와 read-only graph 출력 경계를 검증한다.
+  - [x] `flow_path` analyzer(3 query)·domain·result variant를 구현하고 독립
+    Verifier와 canonical hash를 대조한다([검증 Receipt](../05_QA_Validation/43_TASK_014_ANALYZER_VERIFICATION_RECEIPT.md)).
+  - [x] cycle·unrelated fund·residual·budget partial·trace_unavailable을 구현하고
+    회귀 테스트로 고정한다.
+  - [x] path artifact와 read-only graph 출력 경계를 CLI persist/show/partial/
+    resume 통합 테스트로 검증한다.
+  - [ ] 단일-trace 하드 게이트 충족 후 fixture `확정`·Benchmark 자동화 승격을
+    별도 판단한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - FLOW 3문항
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - PATH 18개 필수 근거
@@ -1169,9 +1175,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] Analysis I/O·Workbench·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PREPARED — 참조 문서 정독·Constraints·Conflicts 확정 완료(2026-07-30).
-    `flow_path` 대안 B 계약(doc 16)은 PR #71로 병합됨. **`PASS` 전환과 사용자
-    analyzer 구현 승인은 사용자 명시 행위로 남긴다.** 그 전까지 코드 착수 금지.
+  - Status: PASS — 참조 문서 정독·Constraints·Conflicts 확정(2026-07-30).
+    `flow_path` 대안 B 계약(doc 16) PR #71 병합. 사용자가 2026-07-30
+    "Context Receipt PASS 전환을 승인합니다. TASK-014 analyzer 구현을
+    진행해 주세요"로 PASS 전환과 구현 착수를 명시 승인함.
   - Required References Read:
     - [15 PATH 계약 제안](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) — graph 불변조건, bounded traversal, exclusion·residual 보존식(§7)
     - [16 flow_path I/O 계약 확정안](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md) — request/result variant, ErrorCode 재사용 매핑(§5), scope_status 필수(§8), 단일 trace 하드 게이트(§7), 구현 확장(§9)
@@ -1197,9 +1204,21 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     - (경계 고지) 문제은행 `FLOW-EVM-001`(서비스 라벨 교차검증·최종 도착 서비스)·`FLOW-MULTI-001`(시점 가격 환산 피해액)은 문제 전체 형태이나, `flow_path` v1 fixture는 **raw-path subset만 채점**하고 label/price/서비스 귀속은 `not_assessed`로 유예한다(TASK-015 PRICE/LABEL 연계). 구현·승격 문서에서 이 채점 경계를 명시할 것
     - (예정) doc 16 §9의 scope_status→fixture/verifier/hash 재계산은 구현 시 처리(현재 fixture·verifier는 scope_status 미보유)
 - Change Receipt:
-  - N/A - analyzer 구현 미시작. 본 작업은 Context Receipt 준비(docs-only)와 doc 39 정합 수정에 한정.
+  - `src/scan_tool/domain/{flow_path,analysis_request,analysis_result,_types}.py`,
+    `src/scan_tool/slices/flow_path.py`, `src/scan_tool/application/{cli_runtime,task_014_independent_verifier}.py`,
+    schema 3종, `check_analysis_schema.py`·`check_task_012_analysis_contract_proposal.py`,
+    fixture 3개 `analysis-request.json`(신규)·`expected.json`·`evidence.json`(scope_status·hash),
+    `tests/unit/test_flow_path_slice.py`(18)·`tests/integration/test_flow_path_cli.py`(5),
+    `scripts/verify_task_014_analyzer_independent_verification.py`(verify.py 연결).
+  - 새 공개 `ErrorCode` 추가 없음(기존 enum + stage). `evm_core`·`evm_special`·
+    기존 `0.1` 결과 불변.
 - Verification Receipt:
-  - N/A - analyzer 구현 미시작.
+  - 459 tests PASS, fixture 13, schema 48 probes, traceability 1477 links,
+    security 162 files, TASK-014 negative oracle 18×2·독립 Verifier 3×2·
+    **analyzer 독립 검증 3 fixtures canonical hash 일치** PASS.
+    [TASK-014 Analyzer 검증 Receipt](../05_QA_Validation/43_TASK_014_ANALYZER_VERIFICATION_RECEIPT.md).
+  - Fixture는 `확정`이 아니라 `검증 중` 유지, Benchmark 9/9 유지 — `확정`·
+    자동화 승격은 단일-trace 하드 게이트(doc 16 §7) 이후 별도 판단.
 
 ### [ ] TASK-015: Label·OSINT·Actor Intelligence 엔진
 
