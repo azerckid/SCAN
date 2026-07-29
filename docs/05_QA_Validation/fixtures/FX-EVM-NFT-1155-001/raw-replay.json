@@ -1,0 +1,120 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-EVM-NFT-1155-001",
+  "chain_id": 1,
+  "standard_hint": "erc1155",
+  "captured_at": "2026-07-29T05:58:26Z",
+  "scope": {
+    "kind": "selected_transactions_and_exact_block_windows",
+    "selected_transactions_complete": true,
+    "exact_block_windows_complete": true,
+    "continuous_gap_scanned": false,
+    "block_windows": [
+      {"from": "0x16a94dc", "to": "0x16a94dc"},
+      {"from": "0x1778402", "to": "0x1778402"}
+    ]
+  },
+  "receipts": [
+    {
+      "transaction_hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+      "block_hash": "0x4ed376bdb214dc19788cb52ac78e9f45dac338afe546bcff4f2263d33292ee2a",
+      "block_number": "0x1778402",
+      "transaction_index": "0x147",
+      "status": "0x1"
+    },
+    {
+      "transaction_hash": "0x94fcb6337f5cae9223146caf50f92d9e1af4342ea7cb21bb16792d032e3a230e",
+      "block_hash": "0x075ab753553c27c473ab4d79ac060c6409f0e126c5c0c0da8c32e18dc8cfe672",
+      "block_number": "0x16a94dc",
+      "transaction_index": "0xf3",
+      "status": "0x1"
+    }
+  ],
+  "logs": [
+    {
+      "address": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+      "topics": [
+        "0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62",
+        "0x000000000000000000000000ed2da4a573b3a68f221ff07f0c9343b94d6a2e79",
+        "0x000000000000000000000000b9ea7ef305039447346a8f9b2ecb14240d1cd4bf",
+        "0x000000000000000000000000ed2da4a573b3a68f221ff07f0c9343b94d6a2e79"
+      ],
+      "data": "0x7c01e9fdfa424448e4dcb419fad0c4ca11e7968c0000000000000000000000470000000000000000000000000000000000000000000000000000000000000001",
+      "block_number": "0x1778402",
+      "transaction_hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+      "transaction_index": "0x147",
+      "log_index": "0x409",
+      "removed": false
+    },
+    {
+      "address": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+      "topics": [
+        "0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31",
+        "0x000000000000000000000000ed2da4a573b3a68f221ff07f0c9343b94d6a2e79",
+        "0x000000000000000000000000a6d2351d519c0f5576c18628eed5c69d9943dcd8"
+      ],
+      "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "block_number": "0x1778402",
+      "transaction_hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+      "transaction_index": "0x147",
+      "log_index": "0x40a",
+      "removed": false
+    },
+    {
+      "address": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+      "topics": [
+        "0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62",
+        "0x000000000000000000000000a6d2351d519c0f5576c18628eed5c69d9943dcd8",
+        "0x000000000000000000000000ed2da4a573b3a68f221ff07f0c9343b94d6a2e79",
+        "0x000000000000000000000000a6d2351d519c0f5576c18628eed5c69d9943dcd8"
+      ],
+      "data": "0x7c01e9fdfa424448e4dcb419fad0c4ca11e7968c0000000000000000000000470000000000000000000000000000000000000000000000000000000000000001",
+      "block_number": "0x1778402",
+      "transaction_hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+      "transaction_index": "0x147",
+      "log_index": "0x40b",
+      "removed": false
+    },
+    {
+      "address": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+      "topics": [
+        "0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31",
+        "0x000000000000000000000000ed2da4a573b3a68f221ff07f0c9343b94d6a2e79",
+        "0x000000000000000000000000a6d2351d519c0f5576c18628eed5c69d9943dcd8"
+      ],
+      "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "block_number": "0x1778402",
+      "transaction_hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+      "transaction_index": "0x147",
+      "log_index": "0x40e",
+      "removed": false
+    },
+    {
+      "address": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+      "topics": [
+        "0x4a39dc06d4c0dbc64b70af90fd698a233a518aa5d07e595d983b8c0526c8f7fb",
+        "0x0000000000000000000000007730c56f6f8cae7afe82beaad3484fba50a7668b",
+        "0x0000000000000000000000007730c56f6f8cae7afe82beaad3484fba50a7668b",
+        "0x00000000000000000000000072b69c619ba17e9ef5c3764dec89c0ac1ec0345e"
+      ],
+      "data": "0x000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002d934355fb6e743d07688b7711c9ffb55b9657b5500000000000000000000000ed934355fb6e743d07688b7711c9ffb55b9657b55000000000000000000000001000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001",
+      "block_number": "0x16a94dc",
+      "transaction_hash": "0x94fcb6337f5cae9223146caf50f92d9e1af4342ea7cb21bb16792d032e3a230e",
+      "transaction_index": "0xf3",
+      "log_index": "0x286",
+      "removed": false
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "provider-evm-primary",
+      "retrieved_at": "2026-07-29T05:58:25Z"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "provider-evm-verify",
+      "retrieved_at": "2026-07-29T05:58:26Z"
+    }
+  ]
+}

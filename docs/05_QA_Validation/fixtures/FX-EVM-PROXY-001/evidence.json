@@ -4,7 +4,7 @@
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-PROXY-001",
   "status": "candidate",
-  "captured_at": "2026-07-29T05:38:10Z",
+  "captured_at": "2026-07-29T05:58:29Z",
   "event_evidence": [
     {
       "evidence_id": "EV-PROXY-UPGRADED",
@@ -70,25 +70,36 @@
       "source_id": "DS-EVM-RPC-ARCHIVE",
       "provider": "PROVIDER-EVM-PRIMARY",
       "retrieved_at": "2026-07-29T05:38:10Z",
-      "methods": ["eth_getTransactionReceipt", "eth_getStorageAt"]
+      "methods": [
+        "eth_getTransactionReceipt",
+        "eth_getLogs",
+        "eth_getStorageAt"
+      ]
     },
     {
       "source_id": "DS-EVM-RPC-ARCHIVE",
       "provider": "PROVIDER-EVM-VERIFY",
       "retrieved_at": "2026-07-29T05:38:10Z",
-      "methods": ["eth_getTransactionReceipt", "eth_getStorageAt"]
+      "methods": [
+        "eth_getTransactionReceipt",
+        "eth_getLogs",
+        "eth_getStorageAt"
+      ]
     }
   ],
   "consistency_checks": {
     "two_provider_decoded_match": true,
     "receipt_status_success": true,
+    "raw_sha256_recorded_per_capability": true,
+    "selected_upgrade_scope_complete": true,
+    "wider_history_scanned": false,
     "implementation_changed": true,
     "event_matches_after_state": true,
     "admin_remained_zero": true
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Raw replay SHA-256, wider history completeness, negative oracle, Schema/UI approval, and independent verifier are not complete"
+    "remaining": "Negative oracle, Analysis I/O/UI approval, and independent verifier are not complete. Wider upgrade history is outside this selected-upgrade fixture scope."
   },
   "provenance_notes": "Etherscan was used only to discover the public upgrade transaction. Scoring event and storage values were independently read from two archive RPC providers."
 }

@@ -1,7 +1,7 @@
 # TASK-013 NFT·Proxy 분석 계약 제안
 > Created: 2026-07-29
-> Last Updated: 2026-07-29 14:50
-> Status: Candidate Fixtures Selected · Contract Proposed · Implementation Not Approved
+> Last Updated: 2026-07-29 15:05
+> Status: Candidate Replay Gate Passed · Contract Proposed · Implementation Not Approved
 
 ## 1. 목적
 
@@ -20,7 +20,7 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 | TASK-012 EVM Core | Done · Analysis I/O 0.2 | raw log/state 입력 재사용 |
 | EVM-NFT-001 | Assisted | fixture·계약 후보만 정의 |
 | EVM-PROXY-001 | Assisted | fixture·계약 후보만 정의 |
-| NFT·Proxy fixture | 공개 사례 3개 선정 · `candidate` | 두 공급자 receipt/storage 기본 일치, 승격 Gate 유지 |
+| NFT·Proxy fixture | 공개 사례 3개 · replay Gate 통과 · `candidate` | raw SHA·exact scope 통과, negative/Verifier Gate 유지 |
 | Analysis I/O | 0.2 적용, 0.1 호환 | 변경하지 않음 |
 | Python runtime | NFT·Proxy analyzer 없음 | 구현하지 않음 |
 | UI | 공통 CLI Preview 존재 | TASK-013 전용 Preview는 별도 승인 |
@@ -83,23 +83,26 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 | [`FX-EVM-NFT-1155-001`](../05_QA_Validation/fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | Rarible TransferSingle·TransferBatch·ApprovalForAll과 ids/values exact 배열 | candidate |
 | [`FX-EVM-PROXY-001`](../05_QA_Validation/fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | Aave V3 Pool EIP-1967 slot before/after·Upgraded event·admin zero | candidate |
 
-`candidate`는 공개 주소·TX·block과 expected/evidence 골격을 채우고 두
-논리 공급자의 receipt 또는 historical storage가 일치했다는 뜻이다.
-filtered range completeness, raw replay SHA-256, negative oracle, 독립
-Verifier가 남아 있으므로 `verifying`이나 `confirmed`로 부르지 않는다.
+`candidate`는 공개 주소·TX·block과 expected/evidence 골격, 두 논리
+공급자의 raw SHA·receipt/log/storage replay가 일치했다는 뜻이다.
+범위 완전성은 명시한 selected transaction·exact block window 또는
+selected upgrade·adjacent state에만 적용한다. negative oracle, 독립
+Verifier, UI·계약 승인이 남아 있으므로 `verifying`이나 `confirmed`로
+부르지 않는다.
 
 ### 4.1 공통 승격 Gate
 
 - [x] 주소·TX·block 범위를 공개 자료에서 선정
 - [x] 두 논리 RPC 공급자의 receipt 또는 historical storage decoded 값 일치
-- [ ] `external_rpc`와 저장 raw replay에서 같은 normalized evidence 생성
-- [ ] raw SHA-256, method·params·block tag, retrieved_at과 provider role 기록
-- [ ] expected를 복사하지 않고 raw topic/data/storage에서 reference answer 계산
+- [x] `external_rpc`와 저장 raw replay에서 같은 normalized evidence 생성
+- [x] raw SHA-256, method·params·block tag, retrieved_at과 provider role 기록
+- [x] replay integrity checker가 raw topic/data/storage에서 expected 핵심 값을 재계산
 - [ ] 같은 signature의 무관 log, malformed ABI, 범위 누락 반례 포함
 - [ ] complete·partial·failed가 두 번 결정적으로 재현
-- [ ] result→evidence→source 참조 무결성 통과
+- [x] fixture의 requirement→evidence→source 참조 무결성 통과
 - [ ] 독립 Verifier가 필수 값을 다시 계산
-- [ ] fixture Schema와 사용자 UI Gate 통과
+- [x] fixture Schema 통과
+- [ ] 사용자 UI Gate 통과
 
 ## 5. Analysis I/O 제안
 
@@ -225,9 +228,9 @@ storage snapshot은 명시 block tag와 함께 비교한다.
 
 ## 10. 다음 Gate
 
-1. 세 candidate fixture의 filtered range와 raw replay를 작성한다.
-2. raw SHA-256과 provider replay provenance를 고정한다.
-3. 반례·독립 재현 후에만 fixture 승격을 판단한다.
+1. 세 candidate fixture의 negative oracle을 작성한다.
+2. complete·partial·failed를 두 번 결정적으로 재현한다.
+3. 독립 Verifier 통과 후에만 fixture 승격을 판단한다.
 4. Analysis I/O 대안과 전용 Preview를 사용자에게 제시한다.
 5. Context Receipt와 별도 구현 승인을 받은 뒤 Python decoder를 시작한다.
 

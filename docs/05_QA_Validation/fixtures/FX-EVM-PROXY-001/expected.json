@@ -26,7 +26,7 @@
   },
   "partial_conditions": [
     "Upgraded event is available but one historical storage block is unavailable",
-    "Storage change is exact but the requested wider history range is incomplete"
+    "Storage change is exact but the selected upgrade transaction or adjacent-state scope is incomplete"
   ],
   "failed_conditions": [
     "Latest storage is substituted for the before block",

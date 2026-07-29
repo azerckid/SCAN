@@ -1,0 +1,59 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-EVM-PROXY-001",
+  "captured_at": "2026-07-29T05:58:29Z",
+  "status": "candidate",
+  "scope_kind": "selected_upgrade_transaction_and_adjacent_state",
+  "request_scope": {
+    "proxy": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+    "transaction": "0xe9949c36e86fc9f481897dbac8de33d655bff20b267955a303e2e5643fbc2b35",
+    "block_tags": ["0x1808542", "0x1808543"],
+    "methods": [
+      "eth_getTransactionReceipt",
+      "eth_getLogs",
+      "eth_getStorageAt"
+    ],
+    "slots": [
+      "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+      "0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103"
+    ],
+    "upgraded_topic0": "0xbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b"
+  },
+  "providers": [
+    {
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T05:58:27Z",
+      "raw_sha256": {
+        "upgrade_receipt": "88adfad979338b3e6e39b44441613ce3ee6788e588d38f8496e1dc9ab8abbb7c",
+        "upgraded_logs": "969f9ca3f5adfcbbd88b6d31ce1d44e1c7df8631b5d49cd2e455188c9b23606a",
+        "implementation_before": "7a377aa3917bdf4efa33927a07eecd216960e381e5a7dbffdb368630b05ea06b",
+        "implementation_after": "aec0cbafd7f11b77a08b64642b833e48dab75b394fa739d3d334abfd7b65b194",
+        "admin_before": "29e9e2984794042a7b032aaced108b942d1809d049bfe9e0e2be92749d7bbe17",
+        "admin_after": "29e9e2984794042a7b032aaced108b942d1809d049bfe9e0e2be92749d7bbe17"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T05:58:29Z",
+      "raw_sha256": {
+        "upgrade_receipt": "c81221553166b5eb4b9b54083fe0e3bf058a05ed66cc5f0665dc252459a65a5b",
+        "upgraded_logs": "bf782c01a16448f5a6dd463319426f1fff070de2b23c8eac0f14a4ec4ffdf854",
+        "implementation_before": "50047d8c8e32844f22190b467ff6036e638806405108ee27f889629cd64527a1",
+        "implementation_after": "e9acacb979e9b1cdccac963cfac013221ffd81dbbfe7bb6ac5be8c9b3013f2d1",
+        "admin_before": "d6270a96c74e698681cb7c0012a25d17a018228bca3a631fd19a384e561ca22a",
+        "admin_after": "d6270a96c74e698681cb7c0012a25d17a018228bca3a631fd19a384e561ca22a"
+      }
+    }
+  ],
+  "decoded_match": true,
+  "upgrade_event_matches_after_state": true,
+  "adjacent_state_scope_complete": true,
+  "wider_history_scanned": false,
+  "remaining_gate": [
+    "negative oracle",
+    "independent verifier",
+    "Analysis I/O and UI approval"
+  ]
+}

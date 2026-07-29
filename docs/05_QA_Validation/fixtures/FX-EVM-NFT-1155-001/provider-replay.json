@@ -1,0 +1,56 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-EVM-NFT-1155-001",
+  "captured_at": "2026-07-29T05:58:26Z",
+  "status": "candidate",
+  "scope_kind": "selected_transactions_and_exact_block_windows",
+  "request_scope": {
+    "contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+    "transactions": [
+      "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+      "0x94fcb6337f5cae9223146caf50f92d9e1af4342ea7cb21bb16792d032e3a230e"
+    ],
+    "block_tags": ["0x1778402", "0x16a94dc"],
+    "methods": ["eth_getTransactionReceipt", "eth_getLogs"],
+    "filtered_topic0": [
+      "0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62",
+      "0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31",
+      "0x4a39dc06d4c0dbc64b70af90fd698a233a518aa5d07e595d983b8c0526c8f7fb"
+    ]
+  },
+  "providers": [
+    {
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T05:58:25Z",
+      "raw_sha256": {
+        "single_receipt": "69e90954bd4fae0db5029fd61b148bb974dfe0f4048ce492e986694862f8bd00",
+        "batch_receipt": "47f6f6ef8aa5ec2f0d9d28aea9f1f2df4e350a8a20c984c3df4aeaee493ddc38",
+        "single_logs": "8c3cfcdf7d5232805023757c208570428b583d3d342a7809e4bce1a8b00bb222",
+        "approval_for_all_logs": "4c42a3540d53c1caf5086aea5f1fbf1a97a709771338db4341bed18b59c95ffa",
+        "batch_logs": "92d36a00f5dbb00b3317749371434742483396c002c5ec61457b1a5603ccfb04"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T05:58:26Z",
+      "raw_sha256": {
+        "single_receipt": "28a1aae62b234c04cdf325ced48b101b0d15634fb06e138d44f229db3a9391bc",
+        "batch_receipt": "9629c585262238ba6a99aeb0be4a3fe3476ed7a02f578184aff35ec14e63782d",
+        "single_logs": "310ed6e1c16b31adfb9251bced7fbb7f970c66c2cfd324e0439951b054570165",
+        "approval_for_all_logs": "1cc83bf660f9e758cbc5d80cb839afeb171f075b5ea97f72afc9cf29aff01cac",
+        "batch_logs": "d5bcec6598bdff83e03449edb7c81cbe44a02adc46bf9c2687e2e62b142bac3d"
+      }
+    }
+  ],
+  "decoded_match": true,
+  "selected_transaction_scope_complete": true,
+  "exact_block_window_logs_match_receipts": true,
+  "continuous_gap_scanned": false,
+  "remaining_gate": [
+    "negative oracle",
+    "independent verifier",
+    "Analysis I/O and UI approval"
+  ]
+}

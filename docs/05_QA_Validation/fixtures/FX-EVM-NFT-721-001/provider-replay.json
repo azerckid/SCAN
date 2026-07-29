@@ -1,0 +1,68 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-EVM-NFT-721-001",
+  "captured_at": "2026-07-29T05:58:23Z",
+  "status": "candidate",
+  "scope_kind": "selected_transactions_and_exact_block_windows",
+  "request_scope": {
+    "contract": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+    "subject_topic": "0x00000000000000000000000028dda46bdc0aeb3b4e58e6a9a3774875729367a0",
+    "transactions": [
+      "0x4501b47b05689704ee2c2524bc9cb69bcbea0ca3ab71f2a4fc6db97d71af9379",
+      "0x07ae8c28ff8109cbe3051308ecd00568ee5539d40c72154ad3412bbe14a727d7"
+    ],
+    "block_tags": ["0x17d9aba", "0x17dd41c"],
+    "methods": ["eth_getTransactionReceipt", "eth_getLogs"],
+    "filtered_topic0": [
+      "0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31",
+      "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925",
+      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+    ]
+  },
+  "providers": [
+    {
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T05:57:49Z",
+      "raw_sha256": {
+        "approval_receipt": "94381bfa972a67ae4af73071fffd26d80ddd4e9dd946396b7e85d8915bce4520",
+        "transfer_receipt": "eea7c1d142a0c5e824f76fafa5a2669d1ac1db03d0d0701f7f15ae0926ae13cf",
+        "approval_for_all_logs": "235ebcdcda19e81cf217ba93634664adca56ccc2a30744a7856893fa3507896d",
+        "approval_logs": "84e4abe3e4155d79285fc199f290adf98df1948bb70236c223f02e90b71468d3",
+        "transfer_logs": "01ba5bd86db8f5accf52ee560c0c34963affe17bf135caa84b7f5eb8c6bb56ff"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T05:58:23Z",
+      "raw_sha256": {
+        "approval_receipt": "2c62a65c4373625a79843ce324a9114147c3051b5870a1a7328232c6e594e8a6",
+        "transfer_receipt": "7dd00560e8ed2091668929c70f017513b16757f223f1e353f2d8256e5e2d07c1",
+        "approval_for_all_logs": "ab12299c227f57a3280f5e47398ff6d4d161bec21b97f84f7f7aa54b7cbef9ba",
+        "approval_logs": "d4603ea0690cd4e06ef1980efdd8ed67b547183a114e601cfe032f7f4bdf8a36",
+        "transfer_logs": "a27546644e8cd35081b55b2ead86bec15bb18f00d228916c7b6051748d713910"
+      }
+    }
+  ],
+  "decoded_match": true,
+  "selected_transaction_scope_complete": true,
+  "exact_block_window_logs_match_receipts": true,
+  "continuous_gap_scanned": false,
+  "verification_runs": [
+    {
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "result": "complete_after_retry",
+      "note": "Initial transfer receipt call returned HTTP 429; the bounded retry completed all five requests."
+    },
+    {
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "result": "complete"
+    }
+  ],
+  "remaining_gate": [
+    "negative oracle",
+    "independent verifier",
+    "Analysis I/O and UI approval"
+  ]
+}

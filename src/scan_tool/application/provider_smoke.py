@@ -49,6 +49,7 @@ SMOKE_METHODS = frozenset(
 READ_ONLY_METHODS = SMOKE_METHODS | {
     "eth_getCode",
     "eth_getBalance",
+    "eth_getStorageAt",
     "trace_transaction",
 }
 type SummaryDecoder = Callable[[JsonRpcSourceRequest, bytes], object]
