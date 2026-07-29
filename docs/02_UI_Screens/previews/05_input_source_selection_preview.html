@@ -209,9 +209,12 @@
       <pre>ProblemRecord(provided_urls, provided_file_artifacts[sha256], answer_format)
       │  Operator가 input_mode · chain_scope 선택
       ▼
-input adapter / importer  ──>  raw bytes를 content-addressed artifact로 저장
-      │                              │ artifact://sha256/&lt;raw_sha256&gt;
-      ▼                              ▼
+input adapter / importer  ──>  raw bytes 보존
+      │                       크기 · secret · format · chain 검사
+      ▼                              │ 성공 뒤 artifact 저장
+NormalizedEvidenceBundle            ▼ artifact://sha256/&lt;raw_sha256&gt;
+      └──────────────┬───────────────┘
+                     ▼
 InputEvidenceEnvelope { bundle, raw_artifact_uri }
       │                              │ artifact bytes 로드
       ▼                              ▼

@@ -1,6 +1,6 @@
 # WP-INPUT-GATE CLI·Operations 연결 계약
 > Created: 2026-07-29 12:20
-> Last Updated: 2026-07-29 12:20
+> Last Updated: 2026-07-29 12:38
 > Status: Proposed 0.1 · Docs-Only · CLI·Operations 구현 승인 대기
 
 ## 1. 목적
@@ -93,7 +93,7 @@ URL path가 credential인 경우 포함)는 그 환경변수에서 읽는다. �
 
 ```bash
 # 주최 제공 read-only RPC (endpoint 값은 환경변수에만 존재)
-export SCAN_CONTEST_RPC_ENDPOINT="https://…"   # shell 밖에서 설정
+# SCAN_CONTEST_RPC_ENDPOINT는 ignored local env 또는 secret store에서 사전 주입
 scan analyze --request requests/evm_core.json \
   --input-mode contest_rpc --chain-scope evm \
   --contest-rpc-endpoint-env SCAN_CONTEST_RPC_ENDPOINT
@@ -148,9 +148,13 @@ scan analyze --request requests/evm_core.json \
 않는다. 따라서 bundle 하나만으로는 `ApprovedReplay(body, sha256)`를 만들 수
 없다. 이 계약은 다음을 명시한다.
 
-- ingest 시점에 원본 bytes를 확보한다. `contest_rpc`/`external_rpc`는
+- ingest 시점에 원본 bytes를 확보하고 정규화가 끝날 때까지 호출자 범위에서
+  보존한다. `contest_rpc`/`external_rpc`는
   `SourcePayload.raw_bytes`, `provided_artifact`는 읽은 파일 bytes다.
-- 원본 bytes를 정규화 **전에** content-addressed artifact로 저장한다. URI는
+- raw bytes에 입력 크기 한도와 `SensitiveDataGuard`를 먼저 적용하고, 파싱·
+  chain scope 검사를 포함한 정규화가 성공해야 저장 단계로 이동한다. 실패한
+  입력 bytes는 artifact에 남기지 않는다.
+- 정규화 성공 뒤 원본 bytes를 content-addressed artifact로 저장한다. URI는
   `artifact://sha256/<raw_sha256>`이며 저장된 hash는 `bundle.raw_sha256`과
   같아야 한다.
 - bundle과 그 raw artifact reference를 하나의 `InputEvidenceEnvelope`로 묶어
@@ -162,7 +166,7 @@ InputEvidenceEnvelope
   raw_artifact_uri: "artifact://sha256/<raw_sha256>"   # 원본 bytes 참조
 ```
 
-`ApprovedReplay.body`는 정규화 전에 저장한 raw artifact의 bytes를 읽어
+`ApprovedReplay.body`는 정규화 성공 뒤 저장한 raw artifact의 bytes를 읽어
 채우고, `ApprovedReplay.sha256`은 `envelope.bundle.raw_sha256`
 (= `raw_artifact_uri`의 sha256)이다. `EvidenceWorkerService`의 기존 hash
 검증(`sha256(body) == sha256`)이 그대로 적용된다.
@@ -178,9 +182,12 @@ ProblemRecord
   (provided_urls, provided_file_artifacts[sha256], answer_format)
       │  Operator가 input_mode·chain_scope 선택
       ▼
-input adapter/importer (§5)  ──> raw bytes를 content-addressed artifact로 저장
-      │                                    │ artifact://sha256/<raw_sha256>
-      ▼                                    ▼
+input adapter/importer (§5)  ──> raw bytes 보존
+      │                         크기·secret·format·chain 검사
+      ▼                                    │ 성공 뒤 저장
+NormalizedEvidenceBundle                    ▼ artifact://sha256/<raw_sha256>
+      └───────────────────────┬──────────────┘
+                              ▼
 InputEvidenceEnvelope { bundle, raw_artifact_uri }
       │                                    │ artifact bytes 로드
       ▼                                    ▼

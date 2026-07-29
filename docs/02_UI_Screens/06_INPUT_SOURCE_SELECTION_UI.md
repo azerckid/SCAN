@@ -1,6 +1,6 @@
 # 입력 소스 선택 UI (WP-INPUT-GATE)
 > Created: 2026-07-29 12:20
-> Last Updated: 2026-07-29 12:20
+> Last Updated: 2026-07-29 12:38
 > Status: Proposed 0.1 · HTML Preview 작성 · 사용자 UI-First Gate 대기
 
 ## 1. 문서 목적
@@ -18,7 +18,7 @@ Analysis I/O `0.1`과 기존 CLI V1 화면(SCREEN_FLOW 1.5)은 변경하지 않�
 
 | 화면 | 목적 | 표시 데이터 |
 |:---|:---|:---|
-| Input source selector | 모드·체인 범위·입력 소스 선택 | input_mode, chain_scope, endpoint(마스킹), artifact 파일·형식 |
+| Input source selector | 모드·체인 범위·입력 소스 선택 | input_mode, chain_scope, endpoint 환경변수 이름, artifact 파일·형식 |
 | CLI 진행·결과 | 입력 출처·record·상태 표시 | STARTING/INPUT progress, complete·partial·failed |
 | Operations 입력 배지 | 문제별 입력 모드·체인 표시 | input_mode 배지, chain_scope, source health |
 
