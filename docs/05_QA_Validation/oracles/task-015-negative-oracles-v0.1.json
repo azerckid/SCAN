@@ -1,0 +1,217 @@
+{
+  "schema_version": "0.1",
+  "status": "verified",
+  "execution_mode": "synthetic_offline",
+  "cases": [
+    {
+      "oracle_id": "OR-INTEL-LABEL-SUBJECT-SWAP",
+      "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+      "category": "label_conflict",
+      "facts": {"subject_matches": false, "selected_row_hash_matches": true, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
+      "expected": {"outcome": "failed", "classification": "subject_mismatch"}
+    },
+    {
+      "oracle_id": "OR-INTEL-LABEL-ROW-HASH-MISMATCH",
+      "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+      "category": "label_conflict",
+      "facts": {"subject_matches": true, "selected_row_hash_matches": false, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
+      "expected": {"outcome": "failed", "classification": "source_integrity_failed"}
+    },
+    {
+      "oracle_id": "OR-INTEL-LABEL-AUTO-MERGE",
+      "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+      "category": "label_conflict",
+      "facts": {"subject_matches": true, "selected_row_hash_matches": true, "auto_merged": true, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
+      "expected": {"outcome": "failed", "classification": "source_assertion_merged"}
+    },
+    {
+      "oracle_id": "OR-INTEL-LABEL-TRUTH-PROMOTION",
+      "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+      "category": "label_conflict",
+      "facts": {"subject_matches": true, "selected_row_hash_matches": true, "auto_merged": false, "ownership_promoted": true, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
+      "expected": {"outcome": "failed", "classification": "unsupported_truth_promotion"}
+    },
+    {
+      "oracle_id": "OR-INTEL-LABEL-ENS-MISSING",
+      "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+      "category": "label_conflict",
+      "facts": {"subject_matches": true, "selected_row_hash_matches": true, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": false},
+      "expected": {"outcome": "partial", "classification": "source_unavailable"}
+    },
+    {
+      "oracle_id": "OR-INTEL-LABEL-VALID-CONFLICT",
+      "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+      "category": "label_conflict",
+      "facts": {"subject_matches": true, "selected_row_hash_matches": true, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
+      "expected": {"outcome": "complete", "classification": "label_conflict"}
+    },
+    {
+      "oracle_id": "OR-INTEL-SAN-INDIRECT-AS-DIRECT",
+      "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+      "category": "sanctions_history",
+      "facts": {"direct_address_match": false, "timeline_ordered": true, "current_status_promoted": false, "criminality_promoted": false, "designation_available": true, "removal_available": true},
+      "expected": {"outcome": "failed", "classification": "direct_match_mismatch"}
+    },
+    {
+      "oracle_id": "OR-INTEL-SAN-REMOVAL-MISSING",
+      "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+      "category": "sanctions_history",
+      "facts": {"direct_address_match": true, "timeline_ordered": true, "current_status_promoted": false, "criminality_promoted": false, "designation_available": true, "removal_available": false},
+      "expected": {"outcome": "partial", "classification": "source_unavailable"}
+    },
+    {
+      "oracle_id": "OR-INTEL-SAN-TIMELINE-REVERSED",
+      "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+      "category": "sanctions_history",
+      "facts": {"direct_address_match": true, "timeline_ordered": false, "current_status_promoted": false, "criminality_promoted": false, "designation_available": true, "removal_available": true},
+      "expected": {"outcome": "failed", "classification": "timeline_reconciliation_failed"}
+    },
+    {
+      "oracle_id": "OR-INTEL-SAN-STALE-CURRENT",
+      "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+      "category": "sanctions_history",
+      "facts": {"direct_address_match": true, "timeline_ordered": true, "current_status_promoted": true, "criminality_promoted": false, "designation_available": true, "removal_available": true},
+      "expected": {"outcome": "failed", "classification": "stale_status_promotion"}
+    },
+    {
+      "oracle_id": "OR-INTEL-SAN-CRIMINALITY-PROMOTION",
+      "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+      "category": "sanctions_history",
+      "facts": {"direct_address_match": true, "timeline_ordered": true, "current_status_promoted": false, "criminality_promoted": true, "designation_available": true, "removal_available": true},
+      "expected": {"outcome": "failed", "classification": "unsupported_truth_promotion"}
+    },
+    {
+      "oracle_id": "OR-INTEL-SAN-VALID-HISTORY",
+      "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+      "category": "sanctions_history",
+      "facts": {"direct_address_match": true, "timeline_ordered": true, "current_status_promoted": false, "criminality_promoted": false, "designation_available": true, "removal_available": true},
+      "expected": {"outcome": "complete", "classification": "sanctions_history"}
+    },
+    {
+      "oracle_id": "OR-INTEL-ENS-SUBJECT-SWAP",
+      "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+      "category": "ens_resolution",
+      "facts": {"subject_matches": false, "latest_substituted": false, "ownership_promoted": false, "forward_available": true, "reverse_available": true, "forward_reverse_match": true},
+      "expected": {"outcome": "failed", "classification": "subject_mismatch"}
+    },
+    {
+      "oracle_id": "OR-INTEL-ENS-FORWARD-MISSING",
+      "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+      "category": "ens_resolution",
+      "facts": {"subject_matches": true, "latest_substituted": false, "ownership_promoted": false, "forward_available": false, "reverse_available": true, "forward_reverse_match": true},
+      "expected": {"outcome": "partial", "classification": "source_unavailable"}
+    },
+    {
+      "oracle_id": "OR-INTEL-ENS-MISMATCH",
+      "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+      "category": "ens_resolution",
+      "facts": {"subject_matches": true, "latest_substituted": false, "ownership_promoted": false, "forward_available": true, "reverse_available": true, "forward_reverse_match": false},
+      "expected": {"outcome": "failed", "classification": "ens_resolution_conflict"}
+    },
+    {
+      "oracle_id": "OR-INTEL-ENS-LATEST-SUBSTITUTION",
+      "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+      "category": "ens_resolution",
+      "facts": {"subject_matches": true, "latest_substituted": true, "ownership_promoted": false, "forward_available": true, "reverse_available": true, "forward_reverse_match": true},
+      "expected": {"outcome": "failed", "classification": "historical_state_mismatch"}
+    },
+    {
+      "oracle_id": "OR-INTEL-ENS-OWNERSHIP-PROMOTION",
+      "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+      "category": "ens_resolution",
+      "facts": {"subject_matches": true, "latest_substituted": false, "ownership_promoted": true, "forward_available": true, "reverse_available": true, "forward_reverse_match": true},
+      "expected": {"outcome": "failed", "classification": "unsupported_truth_promotion"}
+    },
+    {
+      "oracle_id": "OR-INTEL-ENS-VALID-BINDING",
+      "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+      "category": "ens_resolution",
+      "facts": {"subject_matches": true, "latest_substituted": false, "ownership_promoted": false, "forward_available": true, "reverse_available": true, "forward_reverse_match": true},
+      "expected": {"outcome": "complete", "classification": "ens_resolution"}
+    },
+    {
+      "oracle_id": "OR-INTEL-FUNDER-NONSEED-INCLUDED",
+      "fixture_id": "FX-ACTOR-COMMON-FUNDER-001",
+      "category": "common_funder",
+      "facts": {"nonseed_inflow_included": true, "amounts_match": true, "ownership_promoted": false, "coordination_promoted": false, "prehistory_complete": true, "service_exclusion_complete": true},
+      "expected": {"outcome": "failed", "classification": "relation_scope_mismatch"}
+    },
+    {
+      "oracle_id": "OR-INTEL-FUNDER-AMOUNT-MISMATCH",
+      "fixture_id": "FX-ACTOR-COMMON-FUNDER-001",
+      "category": "common_funder",
+      "facts": {"nonseed_inflow_included": false, "amounts_match": false, "ownership_promoted": false, "coordination_promoted": false, "prehistory_complete": true, "service_exclusion_complete": true},
+      "expected": {"outcome": "failed", "classification": "amount_reconciliation_failed"}
+    },
+    {
+      "oracle_id": "OR-INTEL-FUNDER-PREHISTORY-MISSING",
+      "fixture_id": "FX-ACTOR-COMMON-FUNDER-001",
+      "category": "common_funder",
+      "facts": {"nonseed_inflow_included": false, "amounts_match": true, "ownership_promoted": false, "coordination_promoted": false, "prehistory_complete": false, "service_exclusion_complete": true},
+      "expected": {"outcome": "partial", "classification": "prehistory_unavailable"}
+    },
+    {
+      "oracle_id": "OR-INTEL-FUNDER-SERVICE-UNKNOWN",
+      "fixture_id": "FX-ACTOR-COMMON-FUNDER-001",
+      "category": "common_funder",
+      "facts": {"nonseed_inflow_included": false, "amounts_match": true, "ownership_promoted": false, "coordination_promoted": false, "prehistory_complete": true, "service_exclusion_complete": false},
+      "expected": {"outcome": "partial", "classification": "service_exclusion_unavailable"}
+    },
+    {
+      "oracle_id": "OR-INTEL-FUNDER-OWNERSHIP-PROMOTION",
+      "fixture_id": "FX-ACTOR-COMMON-FUNDER-001",
+      "category": "common_funder",
+      "facts": {"nonseed_inflow_included": false, "amounts_match": true, "ownership_promoted": true, "coordination_promoted": false, "prehistory_complete": true, "service_exclusion_complete": true},
+      "expected": {"outcome": "failed", "classification": "unsupported_truth_promotion"}
+    },
+    {
+      "oracle_id": "OR-INTEL-FUNDER-VALID-CANDIDATE",
+      "fixture_id": "FX-ACTOR-COMMON-FUNDER-001",
+      "category": "common_funder",
+      "facts": {"nonseed_inflow_included": false, "amounts_match": true, "ownership_promoted": false, "coordination_promoted": false, "prehistory_complete": true, "service_exclusion_complete": true},
+      "expected": {"outcome": "complete", "classification": "common_funder_candidate"}
+    },
+    {
+      "oracle_id": "OR-INTEL-HUB-SOURCE-MISSING",
+      "fixture_id": "FX-ACTOR-RELATION-HUB-001",
+      "category": "relation_hub",
+      "facts": {"subjects_distinct": true, "ownership_promoted": false, "coordination_promoted": false, "hub_excluded": true, "both_relations_available": false, "public_hub_role_confirmed": true},
+      "expected": {"outcome": "partial", "classification": "source_unavailable"}
+    },
+    {
+      "oracle_id": "OR-INTEL-HUB-SUBJECT-MERGED",
+      "fixture_id": "FX-ACTOR-RELATION-HUB-001",
+      "category": "relation_hub",
+      "facts": {"subjects_distinct": false, "ownership_promoted": false, "coordination_promoted": false, "hub_excluded": true, "both_relations_available": true, "public_hub_role_confirmed": true},
+      "expected": {"outcome": "failed", "classification": "subject_merge"}
+    },
+    {
+      "oracle_id": "OR-INTEL-HUB-PUBLIC-ROLE-UNKNOWN",
+      "fixture_id": "FX-ACTOR-RELATION-HUB-001",
+      "category": "relation_hub",
+      "facts": {"subjects_distinct": true, "ownership_promoted": false, "coordination_promoted": false, "hub_excluded": true, "both_relations_available": true, "public_hub_role_confirmed": false},
+      "expected": {"outcome": "partial", "classification": "hub_role_unavailable"}
+    },
+    {
+      "oracle_id": "OR-INTEL-HUB-NOT-EXCLUDED",
+      "fixture_id": "FX-ACTOR-RELATION-HUB-001",
+      "category": "relation_hub",
+      "facts": {"subjects_distinct": true, "ownership_promoted": false, "coordination_promoted": false, "hub_excluded": false, "both_relations_available": true, "public_hub_role_confirmed": true},
+      "expected": {"outcome": "failed", "classification": "public_hub_false_positive"}
+    },
+    {
+      "oracle_id": "OR-INTEL-HUB-TRUTH-PROMOTION",
+      "fixture_id": "FX-ACTOR-RELATION-HUB-001",
+      "category": "relation_hub",
+      "facts": {"subjects_distinct": true, "ownership_promoted": false, "coordination_promoted": true, "hub_excluded": true, "both_relations_available": true, "public_hub_role_confirmed": true},
+      "expected": {"outcome": "failed", "classification": "unsupported_truth_promotion"}
+    },
+    {
+      "oracle_id": "OR-INTEL-HUB-VALID-EXCLUSION",
+      "fixture_id": "FX-ACTOR-RELATION-HUB-001",
+      "category": "relation_hub",
+      "facts": {"subjects_distinct": true, "ownership_promoted": false, "coordination_promoted": false, "hub_excluded": true, "both_relations_available": true, "public_hub_role_confirmed": true},
+      "expected": {"outcome": "complete", "classification": "public_hub_exclusion"}
+    }
+  ]
+}

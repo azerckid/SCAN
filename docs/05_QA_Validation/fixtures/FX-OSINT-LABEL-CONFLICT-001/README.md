@@ -1,7 +1,7 @@
 # Fixture: FX-OSINT-LABEL-CONFLICT-001
 > Created: 2026-07-30 03:37
-> Last Updated: 2026-07-30 03:37
-> Status: Candidate 0.1 · Selected artifacts recorded · Verifier pending
+> Last Updated: 2026-07-30 04:00
+> Status: Candidate 0.1 · Negative Oracle Passed · Verifier pending
 
 ## 1. 목적
 
@@ -19,7 +19,7 @@ Etherscan label은 사용하지 않는다.
 ## 3. 남은 Gate
 
 - [ ] ENS 제2 provider 또는 독립 저장 replay
-- [ ] category conflict negative oracle
+- [x] category conflict negative oracle — 6개·2회 결정성
 - [ ] 독립 Verifier·두 번 결정성
 - [ ] `verifying` 승격 검토
 

@@ -1,7 +1,7 @@
 # Fixture: FX-ACTOR-RELATION-HUB-001
 > Created: 2026-07-30 03:37
-> Last Updated: 2026-07-30 03:37
-> Status: Candidate 0.1 · Confirmed DEX/AUTH snapshots linked · Verifier pending
+> Last Updated: 2026-07-30 04:00
+> Status: Candidate 0.1 · Negative Oracle Passed · Verifier pending
 
 ## 1. 목적
 
@@ -16,7 +16,7 @@
 
 ## 3. 남은 Gate
 
-- [ ] public-hub·subject-swap negative oracle
+- [x] public-hub·subject-swap negative oracle — 6개·2회 결정성
 - [ ] 독립 Verifier·두 번 결정성
 - [ ] `verifying` 승격 검토
 

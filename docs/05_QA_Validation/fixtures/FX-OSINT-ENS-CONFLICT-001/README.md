@@ -1,7 +1,7 @@
 # Fixture: FX-OSINT-ENS-CONFLICT-001
 > Created: 2026-07-30 03:37
-> Last Updated: 2026-07-30 03:37
-> Status: Candidate 0.1 · Single-provider fixed-block replay · Verifier pending
+> Last Updated: 2026-07-30 04:00
+> Status: Candidate 0.1 · Negative Oracle Passed · Verifier pending
 
 ## 1. 목적
 
@@ -18,7 +18,7 @@
 ## 3. 남은 Gate
 
 - [ ] 제2 provider replay
-- [ ] forward/reverse mismatch·latest substitution negative oracle
+- [x] forward/reverse mismatch·latest substitution negative oracle — 6개·2회 결정성
 - [ ] 독립 Verifier·두 번 결정성
 - [ ] `verifying` 승격 검토
 
