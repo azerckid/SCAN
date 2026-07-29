@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 22:52
-> Status: TASK-012·013 Complete · TASK-014 Docs-only Gate Draft · Benchmark 9/9
+> Last Updated: 2026-07-29 23:09
+> Status: TASK-012·013 Complete · TASK-014 Preview User Review Passed · Benchmark 9/9
 
 ## 1. 목적
 
@@ -137,7 +137,8 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   partial/failed 계약을 작성한다.
 - [x] `TASK-014` query 3개 × 상태 3개 HTML Preview와 UI Gate를 작성한다.
 - [ ] `TASK-014` 단일 path와 분기·재병합 fixture를 확정한다.
-- [ ] 사용자가 PATH Preview와 `flow_path` 대안 B를 승인한다.
+- [x] 사용자가 PATH Preview를 승인한다(2026-07-29 23:09).
+- [ ] 사용자가 `flow_path` 대안 B를 정식 승인한다.
 - [ ] graph node/edge·asset conservation·budget·partial 계약을 정식 승인한다.
 - [ ] path 결과가 label/heuristic과 분리되는지 검증한다.
 - [x] 기존 Workbench는 상위 read-only 화면으로 유지하고 TASK-014 전용

@@ -1,7 +1,7 @@
 # TASK-014 PATH Graph·금액 정합 계약 제안
 > Created: 2026-07-29 22:52
-> Last Updated: 2026-07-29 23:05
-> Status: Proposed 0.1 · Docs-only · Fixture 사례 미선정 · Implementation Not Approved
+> Last Updated: 2026-07-29 23:09
+> Status: Proposed 0.1 · Preview User Review Passed · Fixture 사례 미선정 · Implementation Not Approved
 
 ## 1. 목적
 
@@ -232,7 +232,7 @@ Verifier 재계산을 통과해야 한다.
 - [ ] 두 공급자 또는 공급자+artifact replay로 edge 집합 재현
 - [ ] negative oracle과 독립 Verifier 작성
 - [ ] `flow_path` 대안 B 정식 승인
-- [ ] HTML Preview 사용자 확인·피드백 반영
+- [x] HTML Preview 사용자 확인·피드백 반영 — 2026-07-29 23:09
 - [ ] Context Receipt `PASS`
 - [ ] 사용자 analyzer 구현 승인
 

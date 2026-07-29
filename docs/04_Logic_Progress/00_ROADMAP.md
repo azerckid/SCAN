@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-29 22:52
-> Status: Approved 3.0 Baseline · TASK-014 Docs-only Gate Draft
+> Last Updated: 2026-07-29 23:09
+> Status: Approved 3.1 Baseline · TASK-014 Preview User Review Passed
 
 ## 1. 문서 목적
 
@@ -87,7 +87,7 @@
 | [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) | Pre-event Smoke Partial Pass · Fixture Common 9/9 Match · Primary Trace Pass | TASK-012 전 credential 회전·독립 trace·반례 |
 | [TASK-012 Analysis Contract](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) | Approved 0.2 · 12 Cases · 14 Probes | runtime·Schema 적용, 0.1 세 type 호환 |
 | [TASK-013 NFT·Proxy Contract](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) | Approved 1.0 · Runtime Applied | fixture 3 confirmed·Benchmark 9/9 |
-| [TASK-014 PATH Contract](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) | Proposed 0.1 · Docs-only | fixture 사례·UI 승인·Context Receipt 대기 |
+| [TASK-014 PATH Contract](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) | Proposed 0.1 · Preview Approved | fixture 사례·정식 계약·Context Receipt 대기 |
 
 ### 3.4 Logic Progress
 
@@ -111,7 +111,7 @@
 | [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) | Proposed 0.1 · Not Executed | TASK-012~019 승격·반례·통합 Gate |
 | [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) | EVM Common Passed · Alchemy Trace Two Dialects Failed · Overall Partial | 성공 가능한 독립 trace·live rate/timeout·AI Planner Gate |
 | [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) | Candidate · Replay·Negative·Verifier Gates Passed | 별도 판단 후 조건부 승격 |
-| [TASK-014 Fixture·Contract Gate](../05_QA_Validation/39_TASK_014_FIXTURE_CONTRACT_GATE.md) | Proposed · Not Executed | 공개 fixture 3개·oracle·Verifier·UI 승인 |
+| [TASK-014 Fixture·Contract Gate](../05_QA_Validation/39_TASK_014_FIXTURE_CONTRACT_GATE.md) | Preview Approved · Runtime Not Executed | 공개 fixture 3개·oracle·Verifier·정식 계약 승인 |
 | [TASK-012 Negative Oracle](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) | Offline 24 Passed Twice | live rate/timeout·독립 trace는 별도 |
 | [TASK-012 Analysis Contract Examples](../05_QA_Validation/examples/task-012/README.md) | Approved 12 Cases · 14 Probes Passed | runtime complete·partial·failed 기준 |
 | [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) | UI Gate Passed · Runtime Applied | 공통 terminal renderer로 구현 |

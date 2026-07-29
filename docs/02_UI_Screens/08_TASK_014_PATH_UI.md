@@ -1,7 +1,7 @@
 # TASK-014 PATH Graph·금액 정합 UI
 > Created: 2026-07-29 22:52
-> Last Updated: 2026-07-29 23:05
-> Status: Draft 0.1 · Interactive Preview Added · User Review Pending · Runtime Not Implemented
+> Last Updated: 2026-07-29 23:09
+> Status: Approved 0.1 · User Review Passed · Browser Interaction Not Executed · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -147,11 +147,13 @@ Preview는 fixture 확정이나 analyzer 구현을 뜻하지 않는다.
 - [x] 키보드·색상 비의존 규칙 정의
 - [x] HTML Preview 작성
 - [ ] 브라우저 상호작용 검증
-- [ ] 사용자 Preview 확인
-- [ ] 사용자 피드백 반영
+- [x] 사용자 Preview 확인 — 2026-07-29 23:09 승인
+- [x] 사용자 피드백 반영 — P2 source 상태·query별 failed 보완 후 승인
 
-사용자 확인 전에는 Context Receipt를 `PASS`로 전환하거나 PATH analyzer를
-구현하지 않는다.
+사용자는 PR #68의 source 상태·query별 failed 보완 결과를 확인한 뒤
+2026-07-29 23:09 "승인합니다"로 Preview를 승인했다. 이 승인은 docs-only
+화면 계약에 한정되며 공개 fixture 선정, `flow_path` 정식 계약, Context
+Receipt `PASS`, PATH analyzer 구현을 승인하지 않는다.
 
 ## 10. 365 글로벌 평가 기준
 
@@ -160,7 +162,7 @@ Preview는 fixture 확정이나 analyzer 구현을 뜻하지 않는다.
 | Functionality | Draft | query 3개·상태 3개 화면 계약 |
 | Potential Impact | Planned | PATH 의존 예상문제의 공통 검토 UI |
 | Novelty | Proposed | graph보다 exclusion·residual을 우선 |
-| UX | Review Pending | 한 화면 scope·graph·ledger·next action |
+| UX | Pass / Docs-only | 사용자 승인된 한 화면 scope·graph·ledger·next action |
 | Open-source | Pass | 단일 HTML·외부 dependency 없음 |
 | Business Plan | N/A | 대회 준비 범위 |
 

@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 22:52
+> Last Updated: 2026-07-29 23:09
 > Status: TASK-001~013 Done · WP-INPUT Done · TASK-014~019 Proposed
 
 ## 1. 문서 목적
@@ -1147,7 +1147,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [ ] graph artifact·메모리 budget·partial 상태를 승인한다.
   - [ ] CLI/Workbench 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
   - [ ] edge 최소 필드·artifact mutation·bounded graph 상태 관리를 승인한다.
-  - [ ] TASK-014 PATH Preview를 사용자가 검토하고 피드백을 승인한다.
+  - [x] TASK-014 PATH Preview를 사용자가 검토하고 피드백을 승인한다
+    (2026-07-29 23:09, runtime·fixture 승인은 아님).
   - [ ] graph DB 미도입과 사용자 구현 승인을 기록한다.
 - Component & Library Plan:
   - shadcn/ui: N/A - Python engine 우선.

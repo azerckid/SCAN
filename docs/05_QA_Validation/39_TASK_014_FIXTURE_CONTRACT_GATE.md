@@ -1,7 +1,7 @@
 # TASK-014 PATH Fixture·Contract Gate
 > Created: 2026-07-29 22:52
-> Last Updated: 2026-07-29 23:05
-> Status: Proposed · Not Executed · Fixture 0 Selected · Runtime Not Implemented
+> Last Updated: 2026-07-29 23:09
+> Status: Preview User Review Passed · Fixture 0 Selected · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -54,8 +54,8 @@
 - [x] loading·empty·stale·Rules 재사용 경계 정의
 - [x] HTML Preview 작성
 - [ ] 브라우저 상호작용 검증
-- [ ] 사용자 Preview 확인
-- [ ] 피드백 반영
+- [x] 사용자 Preview 확인 — 2026-07-29 23:09
+- [x] 피드백 반영 — source partial/failed·query별 failed 사유 분리
 
 ## 6. Originality·Ethics
 
@@ -72,7 +72,7 @@
 | Functionality | Not Executed | 세 fixture exact·partial·failed·Verifier |
 | Potential Impact | Planned | PATH 18개 필수 문제의 공통 기반 |
 | Novelty | Proposed | exclusion·residual을 포함한 증거 우선 graph |
-| UX | Review Pending | 세 query·세 상태 HTML Preview |
+| UX | Pass / Docs-only | 사용자 승인된 세 query·세 상태 HTML Preview |
 | Open-source | Planned | bounded JSON 계약·fixture·재현 명령 |
 | Business Plan | N/A | 대회 준비 범위 |
 
@@ -84,7 +84,7 @@ Context Receipt를 `PASS`로 전환한다.
 1. fixture candidate 3개 작성
 2. replay·negative oracle·Verifier Gate
 3. Analysis I/O 대안 정식 승인
-4. 사용자 Preview 승인
+4. ~~사용자 Preview 승인~~ → 2026-07-29 23:09 완료
 5. 사용자 구현 승인
 
 ## 9. Related Documents

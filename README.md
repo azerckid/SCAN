@@ -110,7 +110,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | WP-INPUT wiring | [`31_WP_INPUT_CLI_OPERATIONS_REPORT.md`](docs/05_QA_Validation/31_WP_INPUT_CLI_OPERATIONS_REPORT.md) | CLI mode selection, raw artifact envelope, Operations handoff, and secret-boundary evidence |
 | TASK-013 final promotion | [`38_TASK_013_FINAL_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md) | NFT·Proxy confirmed fixtures, remediation, and Benchmark 9/9 evidence |
 | TASK-014 PATH contract | [`15_TASK_014_PATH_CONTRACT_PROPOSAL.md`](docs/03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) | proposed bounded graph, exclusion, reconciliation, and error contract |
-| TASK-014 PATH UI | [`08_TASK_014_PATH_UI.md`](docs/02_UI_Screens/08_TASK_014_PATH_UI.md) | docs-only query/state Preview with user review pending |
+| TASK-014 PATH UI | [`08_TASK_014_PATH_UI.md`](docs/02_UI_Screens/08_TASK_014_PATH_UI.md) | docs-only query/state Preview with user review passed |
 | TASK-014 PATH Gate | [`39_TASK_014_FIXTURE_CONTRACT_GATE.md`](docs/05_QA_Validation/39_TASK_014_FIXTURE_CONTRACT_GATE.md) | fixture, oracle, Verifier, and UI Stop/Go criteria |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 

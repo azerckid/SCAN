@@ -1,7 +1,7 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-29 22:52
-> Status: Approved 1.6 · V1·TASK-012/013 Gates Passed · TASK-014 Preview Review Pending
+> Last Updated: 2026-07-29 23:09
+> Status: Approved 1.7 · V1·TASK-012/013 Gates Passed · TASK-014 Preview User Review Passed
 
 ## 1. 문서 목적
 
