@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-30 03:07
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 Candidate Research 4 Viable / 1 Source-Blocked · TASK-016~019 Proposed
+> Last Updated: 2026-07-30 03:37
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 Source Resolution 5 Viable / Snapshot Basis · TASK-016~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1245,6 +1245,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     (2026-07-30 02:52, fixture·runtime 승인은 아님).
   - [x] 공개 source Terms·privacy와 다섯 fixture 후보를 bounded 조사한다
     (4 viable, label conflict 1 source-blocked; package 생성 아님).
+  - [x] label source blocker를 OpenRAIL research sample·MIT config·onchain
+    ENS conflict로 교체하고 다섯 후보 snapshot SHA 기준선을 기록한다.
   - [ ] 공개 사례를 선정하고 fixture package를 만든다.
   - [ ] actor relation 후보와 반례를 검증한다.
   - [ ] AI 가설과 Python/source 증명을 분리한다.
@@ -1264,10 +1266,11 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Related QA Docs:
   - [TASK-015 Fixture·Contract Gate](../05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) - fixture·oracle·UI Stop/Go
   - [TASK-015 공개 Source·Fixture 후보 조사](../05_QA_Validation/46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) - Terms·privacy·4 viable·1 source-blocked
+  - [TASK-015 Source 교체·Raw Snapshot 기준선](../05_QA_Validation/47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) - 5 viable·artifact hash
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001
 - Implementation Preconditions:
   - [ ] 공식 대회 Rules와 채택 source snapshot의 Terms·privacy·최소 필드를 확정한다
-    (후보 조사 완료, label source 1건 차단).
+    (후보 조사·label source 교체 완료, package별 재배포 범위 확정 대기).
   - [ ] 충돌·주소 비명시·폐기 라벨 fixture를 확정한다.
   - [x] TASK-015 Preview에서 진입·전환·이탈과
     loading·empty·stale·Rules·conflict·failed를 확인한다.
@@ -1301,9 +1304,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     - 위 Related Concept·Technical·QA 문서 전체
   - Constraints: privacy 최소 수집, Terms·Rules Gate, source assertion과
     ownership/crime truth 분리, AI hypothesis 비승격
-  - Conflicts: 공식 대회 Rules 미확정, label conflict용 open-license 제2
-    source 미선정, raw snapshot·fixture package 미작성. OFAC·ENS·Actor 4개
-    후보의 Terms·privacy 조사는 완료
+  - Conflicts: 공식 대회 Rules 미확정, selected raw artifact를 포함한 fixture
+    package 미작성, ENS 제2 provider replay·negative oracle 미실행. label
+    source blocker와 다섯 후보 snapshot 기준선은 해소
 - Change Receipt:
   - N/A - docs-only Gate, 구현 미시작
 - Verification Receipt:
@@ -1314,6 +1317,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Public-source candidate research: 468 tests PASS, fixture 13,
     schema 48 probes, traceability 1554 links, security 162 files.
     4 viable·1 source-blocked이며 package·runtime은 미작성.
+  - Source resolution·snapshot basis: 468 tests PASS, fixture 13,
+    schema 48 probes, traceability 1569 links, security 162 files.
+    label blocker를 교체해 5 viable이며 package·TASK-015 runtime은 미작성.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 

@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 03:07
+> Last Updated: 2026-07-30 03:27
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -190,7 +190,7 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
 | 상태 | 후보 | 검증 중 |
 | 마지막 확인 | 2026-07-30 03:07 | 2026-07-30 03:07 |
 | 관련 fixture | FLOW-EVM-001 등 | EVM-FREEZE-001 (`FX-EVM-FREEZE-001`) |
-| 비고 | MyEtherWallet `ethereum-lists`는 MIT source 후보. Etherscan public label/name tag는 Terms의 복제·AI/ML·dataset 제한 때문에 fixture source에서 제외하며 수동 관찰도 expected 값으로 저장하지 않음 | OFAC SLS의 공개 download/API와 2022 지정·2025 해제 원문에서 주소·timeline 후보를 확인. 고시 시점의 역사적 맥락이며 현재 제재 상태로 자동 간주하지 않음 |
+| 비고 | Etherscan public label/name tag는 Terms 때문에 fixture source에서 제외. replacement는 pinned OpenRAIL research/testing sample row와 MIT Tornado config·onchain ENS의 category conflict이며 상업·전체 dataset 권한으로 확대하지 않음 | OFAC SLS의 공개 download/API와 2022 지정·2025 해제 원문에서 주소·timeline 후보를 확인. 고시 시점의 역사적 맥락이며 현재 제재 상태로 자동 간주하지 않음 |
 
 ### 5.5 ENS·OSINT
 
@@ -386,9 +386,11 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
   목록에 있을 때만 assertion을 만든다.
 - Actor 후보는 기존 confirmed FLOW·DEX·AUTH replay에서 재계산한다.
   공통 funder·공용 contract는 ownership 또는 coordination 확정이 아니다.
-- 현재 조사 결과는 4개 viable candidate와 1개 source-blocked candidate다.
-  raw snapshot·negative oracle·독립 Verifier 전에는 package를 생성하거나
-  `verifying`으로 승격하지 않는다.
+- Etherscan을 쓰지 않는 replacement subject를 선정해 현재 다섯 후보가 모두
+  viable이다. pinned dataset/config, official HTML, fixed-block ENS,
+  confirmed local replay의 SHA-256 기준선을 기록했다.
+- snapshot 기준선은 fixture package가 아니다. selected artifact·negative
+  oracle·독립 Verifier 전에는 `verifying`으로 승격하지 않는다.
 
 ## 10. Related Documents
 
@@ -412,3 +414,4 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 계정 smoke·독립성·반례
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - dry-run·보안·미실행 경계
 - **QA_Validation**: [TASK-015 공개 Source·Fixture 후보 조사](../05_QA_Validation/46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) - Terms·privacy·후보 채택 가능성
+- **QA_Validation**: [TASK-015 Source 교체·Raw Snapshot 기준선](../05_QA_Validation/47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) - replacement와 artifact hash

@@ -124,6 +124,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-015 Intelligence UI | [`09_TASK_015_INTELLIGENCE_UI.md`](docs/02_UI_Screens/09_TASK_015_INTELLIGENCE_UI.md) | docs-only five-query Preview with user review passed |
 | TASK-015 Intelligence Gate | [`45_TASK_015_FIXTURE_CONTRACT_GATE.md`](docs/05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) | proposed fixture, negative oracle, privacy, UI, and Verifier Stop/Go criteria |
 | TASK-015 public-source candidates | [`46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md`](docs/05_QA_Validation/46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) | official Terms/privacy review with four viable candidates and one source-blocked label candidate |
+| TASK-015 source resolution | [`47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md`](docs/05_QA_Validation/47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) | Etherscan-free label replacement and five-candidate raw snapshot hash baseline |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
