@@ -41,7 +41,7 @@ analyzer와 최종 승격은 아직 주장하지 않는다.
 | QA-PATH-CONTRACT-003 | multi-origin complete | origin별 contribution·deduplicated total exact | not_executed |
 | QA-PATH-PARTIAL-001 | hop/node/edge budget 초과 | frontier·termination을 보존한 partial | not_executed |
 | QA-PATH-PARTIAL-002 | 비필수 source/range 일부 누락 | 확인된 edge 보존·미확인 범위 표시 | not_executed |
-| QA-PATH-FAILED-001 | scope/replay 또는 필수 source 결합 불일치 | failed·data null·reconciliation error | not_executed |
+| QA-PATH-FAILED-001 | scope/replay 또는 필수 source 결합 불일치 | failed·`results: []`·reconciliation error | not_executed |
 | QA-PATH-NEG-001 | cycle·중복·unrelated fund | 확정 경로 오염 없이 제외·실패 | pass / offline |
 | QA-PATH-SEC-001 | secret/path·Rules Gate | endpoint·credential·절대 경로 비노출 | not_executed |
 | QA-PATH-DET-001 | 동일 replay 두 번 | canonical result hash 일치 | pass / fixture |
