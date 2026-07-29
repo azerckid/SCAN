@@ -1,7 +1,7 @@
 # 입력 소스 선택 UI (WP-INPUT-GATE)
 > Created: 2026-07-29 12:20
-> Last Updated: 2026-07-29 12:38
-> Status: Proposed 0.1 · HTML Preview 작성 · 사용자 UI-First Gate 대기
+> Last Updated: 2026-07-29 12:54
+> Status: Approved 0.1 · UI-First Gate Passed · Runtime Wiring Applied
 
 ## 1. 문서 목적
 
@@ -81,11 +81,11 @@ Preview는 다음을 보여준다.
 - [x] endpoint·API key 비노출과 read-only allowlist 표시가 정의됨
 - [x] Operations 입력 배지와 Queue→Worker 핸드오프가 표현됨
 - [x] HTML Preview가 문서에 연결됨
-- [ ] 사용자가 HTML Preview를 확인함
-- [ ] 사용자 피드백과 보완 결과가 기록됨
+- [x] 사용자가 HTML Preview를 확인함
+- [x] 사용자 피드백과 보완 결과가 계약·Preview에 기록됨
 
-마지막 두 항목은 사용자 확인 대기다. 이 Gate를 통과하기 전에는 CLI·Operations
-wiring을 구현하지 않는다.
+사용자 승인 뒤 `WP-INPUT-IMPL-02`에서 CLI·Operations wiring을 구현했다.
+정적 Preview는 실제 RPC·파일을 호출하지 않는 검토 산출물로 계속 유지한다.
 
 ## 7. Related Documents
 

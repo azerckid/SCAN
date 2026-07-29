@@ -220,11 +220,7 @@ class ContestRpcSourceAdapter(JsonRpcSourceAdapter):
         source_id: str = "DS-CONTEST-RPC",
         provider_id: str = "contest-rpc",
     ) -> None:
-        parts = urlsplit(endpoint)
-        if parts.scheme != "https" or not parts.netloc:
-            raise ValueError("contest RPC endpoint must be an absolute HTTPS URL")
-        if parts.username is not None or parts.password is not None:
-            raise ValueError("contest RPC endpoint must not contain URL userinfo")
+        validate_contest_rpc_endpoint(endpoint)
         self.chain_scope = chain_scope
         super().__init__(
             source_id=source_id,
@@ -258,6 +254,15 @@ class ContestRpcSourceAdapter(JsonRpcSourceAdapter):
             source_id=self.source_id,
             provider_id=self.provider_id,
         )
+
+
+def validate_contest_rpc_endpoint(endpoint: str) -> None:
+    """Validate an endpoint without returning or logging its credential-bearing value."""
+    parts = urlsplit(endpoint)
+    if parts.scheme != "https" or not parts.netloc:
+        raise ValueError("contest RPC endpoint must be an absolute HTTPS URL")
+    if parts.username is not None or parts.password is not None:
+        raise ValueError("contest RPC endpoint must not contain URL userinfo")
 
 
 def normalize_json_rpc_payload(

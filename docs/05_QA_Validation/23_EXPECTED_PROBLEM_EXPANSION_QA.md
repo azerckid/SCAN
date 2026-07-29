@@ -134,6 +134,7 @@ TASK-012의 `evm_core` 계약 제안 12개와 Schema probe 14개는 통과했지
 - **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - provider·secret·AI Planner Gate
 - **Technical_Specs**: [다중 입력 모드와 체인 범위](../03_Technical_Specs/12_MULTI_SOURCE_INPUT_AND_CHAIN_SCOPE.md) - 입력 정규화·체인 격리 계약
 - **QA_Validation**: [WP-INPUT-GATE Core 보고서](./30_WP_INPUT_GATE_CORE_REPORT.md) - 집중·전체 검증과 잔여 범위
+- **QA_Validation**: [WP-INPUT CLI·Operations 보고서](./31_WP_INPUT_CLI_OPERATIONS_REPORT.md) - envelope·artifact·Worker handoff 검증
 - **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - `evm_core` 0.2 Draft·partial 오류 매핑
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - Wave 순서와 Stop/Go
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 Context Lock

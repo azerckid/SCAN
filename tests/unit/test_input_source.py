@@ -9,6 +9,7 @@ from scan_tool.adapters.input_source import ProvidedArtifactImporter
 from scan_tool.domain.input_source import (
     ArtifactFormat,
     ChainScope,
+    InputEvidenceEnvelope,
     InputFailureKind,
     InputNormalizationError,
     require_chain_scope,
@@ -200,4 +201,26 @@ def test_artifact_observed_at_must_be_timezone_aware() -> None:
             artifact_format=ArtifactFormat.JSON,
             chain_scope=ChainScope.EVM,
             observed_at=datetime(2026, 7, 29),
+        )
+
+
+def test_input_envelope_binds_raw_artifact_uri_to_bundle_hash() -> None:
+    bundle = ProvidedArtifactImporter().import_bytes(
+        b'{"ok":true}',
+        artifact_format=ArtifactFormat.JSON,
+        chain_scope=ChainScope.EVM,
+    )
+
+    envelope = InputEvidenceEnvelope(
+        bundle=bundle,
+        raw_artifact_uri=f"artifact://sha256/{bundle.raw_sha256}",
+    )
+
+    assert envelope.safe_details()["input_mode"] == "provided_artifact"
+    assert envelope.safe_details()["record_count"] == 1
+
+    with pytest.raises(ValueError, match="does not match"):
+        InputEvidenceEnvelope(
+            bundle=bundle,
+            raw_artifact_uri="artifact://sha256/" + "0" * 64,
         )

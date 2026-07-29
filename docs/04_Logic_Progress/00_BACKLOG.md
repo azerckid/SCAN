@@ -127,13 +127,14 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 `WP-INPUT-GATE`는 TASK-012~019의 공통 선행 조건이다. 입력 모드는
 `external_rpc | contest_rpc | provided_artifact`, 체인 범위는
 `evm | bitcoin | non_evm | cross_chain`이다. 첫 승인 단위에서 contest RPC
-core adapter와 bounded JSON·JSONL·CSV importer를 구현했다. CLI·Operations
-wiring, 임의 mapping, 체인별 analyzer는 미구현이며 TASK-012~019의 Context
-Receipt·개별 구현 승인을 대체하지 않는다.
+core adapter와 bounded JSON·JSONL·CSV importer를 구현했고, 두 번째 승인
+단위에서 CLI·Operations offline handoff를 연결했다. 임의 mapping과 체인별
+analyzer는 미구현이며 TASK-012~019의 Context Receipt·개별 구현 승인을
+대체하지 않는다.
 
 ### 3.1 WP-INPUT-IMPL-01: Core input library
 
-- Status: Done · CLI Wiring Pending
+- Status: Done
 - Approval: 2026-07-29 사용자 승인
 - Scope:
   - [x] input mode·chain scope enum과 normalized evidence bundle
@@ -152,6 +153,27 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   Coverage QA를 확인했고 Analysis I/O `0.1`은 변경하지 않았다.
 - Verification Receipt: focused 30 tests·전체 336 tests·Schema·traceability·
   security PASS, 상세는 구현 보고서 참조.
+
+### 3.2 WP-INPUT-IMPL-02: CLI·Operations input wiring
+
+- Status: Done
+- Approval: 2026-07-29 사용자 구현 승인
+- Scope:
+  - [x] `scan analyze`에 input mode·chain scope·artifact 옵션을 연결했다.
+  - [x] endpoint 값 대신 환경변수 이름만 받고 안전한 HTTPS 여부를 검사한다.
+  - [x] 정규화 성공 뒤에만 raw bytes를 content-addressed artifact로 저장한다.
+  - [x] `InputEvidenceEnvelope` hash·URI에서 `ApprovedReplay`를 재구성한다.
+  - [x] Evidence Worker가 envelope↔replay hash·EVM scope를 adapter 호출 전에 검사한다.
+  - [x] OperationEvent에 endpoint 없는 input provenance를 기록한다.
+  - [x] 기존 옵션 없는 `--evidence` DEX·AUTH·FREEZE 경로를 보존한다.
+- Excluded:
+  - [ ] `contest_rpc` 문제별 query mapping과 live 실행
+  - [ ] TASK-012 `evm_core` analyzer와 Analysis I/O version 변경
+  - [ ] Bitcoin·non-EVM·cross-chain analyzer
+- Context Receipt: PASS — 계약·Preview 사용자 승인, core input library,
+  기존 Evidence Worker·artifact·SQLite 경계를 확인했다.
+- Verification Receipt: focused CLI·input·Evidence Worker PASS, 전체 offline
+  Gate PASS. 상세는 `31_WP_INPUT_CLI_OPERATIONS_REPORT.md` 참조.
 
 ## 4. Task Register
 
