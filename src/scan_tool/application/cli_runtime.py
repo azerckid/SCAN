@@ -22,6 +22,7 @@ from scan_tool.domain.analysis_request import (
     DexAnalysisRequest,
     EvmCoreAnalysisRequest,
     EvmSpecialAnalysisRequest,
+    FlowPathAnalysisRequest,
     FreezeAnalysisRequest,
 )
 from scan_tool.domain.analysis_result import AnalysisResult
@@ -29,11 +30,13 @@ from scan_tool.domain.auth import AuthReplay
 from scan_tool.domain.dex import DexReplay
 from scan_tool.domain.evm_core import EvmCoreReplay
 from scan_tool.domain.evm_special import EvmSpecialReplay
+from scan_tool.domain.flow_path import FlowPathReplay
 from scan_tool.domain.freeze import FreezeReplay
 from scan_tool.slices.auth import analyze_auth_replay
 from scan_tool.slices.dex import analyze_dex_replay
 from scan_tool.slices.evm_core import analyze_evm_core_replay
 from scan_tool.slices.evm_special import analyze_evm_special_replay
+from scan_tool.slices.flow_path import analyze_flow_path_replay
 from scan_tool.slices.freeze import analyze_freeze_replay
 
 DEX_REPLAY_STAGE = "dex_replay_loaded"
@@ -41,6 +44,7 @@ AUTH_REPLAY_STAGE = "auth_replay_loaded"
 FREEZE_REPLAY_STAGE = "freeze_replay_loaded"
 EVM_CORE_REPLAY_STAGE = "evm_core_replay_loaded"
 EVM_SPECIAL_REPLAY_STAGE = "evm_special_replay_loaded"
+FLOW_PATH_REPLAY_STAGE = "flow_path_replay_loaded"
 
 
 class AnalysisUnavailable(RuntimeError):
@@ -208,6 +212,22 @@ class CliRuntime:
                 resumed=resumed,
                 checkpoint_id=checkpoint_id,
             )
+        if isinstance(document, FlowPathAnalysisRequest):
+            replay_body, checkpoint_id, resumed = self._load_replay(
+                document.analysis_id,
+                replay_path,
+                replay_body,
+                expected_replay_sha256,
+                stage=FLOW_PATH_REPLAY_STAGE,
+                replay_model=FlowPathReplay,
+                analysis_label="Flow Path",
+            )
+            return analyze_flow_path_replay(
+                document,
+                replay_body,
+                resumed=resumed,
+                checkpoint_id=checkpoint_id,
+            )
         raise AnalysisUnavailable("The selected vertical analyzer is not implemented.")
 
     def _load_replay(
@@ -224,6 +244,7 @@ class CliRuntime:
             | type[FreezeReplay]
             | type[EvmCoreReplay]
             | type[EvmSpecialReplay]
+            | type[FlowPathReplay]
         ),
         analysis_label: str,
     ) -> tuple[bytes, str | None, bool]:

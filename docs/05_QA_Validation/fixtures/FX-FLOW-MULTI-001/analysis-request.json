@@ -1,0 +1,49 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-FLOW-MULTI-001",
+  "analysis_type": "flow_path",
+  "query_kind": "aggregate_origins",
+  "chain_id": 1,
+  "fixture_id": "FX-FLOW-MULTI-001",
+  "requested_at": "2026-07-30T00:00:00+00:00",
+  "inputs": {
+    "origin_nodes": [
+      "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55",
+      "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "0x8765a35394c98e81b9d56d44248e1199d8e38a4c",
+      "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e"
+    ],
+    "exit_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+    "asset_scope": {
+      "kind": "native",
+      "symbol": "ETH",
+      "decimals": 18
+    },
+    "budgets": {
+      "max_hops": 1,
+      "max_nodes": 5,
+      "max_edges": 4
+    },
+    "scope": {
+      "kind": "selected_transactions_and_exact_blocks",
+      "selected_transactions": [
+        "0xc9641dceab1311d219523e5d3914df31f6a97986d5e331db45387037ea06a07c",
+        "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+        "0x9f3edbd1eb404dec2e4d9aae93c739136f79c87f6382af25413ce705cc431f59",
+        "0x19f802affe24572bac3af47983f42bbec6055117c6a32c3fddc58bd7545e5240"
+      ]
+    }
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": [
+      "DS-EVM-RPC-ARCHIVE"
+    ],
+    "source_order": [
+      "DS-EVM-RPC-ARCHIVE"
+    ],
+    "allow_fallback": false,
+    "offline_mode": true
+  }
+}

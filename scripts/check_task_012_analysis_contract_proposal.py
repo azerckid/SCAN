@@ -228,7 +228,14 @@ def _validate_approved_contract_adoption() -> None:
     approved = load_json(APPROVED_REQUEST_SCHEMA)
     approved_types = set(approved["$defs"]["analysisType"]["enum"])
     runtime_types = {item.value for item in AnalysisType}
-    expected = {"dex_swap", "auth_consumption", "address_freeze", "evm_core", "evm_special"}
+    expected = {
+        "dex_swap",
+        "auth_consumption",
+        "address_freeze",
+        "evm_core",
+        "evm_special",
+        "flow_path",
+    }
     if approved_types != expected or runtime_types != expected:
         raise ValueError("Analysis I/O 0.2 does not expose the approved analysis types")
 

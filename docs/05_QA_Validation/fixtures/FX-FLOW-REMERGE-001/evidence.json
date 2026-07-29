@@ -84,7 +84,11 @@
       "source_id": "DS-EVM-RPC-PUBLIC",
       "provider": "PROVIDER-EVM-VERIFY",
       "retrieved_at": "2026-07-29T14:25:33Z",
-      "methods": ["eth_getTransactionByHash", "eth_getTransactionReceipt", "eth_getBlockByNumber"]
+      "methods": [
+        "eth_getTransactionByHash",
+        "eth_getTransactionReceipt",
+        "eth_getBlockByNumber"
+      ]
     },
     {
       "source_id": "DS-OSINT-WEB",
@@ -106,7 +110,7 @@
   "verification_provenance": {
     "negative_oracle_report": "../../41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md",
     "independent_verifier_report": "../../42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md",
-    "calculated_fact_sha256": "39198d15b878ddd07a227fd6df1e0047a2c3cf2b2d8f8b414bfa33e14ffab381"
+    "calculated_fact_sha256": "1a93d95a25536802f0ff95c957155c2a8f6017d1cce95d97838125a3ce4c67a5"
   },
   "uncertainty": {
     "candidate_only": false,

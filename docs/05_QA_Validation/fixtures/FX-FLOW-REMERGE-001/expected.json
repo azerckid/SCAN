@@ -47,7 +47,8 @@
       "from_node": "0xfa24ea2318dbc719b9d1a0d8eb7f282255c5bde0",
       "to_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
       "amount_raw": "1000000000000",
-      "reason": "external_inflow_not_from_seed"
+      "reason": "external_inflow_not_from_seed",
+      "scope_status": "excluded"
     }
   ],
   "partial_conditions": [
@@ -69,13 +70,19 @@
         "requirement_id": "REQ-FLOW-REMERGE-BRANCHES",
         "description": "Four seed outputs and four matching merge inputs must preserve branch identity and raw values.",
         "mandatory": true,
-        "evidence_refs": ["EV-FLOW-SPLIT-4", "EV-FLOW-REMERGE-4"]
+        "evidence_refs": [
+          "EV-FLOW-SPLIT-4",
+          "EV-FLOW-REMERGE-4"
+        ]
       },
       {
         "requirement_id": "REQ-FLOW-REMERGE-LEDGER",
         "description": "Input, merge output, residual, and unrelated external inflow must remain separate.",
         "mandatory": true,
-        "evidence_refs": ["EV-FLOW-REMERGE-LEDGER", "EV-FLOW-UNRELATED-INFLOW"]
+        "evidence_refs": [
+          "EV-FLOW-REMERGE-LEDGER",
+          "EV-FLOW-UNRELATED-INFLOW"
+        ]
       }
     ]
   }

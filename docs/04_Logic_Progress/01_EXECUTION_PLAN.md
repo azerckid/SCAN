@@ -141,9 +141,14 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] `TASK-014` 세 fixture의 두 공급자 replay·negative oracle 18개·독립
   Verifier를 통과해 `verifying`으로 올린다.
 - [x] 사용자가 PATH Preview를 승인한다(2026-07-29 23:09).
-- [ ] 사용자가 `flow_path` 대안 B를 정식 승인한다.
-- [ ] graph node/edge·asset conservation·budget·partial 계약을 정식 승인한다.
-- [ ] path 결과가 label/heuristic과 분리되는지 검증한다.
+- [x] 사용자가 `flow_path` 대안 B를 정식 승인한다(계약 확정안 PR #71 병합).
+- [x] graph node/edge·asset conservation·budget·partial 계약을 정식 승인한다
+  ([16_TASK_014_FLOW_PATH_IO_CONTRACT](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md)).
+- [x] Context Receipt `PASS`·사용자 analyzer 구현 승인을 기록한다(2026-07-30).
+- [x] `flow_path` analyzer 3 query를 구현하고 독립 Verifier와 canonical hash를
+  대조한다([검증 Receipt](../05_QA_Validation/43_TASK_014_ANALYZER_VERIFICATION_RECEIPT.md)).
+- [x] path 결과가 label/price/heuristic과 분리되는지 검증한다(`not_assessed`·별도 context).
+- [ ] 단일-trace 하드 게이트 충족 후 fixture `확정`·Benchmark 자동화 승격.
 - [x] 기존 Workbench는 상위 read-only 화면으로 유지하고 TASK-014 전용
   Preview를 별도로 사용하기로 결정한다.
 

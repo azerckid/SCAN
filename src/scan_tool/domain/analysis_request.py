@@ -3,7 +3,7 @@
 from enum import StrEnum
 from typing import Annotated, Literal
 
-from pydantic import AnyUrl, ConfigDict, Field, RootModel, model_validator
+from pydantic import AnyUrl, ConfigDict, Field, RootModel, StrictInt, model_validator
 from pydantic.experimental.missing_sentinel import MISSING
 from pydantic_core import PydanticCustomError
 
@@ -29,6 +29,7 @@ class AnalysisType(StrEnum):
     ADDRESS_FREEZE = "address_freeze"
     EVM_CORE = "evm_core"
     EVM_SPECIAL = "evm_special"
+    FLOW_PATH = "flow_path"
 
 
 class EvmQueryKind(StrEnum):
@@ -186,6 +187,89 @@ class ProxyHistoryInputs(ContractModel):
 EvmSpecialInputs = NftActivityInputs | ProxyHistoryInputs
 
 
+class FlowPathQueryKind(StrEnum):
+    TRACE_PATH = "trace_path"
+    TRACE_REMERGE = "trace_remerge"
+    AGGREGATE_ORIGINS = "aggregate_origins"
+
+
+PositiveInt = Annotated[StrictInt, Field(gt=0)]
+
+
+class NativeAssetScope(ContractModel):
+    # v1 scores native ETH only; ERC-20/wrapped assets are a later contract.
+    kind: Literal["native"]
+    symbol: Literal["ETH"]
+    decimals: Literal[18]
+
+
+class TraversalBudgets(ContractModel):
+    max_hops: PositiveInt
+    max_nodes: PositiveInt
+    max_edges: PositiveInt
+
+
+class FlowBlockWindow(ContractModel):
+    from_block: BlockNumber = Field(alias="from")
+    to_block: BlockNumber = Field(alias="to")
+
+    @model_validator(mode="after")
+    def window_is_ordered(self) -> "FlowBlockWindow":
+        if self.to_block < self.from_block:
+            raise PydanticCustomError("invalid_input", "block window from must not exceed to")
+        return self
+
+
+class TracePathScope(ContractModel):
+    kind: Literal["selected_transactions_and_exact_blocks"]
+    block_windows: list[FlowBlockWindow] = Field(min_length=1)
+
+
+class TraceRemergeScope(ContractModel):
+    kind: Literal["selected_transactions_and_exact_blocks"]
+    block_range: FlowBlockWindow
+    selected_transactions: NonEmptyUniqueList[TransactionHash]
+    excluded_context_transactions: UniqueList[TransactionHash]
+
+
+class AggregateOriginsScope(ContractModel):
+    kind: Literal["selected_transactions_and_exact_blocks"]
+    selected_transactions: NonEmptyUniqueList[TransactionHash]
+
+
+class TerminalPolicy(ContractModel):
+    terminal_node: Address
+    stop_on: Literal["selected_terminal_reached"]
+
+
+class TracePathInputs(ContractModel):
+    seed_node: Address
+    direction: Literal["outbound"]
+    asset_scope: NativeAssetScope
+    terminal_policy: TerminalPolicy
+    budgets: TraversalBudgets
+    scope: TracePathScope
+
+
+class TraceRemergeInputs(ContractModel):
+    seed_node: Address
+    merge_node: Address
+    asset_scope: NativeAssetScope
+    budgets: TraversalBudgets
+    scope: TraceRemergeScope
+
+
+class AggregateOriginsInputs(ContractModel):
+    origin_nodes: NonEmptyUniqueList[Address]
+    exit_node: Address
+    asset_scope: NativeAssetScope
+    budgets: TraversalBudgets
+    scope: AggregateOriginsScope
+
+
+FlowPathInputs = TracePathInputs | TraceRemergeInputs | AggregateOriginsInputs
+
+
 class AnalysisRequestBase(ContractModel):
     schema_uri: Annotated[
         str,
@@ -289,12 +373,49 @@ class EvmSpecialAnalysisRequest(AnalysisRequestBase):
         return self
 
 
+class FlowPathAnalysisRequest(AnalysisRequestBase):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "allOf": [
+                {
+                    "if": {"properties": {"query_kind": {"const": query_kind}}},
+                    "then": {"properties": {"inputs": {"required": required_fields}}},
+                }
+                for query_kind, required_fields in (
+                    ("trace_path", ["seed_node", "terminal_policy"]),
+                    ("trace_remerge", ["seed_node", "merge_node"]),
+                    ("aggregate_origins", ["origin_nodes", "exit_node"]),
+                )
+            ]
+        }
+    )
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.FLOW_PATH]
+    query_kind: FlowPathQueryKind
+    inputs: FlowPathInputs
+
+    @model_validator(mode="after")
+    def inputs_match_query_kind(self) -> "FlowPathAnalysisRequest":
+        expected = {
+            FlowPathQueryKind.TRACE_PATH: TracePathInputs,
+            FlowPathQueryKind.TRACE_REMERGE: TraceRemergeInputs,
+            FlowPathQueryKind.AGGREGATE_ORIGINS: AggregateOriginsInputs,
+        }[self.query_kind]
+        if not isinstance(self.inputs, expected):
+            raise PydanticCustomError(
+                "invalid_input",
+                "inputs must match query_kind",
+            )
+        return self
+
+
 RequestVariant = Annotated[
     DexAnalysisRequest
     | AuthAnalysisRequest
     | FreezeAnalysisRequest
     | EvmCoreAnalysisRequest
-    | EvmSpecialAnalysisRequest,
+    | EvmSpecialAnalysisRequest
+    | FlowPathAnalysisRequest,
     Field(discriminator="analysis_type"),
 ]
 
