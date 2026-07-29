@@ -1,7 +1,7 @@
 # TASK-015 Label·OSINT·Actor Intelligence 계약 제안
 > Created: 2026-07-30 02:37
-> Last Updated: 2026-07-30 02:37
-> Status: Proposed 0.1 · Docs-only · Fixture 5 Proposed · Runtime Not Implemented
+> Last Updated: 2026-07-30 03:07
+> Status: Proposed 0.1 · Docs-only · Candidate Research 4 Viable / 1 Source-Blocked · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -261,15 +261,16 @@ Python worker는 다음을 수행한다.
 | Functionality | Proposed | 5 query·source/claim/conflict 계약 |
 | Potential Impact | Planned | LABEL이 필요한 14개 문제와 후속 CASE/SERVICE 재사용 |
 | Novelty | Proposed | source가 말한 사실과 실제 소유·범죄 사실을 분리 |
-| UX | Proposed | conflict·stale·direct/indirect 우선 화면 |
+| UX | Pass / Docs-only | conflict·stale·direct/indirect Preview 사용자 승인 |
 | Open-source | Pass / Contract | provider 종속 없는 JSON assertion 모델 |
 | Business Plan | N/A | 대회 준비 범위 |
 
 ## 11. 구현 전 Gate
 
 - [ ] source role·claim·conflict 계약 사용자 승인
-- [ ] TASK-015 UI Preview 사용자 검토·피드백
-- [ ] 공개 fixture 5개 후보 선정
+- [x] TASK-015 UI Preview 사용자 검토·피드백 — 2026-07-30 02:52 승인
+- [x] 공개 fixture 5개 후보 bounded 조사 — 4 viable, 1 source-blocked
+- [ ] label conflict open-license 제2 source와 다섯 raw fixture package 확정
 - [ ] source별 Rules·Terms·privacy·license 확인
 - [ ] raw/source snapshot·negative oracle·독립 Verifier
 - [ ] Analysis I/O 대안 B 정식 승인
@@ -285,3 +286,4 @@ Python worker는 다음을 수행한다.
 - **Technical_Specs**: [Coverage 확장 Brief](./09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-INTEL 상위 계약
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) - Context Lock·구현 승인
 - **QA_Validation**: [TASK-015 Fixture·Contract Gate](../05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) - Stop/Go 기준
+- **QA_Validation**: [TASK-015 공개 Source·Fixture 후보 조사](../05_QA_Validation/46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) - Terms·privacy·후보 판정
