@@ -1016,20 +1016,26 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] 세 표준의 negative oracle 16개를 두 번 실행해 결정성을 확인한다.
   - [x] 독립 Verifier가 세 candidate의 raw facts·13개 evidence 값·7개
     requirement를 두 번 재계산한다.
-  - [ ] ERC-721/1155와 EIP-1967 공개 fixture를 각각 확정한다.
-  - [ ] Analysis I/O 대안과 전용 UI Preview를 승인한다.
-  - [ ] 표준·반례·decode failure를 검증한다.
+  - [x] 세 candidate를 `후보`에서 `검증 중`으로 승격한다(승격은 여전히
+    `확정`이 아니다).
+  - [x] Analysis I/O 대안 B(`evm_special`)를 확정하고 전용 UI Preview를
+    작성한다. 사용자 확인은 아직이다.
+  - [ ] ERC-721/1155와 EIP-1967 fixture를 `확정`으로 올린다(UI·Context
+    Receipt·사용자 구현 승인 이후).
+  - [ ] 표준·반례·decode failure를 검증한다(Python decoder 구현 이후).
   - [ ] 두 문제의 Benchmark 승격 여부를 기록한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - NFT·Proxy 문제
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P3 전문 기능 승격 조건
 - Related UI Docs:
   - [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - decode 결과·오류 표시
+  - [TASK-013 NFT·Proxy UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md) - 표준 3개·상태 3개 화면 계약
 - Related HTML Preview:
   - [CLI Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - terminal 결과 기준
+  - [NFT·Proxy Preview](../02_UI_Screens/previews/06_task_013_nft_proxy_preview.html) - 사용자 확인 대기 중인 전용 Preview
 - Related Technical Docs:
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-EVM-SPECIAL 계약
-  - [TASK-013 분석 계약 제안](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - NFT·Proxy 표준·상태·오류 Draft
+  - [TASK-013 분석 계약 제안](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - NFT·Proxy 표준·상태·오류, 대안 B 확정
   - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 유형별 결과 확장
   - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - ABI·slot 도구 조사
 - Related QA Docs:
@@ -1037,15 +1043,18 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - 세 package ID·선정·승격 Gate
   - [TASK-013 Negative Oracle 보고서](../05_QA_Validation/33_TASK_013_NEGATIVE_ORACLE_REPORT.md) - 표준별 16개 반례·결정성
   - [TASK-013 독립 Verifier 보고서](../05_QA_Validation/34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md) - raw-first facts·13 evidence values·7 requirements 재계산
+  - [TASK-013 Fixture 승격 검토 보고서](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) - `검증 중` 승격 판정
 - Implementation Preconditions:
   - [x] fixture·계약·반례 문서 Draft를 작성한다.
   - [x] TASK-012 공통 EVM 입력이 안정됐다.
   - [x] 공개 candidate 주소·TX·block과 reference answer 골격을 선정한다.
   - [x] 명시 scope replay와 provider provenance를 고정한다.
-  - [ ] 공개 fixture와 reference answer를 확정한다.
-  - [ ] CLI 진입·전환·이탈과 loading·empty·partial·failed 표시를 확인한다.
+  - [x] 세 fixture를 `검증 중`으로 승격한다(별도 승격 검토 문서로 판단).
+  - [x] Analysis I/O 대안을 B(`evm_special`)로 확정한다.
+  - [x] CLI 진입·전환·이탈과 loading·empty·partial·failed 표시를 Preview로 작성한다.
+  - [ ] 사용자가 UI Preview를 확인하고 승인한다.
   - [ ] log/state 최소 필드·mutation 없음·decode 상태 관리를 승인한다.
-  - [ ] OSS/license와 Analysis I/O 변경을 승인한다.
+  - [ ] OSS/license를 확인한다.
   - [ ] 사용자 구현 승인을 기록한다.
 - Component & Library Plan:
   - shadcn/ui: N/A - Python CLI 분석기.
@@ -1061,9 +1070,12 @@ Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - candidate 3개의 replay·negative·Verifier Gate와 계약 Draft 존재.
-    fixture 확정·UI·사용자 구현 승인 전 착수 금지
-  - Required References Read: 예상문제 은행·Coverage Brief·EIP-721/1155/1967
+  - Status: PENDING - 세 fixture가 `검증 중`으로 승격되고 Analysis I/O
+    대안 B·전용 UI Preview가 작성됐다. 사용자 Preview 확인·승인, Context
+    Receipt `PASS` 전환, 사용자 구현 승인 전 `In Progress` 착수 금지.
+  - Required References Read: 예상문제 은행·Coverage Brief·EIP-721/1155/1967·
+    [TASK-013 Fixture 승격 검토](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)·
+    [TASK-013 NFT·Proxy UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md)
   - Constraints: 소유권 분쟁·안전성 자동 판정 금지
   - Conflicts: None known
 - Change Receipt:
