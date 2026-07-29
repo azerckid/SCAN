@@ -1,6 +1,6 @@
 # TASK-014 PATH Fixture·Contract Gate
 > Created: 2026-07-29 22:52
-> Last Updated: 2026-07-29 22:52
+> Last Updated: 2026-07-29 23:05
 > Status: Proposed · Not Executed · Fixture 0 Selected · Runtime Not Implemented
 
 ## 1. 목적
@@ -39,8 +39,8 @@
 | QA-PATH-CONTRACT-002 | remerge complete | branches·merge·unrelated exclusion·residual exact | not_executed |
 | QA-PATH-CONTRACT-003 | multi-origin complete | origin별 contribution·deduplicated total exact | not_executed |
 | QA-PATH-PARTIAL-001 | hop/node/edge budget 초과 | frontier·termination을 보존한 partial | not_executed |
-| QA-PATH-PARTIAL-002 | source/range 일부 누락 | 확인된 edge 보존·미확인 범위 표시 | not_executed |
-| QA-PATH-FAILED-001 | scope/replay 결합 불일치 | failed·data null·reconciliation error | not_executed |
+| QA-PATH-PARTIAL-002 | 비필수 source/range 일부 누락 | 확인된 edge 보존·미확인 범위 표시 | not_executed |
+| QA-PATH-FAILED-001 | scope/replay 또는 필수 source 결합 불일치 | failed·data null·reconciliation error | not_executed |
 | QA-PATH-NEG-001 | cycle·중복·unrelated fund | 확정 경로 오염 없이 제외·실패 | not_executed |
 | QA-PATH-SEC-001 | secret/path·Rules Gate | endpoint·credential·절대 경로 비노출 | not_executed |
 | QA-PATH-DET-001 | 동일 replay 두 번 | canonical result hash 일치 | not_executed |

@@ -1,6 +1,6 @@
 # TASK-014 PATH Graph·금액 정합 계약 제안
 > Created: 2026-07-29 22:52
-> Last Updated: 2026-07-29 22:52
+> Last Updated: 2026-07-29 23:05
 > Status: Proposed 0.1 · Docs-only · Fixture 사례 미선정 · Implementation Not Approved
 
 ## 1. 목적
@@ -136,8 +136,8 @@ edge_id sequence)`로 결정적으로 정렬한다.
 | 상태 | 조건 | 데이터 |
 |:---|:---|:---|
 | complete | 요청 범위·budget 안에서 필수 edge와 terminal/merge가 재현되고 residual이 허용 범위 이내 | graph·path·ledger 전부 |
-| partial | budget/range/source 한계로 일부 frontier가 미확인이나 확인된 edge는 유효 | 확인된 graph + termination + unresolved frontier |
-| failed | seed/scope가 invalid, source reconciliation 실패, 필수 edge가 서로 모순 | `data: null` + 구조화 오류 |
+| partial | budget/range/비필수 source 한계로 일부 frontier가 미확인이나 확인된 edge는 유효 | 확인된 graph + termination + unresolved frontier |
+| failed | seed/scope가 invalid, 필수 source 결합·reconciliation 실패, 필수 edge가 서로 모순 | `data: null` + 구조화 오류 |
 
 오류 후보:
 
@@ -151,8 +151,10 @@ edge_id sequence)`로 결정적으로 정렬한다.
 - `path_source_unavailable`
 
 `path_budget_exhausted`와 `path_frontier_unresolved`는 확인된 graph가 있으면
-`partial`이다. source가 서로 다른 raw 사실을 주장하거나 request scope와
-replay가 결합되지 않으면 `failed`다.
+`partial`이다. `path_source_unavailable`도 비필수 source 일부만 누락되고
+확인된 edge가 유효하면 `partial`이다. 반대로 seed·asset·range를 입증할
+필수 source가 없거나 source들이 서로 다른 raw 사실을 주장하거나 request
+scope와 replay가 결합되지 않으면 `failed`다.
 
 ## 7. Exclusion·금액 정합
 

@@ -1,6 +1,6 @@
 # TASK-014 PATH Graph·금액 정합 UI
 > Created: 2026-07-29 22:52
-> Last Updated: 2026-07-29 22:52
+> Last Updated: 2026-07-29 23:05
 > Status: Draft 0.1 · Interactive Preview Added · User Review Pending · Runtime Not Implemented
 
 ## 1. 목적
@@ -66,8 +66,9 @@ flowchart LR
 
 - `PARTIAL`과 중단 이유를 최상단에 표시한다.
 - 확인된 graph는 유지한다.
-- `budget_exhausted`, `frontier_unresolved`, `source_unavailable` 중
-  무엇이 중단 원인인지 표시한다.
+- `budget_exhausted`, `frontier_unresolved`, 비필수 `source_unavailable` 중
+  무엇이 중단 원인인지 표시한다. 필수 source가 seed·asset·range에
+  결합되지 않거나 공급자 사실이 충돌하면 partial이 아니라 failed다.
 - unresolved node/edge와 재개 cursor를 표시한다.
 - residual을 0으로 꾸미지 않고 `unresolved`로 표시한다.
 
@@ -75,7 +76,7 @@ flowchart LR
 
 - `FAILED`, 오류 code·stage를 최상단에 표시한다.
 - `data: null`을 명시한다.
-- scope/replay 결합, asset mismatch, source conflict처럼 재시도로
+- scope/replay 결합, asset mismatch, 필수 source conflict처럼 재시도로
   해결되지 않는 원인을 구분한다.
 - graph·ledger를 성공 결과처럼 표시하지 않는다.
 

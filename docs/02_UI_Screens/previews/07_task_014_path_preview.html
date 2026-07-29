@@ -94,6 +94,8 @@
     path: {
       name:"trace_path",
       copy:"Seed A에서 terminal D까지 같은 자산의 ordered edge를 추적하고 무관 후보를 제외합니다.",
+      failedCode:"path_scope_invalid",
+      failedMessage:"requested seed/range does not bind to the replay evidence",
       fields:[["seed_node","0xA…"],["asset_scope","ETH native"],["block_range","100–140"],["budgets","hops 4 · nodes 12 · edges 20"]],
       complete:[
         ["included","[INCLUDED] A --(12.5 ETH · tx 0x01 · block 101)--> B"],
@@ -105,6 +107,8 @@
     remerge: {
       name:"trace_remerge",
       copy:"Seed A의 두 분기를 따라 공통 merge M을 찾고 unrelated inflow를 ledger에서 분리합니다.",
+      failedCode:"path_reconciliation_failed",
+      failedMessage:"branch contributions and the selected merge ledger are inconsistent",
       fields:[["seed_node","0xA…"],["asset_scope","USDC 0xToken"],["block_range","200–260"],["budgets","hops 5 · nodes 24 · edges 40"]],
       complete:[
         ["included","[INCLUDED] A --(6000 USDC · tx 0x11)--> B1 --(5990)--> M"],
@@ -115,6 +119,8 @@
     multi: {
       name:"aggregate_origins",
       copy:"둘 이상의 origin이 동일 exit로 보낸 contribution을 중복 없이 집계합니다. 가격은 별도 context입니다.",
+      failedCode:"path_asset_mismatch",
+      failedMessage:"origin contributions contain incompatible asset identities",
       fields:[["origin_nodes","0xV1…, 0xV2…, 0xV3…"],["exit_node","0xE…"],["asset_scope","ETH native"],["budgets","hops 3 · nodes 32 · edges 64"]],
       complete:[
         ["included","[INCLUDED] V1 --(3.0 ETH)--> H1 --(2.99)--> E"],
@@ -138,9 +144,9 @@
     document.querySelector("#query-chip").textContent=q.name;
     document.querySelector("#copy").textContent=q.copy;
     document.querySelector("#fields").innerHTML=q.fields.map(([k,v])=>`<div class="field"><span>${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
-    let html=`<div class="status"><span class="badge ${cls}">${state.toUpperCase()}</span><span class="${cls}">${state==="complete"?"terminal_reached":state==="partial"?"budget_exhausted":"path_reconciliation_failed"}</span></div>`;
+    let html=`<div class="status"><span class="badge ${cls}">${state.toUpperCase()}</span><span class="${cls}">${state==="complete"?"terminal_reached":state==="partial"?"budget_exhausted":esc(q.failedCode)}</span></div>`;
     if(state==="failed"){
-      html+=`<div class="section">ERROR</div><div class="error">stage=reconciliation · data=null · source scope does not bind to requested seed/asset</div>`;
+      html+=`<div class="section">ERROR</div><div class="error">stage=reconciliation · data=null · ${esc(q.failedMessage)}</div>`;
     }else{
       const edges=state==="partial"?q.complete.slice(0,2).concat([["unresolved","[UNRESOLVED] frontier --(max_hops reached)--> ?"]]):q.complete;
       html+=`<div class="section">GRAPH EDGES</div>`+edges.map(([kind,text])=>`<div class="edge ${kind}">${esc(text)}</div>`).join("");
