@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 22:13
-> Status: Wave 1 TASK-012 Complete · Wave 3 TASK-013 Complete · Benchmark 9/9
+> Last Updated: 2026-07-29 23:09
+> Status: TASK-012·013 Complete · TASK-014 Preview User Review Passed · Benchmark 9/9
 
 ## 1. 목적
 
@@ -131,10 +131,18 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 `확정`으로 올린다
   ([최종 승격 Receipt](../05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md)).
 - [x] `TASK-013` Benchmark automated 7 → 9 승격과 9/9 통과를 기록한다.
+- [x] `TASK-014` proposed fixture 3개 ID와 공개 사례 선정 기준을 docs-only로
+  고정한다.
+- [x] `TASK-014` `flow_path` 대안·bounded graph·reconciliation ledger·
+  partial/failed 계약을 작성한다.
+- [x] `TASK-014` query 3개 × 상태 3개 HTML Preview와 UI Gate를 작성한다.
 - [ ] `TASK-014` 단일 path와 분기·재병합 fixture를 확정한다.
-- [ ] graph node/edge·asset conservation·budget·partial 계약을 승인한다.
+- [x] 사용자가 PATH Preview를 승인한다(2026-07-29 23:09).
+- [ ] 사용자가 `flow_path` 대안 B를 정식 승인한다.
+- [ ] graph node/edge·asset conservation·budget·partial 계약을 정식 승인한다.
 - [ ] path 결과가 label/heuristic과 분리되는지 검증한다.
-- [ ] 기존 Workbench Preview 변경 필요 여부를 결정한다.
+- [x] 기존 Workbench는 상위 read-only 화면으로 유지하고 TASK-014 전용
+  Preview를 별도로 사용하기로 결정한다.
 
 ### [ ] Wave 4 — Label·OSINT·Actor
 
@@ -213,5 +221,8 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - **QA_Validation**: [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - NFT 표준 2종·Proxy 선정 Gate
 - **QA_Validation**: [TASK-013 Fixture 승격 검토 보고서](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) - `검증 중` 승격 판정
 - **QA_Validation**: [TASK-013 최종 승격 Receipt](../05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md) - confirmed fixture 3개·Benchmark 9/9 최종 판정
+- **Technical_Specs**: [TASK-014 PATH Contract](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) - bounded graph·ledger·오류 계약
+- **UI_Screens**: [TASK-014 PATH UI](../02_UI_Screens/08_TASK_014_PATH_UI.md) - query 3개·상태 3개 UI Gate
+- **QA_Validation**: [TASK-014 Fixture·Contract Gate](../05_QA_Validation/39_TASK_014_FIXTURE_CONTRACT_GATE.md) - fixture·oracle·Verifier Stop/Go
 - **UI_Screens**: [TASK-013 NFT·Proxy UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md) - 표준 3개·상태 3개 화면 계약과 Preview
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - runner·dry-run·미실행 경계

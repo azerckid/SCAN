@@ -1,7 +1,7 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-29 05:58
-> Status: Approved 1.5 · V1·TASK-012 UI-First Gates Passed
+> Last Updated: 2026-07-29 23:09
+> Status: Approved 1.7 · V1·TASK-012/013 Gates Passed · TASK-014 Preview User Review Passed
 
 ## 1. 문서 목적
 
@@ -411,12 +411,15 @@ contest_rpc | provided_artifact` 세 입력 모드와 네 체인 범위를 `scan
 - **UI_Screens**: [TASK-012 EVM Core Preview](./previews/04_task_012_evm_core_cli_preview.html) - 0.2 Draft 사용자 검토 화면
 - **UI_Screens**: [입력 소스 선택 UI](./06_INPUT_SOURCE_SELECTION_UI.md) - WP-INPUT 세 입력 모드·오류·partial 화면 계약
 - **UI_Screens**: [입력 소스 선택 Preview](./previews/05_input_source_selection_preview.html) - 세 입력 모드·체인 범위 검토 화면
+- **UI_Screens**: [TASK-014 PATH UI](./08_TASK_014_PATH_UI.md) - bounded graph·ledger·상태 화면 계약
+- **UI_Screens**: [TASK-014 PATH Preview](./previews/07_task_014_path_preview.html) - query 3개·상태 3개 docs-only 검토 화면
 - **Technical_Specs**: [WP-INPUT-GATE CLI·Operations 연결 계약](../03_Technical_Specs/13_WP_INPUT_CLI_OPERATIONS_CONTRACT.md) - 명령·핸드오프·보안·QA 계약
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·Queue·독립 검증·수동 제출 계약
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - CLI·log·보안 경계
 - **Technical_Specs**: [P0·V1 도구 요구사항](../03_Technical_Specs/03_SCAN_2026_TOOL_REQUIREMENTS.md) - 상태·오류·완료 기준
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 요청·결과·오류 계약
 - **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - EVM Core 0.2 Draft
+- **Technical_Specs**: [TASK-014 PATH Contract Proposal](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) - graph·reconciliation·partial/failed 계약
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - CLI·vertical slice 구현 순서
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 명령·상태·종료 코드 검증
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - preview 기준값
