@@ -223,6 +223,127 @@ def test_analyze_reports_unavailable_vertical_slice_without_live_calls(
     assert "--evidence" in result.stderr
 
 
+@pytest.mark.parametrize("mode", ("external_rpc", "provided_artifact"))
+def test_explicit_input_modes_run_the_existing_dex_analyzer(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    mode: str,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    write_json(request_path, load_document("dex", "request"))
+    source_option = "--evidence" if mode == "external_rpc" else "--artifact"
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--input-mode",
+            mode,
+            source_option,
+            str(DEX_FIXTURE),
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert f"input_mode={mode}" in result.stderr
+    assert "source_id=" in result.stderr
+    assert "records=1" in result.stderr
+    assert "COMPLETE AN-FX-SVC-DEX-001" in result.stdout
+    assert str(tmp_path) not in result.stdout + result.stderr
+
+
+def test_input_mode_scope_and_option_conflicts_fail_before_persistence(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    write_json(request_path, load_document("dex", "request"))
+
+    mismatch = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--chain-scope",
+            "bitcoin",
+            "--evidence",
+            str(DEX_FIXTURE),
+        ],
+    )
+    conflict = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--input-mode",
+            "provided_artifact",
+            "--artifact",
+            str(DEX_FIXTURE),
+            "--evidence",
+            str(DEX_FIXTURE),
+        ],
+    )
+    endpoint_conflict = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--input-mode",
+            "external_rpc",
+            "--evidence",
+            str(DEX_FIXTURE),
+            "--contest-rpc-endpoint-env",
+            "SCAN_TEST_CONTEST_ENDPOINT",
+        ],
+    )
+
+    assert mismatch.exit_code == 2
+    assert "chain_scope_mismatch" in mismatch.stderr
+    assert conflict.exit_code == 2
+    assert "invalid_input" in conflict.stderr
+    assert endpoint_conflict.exit_code == 2
+    assert "invalid_input" in endpoint_conflict.stderr
+    assert not (tmp_path / ".scan").exists()
+
+
+def test_contest_rpc_endpoint_is_environment_only_and_query_mapping_stays_blocked(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request_path = tmp_path / "request.json"
+    write_json(request_path, load_document("dex", "request"))
+    endpoint = "https://contest.example/SECRET_CANARY"
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--input-mode",
+            "contest_rpc",
+            "--contest-rpc-endpoint-env",
+            "SCAN_TEST_CONTEST_ENDPOINT",
+        ],
+        env={"SCAN_TEST_CONTEST_ENDPOINT": endpoint},
+    )
+
+    assert result.exit_code == 2
+    assert "unsupported_input" in result.stderr
+    assert "query mapping is not approved" in result.stderr
+    assert endpoint not in result.stdout + result.stderr
+    assert "SECRET_CANARY" not in result.stdout + result.stderr
+    assert not (tmp_path / ".scan").exists()
+
+
 def test_dex_analyze_persists_and_show_renders_the_same_result(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

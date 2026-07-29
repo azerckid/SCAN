@@ -51,14 +51,15 @@
 
 ## 4. 실행 Wave
 
-### [ ] Wave 0 — 공통 입력 계층
+### [x] Wave 0 — 공통 입력 계층
 
 - [x] 입력 mode·chain scope·정규화·provenance 계약을 문서화한다.
 - [x] contest RPC core adapter의 HTTPS·secret·명시 endpoint 계약을 구현한다.
 - [x] provided artifact core importer의 format·limit·hash·오류 계약을 구현한다.
 - [x] 최소 RPC↔artifact 동등성 테스트와 library-only UI N/A를 확인한다.
 - [x] 첫 구현 단위 승인과 집중 Verification Receipt를 확보한다.
-- [ ] CLI·Operations input selection과 실제 대회 artifact mapping을 별도 승인한다.
+- [x] CLI·Operations input selection과 offline raw-artifact handoff를 승인·구현한다.
+- [ ] 실제 대회 artifact의 문제별 mapping은 문제 공개 뒤 별도 승인한다.
 
 ### [ ] Wave 1 — 범용 EVM
 

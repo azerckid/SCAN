@@ -12,6 +12,7 @@ from scan_tool.application.security import SensitiveDataError, SensitiveDataGuar
 from scan_tool.domain import validate_analysis_pair
 from scan_tool.domain.analysis_request import AnalysisRequest, RuleStatus
 from scan_tool.domain.analysis_result import AnalysisResult, AnalysisStatus
+from scan_tool.domain.input_source import ChainScope, InputEvidenceEnvelope
 from scan_tool.domain.operations import (
     ActorType,
     CompetitionManifest,
@@ -50,6 +51,7 @@ class EvidenceWorkerCommand:
     worker_id: str
     event_id: str
     error_id: str
+    input_evidence: InputEvidenceEnvelope | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -85,6 +87,7 @@ class EvidenceWorkerService:
             return self._blocked(command, policy_error)
         try:
             self._validate_replay(command.approved_replay)
+            self._validate_input_evidence(command)
         except (ValueError, SensitiveDataError):
             return self._failed(command, "approved_replay_rejected", adapter_called=False)
 
@@ -171,6 +174,16 @@ class EvidenceWorkerService:
             raise ValueError("approved replay hash mismatch")
         self._guard.check_bytes(replay.body)
 
+    @staticmethod
+    def _validate_input_evidence(command: EvidenceWorkerCommand) -> None:
+        envelope = command.input_evidence
+        if envelope is None:
+            return
+        if envelope.bundle.chain_scope is not ChainScope.EVM:
+            raise ValueError("input evidence chain scope is unsupported")
+        if envelope.bundle.raw_sha256 != command.approved_replay.sha256:
+            raise ValueError("input evidence does not match the approved replay")
+
     def _validate_response(
         self,
         command: EvidenceWorkerCommand,
@@ -222,6 +235,18 @@ class EvidenceWorkerService:
         checkpoint_ref = (
             result.run.checkpoint_id if result.run.checkpoint_id is not MISSING else None
         )
+        details: dict[str, object] = {
+            "analysis_id": result.analysis_id,
+            "result_ids": [item.result_id for item in result.results],
+            "evidence_ids": [item.evidence_id for item in result.evidence],
+            "source_record_ids": [item.source_record_id for item in result.sources],
+            "request_artifact_uri": response.request_artifact_uri,
+            "replay_artifact_uri": response.replay_artifact_uri,
+            "export_uris": list(response.export_uris),
+            "reused": response.reused,
+        }
+        if command.input_evidence is not None:
+            details["input_evidence"] = command.input_evidence.safe_details()
         return EvidenceWorkerExecution(
             worker_outcome=WorkerOutcome(
                 status=job_status,
@@ -234,16 +259,7 @@ class EvidenceWorkerService:
                 command,
                 event_type=f"evidence_{job_status.value}",
                 to_status=job_status,
-                details={
-                    "analysis_id": result.analysis_id,
-                    "result_ids": [item.result_id for item in result.results],
-                    "evidence_ids": [item.evidence_id for item in result.evidence],
-                    "source_record_ids": [item.source_record_id for item in result.sources],
-                    "request_artifact_uri": response.request_artifact_uri,
-                    "replay_artifact_uri": response.replay_artifact_uri,
-                    "export_uris": list(response.export_uris),
-                    "reused": response.reused,
-                },
+                details=details,
             ),
             error=None,
             export_uris=response.export_uris,

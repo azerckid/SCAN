@@ -1,7 +1,7 @@
 # WP-INPUT-GATE Core Input Library 구현 보고서
 > Created: 2026-07-29 11:10
-> Last Updated: 2026-07-29 11:31
-> Status: Core Library Passed · CLI/Operations Wiring Not Executed
+> Last Updated: 2026-07-29 12:54
+> Status: Core Library Passed · CLI/Operations Wiring Applied Separately
 
 ## 1. 목적
 
@@ -105,10 +105,11 @@ uv run python scripts/verify.py
 - security scan 96 runtime/evidence files PASS
 - TASK-012 oracle·contract·UI 회귀 PASS
 
-## 5. 제외 범위
+## 5. 후속 구현 상태와 제외 범위
 
-- CLI `scan analyze` input mode 옵션
-- Operations Board problem 입력과 adapter wiring
+CLI `scan analyze` input mode 옵션과 Operations Evidence Worker handoff는
+`WP-INPUT-IMPL-02`에서 구현했다. 다음 항목은 계속 제외한다.
+
 - 실제 주최 RPC capability smoke
 - 임의 vendor/문제별 CSV column 자동 mapping
 - binary RLP·protobuf·압축 파일
@@ -119,10 +120,8 @@ uv run python scripts/verify.py
 
 ## 6. 다음 Gate
 
-1. core library 전체 회귀 검증
-2. CLI/Operations input selection 계약과 UI 영향 승인
-3. TASK-012 EVM Core analyzer가 normalized evidence를 소비하도록 별도 승인
-4. 실제 문제 공개 시 contest RPC/artifact mapping을 fixture로 고정
+1. TASK-012 EVM Core analyzer가 normalized evidence를 소비하도록 별도 승인
+2. 실제 문제 공개 시 contest RPC/artifact mapping을 fixture로 고정
 
 ## 7. Related Documents
 
@@ -130,3 +129,4 @@ uv run python scripts/verify.py
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - `WP-INPUT-IMPL-01`
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - Wave 0
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 입력 동등성·체인 격리
+- **QA_Validation**: [CLI·Operations Wiring 보고서](./31_WP_INPUT_CLI_OPERATIONS_REPORT.md) - 후속 envelope·artifact·Worker 연결

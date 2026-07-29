@@ -13,6 +13,7 @@ from threading import Lock
 import pytest
 
 from scan_tool.adapters.evidence import InProcessEvidenceWorker
+from scan_tool.adapters.input_source import ProvidedArtifactImporter
 from scan_tool.application.candidate_verifier import (
     CandidateBuildCommand,
     CandidateBuilder,
@@ -34,6 +35,11 @@ from scan_tool.application.scheduler import (
 from scan_tool.domain import validate_analysis_request, validate_analysis_result
 from scan_tool.domain.analysis_request import AnalysisRequest, AnalysisType, RuleStatus
 from scan_tool.domain.analysis_result import AnalysisResult, AnalysisStatus
+from scan_tool.domain.input_source import (
+    ArtifactFormat,
+    ChainScope,
+    InputEvidenceEnvelope,
+)
 from scan_tool.domain.operations import (
     CompetitionEnvironment,
     CompetitionManifest,
@@ -273,6 +279,46 @@ def test_confirmed_fixture_runs_through_in_process_worker(
     assert execution.event.safe_details_json["source_record_ids"]
     workspace = tmp_path / "workspaces" / command.problem.problem_id / command.job.job_id
     assert (workspace / "scan.sqlite3").exists()
+
+
+def test_input_envelope_is_verified_and_added_to_safe_event_details(
+    tmp_path: Path,
+) -> None:
+    command = _command("dex")
+    replay = command.approved_replay
+    bundle = ProvidedArtifactImporter().import_bytes(
+        replay.body,
+        artifact_format=ArtifactFormat.JSON,
+        chain_scope=ChainScope.EVM,
+    )
+    envelope = InputEvidenceEnvelope(
+        bundle=bundle,
+        raw_artifact_uri=f"artifact://sha256/{bundle.raw_sha256}",
+    )
+
+    execution = asyncio.run(_service(tmp_path).execute(replace(command, input_evidence=envelope)))
+
+    assert execution.worker_outcome.status is JobStatus.COMPLETE
+    assert execution.event.safe_details_json["input_evidence"] == envelope.safe_details()
+
+
+def test_input_envelope_hash_mismatch_blocks_before_adapter(tmp_path: Path) -> None:
+    command = _command("dex")
+    bundle = ProvidedArtifactImporter().import_bytes(
+        b'{"different":true}',
+        artifact_format=ArtifactFormat.JSON,
+        chain_scope=ChainScope.EVM,
+    )
+    envelope = InputEvidenceEnvelope(
+        bundle=bundle,
+        raw_artifact_uri=f"artifact://sha256/{bundle.raw_sha256}",
+    )
+
+    execution = asyncio.run(_service(tmp_path).execute(replace(command, input_evidence=envelope)))
+
+    assert execution.adapter_called is False
+    assert execution.worker_outcome.status is JobStatus.FAILED
+    assert execution.event.safe_details_json["reason"] == "approved_replay_rejected"
 
 
 def test_three_vertical_workers_connect_to_bounded_scheduler(tmp_path: Path) -> None:

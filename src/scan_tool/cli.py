@@ -2,6 +2,8 @@
 
 import hashlib
 import json
+import os
+import re
 import sqlite3
 import sys
 from pathlib import Path
@@ -12,14 +14,21 @@ import typer
 from pydantic import ValidationError
 
 from scan_tool import __version__
+from scan_tool.adapters.input_source import validate_contest_rpc_endpoint
 from scan_tool.adapters.sqlite_operations import SQLiteOperationsRepository
 from scan_tool.application.cli_runtime import (
     AnalysisUnavailable,
     CliRuntime,
 )
 from scan_tool.application.expected_problem_benchmark import ExpectedProblemBenchmarkRunner
+from scan_tool.application.input_wiring import (
+    InputEvidenceService,
+    PreparedInputEvidence,
+    infer_artifact_format,
+)
 from scan_tool.application.operations_snapshot import OperationsSnapshotBuilder
 from scan_tool.application.operations_terminal import render_operations_snapshot
+from scan_tool.application.security import SensitiveDataError
 from scan_tool.application.submission import SubmissionCommand, SubmissionRecorder
 from scan_tool.application.terminal import (
     EXIT_FAILED,
@@ -40,9 +49,18 @@ from scan_tool.domain import (
     validate_operations_document,
 )
 from scan_tool.domain.analysis_request import AnalysisRequest, RuleStatus
+from scan_tool.domain.input_source import (
+    ArtifactFormat,
+    ChainScope,
+    InputFailureKind,
+    InputMode,
+    InputNormalizationError,
+)
 from scan_tool.domain.operations import OperationsDocument, SubmissionResponse
 
 DATA_ROOT = Path(".scan")
+DEFAULT_CONTEST_RPC_ENDPOINT_ENV = "SCAN_CONTEST_RPC_ENDPOINT"
+ENVIRONMENT_NAME = re.compile(r"^[A-Z_][A-Z0-9_]*$")
 
 app = typer.Typer(
     help="Evidence-first blockchain forensic tools for SCAN 2026.",
@@ -100,13 +118,63 @@ def analyze(
             help="Reviewed offline replay evidence JSON for a supported vertical slice.",
         ),
     ] = None,
+    input_mode: Annotated[
+        InputMode | None,
+        typer.Option(
+            "--input-mode",
+            help="external_rpc, contest_rpc, or provided_artifact (default: external_rpc).",
+        ),
+    ] = None,
+    chain_scope: Annotated[
+        ChainScope,
+        typer.Option(
+            "--chain-scope",
+            help="evm, bitcoin, non_evm, or cross_chain.",
+        ),
+    ] = ChainScope.EVM,
+    contest_rpc_endpoint_env: Annotated[
+        str | None,
+        typer.Option(
+            "--contest-rpc-endpoint-env",
+            help="Environment variable name containing the contest HTTPS RPC endpoint.",
+        ),
+    ] = None,
+    artifact: Annotated[
+        Path | None,
+        typer.Option("--artifact", help="Provided JSON, JSONL, or CSV evidence artifact."),
+    ] = None,
+    artifact_format: Annotated[
+        ArtifactFormat | None,
+        typer.Option("--artifact-format", help="json, jsonl, or csv."),
+    ] = None,
 ) -> None:
     """Validate and dispatch a forensic analysis request."""
+    selected_mode = input_mode or InputMode.EXTERNAL_RPC
     started = monotonic()
-    _progress("STARTING", f"request={safe_path_label(request)}")
+    _progress(
+        "STARTING",
+        f"request={safe_path_label(request)} · input_mode={selected_mode.value} · "
+        f"chain_scope={chain_scope.value}",
+    )
     _progress("FEEDBACK", f"{(monotonic() - started) * 1000:.1f}ms")
     model = _validate_request_file(request)
     document = model.root
+    prepared_input = _prepare_analysis_input(
+        input_mode=input_mode,
+        chain_scope=chain_scope,
+        contest_rpc_endpoint_env=contest_rpc_endpoint_env,
+        artifact=artifact,
+        artifact_format=artifact_format,
+        evidence=evidence,
+    )
+    if prepared_input is not None:
+        _progress(
+            "INPUT",
+            f"source_id={prepared_input.bundle.source_id} · "
+            f"records={len(prepared_input.bundle.records)} · "
+            f"sha256={prepared_input.bundle.raw_sha256[:12]} · "
+            f"media_type={prepared_input.bundle.media_type}",
+        )
     _progress(
         "VALIDATED",
         f"{document.analysis_id} · {document.analysis_type} · "
@@ -127,8 +195,18 @@ def analyze(
                 typer.echo(f"FAILED {document.analysis_id} · first_error rule_restricted")
                 raise typer.Exit(EXIT_RESTRICTED)
 
+            replay_path, replay_body, replay_sha256 = _replay_arguments(
+                runtime,
+                evidence=evidence,
+                prepared_input=prepared_input,
+            )
             try:
-                result = runtime.execute_analysis(model, replay_path=evidence)
+                result = runtime.execute_analysis(
+                    model,
+                    replay_path=replay_path,
+                    replay_body=replay_body,
+                    expected_replay_sha256=replay_sha256,
+                )
             except AnalysisUnavailable as error:
                 runtime.storage.finish_run(document.analysis_id, "failed")
                 _progress("ERROR", f"source_unavailable stage=analysis_dispatch · {error}")
@@ -392,6 +470,113 @@ def _load_operations_document(
     if document is None:
         _fail_input("source_unavailable", "competition was not found in the local database")
     return document
+
+
+def _prepare_analysis_input(
+    *,
+    input_mode: InputMode | None,
+    chain_scope: ChainScope,
+    contest_rpc_endpoint_env: str | None,
+    artifact: Path | None,
+    artifact_format: ArtifactFormat | None,
+    evidence: Path | None,
+) -> PreparedInputEvidence | None:
+    selected_mode = input_mode or InputMode.EXTERNAL_RPC
+    if chain_scope is not ChainScope.EVM:
+        _fail_input(
+            InputFailureKind.CHAIN_SCOPE_MISMATCH.value,
+            "input chain scope does not match the analyzer",
+        )
+    if selected_mode is InputMode.CONTEST_RPC:
+        if evidence is not None or artifact is not None or artifact_format is not None:
+            _fail_input(
+                "invalid_input",
+                "contest_rpc does not accept replay or artifact options",
+            )
+        environment_name = contest_rpc_endpoint_env or DEFAULT_CONTEST_RPC_ENDPOINT_ENV
+        if ENVIRONMENT_NAME.fullmatch(environment_name) is None:
+            _fail_input("invalid_input", "contest RPC endpoint environment name is invalid")
+        endpoint = os.environ.get(environment_name)
+        if not endpoint:
+            _fail_input("invalid_input", "contest RPC endpoint environment is not configured")
+        try:
+            validate_contest_rpc_endpoint(endpoint)
+        except ValueError:
+            _fail_input("invalid_input", "contest RPC endpoint is not a safe HTTPS URL")
+        _fail_input(
+            InputFailureKind.UNSUPPORTED_INPUT.value,
+            "contest RPC query mapping is not approved",
+        )
+    if selected_mode is InputMode.PROVIDED_ARTIFACT:
+        if evidence is not None or artifact is None or contest_rpc_endpoint_env is not None:
+            _fail_input(
+                "invalid_input",
+                "provided_artifact accepts only --artifact and --artifact-format",
+            )
+        raw_bytes = _read_input_bytes(artifact)
+    else:
+        if (
+            artifact is not None
+            or artifact_format is not None
+            or contest_rpc_endpoint_env is not None
+        ):
+            _fail_input(
+                "invalid_input",
+                "external_rpc accepts only --evidence",
+            )
+        if input_mode is None:
+            return None
+        if evidence is None:
+            _fail_input("invalid_input", "external_rpc requires --evidence")
+        raw_bytes = _read_input_bytes(evidence)
+    try:
+        selected_format = (
+            artifact_format or infer_artifact_format(artifact)
+            if selected_mode is InputMode.PROVIDED_ARTIFACT and artifact is not None
+            else ArtifactFormat.JSON
+        )
+        return InputEvidenceService().prepare(
+            raw_bytes,
+            input_mode=selected_mode,
+            chain_scope=chain_scope,
+            artifact_format=selected_format,
+        )
+    except (InputNormalizationError, SensitiveDataError) as error:
+        code = (
+            error.kind.value
+            if isinstance(error, InputNormalizationError)
+            else InputFailureKind.INVALID_ARTIFACT.value
+        )
+        _fail_input(code, "input evidence was rejected")
+
+
+def _replay_arguments(
+    runtime: CliRuntime,
+    *,
+    evidence: Path | None,
+    prepared_input: PreparedInputEvidence | None,
+) -> tuple[Path | None, bytes | None, str | None]:
+    if prepared_input is None:
+        return evidence, None, None
+    service = InputEvidenceService()
+    persisted_input = service.persist(
+        prepared_input,
+        artifacts=runtime.artifacts,
+        storage=runtime.storage,
+    )
+    approved_replay = service.approved_replay(
+        persisted_input,
+        artifacts=runtime.artifacts,
+        expected_chain_scope=ChainScope.EVM,
+    )
+    return None, approved_replay.body, approved_replay.sha256
+
+
+def _read_input_bytes(path: Path) -> bytes:
+    try:
+        return path.read_bytes()
+    except OSError:
+        _fail_input("invalid_input", f"cannot read input from {safe_path_label(path)}")
 
 
 def _validate_request_file(path: Path) -> AnalysisRequest:

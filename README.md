@@ -47,6 +47,10 @@ Phase 2 is documented as `TASK-012` through `TASK-019`: generic EVM, NFT/proxy,
 PATH, intelligence, service/xchain, Bitcoin, case reconciliation, and a final
 coverage gate. These tasks are proposed and have no implementation approval yet.
 Live AI and CTFd network submission remain unimplemented.
+`WP-INPUT-IMPL-02` connects explicit external replay and provided JSON/JSONL/CSV
+input selection to a normalized evidence envelope, content-addressed raw artifact,
+and the existing offline Evidence Worker. Contest RPC endpoint values remain
+environment-only and live query mapping remains unimplemented.
 Official rules for AI, automation, prebuilt tools, external APIs, and challenge
 submission remain `unclear`, so external execution modes remain `rules_gated` until
 an authoritative notice is recorded.
@@ -95,6 +99,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | OPS-IMPL-08 evidence | [`21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md`](docs/05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) | same-problem leaf concurrency, manual submission record, six Operations QA, and final security evidence |
 | TASK-011 benchmark | [`22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md`](docs/05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | 30-problem coverage classification, three exact offline executions, and prioritized capability gaps |
 | Phase 2 QA | [`23_EXPECTED_PROBLEM_EXPANSION_QA.md`](docs/05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) | fixture-first promotion, negative cases, package QA, and integration gates |
+| WP-INPUT wiring | [`31_WP_INPUT_CLI_OPERATIONS_REPORT.md`](docs/05_QA_Validation/31_WP_INPUT_CLI_OPERATIONS_REPORT.md) | CLI mode selection, raw artifact envelope, Operations handoff, and secret-boundary evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -112,13 +117,13 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-336 passed
+345 passed
 PASS 7 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.1 across 35 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 1189 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 96 runtime/evidence files
+PASS repository traceability: 1197 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 97 runtime/evidence files
 ```
 
 The installed package exposes the approved analysis and local operations command surface:
@@ -135,11 +140,13 @@ uv run scan mark-submitted --database /explicit/path/scan.sqlite3 --competition-
 uv run scan benchmark --manifest docs/05_QA_Validation/benchmarks/expected-problem-v0.1.json
 uv run scan validate REQUEST.json
 uv run scan analyze --request REQUEST.json --evidence RAW_REPLAY.json
+uv run scan analyze --request REQUEST.json --input-mode provided_artifact --chain-scope evm --artifact RAW_REPLAY.json
 uv run scan resume ANALYSIS_ID
 uv run scan show ANALYSIS_ID
 ```
 
-TASK-006~008 accept only reviewed offline DEX, AUTH, or FREEZE replay evidence.
+TASK-006~008 accept reviewed offline DEX, AUTH, or FREEZE replay evidence through
+the legacy `--evidence` path or the explicit input envelope path.
 A supported request without `--evidence` stops explicitly with
 `source_unavailable`; no hidden live request is made.
 

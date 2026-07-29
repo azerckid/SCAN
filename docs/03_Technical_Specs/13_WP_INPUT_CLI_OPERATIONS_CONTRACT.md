@@ -1,7 +1,7 @@
 # WP-INPUT-GATE CLI·Operations 연결 계약
 > Created: 2026-07-29 12:20
-> Last Updated: 2026-07-29 12:38
-> Status: Proposed 0.1 · Docs-Only · CLI·Operations 구현 승인 대기
+> Last Updated: 2026-07-29 12:54
+> Status: Approved 0.1 · WP-INPUT-IMPL-02 Applied
 
 ## 1. 목적
 
@@ -11,9 +11,9 @@ Operations Queue에 연결하기 위한 설계 계약이다. `external_rpc`,
 cross_chain` 체인 범위가 하나의 `NormalizedEvidenceBundle`로 수렴한 뒤,
 동일한 Python analyzer와 독립 Verifier로 전달되는 경계를 고정한다.
 
-이 계약은 **docs-only**다. 아래 wiring은 사용자가 이 계약과 연결된 HTML
-Preview를 승인하기 전에는 구현하지 않는다. Analysis I/O `0.1`, Operations
-`0.1`, SQLite v2, 기존 DEX·AUTH·FREEZE fixture와 결과는 변경하지 않는다.
+사용자는 이 계약과 연결된 HTML Preview를 승인했고 `WP-INPUT-IMPL-02`에서
+아래 wiring을 구현했다. Analysis I/O `0.1`, Operations `0.1`, SQLite v2,
+기존 DEX·AUTH·FREEZE fixture와 결과는 변경하지 않았다.
 
 ## 2. 선행 상태
 
@@ -23,9 +23,9 @@ Preview를 승인하기 전에는 구현하지 않는다. Analysis I/O `0.1`, Op
 | `contest_rpc` HTTPS adapter·read-only allowlist | 구현됨 | `adapters/input_source.py` |
 | JSON·JSONL·CSV bounded importer | 구현됨 | `adapters/input_source.py` |
 | RPC↔artifact record 동등성 | 구현됨 | `tests/unit/test_input_source.py` |
-| CLI 입력 mode 선택 | **미구현** | 이 계약 §4 |
-| Operations Queue→Evidence Worker 입력 전달 | **미구현** | 이 계약 §6 |
-| 입력 출처·오류·partial UI 표시 | **미구현** | 이 계약 §7, UI 문서 |
+| CLI 입력 mode 선택 | **구현됨** | `cli.py`, `application/input_wiring.py` |
+| Operations Queue→Evidence Worker 입력 전달 | **구현됨** | `application/evidence_worker.py` |
+| 입력 출처·오류 표시 | **구현됨** | `cli.py`, UI 문서 |
 
 `WP-INPUT-IMPL-01` core library는 2026-07-29 승인·구현됐다. 이 계약은 그
 경계를 사용자 명령과 운영 화면까지 확장하되, TASK-012~019의 fixture·Schema·
@@ -301,8 +301,9 @@ LeafJobSpec(inputs_projection == request.inputs)   ApprovedReplay(body, sha256)
   list·SQLite v2·snapshot·export에 저장되지 않는다.
 
 core library 범위(RPC↔artifact record 동등성, 단일 endpoint 호출, JSON/JSONL/
-CSV, size/count, chain mismatch, repr 비반사)는 이미 자동화됐다. CLI·Operations
-시나리오는 승인·구현 전까지 `not_executed`다.
+CSV, size/count, chain mismatch, repr 비반사)와 CLI·Operations handoff가
+자동화됐다. `contest_rpc` live query mapping과 TASK-012 analyzer는 별도
+승인 전까지 `not_executed`다.
 
 ## 10. Stop/Go와 승인 Gate
 

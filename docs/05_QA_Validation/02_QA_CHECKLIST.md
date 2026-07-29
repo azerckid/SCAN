@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1 및 Coverage 확장 QA Checklist
 > Created: 2026-07-26 20:28
-> Last Updated: 2026-07-29 01:55
-> Status: Approved 3.0 Baseline · Phase 2 Coverage QA Proposed / Not Executed
+> Last Updated: 2026-07-29 12:54
+> Status: Approved 3.1 Baseline · WP-INPUT Wiring Passed · Phase 2 Analyzer Not Executed
 
 ## 1. 문서 목적
 
@@ -228,6 +228,19 @@ ID는 24개 집계에서 한 번만 센다.
 - [ ] TASK-012~019 개별 fixture와 Context Receipt를 승인한다.
 - [ ] QA-EXP-* 12개 시나리오를 실행한다.
 - [ ] 새 automated 집계와 잔여 assisted·unsupported를 기록한다.
+
+### 6.9 WP-INPUT-IMPL-02 CLI·Operations Wiring
+
+- [x] 입력 계약과 HTML Preview를 사용자가 승인했다.
+- [x] 명시적 `external_rpc`·`provided_artifact`가 normalized bundle과 raw
+  artifact를 거쳐 기존 analyzer에 같은 bytes를 전달한다.
+- [x] envelope URI·bundle hash·ApprovedReplay hash가 일치한다.
+- [x] chain mismatch·mode 옵션 충돌은 artifact·DB 생성 전에 exit 2다.
+- [x] contest endpoint 값은 환경변수에서만 읽으며 출력·event·SQLite에 없다.
+- [x] query mapping 미승인 contest RPC의 network call은 0건이다.
+- [x] Evidence Worker가 envelope 불일치를 adapter 호출 전에 차단한다.
+- [x] Analysis I/O `0.1`, Operations `0.1`, SQLite v2와 기존 fixture를
+  변경하지 않았다.
 
 ## 7. PR·릴리스·대회 전 Gate
 

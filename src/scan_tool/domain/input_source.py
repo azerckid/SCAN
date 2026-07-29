@@ -93,6 +93,33 @@ class NormalizedEvidenceBundle:
             raise ValueError("record locators must be unique")
 
 
+@dataclass(frozen=True, slots=True)
+class InputEvidenceEnvelope:
+    """Bind normalized provenance to its content-addressed raw input."""
+
+    bundle: NormalizedEvidenceBundle
+    raw_artifact_uri: str
+
+    def __post_init__(self) -> None:
+        expected_uri = f"artifact://sha256/{self.bundle.raw_sha256}"
+        if self.raw_artifact_uri != expected_uri:
+            raise ValueError("raw artifact URI does not match the normalized input")
+
+    def safe_details(self) -> dict[str, object]:
+        """Return endpoint-free provenance suitable for an operation event."""
+        return {
+            "input_mode": self.bundle.input_mode.value,
+            "chain_scope": self.bundle.chain_scope.value,
+            "source_id": self.bundle.source_id,
+            "provider_id": self.bundle.provider_id,
+            "media_type": self.bundle.media_type,
+            "raw_sha256": self.bundle.raw_sha256,
+            "record_count": len(self.bundle.records),
+            "record_locators": [record.record_locator for record in self.bundle.records],
+            "record_sha256s": [record.record_sha256 for record in self.bundle.records],
+        }
+
+
 def canonical_record_sha256(data: JsonValue) -> str:
     """Hash one normalized JSON value independently of input serialization."""
     encoded = json.dumps(
