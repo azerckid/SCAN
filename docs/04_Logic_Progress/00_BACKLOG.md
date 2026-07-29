@@ -1005,8 +1005,12 @@ Receipt·개별 구현 승인을 대체하지 않는다.
 - Depends On: TASK-012
 - Target Problems: `EVM-NFT-001`, `EVM-PROXY-001`
 - Atomic Tasks:
+  - [x] ERC-721·ERC-1155·EIP-1967 fixture ID와 공개 사례 선정 기준을
+    docs-only Draft로 고정한다.
+  - [x] event/state/slot decode와 complete·partial·failed 계약 대안을
+    docs-only Draft로 작성한다.
   - [ ] ERC-721/1155와 EIP-1967 공개 fixture를 각각 확정한다.
-  - [ ] event/state/slot decode와 block별 implementation 정합을 설계한다.
+  - [ ] Analysis I/O 대안과 전용 UI Preview를 승인한다.
   - [ ] 표준·반례·decode failure를 검증한다.
   - [ ] 두 문제의 Benchmark 승격 여부를 기록한다.
 - Related Concept Docs:
@@ -1018,13 +1022,16 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [CLI Preview](../02_UI_Screens/previews/01_cli_terminal_preview.html) - terminal 결과 기준
 - Related Technical Docs:
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-EVM-SPECIAL 계약
+  - [TASK-013 분석 계약 제안](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - NFT·Proxy 표준·상태·오류 Draft
   - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 유형별 결과 확장
   - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - ABI·slot 도구 조사
 - Related QA Docs:
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-SPECIAL-001
+  - [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - 세 package ID·선정·승격 Gate
 - Implementation Preconditions:
-  - [ ] 관련 문서·fixture·반례·UI 출력을 확인한다.
-  - [ ] TASK-012 공통 EVM 입력이 안정됐다.
+  - [x] fixture·계약·반례 문서 Draft를 작성한다.
+  - [x] TASK-012 공통 EVM 입력이 안정됐다.
+  - [ ] 공개 fixture와 reference answer를 확정한다.
   - [ ] CLI 진입·전환·이탈과 loading·empty·partial·failed 표시를 확인한다.
   - [ ] log/state 최소 필드·mutation 없음·decode 상태 관리를 승인한다.
   - [ ] OSS/license와 Analysis I/O 변경을 승인한다.
@@ -1043,8 +1050,8 @@ Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - fixture·사용자 구현 승인 전 착수 금지
-  - Required References Read: 위 Related 문서 전체
+  - Status: PENDING - 계약 Draft만 존재. fixture·UI·사용자 구현 승인 전 착수 금지
+  - Required References Read: 예상문제 은행·Coverage Brief·EIP-721/1155/1967
   - Constraints: 소유권 분쟁·안전성 자동 판정 금지
   - Conflicts: None known
 - Change Receipt:

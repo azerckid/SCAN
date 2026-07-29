@@ -105,7 +105,12 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 
 ### [ ] Wave 3 — NFT·Proxy와 PATH
 
+- [x] `TASK-013`의 ERC-721·ERC-1155·EIP-1967 fixture ID와 선정 기준을
+  docs-only Draft로 고정한다.
+- [x] `TASK-013`의 전문 Analysis type 대안·결과·partial/failed 계약을
+  docs-only Draft로 작성한다.
 - [ ] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 확정한다.
+- [ ] `TASK-013` Analysis I/O 대안과 전용 UI Preview를 승인한다.
 - [ ] `TASK-014` 단일 path와 분기·재병합 fixture를 확정한다.
 - [ ] graph node/edge·asset conservation·budget·partial 계약을 승인한다.
 - [ ] path 결과가 label/heuristic과 분리되는지 검증한다.
@@ -178,10 +183,12 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - Work Package 계약
 - **Technical_Specs**: [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 공개 계약 변경 Gate
 - **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - EVM Core 0.2 Draft와 0.1 비변경 검증
+- **Technical_Specs**: [TASK-013 NFT·Proxy Contract Proposal](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - 전문 decoder 계약과 구현 잠금
 - **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - Wave 1 source·AI Planner 선행 Gate
 - **Logic_Progress**: [Backlog](./00_BACKLOG.md) - TASK-012~019 상태
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 승격 검증 기준
 - **QA_Validation**: [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 3/6/21 기준선
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - Wave 1 후보 4개와 잔여 Gate
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - smoke·secret·independence 체크
+- **QA_Validation**: [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - NFT 표준 2종·Proxy 선정 Gate
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - runner·dry-run·미실행 경계
