@@ -1,0 +1,67 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-PROXY-001",
+  "status": "candidate",
+  "pattern": "eip1967_direct_implementation",
+  "proxy_address": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+  "implementation_slot": "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+  "change": {
+    "transaction_hash": "0xe9949c36e86fc9f481897dbac8de33d655bff20b267955a303e2e5643fbc2b35",
+    "block_number": 25199939,
+    "log_index": 1041,
+    "before_implementation": "0x8147b99df7672a21809c9093e6f6ce1a60f119bd",
+    "after_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf",
+    "event_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf"
+  },
+  "admin": {
+    "slot": "0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103",
+    "before": "0x0000000000000000000000000000000000000000",
+    "after": "0x0000000000000000000000000000000000000000",
+    "change": "not_applicable"
+  },
+  "beacon": {
+    "applicable": false
+  },
+  "partial_conditions": [
+    "Upgraded event is available but one historical storage block is unavailable",
+    "Storage change is exact but the requested wider history range is incomplete"
+  ],
+  "failed_conditions": [
+    "Latest storage is substituted for the before block",
+    "Admin or beacon storage is decoded as the direct implementation",
+    "Event and after-state implementation conflict without a conflict result"
+  ],
+  "tolerance": {
+    "address_exact": true
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-PROXY-UPGRADE-EVENT",
+        "description": "The Upgraded event must identify the same implementation as the after-state slot.",
+        "mandatory": true,
+        "evidence_refs": ["EV-PROXY-UPGRADED"]
+      },
+      {
+        "requirement_id": "REQ-PROXY-HISTORICAL-SLOT",
+        "description": "Implementation storage before and after the upgrade block must be exact and independently replayed.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-PROXY-IMPLEMENTATION-BEFORE",
+          "EV-PROXY-IMPLEMENTATION-AFTER"
+        ]
+      },
+      {
+        "requirement_id": "REQ-PROXY-ADMIN-SEPARATION",
+        "description": "The zero admin slot must remain separate from implementation history.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-PROXY-ADMIN-BEFORE",
+          "EV-PROXY-ADMIN-AFTER"
+        ]
+      }
+    ]
+  }
+}

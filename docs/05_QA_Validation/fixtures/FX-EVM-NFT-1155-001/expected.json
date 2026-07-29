@@ -1,0 +1,67 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-NFT-1155-001",
+  "status": "candidate",
+  "standard": "erc1155",
+  "single_case": {
+    "transaction_hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+    "block_number": 24609794,
+    "token_id_raw": "56090175025510453004781233574040052668718235229192064098345825090519343038535",
+    "amount_raw": "1",
+    "selected_outgoing_log_index": 1035,
+    "from": "0xed2da4a573b3a68f221ff07f0c9343b94d6a2e79",
+    "to": "0xa6d2351d519c0f5576c18628eed5c69d9943dcd8",
+    "approval_transitions": [
+      {"log_index": 1034, "approved": true},
+      {"log_index": 1038, "approved": false}
+    ]
+  },
+  "batch_case": {
+    "transaction_hash": "0x94fcb6337f5cae9223146caf50f92d9e1af4342ea7cb21bb16792d032e3a230e",
+    "block_number": 23762140,
+    "log_index": 646,
+    "operator": "0x7730c56f6f8cae7afe82beaad3484fba50a7668b",
+    "from": "0x7730c56f6f8cae7afe82beaad3484fba50a7668b",
+    "to": "0x72b69c619ba17e9ef5c3764dec89c0ac1ec0345e",
+    "ids_raw": [
+      "98244132562950569486596469134463934172142786003734202593081146763200211976206",
+      "98244132562950569486596469134463934172142786003734202593081146763200211976193"
+    ],
+    "amounts_raw": ["1", "1"]
+  },
+  "partial_conditions": [
+    "Single or Batch receipt is unavailable while the other case remains exact",
+    "Approval transitions are present but range completeness cannot be established"
+  ],
+  "failed_conditions": [
+    "TransferBatch ids and amounts are reordered or have different lengths",
+    "TransferSingle token ID is treated as an ERC-721 indexed topic",
+    "An approval transition is silently discarded"
+  ],
+  "tolerance": {
+    "integer_raw": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-NFT1155-SINGLE-APPROVAL",
+        "description": "TransferSingle and both ApprovalForAll transitions must preserve receipt order and raw values.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-NFT1155-SINGLE-IN",
+          "EV-NFT1155-APPROVAL-TRUE",
+          "EV-NFT1155-SINGLE-OUT",
+          "EV-NFT1155-APPROVAL-FALSE"
+        ]
+      },
+      {
+        "requirement_id": "REQ-NFT1155-BATCH",
+        "description": "The two Batch IDs and values must preserve ABI array length and order.",
+        "mandatory": true,
+        "evidence_refs": ["EV-NFT1155-BATCH"]
+      }
+    ]
+  }
+}

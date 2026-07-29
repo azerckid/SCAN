@@ -1,0 +1,73 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-NFT-721-001",
+  "status": "candidate",
+  "standard": "erc721",
+  "movements": [
+    {
+      "event_kind": "transfer",
+      "transaction_hash": "0x07ae8c28ff8109cbe3051308ecd00568ee5539d40c72154ad3412bbe14a727d7",
+      "block_number": 25023516,
+      "log_index": 418,
+      "from": "0x28dda46bdc0aeb3b4e58e6a9a3774875729367a0",
+      "to": "0xe445283d46d814af9ab554d5afb40afb28b91935",
+      "token_id_raw": "9110",
+      "amount_raw": "1",
+      "amount_origin": "normalized_unit"
+    }
+  ],
+  "approvals": [
+    {
+      "event_kind": "approval_for_all",
+      "transaction_hash": "0x4501b47b05689704ee2c2524bc9cb69bcbea0ca3ab71f2a4fc6db97d71af9379",
+      "block_number": 25008826,
+      "log_index": 971,
+      "owner": "0x28dda46bdc0aeb3b4e58e6a9a3774875729367a0",
+      "operator": "0xf41b389e0c1950dc0b16c9498eae77131cc08a56",
+      "approved": true
+    },
+    {
+      "event_kind": "token_approval",
+      "transaction_hash": "0x07ae8c28ff8109cbe3051308ecd00568ee5539d40c72154ad3412bbe14a727d7",
+      "block_number": 25023516,
+      "log_index": 417,
+      "owner": "0x28dda46bdc0aeb3b4e58e6a9a3774875729367a0",
+      "approved_address": "0x0000000000000000000000000000000000000000",
+      "token_id_raw": "9110",
+      "meaning": "approval_reset"
+    }
+  ],
+  "partial_conditions": [
+    "One of the selected transaction receipts or the requested block range is unavailable",
+    "Transfer is decoded but approval history completeness cannot be established"
+  ],
+  "failed_conditions": [
+    "The ERC-721 Transfer is decoded as an ERC-20 amount",
+    "The indexed token ID is read from data instead of topic3",
+    "An event from a different token contract or subject is included"
+  ],
+  "tolerance": {
+    "integer_raw": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-NFT721-TRANSFER",
+        "description": "Token 9110 from, to, transaction, block, and log index must match the raw ERC-721 Transfer event.",
+        "mandatory": true,
+        "evidence_refs": ["EV-NFT721-TRANSFER"]
+      },
+      {
+        "requirement_id": "REQ-NFT721-APPROVALS",
+        "description": "Operator approval and token-specific approval reset must remain separate facts.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-NFT721-OPERATOR-APPROVAL",
+          "EV-NFT721-TOKEN-APPROVAL-RESET"
+        ]
+      }
+    ]
+  }
+}

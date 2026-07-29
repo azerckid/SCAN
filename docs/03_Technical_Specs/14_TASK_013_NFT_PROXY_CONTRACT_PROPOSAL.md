@@ -1,7 +1,7 @@
 # TASK-013 NFT·Proxy 분석 계약 제안
 > Created: 2026-07-29
-> Last Updated: 2026-07-29
-> Status: Proposed 0.1 · Docs Only · Implementation Not Approved
+> Last Updated: 2026-07-29 14:50
+> Status: Candidate Fixtures Selected · Contract Proposed · Implementation Not Approved
 
 ## 1. 목적
 
@@ -20,7 +20,7 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 | TASK-012 EVM Core | Done · Analysis I/O 0.2 | raw log/state 입력 재사용 |
 | EVM-NFT-001 | Assisted | fixture·계약 후보만 정의 |
 | EVM-PROXY-001 | Assisted | fixture·계약 후보만 정의 |
-| NFT·Proxy fixture | 공개 사례 미선정 | 세 후보 package ID와 승격 Gate 정의 |
+| NFT·Proxy fixture | 공개 사례 3개 선정 · `candidate` | 두 공급자 receipt/storage 기본 일치, 승격 Gate 유지 |
 | Analysis I/O | 0.2 적용, 0.1 호환 | 변경하지 않음 |
 | Python runtime | NFT·Proxy analyzer 없음 | 구현하지 않음 |
 | UI | 공통 CLI Preview 존재 | TASK-013 전용 Preview는 별도 승인 |
@@ -79,17 +79,19 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 
 | Fixture ID | 문제 | 반드시 포함할 공개 사실 | 현재 상태 |
 |:---|:---|:---|:---|
-| `FX-EVM-NFT-721-001` | EVM-NFT-001 | Transfer, Approval, ApprovalForAll 중 범위 답에 필요한 event와 tokenId | proposed |
-| `FX-EVM-NFT-1155-001` | EVM-NFT-001 | TransferSingle, TransferBatch, ApprovalForAll과 ids/values exact 배열 | proposed |
-| `FX-EVM-PROXY-001` | EVM-PROXY-001 | EIP-1967 slot before/after, 변경 event, block별 implementation/admin 또는 beacon | proposed |
+| [`FX-EVM-NFT-721-001`](../05_QA_Validation/fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | BAYC ApprovalForAll·Approval reset·Transfer와 token `9110` | candidate |
+| [`FX-EVM-NFT-1155-001`](../05_QA_Validation/fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | Rarible TransferSingle·TransferBatch·ApprovalForAll과 ids/values exact 배열 | candidate |
+| [`FX-EVM-PROXY-001`](../05_QA_Validation/fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | Aave V3 Pool EIP-1967 slot before/after·Upgraded event·admin zero | candidate |
 
-`proposed`는 package ID와 선정 조건만 존재한다는 뜻이다. 주소·TX·block·raw
-replay·reference answer가 없는 현재 상태를 `candidate`, `verifying`,
-`confirmed`로 부르지 않는다.
+`candidate`는 공개 주소·TX·block과 expected/evidence 골격을 채우고 두
+논리 공급자의 receipt 또는 historical storage가 일치했다는 뜻이다.
+filtered range completeness, raw replay SHA-256, negative oracle, 독립
+Verifier가 남아 있으므로 `verifying`이나 `confirmed`로 부르지 않는다.
 
 ### 4.1 공통 승격 Gate
 
-- [ ] 주소·TX·block 범위를 공개 자료에서 선정
+- [x] 주소·TX·block 범위를 공개 자료에서 선정
+- [x] 두 논리 RPC 공급자의 receipt 또는 historical storage decoded 값 일치
 - [ ] `external_rpc`와 저장 raw replay에서 같은 normalized evidence 생성
 - [ ] raw SHA-256, method·params·block tag, retrieved_at과 provider role 기록
 - [ ] expected를 복사하지 않고 raw topic/data/storage에서 reference answer 계산
@@ -223,8 +225,8 @@ storage snapshot은 명시 block tag와 함께 비교한다.
 
 ## 10. 다음 Gate
 
-1. 세 fixture의 공개 사례 후보를 선정한다.
-2. raw replay와 reference answer를 작성한다.
+1. 세 candidate fixture의 filtered range와 raw replay를 작성한다.
+2. raw SHA-256과 provider replay provenance를 고정한다.
 3. 반례·독립 재현 후에만 fixture 승격을 판단한다.
 4. Analysis I/O 대안과 전용 Preview를 사용자에게 제시한다.
 5. Context Receipt와 별도 구현 승인을 받은 뒤 Python decoder를 시작한다.

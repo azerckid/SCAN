@@ -1,14 +1,14 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
 > Last Updated: 2026-07-29
-> Status: Approved 1.2 · Phase 2 Confirmed Pack · TASK-013 Proposed
+> Status: Approved 1.3 · Phase 2 Confirmed Pack · TASK-013 Candidates
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
 있는 reference fixture를 관리한다. 현재 14개 중 7개는 `확정`, 4개는
-DOC-M3 결정에 따라 `Deferred`, 3개는 TASK-013 공개 사례 선정 전
-`제안`으로 관리한다.
+DOC-M3 결정에 따라 `Deferred`, 3개는 TASK-013 공개 사례를 채운
+`candidate`로 관리한다.
 
 입력 문서:
 
@@ -85,9 +85,9 @@ DOC-M3 결정에 따라 `Deferred`, 3개는 TASK-013 공개 사례 선정 전
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
 | FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | Deferred | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | V1 기준선 | AUTH-DECODE, allowance 연결 |
-| FX-EVM-NFT-721-001 | EVM-NFT-001 | 2 | 제안 | TASK-013 선정 대기 | ERC-721 event·tokenId |
-| FX-EVM-NFT-1155-001 | EVM-NFT-001 | 2 | 제안 | TASK-013 선정 대기 | ERC-1155 Single·Batch |
-| FX-EVM-PROXY-001 | EVM-PROXY-001 | 2 | 제안 | TASK-013 선정 대기 | EIP-1967 slot·event |
+| [FX-EVM-NFT-721-001](./fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | 2 | 후보 0.1 | 공개 사례·두 RPC receipt match | ERC-721 event·tokenId |
+| [FX-EVM-NFT-1155-001](./fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | 2 | 후보 0.1 | 공개 사례·두 RPC receipt match | ERC-1155 Single·Batch |
+| [FX-EVM-PROXY-001](./fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | 2 | 후보 0.1 | 공개 사례·두 archive RPC match | EIP-1967 slot·event |
 | FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | V1 기준선 | FREEZE, state/logs |
 | FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | Deferred | RECON, PRICE, 다주소 집계 |
 | FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | Deferred | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
@@ -104,6 +104,11 @@ Phase 2 네 패키지는 공개 값·1차 provenance·두 공급자 공통 repla
 독립 Trace는 엄격한 fixture 교차검증을 위한 비차단 후속이다. `검증 중`
 fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본으로
 사용한다.
+
+TASK-013 세 패키지는 공개 주소·TX·block, expected/evidence 골격과 두
+공급자 receipt 또는 historical storage 일치까지 확보한 `후보`다.
+raw replay·filtered range·negative oracle·독립 Verifier가 남아 있어
+`검증 중`이나 `확정`으로 올리지 않는다.
 
 ---
 
@@ -200,19 +205,20 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-PROXY-001 |
-| 상태 | 제안 — 공개 사례 미선정 |
-| DOC-M3 결정 | TASK-013 설계 재개 · fixture 승격 미실행 |
+| 상태 | 후보 0.1 — 두 archive RPC decoded match |
+| DOC-M3 결정 | TASK-013 공개 candidate 선정 · fixture 승격 미실행 |
+| 패키지 | [FX-EVM-PROXY-001](./fixtures/FX-EVM-PROXY-001/README.md) |
 | 데이터 형태 | 공개 온체인 |
-| 체인 | TBD (EVM) |
-| 주소·TX | 프록시 P=TBD, upgrade TX 목록=TBD |
-| 기준 정답 | 구현체·admin 또는 beacon 이력, 근거 TX·명시 block 슬롯 값 |
+| 체인 | Ethereum (`chain_id` 1) |
+| 주소·TX | Aave V3 Pool proxy `0x87870bca...b4fa4e2`, upgrade TX `0xe9949c36...bc2b35`, block `25199939` |
+| 기준 정답 | implementation `0x8147b99d...0f119bd` → `0x728a138a...6fe03cf`, Upgraded log `1041`, admin before/after zero |
 | 허용 오차 | 해당 없음(주소·슬롯 exact match) |
-| 확정 사실 | EIP-1967 implementation/admin/beacon slot, Upgraded/AdminChanged/BeaconUpgraded 이벤트 |
+| 후보 사실 | 두 공급자의 EIP-1967 implementation/admin historical slot과 Upgraded event decoded 값 일치 |
 | 휴리스틱 | 비표준 프록시는 자동 해석하지 않음 |
 | 필요 데이터 소스 | `DS-EVM-RPC-ARCHIVE` |
 | 재현 절차 | 1) 명시 block별 슬롯 조회 2) 이벤트 이력 3) before/after 정합 4) beacon이면 implementation() 분리 |
-| 저작권·출처 | [EIP-1967](https://eips.ethereum.org/EIPS/eip-1967), 공개 사례 TBD |
-| 마지막 확인 | 2026-07-29 (설계 Draft, live 미실행) |
+| 저작권·출처 | [EIP-1967](https://eips.ethereum.org/EIPS/eip-1967), 공개 Ethereum RPC. 원문·구현 코드 복제 없음 |
+| 마지막 확인 | 2026-07-29 14:38 (candidate 기본 대조) |
 
 ---
 
@@ -221,17 +227,18 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-NFT-001 |
-| 상태 | 제안 — 공개 사례 미선정 |
-| 데이터 형태 | 공개 EVM log·transaction·raw replay 예정 |
-| 체인·주소·TX | TBD |
-| 기준 정답 | ERC-721 tokenId 이동·승인, ERC-1155 Single/Batch ids·amounts·운영자 |
+| 상태 | 후보 0.1 — 두 RPC receipt decoded match |
+| 패키지 | [ERC-721](./fixtures/FX-EVM-NFT-721-001/README.md) · [ERC-1155](./fixtures/FX-EVM-NFT-1155-001/README.md) |
+| 데이터 형태 | 공개 EVM log·transaction |
+| 체인·주소·TX | Ethereum. BAYC `0xbc4ca0ed...a936f13d` 2 TX, Rarible `0xb66a603f...6518b8` 2 TX |
+| 기준 정답 | ERC-721 token `9110` 승인·이동, ERC-1155 Single/Batch ids·amounts·ApprovalForAll |
 | 허용 오차 | 없음(raw integer·address·log order exact) |
-| 확정 사실 | 표준 event signature와 indexed/data field decode |
+| 후보 사실 | 두 공급자 receipt의 표준 event signature·indexed/data field decode 일치 |
 | 휴리스틱 | NFT 가치·소유권 분쟁·거래 의도는 판정하지 않음 |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, 필요 시 `DS-EVM-RPC-ARCHIVE` |
 | 공식 근거 | [ERC-721](https://eips.ethereum.org/EIPS/eip-721), [ERC-1155](https://eips.ethereum.org/EIPS/eip-1155) |
 | 상세 Gate | [TASK-013 Fixture 후보 보고서](./32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) |
-| 마지막 확인 | 2026-07-29 (설계 Draft, live 미실행) |
+| 마지막 확인 | 2026-07-29 14:38 (candidate 기본 대조) |
 
 ---
 
@@ -411,7 +418,7 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 |:---|:---:|:---|:---|:---|
 | `FX-FLOW-EVM-001` | P1 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-LABEL-PUBLIC` | 공개 사건 시드·N홉 TX·종착 후보를 확보하고 라벨을 확정 사실과 분리해 1회 재현 | P1 PATH·LABEL 요구사항 승인 전 |
 | `FX-SVC-BRG-001` | P2 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` | 브리지 양단 TX·공식 이벤트 매칭 키·수수료 허용 범위를 고정하고 1회 재현 | P2 XCHAIN·BRIDGE 승격 전 |
-| `FX-EVM-PROXY-001` | P3 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM` | 공개 사례를 선정하고 upgrade TX·EIP-1967 슬롯 이력·admin/beacon 변경을 exact match로 재현 | TASK-013 fixture 선정 |
+| `FX-EVM-PROXY-001` | P3 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM` | selected candidate의 raw replay·history 범위·반례를 완성해 upgrade TX·EIP-1967 슬롯 이력을 exact match로 재현 | TASK-013 fixture 승격 |
 | `FX-FLOW-MULTI-001` | P3 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-PRICE` | 피해자 포함 기준·유입 TX·시점 가격 공급자·환산 허용 오차를 고정 | P3 PRICE·다주소 집계 요구사항 작성 전 |
 | `FX-UNCERTAIN-001` | P2/P3 | BTC 분기 `DS-BTC-API`; 믹서 분기 `DS-LABEL-PUBLIC`과 EVM source | P2에서는 `BTC-CJ-001` 우선 여부를 결정하고, 한 문제 ID만 선택해 확정 사실·휴리스틱·반례 집합을 분리 | P2 HEUR 시작 전 또는 P3 MIXER 후보 검토 시 |
 

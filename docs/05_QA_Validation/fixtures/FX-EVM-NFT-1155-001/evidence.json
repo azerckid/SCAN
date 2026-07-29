@@ -1,0 +1,108 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-EVM-NFT-1155-001",
+  "status": "candidate",
+  "captured_at": "2026-07-29T05:38:10Z",
+  "event_evidence": [
+    {
+      "evidence_id": "EV-NFT1155-SINGLE-IN",
+      "evidence_type": "erc1155_transfer_single",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "transaction_hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+      "block_number": 24609794,
+      "log_index": 1033,
+      "topic0": "0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62",
+      "from": "0xb9ea7ef305039447346a8f9b2ecb14240d1cd4bf",
+      "to": "0xed2da4a573b3a68f221ff07f0c9343b94d6a2e79",
+      "token_id_raw": "56090175025510453004781233574040052668718235229192064098345825090519343038535",
+      "amount_raw": "1"
+    },
+    {
+      "evidence_id": "EV-NFT1155-APPROVAL-TRUE",
+      "evidence_type": "erc1155_approval_for_all",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "transaction_hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+      "block_number": 24609794,
+      "log_index": 1034,
+      "owner": "0xed2da4a573b3a68f221ff07f0c9343b94d6a2e79",
+      "operator": "0xa6d2351d519c0f5576c18628eed5c69d9943dcd8",
+      "approved": true
+    },
+    {
+      "evidence_id": "EV-NFT1155-SINGLE-OUT",
+      "evidence_type": "erc1155_transfer_single",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "transaction_hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+      "block_number": 24609794,
+      "log_index": 1035,
+      "from": "0xed2da4a573b3a68f221ff07f0c9343b94d6a2e79",
+      "to": "0xa6d2351d519c0f5576c18628eed5c69d9943dcd8",
+      "token_id_raw": "56090175025510453004781233574040052668718235229192064098345825090519343038535",
+      "amount_raw": "1"
+    },
+    {
+      "evidence_id": "EV-NFT1155-APPROVAL-FALSE",
+      "evidence_type": "erc1155_approval_for_all",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "transaction_hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+      "block_number": 24609794,
+      "log_index": 1038,
+      "owner": "0xed2da4a573b3a68f221ff07f0c9343b94d6a2e79",
+      "operator": "0xa6d2351d519c0f5576c18628eed5c69d9943dcd8",
+      "approved": false
+    },
+    {
+      "evidence_id": "EV-NFT1155-BATCH",
+      "evidence_type": "erc1155_transfer_batch",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "transaction_hash": "0x94fcb6337f5cae9223146caf50f92d9e1af4342ea7cb21bb16792d032e3a230e",
+      "block_number": 23762140,
+      "log_index": 646,
+      "topic0": "0x4a39dc06d4c0dbc64b70af90fd698a233a518aa5d07e595d983b8c0526c8f7fb",
+      "ids_raw": [
+        "98244132562950569486596469134463934172142786003734202593081146763200211976206",
+        "98244132562950569486596469134463934172142786003734202593081146763200211976193"
+      ],
+      "amounts_raw": ["1", "1"]
+    }
+  ],
+  "call_evidence": [],
+  "state_evidence": [],
+  "context_evidence": [],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Successful receipts and exact ERC-1155 Single, Batch, and approval fields"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "PROVIDER-EVM-PRIMARY",
+      "retrieved_at": "2026-07-29T05:38:10Z",
+      "methods": ["eth_getTransactionReceipt"]
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "PROVIDER-EVM-VERIFY",
+      "retrieved_at": "2026-07-29T05:38:10Z",
+      "methods": ["eth_getTransactionReceipt"]
+    }
+  ],
+  "consistency_checks": {
+    "two_provider_decoded_match": true,
+    "receipt_status_success": true,
+    "batch_array_lengths_match": true,
+    "batch_array_order_preserved": true,
+    "approval_transitions_preserved": true
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": "Raw replay SHA-256, filtered range replay, negative oracle, Schema/UI approval, and independent verifier are not complete"
+  },
+  "provenance_notes": "Etherscan was used only to discover public transaction candidates. Scoring values were independently read from two RPC receipts."
+}

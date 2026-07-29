@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 11:10
+> Last Updated: 2026-07-29 14:50
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -83,7 +83,7 @@
 | 대회 규정 | 미확인 | 미확인 |
 | 상태 | 검증 중 | 검증 중 |
 | 마지막 확인 | 2026-07-25 15:25 | 2026-07-25 15:25 |
-| 비고 | `FX-SVC-DEX-001`, `FX-EVM-AUTH-001`, `FX-EVM-FREEZE-001`에 `https://ethereum.publicnode.com` 사용. receipt/logs·TX 또는 최신 상태 확인. Publicnode archive 호출은 개인 토큰 필요 | `FX-EVM-AUTH-001`의 allowance 4지점·trace, `FX-EVM-FREEZE-001`의 blacklist 4지점·이벤트, `FX-SVC-DEX-001`의 거래 시점 Factory `getPair`를 `https://eth.drpc.org`에서 확인. FREEZE 확정 재현 중 프리티어 일시 timeout/internal error는 재시도로 복구 |
+| 비고 | 기존 confirmed 3개와 TASK-013 NFT 후보 2개의 receipt/log를 확인. endpoint·credential은 fixture에 저장하지 않음 | 기존 confirmed 3개와 TASK-013 Proxy 후보의 historical implementation/admin slot을 확인. 공급자 역할과 decoded match만 candidate evidence에 기록 |
 
 #### 5.1.1 Phase 2 live provider 후보
 
@@ -248,6 +248,7 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
 | SVC-DEX-001 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-DEX-META` | in/out 복원 불가 |
 | SVC-BRG-001 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` | 양단 매칭 실패 |
 | EVM-AUTH-001 | `DS-EVM-RPC-PUBLIC`, `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM` | 승인·allowance·권한 소비 연결 불가 |
+| EVM-NFT-001 | `DS-EVM-RPC-PUBLIC`, 범위 완전성 확인 시 logs 지원 RPC | 표준 event·tokenId·amount·승인 순서 입증 불가 |
 | EVM-PROXY-001 | `DS-EVM-RPC-ARCHIVE` | 구현체 이력 검증 불가 |
 | EVM-FREEZE-001 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM`, `DS-OSINT-WEB` | 동결 여부 확정 불가 |
 | FLOW-MULTI-001 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-PRICE` | 환산 피해액 실패 |
