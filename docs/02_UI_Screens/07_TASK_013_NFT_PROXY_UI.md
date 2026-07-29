@@ -1,7 +1,7 @@
 # TASK-013 NFT·Proxy CLI UI
 > Created: 2026-07-29 19:53
-> Last Updated: 2026-07-29 19:59
-> Status: Proposed 0.1 · HTML Preview 작성·브라우저 검증 완료 · 사용자 UI-First Gate 대기
+> Last Updated: 2026-07-29 20:19
+> Status: Approved 0.1 · UI-First Gate Passed · Analyzer 구현 대기
 
 ## 1. 목적
 
@@ -148,8 +148,14 @@ Preview는 외부 요청, 파일 읽기, SQLite mutation, clipboard 외 데이�
 - [x] loading·empty·stale·Rules 재사용 경계 정의
 - [x] HTML Preview 작성
 - [x] 브라우저 정적·상호작용 검증 — 3 표준 × 3 상태 전환, 콘솔 에러 0건 확인
-- [ ] 사용자 Preview 확인
-- [ ] 사용자 피드백 반영
+- [x] 사용자 Preview 확인 — 2026-07-29 20:19 승인
+- [x] 사용자 피드백 반영 — 별도 수정 요청 없이 승인됨
+
+사용자는 2026-07-29 20:19 "TASK-013 UI Preview를 승인합니다. Context
+Receipt PASS 전환과 analyzer 구현을 승인합니다." 요청에 "승인합니다"로
+명시 승인했다. UI Gate 통과 뒤 NFT·Proxy analyzer 구현이 별도로
+시작된다. Preview 자체는 계속 정적이며 live provider 호출을 수행하지
+않는다.
 
 ## 9.1 브라우저 검증 기록
 

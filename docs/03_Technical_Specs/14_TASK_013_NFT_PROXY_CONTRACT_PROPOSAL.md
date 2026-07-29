@@ -1,7 +1,7 @@
 # TASK-013 NFT·Proxy 분석 계약 제안
 > Created: 2026-07-29
-> Last Updated: 2026-07-29 19:59
-> Status: Fixture 검증 중 승격 · Analysis I/O 대안 B 확정 · UI Preview 사용자 승인 대기
+> Last Updated: 2026-07-29 20:19
+> Status: Fixture 검증 중 승격 · Analysis I/O 대안 B 확정 · UI Preview 사용자 승인 완료 · Analyzer 구현 대기
 
 ## 1. 목적
 
@@ -23,17 +23,18 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 | NFT·Proxy fixture | 공개 사례 3개 · replay·negative·Verifier Gate 통과 · [승격 검토](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)로 `검증 중` | raw SHA·exact scope·16 oracle·7 requirement 재계산 통과, `확정`은 잔여 Gate 이후 |
 | Analysis I/O | 0.2 적용, 0.1 호환 | 변경하지 않음. 신규 `evm_special` 대안 B를 §5에서 확정 |
 | Python runtime | NFT·Proxy analyzer 없음 | 구현하지 않음 |
-| UI | [TASK-013 전용 UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md)·[Preview](../02_UI_Screens/previews/06_task_013_nft_proxy_preview.html) 작성 | 사용자 확인·승인 대기 |
+| UI | [TASK-013 전용 UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md)·[Preview](../02_UI_Screens/previews/06_task_013_nft_proxy_preview.html) 작성 | 사용자 확인·승인 완료(2026-07-29 20:19) |
 
-다음 항목이 모두 승인되기 전에는 TASK-013을 `In Progress`로 바꾸지 않는다.
+다음 항목이 모두 승인되어 TASK-013을 `In Progress`로 전환했다.
 
 1. ~~공개 사례와 reference answer가 채워진 fixture를 `confirmed`로 승격~~ →
    [승격 검토](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)로
-   `검증 중` 완료, `확정`은 아래 2~5 완료 후 별도 판단
-2. 아래 Analysis I/O 대안 중 하나를 정식 선택 → **대안 B로 확정**(§5.1)
-3. complete·partial·failed UI Preview 확인 → 작성 완료, 사용자 확인 대기
-4. Context Receipt `PASS`
-5. 사용자 구현 승인
+   `검증 중` 완료, `확정`은 analyzer 구현·독립 검증 후 별도 판단
+2. ~~아래 Analysis I/O 대안 중 하나를 정식 선택~~ → **대안 B로 확정**(§5.1)
+3. ~~complete·partial·failed UI Preview 확인~~ → 작성·브라우저 검증 완료,
+   사용자가 2026-07-29 20:19 승인
+4. ~~Context Receipt `PASS`~~ → Backlog에 기록 완료
+5. ~~사용자 구현 승인~~ → 완료. 다음 단계는 NFT·Proxy analyzer 구현.
 
 ## 3. 표준 근거와 해석 경계
 
@@ -241,8 +242,11 @@ storage snapshot은 명시 block tag와 함께 비교한다.
    [승격 검토](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) 완료, `검증 중`
 2. ~~Analysis I/O 대안과 전용 Preview를 사용자에게 제시한다.~~ → 대안 B 확정,
    [UI 문서](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md)·[Preview](../02_UI_Screens/previews/06_task_013_nft_proxy_preview.html) 작성 완료
-3. **다음: 사용자가 Preview를 확인하고 승인한다.**
-4. Context Receipt와 별도 구현 승인을 받은 뒤 Python decoder를 시작한다.
+3. ~~사용자가 Preview를 확인하고 승인한다.~~ → 2026-07-29 20:19 승인 완료
+4. ~~Context Receipt와 별도 구현 승인을 받는다.~~ → Backlog에 `PASS`·승인
+   기록 완료
+5. **다음: NFT·Proxy analyzer를 구현하고 독립 Verification Receipt를
+   확보한 뒤 Benchmark automated 7 → 9 승격을 기록한다.**
 
 ## 11. Related Documents
 

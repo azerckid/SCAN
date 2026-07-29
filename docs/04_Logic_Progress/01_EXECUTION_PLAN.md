@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 19:59
-> Status: Wave 1 TASK-012 Complete · Later Waves Proposed
+> Last Updated: 2026-07-29 20:19
+> Status: Wave 1 TASK-012 Complete · Wave 3 TASK-013 UI 승인 완료·Analyzer 구현 대기
 
 ## 1. 목적
 
@@ -121,9 +121,13 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] `TASK-013` Analysis I/O 대안 B(`evm_special`)를 확정하고
   [전용 UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md)·[Preview](../02_UI_Screens/previews/06_task_013_nft_proxy_preview.html)를
   작성한다.
-- [ ] `TASK-013` 사용자가 UI Preview를 확인하고 승인한다.
+- [x] `TASK-013` 사용자가 UI Preview를 확인하고 승인한다(2026-07-29 20:19).
+  Context Receipt `PASS`·사용자 구현 승인을 Backlog에 기록했다.
+- [ ] `TASK-013` NFT·Proxy analyzer를 구현하고 독립 Verification Receipt를
+  확보한다.
 - [ ] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 `확정`으로 올린다
-  (Context Receipt `PASS`·사용자 구현 승인 이후).
+  (analyzer 구현·독립 검증 이후).
+- [ ] `TASK-013` Benchmark automated 7 → 9 승격을 기록한다.
 - [ ] `TASK-014` 단일 path와 분기·재병합 fixture를 확정한다.
 - [ ] graph node/edge·asset conservation·budget·partial 계약을 승인한다.
 - [ ] path 결과가 label/heuristic과 분리되는지 검증한다.
