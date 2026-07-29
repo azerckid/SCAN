@@ -1,6 +1,6 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 09:50
+> Last Updated: 2026-07-29 11:00
 > Status: EVM Fixture Common Replay Passed · Overall Partial
 
 ## 1. 목적
@@ -14,10 +14,10 @@ Planner가 필요한 능력을 제공하는지 검증하는 실행 체크리스�
 
 fixture 공통 9개 decoded summary와 primary trace는 성공했다. Alchemy의
 독립 trace는 debug·parity 두 dialect 모두 HTTP 400으로 실패했다.
-credential 회전, rate/timeout·negative
-oracle 24개는 합성 offline 입력으로 두 번 통과했다. credential 회전,
-live rate/timeout 반례, 독립 trace와 AI Planner capability는 아직
-미실행이므로 최종 상태는 `partial`이다.
+negative oracle 24개는 합성 offline 입력으로 두 번 통과했다. credential
+회전, live rate/timeout 반례와 AI Planner capability는 아직 미실행이므로
+최종 상태는 `partial`이다. 독립 Trace는 엄격한 fixture 교차검증의 비차단
+후속이며 실전 QuickNode 단일 Trace 실행을 막지 않는다.
 
 ## 2. 실행 전 보안 Gate
 
@@ -43,7 +43,7 @@ live rate/timeout 반례, 독립 trace와 AI Planner capability는 아직
 | block | pass | pass | number·hash·timestamp 일치 |
 | filtered logs | pass | pass | USDC Transfer 23건·첫 5개 요약 일치 |
 | historical call/state | pass | pass | block `0xfdf1d0`, decimals `6` 일치 |
-| trace | pass | failed | primary callTracer 성공, Alchemy debug·parity 각 HTTP 400·대체 독립 trace 미선정 |
+| trace | pass | deferred | primary callTracer 성공, Alchemy HTTP 400·Chainstack HTTP 403; 독립 trace는 비차단 후속 |
 | rate/timeout | offline injected pass | live not_executed | timeout·429·method-not-found→`invalid_response`·malformed 구조화, 실제 provider 측정 잔여 |
 
 결과는 provider 문서의 지원 표시가 아니라 실제 계정과 대상 block에서
@@ -58,12 +58,27 @@ live rate/timeout 반례, 독립 trace와 AI Planner capability는 아직
 | historical native balance | pass | pass | raw wei 일치 |
 | historical USDC balance·decimals | pass | pass | raw 값 일치 |
 | address·topic·block 제한 USDC logs | pass | pass | 1건·TX/log index·amount 일치 |
-| internal native inflow trace | pass | failed | Alchemy debug·parity HTTP 400, 독립 trace unresolved |
+| internal native inflow trace | pass | deferred | QuickNode raw 값 확보, 독립 trace는 fixture 교차검증 후속 |
 
 공통 9개 조회는 두 공급자의 raw response에서 각각 decode했다. 네 fixture는
-`verifying`으로 올렸다. §5 합성 반례는 통과했지만 독립 trace,
-credential 회전, live rate/timeout·fallback 검증이 남아 `confirmed`는
-아니다.
+`verifying`으로 올렸다. §5 합성 반례는 통과했지만 credential 회전,
+live rate/timeout·fallback과 provenance 승격 정책이 남아 `confirmed`는
+아니다. 독립 Trace는 이 판정을 보강하는 비차단 후속이다.
+
+### 3.2 Chainstack 독립 Trace 시도
+
+| Provider | Method | 조회 시각(UTC) | HTTP | 판정 |
+|:---|:---|:---|:---:|:---|
+| Chainstack Developer/Full | `eth_chainId` | `2026-07-29T01:33:56Z` | 200 | Ethereum Mainnet `0x1`, endpoint 연결 성공 |
+| Chainstack Developer/Full | `debug_traceTransaction(callTracer)` | `2026-07-29T01:32:46Z` | 403 | permanent, Trace 역할 제외 |
+| Chainstack Developer/Full | `trace_transaction` | `2026-07-29T01:33:10Z` | 403 | permanent, Trace 역할 제외 |
+
+각 method는 read-only로 한 번 실행했다. endpoint·credential·응답 원문은
+문서와 Git에 넣지 않았고, 논리 provider 역할과 시각·HTTP·failure kind만
+보존했다. 상세 상태 경계는
+[Live Provider Readiness §7](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md)을
+따른다. Chainstack 실패도 독립 Trace를 비차단 후속으로 두는 근거이지
+QuickNode raw Trace의 실전 사용을 실패로 바꾸는 근거가 아니다.
 
 ## 4. 독립성·정확성 판정
 
