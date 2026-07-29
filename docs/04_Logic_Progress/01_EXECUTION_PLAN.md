@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 10:38
+> Last Updated: 2026-07-29 11:10
 > Status: Proposed 0.1 · No Implementation Approval
 
 ## 1. 목적
@@ -39,12 +39,12 @@
 
 - [x] 입력 모드를 `external_rpc | contest_rpc | provided_artifact`로 고정했다.
 - [x] 체인 범위를 `evm | bitcoin | non_evm | cross_chain`으로 고정했다.
-- [ ] contest RPC를 source port에 즉시 연결하는 adapter를 승인·구현한다.
-- [ ] JSON/JSONL/CSV/raw trace를 normalized evidence로 변환하는 importer를
+- [x] contest RPC를 source port에 즉시 연결하는 core adapter를 승인·구현한다.
+- [x] JSON/JSONL/CSV를 normalized evidence로 변환하는 bounded importer를
   승인·구현한다.
-- [ ] 같은 원자료의 RPC·artifact 입력이 같은 evidence와 분석 값을 만드는지
+- [x] 같은 원자료의 RPC·artifact 입력이 같은 evidence와 분석 값을 만드는지
   검증한다.
-- [ ] 외부 API·Explorer 제한 모드에서 외부 자동 fallback이 0건인지 검증한다.
+- [x] contest adapter가 명시 endpoint만 호출하고 Explorer fallback이 0건인지 검증한다.
 
 이 체크리스트는 설계 Gate다. 미완료 구현 항목은 별도 Context Receipt와
 사용자 승인을 받기 전 `In Progress`로 이동하지 않는다.
@@ -54,10 +54,11 @@
 ### [ ] Wave 0 — 공통 입력 계층
 
 - [x] 입력 mode·chain scope·정규화·provenance 계약을 문서화한다.
-- [ ] contest RPC adapter의 source policy·secret·capability 계약을 승인한다.
-- [ ] provided artifact importer의 mapping·hash·오류 계약을 승인한다.
-- [ ] 최소 RPC↔artifact 동등성 fixture와 UI 영향 여부를 확인한다.
-- [ ] 별도 구현 승인과 Verification Receipt를 확보한다.
+- [x] contest RPC core adapter의 HTTPS·secret·명시 endpoint 계약을 구현한다.
+- [x] provided artifact core importer의 format·limit·hash·오류 계약을 구현한다.
+- [x] 최소 RPC↔artifact 동등성 테스트와 library-only UI N/A를 확인한다.
+- [x] 첫 구현 단위 승인과 집중 Verification Receipt를 확보한다.
+- [ ] CLI·Operations input selection과 실제 대회 artifact mapping을 별도 승인한다.
 
 ### [ ] Wave 1 — 범용 EVM
 

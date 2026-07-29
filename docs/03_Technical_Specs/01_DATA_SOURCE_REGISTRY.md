@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 10:38
+> Last Updated: 2026-07-29 11:10
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -112,8 +112,8 @@ provider ID, method, block tag, 조회 시각, 안전한 오류 코드, raw SHA-
 
 | 논리 source | 입력 모드 | 제공 데이터 | 현재 상태 |
 |:---|:---|:---|:---:|
-| `DS-CONTEST-RPC` | `contest_rpc` | 주최 read-only RPC의 TX·receipt·block·state·logs·trace | adapter 미구현 |
-| `DS-CONTEST-ARTIFACT` | `provided_artifact` | 문제 첨부 JSON/JSONL/CSV/raw TX·receipt·logs·trace | 범용 importer 미구현 |
+| `DS-CONTEST-RPC` | `contest_rpc` | 주최 read-only RPC의 TX·receipt·block·state·logs·trace | core adapter 구현, CLI wiring 미구현 |
+| `DS-CONTEST-ARTIFACT` | `provided_artifact` | 문제 첨부 JSON/JSONL/CSV/raw TX·receipt·logs·trace | JSON·JSONL·CSV bounded importer 구현, 임의 mapping·CLI 미구현 |
 | `DS-SELF-NODE` | `external_rpc` 또는 local source | 검증된 client가 제공하는 chain 원자료 | 운영·규정·비용 미결정 |
 
 외부 API가 금지되면 탐색기 API를 자동 대체재로 간주하지 않는다. RPC와

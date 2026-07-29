@@ -1,6 +1,6 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 10:38
+> Last Updated: 2026-07-29 11:10
 > Status: Pre-event Smoke Partial Pass · Credential Rotation Pending · Competition Rules Unclear
 
 ## 1. 목적
@@ -36,7 +36,7 @@
 | Phase 2 준비 대상 | 나머지 27문항 |
 | 직접 준비 중 | EVM Core 4문항의 verifying fixture |
 | EVM 공급자 topology | QuickNode 일반 RPC+Debug Trace 주 경로·Alchemy 일반 RPC 교차검증, credential 회전·rate behavior 미완료 |
-| 대회 입력 경로 | contest RPC adapter·범용 artifact importer 미구현 |
+| 대회 입력 경로 | contest RPC core adapter·JSON/JSONL/CSV importer 구현, CLI·Operations wiring 미구현 |
 | 비EVM 범위 | Bitcoin·non-EVM·cross-chain 분석기 미구현 |
 | AI Planner 공급자 | 필수 역할 확정, provider/model/비용 smoke 미실행 |
 | TASK-012 구현 | 미승인·미시작 |

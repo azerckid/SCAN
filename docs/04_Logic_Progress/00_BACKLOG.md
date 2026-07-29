@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 10:38
-> Status: TASK-001~009·011 Done · TASK-012~019 Proposed · WP-INPUT-GATE Docs Only · Implementation Not Approved
+> Last Updated: 2026-07-29 11:10
+> Status: TASK-001~009·011 Done · WP-INPUT Core Done · TASK-012~019 Proposed
 
 ## 1. 문서 목적
 
@@ -124,12 +124,34 @@ TASK-012~019는 TASK-011의 3/6/21 측정 이후 별도 Phase 2다. TASK-012와
 TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-019는
 실제로 승인·완료된 package만 통합한다.
 
-`WP-INPUT-GATE`는 TASK-012~019의 공통 문서 선행 조건이다. 입력 모드는
+`WP-INPUT-GATE`는 TASK-012~019의 공통 선행 조건이다. 입력 모드는
 `external_rpc | contest_rpc | provided_artifact`, 체인 범위는
-`evm | bitcoin | non_evm | cross_chain`이다. 이 Gate를 문서화했다는 사실은
-contest RPC adapter·artifact importer 또는 어떤 분석기의 구현 승인이
-아니다. 두 입력 구성요소는 현재 미구현이며 별도 Context Receipt와 사용자
-승인 전 `In Progress`로 이동하지 않는다.
+`evm | bitcoin | non_evm | cross_chain`이다. 첫 승인 단위에서 contest RPC
+core adapter와 bounded JSON·JSONL·CSV importer를 구현했다. CLI·Operations
+wiring, 임의 mapping, 체인별 analyzer는 미구현이며 TASK-012~019의 Context
+Receipt·개별 구현 승인을 대체하지 않는다.
+
+### 3.1 WP-INPUT-IMPL-01: Core input library
+
+- Status: Done · CLI Wiring Pending
+- Approval: 2026-07-29 사용자 승인
+- Scope:
+  - [x] input mode·chain scope enum과 normalized evidence bundle
+  - [x] contest HTTPS JSON-RPC adapter·기존 source port 재사용
+  - [x] JSON·JSONL·CSV bounded importer와 raw/record SHA·locator
+  - [x] chain mismatch·malformed·null·size/count·repr 비반사
+  - [x] JSON-RPC unwrap 이후 내부 chain scope 재검사
+  - [x] contest RPC read-only allowlist·금지 method 호출 전 차단
+  - [x] RPC↔artifact normalized record 동등성
+  - [x] 명시 contest endpoint 외 Explorer/network fallback 0건
+- Excluded:
+  - [ ] CLI·Operations input selection
+  - [ ] 문제별 임의 artifact mapping
+  - [ ] EVM Core·Bitcoin·non-EVM·cross-chain analyzer
+- Context Receipt: PASS — 다중 입력 명세, source/evidence port, 보안 경계,
+  Coverage QA를 확인했고 Analysis I/O `0.1`은 변경하지 않았다.
+- Verification Receipt: focused 30 tests·전체 336 tests·Schema·traceability·
+  security PASS, 상세는 구현 보고서 참조.
 
 ## 4. Task Register
 
@@ -848,8 +870,7 @@ contest RPC adapter·artifact importer 또는 어떤 분석기의 구현 승인�
 - Work Type: code
 - Priority: Phase 2 · P0
 - Depends On: TASK-011
-- Common Input Gate: `WP-INPUT-GATE` docs specified · contest RPC adapter /
-  artifact importer not implemented
+- Common Input Gate: `WP-INPUT-IMPL-01` core done · CLI/consumer wiring pending
 - Target Problems: `BASIC-EVM-001/002`, `EVM-TOKEN-001/002`
 - Atomic Tasks:
   - [ ] 네 문제의 공개 사례·reference answer·partial 조건을 확정한다.
@@ -916,7 +937,8 @@ contest RPC adapter·artifact importer 또는 어떤 분석기의 구현 승인�
     - [x] primary·independent 공통 6개 decoded summary 일치와 primary trace 성공을 확인했다.
     - [x] 독립 Trace dialect·provider failure offline 검증을 통과했다.
     - [ ] credential 회전·live rate/timeout 반례가 남아 전체 상태는 partial이다.
-    - [ ] contest RPC adapter·artifact importer는 별도 구현 승인이 필요하다.
+    - [x] contest RPC core adapter·bounded artifact importer 구현 승인을 기록했다.
+    - [ ] TASK-012 analyzer의 normalized evidence consumer wiring은 별도 범위다.
   - [ ] API key·endpoint가 저장소·DB·fixture·로그에 없음을 검증한다.
   - [ ] confirmed fixture와 reference answer를 확보한다.
   - [x] CLI Preview 재검토와 사용자 UI 승인을 기록한다.
@@ -943,8 +965,8 @@ contest RPC adapter·artifact importer 또는 어떤 분석기의 구현 승인�
   - [ ] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
 - Context Receipt:
   - Status: PENDING - verifying 4개·공통 9개 독립 재현·offline oracle 24개와
-    계약 제안 12개·Schema probe 14개 완료, 공통 입력 구현·credential
-    회전·정식 Schema·사용자 구현 승인 전 착수 금지
+    계약 제안 12개·Schema probe 14개·공통 입력 core 완료, credential
+    회전·정식 Schema·TASK-012 구현 승인 전 착수 금지
   - Required References Read: 위 Related 문서 전체
   - Constraints: exact raw 수량, historical state block 고정, 귀속 미평가
   - Conflicts: None known

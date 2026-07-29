@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Technical Brief
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 10:38
+> Last Updated: 2026-07-29 11:10
 > Status: Proposed 0.1 · Implementation Not Started
 
 ## 1. 목적
@@ -66,7 +66,8 @@ Analysis I/O 변경 검토와 별도 작업 승인을 통과한 뒤 시작한다
 모든 package의 공통 선행 조건은 `WP-INPUT-GATE`다. 외부 RPC, 주최 RPC,
 제공 artifact를 normalized evidence로 변환한 뒤 같은 Python
 analyzer·Verifier가 소비해야 한다. 현재 contest RPC adapter와 범용 artifact
-importer는 미구현이다.
+importer의 core library는 구현됐고 CLI·Operations wiring과 문제별 임의
+mapping은 미구현이다.
 
 `MIXED-XCHAIN-001`의 양단 chain·bridge/service 정합과 직접 Benchmark 책임은
 `WP-SERVICE`가 단독으로 가진다. `WP-CASE`는 그 결과가 더 큰 사건의 입력으로
