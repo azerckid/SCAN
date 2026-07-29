@@ -128,9 +128,9 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 `external_rpc | contest_rpc | provided_artifact`, 체인 범위는
 `evm | bitcoin | non_evm | cross_chain`이다. 첫 승인 단위에서 contest RPC
 core adapter와 bounded JSON·JSONL·CSV importer를 구현했고, 두 번째 승인
-단위에서 CLI·Operations offline handoff를 연결했다. 임의 mapping과 체인별
-analyzer는 TASK-012 EVM Core만 구현됐으며, TASK-013~019의 Context
-Receipt·개별 구현 승인을 대체하지 않는다.
+단위에서 CLI·Operations offline handoff를 연결했다. 제품 analyzer는
+TASK-012 EVM Core와 TASK-013 NFT·Proxy까지 구현됐으며, TASK-014~019의
+Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### 3.1 WP-INPUT-IMPL-01: Core input library
 
