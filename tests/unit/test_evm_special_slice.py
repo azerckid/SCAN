@@ -20,14 +20,18 @@ CASES = (
 )
 
 
-def _request(fixture_id: str) -> EvmSpecialAnalysisRequest:
-    request = validate_analysis_request(_request_document(fixture_id)).root
+def _request(
+    fixture_id: str, request_file: str = "analysis-request.json"
+) -> EvmSpecialAnalysisRequest:
+    request = validate_analysis_request(_request_document(fixture_id, request_file)).root
     assert isinstance(request, EvmSpecialAnalysisRequest)
     return request
 
 
-def _request_document(fixture_id: str) -> dict[str, object]:
-    return json.loads((FIXTURES / fixture_id / "analysis-request.json").read_text())
+def _request_document(
+    fixture_id: str, request_file: str = "analysis-request.json"
+) -> dict[str, object]:
+    return json.loads((FIXTURES / fixture_id / request_file).read_text())
 
 
 def _replay(fixture_id: str) -> dict[str, object]:
@@ -41,7 +45,7 @@ def _expected(fixture_id: str, keys: tuple[str, ...]) -> dict[str, object]:
 
 EXPECTED_KEYS = {
     "FX-EVM-NFT-721-001": ("standard", "movements", "approvals"),
-    "FX-EVM-NFT-1155-001": ("standard", "single_case", "batch_case"),
+    "FX-EVM-NFT-1155-001": ("standard", "single_case"),
     "FX-EVM-PROXY-001": (
         "pattern",
         "proxy_address",
@@ -76,6 +80,16 @@ def test_complete_replays_match_the_fixture_reference_answer(fixture_id: str) ->
 
     assert result.root.status == "complete"
     assert result.root.results[0].value == _expected(fixture_id, EXPECTED_KEYS[fixture_id])
+
+
+def test_erc1155_batch_request_matches_the_fixture_reference_answer() -> None:
+    fixture_id = "FX-EVM-NFT-1155-001"
+    request = _request(fixture_id, "analysis-request-batch.json")
+
+    result = analyze_evm_special_replay(request, json.dumps(_replay(fixture_id)).encode())
+
+    assert result.root.status == "complete"
+    assert result.root.results[0].value == _expected(fixture_id, ("standard", "batch_case"))
 
 
 def _drop_log(replay: dict[str, object], topic0: str) -> None:
@@ -155,7 +169,10 @@ def test_erc1155_batch_length_mismatch_is_structured_failed() -> None:
         if log["topics"][0] == "0x4a39dc06d4c0dbc64b70af90fd698a233a518aa5d07e595d983b8c0526c8f7fb":
             log["data"] = cast(str, log["data"])[:-64]
 
-    result = analyze_evm_special_replay(_request(fixture_id), json.dumps(replay).encode())
+    result = analyze_evm_special_replay(
+        _request(fixture_id, "analysis-request-batch.json"),
+        json.dumps(replay).encode(),
+    )
 
     assert result.root.status == "failed"
     assert result.root.errors[0].code == "decode_failed"
@@ -215,6 +232,37 @@ def test_unrelated_subject_address_does_not_return_complete() -> None:
     assert result.root.status == "failed"
     assert result.root.results == []
     assert result.root.errors[0].code == "source_unavailable"
+
+
+def test_erc1155_unrelated_subject_address_does_not_return_complete() -> None:
+    fixture_id = "FX-EVM-NFT-1155-001"
+    request_document = _request_document(fixture_id)
+    cast(dict[str, object], request_document["inputs"])["subject_address"] = (
+        "0x00000000000000000000000000000000000000ff"
+    )
+    request = validate_analysis_request(request_document).root
+    assert isinstance(request, EvmSpecialAnalysisRequest)
+
+    result = analyze_evm_special_replay(request, json.dumps(_replay(fixture_id)).encode())
+
+    assert result.root.status == "failed"
+    assert result.root.results == []
+    assert result.root.errors[0].code == "source_unavailable"
+
+
+def test_nft_block_windows_diverging_from_receipts_are_rejected() -> None:
+    fixture_id = "FX-EVM-NFT-1155-001"
+    replay = _replay(fixture_id)
+    scope = cast(dict[str, object], replay["scope"])
+    windows = cast(list[dict[str, object]], scope["block_windows"])
+    for window in windows:
+        window["from"] = "0x1"
+        window["to"] = "0x1"
+
+    result = analyze_evm_special_replay(_request(fixture_id), json.dumps(replay).encode())
+
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
 
 
 def test_unrelated_proxy_address_does_not_return_complete() -> None:

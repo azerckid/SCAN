@@ -146,8 +146,11 @@ type으로 분리해 TASK-012 0.2의 범위를 넓히지 않는다. 이 결정�
 `nft_activity`:
 
 - `token_contract`
+- `subject_address`: 반환하는 모든 movement의 `from` 또는 `to`와 결합
 - `standard_hint`: `erc721 | erc1155 | auto`
 - `include_approvals`
+- `block_range`/reviewed replay의 exact block windows는 선택 receipt block
+  집합과 일치해야 하며, 서로 다른 대상 주소의 사례는 별도 요청으로 실행
 
 `proxy_history`:
 

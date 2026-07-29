@@ -34,9 +34,15 @@ hash 일치 검증은 "analyzer가 세 fixture에 대해 결정적으로 같은 
   실제 topic(`from`/`to`/owner)이 일치하는 로그만 채택하고, 없으면
   `source_unavailable`로 `failed`. `_proxy_history`가 `Upgraded` 로그의
   `address`를 `proxy_address`와 비교해 걸러내고, 없으면 `failed`.
+- **ERC-1155 주소별 요청 분리**: fixture의 Single/Approval과 Batch는
+  대상 주소가 다르므로 각각 `analysis-request.json`과
+  `analysis-request-batch.json`으로 실행한다. 제품 결과는 한 요청의
+  subject에 결합된 사실만 반환하고, 독립 검증 Gate에서만 두 결과를
+  합쳐 fixture 전체 고정 hash와 비교한다.
 - **receipt·block 정합**: `_require_unique_receipts`/
   `_require_matching_receipt`를 추가해 모든 NFT 로그가 replay의 receipts
   중 하나와 `transaction_hash`·`block_number`가 일치하는지 확인하고,
+  exact block window 집합도 receipt block 집합과 일치하는지 확인한다.
   불일치하면 `reconciliation_failed`. Proxy는 `Upgraded` 이벤트와
   receipt의 `transaction_hash`·`block_number`를 대조하고, 추가로
   implementation/admin storage snapshot의 block이 event block(및
@@ -60,12 +66,14 @@ hash 일치 검증은 "analyzer가 세 fixture에 대해 결정적으로 같은 
 ## 4. 추가한 회귀 테스트
 
 `tests/unit/test_evm_special_slice.py`에 리뷰의 재현 시나리오를 그대로
-반영한 4개 테스트를 추가했다(회귀 방지 목적 — 수정 전 코드였다면 모두
+반영한 6개 테스트를 추가했다(회귀 방지 목적 — 수정 전 코드였다면 모두
 실패했을 케이스).
 
 | 테스트 | 재현 시나리오 | 기대 결과 |
 |:---|:---|:---|
 | `test_unrelated_subject_address_does_not_return_complete` | `subject_address`를 무관한 주소로 교체 | `failed` / `source_unavailable` |
+| `test_erc1155_unrelated_subject_address_does_not_return_complete` | ERC-1155 `subject_address`를 두 사례 모두와 무관한 주소로 교체 | `failed` / `source_unavailable` |
+| `test_nft_block_windows_diverging_from_receipts_are_rejected` | NFT exact block windows를 receipt block과 다른 값으로 교체 | `failed` / `reconciliation_failed` |
 | `test_unrelated_proxy_address_does_not_return_complete` | `proxy_address`를 무관한 주소로 교체 | `failed` / `source_unavailable` |
 | `test_nft_log_transaction_hash_absent_from_receipts_is_rejected` | Transfer 로그의 `transaction_hash`를 receipts에 없는 값으로 교체 | `failed` / `reconciliation_failed` |
 | `test_proxy_snapshot_block_diverging_from_event_block_is_rejected` | `implementation_after` snapshot의 block을 event block과 다르게 교체 | `failed` / `reconciliation_failed` |
@@ -92,7 +100,9 @@ hash 일치 검증은 "analyzer가 세 fixture에 대해 결정적으로 같은 
 
 ## 6. 검증
 
-- `uv run pytest`: 423 passed (기존 419 + 신규 회귀 테스트 4).
+- `uv run pytest`: 최신 전체 수치는 이번 보완 커밋의 `scripts/verify.py`
+  실행 결과를 기준으로 하며, subject/block-window 회귀 테스트 2개와
+  ERC-1155 Batch CLI 통합 테스트를 추가했다.
 - `uv run python scripts/verify.py`: 전체 게이트 PASS(fixture 10,
   traceability, security, TASK-012/013 negative oracle, 독립 Verifier,
   analyzer 독립 검증 포함). fixture 상태가 `verifying`으로 되돌아간

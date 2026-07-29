@@ -18,7 +18,9 @@ TASK-013 사용자 구현 승인(2026-07-29 20:19) 이후 구현한 NFT·Proxy �
 analyzer(`scan_tool.slices.evm_special`)가 `task_013_independent_verifier.py`와
 독립적으로 동일한 raw-first 결론에 도달하는지 검증한다. 두 코드는 서로
 import하지 않으며, 이 문서는 두 결과가 canonical hash 단위로 정확히
-일치함을 기록한다.
+일치함을 기록한다. ERC-1155는 서로 다른 대상 주소의 Single/Approval과
+Batch를 두 subject-scoped 요청으로 각각 실행한 뒤, 검증 Gate에서만 두
+결과를 결합해 fixture 전체 hash와 비교한다.
 
 **판정: 세 `검증 중` fixture 모두 analyzer가 `complete`를 산출했고, 그
 결과의 canonical SHA-256이 독립 Verifier가 이미 evidence.json에 고정한
@@ -43,15 +45,15 @@ import하지 않으며, 이 문서는 두 결과가 canonical hash 단위로 정
 | Fixture | analyzer 상태 | canonical hash | 고정된 verifier hash | 일치 |
 |:---|:---:|:---|:---|:---:|
 | `FX-EVM-NFT-721-001` | complete | `a2b879fb7aa9f157168b349875decff86d3a1d685792332c9eff1af8ca0e5e74` | 동일 | pass |
-| `FX-EVM-NFT-1155-001` | complete | `0caf8a09994abbff71cb4afddf9bb6e11fa5411ef0870c27d1a92ea324aade91` | 동일 | pass |
+| `FX-EVM-NFT-1155-001` | complete × 2 subject-scoped requests | `0caf8a09994abbff71cb4afddf9bb6e11fa5411ef0870c27d1a92ea324aade91` | 동일 | pass |
 | `FX-EVM-PROXY-001` | complete | `f0683ef2167e2e7799891a66e0b065300842fd46de5d63b84ebe440ee2f58d93` | 동일 | pass |
 
 추가로 확인한 조건:
 
-- 세 fixture 모두 `results[0].value`가 `expected.json`의 채점 필드와
+- 세 fixture 모두 analyzer 결과가 `expected.json`의 채점 필드와
   Python dict 동등성으로 정확히 일치한다(`standard`/`movements`/
   `approvals`, `single_case`/`batch_case`, `pattern`/`change`/`admin`/
-  `beacon`).
+  `beacon`). ERC-1155는 두 요청 결과를 검증기에서 결합한 뒤 대조한다.
 - 두 번 실행한 `AnalysisResult.to_contract_dict()`가 완전히 동일해
   결정적이다.
 - `scan analyze --request ... --evidence ...` CLI로 세 fixture 모두
@@ -99,7 +101,8 @@ import하지 않으며, 이 문서는 두 결과가 canonical hash 단위로 정
   `EVM-NFT-001`·`EVM-PROXY-001`을 automated로 승격
 - `docs/05_QA_Validation/benchmarks/expected-problem-v0.1.json` —
   두 문제의 executable fixture 등록
-- `docs/05_QA_Validation/fixtures/FX-EVM-{NFT-721,NFT-1155,PROXY}-001/analysis-request.json` — 신규
+- `docs/05_QA_Validation/fixtures/FX-EVM-{NFT-721,NFT-1155,PROXY}-001/analysis-request.json`
+  및 ERC-1155 `analysis-request-batch.json` — subject-scoped 요청
 - `docs/05_QA_Validation/schemas/analysis-request.schema.json`,
   `analysis-result.schema.json`, `operations-contract.schema.json` — 갱신
 - `tests/unit/test_evm_special_slice.py` — complete·partial·failed 18개

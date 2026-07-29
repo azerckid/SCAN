@@ -25,6 +25,14 @@ FIXTURE_IDS = (
     "FX-EVM-NFT-1155-001",
     "FX-EVM-PROXY-001",
 )
+REQUEST_FILES = {
+    "FX-EVM-NFT-721-001": ("analysis-request.json",),
+    "FX-EVM-NFT-1155-001": (
+        "analysis-request.json",
+        "analysis-request-batch.json",
+    ),
+    "FX-EVM-PROXY-001": ("analysis-request.json",),
+}
 
 
 def _canonical_sha256(value: dict[str, object]) -> str:
@@ -40,21 +48,38 @@ def _canonical_sha256(value: dict[str, object]) -> str:
 def main() -> None:
     for fixture_id in FIXTURE_IDS:
         package = FIXTURES / fixture_id
-        request = validate_analysis_request(
-            json.loads((package / "analysis-request.json").read_text())
-        ).root
-        if not isinstance(request, EvmSpecialAnalysisRequest):
-            raise ValueError(f"{fixture_id} analysis-request.json is not evm_special")
         raw_replay = (package / "raw-replay.json").read_bytes()
+        values: list[dict[str, object]] = []
+        for request_file in REQUEST_FILES[fixture_id]:
+            request = validate_analysis_request(
+                json.loads((package / request_file).read_text())
+            ).root
+            if not isinstance(request, EvmSpecialAnalysisRequest):
+                raise ValueError(f"{fixture_id} {request_file} is not evm_special")
 
-        first = analyze_evm_special_replay(request, raw_replay)
-        second = analyze_evm_special_replay(request, raw_replay)
-        if first.to_contract_dict() != second.to_contract_dict():
-            raise ValueError(f"{fixture_id} analyzer is not deterministic")
-        if first.root.status != "complete":
-            raise ValueError(f"{fixture_id} analyzer did not reach complete status")
+            first = analyze_evm_special_replay(request, raw_replay)
+            second = analyze_evm_special_replay(request, raw_replay)
+            if first.to_contract_dict() != second.to_contract_dict():
+                raise ValueError(f"{fixture_id} {request_file} analyzer is not deterministic")
+            if first.root.status != "complete":
+                raise ValueError(f"{fixture_id} {request_file} did not reach complete status")
+            values.append(first.root.results[0].value)
 
-        analyzer_hash = _canonical_sha256(first.root.results[0].value)
+        if fixture_id == "FX-EVM-NFT-1155-001":
+            single_value, batch_value = values
+            if single_value.get("standard") != "erc1155":
+                raise ValueError("ERC-1155 single request returned the wrong standard")
+            if batch_value.get("standard") != "erc1155":
+                raise ValueError("ERC-1155 batch request returned the wrong standard")
+            analyzer_value = {
+                "standard": "erc1155",
+                "single_case": single_value["single_case"],
+                "batch_case": batch_value["batch_case"],
+            }
+        else:
+            analyzer_value = values[0]
+
+        analyzer_hash = _canonical_sha256(analyzer_value)
         evidence = json.loads((package / "evidence.json").read_text())
         pinned_hash = evidence["verification_provenance"]["calculated_fact_sha256"]
         if analyzer_hash != pinned_hash:
@@ -65,7 +90,8 @@ def main() -> None:
 
     print(
         f"PASS TASK-013 analyzer independent verification: {len(FIXTURE_IDS)} fixtures, "
-        "canonical result hash matches the independent verifier, 2 deterministic runs"
+        "4 subject-scoped requests, canonical result hash matches the independent "
+        "verifier, 2 deterministic runs"
     )
 
 

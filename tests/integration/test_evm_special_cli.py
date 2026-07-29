@@ -66,6 +66,38 @@ def test_evm_special_analyze_persists_and_show_renders_exact_result(
         assert runtime.storage.count("checkpoints") == 1
 
 
+def test_erc1155_batch_subject_request_persists_exact_result(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    fixture_id = "FX-EVM-NFT-1155-001"
+    analysis_id = "AN-FX-EVM-NFT-1155-BATCH-001"
+
+    analyzed = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(_path(fixture_id, "analysis-request-batch.json")),
+            "--evidence",
+            str(_path(fixture_id, "raw-replay.json")),
+        ],
+    )
+    shown = runner.invoke(app, ["show", analysis_id])
+
+    assert analyzed.exit_code == 0
+    assert shown.exit_code == 0
+    assert f"COMPLETE {analysis_id}" in analyzed.stdout
+    assert f"COMPLETE {analysis_id}" in shown.stdout
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        stored = runtime.load_result(analysis_id)
+        assert stored is not None
+        value = stored.result.root.results[0].value
+        assert "batch_case" in value
+        assert "single_case" not in value
+
+
 def test_evm_special_incomplete_proxy_state_is_partial_and_preserves_candidate(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

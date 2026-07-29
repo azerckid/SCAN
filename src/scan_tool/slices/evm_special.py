@@ -22,6 +22,7 @@ from scan_tool.domain.analysis_request import (
 )
 from scan_tool.domain.analysis_result import AnalysisResult
 from scan_tool.domain.evm_special import (
+    BlockWindow,
     EvmSpecialReplayDocument,
     EvmSpecialReplaySource,
     NftActivityReplay,
@@ -142,6 +143,7 @@ def _nft_activity(
     receipts_by_hash = _require_unique_receipts(replay.receipts)
     for log in logs:
         _require_matching_receipt(log, receipts_by_hash)
+    _require_exact_block_windows(replay.scope.block_windows, replay.receipts)
     scope_complete = (
         replay.scope.selected_transactions_complete and replay.scope.exact_block_windows_complete
     )
@@ -346,9 +348,6 @@ def _erc1155(
     all_singles = _find_logs(logs, TRANSFER_SINGLE_TOPIC)
     for log in all_singles:
         _require_erc1155_single(log)
-    # single_case is bound to subject_address (owner on either leg); batch_case
-    # is a separate historical fact scoped to the token contract only, matching
-    # how the two facts are independently sourced in the reviewed replay.
     singles = sorted(
         (
             log
@@ -365,7 +364,15 @@ def _erc1155(
         ),
         key=_log_sort_key,
     )
-    batches = _find_logs(logs, TRANSFER_BATCH_TOPIC)
+    all_batches = _find_logs(logs, TRANSFER_BATCH_TOPIC)
+    for log in all_batches:
+        if len(log.topics) != 4:
+            raise _DecodeFailure("decode_failed", "ERC-1155 Batch topic count differs.")
+    batches = [
+        log
+        for log in all_batches
+        if subject in (_topic_address(log.topics[2]), _topic_address(log.topics[3]))
+    ]
     if len(batches) > 1:
         raise _DecodeFailure("decode_failed", "More than one ERC-1155 Batch was selected.")
     if not singles and not batches:
@@ -772,6 +779,28 @@ def _require_matching_receipt(
         raise _DecodeFailure(
             "reconciliation_failed",
             "Selected log does not match a receipt in the reviewed replay scope.",
+        )
+
+
+def _require_exact_block_windows(
+    windows: list[BlockWindow],
+    receipts: list[SpecialReceipt],
+) -> None:
+    window_blocks: list[int] = []
+    for window in windows:
+        from_block = _hex_int(window.from_block)
+        to_block = _hex_int(window.to_block)
+        if from_block != to_block:
+            raise _DecodeFailure(
+                "reconciliation_failed",
+                "NFT replay block windows must each identify one exact block.",
+            )
+        window_blocks.append(from_block)
+    receipt_blocks = [_hex_int(receipt.block_number) for receipt in receipts]
+    if len(window_blocks) != len(set(window_blocks)) or set(window_blocks) != set(receipt_blocks):
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "NFT replay block windows differ from the selected receipt blocks.",
         )
 
 
