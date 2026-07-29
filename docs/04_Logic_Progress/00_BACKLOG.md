@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 09:50
-> Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
+> Last Updated: 2026-07-29 10:38
+> Status: TASK-001~009·011 Done · TASK-012~019 Proposed · WP-INPUT-GATE Docs Only · Implementation Not Approved
 
 ## 1. 문서 목적
 
@@ -123,6 +123,13 @@ TASK-010은 통합된 Python leaf 분석을 사용하지만 P0·V1 완료를 차
 TASK-012~019는 TASK-011의 3/6/21 측정 이후 별도 Phase 2다. TASK-012와
 TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-019는
 실제로 승인·완료된 package만 통합한다.
+
+`WP-INPUT-GATE`는 TASK-012~019의 공통 문서 선행 조건이다. 입력 모드는
+`external_rpc | contest_rpc | provided_artifact`, 체인 범위는
+`evm | bitcoin | non_evm | cross_chain`이다. 이 Gate를 문서화했다는 사실은
+contest RPC adapter·artifact importer 또는 어떤 분석기의 구현 승인이
+아니다. 두 입력 구성요소는 현재 미구현이며 별도 Context Receipt와 사용자
+승인 전 `In Progress`로 이동하지 않는다.
 
 ## 4. Task Register
 
@@ -841,6 +848,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 - Work Type: code
 - Priority: Phase 2 · P0
 - Depends On: TASK-011
+- Common Input Gate: `WP-INPUT-GATE` docs specified · contest RPC adapter /
+  artifact importer not implemented
 - Target Problems: `BASIC-EVM-001/002`, `EVM-TOKEN-001/002`
 - Atomic Tasks:
   - [ ] 네 문제의 공개 사례·reference answer·partial 조건을 확정한다.
@@ -856,9 +865,11 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
       method-not-found(`invalid_response`)·malformed offline 주입 검증을 통과했다.
     - [x] Alchemy 두 dialect를 live 실행했으나 모두 HTTP 400 `permanent`로
       실패해 해당 endpoint를 독립 Trace 역할에서 제외했다.
-    - [ ] 노출 credential 회전·독립 trace·live rate/timeout 반례를 통과해 Provider Gate를 닫는다.
-    - [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만
-      `confirmed`로 승격한다.
+    - [ ] 노출 credential 회전·live rate/timeout 반례를 통과해 필수 Provider Gate를 닫는다.
+    - [ ] 독립 trace는 엄격한 fixture 승격을 위한 비차단 후속으로 두고
+      QuickNode 단일 Trace provenance를 명시한다.
+    - [ ] offline oracle과 필수 source Gate를 만족한 fixture의 승격 수준을
+      provenance 정책에 따라 결정한다.
   - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 승인한다.
     - [x] 네 query kind의 최소 입력과 complete·partial·failed 결과 제안
       12개를 작성했다.
@@ -872,6 +883,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
     - [ ] 정식 Analysis I/O version·runtime model·migration을 별도 승인한다.
   - [ ] complete·partial·failed와 negative oracle을 구현·검증한다.
   - [ ] 네 문제의 Benchmark 승격 여부를 독립 검증한다.
+  - [ ] `external_rpc | contest_rpc | provided_artifact` 중 허용 입력을
+    normalized evidence로 연결한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 직접 대상 4문항
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - EVM-TX/STATE/LOG/TRACE 우선 근거
@@ -886,6 +899,7 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
   - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - Schema 변경 Gate
   - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - build/wrap 결정
   - [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - archive·logs·trace·AI Planner 선행 Gate
+  - [다중 입력 모드와 체인 범위](../03_Technical_Specs/12_MULTI_SOURCE_INPUT_AND_CHAIN_SCOPE.md) - `WP-INPUT-GATE`·contest RPC·artifact·체인별 경계
   - [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - `evm_core` 0.2 Draft·12개 사례·14개 probe·0.1 비변경
 - Related QA Docs:
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-EVM-001/002
@@ -901,7 +915,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
   - [ ] primary·independent 공급자와 필요 시 독립 trace 역할의 capability smoke를 통과한다.
     - [x] primary·independent 공통 6개 decoded summary 일치와 primary trace 성공을 확인했다.
     - [x] 독립 Trace dialect·provider failure offline 검증을 통과했다.
-    - [ ] credential 회전·독립 trace·live rate/timeout 반례가 남아 전체 상태는 partial이다.
+    - [ ] credential 회전·live rate/timeout 반례가 남아 전체 상태는 partial이다.
+    - [ ] contest RPC adapter·artifact importer는 별도 구현 승인이 필요하다.
   - [ ] API key·endpoint가 저장소·DB·fixture·로그에 없음을 검증한다.
   - [ ] confirmed fixture와 reference answer를 확보한다.
   - [x] CLI Preview 재검토와 사용자 UI 승인을 기록한다.
@@ -928,8 +943,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
   - [ ] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
 - Context Receipt:
   - Status: PENDING - verifying 4개·공통 9개 독립 재현·offline oracle 24개와
-    계약 제안 12개·Schema probe 14개 완료, credential 회전·독립 trace·정식
-    Schema·UI·사용자 구현 승인 전 착수 금지
+    계약 제안 12개·Schema probe 14개 완료, 공통 입력 구현·credential
+    회전·정식 Schema·사용자 구현 승인 전 착수 금지
   - Required References Read: 위 Related 문서 전체
   - Constraints: exact raw 수량, historical state block 고정, 귀속 미평가
   - Conflicts: None known
