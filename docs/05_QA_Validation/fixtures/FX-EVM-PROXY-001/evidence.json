@@ -95,11 +95,12 @@
     "wider_history_scanned": false,
     "implementation_changed": true,
     "event_matches_after_state": true,
-    "admin_remained_zero": true
+    "admin_remained_zero": true,
+    "independent_verifier_pass": true
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Analysis I/O/UI approval and independent verifier are not complete. Wider upgrade history is outside this selected-upgrade fixture scope."
+    "remaining": "Analysis I/O/UI approval and fixture promotion review are not complete. Wider upgrade history is outside this selected-upgrade fixture scope."
   },
   "provenance_notes": "Etherscan was used only to discover the public upgrade transaction. Scoring event and storage values were independently read from two archive RPC providers."
 }

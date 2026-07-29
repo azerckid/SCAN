@@ -1,15 +1,16 @@
 # TASK-013 NFT·Proxy Fixture 후보 보고서
 > Created: 2026-07-29
-> Last Updated: 2026-07-29 15:25
-> Status: Candidate Replay and Negative Oracle Gates Passed · Verifier Pending
+> Last Updated: 2026-07-29 15:38
+> Status: Candidate Replay, Negative Oracle, and Verifier Gates Passed · Promotion Pending
 
 ## 1. 목적
 
 TASK-013의 코드를 만들기 전에 필요한 ERC-721, ERC-1155, EIP-1967
 fixture의 공개 후보와 최소 구성을 기록한다. 세 package는 공개 사례,
 두 공급자 재현, capability별 raw SHA와 명시 scope의 filtered log/state
-Gate를 통과했다. negative oracle 16개도 두 번 통과했지만 독립 Verifier가
-남아 있어 `candidate`이며,
+Gate를 통과했다. negative oracle 16개와 별도 raw-first Verifier의
+3 candidate·7 requirement·두 번 결정성도 통과했다. 승격 판단 전이므로
+계속 `candidate`이며,
 fixture 확정이나 구현 승인을 뜻하지 않는다.
 
 ## 2. 후보 구성
@@ -27,9 +28,9 @@ NFT 한 건만으로 ERC-721과 ERC-1155를 모두 검증했다고 주장하지 
 
 | Fixture | 재현 입력 | 일치한 값 | 미완료 |
 |:---|:---|:---|:---|
-| ERC-721 | 두 TX receipt + exact-block filtered logs | contract·block·log index·owner/operator·approved·from/to·tokenId | Verifier |
-| ERC-1155 | 두 TX receipt + exact-block filtered logs | contract·block·log index·operator/from/to·ids·amounts | Verifier |
-| Proxy | upgrade receipt/log + adjacent `eth_getStorageAt` | Upgraded implementation·implementation slot·admin zero | Verifier |
+| ERC-721 | 두 TX receipt + exact-block filtered logs | contract·block·log index·owner/operator·approved·from/to·tokenId | fixture 승격 판단 |
+| ERC-1155 | 두 TX receipt + exact-block filtered logs | contract·block·log index·operator/from/to·ids·amounts | fixture 승격 판단 |
+| Proxy | upgrade receipt/log + adjacent `eth_getStorageAt` | Upgraded implementation·implementation slot·admin zero | fixture 승격 판단 |
 
 공급자 endpoint와 credential은 저장하지 않고 `primary`·`verify` 논리 역할만
 사용했다. 탐색기 화면은 후보 발견 보조이며 scoring source가 아니다.
@@ -137,6 +138,7 @@ expected 값은 제품 analyzer 입력으로 사용하지 않는다. 상세 결�
 - [x] selected TX·exact block window와 selected upgrade·adjacent state 범위를 검증했다.
 - [x] replay integrity checker가 raw topic/data/storage에서 expected 핵심 값을 재계산했다.
 - [x] negative oracle 16개를 두 번 실행해 결정성을 확인했다.
+- [x] 독립 Verifier가 세 candidate의 raw facts와 7개 requirement를 두 번 재계산했다.
 - [x] candidate package 3개를 포함한 fixture Schema 0.1을 통과했다.
 - [ ] Analysis I/O와 UI를 승인했다.
 - [ ] Context Receipt가 `PASS`다.
@@ -160,7 +162,7 @@ Benchmark 자동화 7문항은 변하지 않는다.
 
 | 기준 | 상태 | 이번 단계의 증거 | 잔여 |
 |:---|:---|:---|:---|
-| Functionality | Partial | 세 표준의 두 공급자 raw SHA·명시 scope·expected 재계산·negative oracle 통과 | Verifier |
+| Functionality | Partial | 두 공급자 raw SHA·명시 scope·negative oracle·독립 Verifier 통과 | fixture 승격·제품 decoder |
 | Potential Impact | Partial | NFT·Proxy 두 예상문제의 구현 입력을 구체화 | Benchmark 승격 전 |
 | Novelty | Partial | event와 historical slot을 분리하고 귀속을 판정하지 않음 | analyzer 비교 전 |
 | UX | N/A | UI·runtime 변경 없음 | 전용 Preview 승인 |
@@ -175,8 +177,8 @@ Benchmark 자동화 7문항은 변하지 않는다.
 
 **공개 candidate replay·명시 scope·raw integrity Gate 통과, fixture 승격 미실행.**
 
-다음 작업은 독립 Verifier가 raw replay에서 필수 값을 다시 계산하는
-Gate다. 그 뒤에도 즉시 제품 decoder를 시작하지 않고, fixture 승격·UI·Context
+다음 작업은 replay·oracle·Verifier 증거로 fixture 승격 여부를 판단하는
+별도 Gate다. 그 뒤에도 즉시 제품 decoder를 시작하지 않고, UI·Context
 Receipt·사용자 구현 승인을 순서대로 닫는다.
 
 ## 11. Related Documents
@@ -187,3 +189,4 @@ Receipt·사용자 구현 승인을 순서대로 닫는다.
 - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md)
 - [Backlog TASK-013](../04_Logic_Progress/00_BACKLOG.md)
 - [TASK-013 Negative Oracle 보고서](./33_TASK_013_NEGATIVE_ORACLE_REPORT.md)
+- [TASK-013 독립 Verifier 보고서](./34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md)

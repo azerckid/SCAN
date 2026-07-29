@@ -1,7 +1,7 @@
 # TASK-013 NFT·Proxy 분석 계약 제안
 > Created: 2026-07-29
-> Last Updated: 2026-07-29 15:25
-> Status: Candidate Replay and Negative Oracle Gates Passed · Implementation Not Approved
+> Last Updated: 2026-07-29 15:38
+> Status: Candidate Replay, Negative Oracle, and Verifier Gates Passed · Implementation Not Approved
 
 ## 1. 목적
 
@@ -20,7 +20,7 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 | TASK-012 EVM Core | Done · Analysis I/O 0.2 | raw log/state 입력 재사용 |
 | EVM-NFT-001 | Assisted | fixture·계약 후보만 정의 |
 | EVM-PROXY-001 | Assisted | fixture·계약 후보만 정의 |
-| NFT·Proxy fixture | 공개 사례 3개 · replay·negative Gate 통과 · `candidate` | raw SHA·exact scope·16 oracle 통과, Verifier Gate 유지 |
+| NFT·Proxy fixture | 공개 사례 3개 · replay·negative·Verifier Gate 통과 · `candidate` | raw SHA·exact scope·16 oracle·7 requirement 재계산 통과, 승격 판단 유지 |
 | Analysis I/O | 0.2 적용, 0.1 호환 | 변경하지 않음 |
 | Python runtime | NFT·Proxy analyzer 없음 | 구현하지 않음 |
 | UI | 공통 CLI Preview 존재 | TASK-013 전용 Preview는 별도 승인 |
@@ -86,9 +86,9 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 `candidate`는 공개 주소·TX·block과 expected/evidence 골격, 두 논리
 공급자의 raw SHA·receipt/log/storage replay가 일치했다는 뜻이다.
 범위 완전성은 명시한 selected transaction·exact block window 또는
-selected upgrade·adjacent state에만 적용한다. negative oracle 16개는
-두 번 결정적으로 통과했다. 독립
-Verifier, UI·계약 승인이 남아 있으므로 `verifying`이나 `confirmed`로
+selected upgrade·adjacent state에만 적용한다. negative oracle 16개와
+독립 Verifier 두 번의 재계산은 통과했다. fixture 승격 판단과 UI·계약
+승인이 남아 있으므로 `verifying`이나 `confirmed`로
 부르지 않는다.
 
 ### 4.1 공통 승격 Gate
@@ -101,7 +101,7 @@ Verifier, UI·계약 승인이 남아 있으므로 `verifying`이나 `confirmed`
 - [x] 같은 signature의 무관 log, malformed ABI, 범위 누락 반례 포함
 - [x] complete·partial·failed가 두 번 결정적으로 재현
 - [x] fixture의 requirement→evidence→source 참조 무결성 통과
-- [ ] 독립 Verifier가 필수 값을 다시 계산
+- [x] 독립 Verifier가 필수 raw facts와 7개 requirement를 두 번 다시 계산
 - [x] fixture Schema 통과
 - [ ] 사용자 UI Gate 통과
 
@@ -229,10 +229,9 @@ storage snapshot은 명시 block tag와 함께 비교한다.
 
 ## 10. 다음 Gate
 
-1. 독립 Verifier가 세 candidate의 raw replay에서 필수 값을 다시 계산한다.
-2. Verifier 통과 후에만 fixture 승격을 판단한다.
-3. Analysis I/O 대안과 전용 Preview를 사용자에게 제시한다.
-4. Context Receipt와 별도 구현 승인을 받은 뒤 Python decoder를 시작한다.
+1. replay·negative oracle·Verifier 근거로 fixture 승격을 별도 판단한다.
+2. Analysis I/O 대안과 전용 Preview를 사용자에게 제시한다.
+3. Context Receipt와 별도 구현 승인을 받은 뒤 Python decoder를 시작한다.
 
 ## 11. Related Documents
 
@@ -243,4 +242,5 @@ storage snapshot은 명시 block tag와 함께 비교한다.
 - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md)
 - [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md)
 - [TASK-013 Negative Oracle 보고서](../05_QA_Validation/33_TASK_013_NEGATIVE_ORACLE_REPORT.md)
+- [TASK-013 독립 Verifier 보고서](../05_QA_Validation/34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md)
 - [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md)
