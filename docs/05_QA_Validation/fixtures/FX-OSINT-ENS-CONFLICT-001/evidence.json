@@ -1,0 +1,59 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+  "status": "candidate",
+  "captured_at": "2026-07-29T18:37:00Z",
+  "event_evidence": [],
+  "call_evidence": [
+    {
+      "evidence_id": "EV-INTEL-ENS-FORWARD",
+      "evidence_type": "ens_forward_resolution",
+      "source_id": "DS-ENS",
+      "block_number": 25640270,
+      "name": "nick.eth",
+      "address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+      "artifact_uri": "artifact://sha256/a1ed2bfc3bb65b0717afeb979fc92b68658f2ee9391f458a67ad2c5ef246ce2c"
+    },
+    {
+      "evidence_id": "EV-INTEL-ENS-REVERSE",
+      "evidence_type": "ens_reverse_primary_name",
+      "source_id": "DS-ENS",
+      "block_number": 25640270,
+      "address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+      "name": "nick.eth",
+      "artifact_uri": "artifact://sha256/a1ed2bfc3bb65b0717afeb979fc92b68658f2ee9391f458a67ad2c5ef246ce2c"
+    }
+  ],
+  "state_evidence": [],
+  "context_evidence": [],
+  "source_requirements": [
+    {
+      "source_id": "DS-ENS",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Fixed-block forward and reverse ENS calls"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-ENS",
+      "provider": "PROVIDER-EVM-VERIFY",
+      "retrieved_at": "2026-07-29T18:37:00Z",
+      "methods": ["eth_call"]
+    }
+  ],
+  "consistency_checks": {
+    "forward_reverse_match": true,
+    "fixed_block_repeated": true,
+    "second_provider_match": false,
+    "negative_oracle_pass": false,
+    "independent_verifier_pass": false
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": "Second provider replay, mismatch and expired-state negative oracles, and an independent Verifier are required before verifying."
+  },
+  "provenance_notes": "The replay is a fixed-block onchain observation from one logical provider. It is not ownership proof."
+}

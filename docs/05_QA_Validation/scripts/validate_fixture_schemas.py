@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -38,6 +39,21 @@ def duplicate_values(values: list[str]) -> set[str]:
             duplicates.add(value)
         seen.add(value)
     return duplicates
+
+
+def validate_artifact_digests(package: Path) -> list[str]:
+    errors: list[str] = []
+    artifact_root = package / "artifacts" / "sha256"
+    if not artifact_root.exists():
+        return errors
+    for artifact_path in sorted(path for path in artifact_root.iterdir() if path.is_file()):
+        expected_digest = artifact_path.name.split(".", 1)[0]
+        actual_digest = hashlib.sha256(artifact_path.read_bytes()).hexdigest()
+        if expected_digest != actual_digest:
+            errors.append(
+                f"{package.name}: content-addressed artifact digest mismatch: {artifact_path.name}"
+            )
+    return errors
 
 
 def validate_package(package: Path) -> list[str]:
@@ -111,6 +127,7 @@ def validate_package(package: Path) -> list[str]:
                 "has no matching provenance source"
             )
 
+    errors.extend(validate_artifact_digests(package))
     return errors
 
 

@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+  "status": "candidate",
+  "block_number": 25640270,
+  "forward": {
+    "name": "nick.eth",
+    "address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+    "resolver": "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41"
+  },
+  "reverse": {
+    "address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+    "name": "nick.eth",
+    "resolver": "0xa2c122be93b0074270ebee7f6b7292c7deb45047"
+  },
+  "forward_reverse_match": true,
+  "ownership_assessment": "not_assessed",
+  "partial_conditions": [
+    "Only forward or reverse resolution is available",
+    "The fixed-block state cannot be reproduced"
+  ],
+  "failed_conditions": [
+    "Forward and reverse results differ but are reported as a match",
+    "A latest-block result is substituted for the selected historical block",
+    "The ENS binding is promoted to legal ownership"
+  ],
+  "tolerance": {
+    "exact_name_address_and_block": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-INTEL-ENS-FORWARD",
+        "description": "Forward resolution must match the fixed-block raw call.",
+        "mandatory": true,
+        "evidence_refs": ["EV-INTEL-ENS-FORWARD"]
+      },
+      {
+        "requirement_id": "REQ-INTEL-ENS-REVERSE",
+        "description": "Reverse primary name must match the fixed-block raw call and remain separate from ownership.",
+        "mandatory": true,
+        "evidence_refs": ["EV-INTEL-ENS-REVERSE"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-ACTOR-RELATION-HUB-001",
+  "status": "candidate",
+  "captured_at": "2026-07-29T18:27:00Z",
+  "event_evidence": [],
+  "call_evidence": [],
+  "state_evidence": [],
+  "context_evidence": [
+    {
+      "evidence_id": "EV-INTEL-ACTOR-HUB-DEX",
+      "evidence_type": "confirmed_fixture_relation",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_fixture_id": "FX-SVC-DEX-001",
+      "raw_artifact_uri": "artifact://sha256/ff0924acb52db56c2a907d709f83c13b2ecdd5d5a17cae09da70e0aab422733c",
+      "expected_artifact_uri": "artifact://sha256/495b5fddafbf41f627f4d01a7e249304cf2303fcfd7f52fcbd33c251dd9d7dc9"
+    },
+    {
+      "evidence_id": "EV-INTEL-ACTOR-HUB-AUTH",
+      "evidence_type": "confirmed_fixture_relation",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_fixture_id": "FX-EVM-AUTH-001",
+      "raw_artifact_uri": "artifact://sha256/75f07f30863d958146f85052642be07b6d6478194672408f9b473b21ff554dd6",
+      "expected_artifact_uri": "artifact://sha256/9e8966209171a0c9590eb69d8e1499c59d403253a58c8de7f2bfaaedfb08c716"
+    },
+    {
+      "evidence_id": "EV-INTEL-ACTOR-HUB-BOUNDARY",
+      "evidence_type": "public_hub_exclusion",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "hub_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "hub_role": "public_erc20_token_contract",
+      "ownership_assessment": "not_assessed",
+      "coordination_assessment": "not_assessed"
+    }
+  ],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Confirmed DEX and AUTH fixture relations to the public USDC hub"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "CONFIRMED-DEX-AUTH-REPLAYS",
+      "retrieved_at": "2026-07-29T18:27:00Z"
+    }
+  ],
+  "consistency_checks": {
+    "source_artifact_hashes_match": true,
+    "subject_fixture_binding_match": true,
+    "hub_address_match": true,
+    "public_hub_excluded": true,
+    "negative_oracle_pass": false,
+    "independent_verifier_pass": false
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": "Add public-hub false-positive and subject-swap negative oracles, then run an independent Verifier before verifying."
+  },
+  "provenance_notes": "The fixture is a false-positive control. Sharing USDC interaction does not imply ownership or coordination."
+}

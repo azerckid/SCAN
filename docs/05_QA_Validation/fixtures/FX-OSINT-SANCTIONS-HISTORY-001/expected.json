@@ -1,0 +1,58 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+  "status": "candidate",
+  "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+  "timeline": [
+    {
+      "date": "2022-08-08",
+      "action": "designation",
+      "address_explicit": true,
+      "historical": true
+    },
+    {
+      "date": "2025-03-21",
+      "action": "removal",
+      "address_explicit": true,
+      "historical": true
+    }
+  ],
+  "current_status": "not_assessed",
+  "direct_or_indirect": "direct_address_match",
+  "partial_conditions": [
+    "Only one official action is available",
+    "The action is available but address-level matching cannot be reproduced"
+  ],
+  "failed_conditions": [
+    "The 2022 designation is reported as the current status without the 2025 removal",
+    "An address not explicitly present in the action is reported as a direct match",
+    "A historical action is promoted to a criminality assessment"
+  ],
+  "tolerance": {
+    "exact_date_action_and_address": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-INTEL-SAN-TIMELINE",
+        "description": "The designation and removal must remain ordered official historical actions.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-INTEL-SAN-DESIGNATION",
+          "EV-INTEL-SAN-REMOVAL"
+        ]
+      },
+      {
+        "requirement_id": "REQ-INTEL-SAN-CURRENT-SEPARATION",
+        "description": "Current sanctions and criminality must remain not_assessed.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-INTEL-SAN-DESIGNATION",
+          "EV-INTEL-SAN-REMOVAL"
+        ]
+      }
+    ]
+  }
+}

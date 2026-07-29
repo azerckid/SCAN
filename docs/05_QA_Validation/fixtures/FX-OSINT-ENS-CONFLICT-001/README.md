@@ -1,0 +1,28 @@
+# Fixture: FX-OSINT-ENS-CONFLICT-001
+> Created: 2026-07-30 03:37
+> Last Updated: 2026-07-30 03:37
+> Status: Candidate 0.1 · Single-provider fixed-block replay · Verifier pending
+
+## 1. 목적
+
+`nick.eth`의 forward address와 해당 주소의 reverse primary name을 동일한
+고정 block에서 대조한다. 일치 결과를 소유권 증거로 승격하지 않는다.
+
+## 2. 현재 근거
+
+- block `25,640,270`
+- forward resolver/address raw result
+- reverse resolver/name raw result
+- 동일 probe 두 번의 SHA-256 일치
+
+## 3. 남은 Gate
+
+- [ ] 제2 provider replay
+- [ ] forward/reverse mismatch·latest substitution negative oracle
+- [ ] 독립 Verifier·두 번 결정성
+- [ ] `verifying` 승격 검토
+
+## 4. Artifacts
+
+- [Fixed-block raw replay](./artifacts/sha256/a1ed2bfc3bb65b0717afeb979fc92b68658f2ee9391f458a67ad2c5ef246ce2c.json)
+- [Source-resolution report](../../47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md)

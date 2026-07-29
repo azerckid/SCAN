@@ -1,7 +1,7 @@
 # TASK-015 Label·OSINT·Actor Intelligence 계약 제안
 > Created: 2026-07-30 02:37
-> Last Updated: 2026-07-30 03:27
-> Status: Proposed 0.1 · Docs-only · Source Resolution 5 Viable · Snapshot Basis Recorded · Runtime Not Implemented
+> Last Updated: 2026-07-30 03:47
+> Status: Proposed 0.1 · Candidate Packages 5 · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -218,14 +218,15 @@ Analysis I/O `0.2`에 `analysis_type: "intel_context"`를 추가하는 대안 B�
 
 | Fixture ID | 문제 | 필수 사실 | 상태 |
 |:---|:---|:---|:---:|
-| `FX-OSINT-LABEL-CONFLICT-001` | OSINT-LBL-001 | 동일 주소에 대한 일치·충돌·주소 비명시 claim | proposed |
-| `FX-OSINT-SANCTIONS-HISTORY-001` | OSINT-SAN-001 | 직접 match·1홉·고시/해제 시점·공용 서비스 반례 | proposed |
-| `FX-OSINT-ENS-CONFLICT-001` | OSINT-ENS-001 | forward/reverse·설정 TX·사칭/만료 conflict | proposed |
-| `FX-ACTOR-COMMON-FUNDER-001` | ACTOR-REL-001 | 대상별 initial funding TX·공통 source·service exclusion | proposed |
-| `FX-ACTOR-RELATION-HUB-001` | ACTOR-REL-002 | 근거 component·공용 hub 반례·후보 disposition | proposed |
+| `FX-OSINT-LABEL-CONFLICT-001` | OSINT-LBL-001 | 동일 주소에 대한 source assertion·role conflict | candidate |
+| `FX-OSINT-SANCTIONS-HISTORY-001` | OSINT-SAN-001 | 직접 match·고시/해제 시점·현재 상태 분리 | candidate |
+| `FX-OSINT-ENS-CONFLICT-001` | OSINT-ENS-001 | 고정 block forward/reverse·소유권 분리 | candidate |
+| `FX-ACTOR-COMMON-FUNDER-001` | ACTOR-REL-001 | direct funding·initial-inflow·service exclusion | candidate |
+| `FX-ACTOR-RELATION-HUB-001` | ACTOR-REL-002 | 근거 component·공용 hub false-positive | candidate |
 
-공개 사례·주소·source URL은 아직 선정하지 않는다. fixture package는
-source Terms, 개인정보, 재배포 가능 범위를 확인한 뒤 별도 승인으로 만든다.
+공개 사례·주소·source locator를 선정해 다섯 Schema 0.1 package를
+`candidate`로 작성했다. 이는 정식 계약 승인이나 `verifying` 승격이 아니다.
+negative oracle·독립 Verifier와 source별 잔여 Gate를 먼저 닫는다.
 
 ## 8. AI Planner·Python·Verifier 경계
 
@@ -271,7 +272,7 @@ Python worker는 다음을 수행한다.
 - [x] TASK-015 UI Preview 사용자 검토·피드백 — 2026-07-30 02:52 승인
 - [x] 공개 fixture 5개 후보 bounded 조사·source blocker 교체 — 5 viable
 - [x] 다섯 후보의 pinned locator·raw snapshot SHA 기준선 기록
-- [ ] selected raw artifact를 포함한 다섯 fixture package 확정
+- [x] selected raw artifact를 포함한 다섯 candidate fixture package 작성
 - [ ] source별 Rules·Terms·privacy·license 확인
 - [ ] raw/source snapshot·negative oracle·독립 Verifier
 - [ ] Analysis I/O 대안 B 정식 승인
@@ -289,3 +290,4 @@ Python worker는 다음을 수행한다.
 - **QA_Validation**: [TASK-015 Fixture·Contract Gate](../05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) - Stop/Go 기준
 - **QA_Validation**: [TASK-015 공개 Source·Fixture 후보 조사](../05_QA_Validation/46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) - Terms·privacy·후보 판정
 - **QA_Validation**: [Source 교체·Raw Snapshot 기준선](../05_QA_Validation/47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) - replacement·snapshot hash
+- **QA_Validation**: [Candidate Fixture Package 보고서](../05_QA_Validation/48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md) - 5 candidate packages·artifact hash

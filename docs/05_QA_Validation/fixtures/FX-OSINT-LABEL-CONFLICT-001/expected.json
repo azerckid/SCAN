@@ -1,0 +1,74 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+  "status": "candidate",
+  "subject_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+  "assertions": [
+    {
+      "assertion_id": "ASSERT-LABEL-DATASET",
+      "source_role": "public_dataset",
+      "entity": "Tornado.Cash",
+      "categories": ["Mixer", "Sanctioned"],
+      "source_value": "external",
+      "truth_status": "source_assertion_only"
+    },
+    {
+      "assertion_id": "ASSERT-LABEL-CONFIG",
+      "source_role": "community_config",
+      "name": "team4.vesting.contract.tornadocash.eth",
+      "role": "team4_vesting_contract",
+      "truth_status": "role_assertion"
+    },
+    {
+      "assertion_id": "ASSERT-LABEL-ENS",
+      "source_role": "onchain_binding",
+      "name": "team4.vesting.contract.tornadocash.eth",
+      "resolved_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+      "block_number": 25640270,
+      "truth_status": "confirmed_observation"
+    }
+  ],
+  "conflict": {
+    "kind": "category_role_conflict",
+    "auto_merge": false,
+    "ownership_assessment": "not_assessed",
+    "criminality_assessment": "not_assessed"
+  },
+  "partial_conditions": [
+    "One assertion is available but the pinned config or fixed-block ENS binding is unavailable",
+    "The selected dataset row is available but its pinned repository provenance is unavailable"
+  ],
+  "failed_conditions": [
+    "The dataset category is promoted to ownership or criminal truth",
+    "Assertions from different sources are silently merged into one label",
+    "The ENS name resolves to a different address at the selected block"
+  ],
+  "tolerance": {
+    "exact_text_and_address": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-INTEL-LABEL-ASSERTIONS",
+        "description": "Dataset, community config, and onchain ENS assertions must remain separately attributed.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-INTEL-LABEL-DATASET",
+          "EV-INTEL-LABEL-CONFIG",
+          "EV-INTEL-LABEL-ENS"
+        ]
+      },
+      {
+        "requirement_id": "REQ-INTEL-LABEL-CONFLICT",
+        "description": "Category conflict must be preserved without ownership or criminality promotion.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-INTEL-LABEL-DATASET",
+          "EV-INTEL-LABEL-CONFIG"
+        ]
+      }
+    ]
+  }
+}

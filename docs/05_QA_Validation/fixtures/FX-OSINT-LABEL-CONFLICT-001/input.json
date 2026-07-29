@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+  "problem_id": "OSINT-LBL-001",
+  "status": "candidate",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "subject_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+  "scope_kind": "bounded_source_assertion_conflict",
+  "observation_block": 25640270,
+  "source_locators": [
+    {
+      "source_id": "DS-LABEL-PUBLIC",
+      "repository": "Humanbased-AI/Crypto-Address-Annotation-10K",
+      "commit": "865b4b7ca276ffa50255f5fa751227b3c666dbf1",
+      "path": "Crypto-Address-Annotation-10K.csv",
+      "selected_row_sha256": "15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475"
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "repository": "tornadocash-community/torn-token",
+      "commit": "4dea68f71633dab37e3cb4c8b4d8dca3479891c6",
+      "path": "config.js"
+    },
+    {
+      "source_id": "DS-ENS",
+      "name": "team4.vesting.contract.tornadocash.eth",
+      "block_number": 25640270
+    }
+  ],
+  "selection_notes": "Etherscan-free conflict case. A research/testing dataset assertion is preserved beside a community-maintained role config and fixed-block ENS binding. No source is promoted to ownership or criminal truth."
+}

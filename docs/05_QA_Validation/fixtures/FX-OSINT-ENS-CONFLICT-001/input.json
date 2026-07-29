@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+  "problem_id": "OSINT-ENS-001",
+  "status": "candidate",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "name": "nick.eth",
+  "subject_address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+  "scope_kind": "fixed_block_forward_reverse",
+  "block_number": 25640270,
+  "selection_notes": "The forward name resolution and reverse primary name agree at one fixed Ethereum block. This binding is not ownership proof and says nothing about later blocks."
+}

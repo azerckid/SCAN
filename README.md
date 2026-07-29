@@ -125,6 +125,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-015 Intelligence Gate | [`45_TASK_015_FIXTURE_CONTRACT_GATE.md`](docs/05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) | proposed fixture, negative oracle, privacy, UI, and Verifier Stop/Go criteria |
 | TASK-015 public-source candidates | [`46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md`](docs/05_QA_Validation/46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) | official Terms/privacy review with four viable candidates and one source-blocked label candidate |
 | TASK-015 source resolution | [`47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md`](docs/05_QA_Validation/47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) | Etherscan-free label replacement and five-candidate raw snapshot hash baseline |
+| TASK-015 candidate packages | [`48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md`](docs/05_QA_Validation/48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md) | five Schema-valid candidate packages with content-addressed selected artifacts |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -142,13 +143,13 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-468 passed
-PASS 13 fixture packages validated against schema 0.1
+470 passed
+PASS 18 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 48 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 1543 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 162 runtime/evidence files
+PASS repository traceability: 1594 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 185 runtime/evidence files
 PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)
 PASS TASK-013 independent Verifier: 3 fixtures (confirmed), 7 requirements, 13 evidence values, 2 deterministic runs
