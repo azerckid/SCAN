@@ -58,6 +58,10 @@ COMMANDS = (
         sys.executable,
         "scripts/verify_task_013_independent_verifier.py",
     ),
+    (
+        sys.executable,
+        "scripts/verify_task_013_analyzer_independent_verification.py",
+    ),
 )
 
 

@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-NFT-721-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-29T05:58:23Z",
   "event_evidence": [
     {
@@ -86,7 +86,7 @@
   },
   "uncertainty": {
     "candidate_only": false,
-    "remaining": "Fixture promotion review passed (verifying). Analysis I/O UI approval, Context Receipt PASS, and user implementation approval are not complete. The continuous gap between exact block windows is outside this fixture scope."
+    "remaining": "Confirmed: fixture promotion, Analysis I/O UI approval, Context Receipt PASS, user implementation approval, analyzer implementation, and independent verification are all complete. The continuous gap between exact block windows is outside this fixture scope."
   },
   "provenance_notes": "Etherscan was used only to discover public transaction candidates. Scoring values were independently read from two RPC receipts."
 }

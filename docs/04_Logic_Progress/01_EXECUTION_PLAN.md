@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 20:19
-> Status: Wave 1 TASK-012 Complete · Wave 3 TASK-013 UI 승인 완료·Analyzer 구현 대기
+> Last Updated: 2026-07-29 20:59
+> Status: Wave 1 TASK-012 Complete · Wave 3 TASK-013 Complete
 
 ## 1. 목적
 
@@ -123,11 +123,11 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   작성한다.
 - [x] `TASK-013` 사용자가 UI Preview를 확인하고 승인한다(2026-07-29 20:19).
   Context Receipt `PASS`·사용자 구현 승인을 Backlog에 기록했다.
-- [ ] `TASK-013` NFT·Proxy analyzer를 구현하고 독립 Verification Receipt를
+- [x] `TASK-013` NFT·Proxy analyzer를 구현하고
+  [독립 Verification Receipt](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)를
   확보한다.
-- [ ] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 `확정`으로 올린다
-  (analyzer 구현·독립 검증 이후).
-- [ ] `TASK-013` Benchmark automated 7 → 9 승격을 기록한다.
+- [x] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 `확정`으로 올린다.
+- [x] `TASK-013` Benchmark automated 7 → 9 승격을 기록한다.
 - [ ] `TASK-014` 단일 path와 분기·재병합 fixture를 확정한다.
 - [ ] graph node/edge·asset conservation·budget·partial 계약을 승인한다.
 - [ ] path 결과가 label/heuristic과 분리되는지 검증한다.
@@ -200,7 +200,7 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - **Technical_Specs**: [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - Work Package 계약
 - **Technical_Specs**: [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 공개 계약 변경 Gate
 - **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - EVM Core 0.2 Draft와 0.1 비변경 검증
-- **Technical_Specs**: [TASK-013 NFT·Proxy Contract Proposal](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - 전문 decoder 계약과 구현 잠금
+- **Technical_Specs**: [TASK-013 NFT·Proxy Contract Proposal](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - `evm_special` 계약과 구현 완료
 - **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - Wave 1 source·AI Planner 선행 Gate
 - **Logic_Progress**: [Backlog](./00_BACKLOG.md) - TASK-012~019 상태
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 승격 검증 기준
@@ -209,5 +209,6 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - smoke·secret·independence 체크
 - **QA_Validation**: [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - NFT 표준 2종·Proxy 선정 Gate
 - **QA_Validation**: [TASK-013 Fixture 승격 검토 보고서](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) - `검증 중` 승격 판정
+- **QA_Validation**: [TASK-013 Analyzer 검증 Receipt](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md) - `확정` 최종 승격·independent verification
 - **UI_Screens**: [TASK-013 NFT·Proxy UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md) - 표준 3개·상태 3개 화면 계약과 Preview
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - runner·dry-run·미실행 경계

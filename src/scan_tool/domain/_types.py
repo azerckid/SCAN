@@ -59,19 +59,33 @@ def non_empty_text(value: str) -> str:
     return value
 
 
+def _is_canonical_uint256(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and re.fullmatch(r"0|[1-9][0-9]*", value) is not None
+        and int(value) <= UINT256_MAX
+    )
+
+
 def raw_values_are_uint256(value: JsonValue) -> JsonValue:
-    """Validate every nested field whose name ends in ``_raw``."""
+    """Validate every nested field whose name ends in ``_raw``.
+
+    The value may be a single decimal string or an array of them (e.g. a
+    Batch transfer's parallel ``ids_raw``/``amounts_raw`` arrays).
+    """
     if isinstance(value, dict):
         for key, nested in value.items():
-            if key.endswith("_raw") and (
-                not isinstance(nested, str)
-                or re.fullmatch(r"0|[1-9][0-9]*", nested) is None
-                or int(nested) > UINT256_MAX
-            ):
-                raise PydanticCustomError(
-                    "schema_invalid",
-                    "raw values must be canonical uint256 decimal strings",
+            if key.endswith("_raw"):
+                valid = (
+                    _is_canonical_uint256(nested)
+                    if not isinstance(nested, list)
+                    else all(_is_canonical_uint256(item) for item in nested)
                 )
+                if not valid:
+                    raise PydanticCustomError(
+                        "schema_invalid",
+                        "raw values must be canonical uint256 decimal strings",
+                    )
             raw_values_are_uint256(nested)
     elif isinstance(value, list):
         for nested in value:
@@ -127,7 +141,9 @@ ToolRequirementId = Annotated[
 ]
 FixtureRequirementId = Annotated[
     str,
-    StringConstraints(pattern=r"^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN)-[A-Z0-9-]+$"),
+    StringConstraints(
+        pattern=r"^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY)-[A-Z0-9-]+$"
+    ),
 ]
 BlockNumber = Annotated[StrictInt, Field(ge=0)]
 NonNegativeInt = Annotated[StrictInt, Field(ge=0)]

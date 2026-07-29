@@ -28,6 +28,7 @@ class AnalysisType(StrEnum):
     AUTH_CONSUMPTION = "auth_consumption"
     ADDRESS_FREEZE = "address_freeze"
     EVM_CORE = "evm_core"
+    EVM_SPECIAL = "evm_special"
 
 
 class EvmQueryKind(StrEnum):
@@ -35,6 +36,11 @@ class EvmQueryKind(StrEnum):
     HISTORICAL_BALANCE = "historical_balance"
     FIRST_TOKEN_TRANSFER = "first_token_transfer"
     NATIVE_INFLOW = "native_inflow"
+
+
+class EvmSpecialQueryKind(StrEnum):
+    NFT_ACTIVITY = "nft_activity"
+    PROXY_HISTORY = "proxy_history"
 
 
 class RuleStatus(StrEnum):
@@ -160,6 +166,23 @@ EvmCoreInputs = (
 )
 
 
+class NftActivityInputs(ContractModel):
+    token_contract: Address
+    subject_address: Address
+    standard_hint: Literal["erc721", "erc1155", "auto"]
+    include_approvals: ContractBool
+
+
+class ProxyHistoryInputs(ContractModel):
+    proxy_address: Address
+    pattern_hint: Literal["eip1967", "auto"]
+    include_admin: ContractBool
+    include_beacon: ContractBool
+
+
+EvmSpecialInputs = NftActivityInputs | ProxyHistoryInputs
+
+
 class AnalysisRequestBase(ContractModel):
     schema_uri: Annotated[
         str,
@@ -229,8 +252,46 @@ class EvmCoreAnalysisRequest(AnalysisRequestBase):
         return self
 
 
+class EvmSpecialAnalysisRequest(AnalysisRequestBase):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "allOf": [
+                {
+                    "if": {"properties": {"query_kind": {"const": query_kind}}},
+                    "then": {"properties": {"inputs": {"required": required_fields}}},
+                }
+                for query_kind, required_fields in (
+                    ("nft_activity", ["token_contract", "subject_address"]),
+                    ("proxy_history", ["proxy_address"]),
+                )
+            ]
+        }
+    )
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.EVM_SPECIAL]
+    query_kind: EvmSpecialQueryKind
+    inputs: EvmSpecialInputs
+
+    @model_validator(mode="after")
+    def inputs_match_query_kind(self) -> "EvmSpecialAnalysisRequest":
+        expected = {
+            EvmSpecialQueryKind.NFT_ACTIVITY: NftActivityInputs,
+            EvmSpecialQueryKind.PROXY_HISTORY: ProxyHistoryInputs,
+        }[self.query_kind]
+        if not isinstance(self.inputs, expected):
+            raise PydanticCustomError(
+                "invalid_input",
+                "inputs must match query_kind",
+            )
+        return self
+
+
 RequestVariant = Annotated[
-    DexAnalysisRequest | AuthAnalysisRequest | FreezeAnalysisRequest | EvmCoreAnalysisRequest,
+    DexAnalysisRequest
+    | AuthAnalysisRequest
+    | FreezeAnalysisRequest
+    | EvmCoreAnalysisRequest
+    | EvmSpecialAnalysisRequest,
     Field(discriminator="analysis_type"),
 ]
 

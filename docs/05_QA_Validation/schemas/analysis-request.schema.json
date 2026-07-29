@@ -28,7 +28,14 @@
       "$ref": "#/$defs/analysisType"
     },
     "query_kind": {
-      "enum": ["object_summary", "historical_balance", "first_token_transfer", "native_inflow"]
+      "enum": [
+        "object_summary",
+        "historical_balance",
+        "first_token_transfer",
+        "native_inflow",
+        "nft_activity",
+        "proxy_history"
+      ]
     },
     "chain_id": {
       "const": 1
@@ -118,6 +125,16 @@
     },
     {
       "if": {
+        "properties": {"analysis_type": {"const": "evm_special"}},
+        "required": ["analysis_type"]
+      },
+      "then": {
+        "required": ["query_kind"],
+        "properties": {"schema_version": {"const": "0.2"}}
+      }
+    },
+    {
+      "if": {
         "properties": {"query_kind": {"const": "object_summary"}},
         "required": ["query_kind"]
       },
@@ -143,6 +160,20 @@
         "required": ["query_kind"]
       },
       "then": {"properties": {"inputs": {"$ref": "#/$defs/nativeInflowInputs"}}}
+    },
+    {
+      "if": {
+        "properties": {"query_kind": {"const": "nft_activity"}},
+        "required": ["query_kind"]
+      },
+      "then": {"properties": {"inputs": {"$ref": "#/$defs/nftActivityInputs"}}}
+    },
+    {
+      "if": {
+        "properties": {"query_kind": {"const": "proxy_history"}},
+        "required": ["query_kind"]
+      },
+      "then": {"properties": {"inputs": {"$ref": "#/$defs/proxyHistoryInputs"}}}
     }
   ],
   "additionalProperties": false,
@@ -152,7 +183,7 @@
       "pattern": "^AN-[A-Z0-9][A-Z0-9-]{2,63}$"
     },
     "analysisType": {
-      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core"]
+      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core", "evm_special"]
     },
     "address": {
       "type": "string",
@@ -384,6 +415,28 @@
         "transaction_hash": {"$ref": "#/$defs/transactionHash"},
         "require_trace": {"const": true},
         "exclude_reverted": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "nftActivityInputs": {
+      "type": "object",
+      "required": ["token_contract", "subject_address", "standard_hint", "include_approvals"],
+      "properties": {
+        "token_contract": {"$ref": "#/$defs/address"},
+        "subject_address": {"$ref": "#/$defs/address"},
+        "standard_hint": {"enum": ["erc721", "erc1155", "auto"]},
+        "include_approvals": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "proxyHistoryInputs": {
+      "type": "object",
+      "required": ["proxy_address", "pattern_hint", "include_admin", "include_beacon"],
+      "properties": {
+        "proxy_address": {"$ref": "#/$defs/address"},
+        "pattern_hint": {"enum": ["eip1967", "auto"]},
+        "include_admin": {"type": "boolean"},
+        "include_beacon": {"type": "boolean"}
       },
       "additionalProperties": false
     },

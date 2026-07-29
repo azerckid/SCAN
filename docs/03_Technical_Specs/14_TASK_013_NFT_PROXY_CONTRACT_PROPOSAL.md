@@ -1,7 +1,7 @@
 # TASK-013 NFT·Proxy 분석 계약 제안
 > Created: 2026-07-29
-> Last Updated: 2026-07-29 20:19
-> Status: Fixture 검증 중 승격 · Analysis I/O 대안 B 확정 · UI Preview 사용자 승인 완료 · Analyzer 구현 대기
+> Last Updated: 2026-07-29 20:59
+> Status: Done · Fixture 확정 승격 · `evm_special` 구현·독립 검증 완료 · Benchmark 7→9
 
 ## 1. 목적
 
@@ -20,7 +20,7 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 | TASK-012 EVM Core | Done · Analysis I/O 0.2 | raw log/state 입력 재사용 |
 | EVM-NFT-001 | Assisted | fixture·계약 후보만 정의 |
 | EVM-PROXY-001 | Assisted | fixture·계약 후보만 정의 |
-| NFT·Proxy fixture | 공개 사례 3개 · replay·negative·Verifier Gate 통과 · [승격 검토](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)로 `검증 중` | raw SHA·exact scope·16 oracle·7 requirement 재계산 통과, `확정`은 잔여 Gate 이후 |
+| NFT·Proxy fixture | 공개 사례 3개 · [승격 검토](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)·[Analyzer 검증](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)로 `확정` | raw SHA·exact scope·16 oracle·7 requirement·analyzer 독립 검증 재계산 통과 |
 | Analysis I/O | 0.2 적용, 0.1 호환 | 변경하지 않음. 신규 `evm_special` 대안 B를 §5에서 확정 |
 | Python runtime | NFT·Proxy analyzer 없음 | 구현하지 않음 |
 | UI | [TASK-013 전용 UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md)·[Preview](../02_UI_Screens/previews/06_task_013_nft_proxy_preview.html) 작성 | 사용자 확인·승인 완료(2026-07-29 20:19) |
@@ -82,17 +82,18 @@ NFT 표준과 EIP-1967의 의미 해석은 별도 전문 decoder가 담당한다
 
 | Fixture ID | 문제 | 반드시 포함할 공개 사실 | 현재 상태 |
 |:---|:---|:---|:---|
-| [`FX-EVM-NFT-721-001`](../05_QA_Validation/fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | BAYC ApprovalForAll·Approval reset·Transfer와 token `9110` | 검증 중 |
-| [`FX-EVM-NFT-1155-001`](../05_QA_Validation/fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | Rarible TransferSingle·TransferBatch·ApprovalForAll과 ids/values exact 배열 | 검증 중 |
-| [`FX-EVM-PROXY-001`](../05_QA_Validation/fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | Aave V3 Pool EIP-1967 slot before/after·Upgraded event·admin zero | 검증 중 |
+| [`FX-EVM-NFT-721-001`](../05_QA_Validation/fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | BAYC ApprovalForAll·Approval reset·Transfer와 token `9110` | 확정 |
+| [`FX-EVM-NFT-1155-001`](../05_QA_Validation/fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | Rarible TransferSingle·TransferBatch·ApprovalForAll과 ids/values exact 배열 | 확정 |
+| [`FX-EVM-PROXY-001`](../05_QA_Validation/fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | Aave V3 Pool EIP-1967 slot before/after·Upgraded event·admin zero | 확정 |
 
-`검증 중`은 공개 주소·TX·block과 expected/evidence 골격, 두 논리
-공급자의 raw SHA·receipt/log/storage replay 일치, negative oracle 16개와
-독립 Verifier 두 번의 재계산까지 [승격 검토](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)로
-확인했다는 뜻이다. 범위 완전성은 명시한 selected transaction·exact block
-window 또는 selected upgrade·adjacent state에만 적용한다. `confirmed`는
-Analysis I/O 대안 확정(§5.1, 완료), UI 사용자 승인, Context Receipt
-`PASS`, 사용자 구현 승인이 모두 닫힌 뒤 별도로 판단한다.
+세 fixture 모두 공개 주소·TX·block과 expected/evidence 골격, 두 논리
+공급자의 raw SHA·receipt/log/storage replay 일치, negative oracle 16개,
+독립 Verifier 두 번의 재계산, Analysis I/O 대안 확정(§5.1)·UI 사용자
+승인·Context Receipt `PASS`·사용자 구현 승인·NFT·Proxy analyzer 구현·
+독립 Verification Receipt까지 모두 확인해
+[Analyzer 검증 Receipt](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)로
+`확정`으로 승격했다. 범위 완전성은 명시한 selected transaction·exact
+block window 또는 selected upgrade·adjacent state에만 적용한다.
 
 ### 4.1 공통 승격 Gate
 
@@ -107,8 +108,9 @@ Analysis I/O 대안 확정(§5.1, 완료), UI 사용자 승인, Context Receipt
 - [x] 독립 Verifier가 필수 raw facts·13개 evidence 값·7개 requirement를
   두 번 다시 계산
 - [x] fixture Schema 통과
-- [x] 승격 검토 통과 · `검증 중`으로 승격
-- [ ] 사용자 UI Gate 통과
+- [x] 승격 검토 통과 · `검증 중` → `확정`으로 승격
+- [x] 사용자 UI Gate 통과
+- [x] NFT·Proxy analyzer 구현과 독립 Verification Receipt
 
 ## 5. Analysis I/O 제안
 
@@ -245,8 +247,14 @@ storage snapshot은 명시 block tag와 함께 비교한다.
 3. ~~사용자가 Preview를 확인하고 승인한다.~~ → 2026-07-29 20:19 승인 완료
 4. ~~Context Receipt와 별도 구현 승인을 받는다.~~ → Backlog에 `PASS`·승인
    기록 완료
-5. **다음: NFT·Proxy analyzer를 구현하고 독립 Verification Receipt를
-   확보한 뒤 Benchmark automated 7 → 9 승격을 기록한다.**
+5. ~~NFT·Proxy analyzer를 구현하고 독립 Verification Receipt를 확보한 뒤
+   Benchmark automated 7 → 9 승격을 기록한다.~~ →
+   [Analyzer 검증 Receipt](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)
+   완료, fixture 3개 `확정` 승격, Benchmark automated 9문항 달성
+
+TASK-013의 모든 Gate가 닫혔다. 다음 Coverage 확장 작업은
+[Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) Wave 3의
+후속 Wave(TASK-014 PATH 등)를 참고한다.
 
 ## 11. Related Documents
 
