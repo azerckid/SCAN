@@ -1,7 +1,7 @@
 # TASK-015 Candidate Fixture Package 보고서
 > Created: 2026-07-30 03:47
-> Last Updated: 2026-07-30 03:47
-> Status: Candidate Packages 5 · Schema PASS · Oracle / Verifier Pending · Runtime Not Implemented
+> Last Updated: 2026-07-30 04:00
+> Status: Candidate Packages 5 · Schema / Oracle PASS · Verifier Pending · Runtime Not Implemented
 
 ## 1. 목적과 경계
 
@@ -19,7 +19,7 @@ selected artifact·source hash·잔여 승격 Gate를 기록한다.
 
 이번 단계에서 하지 않은 일:
 
-- TASK-015 negative oracle·독립 Verifier
+- TASK-015 독립 Verifier
 - `candidate` → `verifying` 또는 `confirmed` 승격
 - `intel_context` Analysis I/O 승인·Context Receipt 전환
 - 제품 analyzer·Benchmark 자동화 승격
@@ -28,14 +28,15 @@ selected artifact·source hash·잔여 승격 Gate를 기록한다.
 
 | Fixture ID | 문제 | 상태 | 현재 고정 근거 | 잔여 핵심 Gate |
 |:---|:---|:---:|:---|:---|
-| `FX-OSINT-LABEL-CONFLICT-001` | OSINT-LBL-001 | candidate | selected row·MIT config·ENS raw | ENS 제2 replay·conflict oracle |
-| `FX-OSINT-SANCTIONS-HISTORY-001` | OSINT-SAN-001 | candidate | OFAC 2022/2025 URL·HTML SHA·주소 match | SLS version·direct/indirect oracle |
-| `FX-OSINT-ENS-CONFLICT-001` | OSINT-ENS-001 | candidate | fixed-block forward/reverse raw | 제2 provider·mismatch/latest oracle |
+| `FX-OSINT-LABEL-CONFLICT-001` | OSINT-LBL-001 | candidate | selected row·MIT config·ENS raw·oracle | ENS 제2 replay·Verifier |
+| `FX-OSINT-SANCTIONS-HISTORY-001` | OSINT-SAN-001 | candidate | OFAC 2022/2025 URL·HTML SHA·주소 match·oracle | SLS version·Verifier |
+| `FX-OSINT-ENS-CONFLICT-001` | OSINT-ENS-001 | candidate | fixed-block forward/reverse raw·oracle | 제2 provider·Verifier |
 | `FX-ACTOR-COMMON-FUNDER-001` | ACTOR-REL-001 | candidate | confirmed FLOW raw/expected SHA | prehistory·service exclusion |
-| `FX-ACTOR-RELATION-HUB-001` | ACTOR-REL-002 | candidate | confirmed DEX/AUTH raw/expected SHA | public-hub·subject-swap oracle |
+| `FX-ACTOR-RELATION-HUB-001` | ACTOR-REL-002 | candidate | confirmed DEX/AUTH raw/expected SHA·oracle | 독립 Verifier |
 
-다섯 package의 expected 값은 정답 계약 초안이다. negative oracle과 독립
-Verifier가 재계산하기 전에는 검증된 정답 또는 자동화 coverage로 세지 않는다.
+다섯 package의 expected 값은 정답 계약 초안이다. negative oracle은
+통과했지만 독립 Verifier가 source/raw facts를 재계산하기 전에는 검증된
+정답 또는 자동화 coverage로 세지 않는다.
 
 ## 3. Content-addressed Artifact
 
@@ -81,7 +82,8 @@ package가 Schema와 참조 무결성을 통과했다는 뜻이며, TASK-015 의
 
 ## 6. 다음 Gate
 
-1. TASK-015 negative oracle ID·입력·expected outcome을 고정한다.
+1. ~~TASK-015 negative oracle ID·입력·expected outcome을 고정한다.~~
+   → 30개·두 번 결정성 완료
 2. ENS 두 package의 제2 provider 또는 독립 저장 replay를 확보한다.
 3. Sanctions direct/indirect·current-state, Actor service/public-hub 반례를
    두 번 결정적으로 실행한다.
@@ -96,3 +98,4 @@ package가 Schema와 참조 무결성을 통과했다는 뜻이며, TASK-015 의
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - 13 confirmed·5 candidate package·2 deferred
 - **QA_Validation**: [Fixture·Contract Gate](./45_TASK_015_FIXTURE_CONTRACT_GATE.md) - Stop/Go
 - **QA_Validation**: [Source-resolution report](./47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) - package 전 snapshot 기준선
+- **QA_Validation**: [TASK-015 Negative Oracle 보고서](./49_TASK_015_NEGATIVE_ORACLE_REPORT.md) - 30개 반례·두 번 결정성

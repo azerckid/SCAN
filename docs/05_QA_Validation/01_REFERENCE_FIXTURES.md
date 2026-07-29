@@ -17,9 +17,9 @@ TASK-014 세 공개 PATH 사례는 Euler 공개 사건의 서로 다른 request 
 oracle 18개·독립 Verifier·제품 analyzer를 통과했다. PATH internal seed
 edge는 Blockscout API로 독립 교차검증해 세 fixture를 `확정`으로 관리한다.
 
-TASK-015 다섯 package는 source blocker 교체와 selected artifact/hash
-기준선까지만 완료한 `후보`다. negative oracle·독립 Verifier·계약·Context
-Receipt 전에는 `verifying` 또는 자동화 coverage로 승격하지 않는다.
+TASK-015 다섯 package는 source blocker 교체와 selected artifact/hash,
+negative oracle 30개·두 번 결정성까지 완료한 `후보`다. 독립 Verifier·
+계약·Context Receipt 전에는 `verifying` 또는 자동화 coverage로 승격하지 않는다.
 
 입력 문서:
 
@@ -511,6 +511,9 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
     Blockscout internal-tx 교차검증으로 단일 trace Gate를 닫아 세 package를
     `confirmed`로 승격했다. Benchmark는 FLOW-EVM-001/002를 포함해 11/11이며
     가격·귀속이 남은 FLOW-MULTI-001은 assisted다.
+16. TASK-015 다섯 candidate package의 source assertion·timeline·ENS·actor
+    relation 반례 30개를 두 번 결정적으로 실행했다. 이는 독립 Verifier나
+    fixture 승격이 아니며 다섯 package는 계속 `candidate`다.
 
 ## 10. Related Documents
 
@@ -539,4 +542,5 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 - **QA_Validation**: [TASK-013 독립 Verifier 보고서](./34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md) - raw-first facts·requirement 재계산
 - **QA_Validation**: [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 9/9 근거
 - **QA_Validation**: [TASK-014 최종 승격 Receipt](./44_TASK_014_FINAL_PROMOTION_RECEIPT.md) - FLOW confirmed·Benchmark 11/11 근거
+- **QA_Validation**: [TASK-015 Negative Oracle 보고서](./49_TASK_015_NEGATIVE_ORACLE_REPORT.md) - Intelligence 30개 반례·결정성
 - **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 사전 fixture·cache와 source 허용 범위

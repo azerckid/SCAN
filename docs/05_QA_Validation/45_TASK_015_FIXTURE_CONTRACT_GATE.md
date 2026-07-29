@@ -1,7 +1,7 @@
 # TASK-015 Label·OSINT·Actor Fixture·Contract Gate
 > Created: 2026-07-30 02:37
-> Last Updated: 2026-07-30 03:47
-> Status: Preview Passed · Candidate Packages 5 · Oracle / Verifier Pending · Runtime Not Implemented
+> Last Updated: 2026-07-30 04:00
+> Status: Preview / Oracle Passed · Candidate Packages 5 · Verifier Pending · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -34,15 +34,18 @@ config·onchain ENS의 `team4 vesting` 역할을 보존하는 새 subject로 교
 - [x] 다섯 fixture의 subject와 bounded raw snapshot 기준선 선정
 - [x] source locator·고정 commit 또는 snapshot SHA-256 기록
 - [x] 다섯 candidate fixture package에 selected artifact·retrieved_at 고정
-- [ ] 주소 직접 명시와 주소 비명시 claim 분리
-- [ ] official/first-party/provider/public-report/heuristic role 분리
-- [ ] 충돌·stale·withdrawn·정정 claim 보존
-- [ ] sanctions direct와 1홉 indirect 분리
-- [ ] ENS forward/reverse·설정 TX·사칭/만료 반례
-- [ ] common funder와 공용 service false positive 반례
-- [ ] actor relation component score와 hub exclusion
+- [ ] 주소 직접 명시와 주소 비명시 claim 분리 — direct/indirect는 통과,
+  address-omitted 반례는 Verifier 전 보강
+- [x] official/first-party/provider/public-report/heuristic role의 truth 비승격 반례
+- [x] 충돌·stale·withdrawn·정정 claim 보존 반례
+- [x] sanctions direct와 indirect-as-direct 오분류 반례
+- [ ] ENS forward/reverse·latest substitution 반례는 통과, impersonation·설정
+  TX 반례는 Verifier 전 보강
+- [x] common funder와 공용 service false positive 반례
+- [ ] actor relation subject 분리·hub exclusion 반례는 통과, component score는
+  Verifier 전 보강
 - [ ] requirement→evidence→source 참조 무결성
-- [ ] 두 번 결정성 실행
+- [x] negative oracle 30개 두 번 결정성 실행
 - [ ] 독립 Verifier 재계산
 - [ ] fixture Schema 통과
 
@@ -65,17 +68,17 @@ config·onchain ENS의 `team4 vesting` 역할을 보존하는 새 subject로 교
 
 | QA ID | 시나리오 | 기대 결과 | 상태 |
 |:---|:---|:---|:---:|
-| QA-INTEL-LABEL-001 | 일치·충돌 source claim | claim별 role·address explicit·conflict group | not_executed |
-| QA-INTEL-SAN-001 | 직접 목록 match + 1홉 상대 | direct/indirect 분리·목록 버전 | not_executed |
-| QA-INTEL-ENS-001 | ENS·도메인·SNS 충돌 | onchain/source claim·사칭 반례 | not_executed |
-| QA-INTEL-FUNDER-001 | 공통 초기 funding | 공통 source·대상별 TX·service exclusion | not_executed |
-| QA-INTEL-REL-001 | 복수 relation component | component score·hub 반례·heuristic | not_executed |
+| QA-INTEL-LABEL-001 | 일치·충돌 source claim | claim별 role·address explicit·conflict group | partial / oracle |
+| QA-INTEL-SAN-001 | 직접 목록 match + 1홉 상대 | direct/indirect 분리·목록 버전 | partial / oracle |
+| QA-INTEL-ENS-001 | ENS·도메인·SNS 충돌 | onchain/source claim·사칭 반례 | partial / oracle |
+| QA-INTEL-FUNDER-001 | 공통 초기 funding | 공통 source·대상별 TX·service exclusion | partial / oracle |
+| QA-INTEL-REL-001 | 복수 relation component | component score·hub 반례·heuristic | partial / oracle |
 | QA-INTEL-PARTIAL-001 | source budget·Terms 제한 | claim 보존·coverage gap | not_executed |
-| QA-INTEL-FAILED-001 | subject/hash/version 불일치 | failed·results 빈 배열·구조화 오류 | not_executed |
-| QA-INTEL-CONFLICT-001 | official/provider/heuristic 상충 | 자동 병합·자동 truth 승격 없음 | not_executed |
+| QA-INTEL-FAILED-001 | subject/hash/version 불일치 | failed·results 빈 배열·구조화 오류 | partial / oracle |
+| QA-INTEL-CONFLICT-001 | official/provider/heuristic 상충 | 자동 병합·자동 truth 승격 없음 | partial / oracle |
 | QA-INTEL-PRIVACY-001 | 직접 개인정보 포함 페이지 | 최소 수집·저장 차단 | not_executed |
 | QA-INTEL-RULE-001 | Rules unclear/restricted | live adapter 0회·artifact 경로 | not_executed |
-| QA-INTEL-DET-001 | 동일 snapshot 두 번 | canonical result hash 일치 | not_executed |
+| QA-INTEL-DET-001 | 동일 snapshot 두 번 | canonical result hash 일치 | partial / oracle |
 | QA-INTEL-BENCH-001 | 문제별 승격 | confirmed fixture가 있는 완전 범위만 반영 | not_executed |
 
 ## 6. UI Gate
@@ -129,7 +132,8 @@ Context Receipt `PASS` 전:
 4. ~~다섯 후보 source·raw scope 기준선 확정~~ → 2026-07-30 완료
 5. ~~다섯 candidate package에 selected artifact·retrieved_at 연결~~
    → 2026-07-30 완료
-6. snapshot/replay·negative oracle·독립 Verifier
+6. ~~negative oracle 30개·두 번 결정성~~ → 2026-07-30 완료.
+   snapshot/replay 잔여·독립 Verifier는 미완료
 7. Analysis I/O `intel_context` 대안 B 정식 승인
 8. 문제별 complete/partial/failed와 UI 재검토
 
@@ -151,3 +155,4 @@ Context Receipt `PASS` 전:
 - **QA_Validation**: [TASK-015 공개 Source·Fixture 후보 조사](./46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) - 4 viable·1 source-blocked 판정
 - **QA_Validation**: [Source 교체·Raw Snapshot 기준선](./47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) - 5 viable·snapshot hash 판정
 - **QA_Validation**: [Candidate Fixture Package 보고서](./48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md) - 5 package·artifact hash·잔여 Gate
+- **QA_Validation**: [TASK-015 Negative Oracle 보고서](./49_TASK_015_NEGATIVE_ORACLE_REPORT.md) - 30개 반례·두 번 결정성

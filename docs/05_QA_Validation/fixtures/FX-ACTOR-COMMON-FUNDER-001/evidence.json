@@ -46,12 +46,12 @@
     "four_direct_seed_edges_match": true,
     "initial_inflow_complete": false,
     "service_exclusion_complete": false,
-    "negative_oracle_pass": false,
+    "negative_oracle_pass": true,
     "independent_verifier_pass": false
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Bounded prehistory, faucet/paymaster/service exclusions, negative oracles, and an independent Verifier are required before verifying."
+    "remaining": "Bounded prehistory, faucet/paymaster/service exclusions, and an independent Verifier are required before verifying."
   },
   "provenance_notes": "This candidate reuses immutable confirmed FLOW artifacts. A direct funding relation is not ownership or coordination proof."
 }

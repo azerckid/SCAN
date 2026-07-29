@@ -1,7 +1,7 @@
 # Fixture: FX-OSINT-SANCTIONS-HISTORY-001
 > Created: 2026-07-30 03:37
-> Last Updated: 2026-07-30 03:37
-> Status: Candidate 0.1 · Official HTML hashes recorded · Verifier pending
+> Last Updated: 2026-07-30 04:00
+> Status: Candidate 0.1 · Negative Oracle Passed · Verifier pending
 
 ## 1. 목적
 
@@ -19,7 +19,7 @@ address match만 보존한다.
 ## 3. 남은 Gate
 
 - [ ] 적용 가능한 OFAC SLS version 고정
-- [ ] direct/indirect·stale-current negative oracle
+- [x] direct/indirect·stale-current negative oracle — 6개·2회 결정성
 - [ ] 독립 Verifier·두 번 결정성
 - [ ] `verifying` 승격 검토
 

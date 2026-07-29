@@ -48,12 +48,12 @@
     "forward_reverse_match": true,
     "fixed_block_repeated": true,
     "second_provider_match": false,
-    "negative_oracle_pass": false,
+    "negative_oracle_pass": true,
     "independent_verifier_pass": false
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Second provider replay, mismatch and expired-state negative oracles, and an independent Verifier are required before verifying."
+    "remaining": "Second provider replay and an independent Verifier are required before verifying."
   },
   "provenance_notes": "The replay is a fixed-block onchain observation from one logical provider. It is not ownership proof."
 }

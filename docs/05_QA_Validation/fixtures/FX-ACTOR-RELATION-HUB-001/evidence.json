@@ -55,12 +55,12 @@
     "subject_fixture_binding_match": true,
     "hub_address_match": true,
     "public_hub_excluded": true,
-    "negative_oracle_pass": false,
+    "negative_oracle_pass": true,
     "independent_verifier_pass": false
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Add public-hub false-positive and subject-swap negative oracles, then run an independent Verifier before verifying."
+    "remaining": "Run an independent Verifier before verifying."
   },
   "provenance_notes": "The fixture is a false-positive control. Sharing USDC interaction does not imply ownership or coordination."
 }

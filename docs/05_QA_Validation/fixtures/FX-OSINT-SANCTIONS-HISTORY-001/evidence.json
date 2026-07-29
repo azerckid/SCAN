@@ -50,12 +50,12 @@
     "removal_address_match": true,
     "timeline_ordered": true,
     "sls_version_pinned": false,
-    "negative_oracle_pass": false,
+    "negative_oracle_pass": true,
     "independent_verifier_pass": false
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Pin the applicable SLS version, add direct/indirect and stale-current negative oracles, and run an independent Verifier."
+    "remaining": "Pin the applicable SLS version and run an independent Verifier."
   },
   "provenance_notes": "The two official pages establish a historical timeline only. Current status and criminality are not assessed."
 }
