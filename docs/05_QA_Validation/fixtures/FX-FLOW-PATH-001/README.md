@@ -1,7 +1,7 @@
 # Fixture: FX-FLOW-PATH-001
 > Created: 2026-07-29 23:25
-> Last Updated: 2026-07-30 00:08
-> Status: Verifying 0.1 · Two-provider Replay/Oracle/Verifier Passed
+> Last Updated: 2026-07-30
+> Status: Confirmed 0.1 · Analyzer/Verifier Passed · Internal Edge Cross-Checked
 
 ## 1. 목적
 
@@ -27,7 +27,9 @@ Ethereum native ETH 이동을 internal call 1건과 top-level transfer 2건으�
 - [x] 두 공급자 TX·receipt decoded match와 capability별 raw SHA-256 고정
 - [x] selected transaction·exact block만 scoring scope로 확정
 - [x] negative oracle 18개·두 번 결정성·독립 Verifier
-- [ ] 제품 analyzer·최종 fixture 승격
+- [x] 제품 analyzer·canonical hash 독립 검증
+- [x] Blockscout internal-tx API가 primary trace의 첫 edge를 독립 교차검증
+- [x] bounded selected-transaction scope로 최종 fixture 승격
 
 ## 4. Related Documents
 

@@ -2,7 +2,7 @@
 
 > Created: 2026-07-30
 > Last Updated: 2026-07-30
-> Status: Passed · Analyzer 구현·독립 검증 완료 · Fixture 3 Verifying 유지 · Benchmark 9/9 유지
+> Status: Passed · Historical Analyzer Gate · Final Promotion Completed
 
 ## 1. 목적과 판정
 
@@ -20,6 +20,10 @@ evidence.json에 고정한 `calculated_fact_sha256`과 정확히 일치했다. �
 Benchmark 자동화 승격은 [flow_path I/O 계약](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md)
 §7의 **단일-trace 하드 게이트**가 닫힌 뒤 별도로 판단하며, 이 문서로는
 승격하지 않는다.
+
+후속으로 PATH internal edge를 Blockscout API에서 독립 재구성해 하드
+게이트를 닫았다. 세 fixture의 `confirmed` 승격과 Benchmark 11/11은
+[최종 승격 Receipt](./44_TASK_014_FINAL_PROMOTION_RECEIPT.md)에 기록한다.
 
 ## 2. 독립성 경계
 
@@ -133,4 +137,5 @@ PR #73 재검토에서 정상 변형 입력을 잘못 `complete`로 판정하는
 - **QA_Validation**: [TASK-014 독립 Verifier 보고서](./42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md) - 고정 fact hash의 최초 근거
 - **QA_Validation**: [TASK-014 replay·oracle 보고서](./41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md) - 단일 trace disclosure
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - fixture 상태 registry
+- **QA_Validation**: [최종 승격 Receipt](./44_TASK_014_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 11/11
 - **Logic_Progress**: [Backlog TASK-014](../04_Logic_Progress/00_BACKLOG.md) - 진행 상태

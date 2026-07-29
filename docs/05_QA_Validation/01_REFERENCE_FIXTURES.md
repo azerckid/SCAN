@@ -1,19 +1,20 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 00:08
-> Status: Approved 1.7 · Phase 2 Confirmed Pack · TASK-014 Fixture 3 Verifying
+> Last Updated: 2026-07-30
+> Status: Approved 1.8 · Phase 2 Confirmed Pack · TASK-014 Fixture 3 Confirmed
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
-있는 reference fixture를 관리한다. 현재 15개 중 10개는 `확정`, 3개는
-`검증 중`, 2개는 후속 Gate가 남은 `후보`다. TASK-013 세 공개 사례는 remediation
+있는 reference fixture를 관리한다. 현재 15개 중 13개는 `확정`, 2개는
+후속 Gate가 남은 `후보`다. TASK-013 세 공개 사례는 remediation
 재검토와 [최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
 통과해 `확정`으로 관리한다.
 
 TASK-014 세 공개 PATH 사례는 Euler 공개 사건의 서로 다른 request scope를
 사용해 실제 TX·주소·raw 금액을 고정하고, 두 공급자 replay·negative
-oracle 18개·독립 Verifier를 통과해 `검증 중`으로 관리한다.
+oracle 18개·독립 Verifier·제품 analyzer를 통과했다. PATH internal seed
+edge는 Blockscout API로 독립 교차검증해 세 fixture를 `확정`으로 관리한다.
 
 입력 문서:
 
@@ -86,8 +87,8 @@ oracle 18개·독립 Verifier를 통과해 `검증 중`으로 관리한다.
 
 | Fixture ID | 문제 ID | Draft | 상태 | DOC-M3 결정 | 핵심 검증 기능 |
 |:---|:---|:---:|:---|:---|:---|
-| [FX-FLOW-PATH-001](./fixtures/FX-FLOW-PATH-001/README.md) | FLOW-EVM-001 | 1 | 검증 중 0.1 | 두 RPC·18 oracle·독립 Verifier | PATH, internal/top-level edge |
-| [FX-FLOW-REMERGE-001](./fixtures/FX-FLOW-REMERGE-001/README.md) | FLOW-EVM-002 | 1 | 검증 중 0.1 | 두 RPC·18 oracle·독립 Verifier | PATH, RECON, exclusion |
+| [FX-FLOW-PATH-001](./fixtures/FX-FLOW-PATH-001/README.md) | FLOW-EVM-001 | 1 | 확정 0.1 | 두 RPC·Blockscout edge·18 oracle·Verifier·analyzer | PATH, internal/top-level edge |
+| [FX-FLOW-REMERGE-001](./fixtures/FX-FLOW-REMERGE-001/README.md) | FLOW-EVM-002 | 1 | 확정 0.1 | 두 RPC·18 oracle·Verifier·analyzer | PATH, RECON, exclusion |
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
 | FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | Deferred | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | V1 기준선 | AUTH-DECODE, allowance 연결 |
@@ -95,7 +96,7 @@ oracle 18개·독립 Verifier를 통과해 `검증 중`으로 관리한다.
 | [FX-EVM-NFT-1155-001](./fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·subject 분리 | ERC-1155 Single·Batch |
 | [FX-EVM-PROXY-001](./fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | 2 | 확정 0.1 | 두 archive RPC·16 oracle·독립 Verifier·state 정합 | EIP-1967 slot·event |
 | FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | V1 기준선 | FREEZE, state/logs |
-| [FX-FLOW-MULTI-001](./fixtures/FX-FLOW-MULTI-001/README.md) | FLOW-MULTI-001 | 2 | 검증 중 0.1 | 두 RPC·18 oracle·독립 Verifier | RECON, dedup, 다주소 집계 |
+| [FX-FLOW-MULTI-001](./fixtures/FX-FLOW-MULTI-001/README.md) | FLOW-MULTI-001 | 2 | 확정 0.1 | 두 RPC·18 oracle·Verifier·analyzer | RECON, dedup, 다주소 raw 집계 |
 | FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | Deferred | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
 | [FX-BASIC-EVM-001](./fixtures/FX-BASIC-EVM-001/README.md) | BASIC-EVM-001 | 1 | 확정 0.2 | provider replay·반례·consumer pass | EVM-TX, block, code |
 | [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 확정 0.2 | archive replay·반례·consumer pass | EVM-STATE, decimals |
@@ -125,8 +126,8 @@ adjacent state만 완전성을 주장한다.
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | FLOW-EVM-001 |
-| 상태 | 검증 중 0.1 — 두 공급자 replay·18 oracle·독립 Verifier 통과 |
-| DOC-M3 결정 | Phase 2 PATH 후보 — 구현 전 재검토 |
+| 상태 | 확정 0.1 — Blockscout internal edge 교차검증·analyzer·Verifier 통과 |
+| DOC-M3 결정 | TASK-014 confirmed 기준선 |
 | 패키지 | [FX-FLOW-PATH-001](./fixtures/FX-FLOW-PATH-001/README.md) |
 | 데이터 형태 | Euler 공개 사건 + Ethereum 공개 TX·internal transfer |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -134,11 +135,11 @@ adjacent state만 완전성을 주장한다.
 | 기준 정답 | internal 1 + top-level 2의 ordered 3-hop path와 hop별 raw amount |
 | 허용 오차 | ETH raw 정수 오차 0. 홉별 금액을 임의로 같게 만들지 않음 |
 | 확인 사실 | 선택 TX·block·from/to·value·성공 receipt, 첫 internal edge |
-| 미결정 | 긴 block gap·seed 전체 ledger는 scope 밖, 제품 analyzer·최종 승격 대기 |
+| 미결정 | 긴 block gap·seed 전체 ledger는 bounded scope 밖 |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`; `DS-OSINT-WEB`은 context |
 | 재현 절차 | selected TX/trace 조회 → endpoint join → raw amount 보존 → terminal 확인 |
 | 저작권·출처 | Euler 공식 사건 글·공개 Ethereum/Blockscout. 본문 복제 없음 |
-| 마지막 확인 | 2026-07-30 00:08 |
+| 마지막 확인 | 2026-07-30 |
 
 ---
 
@@ -147,8 +148,8 @@ adjacent state만 완전성을 주장한다.
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | FLOW-EVM-002 |
-| 상태 | 검증 중 0.1 — 두 공급자 replay·18 oracle·독립 Verifier 통과 |
-| DOC-M3 결정 | Phase 2 PATH 후보 — 구현 전 재검토 |
+| 상태 | 확정 0.1 — 두 공급자 replay·18 oracle·Verifier·analyzer 통과 |
+| DOC-M3 결정 | TASK-014 confirmed 기준선 |
 | 패키지 | [FX-FLOW-REMERGE-001](./fixtures/FX-FLOW-REMERGE-001/README.md) |
 | 데이터 형태 | Euler 공개 사건 + Ethereum 공개 TX |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -157,11 +158,11 @@ adjacent state만 완전성을 주장한다.
 | Exclusion | 외부 주소→branch dust `1000000000000` wei는 seed ledger 밖 context |
 | 허용 오차 | ETH raw 정수 오차 0 |
 | 확인 사실 | 4개 동일 seed output·4개 공통 merge input·성공 receipt |
-| 미결정 | 연속 range는 scope 밖, residual unresolved 유지, 제품 analyzer 대기 |
+| 미결정 | 연속 range는 scope 밖, residual은 unresolved 유지 |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`; `DS-OSINT-WEB`은 context |
 | 재현 절차 | split 수집 → branch identity 보존 → merge 수집 → unrelated inflow 분리 → residual 계산 |
 | 저작권·출처 | Euler 공식 사건 글·공개 Ethereum. 본문 복제 없음 |
-| 마지막 확인 | 2026-07-30 00:08 |
+| 마지막 확인 | 2026-07-30 |
 
 ---
 
@@ -303,8 +304,8 @@ adjacent state만 완전성을 주장한다.
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | FLOW-MULTI-001 |
-| 상태 | 검증 중 0.1 — 두 공급자 replay·18 oracle·독립 Verifier 통과 |
-| DOC-M3 결정 | Phase 2 PATH 후보 — 가격은 별도 context |
+| 상태 | 확정 0.1 — raw contribution analyzer·Verifier 통과 |
+| DOC-M3 결정 | TASK-014 raw 집계 기준선 — 가격·귀속은 별도 context |
 | 패키지 | [FX-FLOW-MULTI-001](./fixtures/FX-FLOW-MULTI-001/README.md) |
 | 데이터 형태 | Euler 공개 사건 + Ethereum 공개 TX |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -316,7 +317,7 @@ adjacent state만 완전성을 주장한다.
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`; `DS-OSINT-WEB`은 context |
 | 재현 절차 | origin별 TX 조회 → exit 일치 → hash dedup → raw 합계 |
 | 저작권·출처 | Euler 공식 사건 글·공개 Ethereum. 본문 복제 없음 |
-| 마지막 확인 | 2026-07-30 00:08 |
+| 마지막 확인 | 2026-07-30 |
 
 ---
 
@@ -449,11 +450,8 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 
 | Fixture ID | 단계 | 필요 소스 | 승격 조건 | 재검토 시점 |
 |:---|:---:|:---|:---|:---|
-| `FX-FLOW-PATH-001` | P1 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` | replay·raw SHA·oracle·Verifier 통과. 제품 analyzer 후 최종 승격 | TASK-014 구현 승인 전 |
-| `FX-FLOW-REMERGE-001` | P1 | `DS-EVM-RPC-PUBLIC` | 두 공급자 TX 일치·selected scope·unresolved residual·oracle·Verifier 통과. 제품 analyzer 후 최종 승격 | TASK-014 구현 승인 전 |
 | `FX-SVC-BRG-001` | P2 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` | 브리지 양단 TX·공식 이벤트 매칭 키·수수료 허용 범위를 고정하고 1회 재현 | P2 XCHAIN·BRIDGE 승격 전 |
 | `FX-EVM-PROXY-001` | P3 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM` | selected candidate의 raw replay·history 범위·반례를 완성해 upgrade TX·EIP-1967 슬롯 이력을 exact match로 재현 | TASK-013 fixture 승격 |
-| `FX-FLOW-MULTI-001` | P3 | `DS-EVM-RPC-PUBLIC` | origin set·두 공급자 replay·dedup oracle·Verifier 통과. 제품 analyzer 후 최종 승격 | TASK-014 구현 승인 전 |
 | `FX-UNCERTAIN-001` | P2/P3 | BTC 분기 `DS-BTC-API`; 믹서 분기 `DS-LABEL-PUBLIC`과 EVM source | P2에서는 `BTC-CJ-001` 우선 여부를 결정하고, 한 문제 ID만 선택해 확정 사실·휴리스틱·반례 집합을 분리 | P2 HEUR 시작 전 또는 P3 MIXER 후보 검토 시 |
 
 ### 8.3 남은 미결정 사항
@@ -499,8 +497,10 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
     canonical hash·결정성 검증을 통과해 세 package를 `confirmed`로
     승격했다. Benchmark는 EVM-NFT-001·EVM-PROXY-001을 포함해 9/9다.
 15. TASK-014는 Euler 공개 사건에서 단일 3홉·4분기 재병합·4 origin 공통
-    exit 사례를 선정해 세 package를 `candidate`로 작성했다. replay·oracle·
-    Verifier와 구현 승인은 남아 있다.
+    exit 사례를 선정하고 replay·oracle·Verifier·제품 analyzer를 통과했다.
+    Blockscout internal-tx 교차검증으로 단일 trace Gate를 닫아 세 package를
+    `confirmed`로 승격했다. Benchmark는 FLOW-EVM-001/002를 포함해 11/11이며
+    가격·귀속이 남은 FLOW-MULTI-001은 assisted다.
 
 ## 10. Related Documents
 
@@ -528,4 +528,5 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 - **QA_Validation**: [TASK-013 Negative Oracle 보고서](./33_TASK_013_NEGATIVE_ORACLE_REPORT.md) - NFT·Proxy 16개 반례·결정성
 - **QA_Validation**: [TASK-013 독립 Verifier 보고서](./34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md) - raw-first facts·requirement 재계산
 - **QA_Validation**: [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 9/9 근거
+- **QA_Validation**: [TASK-014 최종 승격 Receipt](./44_TASK_014_FINAL_PROMOTION_RECEIPT.md) - FLOW confirmed·Benchmark 11/11 근거
 - **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 사전 fixture·cache와 source 허용 범위

@@ -1,13 +1,13 @@
 # 예상문제 Coverage 확장 QA 계획
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 22:52
-> Status: TASK-012·013 Passed · TASK-014 Contract Proposed · TASK-014~019 Runtime Not Executed
+> Last Updated: 2026-07-30
+> Status: TASK-012~014 Passed · TASK-015~019 Runtime Not Executed
 
 ## 1. 목적
 
 이 문서는 TASK-012~019가 새 예상문제를 automated로 승격할 때 적용할
-검증 기준을 정의한다. TASK-012 EVM Core와 TASK-013 NFT·Proxy는
-통과했으며, TASK-014~019 시나리오는 `not_executed`다.
+검증 기준을 정의한다. TASK-012 EVM Core, TASK-013 NFT·Proxy, TASK-014
+PATH는 통과했으며, TASK-015~019 시나리오는 `not_executed`다.
 
 ## 2. 공통 자동화 승격 Gate
 

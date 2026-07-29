@@ -1,7 +1,7 @@
 # TASK-014 PATH Graph·금액 정합 계약 제안
 > Created: 2026-07-29 22:52
 > Last Updated: 2026-07-30 10:40
-> Status: Proposed 0.1 · Preview User Review Passed · Fixture 3 Verifying · 대안 B 확정안 작성([16](./16_TASK_014_FLOW_PATH_IO_CONTRACT.md)) · Implementation Not Approved
+> Status: Superseded by [Approved flow_path I/O 계약](./16_TASK_014_FLOW_PATH_IO_CONTRACT.md) · Runtime Applied · Fixture 3 Confirmed
 
 ## 1. 목적
 

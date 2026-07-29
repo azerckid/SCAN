@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-30
-> Status: TASK-001~013 Done · WP-INPUT Done · TASK-014 In Progress(analyzer 구현·독립 검증 완료, 확정 승격은 단일-trace 게이트 대기) · TASK-015~019 Proposed
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015~019 Proposed
 
 ## 1. 문서 목적
 
@@ -129,7 +129,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 `evm | bitcoin | non_evm | cross_chain`이다. 첫 승인 단위에서 contest RPC
 core adapter와 bounded JSON·JSONL·CSV importer를 구현했고, 두 번째 승인
 단위에서 CLI·Operations offline handoff를 연결했다. 제품 analyzer는
-TASK-012 EVM Core와 TASK-013 NFT·Proxy까지 구현됐으며, TASK-014~019의
+TASK-012 EVM Core, TASK-013 NFT·Proxy, TASK-014 PATH까지 구현됐으며,
+TASK-015~019의
 Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### 3.1 WP-INPUT-IMPL-01: Core input library
@@ -1111,9 +1112,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     3개를 `confirmed`로 승격하고 Benchmark automated 9/9를 두 번
     결정적으로 재현했다.
 
-### [ ] TASK-014: PATH Graph·금액 정합 엔진
+### [x] TASK-014: PATH Graph·금액 정합 엔진
 
-- Status: In Progress — Context Receipt PASS(2026-07-30)·사용자 analyzer 구현 승인(2026-07-30). `flow_path` analyzer 구현 중
+- Status: Done — Fixture 3 Confirmed · Benchmark 11/11 · FLOW-MULTI Assisted
 - Work Type: code
 - Priority: Phase 2 · P0
 - Depends On: TASK-012
@@ -1132,8 +1133,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     회귀 테스트로 고정한다.
   - [x] path artifact와 read-only graph 출력 경계를 CLI persist/show/partial/
     resume 통합 테스트로 검증한다.
-  - [ ] 단일-trace 하드 게이트 충족 후 fixture `확정`·Benchmark 자동화 승격을
-    별도 판단한다.
+  - [x] Blockscout internal-tx 교차검증으로 단일-trace 하드 게이트를 닫고
+    fixture 3개를 `확정`으로 승격한다.
+  - [x] 완전한 문제 범위만 Benchmark에 반영해 FLOW-EVM-001/002를
+    automated, FLOW-MULTI-001을 PRICE·귀속 잔여가 있는 assisted로 분류한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - FLOW 3문항
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - PATH 18개 필수 근거
@@ -1155,12 +1158,13 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Implementation Preconditions:
   - [x] 세 종류 path 공개 후보와 1차 exclusion·residual 정답 골격을 작성한다.
   - [x] 세 fixture의 두 공급자 replay·negative oracle·독립 Verifier를 통과한다.
-  - [ ] graph artifact·메모리 budget·partial 상태를 승인한다.
-  - [ ] CLI/Workbench 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
-  - [ ] edge 최소 필드·artifact mutation·bounded graph 상태 관리를 승인한다.
+  - [x] graph artifact·메모리 budget·partial 상태를 승인하고 반환 projection
+    크기까지 회귀 테스트로 제한한다.
+  - [x] CLI/Workbench 진입·전환·이탈과 complete·partial·failed를 확인한다.
+  - [x] edge 최소 필드·artifact mutation·bounded graph 상태 관리를 승인한다.
   - [x] TASK-014 PATH Preview를 사용자가 검토하고 피드백을 승인한다
     (2026-07-29 23:09, runtime·fixture 승인은 아님).
-  - [ ] graph DB 미도입과 사용자 구현 승인을 기록한다.
+  - [x] graph DB 미도입과 사용자 구현 승인을 기록한다.
 - Component & Library Plan:
   - shadcn/ui: N/A - Python engine 우선.
   - Custom components: bounded graph, path finder, reconciliation ledger.
@@ -1169,11 +1173,11 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Libraries intentionally not added: graph DB/networkx - 측정된 필요 전 금지.
   - shadcn preset: N/A - 웹 runtime 구현 없음.
 - Acceptance Criteria:
-  - [ ] 경로·분기·재병합·cycle·residual이 exact evidence로 재현된다.
-  - [ ] budget 초과는 중단 위치를 가진 partial이다.
-  - [ ] label 없이도 path 사실이 독립적으로 성립한다.
+  - [x] 경로·분기·재병합·cycle·residual이 exact evidence로 재현된다.
+  - [x] budget 초과는 중단 위치를 가진 partial이다.
+  - [x] label 없이도 path 사실이 독립적으로 성립한다.
 - Document Sync Check:
-  - [ ] Analysis I/O·Workbench·fixture·Benchmark·QA를 동기화한다.
+  - [x] Analysis I/O·Workbench·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
   - Status: PASS — 참조 문서 정독·Constraints·Conflicts 확정(2026-07-30).
     `flow_path` 대안 B 계약(doc 16) PR #71 병합. 사용자가 2026-07-30
@@ -1217,8 +1221,11 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     security 162 files, TASK-014 negative oracle 18×2·독립 Verifier 3×2·
     **analyzer 독립 검증 3 fixtures canonical hash 일치** PASS.
     [TASK-014 Analyzer 검증 Receipt](../05_QA_Validation/43_TASK_014_ANALYZER_VERIFICATION_RECEIPT.md).
-  - Fixture는 `확정`이 아니라 `검증 중` 유지, Benchmark 9/9 유지 — `확정`·
-    자동화 승격은 단일-trace 하드 게이트(doc 16 §7) 이후 별도 판단.
+  - 최종 승격 기준 전체 Gate: 468 tests PASS, fixture 13, schema 48 probes,
+    traceability 1507 links, security 162 files. PATH internal edge 독립
+    교차검증과 Benchmark 11/11 회귀를 포함한다.
+  - Fixture 3개 `확정`, Benchmark automated 11/11·assisted 1. 최종 근거는
+    [TASK-014 최종 승격 Receipt](../05_QA_Validation/44_TASK_014_FINAL_PROMOTION_RECEIPT.md).
 
 ### [ ] TASK-015: Label·OSINT·Actor Intelligence 엔진
 

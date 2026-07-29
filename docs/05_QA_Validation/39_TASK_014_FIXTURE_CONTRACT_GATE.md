@@ -1,14 +1,16 @@
 # TASK-014 PATH Fixture·Contract Gate
 > Created: 2026-07-29 22:52
-> Last Updated: 2026-07-30 00:08
-> Status: Preview User Review Passed · Fixture 3 Verifying · Runtime Not Implemented
+> Last Updated: 2026-07-30
+> Status: Historical Stop/Go Gate Passed · Final Promotion Completed
 
 ## 1. 목적
 
 이 문서는 TASK-014가 공개 사례 선정부터 제품 analyzer·Benchmark 승격까지
-통과해야 할 검증 기준을 정의한다. 세 공개 사례는 두 공급자 replay,
-negative oracle 18개, 독립 Verifier를 통과해 `verifying`이다. 제품
-analyzer와 최종 승격은 아직 주장하지 않는다.
+통과해야 할 검증 기준을 정의한다. 아래 표는 Stop/Go 검토 당시
+`verifying` 기준선을 보존한다. 이후 제품 analyzer·독립 hash 검증과
+Blockscout internal-edge 교차검증을 통과해 세 fixture는
+[최종 승격 Receipt](./44_TASK_014_FINAL_PROMOTION_RECEIPT.md)에서
+`confirmed`로 승격됐다.
 
 ## 2. 대상과 현재 상태
 

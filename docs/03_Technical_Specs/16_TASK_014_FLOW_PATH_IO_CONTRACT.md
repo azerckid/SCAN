@@ -2,7 +2,7 @@
 
 > Created: 2026-07-30
 > Last Updated: 2026-07-30 10:52
-> Status: **Proposed · docs-only · 사용자 승인 대기** · Fixture 3 Verifying · Runtime Not Implemented
+> Status: **Approved 1.0 · Runtime Applied** · Fixture 3 Confirmed · TASK-014 Done
 
 ## 0. 이 문서의 위치
 
@@ -533,8 +533,15 @@ analyzer가 결과 상태를 정할 때 다음 순서로 판정한다(negative-o
 
 - [ ] 두 번째 trace 공급자(예: 다른 archive `debug_traceTransaction`/
   `trace_transaction` dialect)가 같은 internal edge를 재현, 또는
-- [ ] 독립 재구성 교차검증: seed 노드의 해당 block 전후 `eth_getBalance`
+- [x] 독립 재구성 교차검증: seed 노드의 해당 block 전후 `eth_getBalance`
   delta 또는 Blockscout internal-tx API를 2차 소스로 대조.
+
+2026-07-30 Blockscout Ethereum compatibility API의
+`account.txlistinternal` 재조회가 TX `0x298bde…05db55`의 index `1`,
+from/to/value/error 상태를 primary `callTracer`와 동일하게 반환했다. raw
+응답 SHA-256은 fixture `provider-replay.json`에 고정했다. v2 endpoint의
+20초 timeout도 함께 기록했으며 compatibility API 성공을 숨기지 않고
+fallback provenance로 보존한다.
 
 둘 다 실패하면 `FX-FLOW-PATH-001`은 `verifying`에 머문다. 이 게이트는
 `trace_path` complete가 단일 trace에 의존하지 않음을 보장하기 위한 것이며,
@@ -597,7 +604,7 @@ analyzer는 internal edge가 미확인이면 §5의 `trace_unavailable`·`partia
 - [ ] Backlog TASK-014 Context Receipt `PASS`
 - [ ] 사용자 analyzer 구현 승인
 - [ ] 그 후 제품 analyzer 구현 + 독립 Verification Receipt(canonical hash 대조)
-- [ ] §7 단일-trace 하드 게이트 충족 시 `confirmed`·Benchmark 승격 별도 판단
+- [x] §7 단일-trace 하드 게이트 충족 후 `confirmed`·Benchmark 승격 별도 판정
 
 ## 11. Related Documents
 

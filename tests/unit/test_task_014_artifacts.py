@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 from scan_tool.application.task_014_artifacts import build_fixture_packages
 from scan_tool.application.task_014_replay import (
     INTERNAL_SOURCE,
@@ -5,6 +8,9 @@ from scan_tool.application.task_014_replay import (
     SEED_NODE,
     SELECTED_TRANSACTIONS,
 )
+
+ROOT = Path(__file__).resolve().parents[2]
+FIXTURES = ROOT / "docs/05_QA_Validation/fixtures"
 
 
 def _report(role: str) -> dict:
@@ -95,3 +101,22 @@ def test_provider_mismatch_is_rejected() -> None:
         assert "decoded values differ" in str(error)
     else:
         raise AssertionError("provider mismatch must be rejected")
+
+
+def test_confirmed_path_internal_edge_has_independent_cross_check() -> None:
+    package = FIXTURES / "FX-FLOW-PATH-001"
+    replay = json.loads((package / "raw-replay.json").read_text())
+    provider = json.loads((package / "provider-replay.json").read_text())
+    evidence = json.loads((package / "evidence.json").read_text())
+
+    assert replay["status"] == provider["status"] == evidence["status"] == "confirmed"
+    internal = replay["internal_edges"][0]
+    cross_check = provider["internal_edge_cross_check"]
+    assert cross_check["status"] == "complete"
+    assert cross_check["from"] == internal["from"]
+    assert cross_check["to"] == internal["to"]
+    assert cross_check["value_raw"] == internal["value_raw"]
+    assert cross_check["index"] == internal["path"][0] + 1
+    assert cross_check["is_error"] is False
+    assert cross_check["decoded_match_to_primary_trace"] is True
+    assert evidence["consistency_checks"]["internal_seed_edge_cross_checked"] is True

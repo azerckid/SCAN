@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-FLOW-MULTI-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-29T14:25:33Z",
   "event_evidence": [],
   "call_evidence": [
@@ -88,7 +88,7 @@
   },
   "uncertainty": {
     "candidate_only": false,
-    "remaining": "Product analyzer and final fixture promotion remain pending. Historical price stays separate context and is not part of raw contribution scoring."
+    "remaining": "Historical price and victim attribution remain outside this raw path fixture and block full FLOW-MULTI-001 automation."
   },
   "provenance_notes": "Raw on-chain contributions are scoring facts. Common ownership, criminal intent, victim status, and fiat value are explicitly not assessed."
 }
