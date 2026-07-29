@@ -79,14 +79,23 @@ analyzer와 최종 승격은 아직 주장하지 않는다.
 
 ## 8. Stop/Go
 
-현재 판정은 **STOP for implementation**이다. 다음을 모두 닫은 뒤에만
-Context Receipt를 `PASS`로 전환한다.
+현재 판정은 **STOP for implementation**이다. `Context Receipt PASS`와
+`코드 착수`는 별도 게이트로 분리한다. 순서는 다음과 같다.
 
-1. fixture candidate 3개 작성
+**Context Receipt `PASS` 조건** (모두 완료 시 PASS 전환 가능):
+
+1. ~~fixture candidate 3개 작성~~ → 완료
 2. ~~replay·negative oracle·Verifier Gate~~ → 2026-07-30 완료
-3. Analysis I/O 대안 정식 승인
+3. ~~Analysis I/O `flow_path` 대안 B 정식 승인~~ → PR #71 검토·병합으로 완료
 4. ~~사용자 Preview 승인~~ → 2026-07-29 23:09 완료
-5. 사용자 구현 승인
+
+**코드 착수 조건** (Context Receipt PASS 이후 별도로 필요):
+
+5. Context Receipt `PASS` 전환(사용자 확인)
+6. 사용자 analyzer 구현 명시 승인
+
+즉 사용자 구현 승인은 Context Receipt PASS의 *선행* 조건이 아니라, PASS
+이후 코드 착수를 여는 *후행* 게이트다.
 
 ## 9. Related Documents
 

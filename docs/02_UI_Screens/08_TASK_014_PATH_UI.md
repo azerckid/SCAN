@@ -75,7 +75,8 @@ flowchart LR
 ### 4.3 Failed
 
 - `FAILED`, 오류 code·stage를 최상단에 표시한다.
-- `data: null`을 명시한다.
+- 결과가 없음을 `results: []`와 구조화 오류(`errors[]`)로 명시한다
+  (Analysis I/O failed 결과에는 최상위 `data` 필드가 없다).
 - scope/replay 결합, asset mismatch, 필수 source conflict처럼 재시도로
   해결되지 않는 원인을 구분한다.
 - graph·ledger를 성공 결과처럼 표시하지 않는다.
