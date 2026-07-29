@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-30
-> Status: TASK-012~014 Complete · FLOW Fixture 3 Confirmed · Benchmark 11/11
+> Last Updated: 2026-07-30 02:37
+> Status: TASK-012~014 Complete · TASK-015 Docs Gate Draft · Benchmark 11/11
 
 ## 1. 목적
 
@@ -158,10 +158,16 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 
 ### [ ] Wave 4 — Label·OSINT·Actor
 
-- [ ] `TASK-015` official/provider/public/heuristic source role을 고정한다.
-- [ ] 주소 명시·조회 시각·충돌·폐기 라벨 보존 조건을 고정한다.
-- [ ] official과 heuristic의 상충 사례를 fixture에 포함한다.
+- [x] `TASK-015` official/first-party/provider/public-report/heuristic source role,
+  claim·conflict·시점 계약을 docs-only로 제안한다.
+- [x] label·sanctions·ENS·common funder·actor relation의 proposed fixture ID와
+  negative oracle 범주를 고정한다.
+- [x] query 5개 × complete·partial·failed HTML Preview와 UI Gate를 작성한다.
+- [ ] 사용자 Preview 검토·피드백을 기록한다.
+- [ ] 공개 사례를 선정하고 source snapshot·Terms·privacy를 검증한다.
+- [ ] official과 heuristic의 상충 사례를 fixture·독립 Verifier에 포함한다.
 - [ ] AI가 만든 label 가설이 evidence 없는 confirmed fact가 되지 않게 한다.
+- [ ] Context Receipt PASS와 별도 구현 승인을 기록한다.
 
 ### [ ] Wave 5 — 서비스·Cross-chain
 

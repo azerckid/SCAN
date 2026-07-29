@@ -120,6 +120,9 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-014 replay/oracle | [`41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md`](docs/05_QA_Validation/41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md) | two-provider selected-scope replay and 18 deterministic counterexamples |
 | TASK-014 verifier | [`42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md`](docs/05_QA_Validation/42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md) | raw-first graph/ledger recalculation for three FLOW fixtures |
 | TASK-014 final promotion | [`44_TASK_014_FINAL_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/44_TASK_014_FINAL_PROMOTION_RECEIPT.md) | FLOW confirmed fixtures, Blockscout edge cross-check, and Benchmark 11/11 evidence |
+| TASK-015 Intelligence contract | [`17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md`](docs/03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md) | proposed source assertion, conflict, sanctions, ENS, and actor-relation contract |
+| TASK-015 Intelligence UI | [`09_TASK_015_INTELLIGENCE_UI.md`](docs/02_UI_Screens/09_TASK_015_INTELLIGENCE_UI.md) | docs-only five-query Preview with user review pending |
+| TASK-015 Intelligence Gate | [`45_TASK_015_FIXTURE_CONTRACT_GATE.md`](docs/05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) | proposed fixture, negative oracle, privacy, UI, and Verifier Stop/Go criteria |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -142,7 +145,7 @@ PASS 13 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 48 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 1507 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository traceability: 1543 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
 PASS repository security scan: 162 runtime/evidence files
 PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)

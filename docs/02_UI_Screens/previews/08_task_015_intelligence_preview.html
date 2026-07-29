@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCAN TASK-015 Intelligence Preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page:#06090e; --panel:#0d141d; --raised:#131e2b; --border:#2a394b;
+      --fg:#e0e8f1; --muted:#8290a3; --accent:#70adff; --ok:#55d59e;
+      --warn:#f0c75e; --bad:#ff7684; --violet:#c0a0ff; --cyan:#67d4e8;
+      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      --sans:Inter,Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;color:var(--fg);font-family:var(--sans);
+      background:radial-gradient(circle at 12% 0,rgba(43,100,175,.2),transparent 32rem),var(--page)}
+    button,code{font-family:var(--mono)} button{cursor:pointer}
+    button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .page{width:min(1500px,calc(100% - 28px));margin:auto;padding:28px 0 48px}
+    header{display:flex;justify-content:space-between;align-items:end;gap:20px}
+    .eyebrow{color:var(--accent);font:700 11px var(--mono);letter-spacing:.13em}
+    h1{margin:7px 0 0;font-size:clamp(28px,4vw,45px);letter-spacing:-.04em}
+    .lede{max-width:880px;color:#aab6c5;line-height:1.65}
+    .gate,.notice,.panel{border:1px solid var(--border);background:var(--panel);border-radius:10px}
+    .gate{min-width:260px;padding:13px 15px;font:11px/1.65 var(--mono)}
+    .gate b{color:var(--warn)} .notice{margin-top:18px;padding:12px 14px;color:#ebdba6;background:#211b0e;font:11px/1.6 var(--mono)}
+    .tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:16px}
+    .tab{padding:11px;border:1px solid var(--border);border-radius:8px;background:var(--panel);color:#aeb9c8;text-align:left}
+    .tab b{display:block;font-size:11px}.tab span{display:block;margin-top:5px;color:var(--muted);font-size:9px}
+    .tab[aria-pressed=true]{border-color:#4d7bb8;background:#14263e;color:#f5f8fc}
+    .workspace{display:grid;grid-template-columns:340px minmax(0,1fr) 320px;gap:11px;margin-top:11px}
+    .panel{overflow:hidden}.head{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);font:700 10px var(--mono);letter-spacing:.08em}
+    .body{padding:14px}.copy{color:#a9b5c5;font-size:12px;line-height:1.55}
+    .fields{display:grid;gap:7px}.field{display:grid;grid-template-columns:108px 1fr;gap:8px;padding:8px 9px;border:1px solid #202d3c;border-radius:6px;background:#090e15;font:10px/1.45 var(--mono)}
+    .field span:first-child{color:var(--muted)}.states{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:13px}
+    .state{padding:8px 3px;border:1px solid var(--border);border-radius:6px;background:var(--raised);color:#aeb9c9;font-size:10px}
+    .state[data-state=complete][aria-pressed=true]{color:var(--ok);border-color:var(--ok)}
+    .state[data-state=partial][aria-pressed=true]{color:var(--warn);border-color:var(--warn)}
+    .state[data-state=failed][aria-pressed=true]{color:var(--bad);border-color:var(--bad)}
+    .result{background:#080d13;min-height:690px}.term{padding:17px 18px;font-family:var(--mono)}
+    .status{display:flex;gap:8px;align-items:center}.badge{padding:3px 8px;border:1px solid currentColor;border-radius:4px;font-size:10px;font-weight:800}
+    .complete{color:var(--ok)}.partial{color:var(--warn)}.failed{color:var(--bad)}
+    .section{margin-top:15px;color:#73839a;font:700 10px var(--mono);letter-spacing:.12em}
+    .claim,.relation,.error,.next,.source{margin-top:7px;padding:9px 10px;border:1px solid #202d3c;border-radius:6px;background:#0b121a;font:10px/1.6 var(--mono);overflow-wrap:anywhere}
+    .claim{border-left:3px solid var(--cyan)}.claim.conflict{border-left-color:var(--violet)}
+    .relation{border-left:3px solid var(--ok)}.relation.heuristic{border-left-color:var(--warn)}
+    .error{border-left:3px solid var(--bad);color:#f0a5ad}.next{border-left:3px solid var(--accent);color:#d9e8fb}
+    .mini{display:inline-block;margin:0 4px 3px 0;padding:2px 5px;border:1px solid #41536a;border-radius:3px;color:#aebbd0;font-size:9px}
+    .source-list{display:grid;gap:8px}.source b{display:block;color:#dce7f3;font-size:10px}.source span{display:block;margin-top:5px;color:#8998aa}
+    .truth{margin-top:11px;padding:9px;border:1px solid #5a4930;border-radius:6px;color:#e8d29c;background:#18140d;font:10px/1.55 var(--mono)}
+    footer{display:flex;justify-content:space-between;margin-top:15px;color:#6f7e91;font:10px var(--mono)}
+    @media(max-width:1120px){.workspace{grid-template-columns:320px 1fr}.sources{grid-column:1/-1}.source-list{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:820px){header,.workspace{display:grid;grid-template-columns:1fr}.tabs{grid-template-columns:1fr 1fr}.sources{grid-column:auto}.source-list{grid-template-columns:1fr}.gate{min-width:0}}
+    @media(max-width:520px){.tabs,.field{grid-template-columns:1fr}footer{display:grid;gap:5px}}
+  </style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div>
+      <div class="eyebrow">TASK-015 · SOURCE ASSERTION INTELLIGENCE</div>
+      <h1>Claim &amp; Relation Preview</h1>
+      <p class="lede">라벨 자체보다 누가 언제 어떤 주소를 명시했는지, 다른 출처와 충돌하는지, 온체인 관찰과 휴리스틱이 분리됐는지를 검토합니다.</p>
+    </div>
+    <div class="gate">UI-FIRST GATE<br><b>사용자 확인 대기</b><br>FIXTURE 5 PROPOSED<br>RUNTIME NOT IMPLEMENTED</div>
+  </header>
+  <div class="notice">Docs-only synthetic Preview입니다. 외부 검색·RPC·SNS·DB를 호출하지 않으며 주소 소유자·범죄성·제재의 실질적 의미를 자동 단정하지 않습니다.</div>
+  <div class="tabs" role="group" aria-label="Intelligence query 선택">
+    <button class="tab" data-query="label" aria-pressed="true" tabindex="0"><b>collect_label_claims</b><span>source claim · conflict</span></button>
+    <button class="tab" data-query="sanctions" aria-pressed="false" tabindex="-1"><b>check_sanctions_exposure</b><span>direct · one-hop</span></button>
+    <button class="tab" data-query="identity" aria-pressed="false" tabindex="-1"><b>resolve_identity_clues</b><span>ENS · domain · SNS</span></button>
+    <button class="tab" data-query="funder" aria-pressed="false" tabindex="-1"><b>find_common_funder</b><span>initial funding · exclusion</span></button>
+    <button class="tab" data-query="relation" aria-pressed="false" tabindex="-1"><b>score_actor_relations</b><span>components · counterexample</span></button>
+  </div>
+  <div class="workspace">
+    <section class="panel">
+      <div class="head"><span>REQUEST</span><span id="query-chip"></span></div>
+      <div class="body">
+        <p class="copy" id="copy"></p>
+        <div class="fields" id="fields"></div>
+        <div class="states" role="group" aria-label="결과 상태">
+          <button class="state" data-state="complete" aria-pressed="true" tabindex="0">complete</button>
+          <button class="state" data-state="partial" aria-pressed="false" tabindex="-1">partial</button>
+          <button class="state" data-state="failed" aria-pressed="false" tabindex="-1">failed</button>
+        </div>
+        <div class="truth">AI PLANNER: 검색·관계 방법 가설만 제안<br>PYTHON: snapshot·주소·TX·충돌 계산<br>VERIFIER: source/replay에서 독립 재계산</div>
+        <div class="truth">RULES: UNCLEAR → LIVE OFF · ARTIFACT ONLY<br>OPERATIONS: loading / empty / stale은 claim 상태와 별도</div>
+      </div>
+    </section>
+    <section class="panel result">
+      <div class="head"><span>INTELLIGENCE RESULT</span><span>synthetic_contract_preview</span></div>
+      <div class="term" id="result"></div>
+    </section>
+    <section class="panel sources">
+      <div class="head"><span>SOURCE INSPECTOR</span><span>NO LIVE CALLS</span></div>
+      <div class="body source-list" id="sources"></div>
+    </section>
+  </div>
+  <footer><span>SCAN 2026 · TASK-015 Intelligence Preview 0.1</span><span>NO EXTERNAL CALLS · NO MUTATION · NO AUTO ATTRIBUTION</span></footer>
+</main>
+<script>
+  const queries = {
+    label: {
+      name:"collect_label_claims", copy:"같은 주소에 대한 provider·first-party·public report 주장을 병합하지 않고 충돌 그룹으로 보존합니다.",
+      failedCode:"reconciliation_failed", failedStage:"claim_binding", failedMessage:"claim subject or content hash does not bind to the reviewed source snapshot",
+      fields:[["subject","0x1111…1111"],["window","2026-07-01 → 07-30"],["source budget","20"],["network mode","offline"]],
+      claims:[
+        ["claim","[SOURCE ASSERTION] Provider A: “Example Service” · address explicit yes · unresolved"],
+        ["conflict","[CONFLICT CG-001] Public report B: “Exchange deposit” · address explicit yes · stale"],
+        ["conflict","[HEURISTIC] AI Planner: same operator candidate · independent evidence none"]
+      ], relation:"[ONCHAIN] address exists at reviewed blocks · ownership not_assessed"
+    },
+    sanctions: {
+      name:"check_sanctions_exposure", copy:"공식 목록의 직접 주소 match와 1홉 상대방 match를 별도 결과로 표시하고 지정·해제 시점을 함께 봅니다.",
+      failedCode:"reconciliation_failed", failedStage:"sanctions_list_version", failedMessage:"the sanctions list version or effective date cannot be reconciled with the request",
+      fields:[["subject","0x2222…2222"],["hop limit","1"],["list version","2026-07 snapshot"],["network mode","artifact_only"]],
+      claims:[
+        ["claim","[OFFICIAL / DIRECT] subject explicitly listed in historical notice · withdrawn later"],
+        ["conflict","[INDIRECT] counterparty listed · tx 0xabc… · service intermediary unresolved"],
+        ["conflict","[REJECTED] “currently sanctioned” · notice withdrawal contradicts claim"]
+      ], relation:"[ONCHAIN] one-hop transfer observed · substantive sanctions exposure not_assessed"
+    },
+    identity: {
+      name:"resolve_identity_clues", copy:"ENS forward/reverse·설정 TX·도메인·SNS 주장을 분리하고 만료·사칭·주소 비명시를 충돌로 보존합니다.",
+      failedCode:"reconciliation_failed", failedStage:"identity_resolution", failedMessage:"ENS resolution and the reviewed on-chain configuration refer to different subjects",
+      fields:[["subject","0x3333…3333"],["name hint","example.eth"],["window","2025-01 → 2026-07"],["network mode","offline"]],
+      claims:[
+        ["claim","[ONCHAIN] ENS forward resolves to subject at block 200"],
+        ["conflict","[STALE] reverse record pointed elsewhere before block 180"],
+        ["conflict","[REJECTED] SNS profile uses same name but does not state/sign the address"]
+      ], relation:"[SOURCE ASSERTION] domain page mentions address · operator identity unresolved"
+    },
+    funder: {
+      name:"find_common_funder", copy:"대상 주소별 초기 funding TX를 집계하고 공통 source가 공용 서비스인지 반례와 함께 검토합니다.",
+      failedCode:"reconciliation_failed", failedStage:"funding_scope", failedMessage:"initial funding transactions fall outside the bounded subject or observation scope",
+      fields:[["subjects","0xA…, 0xB…, 0xC…"],["initial inflows","3 per subject"],["asset","ETH native"],["network mode","offline"]],
+      claims:[
+        ["claim","[ONCHAIN] 0xF… funds A/B/C · tx 0x01/0x02/0x03"],
+        ["conflict","[PROVIDER LABEL] 0xF… labeled Paymaster · address explicit yes"],
+        ["conflict","[REJECTED] same-owner conclusion · shared service counterexample"]
+      ], relation:"[ONCHAIN RELATION] common funder confirmed · common controller not_assessed"
+    },
+    relation: {
+      name:"score_actor_relations", copy:"공통 출처·목적지·호출·시간 component와 공용 hub 반례를 함께 표시하며 score를 소유 사실로 승격하지 않습니다.",
+      failedCode:"evidence_incomplete", failedStage:"relation_evidence", failedMessage:"required on-chain components or counterexample evidence are missing",
+      fields:[["seed","0xAAAA…"],["candidate limit","12"],["hop limit","2"],["network mode","offline"]],
+      claims:[
+        ["claim","[HEURISTIC] candidate 0xB… score 0.68 · common_source 0.30 · temporal 0.18"],
+        ["claim","[ONCHAIN] shared contract call sequence · 4 reviewed TX"],
+        ["conflict","[COUNTEREXAMPLE] shared destination is public router · component discounted"]
+      ], relation:"[HEURISTIC CANDIDATE] human review required · same controller not_assessed"
+    }
+  };
+  let query="label", state="complete";
+  const esc=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const sourceCards = [
+    ["SRC-001 · OFFICIAL/FIRST PARTY","address explicit yes · retrieved 2026-07-30","sha256: 6db1… · terms artifact_only"],
+    ["SRC-002 · PROVIDER/PUBLIC REPORT","address explicit yes · conflict CG-001","sha256: a92f… · validity stale"],
+    ["SRC-003 · HEURISTIC","AI Planner hypothesis · no truth promotion","evidence refs: 0 · review_required"]
+  ];
+  function render(){
+    const q=queries[query];
+    document.querySelector("#query-chip").textContent=q.name;
+    document.querySelector("#copy").textContent=q.copy;
+    document.querySelector("#fields").innerHTML=q.fields.map(([k,v])=>`<div class="field"><span>${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
+    let html=`<div class="status"><span class="badge ${state}">${state.toUpperCase()}</span><span class="${state}">${state==="complete"?"review_scope_complete":state==="partial"?"source_scope_incomplete":esc(q.failedCode)}</span></div>`;
+    if(state==="failed"){
+      html+=`<div class="section">STRUCTURED ERROR</div><div class="error">results=[] · code=${esc(q.failedCode)} · stage=${esc(q.failedStage)} · ${esc(q.failedMessage)}</div>`;
+      html+=`<div class="next">NEXT: replace the mismatched artifact or correct the bounded subject scope. Do not interpret failure as “no relationship”.</div>`;
+    }else{
+      const claims=state==="partial"?q.claims.slice(0,2):q.claims;
+      html+=`<div class="section">CLAIMS &amp; CONFLICTS</div>`+claims.map(([kind,text])=>`<div class="claim ${kind}">${esc(text)}</div>`).join("");
+      if(state==="partial") html+=`<div class="claim conflict">[COVERAGE GAP] source budget reached · one approved source not collected · absence cannot be concluded</div>`;
+      html+=`<div class="section">RELATION BOUNDARY</div><div class="relation ${q.relation.includes("HEURISTIC")?"heuristic":""}">${esc(q.relation)}</div>`;
+      html+=`<div class="next">${state==="complete"?"NEXT: independent Verifier recalculates address mention, timeline, direct/indirect relation and conflict disposition.":"NEXT: provide the missing approved artifact or expand the explicit source budget, then resume."}</div>`;
+    }
+    html+=`<div class="truth">NOT ASSESSED: legal conclusion, criminal intent, beneficial ownership, real-world identity. “accepted” means accepted as a source claim, not accepted as universal truth.</div>`;
+    document.querySelector("#result").innerHTML=html;
+    document.querySelector("#sources").innerHTML=sourceCards.map(([a,b,c])=>`<div class="source"><b>${esc(a)}</b><span>${esc(b)}</span><span>${esc(c)}</span></div>`).join("");
+  }
+  function bind(selector,key,setter){
+    const buttons=[...document.querySelectorAll(selector)];
+    buttons.forEach((button,index)=>{
+      button.addEventListener("click",()=>setter(button.dataset[key]));
+      button.addEventListener("keydown",event=>{
+        let next=null;
+        if(event.key==="ArrowRight") next=(index+1)%buttons.length;
+        if(event.key==="ArrowLeft") next=(index-1+buttons.length)%buttons.length;
+        if(event.key==="Home") next=0;
+        if(event.key==="End") next=buttons.length-1;
+        if(next!==null){event.preventDefault();buttons[next].focus();buttons[next].click();}
+      });
+    });
+  }
+  function chooseQuery(value){
+    query=value;
+    document.querySelectorAll(".tab").forEach(b=>{const on=b.dataset.query===value;b.setAttribute("aria-pressed",String(on));b.tabIndex=on?0:-1;});
+    render();
+  }
+  function chooseState(value){
+    state=value;
+    document.querySelectorAll(".state").forEach(b=>{const on=b.dataset.state===value;b.setAttribute("aria-pressed",String(on));b.tabIndex=on?0:-1;});
+    render();
+  }
+  bind(".tab","query",chooseQuery);bind(".state","state",chooseState);render();
+</script>
+</body>
+</html>
