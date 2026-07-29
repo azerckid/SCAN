@@ -208,6 +208,40 @@ def test_analyze_restricts_before_dispatch_and_returns_exit_five(
     assert (tmp_path / ".scan" / "scan.sqlite3").exists()
 
 
+def test_restricted_request_skips_invalid_artifact_parsing(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    request = load_document("dex", "request")
+    request["source_policy"]["rule_status"] = "restricted"  # type: ignore[index]
+    request_path = tmp_path / "restricted.json"
+    artifact_path = tmp_path / "invalid.csv"
+    write_json(request_path, request)
+    artifact_path.write_text('not,"valid')
+
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--request",
+            str(request_path),
+            "--input-mode",
+            "provided_artifact",
+            "--artifact",
+            str(artifact_path),
+        ],
+    )
+
+    assert result.exit_code == 5
+    assert "rule_restricted" in result.stdout + result.stderr
+    assert "invalid_input" not in result.stdout + result.stderr
+    with CliRuntime.open(tmp_path / ".scan") as runtime:
+        assert runtime.storage.count("checkpoints") == 0
+        assert runtime.storage.count("artifacts") == 1
+        assert runtime.storage.get_run_artifact("AN-FX-SVC-DEX-001", "request") is not None
+
+
 def test_analyze_reports_unavailable_vertical_slice_without_live_calls(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

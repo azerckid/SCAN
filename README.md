@@ -120,7 +120,7 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-369 passed
+370 passed
 PASS 7 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 40 probes
