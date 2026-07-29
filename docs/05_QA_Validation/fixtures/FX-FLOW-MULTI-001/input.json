@@ -1,0 +1,43 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-FLOW-MULTI-001",
+  "problem_id": "FLOW-MULTI-001",
+  "status": "candidate",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "analysis_candidate": "flow_path",
+  "query_kind": "aggregate_origins",
+  "asset_scope": {
+    "kind": "native",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "origin_nodes": [
+    "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+    "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e",
+    "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55",
+    "0x8765a35394c98e81b9d56d44248e1199d8e38a4c"
+  ],
+  "exit_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+  "budgets": {
+    "max_hops": 1,
+    "max_nodes": 5,
+    "max_edges": 4
+  },
+  "scope_kind": "selected_transactions_and_exact_blocks",
+  "selected_transactions": [
+    "0xc9641dceab1311d219523e5d3914df31f6a97986d5e331db45387037ea06a07c",
+    "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+    "0x9f3edbd1eb404dec2e4d9aae93c739136f79c87f6382af25413ce705cc431f59",
+    "0x19f802affe24572bac3af47983f42bbec6055117c6a32c3fddc58bd7545e5240"
+  ],
+  "price_context": {
+    "included": false,
+    "reason": "PATH contribution scoring is raw ETH only; historical fiat conversion is a separate context source."
+  },
+  "selection_notes": "Four explicit origins send native ETH to one exit. The fixture scores raw per-origin contribution and deduplicated total, not owner attribution or fiat price."
+}

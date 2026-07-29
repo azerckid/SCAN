@@ -1,0 +1,82 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-FLOW-REMERGE-001",
+  "status": "candidate",
+  "query_kind": "trace_remerge",
+  "seed_node": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+  "merge_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+  "branches": [
+    {
+      "branch_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "input_raw": "7738250000000000000000",
+      "merge_output_raw": "7738050000000000000000",
+      "residual_raw": "200000000000000000"
+    },
+    {
+      "branch_node": "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e",
+      "input_raw": "7738250000000000000000",
+      "merge_output_raw": "7738050000000000000000",
+      "residual_raw": "200000000000000000"
+    },
+    {
+      "branch_node": "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55",
+      "input_raw": "7738250000000000000000",
+      "merge_output_raw": "7737250000000000000000",
+      "residual_raw": "1000000000000000000"
+    },
+    {
+      "branch_node": "0x8765a35394c98e81b9d56d44248e1199d8e38a4c",
+      "input_raw": "7738250000000000000000",
+      "merge_output_raw": "7738050000000000000000",
+      "residual_raw": "200000000000000000"
+    }
+  ],
+  "reconciliation": {
+    "confirmed_input_raw": "30953000000000000000000",
+    "confirmed_included_output_raw": "30951400000000000000000",
+    "confirmed_scoped_excluded_output_raw": "0",
+    "explicit_fee_or_context_raw": "0",
+    "unresolved_residual_raw": "1600000000000000000",
+    "external_inflow_raw_not_in_seed_ledger": "1000000000000"
+  },
+  "excluded_edges": [
+    {
+      "transaction_hash": "0xcfec4f86f6d81c83b9b3520d6966936d17490988739a794bf1391562ecb909b6",
+      "from_node": "0xfa24ea2318dbc719b9d1a0d8eb7f282255c5bde0",
+      "to_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "amount_raw": "1000000000000",
+      "reason": "external_inflow_not_from_seed"
+    }
+  ],
+  "partial_conditions": [
+    "One or more branch return transactions are unavailable",
+    "The split is confirmed but a branch frontier remains outside the selected range",
+    "Residual is preserved but cannot yet be classified as balance, fee, or later output"
+  ],
+  "failed_conditions": [
+    "External inflow is subtracted from the seed ledger",
+    "A branch or merge endpoint does not match the selected transactions",
+    "The same transfer is counted in two branches"
+  ],
+  "tolerance": {
+    "integer_raw": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-FLOW-REMERGE-BRANCHES",
+        "description": "Four seed outputs and four matching merge inputs must preserve branch identity and raw values.",
+        "mandatory": true,
+        "evidence_refs": ["EV-FLOW-SPLIT-4", "EV-FLOW-REMERGE-4"]
+      },
+      {
+        "requirement_id": "REQ-FLOW-REMERGE-LEDGER",
+        "description": "Input, merge output, residual, and unrelated external inflow must remain separate.",
+        "mandatory": true,
+        "evidence_refs": ["EV-FLOW-REMERGE-LEDGER", "EV-FLOW-UNRELATED-INFLOW"]
+      }
+    ]
+  }
+}

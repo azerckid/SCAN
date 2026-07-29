@@ -1,0 +1,84 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-FLOW-MULTI-001",
+  "status": "candidate",
+  "captured_at": "2026-07-29T14:25:33Z",
+  "event_evidence": [],
+  "call_evidence": [
+    {
+      "evidence_id": "EV-FLOW-MULTI-ORIGINS",
+      "evidence_type": "native_multi_origin_transfers",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "origin_count": 4,
+      "exit_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+      "transaction_hashes": [
+        "0xc9641dceab1311d219523e5d3914df31f6a97986d5e331db45387037ea06a07c",
+        "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+        "0x9f3edbd1eb404dec2e4d9aae93c739136f79c87f6382af25413ce705cc431f59",
+        "0x19f802affe24572bac3af47983f42bbec6055117c6a32c3fddc58bd7545e5240"
+      ],
+      "receipt_status_all_success": true
+    },
+    {
+      "evidence_id": "EV-FLOW-MULTI-TOTAL",
+      "evidence_type": "native_deduplicated_total",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "deduplicated_transaction_count": 4,
+      "total_raw": "30951400000000000000000"
+    }
+  ],
+  "state_evidence": [],
+  "context_evidence": [
+    {
+      "evidence_id": "EV-FLOW-MULTI-TIMELINE",
+      "evidence_type": "public_incident_timeline",
+      "source_id": "DS-OSINT-WEB",
+      "url": "https://www.euler.finance/blog/war-peace-behind-the-scenes-of-eulers-240m-exploit-recovery",
+      "address_attribution_scored": false
+    }
+  ],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Selected origin transactions, receipts, blocks, destinations, and raw ETH amounts"
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "role": "context",
+      "required": false,
+      "purpose": "Public chronology only; not common-control or criminal attribution"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider": "PROVIDER-EVM-VERIFY",
+      "retrieved_at": "2026-07-29T14:25:33Z",
+      "methods": ["eth_getTransactionByHash", "eth_getTransactionReceipt", "eth_getBlockByNumber"]
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "provider": "Euler Finance",
+      "retrieved_at": "2026-07-29T14:25:33Z"
+    }
+  ],
+  "consistency_checks": {
+    "selected_transactions_exist": true,
+    "receipt_status_success": true,
+    "four_unique_origins": true,
+    "single_exit_node": true,
+    "transaction_hashes_unique": true,
+    "deduplicated_total_recomputed": true,
+    "two_provider_decoded_match": false,
+    "independent_verifier_pass": false
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": "Primary-provider replay, raw SHA-256 artifacts, origin-set completeness decision, negative oracle, and independent Verifier. Historical price remains separate context."
+  },
+  "provenance_notes": "Raw on-chain contributions are scoring facts. Common ownership, criminal intent, victim status, and fiat value are explicitly not assessed."
+}

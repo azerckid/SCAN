@@ -1,0 +1,74 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-FLOW-MULTI-001",
+  "status": "candidate",
+  "query_kind": "aggregate_origins",
+  "exit_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+  "contributions": [
+    {
+      "origin_node": "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55",
+      "amount_raw": "7737250000000000000000",
+      "transaction_hash": "0xc9641dceab1311d219523e5d3914df31f6a97986d5e331db45387037ea06a07c",
+      "block_number": 16905415
+    },
+    {
+      "origin_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "amount_raw": "7738050000000000000000",
+      "transaction_hash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+      "block_number": 16920430
+    },
+    {
+      "origin_node": "0x8765a35394c98e81b9d56d44248e1199d8e38a4c",
+      "amount_raw": "7738050000000000000000",
+      "transaction_hash": "0x9f3edbd1eb404dec2e4d9aae93c739136f79c87f6382af25413ce705cc431f59",
+      "block_number": 16920468
+    },
+    {
+      "origin_node": "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e",
+      "amount_raw": "7738050000000000000000",
+      "transaction_hash": "0x19f802affe24572bac3af47983f42bbec6055117c6a32c3fddc58bd7545e5240",
+      "block_number": 16920507
+    }
+  ],
+  "deduplicated_total_raw": "30951400000000000000000",
+  "price_context": {
+    "status": "not_assessed",
+    "included_in_scoring": false
+  },
+  "attribution": {
+    "common_control_claim": false,
+    "criminal_or_victim_claim": false,
+    "status": "not_assessed"
+  },
+  "partial_conditions": [
+    "At least one selected origin transaction is unavailable",
+    "All available contributions remain exact but the requested origin set is incomplete",
+    "Price context is unavailable while raw path facts remain valid"
+  ],
+  "failed_conditions": [
+    "A contribution does not terminate at the selected exit",
+    "The same transaction is counted for multiple origins",
+    "Human-readable ETH or fiat rounding replaces raw integer scoring"
+  ],
+  "tolerance": {
+    "integer_raw": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-FLOW-MULTI-CONTRIBUTIONS",
+        "description": "Each of four origins must map to one distinct successful transfer and exact raw amount.",
+        "mandatory": true,
+        "evidence_refs": ["EV-FLOW-MULTI-ORIGINS"]
+      },
+      {
+        "requirement_id": "REQ-FLOW-MULTI-TOTAL",
+        "description": "The deduplicated raw total must equal 30951400000000000000000.",
+        "mandatory": true,
+        "evidence_refs": ["EV-FLOW-MULTI-TOTAL"]
+      }
+    ]
+  }
+}

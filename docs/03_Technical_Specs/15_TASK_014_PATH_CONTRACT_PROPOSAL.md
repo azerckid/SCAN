@@ -1,7 +1,7 @@
 # TASK-014 PATH Graph·금액 정합 계약 제안
 > Created: 2026-07-29 22:52
-> Last Updated: 2026-07-29 23:09
-> Status: Proposed 0.1 · Preview User Review Passed · Fixture 사례 미선정 · Implementation Not Approved
+> Last Updated: 2026-07-29 23:25
+> Status: Proposed 0.1 · Preview User Review Passed · Fixture 3 Candidate · Implementation Not Approved
 
 ## 1. 목적
 
@@ -21,7 +21,7 @@ TASK-012 EVM Core가 만든 transaction·receipt·log·internal-call evidence를
 | Benchmark | automated 9 / assisted 0 / unsupported 21 | FLOW 3문항은 아직 unsupported |
 | EVM 입력 | TASK-012 `evm_core`·WP-INPUT 완료 | normalized EVM evidence 재사용 |
 | 전문 해석 | TASK-013 `evm_special` 완료 | PATH는 별도 analysis type 후보 |
-| PATH fixture | 공개 사례 미선정 | 세 proposed package의 선정 조건만 고정 |
+| PATH fixture | 공개 사례 3개 선정 | 세 package는 `candidate`; replay·oracle·Verifier 미실행 |
 | UI | 기존 Workbench는 범용 Draft | TASK-014 전용 정적 Preview를 별도 작성 |
 | Runtime | PATH analyzer 없음 | Context Receipt·사용자 구현 승인 전 코드 금지 |
 
@@ -29,9 +29,16 @@ TASK-012 EVM Core가 만든 transaction·receipt·log·internal-call evidence를
 
 | Fixture ID | 대상 문제 | 공개 사례가 반드시 포함할 사실 | 상태 |
 |:---|:---|:---|:---:|
-| `FX-FLOW-PATH-001` | FLOW-EVM-001 | seed에서 3홉 이상 이어지는 단일 자산 경로, 명확한 terminal address, hop별 TX·raw amount | proposed |
-| `FX-FLOW-REMERGE-001` | FLOW-EVM-002 | 한 seed의 2개 이상 분기, 공통 merge address, unrelated inflow 1건 이상, residual 정답 | proposed |
-| `FX-FLOW-MULTI-001` | FLOW-MULTI-001 | 둘 이상 origin의 동일 exit 유입, origin별 contribution, 중복 방지, 가격은 별도 context | proposed |
+| [`FX-FLOW-PATH-001`](../05_QA_Validation/fixtures/FX-FLOW-PATH-001/README.md) | FLOW-EVM-001 | internal 1 + top-level 2의 native ETH 3홉, terminal·raw amount | candidate |
+| [`FX-FLOW-REMERGE-001`](../05_QA_Validation/fixtures/FX-FLOW-REMERGE-001/README.md) | FLOW-EVM-002 | seed 1→branch 4→merge 1, unrelated inflow·residual | candidate |
+| [`FX-FLOW-MULTI-001`](../05_QA_Validation/fixtures/FX-FLOW-MULTI-001/README.md) | FLOW-MULTI-001 | origin 4→exit 1, contribution·dedup, 가격 별도 | candidate |
+
+세 후보는 Euler 공개 사건의 서로 다른 request scope를 사용한다. 1차 RPC와
+공개 Explorer로 실제 TX·주소·raw 금액을 고정했지만, primary provider
+replay·raw SHA·negative oracle·독립 Verifier가 남았으므로 `verifying`이나
+`confirmed`가 아니다. 자세한 선정 근거는
+[TASK-014 후보 보고서](../05_QA_Validation/40_TASK_014_FIXTURE_CANDIDATE_REPORT.md)에
+기록한다.
 
 선정할 공개 사례는 다음을 만족해야 한다.
 
@@ -228,7 +235,7 @@ Verifier 재계산을 통과해야 한다.
 
 ## 11. 구현 전 Gate
 
-- [ ] 공개 사례 3개를 선정하고 fixture package를 `candidate`로 작성
+- [x] 공개 사례 3개를 선정하고 fixture package를 `candidate`로 작성
 - [ ] 두 공급자 또는 공급자+artifact replay로 edge 집합 재현
 - [ ] negative oracle과 독립 Verifier 작성
 - [ ] `flow_path` 대안 B 정식 승인
@@ -246,3 +253,4 @@ Verifier 재계산을 통과해야 한다.
 - **Technical_Specs**: [Analysis I/O](./05_ANALYSIS_IO_SCHEMA.md) - 공통 envelope와 버전 경계
 - **Logic_Progress**: [Backlog TASK-014](../04_Logic_Progress/00_BACKLOG.md) - Context Lock·구현 승인
 - **QA_Validation**: [TASK-014 Fixture·Contract Gate](../05_QA_Validation/39_TASK_014_FIXTURE_CONTRACT_GATE.md) - 승격 전 QA 기준
+- **QA_Validation**: [TASK-014 후보 보고서](../05_QA_Validation/40_TASK_014_FIXTURE_CANDIDATE_REPORT.md) - Euler 공개 사례·raw 정답·잔여 Gate

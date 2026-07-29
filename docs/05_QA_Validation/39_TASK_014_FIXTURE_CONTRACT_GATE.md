@@ -1,25 +1,25 @@
 # TASK-014 PATH Fixture·Contract Gate
 > Created: 2026-07-29 22:52
-> Last Updated: 2026-07-29 23:09
-> Status: Preview User Review Passed · Fixture 0 Selected · Runtime Not Implemented
+> Last Updated: 2026-07-29 23:25
+> Status: Preview User Review Passed · Fixture 3 Candidate · Runtime Not Implemented
 
 ## 1. 목적
 
 이 문서는 TASK-014가 공개 사례 선정부터 제품 analyzer·Benchmark 승격까지
-통과해야 할 검증 기준을 정의한다. 현재는 fixture ID·계약·UI만 제안됐으며
-실행 결과를 주장하지 않는다.
+통과해야 할 검증 기준을 정의한다. 현재 세 공개 사례와 1차 온체인 값은
+선정됐지만 replay·oracle·Verifier 실행 결과는 주장하지 않는다.
 
 ## 2. 대상과 현재 상태
 
 | 문제 | Fixture 후보 | 현재 coverage | Gate 상태 |
 |:---|:---|:---:|:---:|
-| FLOW-EVM-001 | FX-FLOW-PATH-001 | unsupported | not_executed |
-| FLOW-EVM-002 | FX-FLOW-REMERGE-001 | unsupported | not_executed |
-| FLOW-MULTI-001 | FX-FLOW-MULTI-001 | unsupported | not_executed |
+| FLOW-EVM-001 | [FX-FLOW-PATH-001](./fixtures/FX-FLOW-PATH-001/README.md) | unsupported | candidate_selected |
+| FLOW-EVM-002 | [FX-FLOW-REMERGE-001](./fixtures/FX-FLOW-REMERGE-001/README.md) | unsupported | candidate_selected |
+| FLOW-MULTI-001 | [FX-FLOW-MULTI-001](./fixtures/FX-FLOW-MULTI-001/README.md) | unsupported | candidate_selected |
 
 ## 3. Fixture Gate
 
-- [ ] 공개 seed·TX·block·asset scope 선정
+- [x] 공개 seed·TX·block·asset scope 선정
 - [ ] 두 논리 source 또는 source+artifact의 decoded edge 일치
 - [ ] raw SHA-256·method/locator·retrieved_at 기록
 - [ ] expected graph를 raw replay에서 재계산
@@ -95,3 +95,4 @@ Context Receipt를 `PASS`로 전환한다.
 - **Technical_Specs**: [TASK-014 PATH 계약](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) - graph·ledger·오류 계약
 - **Logic_Progress**: [Backlog TASK-014](../04_Logic_Progress/00_BACKLOG.md) - Context Lock·Acceptance Criteria
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-PATH-001/002 상위 Gate
+- **QA_Validation**: [TASK-014 후보 보고서](./40_TASK_014_FIXTURE_CANDIDATE_REPORT.md) - 공개 사례·1차 정답·잔여 Gate
