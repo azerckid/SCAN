@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 11:10
+> Last Updated: 2026-07-29 15:05
 > Status: TASK-001~012 Done · WP-INPUT Done · TASK-013~019 Proposed
 
 ## 1. 문서 목적
@@ -1011,6 +1011,8 @@ Receipt·개별 구현 승인을 대체하지 않는다.
     docs-only Draft로 작성한다.
   - [x] ERC-721/1155와 EIP-1967 공개 candidate를 선정하고 두 공급자
     receipt/storage 기본 일치를 기록한다.
+  - [x] raw/provider replay·capability별 SHA·명시 scope 완전성·raw
+    integrity checker를 통과한다.
   - [ ] ERC-721/1155와 EIP-1967 공개 fixture를 각각 확정한다.
   - [ ] Analysis I/O 대안과 전용 UI Preview를 승인한다.
   - [ ] 표준·반례·decode failure를 검증한다.
@@ -1034,6 +1036,7 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] fixture·계약·반례 문서 Draft를 작성한다.
   - [x] TASK-012 공통 EVM 입력이 안정됐다.
   - [x] 공개 candidate 주소·TX·block과 reference answer 골격을 선정한다.
+  - [x] 명시 scope replay와 provider provenance를 고정한다.
   - [ ] 공개 fixture와 reference answer를 확정한다.
   - [ ] CLI 진입·전환·이탈과 loading·empty·partial·failed 표시를 확인한다.
   - [ ] log/state 최소 필드·mutation 없음·decode 상태 관리를 승인한다.
@@ -1053,8 +1056,8 @@ Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - candidate 3개와 계약 Draft 존재. raw replay·반례·
-    fixture 확정·UI·사용자 구현 승인 전 착수 금지
+  - Status: PENDING - candidate 3개의 replay Gate와 계약 Draft 존재.
+    negative oracle·Verifier·fixture 확정·UI·사용자 구현 승인 전 착수 금지
   - Required References Read: 예상문제 은행·Coverage Brief·EIP-721/1155/1967
   - Constraints: 소유권 분쟁·안전성 자동 판정 금지
   - Conflicts: None known

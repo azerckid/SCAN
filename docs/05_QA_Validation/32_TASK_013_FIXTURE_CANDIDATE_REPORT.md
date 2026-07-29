@@ -1,14 +1,15 @@
 # TASK-013 NFT·Proxy Fixture 후보 보고서
 > Created: 2026-07-29
-> Last Updated: 2026-07-29 14:50
-> Status: Candidate Cases Selected · Two-Provider Basic Match · Not Confirmed
+> Last Updated: 2026-07-29 15:05
+> Status: Candidate Replay Gate Passed · Negative Oracle Pending · Not Confirmed
 
 ## 1. 목적
 
 TASK-013의 코드를 만들기 전에 필요한 ERC-721, ERC-1155, EIP-1967
-fixture의 공개 후보와 최소 구성을 기록한다. 세 package는 공개 사례와
-두 공급자 기본 재현까지 마쳤지만 raw replay·negative oracle·Verifier가
-남아 있어 `candidate`이며, fixture 확정이나 구현 승인을 뜻하지 않는다.
+fixture의 공개 후보와 최소 구성을 기록한다. 세 package는 공개 사례,
+두 공급자 재현, capability별 raw SHA와 명시 scope의 filtered log/state
+Gate를 통과했다. negative oracle·Verifier가 남아 있어 `candidate`이며,
+fixture 확정이나 구현 승인을 뜻하지 않는다.
 
 ## 2. 후보 구성
 
@@ -25,12 +26,28 @@ NFT 한 건만으로 ERC-721과 ERC-1155를 모두 검증했다고 주장하지 
 
 | Fixture | 재현 입력 | 일치한 값 | 미완료 |
 |:---|:---|:---|:---|
-| ERC-721 | 두 TX receipt | contract·block·log index·owner/operator·approved·from/to·tokenId | filtered range·raw SHA |
-| ERC-1155 | Single/approval TX와 Batch TX receipt | contract·block·log index·operator/from/to·ids·amounts | filtered range·raw SHA |
-| Proxy | upgrade receipt + before/after `eth_getStorageAt` | Upgraded implementation·implementation slot·admin zero | history 범위·raw SHA |
+| ERC-721 | 두 TX receipt + exact-block filtered logs | contract·block·log index·owner/operator·approved·from/to·tokenId | negative oracle·Verifier |
+| ERC-1155 | 두 TX receipt + exact-block filtered logs | contract·block·log index·operator/from/to·ids·amounts | negative oracle·Verifier |
+| Proxy | upgrade receipt/log + adjacent `eth_getStorageAt` | Upgraded implementation·implementation slot·admin zero | negative oracle·Verifier |
 
 공급자 endpoint와 credential은 저장하지 않고 `primary`·`verify` 논리 역할만
 사용했다. 탐색기 화면은 후보 발견 보조이며 scoring source가 아니다.
+
+### 2.2 재현 도구
+
+기본 실행은 네트워크를 호출하지 않는다.
+
+```bash
+uv run python scripts/replay_task_013_candidates.py \
+  --fixture FX-EVM-NFT-721-001 \
+  --role primary
+```
+
+실제 호출은 기존 Rules Gate, `--execute`, 논리 endpoint 환경변수가 모두
+필요하다. 허용 method는 `eth_getTransactionReceipt`, `eth_getLogs`,
+`eth_getStorageAt`뿐이다. request set 5+5+6을 각 provider에 실행해
+총 **32 network calls**, 16 capability 쌍을 비교했다. 첫 ERC-721 primary 실행에서
+receipt 한 건이 HTTP 429였고 bounded 재시도에서 5/5 complete가 됐다.
 
 ## 3. 선정 조건
 
@@ -60,10 +77,9 @@ NFT 한 건만으로 ERC-721과 ERC-1155를 모두 검증했다고 주장하지 
 ## 4. 패키지 최소 파일
 
 현재 candidate package에는 `README.md`, `input.json`, `expected.json`,
-`evidence.json`을 추가했다. 다음 파일은 승격 전에 추가한다.
-
-- `raw-replay.json`: normalized evidence 원본과 SHA-256
-- `provider-replay.json`: provider별 method·params·retrieved_at·decoded match
+`evidence.json`, `raw-replay.json`, `provider-replay.json`을 추가했다.
+provider replay는 endpoint가 아니라 논리 provider ID, method·scope,
+retrieved_at, capability별 raw SHA-256과 decoded match만 보존한다.
 
 endpoint·API key·credential·로컬 절대 경로는 어느 파일에도 넣지 않는다.
 
@@ -113,8 +129,9 @@ endpoint·API key·credential·로컬 절대 경로는 어느 파일에도 넣�
 - [x] 공개 주소·TX·block을 선정했다.
 - [x] candidate package의 README·input·expected·evidence를 작성했다.
 - [x] 두 공급자 receipt와 필요한 historical storage의 decoded 값을 대조했다.
-- [ ] raw replay·SHA-256·provider replay provenance를 작성했다.
-- [ ] filtered range completeness와 proxy history 범위를 검증했다.
+- [x] raw replay·SHA-256·provider replay provenance를 작성했다.
+- [x] selected TX·exact block window와 selected upgrade·adjacent state 범위를 검증했다.
+- [x] replay integrity checker가 raw topic/data/storage에서 expected 핵심 값을 재계산했다.
 - [ ] negative oracle을 실행했다.
 - [x] candidate package 3개를 포함한 fixture Schema 0.1을 통과했다.
 - [ ] Analysis I/O와 UI를 승인했다.
@@ -139,7 +156,7 @@ Benchmark 자동화 7문항은 변하지 않는다.
 
 | 기준 | 상태 | 이번 단계의 증거 | 잔여 |
 |:---|:---|:---|:---|
-| Functionality | Partial | 세 표준 후보의 공개 raw 값과 두 공급자 decoded match | raw replay·negative oracle·Verifier |
+| Functionality | Partial | 세 표준의 두 공급자 raw SHA·명시 scope·expected 재계산 통과 | negative oracle·Verifier |
 | Potential Impact | Partial | NFT·Proxy 두 예상문제의 구현 입력을 구체화 | Benchmark 승격 전 |
 | Novelty | Partial | event와 historical slot을 분리하고 귀속을 판정하지 않음 | analyzer 비교 전 |
 | UX | N/A | UI·runtime 변경 없음 | 전용 Preview 승인 |
@@ -152,11 +169,11 @@ Benchmark 자동화 7문항은 변하지 않는다.
 
 ## 10. 판정
 
-**공개 candidate 선정과 두 공급자 기본 대조 통과, fixture 승격 미실행.**
+**공개 candidate replay·명시 scope·raw integrity Gate 통과, fixture 승격 미실행.**
 
-다음 작업은 filtered range·raw/provider replay·negative oracle 작성이다.
-그 뒤에도 즉시 코드를 시작하지 않고, fixture 승격·UI·Context Receipt·
-사용자 구현 승인을 순서대로 닫는다.
+다음 작업은 negative oracle과 두 번의 결정성 재현이다. 그 뒤에도 즉시
+제품 decoder를 시작하지 않고, 독립 Verifier·fixture 승격·UI·Context
+Receipt·사용자 구현 승인을 순서대로 닫는다.
 
 ## 11. Related Documents
 

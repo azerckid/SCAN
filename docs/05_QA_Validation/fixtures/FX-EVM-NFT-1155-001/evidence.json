@@ -4,7 +4,7 @@
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-NFT-1155-001",
   "status": "candidate",
-  "captured_at": "2026-07-29T05:38:10Z",
+  "captured_at": "2026-07-29T05:58:26Z",
   "event_evidence": [
     {
       "evidence_id": "EV-NFT1155-SINGLE-IN",
@@ -84,25 +84,29 @@
       "source_id": "DS-EVM-RPC-ARCHIVE",
       "provider": "PROVIDER-EVM-PRIMARY",
       "retrieved_at": "2026-07-29T05:38:10Z",
-      "methods": ["eth_getTransactionReceipt"]
+      "methods": ["eth_getTransactionReceipt", "eth_getLogs"]
     },
     {
       "source_id": "DS-EVM-RPC-ARCHIVE",
       "provider": "PROVIDER-EVM-VERIFY",
       "retrieved_at": "2026-07-29T05:38:10Z",
-      "methods": ["eth_getTransactionReceipt"]
+      "methods": ["eth_getTransactionReceipt", "eth_getLogs"]
     }
   ],
   "consistency_checks": {
     "two_provider_decoded_match": true,
     "receipt_status_success": true,
+    "raw_sha256_recorded_per_capability": true,
+    "selected_transaction_scope_complete": true,
+    "exact_block_window_logs_match_receipts": true,
+    "continuous_gap_scanned": false,
     "batch_array_lengths_match": true,
     "batch_array_order_preserved": true,
     "approval_transitions_preserved": true
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Raw replay SHA-256, filtered range replay, negative oracle, Schema/UI approval, and independent verifier are not complete"
+    "remaining": "Negative oracle, Analysis I/O/UI approval, and independent verifier are not complete. The continuous gap between exact block windows is outside this fixture scope."
   },
   "provenance_notes": "Etherscan was used only to discover public transaction candidates. Scoring values were independently read from two RPC receipts."
 }

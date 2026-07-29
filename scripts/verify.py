@@ -46,6 +46,10 @@ COMMANDS = (
         sys.executable,
         "scripts/check_task_012_ui_preview.py",
     ),
+    (
+        sys.executable,
+        "scripts/check_task_013_replay_gate.py",
+    ),
 )
 
 

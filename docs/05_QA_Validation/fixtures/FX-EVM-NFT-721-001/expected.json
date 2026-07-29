@@ -40,8 +40,8 @@
     }
   ],
   "partial_conditions": [
-    "One of the selected transaction receipts or the requested block range is unavailable",
-    "Transfer is decoded but approval history completeness cannot be established"
+    "One of the selected transaction receipts or exact block windows is unavailable",
+    "Transfer is decoded but approval completeness inside the explicit selected scope cannot be established"
   ],
   "failed_conditions": [
     "The ERC-721 Transfer is decoded as an ERC-20 amount",

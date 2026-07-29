@@ -33,7 +33,7 @@
   },
   "partial_conditions": [
     "Single or Batch receipt is unavailable while the other case remains exact",
-    "Approval transitions are present but range completeness cannot be established"
+    "Approval transitions are present but exact-block scope completeness cannot be established"
   ],
   "failed_conditions": [
     "TransferBatch ids and amounts are reordered or have different lengths",

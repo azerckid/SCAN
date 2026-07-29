@@ -1,0 +1,73 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-EVM-PROXY-001",
+  "chain_id": 1,
+  "pattern_hint": "eip1967",
+  "captured_at": "2026-07-29T05:58:29Z",
+  "scope": {
+    "kind": "selected_upgrade_transaction_and_adjacent_state",
+    "upgrade_transaction_complete": true,
+    "adjacent_state_complete": true,
+    "wider_history_scanned": false
+  },
+  "receipt": {
+    "transaction_hash": "0xe9949c36e86fc9f481897dbac8de33d655bff20b267955a303e2e5643fbc2b35",
+    "block_hash": "0x35eca1fe76611d0ab4116bc0df57acf702e39ff750de0ae07df15122171560e6",
+    "block_number": "0x1808543",
+    "transaction_index": "0x9d",
+    "status": "0x1"
+  },
+  "logs": [
+    {
+      "address": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+      "topics": [
+        "0xbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b",
+        "0x000000000000000000000000728a138a4823392c2efa55e028d434f526fe03cf"
+      ],
+      "data": "0x",
+      "block_number": "0x1808543",
+      "transaction_hash": "0xe9949c36e86fc9f481897dbac8de33d655bff20b267955a303e2e5643fbc2b35",
+      "transaction_index": "0x9d",
+      "log_index": "0x411",
+      "removed": false
+    }
+  ],
+  "storage_snapshots": [
+    {
+      "role": "implementation_before",
+      "block_number": "0x1808542",
+      "slot": "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+      "raw_word": "0x0000000000000000000000008147b99df7672a21809c9093e6f6ce1a60f119bd"
+    },
+    {
+      "role": "implementation_after",
+      "block_number": "0x1808543",
+      "slot": "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+      "raw_word": "0x000000000000000000000000728a138a4823392c2efa55e028d434f526fe03cf"
+    },
+    {
+      "role": "admin_before",
+      "block_number": "0x1808542",
+      "slot": "0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103",
+      "raw_word": "0x0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "admin_after",
+      "block_number": "0x1808543",
+      "slot": "0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103",
+      "raw_word": "0x0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "provider-evm-primary",
+      "retrieved_at": "2026-07-29T05:58:27Z"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "provider-evm-verify",
+      "retrieved_at": "2026-07-29T05:58:29Z"
+    }
+  ]
+}

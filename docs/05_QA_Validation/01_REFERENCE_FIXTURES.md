@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29
+> Last Updated: 2026-07-29 15:05
 > Status: Approved 1.3 · Phase 2 Confirmed Pack · TASK-013 Candidates
 
 ## 1. 문서 목적
@@ -106,9 +106,10 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 사용한다.
 
 TASK-013 세 패키지는 공개 주소·TX·block, expected/evidence 골격과 두
-공급자 receipt 또는 historical storage 일치까지 확보한 `후보`다.
-raw replay·filtered range·negative oracle·독립 Verifier가 남아 있어
-`검증 중`이나 `확정`으로 올리지 않는다.
+공급자 receipt/log 또는 historical storage 일치, raw SHA와 명시 scope
+replay까지 확보한 `후보`다. negative oracle·독립 Verifier가 남아 있어
+`검증 중`이나 `확정`으로 올리지 않는다. NFT는 두 선정 TX와 exact block
+window, Proxy는 선정 upgrade와 adjacent state만 완전성을 주장한다.
 
 ---
 
@@ -205,7 +206,7 @@ raw replay·filtered range·negative oracle·독립 Verifier가 남아 있어
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-PROXY-001 |
-| 상태 | 후보 0.1 — 두 archive RPC decoded match |
+| 상태 | 후보 0.1 — replay·adjacent-state Gate 통과 |
 | DOC-M3 결정 | TASK-013 공개 candidate 선정 · fixture 승격 미실행 |
 | 패키지 | [FX-EVM-PROXY-001](./fixtures/FX-EVM-PROXY-001/README.md) |
 | 데이터 형태 | 공개 온체인 |
@@ -213,7 +214,7 @@ raw replay·filtered range·negative oracle·독립 Verifier가 남아 있어
 | 주소·TX | Aave V3 Pool proxy `0x87870bca...b4fa4e2`, upgrade TX `0xe9949c36...bc2b35`, block `25199939` |
 | 기준 정답 | implementation `0x8147b99d...0f119bd` → `0x728a138a...6fe03cf`, Upgraded log `1041`, admin before/after zero |
 | 허용 오차 | 해당 없음(주소·슬롯 exact match) |
-| 후보 사실 | 두 공급자의 EIP-1967 implementation/admin historical slot과 Upgraded event decoded 값 일치 |
+| 후보 사실 | 두 공급자의 receipt/log·EIP-1967 implementation/admin historical slot·raw SHA 일치 |
 | 휴리스틱 | 비표준 프록시는 자동 해석하지 않음 |
 | 필요 데이터 소스 | `DS-EVM-RPC-ARCHIVE` |
 | 재현 절차 | 1) 명시 block별 슬롯 조회 2) 이벤트 이력 3) before/after 정합 4) beacon이면 implementation() 분리 |
@@ -227,13 +228,13 @@ raw replay·filtered range·negative oracle·독립 Verifier가 남아 있어
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-NFT-001 |
-| 상태 | 후보 0.1 — 두 RPC receipt decoded match |
+| 상태 | 후보 0.1 — replay·exact-block Gate 통과 |
 | 패키지 | [ERC-721](./fixtures/FX-EVM-NFT-721-001/README.md) · [ERC-1155](./fixtures/FX-EVM-NFT-1155-001/README.md) |
 | 데이터 형태 | 공개 EVM log·transaction |
 | 체인·주소·TX | Ethereum. BAYC `0xbc4ca0ed...a936f13d` 2 TX, Rarible `0xb66a603f...6518b8` 2 TX |
 | 기준 정답 | ERC-721 token `9110` 승인·이동, ERC-1155 Single/Batch ids·amounts·ApprovalForAll |
 | 허용 오차 | 없음(raw integer·address·log order exact) |
-| 후보 사실 | 두 공급자 receipt의 표준 event signature·indexed/data field decode 일치 |
+| 후보 사실 | 두 공급자 receipt/filtered log의 표준 event·raw SHA·indexed/data field decode 일치 |
 | 휴리스틱 | NFT 가치·소유권 분쟁·거래 의도는 판정하지 않음 |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, 필요 시 `DS-EVM-RPC-ARCHIVE` |
 | 공식 근거 | [ERC-721](https://eips.ethereum.org/EIPS/eip-721), [ERC-1155](https://eips.ethereum.org/EIPS/eip-1155) |

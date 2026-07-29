@@ -11,9 +11,22 @@
   },
   "standard_hint": "erc1155",
   "token_contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
-  "transactions": {
-    "single_and_approval": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
-    "multi_item_batch": "0x94fcb6337f5cae9223146caf50f92d9e1af4342ea7cb21bb16792d032e3a230e"
-  },
-  "selection_notes": "The Rarible ERC-1155 contract supplies atomic TransferSingle and ApprovalForAll events plus a separate two-item TransferBatch. Two RPC providers returned identical decoded fields."
+  "scope_kind": "selected_transactions_and_exact_block_windows",
+  "block_windows": [
+    {"from": 23762140, "to": 23762140},
+    {"from": 24609794, "to": 24609794}
+  ],
+  "transactions": [
+    {
+      "role": "single_and_approval",
+      "hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
+      "block_number": 24609794
+    },
+    {
+      "role": "multi_item_batch",
+      "hash": "0x94fcb6337f5cae9223146caf50f92d9e1af4342ea7cb21bb16792d032e3a230e",
+      "block_number": 23762140
+    }
+  ],
+  "selection_notes": "The Rarible ERC-1155 contract supplies atomic TransferSingle and ApprovalForAll events plus a separate two-item TransferBatch. Scope completeness applies only to the selected transactions and exact block windows."
 }
