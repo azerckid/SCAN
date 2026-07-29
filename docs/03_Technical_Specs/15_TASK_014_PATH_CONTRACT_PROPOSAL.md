@@ -1,7 +1,7 @@
 # TASK-014 PATH Graph·금액 정합 계약 제안
 > Created: 2026-07-29 22:52
-> Last Updated: 2026-07-29 23:25
-> Status: Proposed 0.1 · Preview User Review Passed · Fixture 3 Verifying · Implementation Not Approved
+> Last Updated: 2026-07-30 10:40
+> Status: Proposed 0.1 · Preview User Review Passed · Fixture 3 Verifying · 대안 B 확정안 작성([16](./16_TASK_014_FLOW_PATH_IO_CONTRACT.md)) · Implementation Not Approved
 
 ## 1. 목적
 
@@ -103,6 +103,13 @@ internal native를 근거 없이 합산하지 않으며, ERC-20과 native/wrappe
 그 evidence를 그래프로 조합한다. 정식 선택은 fixture 후보와 Preview를
 사용자가 확인한 뒤 별도 승인한다.
 
+> **확정안:** 대안 B의 request/result variant, query별 예제(complete·
+> partial·failed), 오류 코드 매핑, 단일-trace 하드 게이트, Preview 필드
+> 대조를 [16_TASK_014_FLOW_PATH_IO_CONTRACT](./16_TASK_014_FLOW_PATH_IO_CONTRACT.md)에서
+> docs-only로 구체화했다. 사용자 승인 대기 중이며, 아래 §6의 `path_*`
+> 오류 코드 초안은 그 문서 §5의 **기존 `ErrorCode` enum 재사용 매핑**으로
+> 대체된다(신규 공개 코드 없음).
+
 ### 5.2 Query 후보
 
 `trace_path`
@@ -144,24 +151,26 @@ edge_id sequence)`로 결정적으로 정렬한다.
 |:---|:---|:---|
 | complete | 요청 범위·budget 안에서 필수 edge와 terminal/merge가 재현되고 residual이 허용 범위 이내 | graph·path·ledger 전부 |
 | partial | budget/range/비필수 source 한계로 일부 frontier가 미확인이나 확인된 edge는 유효 | 확인된 graph + termination + unresolved frontier |
-| failed | seed/scope가 invalid, 필수 source 결합·reconciliation 실패, 필수 edge가 서로 모순 | `data: null` + 구조화 오류 |
+| failed | seed/scope가 invalid, 필수 source 결합·reconciliation 실패, 필수 edge가 서로 모순 | `results: []` + 구조화 오류 |
 
-오류 후보:
+오류 후보(초안 — **폐기**, [16_TASK_014_FLOW_PATH_IO_CONTRACT §5](./16_TASK_014_FLOW_PATH_IO_CONTRACT.md#5-오류-계약--기존-errorcode-enum-재사용-신규-코드-없음)의
+기존 `ErrorCode` enum 매핑으로 대체. 아래 이름은 내부 사유(=`stage`)로만 남긴다):
 
-- `path_seed_unavailable`
-- `path_scope_invalid`
-- `path_budget_exhausted`
-- `path_frontier_unresolved`
-- `path_reconciliation_failed`
-- `path_asset_mismatch`
-- `path_cycle_only`
-- `path_source_unavailable`
+- `path_seed_unavailable` → `source_unavailable` / stage `seed_resolution`
+- `path_scope_invalid` → `invalid_input` / stage `scope_validation`
+- `path_budget_exhausted` → `evidence_incomplete` / stage `budget_traversal`
+- `path_frontier_unresolved` → `evidence_incomplete` / stage `frontier_resolution`
+- `path_reconciliation_failed` → `reconciliation_failed` / stage `ledger_reconciliation`
+- `path_asset_mismatch` → `reconciliation_failed` / stage `asset_scope`
+- `path_cycle_only` → `reconciliation_failed` / stage `path_topology`
+- `path_source_unavailable` → `source_unavailable` / stage `source_binding`
 
-`path_budget_exhausted`와 `path_frontier_unresolved`는 확인된 graph가 있으면
-`partial`이다. `path_source_unavailable`도 비필수 source 일부만 누락되고
-확인된 edge가 유효하면 `partial`이다. 반대로 seed·asset·range를 입증할
-필수 source가 없거나 source들이 서로 다른 raw 사실을 주장하거나 request
-scope와 replay가 결합되지 않으면 `failed`다.
+`budget_traversal`·`frontier_resolution`·`internal_edge_trace` stage는 확인된
+graph가 있으면 `partial`(각각 `evidence_incomplete`·`trace_unavailable`)이다.
+`source_binding`도 비필수 source 일부만 누락되고 확인된 edge가 유효하면
+`partial`(`source_unavailable`, retryable)이다. 반대로 seed·asset·range를
+입증할 필수 source가 없거나 source들이 서로 다른 raw 사실을 주장하거나
+request scope와 replay가 결합되지 않으면 `failed`다.
 
 ## 7. Exclusion·금액 정합
 
@@ -238,10 +247,14 @@ Verifier 재계산을 통과해야 한다.
 - [x] 공개 사례 3개를 선정하고 fixture package를 `candidate`로 작성
 - [x] 두 공급자 replay로 selected TX·receipt와 primary internal edge 재현
 - [x] negative oracle 18개와 독립 Verifier 작성
-- [ ] `flow_path` 대안 B 정식 승인
+- [x] `flow_path` 대안 B를 docs-only로 구체화 —
+  [16_TASK_014_FLOW_PATH_IO_CONTRACT](./16_TASK_014_FLOW_PATH_IO_CONTRACT.md)
+- [ ] `flow_path` 대안 B 정식 승인(위 확정안 검토)
 - [x] HTML Preview 사용자 확인·피드백 반영 — 2026-07-29 23:09
 - [ ] Context Receipt `PASS`
 - [ ] 사용자 analyzer 구현 승인
+- [ ] (`confirmed` 전) 단일 trace 하드 게이트 — internal seed edge 2차 소스
+  확보 또는 balance-delta/Explorer 교차검증([16 §7](./16_TASK_014_FLOW_PATH_IO_CONTRACT.md#7-단일-trace-의존성--confirmed-전-하드-게이트))
 
 ## 12. Related Documents
 
@@ -249,6 +262,7 @@ Verifier 재계산을 통과해야 한다.
 - **Concept_Design**: [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - PATH 18개 필수 근거
 - **UI_Screens**: [TASK-014 PATH UI](../02_UI_Screens/08_TASK_014_PATH_UI.md) - 화면·상태·사용자 검토 Gate
 - **UI_Screens**: [PATH HTML Preview](../02_UI_Screens/previews/07_task_014_path_preview.html) - docs-only 상호작용 화면
+- **Technical_Specs**: [`flow_path` I/O 계약 확정안](./16_TASK_014_FLOW_PATH_IO_CONTRACT.md) - 대안 B request/result/오류/예제·단일 trace 게이트
 - **Technical_Specs**: [Coverage 확장 Brief](./09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-PATH 상위 계약
 - **Technical_Specs**: [Analysis I/O](./05_ANALYSIS_IO_SCHEMA.md) - 공통 envelope와 버전 경계
 - **Logic_Progress**: [Backlog TASK-014](../04_Logic_Progress/00_BACKLOG.md) - Context Lock·구현 승인
