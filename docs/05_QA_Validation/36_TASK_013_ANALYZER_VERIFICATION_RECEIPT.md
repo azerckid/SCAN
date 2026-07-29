@@ -1,7 +1,16 @@
 # TASK-013 NFT·Proxy Analyzer 독립 Verification Receipt
 > Created: 2026-07-29 20:55
-> Last Updated: 2026-07-29 20:55
-> Status: Passed · 3 Fixtures Promoted to Confirmed · Analysis I/O 0.2 (`evm_special`) · CLI Wired
+> Last Updated: 2026-07-29 21:40
+> Status: canonical hash 일치는 유효 · **`확정` 승격은 철회**, 사유는
+> [P1 정정 Receipt](./37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md) 참고
+
+> **정정 안내(2026-07-29 21:40):** 이 문서가 근거로 삼은 canonical hash
+> 일치는 여전히 유효하지만, hash 일치만으로는 subject/proxy 결합 누락과
+> receipt·block 정합 누락 같은 P1 결함을 드러내지 못한다는 점이 이후
+> 리뷰에서 확인됐다. §6·§7의 `확정` 승격 판정은 철회하고 fixture는
+> `검증 중`으로 되돌렸으며 Benchmark automated는 7로 유지한다. 자세한
+> 내용은 [P1 정정 Receipt](./37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md)를
+> 참고한다.
 
 ## 1. 목적과 판정
 
@@ -111,27 +120,30 @@ import하지 않으며, 이 문서는 두 결과가 canonical hash 단위로 정
 | 9 | 사용자 구현 승인 기록 | "TASK-013 analyzer 구현을 진행해 주세요" 명시 승인 |
 | 10 | Python decoder 구현과 독립 Verification Receipt | `slices/evm_special.py` 구현, 본 문서의 canonical hash 일치로 독립 검증 완료 |
 
-다섯 항목이 모두 닫혔으므로 세 fixture(`FX-EVM-NFT-721-001`,
-`FX-EVM-NFT-1155-001`, `FX-EVM-PROXY-001`)를 `검증 중`에서 **`확정`**으로
-승격한다.
+다섯 항목이 모두 닫혔다고 판단해 당시 세 fixture를 `검증 중`에서
+`확정`으로 승격했었다. **이 판정은 이후 리뷰에서 철회됐다** — canonical
+hash 일치는 analyzer가 fixture 3개에 대해 결정적으로 같은 값을 낸다는
+것만 보장하며, 요청 대상(subject/proxy_address)이 실제로 결합됐는지나
+log/snapshot이 receipt·block과 정합하는지는 별도로 검증하지 않았기
+때문이다. 자세한 결함 목록과 수정 내역은
+[P1 정정 Receipt](./37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md)를 참고한다.
 
-## 7. 상태 경계와 다음 Gate
+## 7. 상태 경계와 다음 Gate (철회됨 — §37 참고)
 
-- Fixture 3개: `검증 중` → **`확정`**으로 승격.
+- ~~Fixture 3개: `검증 중` → `확정`으로 승격.~~ → 철회, `검증 중` 유지.
 - Analysis I/O: `0.2`에 `evm_special` 추가, `evm_core`·기존 `0.1` 분석기
-  결과는 변경하지 않았다.
-- Benchmark 자동화: 7 → **9**문항(`EVM-NFT-001`은 `FX-EVM-NFT-721-001`을
-  대표 fixture로 등록, ERC-1155는 별도 unit/CLI 테스트로 회귀 보호).
-- 전체 게이트: 419 tests PASS, fixture 10 PASS, traceability·security·
-  operations·TASK-012/013 negative oracle·독립 Verifier·analyzer 독립
-  검증 전부 PASS.
+  결과는 변경하지 않았다. (변경 없음, 유효)
+- ~~Benchmark 자동화: 7 → 9문항.~~ → 철회, 7 유지.
+- 전체 게이트: 이 문서 작성 시점 기준 419 tests PASS, fixture 10 PASS.
+  P1 수정 이후 최신 결과는 [P1 정정 Receipt](./37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md)를
+  참고한다.
 
 ## 8. 365 글로벌 평가 기준
 
 | 기준 | 판정 |
 |:---|:---|
 | Functionality | 세 fixture의 raw-first 결과가 독립 Verifier의 고정 hash와 정확히 일치, CLI complete/partial/resume 재현 |
-| Potential Impact | NFT·Proxy 자동화 승격으로 대회 자동화 범위 7→9문항 확대 |
+| Potential Impact | NFT·Proxy 자동화가 목표(대회 자동화 범위 7→9문항)이나, 자동 승격은 P1 정정·재검토 완료 후로 보류 |
 | Novelty | 승인된 expected.json 값을 복사하지 않고 raw에서 두 번째로 재계산 |
 | UX | 기존 CLI 명령·종료 코드·checkpoint 경계 재사용, 신규 플래그 없음 |
 | Open-source | 신규 dependency 없음, 기존 `eth-abi`/`eth-utils`만 재사용 |

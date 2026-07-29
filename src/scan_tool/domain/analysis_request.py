@@ -177,7 +177,10 @@ class ProxyHistoryInputs(ContractModel):
     proxy_address: Address
     pattern_hint: Literal["eip1967", "auto"]
     include_admin: ContractBool
-    include_beacon: ContractBool
+    # Beacon-path decoding (beacon address + implementation() cross-check) is
+    # not implemented in this version. Restricted to False so the analyzer
+    # never reports beacon.applicable without having verified anything.
+    include_beacon: Literal[False]
 
 
 EvmSpecialInputs = NftActivityInputs | ProxyHistoryInputs

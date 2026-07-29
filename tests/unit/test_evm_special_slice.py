@@ -9,7 +9,7 @@ import pytest
 
 from scan_tool.domain import validate_analysis_request
 from scan_tool.domain.analysis_request import EvmSpecialAnalysisRequest
-from scan_tool.slices.evm_special import analyze_evm_special_replay
+from scan_tool.slices.evm_special import TRANSFER_TOPIC, analyze_evm_special_replay
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = ROOT / "docs/05_QA_Validation/fixtures"
@@ -95,8 +95,8 @@ def _drop_log(replay: dict[str, object], topic0: str) -> None:
         ),
         (
             "FX-EVM-NFT-1155-001",
-            lambda value: _drop_log(
-                value, "0x4a39dc06d4c0dbc64b70af90fd698a233a518aa5d07e595d983b8c0526c8f7fb"
+            lambda value: cast(dict[str, object], value["scope"]).update(
+                exact_block_windows_complete=False
             ),
             "source_unavailable",
         ),
@@ -192,6 +192,74 @@ def test_replay_fixture_id_mismatch_is_structured_failed(
 ) -> None:
     replay = _replay(fixture_id)
     mutate(replay)
+
+    result = analyze_evm_special_replay(_request(fixture_id), json.dumps(replay).encode())
+
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_unrelated_subject_address_does_not_return_complete() -> None:
+    """Reviewer-reported P1: changing subject_address must not return another
+    subject's transfer as if it matched the request."""
+    fixture_id = "FX-EVM-NFT-721-001"
+    request_document = _request_document(fixture_id)
+    cast(dict[str, object], request_document["inputs"])["subject_address"] = (
+        "0x00000000000000000000000000000000000000ff"
+    )
+    request = validate_analysis_request(request_document).root
+    assert isinstance(request, EvmSpecialAnalysisRequest)
+
+    result = analyze_evm_special_replay(request, json.dumps(_replay(fixture_id)).encode())
+
+    assert result.root.status == "failed"
+    assert result.root.results == []
+    assert result.root.errors[0].code == "source_unavailable"
+
+
+def test_unrelated_proxy_address_does_not_return_complete() -> None:
+    """Reviewer-reported P1: changing proxy_address must not return another
+    proxy's Upgraded history as if it matched the request."""
+    fixture_id = "FX-EVM-PROXY-001"
+    request_document = _request_document(fixture_id)
+    cast(dict[str, object], request_document["inputs"])["proxy_address"] = (
+        "0x00000000000000000000000000000000000000ff"
+    )
+    request = validate_analysis_request(request_document).root
+    assert isinstance(request, EvmSpecialAnalysisRequest)
+
+    result = analyze_evm_special_replay(request, json.dumps(_replay(fixture_id)).encode())
+
+    assert result.root.status == "failed"
+    assert result.root.results == []
+    assert result.root.errors[0].code == "source_unavailable"
+
+
+def test_nft_log_transaction_hash_absent_from_receipts_is_rejected() -> None:
+    """Reviewer-reported P1: a log whose transaction_hash has no matching
+    receipt in the reviewed replay must not be trusted as reconciled."""
+    fixture_id = "FX-EVM-NFT-721-001"
+    replay = _replay(fixture_id)
+    logs = cast(list[dict[str, object]], replay["logs"])
+    for log in logs:
+        if log["topics"][0] == TRANSFER_TOPIC:
+            log["transaction_hash"] = "0x" + "0" * 60 + "dead"
+
+    result = analyze_evm_special_replay(_request(fixture_id), json.dumps(replay).encode())
+
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_proxy_snapshot_block_diverging_from_event_block_is_rejected() -> None:
+    """Reviewer-reported P1: a storage snapshot pinned to a different block
+    than the Upgraded event must not be accepted as the historical state."""
+    fixture_id = "FX-EVM-PROXY-001"
+    replay = _replay(fixture_id)
+    snapshots = cast(list[dict[str, object]], replay["storage_snapshots"])
+    for snapshot in snapshots:
+        if snapshot["role"] == "implementation_after":
+            snapshot["block_number"] = "0x1808544"
 
     result = analyze_evm_special_replay(_request(fixture_id), json.dumps(replay).encode())
 

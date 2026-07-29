@@ -27,6 +27,7 @@ from scan_tool.domain.evm_special import (
     NftActivityReplay,
     ProxyHistoryReplay,
     SpecialLog,
+    SpecialReceipt,
     parse_evm_special_replay,
 )
 
@@ -138,6 +139,9 @@ def _nft_activity(
             "Requested standard hint does not match the replay's declared standard.",
         )
     logs = _require_single_contract(replay.logs, inputs.token_contract)
+    receipts_by_hash = _require_unique_receipts(replay.receipts)
+    for log in logs:
+        _require_matching_receipt(log, receipts_by_hash)
     scope_complete = (
         replay.scope.selected_transactions_complete and replay.scope.exact_block_windows_complete
     )
@@ -156,82 +160,99 @@ def _erc721(
 ) -> AnalysisResult:
     inputs = request.inputs
     assert isinstance(inputs, NftActivityInputs)
-    transfers = _find_logs(logs, TRANSFER_TOPIC)
-    if len(transfers) > 1:
-        raise _DecodeFailure("decode_failed", "More than one ERC-721 Transfer was selected.")
-    if not transfers:
+    subject = inputs.subject_address
+    evidence_id_counts: dict[str, int] = {}
+    evidence = []
+
+    all_transfers = [
+        _require_erc721_event(log, expected_topics=4) for log in _find_logs(logs, TRANSFER_TOPIC)
+    ]
+    subject_transfers = sorted(
+        (
+            log
+            for log in all_transfers
+            if subject in (_topic_address(log.topics[1]), _topic_address(log.topics[2]))
+        ),
+        key=_log_sort_key,
+    )
+    if not subject_transfers:
         return _failed(
             request,
             "source_unavailable",
-            "No ERC-721 Transfer event is present in the reviewed replay.",
+            "No ERC-721 Transfer event for the requested subject_address is present "
+            "in the reviewed replay.",
             "erc721_transfer_scan",
             resumed,
             checkpoint_id,
         )
-    transfer = _require_erc721_event(transfers[0], expected_topics=4)
-    token_id = str(_hex_int(transfer.topics[3]))
 
-    evidence = []
-    movement = {
-        "event_kind": "transfer",
-        **_log_location(transfer),
-        "from": _topic_address(transfer.topics[1]),
-        "to": _topic_address(transfer.topics[2]),
-        "token_id_raw": token_id,
-        "amount_raw": "1",
-        "amount_origin": "normalized_unit",
-    }
-    evidence.append(
-        _evidence(
-            replay.sources,
-            "EV-NFT721-TRANSFER",
-            "event",
-            "eth_getLogs",
-            {
-                "topic0": TRANSFER_TOPIC,
-                "transaction_hash": movement["transaction_hash"],
-                "block_number": movement["block_number"],
-                "log_index": movement["log_index"],
-                "from": movement["from"],
-                "to": movement["to"],
-                "token_id_raw": token_id,
-            },
+    movements: list[dict[str, object]] = []
+    token_ids: set[str] = set()
+    for transfer in subject_transfers:
+        token_id = str(_hex_int(transfer.topics[3]))
+        token_ids.add(token_id)
+        movement = {
+            "event_kind": "transfer",
+            **_log_location(transfer),
+            "from": _topic_address(transfer.topics[1]),
+            "to": _topic_address(transfer.topics[2]),
+            "token_id_raw": token_id,
+            "amount_raw": "1",
+            "amount_origin": "normalized_unit",
+        }
+        movements.append(movement)
+        evidence.append(
+            _evidence(
+                replay.sources,
+                _next_evidence_id("EV-NFT721-TRANSFER", evidence_id_counts),
+                "event",
+                "eth_getLogs",
+                {
+                    "topic0": TRANSFER_TOPIC,
+                    "transaction_hash": movement["transaction_hash"],
+                    "block_number": movement["block_number"],
+                    "log_index": movement["log_index"],
+                    "from": movement["from"],
+                    "to": movement["to"],
+                    "token_id_raw": token_id,
+                },
+            )
         )
-    )
 
     approvals: list[dict[str, object]] = []
-    missing_approvals = False
+    operator_logs: list[SpecialLog] = []
+    token_logs: list[SpecialLog] = []
     if inputs.include_approvals:
-        operator_logs = _find_logs(logs, APPROVAL_FOR_ALL_TOPIC)
-        token_logs = _find_logs(logs, APPROVAL_TOPIC)
-        if len(operator_logs) > 1 or len(token_logs) > 1:
-            raise _DecodeFailure(
-                "decode_failed",
-                "More than one ERC-721 approval event of the same kind was selected.",
-            )
-        if operator_logs:
-            operator = _require_erc721_event(
-                operator_logs[0], expected_topics=3, expect_empty_data=False
-            )
-            approvals.append(
-                {
-                    "event_kind": "approval_for_all",
-                    **_log_location(operator),
-                    "owner": _topic_address(operator.topics[1]),
-                    "operator": _topic_address(operator.topics[2]),
-                    "approved": _data_bool(operator),
-                }
-            )
+        operator_logs = [
+            _require_erc721_event(log, expected_topics=3, expect_empty_data=False)
+            for log in _find_logs(logs, APPROVAL_FOR_ALL_TOPIC)
+            if _topic_address(log.topics[1]) == subject
+        ]
+        token_logs = [
+            _require_erc721_event(log, expected_topics=4)
+            for log in _find_logs(logs, APPROVAL_TOPIC)
+            if _topic_address(log.topics[1]) == subject
+            and str(_hex_int(log.topics[3])) in token_ids
+        ]
+        for operator in sorted(operator_logs, key=_log_sort_key):
+            entry = {
+                "event_kind": "approval_for_all",
+                **_log_location(operator),
+                "owner": _topic_address(operator.topics[1]),
+                "operator": _topic_address(operator.topics[2]),
+                "approved": _data_bool(operator),
+            }
+            approvals.append(entry)
             evidence.append(
                 _evidence(
                     replay.sources,
-                    "EV-NFT721-OPERATOR-APPROVAL",
+                    _next_evidence_id("EV-NFT721-OPERATOR-APPROVAL", evidence_id_counts),
                     "event",
                     "eth_getLogs",
                     {
                         "topic0": APPROVAL_FOR_ALL_TOPIC,
                         **{
-                            key: approvals[-1][key]
+                            key: entry[key]
                             for key in (
                                 "transaction_hash",
                                 "block_number",
@@ -244,36 +265,29 @@ def _erc721(
                     },
                 )
             )
-        if token_logs:
-            token_approval = _require_erc721_event(token_logs[0], expected_topics=4)
-            if str(_hex_int(token_approval.topics[3])) != token_id:
-                raise _DecodeFailure(
-                    "decode_failed",
-                    "ERC-721 Approval and Transfer token IDs differ.",
-                )
+        for token_approval in sorted(token_logs, key=_log_sort_key):
             approved_address = _topic_address(token_approval.topics[2])
-            approvals.append(
-                {
-                    "event_kind": "token_approval",
-                    **_log_location(token_approval),
-                    "owner": _topic_address(token_approval.topics[1]),
-                    "approved_address": approved_address,
-                    "token_id_raw": token_id,
-                    "meaning": (
-                        "approval_reset" if approved_address == ZERO_ADDRESS else "approval_set"
-                    ),
-                }
-            )
+            entry = {
+                "event_kind": "token_approval",
+                **_log_location(token_approval),
+                "owner": _topic_address(token_approval.topics[1]),
+                "approved_address": approved_address,
+                "token_id_raw": str(_hex_int(token_approval.topics[3])),
+                "meaning": (
+                    "approval_reset" if approved_address == ZERO_ADDRESS else "approval_set"
+                ),
+            }
+            approvals.append(entry)
             evidence.append(
                 _evidence(
                     replay.sources,
-                    "EV-NFT721-TOKEN-APPROVAL-RESET",
+                    _next_evidence_id("EV-NFT721-TOKEN-APPROVAL-RESET", evidence_id_counts),
                     "event",
                     "eth_getLogs",
                     {
                         "topic0": APPROVAL_TOPIC,
                         **{
-                            key: approvals[-1][key]
+                            key: entry[key]
                             for key in (
                                 "transaction_hash",
                                 "block_number",
@@ -284,12 +298,13 @@ def _erc721(
                             )
                         },
                     },
+                    source_index=1,
                 )
             )
-        missing_approvals = not operator_logs or not token_logs
         approvals.sort(key=lambda item: (item["block_number"], item["log_index"]))
 
-    value: dict[str, object] = {"standard": "erc721", "movements": [movement]}
+    missing_approvals = inputs.include_approvals and (not operator_logs or not token_logs)
+    value: dict[str, object] = {"standard": "erc721", "movements": movements}
     if inputs.include_approvals:
         value["approvals"] = approvals
     result = _result_item(
@@ -302,7 +317,7 @@ def _erc721(
     )
     errors: list[dict[str, object]] = []
     status = "complete"
-    if not scope_complete or (inputs.include_approvals and missing_approvals):
+    if not scope_complete or missing_approvals:
         status = "partial"
         errors = [
             _error(
@@ -326,8 +341,30 @@ def _erc1155(
 ) -> AnalysisResult:
     inputs = request.inputs
     assert isinstance(inputs, NftActivityInputs)
-    singles = sorted(_find_logs(logs, TRANSFER_SINGLE_TOPIC), key=_log_sort_key)
-    approvals_logs = sorted(_find_logs(logs, APPROVAL_FOR_ALL_TOPIC), key=_log_sort_key)
+    subject = inputs.subject_address
+    evidence_id_counts: dict[str, int] = {}
+    all_singles = _find_logs(logs, TRANSFER_SINGLE_TOPIC)
+    for log in all_singles:
+        _require_erc1155_single(log)
+    # single_case is bound to subject_address (owner on either leg); batch_case
+    # is a separate historical fact scoped to the token contract only, matching
+    # how the two facts are independently sourced in the reviewed replay.
+    singles = sorted(
+        (
+            log
+            for log in all_singles
+            if subject in (_topic_address(log.topics[2]), _topic_address(log.topics[3]))
+        ),
+        key=_log_sort_key,
+    )
+    approvals_logs = sorted(
+        (
+            log
+            for log in _find_logs(logs, APPROVAL_FOR_ALL_TOPIC)
+            if _topic_address(log.topics[1]) == subject
+        ),
+        key=_log_sort_key,
+    )
     batches = _find_logs(logs, TRANSFER_BATCH_TOPIC)
     if len(batches) > 1:
         raise _DecodeFailure("decode_failed", "More than one ERC-1155 Batch was selected.")
@@ -335,7 +372,8 @@ def _erc1155(
         return _failed(
             request,
             "source_unavailable",
-            "No ERC-1155 Single or Batch transfer event is present in the reviewed replay.",
+            "No ERC-1155 Single or Batch transfer event for the requested subject_address "
+            "or token contract is present in the reviewed replay.",
             "erc1155_transfer_scan",
             resumed,
             checkpoint_id,
@@ -347,7 +385,6 @@ def _erc1155(
     single_case_missing = not singles
     if singles:
         outgoing = singles[-1]
-        _require_erc1155_single(outgoing)
         single_case = {
             "transaction_hash": outgoing.transaction_hash,
             "block_number": _hex_int(outgoing.block_number),
@@ -363,17 +400,19 @@ def _erc1155(
                 for item in approvals_logs
             ]
         value["single_case"] = single_case
-        single_ids = ("EV-NFT1155-SINGLE-IN", "EV-NFT1155-SINGLE-OUT")
-        for evidence_id, item in zip(single_ids[-len(singles) :], singles, strict=True):
-            _require_erc1155_single(item)
+        for item in singles:
+            is_outgoing = item is outgoing
             evidence.append(
                 _evidence(
                     replay.sources,
-                    evidence_id,
+                    _next_evidence_id(
+                        "EV-NFT1155-SINGLE-OUT" if is_outgoing else "EV-NFT1155-SINGLE-IN",
+                        evidence_id_counts,
+                    ),
                     "event",
                     "eth_getLogs",
                     {
-                        **({"topic0": TRANSFER_SINGLE_TOPIC} if evidence_id.endswith("IN") else {}),
+                        **({} if is_outgoing else {"topic0": TRANSFER_SINGLE_TOPIC}),
                         **_log_location(item),
                         "from": _topic_address(item.topics[2]),
                         "to": _topic_address(item.topics[3]),
@@ -383,21 +422,22 @@ def _erc1155(
                 )
             )
         if inputs.include_approvals:
-            approval_ids = ("EV-NFT1155-APPROVAL-TRUE", "EV-NFT1155-APPROVAL-FALSE")
-            for evidence_id, item in zip(
-                approval_ids[: len(approvals_logs)], approvals_logs, strict=True
-            ):
+            for item in approvals_logs:
+                approved = _data_bool(item)
                 evidence.append(
                     _evidence(
                         replay.sources,
-                        evidence_id,
+                        _next_evidence_id(
+                            "EV-NFT1155-APPROVAL-TRUE" if approved else "EV-NFT1155-APPROVAL-FALSE",
+                            evidence_id_counts,
+                        ),
                         "event",
                         "eth_getLogs",
                         {
                             **_log_location(item),
                             "owner": _topic_address(item.topics[1]),
                             "operator": _topic_address(item.topics[2]),
-                            "approved": _data_bool(item),
+                            "approved": approved,
                         },
                     )
                 )
@@ -440,6 +480,7 @@ def _erc1155(
                     "ids_raw": batch_case["ids_raw"],
                     "amounts_raw": batch_case["amounts_raw"],
                 },
+                source_index=1,
             )
         )
 
@@ -458,12 +499,12 @@ def _erc1155(
     )
     errors: list[dict[str, object]] = []
     status = "complete"
-    if not scope_complete or single_case_missing or batch_case_missing:
+    if not scope_complete:
         status = "partial"
         errors = [
             _error(
                 "source_unavailable",
-                "Single or Batch case is unavailable while the other case remains exact.",
+                "Selected scope is incomplete; the resolved single/batch case is preserved.",
                 "erc1155_case_scope",
                 [item["evidence_id"] for item in evidence],
                 retryable=True,
@@ -484,14 +525,17 @@ def _proxy_history(
     if inputs.pattern_hint != "auto" and inputs.pattern_hint != "eip1967":
         raise _DecodeFailure("decode_failed", "Requested proxy pattern is unsupported.")
 
-    upgraded_logs = _find_logs(replay.logs, UPGRADED_TOPIC)
+    all_upgraded_logs = _find_logs(replay.logs, UPGRADED_TOPIC)
+    upgraded_logs = [
+        log for log in all_upgraded_logs if _to_address(log.address) == inputs.proxy_address
+    ]
     if len(upgraded_logs) > 1:
         raise _DecodeFailure("reconciliation_failed", "More than one Upgraded event was selected.")
     if not upgraded_logs:
         return _failed(
             request,
             "source_unavailable",
-            "No Upgraded event is present in the reviewed replay.",
+            "No Upgraded event for the requested proxy_address is present in the reviewed replay.",
             "proxy_event_scan",
             resumed,
             checkpoint_id,
@@ -501,6 +545,16 @@ def _proxy_history(
         raise _DecodeFailure("decode_failed", "Upgraded topic count differs.")
     proxy_address = _to_address(upgraded.address)
     event_implementation = _topic_address(upgraded.topics[1])
+    event_block = _hex_int(upgraded.block_number)
+
+    if (
+        replay.receipt.transaction_hash != upgraded.transaction_hash
+        or _hex_int(replay.receipt.block_number) != event_block
+    ):
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Upgraded event does not match the reviewed replay's receipt.",
+        )
 
     snapshots = {item.role: item for item in replay.storage_snapshots}
     scope_complete = (
@@ -514,6 +568,11 @@ def _proxy_history(
     if after_snapshot is not None:
         if after_snapshot.slot != IMPLEMENTATION_SLOT:
             raise _DecodeFailure("reconciliation_failed", "Implementation slot differs.")
+        if _hex_int(after_snapshot.block_number) != event_block:
+            raise _DecodeFailure(
+                "reconciliation_failed",
+                "After-state implementation snapshot block differs from the Upgraded event block.",
+            )
         after_address = _word_address(after_snapshot.raw_word)
         if after_address != event_implementation:
             raise _DecodeFailure(
@@ -528,6 +587,12 @@ def _proxy_history(
         if before_snapshot is not None:
             if before_snapshot.slot != IMPLEMENTATION_SLOT:
                 raise _DecodeFailure("reconciliation_failed", "Implementation slot differs.")
+            if _hex_int(before_snapshot.block_number) != event_block - 1:
+                raise _DecodeFailure(
+                    "reconciliation_failed",
+                    "Before-state implementation snapshot is not the block adjacent to "
+                    "the Upgraded event.",
+                )
             change["before_implementation"] = _word_address(before_snapshot.raw_word)
         else:
             implementation_missing = True
@@ -542,6 +607,14 @@ def _proxy_history(
         if admin_after is not None and admin_before is not None:
             if admin_before.slot != ADMIN_SLOT or admin_after.slot != ADMIN_SLOT:
                 raise _DecodeFailure("reconciliation_failed", "Admin slot differs.")
+            if (
+                _hex_int(admin_after.block_number) != event_block
+                or _hex_int(admin_before.block_number) != event_block - 1
+            ):
+                raise _DecodeFailure(
+                    "reconciliation_failed",
+                    "Admin snapshot blocks are not adjacent to the Upgraded event block.",
+                )
             before_admin = _word_address(admin_before.raw_word)
             after_admin = _word_address(admin_after.raw_word)
             admin = {
@@ -553,9 +626,10 @@ def _proxy_history(
         else:
             admin_missing = True
 
+    # Beacon-path decoding is not implemented in this version;
+    # ProxyHistoryInputs.include_beacon is restricted to False so this is
+    # always the honest answer rather than an unverified "applicable: True".
     beacon: dict[str, object] = {"applicable": False}
-    if inputs.include_beacon and any(role.startswith("beacon") for role in snapshots):
-        beacon = {"applicable": True}
 
     evidence = [
         _evidence(
@@ -623,6 +697,7 @@ def _proxy_history(
                     "slot": ADMIN_SLOT,
                     "raw_word": admin_after.raw_word,  # type: ignore[union-attr]
                 },
+                source_index=1,
             )
         )
 
@@ -635,8 +710,7 @@ def _proxy_history(
         value["change"] = change
     if admin is not None:
         value["admin"] = admin
-    if inputs.include_beacon:
-        value["beacon"] = beacon
+    value["beacon"] = beacon
 
     requirement_ids = ["REQ-PROXY-UPGRADE-EVENT"]
     if not implementation_missing:
@@ -675,6 +749,35 @@ def _require_single_contract(logs: list[SpecialLog], token_contract: str) -> lis
             "Selected logs do not belong to the requested token contract.",
         )
     return logs
+
+
+def _require_unique_receipts(receipts: list[SpecialReceipt]) -> dict[str, SpecialReceipt]:
+    by_hash: dict[str, SpecialReceipt] = {}
+    for receipt in receipts:
+        if receipt.transaction_hash in by_hash:
+            raise _DecodeFailure(
+                "decode_failed",
+                "Selected receipts contain a duplicate transaction hash.",
+            )
+        by_hash[receipt.transaction_hash] = receipt
+    return by_hash
+
+
+def _require_matching_receipt(
+    log: SpecialLog,
+    receipts_by_hash: dict[str, SpecialReceipt],
+) -> None:
+    receipt = receipts_by_hash.get(log.transaction_hash)
+    if receipt is None or receipt.block_number != log.block_number:
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Selected log does not match a receipt in the reviewed replay scope.",
+        )
+
+
+def _next_evidence_id(base: str, counts: dict[str, int]) -> str:
+    counts[base] = counts.get(base, 0) + 1
+    return base if counts[base] == 1 else f"{base}-{counts[base]}"
 
 
 def _find_logs(logs: list[SpecialLog], topic0: str) -> list[SpecialLog]:
@@ -769,13 +872,15 @@ def _evidence(
     evidence_type: str,
     method: str,
     decoded: dict[str, object],
+    *,
+    source_index: int = 0,
 ) -> dict[str, object]:
-    source = sources[0]
+    source = sources[min(source_index, len(sources) - 1)]
     return {
         "evidence_id": evidence_id,
         "evidence_type": evidence_type,
         "source_id": source.source_id,
-        "source_record_ref": "SRC-EVM-SPECIAL-1",
+        "source_record_ref": f"SRC-EVM-SPECIAL-{min(source_index, len(sources) - 1) + 1}",
         "method": method,
         "retrieved_at": source.retrieved_at,
         "locator": {"chain_id": 1},
@@ -787,11 +892,13 @@ def _evidence(
     }
 
 
-def _source_records(sources: list[EvmSpecialReplaySource]) -> list[dict[str, object]]:
-    source = sources[0]
+def _source_records(
+    sources: list[EvmSpecialReplaySource],
+    referenced_ids: set[str],
+) -> list[dict[str, object]]:
     return [
         {
-            "source_record_id": "SRC-EVM-SPECIAL-1",
+            "source_record_id": f"SRC-EVM-SPECIAL-{index}",
             "source_id": source.source_id,
             "provider_id": source.provider_id,
             "role": "scoring",
@@ -800,6 +907,8 @@ def _source_records(sources: list[EvmSpecialReplaySource]) -> list[dict[str, obj
             "endpoint_host": "reviewed.replay.invalid",
             "retrieved_at": source.retrieved_at,
         }
+        for index, source in enumerate(sources, start=1)
+        if f"SRC-EVM-SPECIAL-{index}" in referenced_ids
     ]
 
 
@@ -835,6 +944,7 @@ def _result(
     checkpoint_id: str | None,
 ) -> AnalysisResult:
     sources = replay.sources
+    referenced = {str(item["source_record_ref"]) for item in evidence}
     finished_at = max([request.requested_at, *[source.retrieved_at for source in sources]])
     return validate_analysis_result(
         {
@@ -846,7 +956,7 @@ def _result(
             "status": status,
             "results": results,
             "evidence": evidence,
-            "sources": _source_records(sources),
+            "sources": _source_records(sources, referenced),
             "warnings": [],
             "errors": errors,
             "run": _run(

@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 20:59
-> Status: TASK-001~013 Done · WP-INPUT Done · TASK-014~019 Proposed
+> Last Updated: 2026-07-29 21:40
+> Status: TASK-001~012 Done · WP-INPUT Done · TASK-013 In Progress · TASK-014~019 Proposed
 
 ## 1. 문서 목적
 
@@ -997,10 +997,11 @@ Receipt·개별 구현 승인을 대체하지 않는다.
 - Verification Receipt:
   - 4 complete·4 partial·4 failed unit, Benchmark 7/7, 전체 offline Gate 통과
 
-### [x] TASK-013: NFT·Proxy 결정적 Decoder
+### [ ] TASK-013: NFT·Proxy 결정적 Decoder
 
-- Status: Done — analyzer 구현·독립 Verification Receipt 완료, fixture
-  3개 `확정` 승격, Benchmark 자동화 7→9
+- Status: In Progress — Analyzer 구현 완료(PR #66), 리뷰에서 P1 5건·P2
+  2건 발견, 수정·회귀 테스트 반영 완료. Fixture는 `검증 중`, Benchmark는
+  7 유지, 재검토 통과 전까지 PR 병합 보류
 - Work Type: code
 - Priority: Phase 2 · P1
 - Depends On: TASK-012
@@ -1017,13 +1018,20 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] 세 표준의 negative oracle 16개를 두 번 실행해 결정성을 확인한다.
   - [x] 독립 Verifier가 세 candidate의 raw facts·13개 evidence 값·7개
     requirement를 두 번 재계산한다.
-  - [x] 세 candidate를 `후보`에서 `검증 중`으로 승격한다.
+  - [x] 세 candidate를 `후보`에서 `검증 중`으로 승격한다(승격은 여전히
+    `확정`이 아니다).
   - [x] Analysis I/O 대안 B(`evm_special`)를 확정하고 전용 UI Preview를
-    작성한다. 사용자가 확인·승인했다(2026-07-29 20:19).
-  - [x] ERC-721/1155와 EIP-1967 fixture를 `확정`으로 올린다(analyzer
-    구현·독립 Verification Receipt 완료).
-  - [x] 표준·반례·decode failure를 검증한다(unit 18건·CLI 5건).
-  - [x] 두 문제의 Benchmark 승격을 기록한다(automated 7 → 9).
+    작성한다. 사용자 확인은 아직이다.
+  - [x] NFT·Proxy analyzer(`slices/evm_special.py`)를 구현하고 독립
+    Verifier와 canonical hash를 대조한다.
+  - [x] 리뷰에서 발견한 P1 5건(subject/proxy 결합, receipt·block 정합,
+    Schema 교차 조합, fixture 형태 고정, beacon 미구현)과 P2 2건(단일
+    provider provenance, 계약 문서 stale 표기)을 수정한다.
+  - [x] 리뷰 재현 시나리오를 그대로 반영한 변형 회귀 테스트 4건을
+    추가한다.
+  - [ ] ERC-721/1155와 EIP-1967 fixture를 `확정`으로 올린다(재검토 통과
+    이후 별도 판단).
+  - [ ] 두 문제의 Benchmark 승격 여부를 기록한다(재검토 통과 이후).
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - NFT·Proxy 문제
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P3 전문 기능 승격 조건
@@ -1044,7 +1052,8 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [TASK-013 Negative Oracle 보고서](../05_QA_Validation/33_TASK_013_NEGATIVE_ORACLE_REPORT.md) - 표준별 16개 반례·결정성
   - [TASK-013 독립 Verifier 보고서](../05_QA_Validation/34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md) - raw-first facts·13 evidence values·7 requirements 재계산
   - [TASK-013 Fixture 승격 검토 보고서](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) - `검증 중` 승격 판정
-  - [TASK-013 Analyzer 검증 Receipt](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md) - `확정` 최종 승격·independent verification
+  - [TASK-013 Analyzer 검증 Receipt](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md) - canonical hash 일치(확정 판정은 철회)
+  - [TASK-013 Analyzer P1 정정 Receipt](../05_QA_Validation/37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md) - 리뷰 결함·수정·회귀 테스트·승격 철회 근거
 - Implementation Preconditions:
   - [x] fixture·계약·반례 문서 Draft를 작성한다.
   - [x] TASK-012 공통 EVM 입력이 안정됐다.
@@ -1055,10 +1064,9 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] CLI 진입·전환·이탈과 complete·partial·failed 표시를 Preview로
     작성한다. loading·empty·stale·Rules는 기존 CLI 경계를 재사용한다.
   - [x] 사용자가 UI Preview를 확인하고 승인한다(2026-07-29 20:19).
-  - [x] log/state 최소 필드·mutation 없음·decode 상태 관리를 확인한다
-    (reviewed replay만 소비, 외부 mutation 없음).
-  - [x] OSS/license를 확인한다(신규 dependency 없음, 기존 `eth-abi`·
-    `eth-utils`만 재사용).
+  - [ ] log/state 최소 필드·mutation 없음·decode 상태 관리를 승인한다
+    (analyzer 구현자가 착수 시 재확인).
+  - [ ] OSS/license를 확인한다(analyzer 구현자가 착수 시 재확인).
   - [x] 사용자 구현 승인을 기록한다(2026-07-29 20:19).
 - Component & Library Plan:
   - shadcn/ui: N/A - Python CLI 분석기.
@@ -1068,11 +1076,11 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - Libraries intentionally not added: 범용 ABI framework - fixture 요구 이상 금지.
   - shadcn preset: N/A - 웹 UI 변경 없음.
 - Acceptance Criteria:
-  - [x] NFT 표준·token ID·amount와 proxy implementation이 raw evidence에 연결된다.
-  - [x] 잘못된 표준·slot·block은 decode 실패 또는 partial이다.
-  - [x] 두 문제의 automated 승격은 confirmed fixture가 있을 때만 일어난다.
+  - [ ] NFT 표준·token ID·amount와 proxy implementation이 raw evidence에 연결된다.
+  - [ ] 잘못된 표준·slot·block은 decode 실패 또는 partial이다.
+  - [ ] 두 문제의 automated 승격은 confirmed fixture가 있을 때만 일어난다.
 - Document Sync Check:
-  - [x] Analysis I/O·fixture·Benchmark·QA를 동기화한다.
+  - [ ] Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
   - Status: PASS — 세 fixture가 `검증 중`으로 승격되고(승격 검토 통과),
     Analysis I/O 대안 B가 확정되고, 전용 UI Preview가 작성·브라우저
@@ -1087,34 +1095,18 @@ Receipt·개별 구현 승인을 대체하지 않는다.
     착수 시 log/state 최소 필드·mutation 없음·OSS/license를 다시 확인한다.
   - Conflicts: None known
 - Change Receipt:
-  - `src/scan_tool/domain/evm_special.py` (신규): `NftActivityReplay`·
-    `ProxyHistoryReplay` reviewed replay 모델과 callable discriminator
-  - `src/scan_tool/domain/analysis_request.py`: `EvmSpecialQueryKind`,
-    `NftActivityInputs`, `ProxyHistoryInputs`, `EvmSpecialAnalysisRequest`
-  - `src/scan_tool/domain/analysis_result.py`: `EvmSpecialComplete/Partial/FailedAnalysisResult`
-  - `src/scan_tool/slices/evm_special.py` (신규): `analyze_evm_special_replay`
-  - `src/scan_tool/application/cli_runtime.py`,
-    `expected_problem_benchmark.py`: 디스패치·Benchmark 승격 연결
-  - `src/scan_tool/domain/_types.py`: `FixtureRequirementId` 패턴과
-    `raw_values_are_uint256`(배열 raw 값 지원) 확장
-  - `docs/05_QA_Validation/schemas/analysis-request.schema.json`,
-    `analysis-result.schema.json`, `operations-contract.schema.json`: 갱신
-  - `docs/05_QA_Validation/benchmarks/expected-problem-v0.1.json`:
-    `EVM-NFT-001`·`EVM-PROXY-001` automated 승격
-  - fixture 3개의 `analysis-request.json` 신규, `status` 필드
-    `verifying` → `confirmed`로 갱신
-  - `tests/unit/test_evm_special_slice.py`(18),
-    `tests/integration/test_evm_special_cli.py`(5) 신규
-  - `scripts/verify_task_013_analyzer_independent_verification.py` 신규,
-    `scripts/verify.py` 파이프라인에 연결
+  - `src/scan_tool/domain/{analysis_request,analysis_result,evm_special,_types}.py`,
+    `src/scan_tool/slices/evm_special.py`, `src/scan_tool/application/cli_runtime.py`,
+    schema 3종, fixture 3개 `analysis-request.json`, 회귀 테스트 23건
+    (unit 22 + integration 5 CLI 중 신규분). PR #66에서 구현.
+  - 리뷰에서 발견한 P1 5건·P2 2건을 같은 PR에서 수정하고, 재현
+    시나리오 회귀 테스트 4건을 추가했다(§ TASK-013 Atomic Tasks 참고).
 - Verification Receipt:
-  - 전체 게이트 419 tests PASS, fixture 10 PASS, traceability·security·
-    operations·TASK-012/013 negative oracle·독립 Verifier·analyzer 독립
-    검증 전부 PASS(상세는
-    [TASK-013 Analyzer 검증 Receipt](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)).
-  - analyzer의 canonical 결과 hash가 독립 Verifier의 고정
-    `calculated_fact_sha256` 3개와 정확히 일치(별도 코드 경로 간
-    독립 검증).
+  - 423 tests PASS(신규 회귀 4건 포함), fixture 10 PASS, Schema 44
+    probes PASS, `scripts/verify.py` 전체 게이트 PASS.
+  - Fixture 3개는 `확정`이 아니라 `검증 중`으로 유지, Benchmark
+    automated는 7로 유지 — [P1 정정 Receipt](../05_QA_Validation/37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md) §5의
+    명시적 결정에 따름. PR #66은 재검토 통과 전까지 병합하지 않는다.
 
 ### [ ] TASK-014: PATH Graph·금액 정합 엔진
 

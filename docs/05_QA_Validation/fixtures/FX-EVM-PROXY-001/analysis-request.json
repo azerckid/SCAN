@@ -11,7 +11,7 @@
     "proxy_address": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
     "pattern_hint": "eip1967",
     "include_admin": true,
-    "include_beacon": true
+    "include_beacon": false
   },
   "source_policy": {
     "rule_status": "allowed",

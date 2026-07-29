@@ -2,7 +2,7 @@
   "schema_version": "0.1",
   "fixture_id": "FX-EVM-NFT-1155-001",
   "captured_at": "2026-07-29T05:58:26Z",
-  "status": "confirmed",
+  "status": "verifying",
   "scope_kind": "selected_transactions_and_exact_block_windows",
   "request_scope": {
     "contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
@@ -48,5 +48,9 @@
   "selected_transaction_scope_complete": true,
   "exact_block_window_logs_match_receipts": true,
   "continuous_gap_scanned": false,
-  "remaining_gate": []
+  "remaining_gate": [
+    "UI Preview user approval",
+    "Context Receipt PASS",
+    "user implementation approval"
+  ]
 }

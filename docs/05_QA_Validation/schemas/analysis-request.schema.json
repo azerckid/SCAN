@@ -120,7 +120,17 @@
       },
       "then": {
         "required": ["query_kind"],
-        "properties": {"schema_version": {"const": "0.2"}}
+        "properties": {
+          "schema_version": {"const": "0.2"},
+          "query_kind": {
+            "enum": [
+              "object_summary",
+              "historical_balance",
+              "first_token_transfer",
+              "native_inflow"
+            ]
+          }
+        }
       }
     },
     {
@@ -130,7 +140,10 @@
       },
       "then": {
         "required": ["query_kind"],
-        "properties": {"schema_version": {"const": "0.2"}}
+        "properties": {
+          "schema_version": {"const": "0.2"},
+          "query_kind": {"enum": ["nft_activity", "proxy_history"]}
+        }
       }
     },
     {
@@ -436,7 +449,7 @@
         "proxy_address": {"$ref": "#/$defs/address"},
         "pattern_hint": {"enum": ["eip1967", "auto"]},
         "include_admin": {"type": "boolean"},
-        "include_beacon": {"type": "boolean"}
+        "include_beacon": {"const": false}
       },
       "additionalProperties": false
     },

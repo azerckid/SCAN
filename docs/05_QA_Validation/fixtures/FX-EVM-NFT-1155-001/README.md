@@ -1,7 +1,7 @@
 # Fixture: FX-EVM-NFT-1155-001
 > Created: 2026-07-29 14:38
-> Last Updated: 2026-07-29 20:59
-> Status: Confirmed 0.1 · Analyzer 구현·독립 검증 완료
+> Last Updated: 2026-07-29 21:40
+> Status: Verifying 0.1 · Analyzer 구현 완료·canonical hash 일치, 리뷰 P1 5건 수정 반영·재검토 대기(확정 보류)
 
 ## 1. 목적
 
@@ -17,7 +17,7 @@ Rarible ERC-1155 계약의 Single·Batch·ApprovalForAll을 raw ABI 순서로
 | Multi-item Batch | TX `0x94fcb633...a230e`, block `23762140`, log `646` |
 | Batch 길이 | ids 2 · amounts 2 |
 | Batch amounts | `[1, 1]` |
-| 상태 | confirmed — 두 RPC receipt·filtered logs·raw SHA match·독립 Verifier·analyzer 독립 검증 통과 |
+| 상태 | verifying — 두 RPC receipt·filtered logs·raw SHA match·독립 Verifier Gate 통과 |
 
 범위 완전성은 선정된 두 TX와 각각의 정확한 block window에만 적용한다.
 두 block 사이의 연속 구간 전체를 스캔했다는 뜻이 아니다.
@@ -27,20 +27,20 @@ Rarible ERC-1155 계약의 Single·Batch·ApprovalForAll을 raw ABI 순서로
 - [x] 선정 TX receipt·정확한 block window filtered logs·raw replay SHA-256
 - [x] Batch 길이 불일치·다른 contract·누락 log negative oracle
 - [x] 독립 Verifier와 두 번의 결정성
-- [x] 승격 검토 통과 · `candidate` → `verifying` → `confirmed`
+- [x] 승격 검토 통과 · `candidate` → `verifying`
 - [x] Analysis I/O 대안 B(`evm_special`) 확정
 - [x] UI Preview 사용자 승인(2026-07-29 20:19)
 - [x] Context Receipt `PASS`·사용자 구현 승인
-- [x] NFT·Proxy analyzer 구현과 독립 Verification Receipt
+- [x] NFT·Proxy analyzer 구현과 독립 Verification Receipt(canonical hash 일치)
+- [ ] 리뷰 P1 5건 재검토 통과 후 `confirmed` 승격 (P1 수정·회귀 테스트는 반영 완료)
 
 ## 4. Related Documents
 
 - **Technical_Specs**: [TASK-013 계약](../../../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - ERC-1155 해석 경계
-- **UI_Screens**: [TASK-013 NFT·Proxy UI](../../../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md) - 사용자 승인된 Preview
+- **UI_Screens**: [TASK-013 NFT·Proxy UI](../../../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md) - 사용자 승인 대기 중인 Preview
 - **QA_Validation**: [TASK-013 후보 보고서](../../32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - 선정 Gate
 - **QA_Validation**: [TASK-013 Negative Oracle](../../33_TASK_013_NEGATIVE_ORACLE_REPORT.md) - ABI·범위 반례
 - **QA_Validation**: [TASK-013 독립 Verifier](../../34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md) - raw-first 재계산
 - **QA_Validation**: [TASK-013 승격 검토](../../35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) - `verifying` 승격 판정
-- **QA_Validation**: [TASK-013 Analyzer 검증 Receipt](../../36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md) - `confirmed` 최종 승격 판정
 - **QA_Validation**: [Raw replay](./raw-replay.json) · [Provider replay](./provider-replay.json) - raw evidence와 공급자별 SHA
 - **External**: [ERC-1155](https://eips.ethereum.org/EIPS/eip-1155) - 공식 event 정의

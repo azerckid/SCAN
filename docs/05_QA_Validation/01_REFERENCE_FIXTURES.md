@@ -1,15 +1,15 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 20:59
-> Status: Approved 1.5 · Phase 2 Confirmed Pack · TASK-013 확정
+> Last Updated: 2026-07-29 19:59
+> Status: Approved 1.4 · Phase 2 Confirmed Pack · TASK-013 검증 중
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
-있는 reference fixture를 관리한다. 현재 14개 중 10개는 `확정`(TASK-013
-세 fixture는 [승격 검토](./35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)와
-[Analyzer 검증 Receipt](./36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)를
-거쳐 `확정`으로 승격됐다), 4개는 DOC-M3 결정에 따라 `Deferred`다.
+있는 reference fixture를 관리한다. 현재 14개 중 7개는 `확정`, 4개는
+DOC-M3 결정에 따라 `Deferred`, 3개는 TASK-013 공개 사례를 채우고
+[승격 검토](./35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)를 통과한
+`검증 중`으로 관리한다.
 
 입력 문서:
 
@@ -86,9 +86,9 @@
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
 | FX-SVC-BRG-001 | SVC-BRG-001 | 1 | 후보 | Deferred | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | V1 기준선 | AUTH-DECODE, allowance 연결 |
-| [FX-EVM-NFT-721-001](./fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC match·16 oracle·독립 Verifier·analyzer 독립 검증 | ERC-721 event·tokenId |
-| [FX-EVM-NFT-1155-001](./fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC match·16 oracle·독립 Verifier·analyzer 독립 검증 | ERC-1155 Single·Batch |
-| [FX-EVM-PROXY-001](./fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | 2 | 확정 0.1 | 두 archive RPC match·16 oracle·독립 Verifier·analyzer 독립 검증 | EIP-1967 slot·event |
+| [FX-EVM-NFT-721-001](./fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | 2 | 검증 중 0.1 | 두 RPC match·16 oracle·독립 Verifier | ERC-721 event·tokenId |
+| [FX-EVM-NFT-1155-001](./fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | 2 | 검증 중 0.1 | 두 RPC match·16 oracle·독립 Verifier | ERC-1155 Single·Batch |
+| [FX-EVM-PROXY-001](./fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | 2 | 검증 중 0.1 | 두 archive RPC match·16 oracle·독립 Verifier | EIP-1967 slot·event |
 | FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | V1 기준선 | FREEZE, state/logs |
 | FX-FLOW-MULTI-001 | FLOW-MULTI-001 | 2 | 후보 | Deferred | RECON, PRICE, 다주소 집계 |
 | FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | Deferred | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
@@ -110,11 +110,10 @@ TASK-013 세 패키지는 공개 주소·TX·block, expected/evidence 골격과 
 공급자 receipt/log 또는 historical storage 일치, raw SHA와 명시 scope
 replay, negative oracle 16개와 독립 Verifier의 13개 evidence 값·7개
 requirement 두 번 재계산까지 확보해 [승격 검토](./35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)를
-거쳐 `검증 중`으로 승격했다. 이후 Analysis I/O 대안 B(`evm_special`)
-확정, 사용자 UI 승인, Context Receipt `PASS`, 사용자 구현 승인, NFT·Proxy
-analyzer 구현과 [독립 Verification Receipt](./36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)까지
-모두 닫혀 `확정`으로 최종 승격했다. NFT는 두 선정 TX와 exact block
-window, Proxy는 선정 upgrade와 adjacent state만 완전성을 주장한다.
+거쳐 `검증 중`으로 승격했다. `확정`은 Analysis I/O 대안 결정·사용자 UI
+승인·Context Receipt `PASS`·사용자 구현 승인이 모두 닫힌 뒤 별도로
+판단한다. NFT는 두 선정 TX와 exact block window, Proxy는 선정 upgrade와
+adjacent state만 완전성을 주장한다.
 
 ---
 
@@ -211,20 +210,20 @@ window, Proxy는 선정 upgrade와 adjacent state만 완전성을 주장한다.
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-PROXY-001 |
-| 상태 | 확정 0.1 — replay·negative oracle·독립 Verifier·analyzer 독립 검증 Gate 통과 |
-| DOC-M3 결정 | TASK-013 공개 candidate 선정 · [승격 검토](./35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)·[Analyzer 검증 Receipt](./36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md) 통과 · 확정 |
+| 상태 | 검증 중 0.1 — replay·negative oracle·독립 Verifier Gate 통과 |
+| DOC-M3 결정 | TASK-013 공개 candidate 선정 · [승격 검토](./35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) 통과 · 확정 미실행 |
 | 패키지 | [FX-EVM-PROXY-001](./fixtures/FX-EVM-PROXY-001/README.md) |
 | 데이터 형태 | 공개 온체인 |
 | 체인 | Ethereum (`chain_id` 1) |
 | 주소·TX | Aave V3 Pool proxy `0x87870bca...b4fa4e2`, upgrade TX `0xe9949c36...bc2b35`, block `25199939` |
 | 기준 정답 | implementation `0x8147b99d...0f119bd` → `0x728a138a...6fe03cf`, Upgraded log `1041`, admin before/after zero |
 | 허용 오차 | 해당 없음(주소·슬롯 exact match) |
-| 확정 사실 | 두 공급자의 receipt/log·EIP-1967 implementation/admin historical slot·raw SHA 일치, 독립 Verifier와 제품 analyzer가 각각 raw에서 재계산해 canonical hash까지 일치 |
+| 검증 중 사실 | 두 공급자의 receipt/log·EIP-1967 implementation/admin historical slot·raw SHA 일치, 독립 Verifier가 raw에서 재계산 |
 | 휴리스틱 | 비표준 프록시는 자동 해석하지 않음 |
 | 필요 데이터 소스 | `DS-EVM-RPC-ARCHIVE` |
 | 재현 절차 | 1) 명시 block별 슬롯 조회 2) 이벤트 이력 3) before/after 정합 4) beacon이면 implementation() 분리 |
 | 저작권·출처 | [EIP-1967](https://eips.ethereum.org/EIPS/eip-1967), 공개 Ethereum RPC. 원문·구현 코드 복제 없음 |
-| 마지막 확인 | 2026-07-29 (analyzer 독립 검증·확정 승격 통과) |
+| 마지막 확인 | 2026-07-29 (독립 Verifier 재계산·승격 검토 통과) |
 
 ---
 
@@ -233,18 +232,18 @@ window, Proxy는 선정 upgrade와 adjacent state만 완전성을 주장한다.
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-NFT-001 |
-| 상태 | 확정 0.1 — replay·negative oracle·독립 Verifier·analyzer 독립 검증 Gate 통과 |
+| 상태 | 검증 중 0.1 — replay·negative oracle·독립 Verifier Gate 통과 |
 | 패키지 | [ERC-721](./fixtures/FX-EVM-NFT-721-001/README.md) · [ERC-1155](./fixtures/FX-EVM-NFT-1155-001/README.md) |
 | 데이터 형태 | 공개 EVM log·transaction |
 | 체인·주소·TX | Ethereum. BAYC `0xbc4ca0ed...a936f13d` 2 TX, Rarible `0xb66a603f...6518b8` 2 TX |
 | 기준 정답 | ERC-721 token `9110` 승인·이동, ERC-1155 Single/Batch ids·amounts·ApprovalForAll |
 | 허용 오차 | 없음(raw integer·address·log order exact) |
-| 확정 사실 | 두 공급자 receipt/filtered log의 표준 event·raw SHA·indexed/data field decode 일치, 독립 Verifier와 제품 analyzer가 각각 raw에서 재계산해 canonical hash까지 일치 |
+| 검증 중 사실 | 두 공급자 receipt/filtered log의 표준 event·raw SHA·indexed/data field decode 일치, 독립 Verifier가 raw에서 재계산 |
 | 휴리스틱 | NFT 가치·소유권 분쟁·거래 의도는 판정하지 않음 |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, 필요 시 `DS-EVM-RPC-ARCHIVE` |
 | 공식 근거 | [ERC-721](https://eips.ethereum.org/EIPS/eip-721), [ERC-1155](https://eips.ethereum.org/EIPS/eip-1155) |
-| 상세 Gate | [TASK-013 Fixture 후보 보고서](./32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) · [승격 검토](./35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) · [Analyzer 검증 Receipt](./36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md) |
-| 마지막 확인 | 2026-07-29 (analyzer 독립 검증·확정 승격 통과) |
+| 상세 Gate | [TASK-013 Fixture 후보 보고서](./32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) · [승격 검토](./35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) |
+| 마지막 확인 | 2026-07-29 (독립 Verifier 재계산·승격 검토 통과) |
 
 ---
 
@@ -414,12 +413,9 @@ window, Proxy는 선정 upgrade와 adjacent state만 완전성을 주장한다.
 | `Drop` | 중복, 공개 재현 불가, 규정 위반 또는 검증 가치 부족이 확정 |
 
 P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된다.
-후보 4개는 모두 후속 단계의 고유 기능을 다루지만 주소·TX·정답 또는
+후보 5개는 모두 후속 단계의 고유 기능을 다루지만 주소·TX·정답 또는
 공급자가 미확정이므로 `Deferred`로 결정한다. 현재 `Confirm Now`와 `Drop`은
-각각 0개다. `FX-EVM-PROXY-001`은 이 표의 원래 5번째 항목이었으나
-TASK-013 fixture 승격 Gate([승격 검토](./35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)·
-[Analyzer 검증 Receipt](./36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md))로
-`확정`까지 승격해 아래 §8.2 목록에서 제외한다.
+각각 0개다.
 
 ### 8.2 Deferred 승격 조건
 
@@ -427,6 +423,7 @@ TASK-013 fixture 승격 Gate([승격 검토](./35_TASK_013_FIXTURE_PROMOTION_REV
 |:---|:---:|:---|:---|:---|
 | `FX-FLOW-EVM-001` | P1 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-LABEL-PUBLIC` | 공개 사건 시드·N홉 TX·종착 후보를 확보하고 라벨을 확정 사실과 분리해 1회 재현 | P1 PATH·LABEL 요구사항 승인 전 |
 | `FX-SVC-BRG-001` | P2 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` | 브리지 양단 TX·공식 이벤트 매칭 키·수수료 허용 범위를 고정하고 1회 재현 | P2 XCHAIN·BRIDGE 승격 전 |
+| `FX-EVM-PROXY-001` | P3 | `DS-EVM-RPC-ARCHIVE`, `DS-EXPLORER-EVM` | selected candidate의 raw replay·history 범위·반례를 완성해 upgrade TX·EIP-1967 슬롯 이력을 exact match로 재현 | TASK-013 fixture 승격 |
 | `FX-FLOW-MULTI-001` | P3 | `DS-EVM-RPC-PUBLIC` 또는 `DS-EXPLORER-EVM`, `DS-PRICE` | 피해자 포함 기준·유입 TX·시점 가격 공급자·환산 허용 오차를 고정 | P3 PRICE·다주소 집계 요구사항 작성 전 |
 | `FX-UNCERTAIN-001` | P2/P3 | BTC 분기 `DS-BTC-API`; 믹서 분기 `DS-LABEL-PUBLIC`과 EVM source | P2에서는 `BTC-CJ-001` 우선 여부를 결정하고, 한 문제 ID만 선택해 확정 사실·휴리스틱·반례 집합을 분리 | P2 HEUR 시작 전 또는 P3 MIXER 후보 검토 시 |
 

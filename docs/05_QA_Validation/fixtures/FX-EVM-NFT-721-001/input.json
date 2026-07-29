@@ -4,7 +4,7 @@
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-NFT-721-001",
   "problem_id": "EVM-NFT-001",
-  "status": "confirmed",
+  "status": "verifying",
   "chain": {
     "name": "ethereum",
     "chain_id": 1
