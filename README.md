@@ -40,19 +40,19 @@ job-scoped same-problem leaf concurrency, composite stale/Rules alerts, explicit
 SQLite Board input, and an atomic human-confirmed local submission record.
 `TASK-011` adds an offline benchmark over all 30 expected problems. `TASK-012`
 adds Analysis I/O 0.2 `evm_core` object·historical balance·first Transfer·native
-inflow queries while retaining the three 0.1 verticals. Seven cases are now
-directly automated, 2 are assisted by reusable primitives, and 21 remain
-unsupported. The seven automated cases pass exact answer, evidence,
-fixture-requirement, and deterministic replay checks. This is 7/7 accuracy within
+inflow queries while retaining the three 0.1 verticals. `TASK-013` adds
+subject-scoped ERC-721/1155 and EIP-1967 event/state analysis. Nine cases are now
+directly automated, 0 are assisted, and 21 remain unsupported. The nine automated
+cases pass exact answer, evidence, fixture-requirement, and deterministic replay
+checks. This is 9/9 accuracy within
 the automated scope, not 30/30 problem coverage.
 Phase 2 is documented as `TASK-012` through `TASK-019`: generic EVM, NFT/proxy,
 PATH, intelligence, service/xchain, Bitcoin, case reconciliation, and a final
-coverage gate. TASK-012 is complete; TASK-013 through TASK-019 remain proposed.
-TASK-013 now has three public NFT·Proxy candidate packages with two-provider
+coverage gate. TASK-012 and TASK-013 are complete; TASK-014 through TASK-019 remain
+proposed. TASK-013 has three confirmed public NFT·Proxy packages with two-provider
 raw SHA replay, explicit selected-scope integrity checks, and 16 offline negative
-oracles and an independent raw-first Verifier passing twice plus a docs-only
-analysis-contract Draft; fixture confirmation,
-UI approval, Context Receipt, and product runtime remain pending.
+oracles, an independent raw-first Verifier, approved UI·Context, product analyzer,
+remediation regression tests, and four subject-scoped deterministic runs.
 Live AI and CTFd network submission remain unimplemented.
 `WP-INPUT-IMPL-02` connects explicit external replay and provided JSON/JSONL/CSV
 input selection to a normalized evidence envelope, content-addressed raw artifact,
@@ -104,10 +104,11 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | OPS-IMPL-06 evidence | [`19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md`](docs/05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) | canonical candidate, fresh independent replay, conflict preservation, and promotion-gate evidence |
 | OPS-IMPL-07 evidence | [`20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md`](docs/05_QA_Validation/20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) | SQLite read-back, strict snapshot, local terminal/JSON view, and Preview-state mapping evidence |
 | OPS-IMPL-08 evidence | [`21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md`](docs/05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) | same-problem leaf concurrency, manual submission record, six Operations QA, and final security evidence |
-| TASK-011/012 benchmark | [`22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md`](docs/05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | 30-problem coverage classification, seven exact offline executions, and prioritized capability gaps |
+| TASK-011~013 benchmark | [`22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md`](docs/05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | 30-problem coverage classification, nine exact offline executions, and prioritized capability gaps |
 | TASK-012 evidence | [`24_TASK_012_FIXTURE_CANDIDATE_REPORT.md`](docs/05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) | four EVM Core queries, confirmed fixtures, Analysis I/O 0.2, CLI integration, and benchmark promotion |
 | Phase 2 QA | [`23_EXPECTED_PROBLEM_EXPANSION_QA.md`](docs/05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) | fixture-first promotion, negative cases, package QA, and integration gates |
 | WP-INPUT wiring | [`31_WP_INPUT_CLI_OPERATIONS_REPORT.md`](docs/05_QA_Validation/31_WP_INPUT_CLI_OPERATIONS_REPORT.md) | CLI mode selection, raw artifact envelope, Operations handoff, and secret-boundary evidence |
+| TASK-013 final promotion | [`38_TASK_013_FINAL_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md) | NFT·Proxy confirmed fixtures, remediation, and Benchmark 9/9 evidence |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -125,16 +126,17 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-396 passed
+427 passed
 PASS 10 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
-PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 40 probes
+PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 44 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 1265 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 129 runtime/evidence files
-PASS TASK-013 replay Gate: 3 candidates, 2 providers, 16 capabilities, exact scoped raw values
+PASS repository traceability: 1364 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 135 runtime/evidence files
+PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)
-PASS TASK-013 independent Verifier: 3 candidates, 7 requirements, 13 evidence values, 2 deterministic runs
+PASS TASK-013 independent Verifier: 3 fixtures (confirmed), 7 requirements, 13 evidence values, 2 deterministic runs
+PASS TASK-013 analyzer independent verification: 3 fixtures, 4 subject-scoped requests, canonical result hash matches the independent verifier, 2 deterministic runs
 ```
 
 The installed package exposes the approved analysis and local operations command surface:
@@ -174,7 +176,8 @@ A supported request without `--evidence` stops explicitly with
 `TASK-001` through `TASK-009` and `TASK-011` are complete. The offline P0·V1
 baseline and expected-problem Benchmark 0.1 are closed.
 `TASK-012` is complete with four confirmed fixtures and a PASS Context Receipt.
-`TASK-013` through `TASK-019` remain proposals requiring their own fixture,
+`TASK-013` is complete with three confirmed fixtures and Benchmark 9/9.
+`TASK-014` through `TASK-019` remain proposals requiring their own fixture,
 Context Receipt, and implementation approval.
 `TASK-010` offline Operations V1 is complete through human-confirmed local
 submission recording. No live provider configuration exists; live transport still

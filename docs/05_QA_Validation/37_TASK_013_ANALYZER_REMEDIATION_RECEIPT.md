@@ -3,6 +3,13 @@
 > Last Updated: 2026-07-29 21:40
 > Status: P1 5건·P2 2건 수정 완료 · 변형 회귀 테스트 추가 · Fixture `검증 중` 유지 · Benchmark 7 유지 · PR 병합 보류
 
+> **후속 상태:** 이 문서는 PR #66 재검토 전의 안전한 철회 결정을 보존한다.
+> 이후 추가 ERC-1155 격리·block-window 회귀까지 통과한 PR #66이
+> 병합됐고, 최종 재현에서 fixture 3개는 `confirmed`, Benchmark는 9/9로
+> 승격됐다. 현재 판정은
+> [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
+> 따른다.
+
 ## 1. 목적
 
 [Analyzer 검증 Receipt](./36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)가
@@ -118,3 +125,4 @@ hash 일치 검증은 "analyzer가 세 fixture에 대해 결정적으로 같은 
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - fixture 상태 registry
 - **Technical_Specs**: [TASK-013 분석 계약](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - 계약·경계 갱신
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-013 진행 상태
+- **QA_Validation**: [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md) - 재검토 이후 최종 confirmed·Benchmark 판정

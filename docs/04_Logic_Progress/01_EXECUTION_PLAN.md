@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 21:40
-> Status: Wave 1 TASK-012 Complete · Wave 3 TASK-013 Analyzer 구현 완료·P1 수정 반영·재검토 대기(확정/Benchmark 승격 보류)
+> Last Updated: 2026-07-29 22:13
+> Status: Wave 1 TASK-012 Complete · Wave 3 TASK-013 Complete · Benchmark 9/9
 
 ## 1. 목적
 
@@ -11,8 +11,8 @@
 
 ## 2. 기준선
 
-- [x] DEX·AUTH·FREEZE 3개가 automated로 실증됐다.
-- [x] assisted 6·unsupported 21의 기능 공백이 manifest에 기록됐다.
+- [x] DEX·AUTH·FREEZE, EVM Core 네 query, NFT·Proxy 9문항이 automated로 실증됐다.
+- [x] assisted 0·unsupported 21의 기능 공백이 manifest에 기록됐다.
 - [x] 공통 source·storage·artifact·Queue·Verifier 기반이 있다.
 - [x] Wave 1의 새 4문항용 confirmed fixture가 확보됐다.
 - [x] `evm_core` Analysis type과 Analysis I/O 0.2 변경이 승인됐다.
@@ -103,7 +103,7 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [ ] change·CoinJoin heuristic과 deterministic 사실을 분리한다.
 - [ ] `contest_rpc`/artifact 입력의 Bitcoin normalized evidence를 승인한다.
 
-### [ ] Wave 3 — NFT·Proxy와 PATH
+### [ ] Wave 3 — NFT·Proxy 완료 · PATH 대기
 
 - [x] `TASK-013`의 ERC-721·ERC-1155·EIP-1967 fixture ID와 선정 기준을
   docs-only Draft로 고정한다.
@@ -126,11 +126,11 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] `TASK-013` NFT·Proxy analyzer를 구현하고 독립 Verification Receipt를
   확보한다([canonical hash 일치](../05_QA_Validation/36_TASK_013_ANALYZER_VERIFICATION_RECEIPT.md)).
 - [x] `TASK-013` 리뷰에서 발견한 P1 5건·P2 2건을 수정하고 재현 회귀
-  테스트 4건을 추가한다([P1 정정 Receipt](../05_QA_Validation/37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md)).
-- [ ] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 `확정`으로 올린다
-  (P1 정정 재검토 통과 이후).
-- [ ] `TASK-013` Benchmark automated 7 → 9 승격을 기록한다(재검토 통과
-  이후).
+  테스트 6건과 Batch subject CLI 통합 테스트를 추가한다
+  ([P1 정정 Receipt](../05_QA_Validation/37_TASK_013_ANALYZER_REMEDIATION_RECEIPT.md)).
+- [x] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 `확정`으로 올린다
+  ([최종 승격 Receipt](../05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md)).
+- [x] `TASK-013` Benchmark automated 7 → 9 승격과 9/9 통과를 기록한다.
 - [ ] `TASK-014` 단일 path와 분기·재병합 fixture를 확정한다.
 - [ ] graph node/edge·asset conservation·budget·partial 계약을 승인한다.
 - [ ] path 결과가 label/heuristic과 분리되는지 검증한다.
@@ -207,10 +207,11 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - **Technical_Specs**: [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) - Wave 1 source·AI Planner 선행 Gate
 - **Logic_Progress**: [Backlog](./00_BACKLOG.md) - TASK-012~019 상태
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 승격 검증 기준
-- **QA_Validation**: [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 3/6/21 기준선
+- **QA_Validation**: [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 9/0/21 기준선
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - Wave 1 후보 4개와 잔여 Gate
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - smoke·secret·independence 체크
 - **QA_Validation**: [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - NFT 표준 2종·Proxy 선정 Gate
 - **QA_Validation**: [TASK-013 Fixture 승격 검토 보고서](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) - `검증 중` 승격 판정
+- **QA_Validation**: [TASK-013 최종 승격 Receipt](../05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md) - confirmed fixture 3개·Benchmark 9/9 최종 판정
 - **UI_Screens**: [TASK-013 NFT·Proxy UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md) - 표준 3개·상태 3개 화면 계약과 Preview
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - runner·dry-run·미실행 경계

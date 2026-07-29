@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-NFT-1155-001",
-  "status": "verifying",
+  "status": "confirmed",
   "standard": "erc1155",
   "single_case": {
     "transaction_hash": "0x49f0ce147dd81bb250569f8f6d44c467e79452ba6fdb739165e03cf15fcfe2f0",
