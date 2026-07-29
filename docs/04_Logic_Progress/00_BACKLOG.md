@@ -1213,7 +1213,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - 새 공개 `ErrorCode` 추가 없음(기존 enum + stage). `evm_core`·`evm_special`·
     기존 `0.1` 결과 불변.
 - Verification Receipt:
-  - 459 tests PASS, fixture 13, schema 48 probes, traceability 1489 links,
+  - 467 tests PASS, fixture 13, schema 48 probes, traceability 1489 links,
     security 162 files, TASK-014 negative oracle 18×2·독립 Verifier 3×2·
     **analyzer 독립 검증 3 fixtures canonical hash 일치** PASS.
     [TASK-014 Analyzer 검증 Receipt](../05_QA_Validation/43_TASK_014_ANALYZER_VERIFICATION_RECEIPT.md).

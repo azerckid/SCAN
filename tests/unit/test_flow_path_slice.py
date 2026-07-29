@@ -218,7 +218,7 @@ def test_aggregate_unrequested_origin_is_failed_reconciliation() -> None:
 
 @pytest.mark.parametrize("fixture_id", CASES)
 def test_traversal_budget_upper_bound_is_enforced(fixture_id: str) -> None:
-    """A budget of one node/edge/hop must never return complete for any query."""
+    """A one-unit budget must bound both status and the returned projection."""
     request_document = _request_document(fixture_id)
     budgets = cast(dict[str, int], cast(dict[str, object], request_document["inputs"])["budgets"])
     budgets["max_nodes"] = 1
@@ -232,6 +232,22 @@ def test_traversal_budget_upper_bound_is_enforced(fixture_id: str) -> None:
     assert result.root.status == "partial"
     assert result.root.errors[0].code == "evidence_incomplete"
     assert result.root.errors[0].stage == "budget_traversal"
+    value = result.root.results[0].value
+    if fixture_id == "FX-FLOW-PATH-001":
+        graph = cast(dict[str, object], value["graph"])
+        assert cast(int, graph["node_count"]) <= budgets["max_nodes"]
+        assert cast(int, graph["edge_count"]) <= budgets["max_edges"]
+        candidates = cast(list[dict[str, object]], value["path_candidates"])
+        assert cast(int, candidates[0]["hop_count"]) <= budgets["max_hops"]
+    elif fixture_id == "FX-FLOW-REMERGE-001":
+        branches = cast(list[dict[str, object]], value["branches"])
+        assert 2 + len(branches) <= budgets["max_nodes"] or not branches
+        assert 2 * len(branches) <= budgets["max_edges"]
+        assert not branches  # each atomic branch requires two hops
+    else:
+        contributions = cast(list[dict[str, object]], value["contributions"])
+        assert len(contributions) + 1 <= budgets["max_nodes"] or not contributions
+        assert len(contributions) <= budgets["max_edges"]
 
 
 def test_remerge_block_range_not_covering_replay_is_rejected() -> None:
@@ -271,6 +287,19 @@ def test_duplicate_transaction_hash_is_failed_reconciliation(fixture_id: str) ->
 
     assert result.root.status == "failed"
     assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_duplicate_internal_edge_is_failed_as_edge_dedup() -> None:
+    fixture_id = "FX-FLOW-PATH-001"
+    replay = _replay(fixture_id)
+    internal_edges = cast(list[dict[str, object]], replay["internal_edges"])
+    internal_edges.append(json.loads(json.dumps(internal_edges[0])))
+
+    result = analyze_flow_path_replay(_request(fixture_id), json.dumps(replay).encode())
+
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+    assert result.root.errors[0].stage == "edge_dedup"
 
 
 def test_restricted_source_policy_blocks_before_decode() -> None:

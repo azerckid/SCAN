@@ -19,6 +19,7 @@ from scan_tool.domain.analysis_request import (
     FlowPathAnalysisRequest,
     TracePathInputs,
     TraceRemergeInputs,
+    TraversalBudgets,
 )
 from scan_tool.domain.analysis_result import AnalysisResult
 from scan_tool.domain.flow_path import (
@@ -89,6 +90,7 @@ def analyze_flow_path_replay(
         return _failed(request, *binding_error, resumed, checkpoint_id)
     try:
         _require_unique_transaction_hashes(replay)
+        _require_unique_internal_edges(replay)
         inputs = request.inputs
         if isinstance(inputs, TracePathInputs):
             return _trace_path(request, replay, resumed, checkpoint_id)
@@ -470,11 +472,19 @@ def _trace_remerge(
             )
         merges_by_origin[origin] = item
 
+    # A remerge branch is atomic: seed -> branch -> merge consumes two edges,
+    # one intermediate node, and two hops.  Do not derive or return branches
+    # beyond the caller's traversal budget.
+    branch_budget = _remerge_branch_budget(inputs.budgets)
     branches: list[dict[str, object]] = []
     split_evidence_hashes: list[str] = []
     merge_evidence_hashes: list[str] = []
     available = True
+    budget_exhausted = False
     for split in splits:
+        if len(branches) >= branch_budget:
+            budget_exhausted = True
+            break
         branch = _addr(split.transaction.to_address)
         merge = merges_by_origin.get(branch)
         input_raw = int(split.transaction.value, 16)
@@ -529,16 +539,12 @@ def _trace_remerge(
         ["REQ-FLOW-REMERGE-BRANCHES", "REQ-FLOW-REMERGE-LEDGER"],
         [item["evidence_id"] for item in evidence],
     )
-    # Budget counts the confirmed ledger only (seed + branches + merge, and the
-    # split+merge edges); excluded external inflows are context, not budget.
-    node_count = 2 + len({b["branch_node"] for b in branches})
-    edge_count = 2 * len(branches)
-    if _budget_partial(node_count, edge_count, 2, inputs.budgets):
+    if budget_exhausted:
         errors = [
             _error(
                 "evidence_incomplete",
-                "The confirmed remerge graph exceeds the requested traversal budget; "
-                "the confirmed branches and residual are preserved.",
+                "The requested traversal budget stopped the remerge walk; "
+                "only the bounded confirmed branches and residual are preserved.",
                 "budget_traversal",
                 [item["evidence_id"] for item in evidence],
                 retryable=True,
@@ -607,9 +613,8 @@ def _aggregate_origins(
     origins = set(inputs.origin_nodes)
     _require_aggregate_scope(inputs, replay)
 
-    contributions: list[dict[str, object]] = []
+    eligible: list[SelectedTransaction] = []
     seen_hashes: set[str] = set()
-    seen_origins: set[str] = set()
     evidence_hashes: list[str] = []
     for item in replay.transactions:
         to_node = _addr(item.transaction.to_address)
@@ -629,6 +634,15 @@ def _aggregate_origins(
                 "origin_dedup",
             )
         seen_hashes.add(item.transaction.hash)
+        eligible.append(item)
+
+    contribution_budget = _aggregate_contribution_budget(inputs.budgets)
+    bounded_items = eligible[:contribution_budget]
+    budget_exhausted = len(eligible) > len(bounded_items)
+    contributions: list[dict[str, object]] = []
+    seen_origins: set[str] = set()
+    for item in bounded_items:
+        from_node = _addr(item.transaction.from_address)
         seen_origins.add(from_node)
         contributions.append(
             {
@@ -640,7 +654,7 @@ def _aggregate_origins(
         )
         evidence_hashes.append(item.transaction.hash)
 
-    if not contributions:
+    if not contributions and not budget_exhausted:
         return _failed(
             request,
             "source_unavailable",
@@ -669,13 +683,12 @@ def _aggregate_origins(
         ["REQ-FLOW-MULTI-CONTRIBUTIONS", "REQ-FLOW-MULTI-TOTAL"],
         [item["evidence_id"] for item in evidence],
     )
-    node_count = len(seen_origins) + 1
-    if _budget_partial(node_count, len(contributions), 1, inputs.budgets):
+    if budget_exhausted:
         errors = [
             _error(
                 "evidence_incomplete",
-                "The confirmed origin set exceeds the requested traversal budget; "
-                "confirmed contributions are preserved.",
+                "The requested traversal budget stopped origin aggregation; "
+                "only bounded confirmed contributions are preserved.",
                 "budget_traversal",
                 [item["evidence_id"] for item in evidence],
                 retryable=True,
@@ -756,17 +769,35 @@ def _require_unique_transaction_hashes(replay: FlowPathReplay) -> None:
         )
 
 
-def _budget_partial(
-    node_count: int,
-    edge_count: int,
-    hop_count: int,
-    budgets: object,
-) -> bool:
-    return (
-        node_count > budgets.max_nodes  # type: ignore[attr-defined]
-        or edge_count > budgets.max_edges  # type: ignore[attr-defined]
-        or hop_count > budgets.max_hops  # type: ignore[attr-defined]
-    )
+def _require_unique_internal_edges(replay: FlowPathReplay) -> None:
+    identities = [
+        (
+            tuple(edge.path),
+            edge.type,
+            _addr(edge.from_address),
+            _addr(edge.to_address),
+            edge.value_raw,
+        )
+        for edge in replay.internal_edges
+    ]
+    if len(identities) != len(set(identities)):
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "An internal transfer edge is aggregated more than once in the reviewed replay.",
+            "edge_dedup",
+        )
+
+
+def _remerge_branch_budget(budgets: TraversalBudgets) -> int:
+    if budgets.max_hops < 2 or budgets.max_nodes < 3 or budgets.max_edges < 2:
+        return 0
+    return min(budgets.max_nodes - 2, budgets.max_edges // 2)
+
+
+def _aggregate_contribution_budget(budgets: TraversalBudgets) -> int:
+    if budgets.max_hops < 1 or budgets.max_nodes < 2 or budgets.max_edges < 1:
+        return 0
+    return min(budgets.max_nodes - 1, budgets.max_edges)
 
 
 def _require_aggregate_scope(inputs: AggregateOriginsInputs, replay: FlowPathReplay) -> None:

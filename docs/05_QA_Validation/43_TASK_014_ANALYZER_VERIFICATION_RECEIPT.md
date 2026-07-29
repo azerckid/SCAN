@@ -120,7 +120,7 @@ PR #73 재검토에서 정상 변형 입력을 잘못 `complete`로 판정하는
 
 - Fixture 3개: `검증 중` 유지(확정 승격 안 함).
 - Benchmark: 9/9 유지(자동화 승격 안 함).
-- 전체 게이트: 459 tests PASS, fixture 13, traceability 1489 links, security
+- 전체 게이트: 467 tests PASS, fixture 13, traceability 1489 links, security
   162 files, TASK-014 negative oracle 18×2·독립 Verifier 3×2·analyzer 독립
   검증 3 fixtures PASS.
 - **다음: [단일-trace 하드 게이트](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md#7-단일-trace-의존성--confirmed-전-하드-게이트)를
