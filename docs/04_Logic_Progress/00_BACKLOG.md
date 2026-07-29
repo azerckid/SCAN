@@ -140,6 +140,8 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] contest HTTPS JSON-RPC adapter·기존 source port 재사용
   - [x] JSON·JSONL·CSV bounded importer와 raw/record SHA·locator
   - [x] chain mismatch·malformed·null·size/count·repr 비반사
+  - [x] JSON-RPC unwrap 이후 내부 chain scope 재검사
+  - [x] contest RPC read-only allowlist·금지 method 호출 전 차단
   - [x] RPC↔artifact normalized record 동등성
   - [x] 명시 contest endpoint 외 Explorer/network fallback 0건
 - Excluded:
@@ -148,7 +150,7 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [ ] EVM Core·Bitcoin·non-EVM·cross-chain analyzer
 - Context Receipt: PASS — 다중 입력 명세, source/evidence port, 보안 경계,
   Coverage QA를 확인했고 Analysis I/O `0.1`은 변경하지 않았다.
-- Verification Receipt: focused 22 tests·전체 328 tests·Schema·traceability·
+- Verification Receipt: focused 30 tests·전체 336 tests·Schema·traceability·
   security PASS, 상세는 구현 보고서 참조.
 
 ## 4. Task Register

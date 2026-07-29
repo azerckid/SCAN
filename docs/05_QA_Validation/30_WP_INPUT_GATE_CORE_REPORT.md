@@ -1,6 +1,6 @@
 # WP-INPUT-GATE Core Input Library 구현 보고서
 > Created: 2026-07-29 11:10
-> Last Updated: 2026-07-29 11:10
+> Last Updated: 2026-07-29 11:31
 > Status: Core Library Passed · CLI/Operations Wiring Not Executed
 
 ## 1. 목적
@@ -49,6 +49,8 @@ Analysis I/O `0.1`, Operations `0.1`, SQLite v2와 기존 fixture 상태는 변�
 - 기존 `JsonRpcSourceAdapter`를 상속해 source port와 HTTPX transport를 재사용
 - 절대 HTTPS URL만 허용
 - URL userinfo 거부
+- 명시적 read-only allowlist 적용
+- send/sign/wallet/mutation 메서드는 네트워크 호출 전에 거부
 - 명시 endpoint 한 곳만 호출
 - validated JSON-RPC result를 normalized bundle로 변환
 - Explorer·다른 RPC 자동 fallback 없음
@@ -59,7 +61,8 @@ Analysis I/O `0.1`, Operations `0.1`, SQLite v2와 기존 fixture 상태는 변�
 - 기본 3MB·2,000 record 제한
 - UTF-8·null·malformed·빈 record·한도 초과 거부
 - JSON-RPC envelope의 `result`를 RPC와 동일한 record data로 정규화
-- artifact 내부 `chain_scope`가 요청 scope와 다르면 거부
+- artifact envelope와 JSON-RPC `result` 내부 `chain_scope`를 각각 검사하고
+  요청 scope와 다르면 거부
 - normalized record data는 repr에 노출하지 않음
 
 ## 4. 검증
@@ -71,7 +74,7 @@ uv run pytest tests/unit/test_input_source.py \
   tests/integration/test_contest_rpc_input.py -q
 ```
 
-결과: **22 passed**
+결과: **30 passed**
 
 | 검증 | 결과 |
 |:---|:---:|
@@ -79,8 +82,10 @@ uv run pytest tests/unit/test_input_source.py \
 | byte·record bounds | pass |
 | malformed·null·UTF-8 failure | pass |
 | chain scope mismatch·analyzer guard | pass |
+| JSON-RPC unwrap 이후 chain scope 재검사 | pass |
 | normalized data repr 비반사 | pass |
 | contest HTTPS·userinfo Gate | pass |
+| send/sign/wallet/mutation 7종 호출 전 차단·network 0 | pass |
 | 명시 endpoint 단일 호출·Explorer 0건 | pass |
 | RPC↔artifact record data/hash 동등성 | pass |
 
@@ -92,7 +97,7 @@ uv run python scripts/verify.py
 
 결과:
 
-- **328 passed**
+- **336 passed**
 - fixture Schema PASS 7
 - Analysis I/O `0.1` compatibility PASS
 - Operations `0.1` probe PASS

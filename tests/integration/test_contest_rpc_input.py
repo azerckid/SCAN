@@ -12,7 +12,7 @@ from scan_tool.adapters.input_source import (
     normalize_json_rpc_payload,
 )
 from scan_tool.domain.input_source import ArtifactFormat, ChainScope, InputMode
-from scan_tool.domain.source import JsonRpcSourceRequest
+from scan_tool.domain.source import JsonRpcSourceRequest, SourceFailure, SourceFailureKind
 
 TIMEOUT = httpx.Timeout(connect=5, read=20, write=5, pool=5)
 
@@ -67,6 +67,44 @@ def test_contest_rpc_requires_safe_https_endpoint(endpoint: str) -> None:
 
     with pytest.raises(ValueError):
         asyncio.run(construct())
+
+
+@pytest.mark.parametrize(
+    "method",
+    [
+        "eth_sendRawTransaction",
+        "eth_sendTransaction",
+        "eth_sign",
+        "personal_sign",
+        "wallet_addEthereumChain",
+        "debug_setHead",
+        "evm_mine",
+    ],
+)
+def test_contest_rpc_rejects_mutating_or_signing_methods_before_network(
+    method: str,
+) -> None:
+    network_calls = 0
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal network_calls
+        network_calls += 1
+        return httpx.Response(200, json={"jsonrpc": "2.0", "id": 1, "result": True})
+
+    async def execute() -> None:
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+            adapter = ContestRpcSourceAdapter(
+                endpoint="https://contest-rpc.example/rpc",
+                client=client,
+                timeout=TIMEOUT,
+            )
+            with pytest.raises(SourceFailure) as captured:
+                await adapter.execute(JsonRpcSourceRequest("forbidden", method, []))
+            assert captured.value.kind is SourceFailureKind.PERMANENT
+            assert str(captured.value) == "contest RPC method is not allowed"
+
+    asyncio.run(execute())
+    assert network_calls == 0
 
 
 def test_all_three_input_modes_share_normalized_record_data() -> None:

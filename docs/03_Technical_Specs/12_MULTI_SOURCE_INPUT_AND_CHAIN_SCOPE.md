@@ -64,7 +64,8 @@ migration 승인을 먼저 받는다.
 ### 4.1 `external_rpc`
 
 - provider별 endpoint·인증·rate limit을 composition root에서 주입한다.
-- read-only method allowlist와 Rules Gate를 적용한다.
+- core adapter의 명시적 read-only method allowlist로 send/sign/wallet/mutation
+  메서드를 네트워크 호출 전에 거부하고, 상위 composition에서 Rules Gate를 적용한다.
 - QuickNode는 현재 일반 RPC + Debug Trace 주 경로다.
 - Alchemy 무료 경로는 일반 RPC 독립 교차검증에 사용하며 Trace 공급자로
   간주하지 않는다.
@@ -200,13 +201,13 @@ CLI·Operations·실제 대회 artifact 시나리오는 `not_executed`다.
 |:---|:---|
 | 입력 enum | `external_rpc`, `contest_rpc`, `provided_artifact` |
 | 체인 enum | `evm`, `bitcoin`, `non_evm`, `cross_chain` |
-| contest RPC | 기존 HTTPX JSON-RPC adapter 재사용, HTTPS·userinfo 검증 |
+| contest RPC | 기존 HTTPX JSON-RPC adapter 재사용, HTTPS·userinfo·read-only allowlist 검증 |
 | artifact | JSON·JSONL·CSV, 3MB·2,000 record 기본 한도 |
 | provenance | input mode·chain scope·source/provider·media type·raw/record SHA·observed time·locator |
-| 격리 | chain mismatch·null·malformed·oversize·record 초과 거부 |
+| 격리 | envelope/result chain mismatch·null·malformed·oversize·record 초과 거부 |
 | 동등성 | 같은 JSON-RPC result의 RPC↔artifact normalized record 일치 |
 | 외부 fallback | adapter가 명시 contest endpoint 한 곳만 호출, Explorer 호출 없음 |
-| 집중 검증 | 22 tests PASS |
+| 집중 검증 | 30 tests PASS |
 
 Implementation files:
 

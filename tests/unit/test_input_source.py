@@ -57,6 +57,18 @@ def test_json_rpc_artifact_unwraps_to_its_result() -> None:
     assert bundle.records[0].data == {"number": "0x10"}
 
 
+def test_json_rpc_artifact_rechecks_unwrapped_result_chain_scope() -> None:
+    with pytest.raises(InputNormalizationError) as captured:
+        ProvidedArtifactImporter().import_bytes(
+            b'{"jsonrpc":"2.0","id":1,"result":{"chain_scope":"bitcoin","txid":"abc"}}',
+            artifact_format=ArtifactFormat.JSON,
+            chain_scope=ChainScope.EVM,
+            record_type="transaction",
+        )
+
+    assert captured.value.kind is InputFailureKind.CHAIN_SCOPE_MISMATCH
+
+
 def test_normalized_bundle_repr_does_not_reflect_record_data() -> None:
     bundle = ProvidedArtifactImporter().import_bytes(
         b'{"note":"SECRET_CANARY"}',

@@ -24,12 +24,34 @@ from scan_tool.domain.input_source import (
 )
 from scan_tool.domain.source import (
     JsonRpcSourceRequest,
+    SourceFailure,
+    SourceFailureKind,
     SourcePayload,
+    SourceRequest,
     source_request_fingerprint,
 )
 
 DEFAULT_MAX_ARTIFACT_BYTES = 3 * 1024 * 1024
 DEFAULT_MAX_RECORDS = 2_000
+CONTEST_RPC_READ_ONLY_METHODS = frozenset(
+    {
+        "debug_traceTransaction",
+        "eth_blockNumber",
+        "eth_call",
+        "eth_chainId",
+        "eth_getBalance",
+        "eth_getBlockByHash",
+        "eth_getBlockByNumber",
+        "eth_getCode",
+        "eth_getLogs",
+        "eth_getProof",
+        "eth_getStorageAt",
+        "eth_getTransactionByHash",
+        "eth_getTransactionCount",
+        "eth_getTransactionReceipt",
+        "trace_transaction",
+    }
+)
 
 
 class ProvidedArtifactImporter:
@@ -165,12 +187,7 @@ class ProvidedArtifactImporter:
                 "provided artifact contains a null record",
             )
         if isinstance(value, Mapping):
-            declared_scope = value.get("chain_scope")
-            if declared_scope is not None and declared_scope != expected_scope.value:
-                raise InputNormalizationError(
-                    InputFailureKind.CHAIN_SCOPE_MISMATCH,
-                    "provided artifact record has another chain scope",
-                )
+            _require_record_chain_scope(value, expected_scope)
             if "jsonrpc" in value and "result" in value:
                 value = value["result"]
                 if value is None:
@@ -178,6 +195,8 @@ class ProvidedArtifactImporter:
                         InputFailureKind.INVALID_ARTIFACT,
                         "JSON-RPC artifact result must not be null",
                     )
+                if isinstance(value, Mapping):
+                    _require_record_chain_scope(value, expected_scope)
         return NormalizedEvidenceRecord(
             record_locator=locator,
             record_type=record_type,
@@ -214,6 +233,17 @@ class ContestRpcSourceAdapter(JsonRpcSourceAdapter):
             client=client,
             timeout=timeout,
         )
+
+    async def execute(self, request: SourceRequest) -> SourcePayload:
+        if (
+            not isinstance(request, JsonRpcSourceRequest)
+            or request.method not in CONTEST_RPC_READ_ONLY_METHODS
+        ):
+            raise SourceFailure(
+                SourceFailureKind.PERMANENT,
+                "contest RPC method is not allowed",
+            )
+        return await super().execute(request)
 
     def normalize(
         self,
@@ -276,6 +306,18 @@ def normalize_json_rpc_payload(
         observed_at=payload.retrieved_at,
         records=(record,),
     )
+
+
+def _require_record_chain_scope(
+    value: Mapping[object, object],
+    expected_scope: ChainScope,
+) -> None:
+    declared_scope = value.get("chain_scope")
+    if declared_scope is not None and declared_scope != expected_scope.value:
+        raise InputNormalizationError(
+            InputFailureKind.CHAIN_SCOPE_MISMATCH,
+            "provided artifact record has another chain scope",
+        )
 
 
 def _media_type(artifact_format: ArtifactFormat) -> str:
