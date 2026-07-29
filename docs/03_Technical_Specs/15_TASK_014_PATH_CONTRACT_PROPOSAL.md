@@ -1,6 +1,6 @@
 # TASK-014 PATH Graph·금액 정합 계약 제안
 > Created: 2026-07-29 22:52
-> Last Updated: 2026-07-30
+> Last Updated: 2026-07-30 10:40
 > Status: Proposed 0.1 · Preview User Review Passed · Fixture 3 Verifying · 대안 B 확정안 작성([16](./16_TASK_014_FLOW_PATH_IO_CONTRACT.md)) · Implementation Not Approved
 
 ## 1. 목적
@@ -151,7 +151,7 @@ edge_id sequence)`로 결정적으로 정렬한다.
 |:---|:---|:---|
 | complete | 요청 범위·budget 안에서 필수 edge와 terminal/merge가 재현되고 residual이 허용 범위 이내 | graph·path·ledger 전부 |
 | partial | budget/range/비필수 source 한계로 일부 frontier가 미확인이나 확인된 edge는 유효 | 확인된 graph + termination + unresolved frontier |
-| failed | seed/scope가 invalid, 필수 source 결합·reconciliation 실패, 필수 edge가 서로 모순 | `data: null` + 구조화 오류 |
+| failed | seed/scope가 invalid, 필수 source 결합·reconciliation 실패, 필수 edge가 서로 모순 | `results: []` + 구조화 오류 |
 
 오류 후보(초안 — **폐기**, [16_TASK_014_FLOW_PATH_IO_CONTRACT §5](./16_TASK_014_FLOW_PATH_IO_CONTRACT.md#5-오류-계약--기존-errorcode-enum-재사용-신규-코드-없음)의
 기존 `ErrorCode` enum 매핑으로 대체. 아래 이름은 내부 사유(=`stage`)로만 남긴다):

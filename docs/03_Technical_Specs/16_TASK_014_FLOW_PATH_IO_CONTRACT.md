@@ -1,7 +1,7 @@
 # TASK-014 `flow_path` Analysis I/O 계약 (대안 B 확정안)
 
 > Created: 2026-07-30
-> Last Updated: 2026-07-30
+> Last Updated: 2026-07-30 10:40
 > Status: **Proposed · docs-only · 사용자 승인 대기** · Fixture 3 Verifying · Runtime Not Implemented
 
 ## 0. 이 문서의 위치
@@ -38,6 +38,7 @@ oracle·Verifier가 이미 준비된 상태에서 제품 analyzer를 짤 때 Sch
 
 ```json
 {
+  "$schema": "../05_QA_Validation/schemas/analysis-request.schema.json",
   "schema_version": "0.2",
   "analysis_id": "AN-FX-FLOW-PATH-001",
   "analysis_type": "flow_path",
@@ -56,20 +57,40 @@ oracle·Verifier가 이미 준비된 상태에서 제품 analyzer를 짤 때 Sch
 }
 ```
 
+- 위 예시는 **전체 request envelope의 규범 예시**다. `$schema`를 포함하며,
+  구현 후 정적 `analysis-request.schema.json`과 Pydantic 모델 양쪽을 통과해야
+  한다. 아래 query별 `inputs`와 `results[0].value` 예시는 전체 envelope 안에
+  들어가는 **규범 fragment**다. 코드 블록에는 축약 주소·해시·`…` placeholder를
+  사용하지 않는다.
 - `query_kind`와 `inputs`의 결합은 `evm_special`처럼 `model_validator`와
   `json_schema_extra.allOf(if/then)`로 이중 고정한다. 잘못된 조합은
   `schema_invalid`(공개 Schema)·`ContractViolation`(runtime) 양쪽에서 거부돼야
   하며, 구현 시 `check_analysis_schema.py`에 교차 조합 probe를 추가한다
   (TASK-013 P1-4 재발 방지).
 
-### 2.1 공통 입력 요소
+### 2.1 공통 입력 요소와 query별 `scope`
 
-| 요소 | 값 | 비고 |
+`asset_scope`와 `budgets`는 세 query가 공유한다. `scope`는 query별 replay
+경계를 숨기지 않기 위해 query discriminator에 묶인 별도 모델로 고정한다.
+`block_windows`와 `block_range`를 같은 모델에서 선택적으로 섞지 않는다.
+
+| 모델 | 필수 필드 | 비고 |
 |:---|:---|:---|
-| `asset_scope` | `{ "kind": "native", "symbol": "ETH", "decimals": 18 }` | v1은 `native`만. ERC-20은 후속 |
-| `budgets` | `{ "max_hops": int, "max_nodes": int, "max_edges": int }` | 상한 도달은 `partial` |
-| `scope` | `{ "kind": "selected_transactions_and_exact_blocks", "block_windows": [{"from":n,"to":n}] }` | reviewed replay 범위 |
-| `direction` | `"outbound" \| "inbound"` | `trace_path`만 |
+| 공통 `NativeAssetScope` | `kind: native`, `symbol: ETH`, `decimals: 18` | v1은 native만. ERC-20은 후속 |
+| 공통 `TraversalBudgets` | `max_hops`, `max_nodes`, `max_edges` | 모두 양의 정수. 상한 도달은 `partial` |
+| `TracePathScope` | `kind`, `block_windows[]` | 세 selected TX의 exact-block window. `from <= to`, 비어 있지 않음 |
+| `TraceRemergeScope` | `kind`, `block_range`, `selected_transactions[]`, `excluded_context_transactions[]` | split/return TX와 unrelated inflow를 명시적으로 분리 |
+| `AggregateOriginsScope` | `kind`, `selected_transactions[]` | origin별 contribution TX 집합. 비어 있지 않고 중복 금지 |
+
+세 모델의 `kind`는 모두
+`selected_transactions_and_exact_blocks`다. query별 Pydantic 모델이 다른
+필드를 강제하므로 공통 `scope` union의 모호성은 없다.
+
+| query_kind | inputs 모델 | scope 모델 | query 전용 필드 |
+|:---|:---|:---|:---|
+| `trace_path` | `TracePathInputs` | `TracePathScope` | `seed_node`, `direction`, `terminal_policy` |
+| `trace_remerge` | `TraceRemergeInputs` | `TraceRemergeScope` | `seed_node`, `merge_node` |
+| `aggregate_origins` | `AggregateOriginsInputs` | `AggregateOriginsScope` | `origin_nodes[]`, `exit_node` |
 
 ## 3. Query별 inputs·result value
 
@@ -108,23 +129,54 @@ oracle·Verifier가 이미 준비된 상태에서 제품 analyzer를 짤 때 Sch
   "graph": {
     "node_count": 4,
     "edge_count": 3,
-    "nodes": ["0x036cec…25f1c", "0xb66cd9…995db", "0xa1b44d…8e676", "0xee009f…c8c5"],
+    "nodes": [
+      "0x036cec1a199234fc02f72d29e596a09440825f1c",
+      "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+      "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5"
+    ],
     "edges": [
-      { "edge_id": "EDGE-PATH-001", "from_node": "0x036cec…25f1c", "to_node": "0xb66cd9…995db",
-        "amount_raw": "88752697459828535340019", "transaction_hash": "0x298b…db55",
-        "block_number": 16818102, "transfer_kind": "native_internal" },
-      { "edge_id": "EDGE-PATH-002", "from_node": "0xb66cd9…995db", "to_node": "0xa1b44d…8e676",
-        "amount_raw": "7738250000000000000000", "transaction_hash": "0x79c1…aeda",
-        "block_number": 16905356, "transaction_index": 23, "transfer_kind": "native_top_level" },
-      { "edge_id": "EDGE-PATH-003", "from_node": "0xa1b44d…8e676", "to_node": "0xee009f…c8c5",
-        "amount_raw": "7738050000000000000000", "transaction_hash": "0xe3f6…fd0d",
-        "block_number": 16920430, "transaction_index": 55, "transfer_kind": "native_top_level" }
+      {
+        "edge_id": "EDGE-PATH-001",
+        "from_node": "0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "to_node": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+        "amount_raw": "88752697459828535340019",
+        "transaction_hash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+        "block_number": 16818102,
+        "transfer_kind": "native_internal",
+        "scope_status": "included"
+      },
+      {
+        "edge_id": "EDGE-PATH-002",
+        "from_node": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+        "to_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+        "amount_raw": "7738250000000000000000",
+        "transaction_hash": "0x79c10cf538667a0a7de40ce54d2444c9e9e17b5c62b321e739020df0015baeda",
+        "block_number": 16905356,
+        "transaction_index": 23,
+        "transfer_kind": "native_top_level",
+        "scope_status": "included"
+      },
+      {
+        "edge_id": "EDGE-PATH-003",
+        "from_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+        "to_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+        "amount_raw": "7738050000000000000000",
+        "transaction_hash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+        "block_number": 16920430,
+        "transaction_index": 55,
+        "transfer_kind": "native_top_level",
+        "scope_status": "included"
+      }
     ]
   },
   "path_candidates": [
-    { "ordered_edge_ids": ["EDGE-PATH-001", "EDGE-PATH-002", "EDGE-PATH-003"],
-      "hop_count": 3, "terminal_node": "0xee009f…c8c5",
-      "termination": "selected_terminal_reached" }
+    {
+      "ordered_edge_ids": ["EDGE-PATH-001", "EDGE-PATH-002", "EDGE-PATH-003"],
+      "hop_count": 3,
+      "terminal_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+      "termination": "selected_terminal_reached"
+    }
   ],
   "reconciliation": {
     "status": "unresolved_selected_path_scope",
@@ -146,12 +198,70 @@ top-level 2홉(`EDGE-PATH-002/003`)은 confirmed로 유지, seed inflow edge는
 ```json
 {
   "status": "partial",
-  "results": [{ "…": "확인된 부분 graph + termination: budget_or_frontier_open" }],
-  "errors": [{
-    "error_id": "ERR-FLOW-TRACE-UNAVAILABLE", "code": "trace_unavailable",
-    "stage": "internal_edge_trace", "retryable": true, "attempt_count": 0,
-    "message": "The seed's internal inflow trace is unavailable from the archive trace provider."
-  }]
+  "results": [
+    {
+      "result_id": "RES-FLOW-PATH",
+      "result_type": "trace_path",
+      "classification": "confirmed_fact",
+      "value": {
+        "graph": {
+          "node_count": 3,
+          "edge_count": 2,
+          "nodes": [
+            "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+            "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+            "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5"
+          ],
+          "edges": [
+            {
+              "edge_id": "EDGE-PATH-002",
+              "from_node": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+              "to_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+              "amount_raw": "7738250000000000000000",
+              "transaction_hash": "0x79c10cf538667a0a7de40ce54d2444c9e9e17b5c62b321e739020df0015baeda",
+              "block_number": 16905356,
+              "transaction_index": 23,
+              "transfer_kind": "native_top_level",
+              "scope_status": "included"
+            },
+            {
+              "edge_id": "EDGE-PATH-003",
+              "from_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+              "to_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+              "amount_raw": "7738050000000000000000",
+              "transaction_hash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+              "block_number": 16920430,
+              "transaction_index": 55,
+              "transfer_kind": "native_top_level",
+              "scope_status": "included"
+            }
+          ]
+        },
+        "path_candidates": [],
+        "frontier": [
+          {
+            "edge_id": "EDGE-PATH-001",
+            "scope_status": "unresolved",
+            "reason": "internal_trace_unavailable"
+          }
+        ],
+        "termination": "budget_or_frontier_open"
+      },
+      "tool_requirement_ids": ["REQ-P0-EVM-005", "REQ-P0-EVM-006", "REQ-P0-EVM-008"],
+      "fixture_requirement_ids": ["REQ-FLOW-PATH-ORDER", "REQ-FLOW-PATH-SCOPE"],
+      "evidence_refs": ["EV-FLOW-PATH-HOP-2", "EV-FLOW-PATH-HOP-3"]
+    }
+  ],
+  "errors": [
+    {
+      "error_id": "ERR-FLOW-TRACE-UNAVAILABLE",
+      "code": "trace_unavailable",
+      "stage": "internal_edge_trace",
+      "retryable": true,
+      "attempt_count": 0,
+      "message": "The seed's internal inflow trace is unavailable from the archive trace provider."
+    }
+  ]
 }
 ```
 
@@ -168,17 +278,39 @@ top-level 2홉(`EDGE-PATH-002/003`)은 confirmed로 유지, seed inflow edge는
 }
 ```
 
+위 partial/failed 블록은 공통 `evidence`/`sources`/`warnings`/`run`/`exports`
+필드를 생략한 **outcome fragment**다. 생략된 필드는
+[Analysis I/O Schema](./05_ANALYSIS_IO_SCHEMA.md)의 공통 envelope를 그대로
+따른다. `failed`에는 존재하지 않는 `data` 필드를 만들지 않으며
+`results: []`와 한 개 이상의 구조화 `errors`를 사용한다.
+
 ### 3.2 `trace_remerge`
 
 **inputs**
 
 ```json
 {
-  "seed_node": "0xb66cd9…995db",
-  "merge_node": "0xee009f…c8c5",
+  "seed_node": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+  "merge_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
   "asset_scope": { "kind": "native", "symbol": "ETH", "decimals": 18 },
   "budgets": { "max_hops": 2, "max_nodes": 6, "max_edges": 9 },
-  "scope": { "kind": "selected_transactions_and_exact_blocks", "block_range": "…" }
+  "scope": {
+    "kind": "selected_transactions_and_exact_blocks",
+    "block_range": { "from": 16905356, "to": 16920507 },
+    "selected_transactions": [
+      "0x79c10cf538667a0a7de40ce54d2444c9e9e17b5c62b321e739020df0015baeda",
+      "0xd4c7c88944783f3c39695bc5e6c5fcd8a399c0a103d822ac8bd96fad41a41866",
+      "0x03a06cfb99cf699dd5f61088fdf015e17b8c2f258a17882f6ff4de8607a3e46e",
+      "0x77720ab2ab2bb6550e9b4e1cb4b6c2033c2200ae3abb7ae51f89898f86ac1e2a",
+      "0xc9641dceab1311d219523e5d3914df31f6a97986d5e331db45387037ea06a07c",
+      "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+      "0x9f3edbd1eb404dec2e4d9aae93c739136f79c87f6382af25413ce705cc431f59",
+      "0x19f802affe24572bac3af47983f42bbec6055117c6a32c3fddc58bd7545e5240"
+    ],
+    "excluded_context_transactions": [
+      "0xcfec4f86f6d81c83b9b3520d6966936d17490988739a794bf1391562ecb909b6"
+    ]
+  }
 }
 ```
 
@@ -187,13 +319,13 @@ top-level 2홉(`EDGE-PATH-002/003`)은 confirmed로 유지, seed inflow edge는
 ```json
 {
   "branches": [
-    { "branch_node": "0xa1b44d…8e676", "input_raw": "7738250000000000000000",
+    { "branch_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676", "input_raw": "7738250000000000000000",
       "merge_output_raw": "7738050000000000000000", "residual_raw": "200000000000000000" },
-    { "branch_node": "0xc4e04a…b208e", "input_raw": "7738250000000000000000",
+    { "branch_node": "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e", "input_raw": "7738250000000000000000",
       "merge_output_raw": "7738050000000000000000", "residual_raw": "200000000000000000" },
-    { "branch_node": "0x46e0be…0cf55", "input_raw": "7738250000000000000000",
+    { "branch_node": "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55", "input_raw": "7738250000000000000000",
       "merge_output_raw": "7737250000000000000000", "residual_raw": "1000000000000000000" },
-    { "branch_node": "0x8765a3…8a4c",  "input_raw": "7738250000000000000000",
+    { "branch_node": "0x8765a35394c98e81b9d56d44248e1199d8e38a4c",  "input_raw": "7738250000000000000000",
       "merge_output_raw": "7738050000000000000000", "residual_raw": "200000000000000000" }
   ],
   "reconciliation": {
@@ -205,9 +337,14 @@ top-level 2홉(`EDGE-PATH-002/003`)은 confirmed로 유지, seed inflow edge는
     "external_inflow_raw_not_in_seed_ledger": "1000000000000"
   },
   "excluded_edges": [
-    { "transaction_hash": "0xcfec…09b6", "from_node": "0xfa24…5bde0",
-      "to_node": "0xa1b44d…8e676", "amount_raw": "1000000000000",
-      "reason": "external_inflow_not_from_seed" }
+    {
+      "transaction_hash": "0xcfec4f86f6d81c83b9b3520d6966936d17490988739a794bf1391562ecb909b6",
+      "from_node": "0xfa24ea2318dbc719b9d1a0d8eb7f282255c5bde0",
+      "to_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "amount_raw": "1000000000000",
+      "reason": "external_inflow_not_from_seed",
+      "scope_status": "excluded"
+    }
   ]
 }
 ```
@@ -223,8 +360,9 @@ top-level 2홉(`EDGE-PATH-002/003`)은 confirmed로 유지, seed inflow edge는
 `unresolved_residual_raw`에 미해결분 반영, `code: source_unavailable`,
 `stage: branch_return_binding`, `retryable: true`.
 
-**failed 예** — external inflow를 seed ledger에서 차감: `code:
-reconciliation_failed`, `stage: ledger_reconciliation`, `data: null`.
+**failed 예** — external inflow를 seed ledger에서 차감:
+`status: failed`, `results: []`, `code: reconciliation_failed`,
+`stage: ledger_reconciliation`.
 
 ### 3.3 `aggregate_origins`
 
@@ -232,11 +370,24 @@ reconciliation_failed`, `stage: ledger_reconciliation`, `data: null`.
 
 ```json
 {
-  "origin_nodes": ["0xa1b44d…8e676", "0xc4e04a…b208e", "0x46e0be…0cf55", "0x8765a3…8a4c"],
-  "exit_node": "0xee009f…c8c5",
+  "origin_nodes": [
+    "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+    "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e",
+    "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55",
+    "0x8765a35394c98e81b9d56d44248e1199d8e38a4c"
+  ],
+  "exit_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
   "asset_scope": { "kind": "native", "symbol": "ETH", "decimals": 18 },
   "budgets": { "max_hops": 1, "max_nodes": 5, "max_edges": 4 },
-  "scope": { "kind": "selected_transactions_and_exact_blocks" }
+  "scope": {
+    "kind": "selected_transactions_and_exact_blocks",
+    "selected_transactions": [
+      "0xc9641dceab1311d219523e5d3914df31f6a97986d5e331db45387037ea06a07c",
+      "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+      "0x9f3edbd1eb404dec2e4d9aae93c739136f79c87f6382af25413ce705cc431f59",
+      "0x19f802affe24572bac3af47983f42bbec6055117c6a32c3fddc58bd7545e5240"
+    ]
+  }
 }
 ```
 
@@ -244,16 +395,32 @@ reconciliation_failed`, `stage: ledger_reconciliation`, `data: null`.
 
 ```json
 {
-  "exit_node": "0xee009f…c8c5",
+  "exit_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
   "contributions": [
-    { "origin_node": "0x46e0be…0cf55", "amount_raw": "7737250000000000000000",
-      "transaction_hash": "0xc964…a07c", "block_number": 16905415 },
-    { "origin_node": "0xa1b44d…8e676", "amount_raw": "7738050000000000000000",
-      "transaction_hash": "0xe3f6…fd0d", "block_number": 16920430 },
-    { "origin_node": "0x8765a3…8a4c", "amount_raw": "7738050000000000000000",
-      "transaction_hash": "0x9f3e…1f59", "block_number": 16920468 },
-    { "origin_node": "0xc4e04a…b208e", "amount_raw": "7738050000000000000000",
-      "transaction_hash": "0x19f8…5240", "block_number": 16920507 }
+    {
+      "origin_node": "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55",
+      "amount_raw": "7737250000000000000000",
+      "transaction_hash": "0xc9641dceab1311d219523e5d3914df31f6a97986d5e331db45387037ea06a07c",
+      "block_number": 16905415
+    },
+    {
+      "origin_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "amount_raw": "7738050000000000000000",
+      "transaction_hash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+      "block_number": 16920430
+    },
+    {
+      "origin_node": "0x8765a35394c98e81b9d56d44248e1199d8e38a4c",
+      "amount_raw": "7738050000000000000000",
+      "transaction_hash": "0x9f3edbd1eb404dec2e4d9aae93c739136f79c87f6382af25413ce705cc431f59",
+      "block_number": 16920468
+    },
+    {
+      "origin_node": "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e",
+      "amount_raw": "7738050000000000000000",
+      "transaction_hash": "0x19f802affe24572bac3af47983f42bbec6055117c6a32c3fddc58bd7545e5240",
+      "block_number": 16920507
+    }
   ],
   "deduplicated_total_raw": "30951400000000000000000",
   "price_context": { "status": "not_assessed", "included_in_scoring": false },
@@ -270,8 +437,9 @@ reconciliation_failed`, `stage: ledger_reconciliation`, `data: null`.
 `deduplicated_total_raw`는 확인분만, `code: source_unavailable`,
 `stage: origin_binding`, `retryable: true`.
 
-**failed 예** — 같은 TX가 두 origin에 중복 집계: `code: reconciliation_failed`,
-`stage: origin_dedup`, `data: null`.
+**failed 예** — 같은 TX가 두 origin에 중복 집계:
+`status: failed`, `results: []`, `code: reconciliation_failed`,
+`stage: origin_dedup`.
 
 ## 4. 결과 항목 규약
 
@@ -279,7 +447,10 @@ reconciliation_failed`, `stage: ledger_reconciliation`, `data: null`.
   `RES-FLOW-PATH` / `RES-FLOW-REMERGE` / `RES-FLOW-MULTI`.
 - `classification` = `confirmed_fact`. 그래프 존재·edge·금액은 confirmed
   fact이며, 소유·의도·서비스는 결과에 넣지 않는다.
-- `tool_requirement_ids`는 공통 `REQ-P0-…` 계열, `fixture_requirement_ids`는
+- `tool_requirement_ids`는 현재 등록된 `REQ-P0-EVM-005`(정합),
+  `REQ-P0-EVM-006`(자산·raw 분리), `REQ-P0-EVM-008`(exact raw)를 사용한다.
+  새 `REQ-P0-PATH-*` ID를 문서에서 임의로 만들지 않는다.
+  `fixture_requirement_ids`는
   fixture의 `REQ-FLOW-PATH-ORDER`/`REQ-FLOW-PATH-SCOPE`/
   `REQ-FLOW-REMERGE-BRANCHES`/`REQ-FLOW-REMERGE-LEDGER`/
   `REQ-FLOW-MULTI-CONTRIBUTIONS`/`REQ-FLOW-MULTI-TOTAL`.
@@ -317,8 +488,9 @@ oracle이 쓰는 **내부 classification 문자열**, 오른쪽은 **공개 resu
   `classification`이며 공개 Schema에 노출되지 않는다. 공개로 나가는 것은
   `code`(enum)·`stage`·`message`뿐이므로 이 매핑이 지켜지면 Schema는 흔들리지
   않는다.
-- `partial`은 확인된 graph/ledger를 버리지 않는다. `failed`는 `data: null`과
-  구조화 오류만 반환한다.
+- `partial`은 확인된 graph/ledger를 버리지 않는다. `failed`는
+  `results: []`와 구조화 오류만 반환한다. 현재 공개 Analysis Result에는
+  `data` 필드가 없으므로 `data: null`을 새로 만들지 않는다.
 
 ## 6. 상태 판정 우선순위
 
@@ -360,8 +532,8 @@ analyzer는 internal edge가 미확인이면 §5의 `trace_unavailable`·`partia
 | Preview 요소 (UI §5·§4) | 계약 필드 | 대응 |
 |:---|:---|:---|
 | `[INCLUDED]` edge | `graph.edges[]` + `scope_status: included` | ✓ |
-| `[EXCLUDED]` edge | `excluded_edges[]` (reason 포함) | ✓ |
-| `[UNRESOLVED]` frontier | `partial` + `termination`/frontier | ✓ |
+| `[EXCLUDED]` edge | `excluded_edges[]` + `scope_status: excluded` (reason 포함) | ✓ |
+| `[UNRESOLVED]` frontier | `partial` + `frontier[]` + `scope_status: unresolved` | ✓ |
 | ledger `input` | `reconciliation.confirmed_input_raw` | ✓ |
 | ledger `included` | `confirmed_included_output_raw` | ✓ |
 | ledger `excluded` | `confirmed_scoped_excluded_output_raw` (external은 별도) | ✓ |
@@ -371,10 +543,12 @@ analyzer는 internal edge가 미확인이면 §5의 `trace_unavailable`·`partia
 | `not_assessed` | `attribution.status` / `price_context.status` | ✓ |
 | 상태 badge COMPLETE/PARTIAL/FAILED | `status` + `errors[].code/stage` | ✓ |
 
-- **UI가 요구하나 계약에 이름이 없던 것:** edge별 `scope_status`
-  (`included|excluded|unresolved`)는 §15 §4.2에 있으나 §3의 `graph.edges`
-  예시에는 생략돼 있었다. 구현 시 `graph.edges[]`에 `scope_status`를
-  명시(기본 `included`)해 Preview의 3-상태 표기와 정확히 맞춘다.
+- `scope_status` enum은 `included|excluded|unresolved`로 고정한다.
+  `graph.edges[]`는 `included`, `excluded_edges[]`는 `excluded`,
+  `partial`의 `frontier[]`는 `unresolved`만 허용한다. 한 항목을 두 배열에
+  중복 배치하지 않는다.
+- `scope_status`는 구현 시 추가할 선택 필드가 아니라 `flow_path` 결과
+  모델의 필수 필드다. §3의 complete·partial 예제가 이 규칙을 직접 보여준다.
 - 그 외 Preview 요소는 모두 위 결과 필드로 표현되며 신규 UI 필드는 필요 없다.
 
 ## 9. 구현 시 필요한 계약 확장 (승인 후 적용, 이 문서로는 미적용)
