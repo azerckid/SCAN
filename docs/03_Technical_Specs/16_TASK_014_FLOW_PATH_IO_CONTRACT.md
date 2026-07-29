@@ -46,7 +46,24 @@ oracle·Verifier가 이미 준비된 상태에서 제품 analyzer를 짤 때 Sch
   "chain_id": 1,
   "fixture_id": "FX-FLOW-PATH-001",
   "requested_at": "2026-07-30T00:00:00+00:00",
-  "inputs": { "...": "query_kind별 §3" },
+  "inputs": {
+    "seed_node": "0x036cec1a199234fc02f72d29e596a09440825f1c",
+    "direction": "outbound",
+    "asset_scope": { "kind": "native", "symbol": "ETH", "decimals": 18 },
+    "terminal_policy": {
+      "terminal_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+      "stop_on": "selected_terminal_reached"
+    },
+    "budgets": { "max_hops": 3, "max_nodes": 4, "max_edges": 3 },
+    "scope": {
+      "kind": "selected_transactions_and_exact_blocks",
+      "block_windows": [
+        { "from": 16818102, "to": 16818102 },
+        { "from": 16905356, "to": 16905356 },
+        { "from": 16920430, "to": 16920430 }
+      ]
+    }
+  },
   "source_policy": {
     "rule_status": "allowed",
     "allowed_source_ids": ["DS-EVM-RPC-ARCHIVE"],
