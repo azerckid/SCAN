@@ -1,6 +1,6 @@
 # Live Provider Integration 최소 준비와 Capability Gate
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 06:14
+> Last Updated: 2026-07-29 09:50
 > Status: Pre-event Smoke Partial Pass · Credential Rotation Pending · Competition Rules Unclear
 
 ## 1. 목적
@@ -214,8 +214,10 @@ hash 계산 전후 모두 artifact에 들어가면 안 된다.
 독립 Trace 재시도 계약은 `debug_traceTransaction(callTracer)`와
 `trace_transaction` 두 dialect를 동일한 성공 내부 inflow 구조로 정규화한다.
 timeout·429·method not found·malformed JSON은 offline 주입 검증을 통과했지만
-credential 회전 전이므로 추가 live 호출은 0건이다. Alchemy
-`trace_transaction`의 plan 제한은 실제 계정 확인 전까지 `unresolved`로 둔다.
+사용자가 노출 위험을 수용하고 read-only 실행을 승인해 Alchemy에서 두
+dialect를 각각 1회 호출했다. 둘 다 HTTP 400 `permanent`로 실패했으므로
+현재 endpoint는 독립 Trace 역할에 부적합하다. `trace_transaction`의 plan
+제한과 대체 공급자는 `unresolved`로 둔다.
 
 합성 offline 반례 24개는 두 번 실행해 결정성을 통과했다. 실행 근거는
 [TASK-012 Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md)다.

@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 06:14
+> Last Updated: 2026-07-29 09:50
 > Status: Proposed 0.1 · No Implementation Approval
 
 ## 1. 목적
@@ -55,7 +55,9 @@
 - [ ] 독립 trace와 rate-limit·timeout·method-not-found 반례를 실행한다.
   - [x] 두 Trace dialect 정규화·교차 동등성과 timeout·429·
     method-not-found(`invalid_response`)·malformed offline 주입 검증을 통과했다.
-  - [ ] 회전된 credential로 독립 trace와 live rate/timeout을 실행한다.
+  - [x] 사용자 위험 수용 후 현재 Alchemy endpoint에서 두 dialect를 실행했으나
+    모두 HTTP 400 `permanent`로 실패했다.
+  - [ ] 성공 가능한 별도 독립 trace endpoint와 live rate/timeout을 검증한다.
 - [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만 `confirmed` 승격한다.
 - [ ] 네 문제 입력·정답 필드와 partial 조건 제안을 승인한다.
 - [ ] 기존 EVM decoder·source·cache 재사용 범위를 확인한다.

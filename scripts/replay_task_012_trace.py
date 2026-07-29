@@ -17,6 +17,7 @@ from scan_tool.application.security import SensitiveDataError
 from scan_tool.application.task_012_trace import (
     TraceDialect,
     dry_run_trace_plan,
+    preserve_dialect_report,
     run_task_012_trace_replay,
 )
 
@@ -72,7 +73,10 @@ async def async_main() -> int:
                 output_root=output_root,
                 client=client,
             )
-        report_path = write_report(report, output_root)
+        report_path = preserve_dialect_report(
+            write_report(report, output_root),
+            dialect,
+        )
     except SensitiveDataError:
         print(json.dumps({"status": "security_blocked"}))
         return 4
