@@ -95,11 +95,17 @@
     "wider_history_scanned": false,
     "implementation_changed": true,
     "event_matches_after_state": true,
-    "admin_remained_zero": true
+    "admin_remained_zero": true,
+    "independent_verifier_pass": true
+  },
+  "verification_provenance": {
+    "negative_oracle_report": "../../33_TASK_013_NEGATIVE_ORACLE_REPORT.md",
+    "independent_verifier_report": "../../34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md",
+    "calculated_fact_sha256": "f0683ef2167e2e7799891a66e0b065300842fd46de5d63b84ebe440ee2f58d93"
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Analysis I/O/UI approval and independent verifier are not complete. Wider upgrade history is outside this selected-upgrade fixture scope."
+    "remaining": "Analysis I/O/UI approval and fixture promotion review are not complete. Wider upgrade history is outside this selected-upgrade fixture scope."
   },
   "provenance_notes": "Etherscan was used only to discover the public upgrade transaction. Scoring event and storage values were independently read from two archive RPC providers."
 }

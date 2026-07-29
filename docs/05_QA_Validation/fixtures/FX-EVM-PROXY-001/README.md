@@ -1,7 +1,7 @@
 # Fixture: FX-EVM-PROXY-001
 > Created: 2026-07-29 14:38
-> Last Updated: 2026-07-29 15:25
-> Status: Candidate 0.1 · Replay and Negative Oracle Gate Passed
+> Last Updated: 2026-07-29 15:38
+> Status: Candidate 0.1 · Replay, Negative Oracle, and Verifier Gates Passed
 
 ## 1. 목적
 
@@ -29,12 +29,13 @@ storage로 함께 입증하는 공개 후보다.
 - [x] 선정 upgrade receipt·filtered log·adjacent state·raw replay SHA-256
 - [x] latest-state 오용·admin 혼동·event/state·implementation/beacon conflict negative oracle
 - [ ] Analysis I/O·UI Preview 승인
-- [ ] 독립 Verifier와 결정성
+- [x] 독립 Verifier와 두 번의 결정성
 
 ## 4. Related Documents
 
 - **Technical_Specs**: [TASK-013 계약](../../../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - EIP-1967 해석 경계
 - **QA_Validation**: [TASK-013 후보 보고서](../../32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - 선정·승격 Gate
 - **QA_Validation**: [TASK-013 Negative Oracle](../../33_TASK_013_NEGATIVE_ORACLE_REPORT.md) - slot·state 반례
+- **QA_Validation**: [TASK-013 독립 Verifier](../../34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md) - raw-first 재계산
 - **QA_Validation**: [Raw replay](./raw-replay.json) · [Provider replay](./provider-replay.json) - raw evidence와 공급자별 SHA
 - **External**: [ERC-1967](https://eips.ethereum.org/EIPS/eip-1967) - 공식 slot·event 정의

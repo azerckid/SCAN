@@ -1,7 +1,7 @@
 # Fixture: FX-EVM-NFT-721-001
 > Created: 2026-07-29 14:38
-> Last Updated: 2026-07-29 15:17
-> Status: Candidate 0.1 · Replay and Negative Oracle Gate Passed
+> Last Updated: 2026-07-29 15:38
+> Status: Candidate 0.1 · Replay, Negative Oracle, and Verifier Gates Passed
 
 ## 1. 목적
 
@@ -27,12 +27,13 @@
 - [x] 선정 TX receipt·정확한 block window filtered logs·raw replay SHA-256
 - [x] ERC-20/721 혼동·다른 contract·range 누락 negative oracle
 - [ ] Analysis I/O·UI Preview 승인
-- [ ] 독립 Verifier와 결정성
+- [x] 독립 Verifier와 두 번의 결정성
 
 ## 4. Related Documents
 
 - **Technical_Specs**: [TASK-013 계약](../../../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - ERC-721 해석 경계
 - **QA_Validation**: [TASK-013 후보 보고서](../../32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - 선정·승격 Gate
 - **QA_Validation**: [TASK-013 Negative Oracle](../../33_TASK_013_NEGATIVE_ORACLE_REPORT.md) - 표준·범위 반례
+- **QA_Validation**: [TASK-013 독립 Verifier](../../34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md) - raw-first 재계산
 - **QA_Validation**: [Raw replay](./raw-replay.json) · [Provider replay](./provider-replay.json) - raw evidence와 공급자별 SHA
 - **External**: [ERC-721](https://eips.ethereum.org/EIPS/eip-721) - 공식 event 정의

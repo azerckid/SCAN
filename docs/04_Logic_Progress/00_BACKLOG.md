@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 15:25
+> Last Updated: 2026-07-29 15:49
 > Status: TASK-001~012 Done · WP-INPUT Done · TASK-013~019 Proposed
 
 ## 1. 문서 목적
@@ -1014,6 +1014,8 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] raw/provider replay·capability별 SHA·명시 scope 완전성·raw
     integrity checker를 통과한다.
   - [x] 세 표준의 negative oracle 16개를 두 번 실행해 결정성을 확인한다.
+  - [x] 독립 Verifier가 세 candidate의 raw facts·13개 evidence 값·7개
+    requirement를 두 번 재계산한다.
   - [ ] ERC-721/1155와 EIP-1967 공개 fixture를 각각 확정한다.
   - [ ] Analysis I/O 대안과 전용 UI Preview를 승인한다.
   - [ ] 표준·반례·decode failure를 검증한다.
@@ -1034,6 +1036,7 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-SPECIAL-001
   - [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - 세 package ID·선정·승격 Gate
   - [TASK-013 Negative Oracle 보고서](../05_QA_Validation/33_TASK_013_NEGATIVE_ORACLE_REPORT.md) - 표준별 16개 반례·결정성
+  - [TASK-013 독립 Verifier 보고서](../05_QA_Validation/34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md) - raw-first facts·13 evidence values·7 requirements 재계산
 - Implementation Preconditions:
   - [x] fixture·계약·반례 문서 Draft를 작성한다.
   - [x] TASK-012 공통 EVM 입력이 안정됐다.
@@ -1058,8 +1061,8 @@ Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - candidate 3개의 replay·negative Gate와 계약 Draft 존재.
-    Verifier·fixture 확정·UI·사용자 구현 승인 전 착수 금지
+  - Status: PENDING - candidate 3개의 replay·negative·Verifier Gate와 계약 Draft 존재.
+    fixture 확정·UI·사용자 구현 승인 전 착수 금지
   - Required References Read: 예상문제 은행·Coverage Brief·EIP-721/1155/1967
   - Constraints: 소유권 분쟁·안전성 자동 판정 금지
   - Conflicts: None known

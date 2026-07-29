@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 15:25
+> Last Updated: 2026-07-29 15:49
 > Status: Wave 1 TASK-012 Complete · Later Waves Proposed
 
 ## 1. 목적
@@ -114,6 +114,8 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] `TASK-013` raw/provider replay와 selected TX·exact block 또는
   selected upgrade·adjacent state scope Gate를 통과한다.
 - [x] `TASK-013` negative oracle 16개와 두 번의 결정성 재현을 완성한다.
+- [x] `TASK-013` 독립 Verifier가 세 candidate의 13개 evidence 값과 7개
+  requirement를 raw에서 두 번 재계산한다.
 - [ ] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 확정한다.
 - [ ] `TASK-013` Analysis I/O 대안과 전용 UI Preview를 승인한다.
 - [ ] `TASK-014` 단일 path와 분기·재병합 fixture를 확정한다.

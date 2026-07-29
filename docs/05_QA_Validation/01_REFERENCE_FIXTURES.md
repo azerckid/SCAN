@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 15:25
+> Last Updated: 2026-07-29 15:49
 > Status: Approved 1.3 · Phase 2 Confirmed Pack · TASK-013 Candidates
 
 ## 1. 문서 목적
@@ -107,8 +107,9 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 
 TASK-013 세 패키지는 공개 주소·TX·block, expected/evidence 골격과 두
 공급자 receipt/log 또는 historical storage 일치, raw SHA와 명시 scope
-replay, negative oracle 16개 두 번 실행까지 확보한 `후보`다. 독립 Verifier가 남아 있어
-`검증 중`이나 `확정`으로 올리지 않는다. NFT는 두 선정 TX와 exact block
+replay, negative oracle 16개와 독립 Verifier의 13개 evidence 값·7개
+requirement 두 번 재계산까지 확보한 `후보`다. 별도 승격 판단 전에는 `검증 중`이나
+`확정`으로 올리지 않는다. NFT는 두 선정 TX와 exact block
 window, Proxy는 선정 upgrade와 adjacent state만 완전성을 주장한다.
 
 ---
@@ -458,7 +459,10 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
     정식 Analysis I/O 승인·제품 analyzer·fixture `confirmed`를 뜻하지 않는다.
 12. TASK-013 NFT·Proxy 세 fixture의 합성 negative oracle 16개를 두 번
     실행해 표준 혼동·범위 누락·ABI·slot/state 충돌 경계를 고정했다.
-    독립 Verifier·UI·Context Receipt가 남아 package는 `candidate`다.
+13. TASK-013 독립 Verifier가 raw replay에서 세 candidate의 필수 facts,
+    13개 evidence 값과 7개 requirement를 두 번 재계산했다. Oracle·Verifier
+    보고서 경로와 fact hash도 evidence provenance에 고정했다. UI·Context
+    Receipt와 별도 승격 판단이 남아 package는 `candidate`다.
 
 ## 10. Related Documents
 
@@ -484,4 +488,5 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 - **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 네 confirmed fixture의 24개 offline 반례
 - **QA_Validation**: [TASK-012 Analysis Contract Examples](./examples/task-012/README.md) - complete·partial·failed 12개 제안 사례와 검증 명령
 - **QA_Validation**: [TASK-013 Negative Oracle 보고서](./33_TASK_013_NEGATIVE_ORACLE_REPORT.md) - NFT·Proxy 16개 반례·결정성
+- **QA_Validation**: [TASK-013 독립 Verifier 보고서](./34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md) - raw-first facts·requirement 재계산
 - **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 사전 fixture·cache와 source 허용 범위
