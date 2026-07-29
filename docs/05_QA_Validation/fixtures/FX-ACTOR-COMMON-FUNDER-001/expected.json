@@ -1,0 +1,63 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-ACTOR-COMMON-FUNDER-001",
+  "status": "candidate",
+  "seed_address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+  "relations": [
+    {
+      "subject_address": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    },
+    {
+      "subject_address": "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    },
+    {
+      "subject_address": "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    },
+    {
+      "subject_address": "0x8765a35394c98e81b9d56d44248e1199d8e38a4c",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    }
+  ],
+  "common_funder_assessment": "candidate",
+  "ownership_assessment": "not_assessed",
+  "coordination_assessment": "not_assessed",
+  "initial_inflow_complete": false,
+  "service_exclusion_complete": false,
+  "partial_conditions": [
+    "Direct seed outputs are confirmed but initial-inflow completeness is unavailable",
+    "The seed service/faucet/paymaster exclusion is unavailable"
+  ],
+  "failed_conditions": [
+    "A non-seed inbound transfer is counted as seed funding",
+    "Direct funding is promoted to common ownership or coordination",
+    "The public seed is known to be a service but is not excluded"
+  ],
+  "tolerance": {
+    "integer_raw": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-INTEL-ACTOR-FUNDER-EDGES",
+        "description": "Four direct seed outputs and raw values must match the confirmed FLOW snapshot.",
+        "mandatory": true,
+        "evidence_refs": ["EV-INTEL-ACTOR-FUNDER-EDGES"]
+      },
+      {
+        "requirement_id": "REQ-INTEL-ACTOR-FUNDER-BOUNDARY",
+        "description": "Ownership, coordination, initial-inflow completeness, and service exclusion must remain explicit.",
+        "mandatory": true,
+        "evidence_refs": ["EV-INTEL-ACTOR-FUNDER-BOUNDARY"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "provider": "PROVIDER-EVM-VERIFY",
+  "block_number": 25640270,
+  "block_tag": "0x1873d4e",
+  "name": "team4.vesting.contract.tornadocash.eth",
+  "node": "0x89658e012376b43a5108744fbe66ad3c8c14d2713bd74e4d9109b3e7a4b496d4",
+  "resolver_raw": "0x0000000000000000000000004976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
+  "resolver": "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
+  "address_raw": "0x000000000000000000000000c3877028655ebe90b9447dd33de391c955ead267",
+  "address": "0xc3877028655ebe90b9447dd33de391c955ead267"
+}

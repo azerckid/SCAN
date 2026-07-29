@@ -1,0 +1,58 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-ACTOR-RELATION-HUB-001",
+  "status": "candidate",
+  "hub": {
+    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "role": "public_erc20_token_contract",
+    "symbol": "USDC"
+  },
+  "relations": [
+    {
+      "subject_address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "source_fixture_id": "FX-SVC-DEX-001",
+      "relation": "token_transfer_interaction"
+    },
+    {
+      "subject_address": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+      "source_fixture_id": "FX-EVM-AUTH-001",
+      "relation": "approval_and_consumption_interaction"
+    }
+  ],
+  "hub_excluded_from_actor_link": true,
+  "ownership_assessment": "not_assessed",
+  "coordination_assessment": "not_assessed",
+  "partial_conditions": [
+    "Only one confirmed source fixture is available",
+    "The hub role cannot be established as a public token contract"
+  ],
+  "failed_conditions": [
+    "Shared interaction with a public token contract is reported as common ownership",
+    "The DEX and AUTH subject identities are merged",
+    "A different token contract is substituted for the scoped hub"
+  ],
+  "tolerance": {
+    "exact_address_and_relation": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-INTEL-ACTOR-HUB-RELATIONS",
+        "description": "Each subject-to-USDC relation must remain tied to its own confirmed fixture.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-INTEL-ACTOR-HUB-DEX",
+          "EV-INTEL-ACTOR-HUB-AUTH"
+        ]
+      },
+      {
+        "requirement_id": "REQ-INTEL-ACTOR-HUB-EXCLUSION",
+        "description": "The public USDC hub must be excluded from ownership or coordination inference.",
+        "mandatory": true,
+        "evidence_refs": ["EV-INTEL-ACTOR-HUB-BOUNDARY"]
+      }
+    ]
+  }
+}

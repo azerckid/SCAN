@@ -1,0 +1,57 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-ACTOR-COMMON-FUNDER-001",
+  "status": "candidate",
+  "captured_at": "2026-07-29T18:27:00Z",
+  "event_evidence": [],
+  "call_evidence": [],
+  "state_evidence": [],
+  "context_evidence": [
+    {
+      "evidence_id": "EV-INTEL-ACTOR-FUNDER-EDGES",
+      "evidence_type": "confirmed_flow_snapshot",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_fixture_id": "FX-FLOW-REMERGE-001",
+      "raw_artifact_uri": "artifact://sha256/16ff54e8a12245d3d23a6c8954604db6c1ce371558a47645c8f58307be526ab5",
+      "expected_artifact_uri": "artifact://sha256/627c47ffb39dcb8c5179883a8c84c1ac92fca14ef08cf23dd5cfbfd804437cad"
+    },
+    {
+      "evidence_id": "EV-INTEL-ACTOR-FUNDER-BOUNDARY",
+      "evidence_type": "relation_scope_boundary",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "initial_inflow_complete": false,
+      "service_exclusion_complete": false,
+      "ownership_assessment": "not_assessed"
+    }
+  ],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Confirmed FLOW seed-output snapshot"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "FX-FLOW-REMERGE-001-CONFIRMED-REPLAY",
+      "retrieved_at": "2026-07-29T18:27:00Z"
+    }
+  ],
+  "consistency_checks": {
+    "source_artifact_hashes_match": true,
+    "four_direct_seed_edges_match": true,
+    "initial_inflow_complete": false,
+    "service_exclusion_complete": false,
+    "negative_oracle_pass": false,
+    "independent_verifier_pass": false
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": "Bounded prehistory, faucet/paymaster/service exclusions, negative oracles, and an independent Verifier are required before verifying."
+  },
+  "provenance_notes": "This candidate reuses immutable confirmed FLOW artifacts. A direct funding relation is not ownership or coordination proof."
+}

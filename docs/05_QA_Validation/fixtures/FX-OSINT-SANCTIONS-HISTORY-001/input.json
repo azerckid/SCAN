@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+  "problem_id": "OSINT-SAN-001",
+  "status": "candidate",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+  "scope_kind": "official_historical_actions",
+  "actions": [
+    {
+      "role": "designation",
+      "date": "2022-08-08",
+      "url": "https://ofac.treasury.gov/recent-actions/20220808",
+      "html_sha256": "a6160e2d63d9c13ac8ca60778b48c778e94dc84e10b6ef4cacadd337f34df74c"
+    },
+    {
+      "role": "removal",
+      "date": "2025-03-21",
+      "url": "https://ofac.treasury.gov/recent-actions/20250321",
+      "html_sha256": "630ff0e4efa827bb95fd4d00e2ecd0072daff56e966f9fa3536dcd07b4ead465"
+    }
+  ],
+  "selection_notes": "Official OFAC historical actions that each enumerate the subject address. The fixture preserves the timeline and does not infer current sanctions status from the 2022 action."
+}

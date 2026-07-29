@@ -1,0 +1,89 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+  "status": "candidate",
+  "captured_at": "2026-07-29T18:37:00Z",
+  "event_evidence": [],
+  "call_evidence": [
+    {
+      "evidence_id": "EV-INTEL-LABEL-ENS",
+      "evidence_type": "ens_fixed_block_resolution",
+      "source_id": "DS-ENS",
+      "name": "team4.vesting.contract.tornadocash.eth",
+      "block_number": 25640270,
+      "resolved_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+      "artifact_uri": "artifact://sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b"
+    }
+  ],
+  "state_evidence": [],
+  "context_evidence": [
+    {
+      "evidence_id": "EV-INTEL-LABEL-DATASET",
+      "evidence_type": "pinned_dataset_row",
+      "source_id": "DS-LABEL-PUBLIC",
+      "selected_row_sha256": "15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475",
+      "artifact_uri": "artifact://sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475",
+      "license_scope": "research_and_testing_only"
+    },
+    {
+      "evidence_id": "EV-INTEL-LABEL-CONFIG",
+      "evidence_type": "pinned_community_config",
+      "source_id": "DS-OSINT-WEB",
+      "commit": "4dea68f71633dab37e3cb4c8b4d8dca3479891c6",
+      "config_sha256": "84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32",
+      "license": "MIT"
+    }
+  ],
+  "source_requirements": [
+    {
+      "source_id": "DS-LABEL-PUBLIC",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Pinned research/testing sample assertion"
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Pinned community role configuration"
+    },
+    {
+      "source_id": "DS-ENS",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Fixed-block name-to-address binding"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-LABEL-PUBLIC",
+      "provider": "HUMANBASED-AI-HF-PINNED",
+      "retrieved_at": "2026-07-29T18:27:00Z"
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "provider": "TORNADO-COMMUNITY-GITHUB-PINNED",
+      "retrieved_at": "2026-07-29T18:27:00Z"
+    },
+    {
+      "source_id": "DS-ENS",
+      "provider": "PROVIDER-EVM-VERIFY",
+      "retrieved_at": "2026-07-29T18:37:00Z"
+    }
+  ],
+  "consistency_checks": {
+    "selected_row_hash_matches": true,
+    "config_hash_matches": true,
+    "ens_fixed_block_repeated": true,
+    "second_ens_provider_match": false,
+    "negative_oracle_pass": false,
+    "independent_verifier_pass": false
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": "Second ENS provider or independently reproducible stored replay, conflict negative oracle, and independent Verifier are required before verifying."
+  },
+  "provenance_notes": "Etherscan content is not used. The OpenRAIL sample is limited to research/testing use; all assertions remain source-scoped."
+}

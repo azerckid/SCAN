@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-30 03:27
-> Status: TASK-012~014 Complete · TASK-015 Source Resolution 5 Viable / Snapshot Basis · Benchmark 11/11
+> Last Updated: 2026-07-30 03:47
+> Status: TASK-012~014 Complete · TASK-015 Candidate Packages 5 · Benchmark 11/11
 
 ## 1. 목적
 
@@ -168,7 +168,7 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   (4 viable, label conflict 1 source-blocked; package·snapshot 아님).
 - [x] label source blocker를 research-permitted OpenRAIL sample·MIT config·
   onchain ENS conflict로 교체하고 다섯 후보의 raw snapshot SHA 기준선을 고정한다.
-- [ ] selected raw artifact를 포함한 다섯 candidate package를 작성한다.
+- [x] selected raw artifact를 포함한 다섯 candidate package를 작성한다.
 - [ ] official과 heuristic의 상충 사례를 fixture·독립 Verifier에 포함한다.
 - [ ] AI가 만든 label 가설이 evidence 없는 confirmed fact가 되지 않게 한다.
 - [ ] Context Receipt PASS와 별도 구현 승인을 기록한다.

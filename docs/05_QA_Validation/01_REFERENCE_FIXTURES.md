@@ -1,13 +1,14 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30
-> Status: Approved 1.8 · Phase 2 Confirmed Pack · TASK-014 Fixture 3 Confirmed
+> Last Updated: 2026-07-30 03:37
+> Status: Approved 1.8 · 13 Confirmed · TASK-015 Candidate Packages 5
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
-있는 reference fixture를 관리한다. 현재 15개 중 13개는 `확정`, 2개는
-후속 Gate가 남은 `후보`다. TASK-013 세 공개 사례는 remediation
+있는 reference fixture를 관리한다. 현재 등록한 20개 중 13개는 `확정`,
+7개는 후속 Gate가 남은 `후보`다. 18개는 Schema package가 있고, 기존
+Deferred 2개는 문서 후보만 있다. TASK-013 세 공개 사례는 remediation
 재검토와 [최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
 통과해 `확정`으로 관리한다.
 
@@ -15,6 +16,10 @@ TASK-014 세 공개 PATH 사례는 Euler 공개 사건의 서로 다른 request 
 사용해 실제 TX·주소·raw 금액을 고정하고, 두 공급자 replay·negative
 oracle 18개·독립 Verifier·제품 analyzer를 통과했다. PATH internal seed
 edge는 Blockscout API로 독립 교차검증해 세 fixture를 `확정`으로 관리한다.
+
+TASK-015 다섯 package는 source blocker 교체와 selected artifact/hash
+기준선까지만 완료한 `후보`다. negative oracle·독립 Verifier·계약·Context
+Receipt 전에는 `verifying` 또는 자동화 coverage로 승격하지 않는다.
 
 입력 문서:
 
@@ -102,6 +107,11 @@ edge는 Blockscout API로 독립 교차검증해 세 fixture를 `확정`으로 �
 | [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 확정 0.2 | archive replay·반례·consumer pass | EVM-STATE, decimals |
 | [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 확정 0.2 | filtered logs·ordering·consumer pass | EVM-LOG, first ordering |
 | [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | EVM-TOKEN-002 | 1 | 확정 0.2 | primary trace·cross-check·consumer pass | EVM-TRACE, native sum |
+| [FX-OSINT-LABEL-CONFLICT-001](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) | OSINT-LBL-001 | 2 | 후보 0.1 | selected row·config·ENS snapshot, oracle·Verifier 대기 | LABEL, source conflict |
+| [FX-OSINT-SANCTIONS-HISTORY-001](./fixtures/FX-OSINT-SANCTIONS-HISTORY-001/README.md) | OSINT-SAN-001 | 2 | 후보 0.1 | official action hashes, SLS·oracle·Verifier 대기 | SANCTIONS, timeline |
+| [FX-OSINT-ENS-CONFLICT-001](./fixtures/FX-OSINT-ENS-CONFLICT-001/README.md) | OSINT-ENS-001 | 2 | 후보 0.1 | fixed-block replay, 제2 provider·oracle·Verifier 대기 | ENS, forward/reverse |
+| [FX-ACTOR-COMMON-FUNDER-001](./fixtures/FX-ACTOR-COMMON-FUNDER-001/README.md) | ACTOR-REL-001 | 1 | 후보 0.1 | confirmed FLOW hash, prehistory·service exclusion 대기 | ACTOR, common funder |
+| [FX-ACTOR-RELATION-HUB-001](./fixtures/FX-ACTOR-RELATION-HUB-001/README.md) | ACTOR-REL-002 | 1 | 후보 0.1 | confirmed DEX/AUTH hash, false-positive oracle 대기 | ACTOR, public hub |
 
 ## 6. Fixture 상세
 
