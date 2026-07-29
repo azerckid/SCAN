@@ -1,0 +1,52 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-FLOW-PATH-001",
+  "status": "verifying",
+  "captured_at": "2026-07-29T14:58:46.375333+00:00",
+  "scope_kind": "selected_transactions_and_exact_blocks",
+  "providers": [
+    {
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T14:58:32.515362+00:00",
+      "raw_sha256": {
+        "internal_seed_transaction": "07aba35450e7b391671b385d7c80b74f565e1cd3781845a6a11258cc6fe18082",
+        "internal_seed_receipt": "77a1d655d3ea6379db8b007b76449b69a8da7f1fc11e4e7264581d4ad0e36462",
+        "split_a_transaction": "e829a765c23781f9681c257e5a4fa6daf88d3897e97b1fe468b6862cf486803d",
+        "split_a_receipt": "d330c1616426b68d0759880e5a87db47e898352e56d7abe9a6a63d289b014dc1",
+        "merge_a_transaction": "fc63002ef2ef49dbc46705caf40583590c2405919925d16441e10c9be4b3ed69",
+        "merge_a_receipt": "9bffa406cb88a9c061103d40b4372150ad3345cfb218bd76baf3e93ed47bdd99",
+        "internal_seed_trace": "725d89870d4ed3efb365ea29ca4daca8638021a1b3f11c86d619f618f564d149"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T14:58:46.375333+00:00",
+      "raw_sha256": {
+        "internal_seed_transaction": "f0c86147f34c75a6308b4985b0cd0a04d80292f939edbffd96ae9adcfe450379",
+        "internal_seed_receipt": "ce6c4383542225bf1125191f6bb67d6234ca92691b98a4dfc9d1658474c123a3",
+        "split_a_transaction": "714ff0d9596960398dfcdc81261fb1535a9b78bafe80422fa0669aae769163df",
+        "split_a_receipt": "2b34da5ad5acbc716c1675c570fd23f0e4133e9f8e254bd212aea45b4c486fe6",
+        "merge_a_transaction": "c3a52b92766c86cd87c806d2899983a10fecef7d0b70547db363581a06ba0f2f",
+        "merge_a_receipt": "c7a6c6f0beb24cfcc2379aea18bbdb4931e73f77c6568fb60bcd939be8fe5755"
+      }
+    }
+  ],
+  "decoded_match": true,
+  "selected_transaction_scope_complete": true,
+  "continuous_gap_scanned": false,
+  "internal_trace": {
+    "provider_id": "PROVIDER-EVM-PRIMARY",
+    "status": "complete",
+    "capability": "internal_seed_trace",
+    "raw_sha256": "725d89870d4ed3efb365ea29ca4daca8638021a1b3f11c86d619f618f564d149",
+    "decoded_match_to_expected_edge": true
+  },
+  "negative_oracle_status": "pass_18_shared_cases",
+  "independent_verifier_status": "pass",
+  "remaining_gate": [
+    "product_analyzer",
+    "final_promotion"
+  ]
+}

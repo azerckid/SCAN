@@ -1,7 +1,7 @@
 # Fixture: FX-FLOW-MULTI-001
 > Created: 2026-07-29 23:25
-> Last Updated: 2026-07-29 23:25
-> Status: Candidate 0.1 · 공개 4 origin→1 exit 사례 선정 · Replay/Oracle/Verifier Pending
+> Last Updated: 2026-07-30 00:08
+> Status: Verifying 0.1 · Two-provider Replay/Oracle/Verifier Passed
 
 ## 1. 목적
 
@@ -21,19 +21,22 @@
 exit는 `0xee009f...c8c5`다. 가격 환산과 네 주소의 동일 소유자 여부는 채점하지
 않는다.
 
-## 3. 후보 유지 사유
+## 3. 검증 상태
 
 - [x] origin 네 개·exit 하나·성공 TX 네 건 1차 재현
 - [x] transaction hash dedup 후 raw 총액 계산
 - [x] 가격·라벨·귀속을 `not_assessed`로 분리
-- [ ] primary provider·고정 raw artifact 재현
-- [ ] origin set 완전성 범위 결정
-- [ ] 중복·누락·다른 exit·price 누락 negative oracle
-- [ ] 두 번 결정성·독립 Verifier
+- [x] 두 공급자 raw replay·SHA-256
+- [x] 명시 origin set와 transaction hash 중복 제거 결정성
+- [x] 중복·누락·다른 exit·price 누락 negative oracle
+- [x] 두 번 결정성·독립 Verifier contribution·total 재계산
+- [ ] 제품 analyzer·최종 fixture 승격
 
 ## 4. Related Documents
 
 - **Technical_Specs**: [TASK-014 PATH 계약](../../../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) - multi-origin·dedup 계약
 - **QA_Validation**: [TASK-014 Fixture Gate](../../39_TASK_014_FIXTURE_CONTRACT_GATE.md) - 승격 기준
 - **QA_Validation**: [TASK-014 후보 보고서](../../40_TASK_014_FIXTURE_CANDIDATE_REPORT.md) - 세 후보 선정 판정
+- **QA_Validation**: [Replay·Oracle 보고서](../../41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md) - 공급자 재현과 반례
+- **QA_Validation**: [독립 Verifier 보고서](../../42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md) - raw-first total 재계산
 - **External**: [Euler Finance incident timeline](https://www.euler.finance/blog/war-peace-behind-the-scenes-of-eulers-240m-exploit-recovery) - 공개 사건 맥락

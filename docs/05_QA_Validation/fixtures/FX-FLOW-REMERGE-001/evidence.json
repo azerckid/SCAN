@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-FLOW-REMERGE-001",
-  "status": "candidate",
+  "status": "verifying",
   "captured_at": "2026-07-29T14:25:33Z",
   "event_evidence": [],
   "call_evidence": [
@@ -98,13 +98,19 @@
     "four_distinct_branch_nodes": true,
     "single_merge_node": true,
     "external_inflow_separated": true,
-    "two_provider_decoded_match": false,
+    "two_provider_decoded_match": true,
     "continuous_range_scanned": false,
-    "independent_verifier_pass": false
+    "raw_sha256_recorded_per_capability": true,
+    "independent_verifier_pass": true
+  },
+  "verification_provenance": {
+    "negative_oracle_report": "../../41_TASK_014_REPLAY_NEGATIVE_ORACLE_REPORT.md",
+    "independent_verifier_report": "../../42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md",
+    "calculated_fact_sha256": "39198d15b878ddd07a227fd6df1e0047a2c3cf2b2d8f8b414bfa33e14ffab381"
   },
   "uncertainty": {
-    "candidate_only": true,
-    "remaining": "Primary-provider replay, raw SHA-256 artifacts, continuous-range scope, residual classification, negative oracle, and independent Verifier."
+    "candidate_only": false,
+    "remaining": "Product analyzer and final fixture promotion remain pending. Residual stays explicitly unresolved and the long continuous range is outside this selected-transaction scope."
   },
   "provenance_notes": "The graph uses public transaction facts only. The official incident article is context. Common control, intent, criminal attribution, and victim labels are not scored."
 }

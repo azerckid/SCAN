@@ -1,0 +1,102 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-FLOW-MULTI-001",
+  "status": "verifying",
+  "chain_id": 1,
+  "captured_at": "2026-07-29T14:58:46.375333+00:00",
+  "scope": {
+    "kind": "selected_transactions_and_exact_blocks",
+    "selected_transactions_complete": true,
+    "continuous_gap_scanned": false
+  },
+  "transactions": [
+    {
+      "label": "merge_c",
+      "transaction": {
+        "hash": "0xc9641dceab1311d219523e5d3914df31f6a97986d5e331db45387037ea06a07c",
+        "blockHash": "0x8f96c356211a24e7966d53e3e063e49874ca0c12e09445dc3c051da439cdacb9",
+        "blockNumber": "0x101f4c7",
+        "transactionIndex": "0x24",
+        "from": "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55",
+        "to": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+        "value": "0x1a36fe9e94ae71d0000"
+      },
+      "receipt": {
+        "transactionHash": "0xc9641dceab1311d219523e5d3914df31f6a97986d5e331db45387037ea06a07c",
+        "blockHash": "0x8f96c356211a24e7966d53e3e063e49874ca0c12e09445dc3c051da439cdacb9",
+        "blockNumber": "0x101f4c7",
+        "transactionIndex": "0x24",
+        "status": "0x1"
+      }
+    },
+    {
+      "label": "merge_a",
+      "transaction": {
+        "hash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+        "blockHash": "0xefe4fb3f75192fd6980bcec2a5938a7aa965eba8b65a924b0dd40be54ebb698f",
+        "blockNumber": "0x1022f6e",
+        "transactionIndex": "0x37",
+        "from": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+        "to": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+        "value": "0x1a37b04150dd36d0000"
+      },
+      "receipt": {
+        "transactionHash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+        "blockHash": "0xefe4fb3f75192fd6980bcec2a5938a7aa965eba8b65a924b0dd40be54ebb698f",
+        "blockNumber": "0x1022f6e",
+        "transactionIndex": "0x37",
+        "status": "0x1"
+      }
+    },
+    {
+      "label": "merge_d",
+      "transaction": {
+        "hash": "0x9f3edbd1eb404dec2e4d9aae93c739136f79c87f6382af25413ce705cc431f59",
+        "blockHash": "0x23f1e2e5f0ea74550f80270bff5093e9cd0c92add59a6942edbc73245372a2b1",
+        "blockNumber": "0x1022f94",
+        "transactionIndex": "0x17",
+        "from": "0x8765a35394c98e81b9d56d44248e1199d8e38a4c",
+        "to": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+        "value": "0x1a37b04150dd36d0000"
+      },
+      "receipt": {
+        "transactionHash": "0x9f3edbd1eb404dec2e4d9aae93c739136f79c87f6382af25413ce705cc431f59",
+        "blockHash": "0x23f1e2e5f0ea74550f80270bff5093e9cd0c92add59a6942edbc73245372a2b1",
+        "blockNumber": "0x1022f94",
+        "transactionIndex": "0x17",
+        "status": "0x1"
+      }
+    },
+    {
+      "label": "merge_b",
+      "transaction": {
+        "hash": "0x19f802affe24572bac3af47983f42bbec6055117c6a32c3fddc58bd7545e5240",
+        "blockHash": "0xdaf85d2269bad82b9a5c062bbf94b3acbe37bb59cad15fa469b4f9dbf11a751b",
+        "blockNumber": "0x1022fbb",
+        "transactionIndex": "0x2d",
+        "from": "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e",
+        "to": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+        "value": "0x1a37b04150dd36d0000"
+      },
+      "receipt": {
+        "transactionHash": "0x19f802affe24572bac3af47983f42bbec6055117c6a32c3fddc58bd7545e5240",
+        "blockHash": "0xdaf85d2269bad82b9a5c062bbf94b3acbe37bb59cad15fa469b4f9dbf11a751b",
+        "blockNumber": "0x1022fbb",
+        "transactionIndex": "0x2d",
+        "status": "0x1"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "retrieved_at": "2026-07-29T14:58:32.515362+00:00"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "retrieved_at": "2026-07-29T14:58:46.375333+00:00"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 23:25
-> Status: TASK-012·013 Complete · TASK-014 Fixture 3 Candidate · Benchmark 9/9
+> Last Updated: 2026-07-30 00:08
+> Status: TASK-012·013 Complete · TASK-014 Fixture 3 Verifying · Benchmark 9/9
 
 ## 1. 목적
 
@@ -138,8 +138,8 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] `TASK-014` query 3개 × 상태 3개 HTML Preview와 UI Gate를 작성한다.
 - [x] `TASK-014` 단일 path·분기/재병합·multi-origin 공개 사례를
   `candidate` package로 작성한다.
-- [ ] `TASK-014` 세 fixture의 두 공급자 replay·negative oracle·독립
-  Verifier를 통과하고 승격을 판단한다.
+- [x] `TASK-014` 세 fixture의 두 공급자 replay·negative oracle 18개·독립
+  Verifier를 통과해 `verifying`으로 올린다.
 - [x] 사용자가 PATH Preview를 승인한다(2026-07-29 23:09).
 - [ ] 사용자가 `flow_path` 대안 B를 정식 승인한다.
 - [ ] graph node/edge·asset conservation·budget·partial 계약을 정식 승인한다.

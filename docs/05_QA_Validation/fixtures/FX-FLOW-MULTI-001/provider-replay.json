@@ -1,0 +1,49 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-FLOW-MULTI-001",
+  "status": "verifying",
+  "captured_at": "2026-07-29T14:58:46.375333+00:00",
+  "scope_kind": "selected_transactions_and_exact_blocks",
+  "providers": [
+    {
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T14:58:32.515362+00:00",
+      "raw_sha256": {
+        "merge_c_transaction": "87ea2010e09861c3b6952e65b90cf87ca0a7fd2ce65daec50b023c9277dc4eaf",
+        "merge_c_receipt": "82096d618da452655fc16b8651a1207828e807306b8f669eab588e6cd2ea5812",
+        "merge_a_transaction": "fc63002ef2ef49dbc46705caf40583590c2405919925d16441e10c9be4b3ed69",
+        "merge_a_receipt": "9bffa406cb88a9c061103d40b4372150ad3345cfb218bd76baf3e93ed47bdd99",
+        "merge_d_transaction": "317a37cf99f8b1fc54c22fe80e2f27766b7f005845f76c81427027a31ba70f64",
+        "merge_d_receipt": "da4aba5a39a85a38d5c4940dcb6d0dcdcfe144add6c08889cd0776c8badb11ed",
+        "merge_b_transaction": "d062143f5f1fae5eb5c4a83f90412e706586d6a1de4a1b412b3a1a60bc1bd8be",
+        "merge_b_receipt": "b18401671a55796ca672c9cb732b7b7eaf99e916aa33c8bfcec17855987eb8ea"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T14:58:46.375333+00:00",
+      "raw_sha256": {
+        "merge_c_transaction": "296cc03c9d9f36473d4ad37a42f2a317cf06edb2d95cf991e055c0512cf7cec0",
+        "merge_c_receipt": "b7b7adcbd69bd82ec90be18c1ba2a0eb3ed3dec00fa640837f672c84e50821a2",
+        "merge_a_transaction": "c3a52b92766c86cd87c806d2899983a10fecef7d0b70547db363581a06ba0f2f",
+        "merge_a_receipt": "c7a6c6f0beb24cfcc2379aea18bbdb4931e73f77c6568fb60bcd939be8fe5755",
+        "merge_d_transaction": "e6961bbba6ebccbea3f2ed66e77aa2842b1f73b9827ad05c890dcb40bdb3a839",
+        "merge_d_receipt": "2f23c3e20e8756337e15a3749451d76c22282373c81becba3f8de2aa3771d3d9",
+        "merge_b_transaction": "6906afd7484499395340a791955708f8102503dd9ab44b36f4b1c07df77569ab",
+        "merge_b_receipt": "1286d3e067b9a8ba87ceceb85c69a17350795ee86dcb7055f589ab14e7ac5295"
+      }
+    }
+  ],
+  "decoded_match": true,
+  "selected_transaction_scope_complete": true,
+  "continuous_gap_scanned": false,
+  "internal_trace": null,
+  "negative_oracle_status": "pass_18_shared_cases",
+  "independent_verifier_status": "pass",
+  "remaining_gate": [
+    "product_analyzer",
+    "final_promotion"
+  ]
+}

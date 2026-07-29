@@ -62,6 +62,14 @@ COMMANDS = (
         sys.executable,
         "scripts/verify_task_013_analyzer_independent_verification.py",
     ),
+    (
+        sys.executable,
+        "scripts/verify_task_014_negative_oracles.py",
+    ),
+    (
+        sys.executable,
+        "scripts/verify_task_014_independent_verifier.py",
+    ),
 )
 
 

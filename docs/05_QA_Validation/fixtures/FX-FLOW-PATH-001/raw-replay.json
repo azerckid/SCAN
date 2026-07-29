@@ -1,0 +1,95 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-FLOW-PATH-001",
+  "status": "verifying",
+  "chain_id": 1,
+  "captured_at": "2026-07-29T14:58:46.375333+00:00",
+  "scope": {
+    "kind": "selected_transactions_and_exact_blocks",
+    "selected_transactions_complete": true,
+    "continuous_gap_scanned": false
+  },
+  "transactions": [
+    {
+      "label": "internal_seed",
+      "transaction": {
+        "hash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+        "blockHash": "0x27bd43aa4111dac245ee76d24d703853f5c6d7641517edfa19412a6f7fcafe2e",
+        "blockNumber": "0x1009fb6",
+        "transactionIndex": "0x21",
+        "from": "0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4",
+        "to": "0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "value": "0x0"
+      },
+      "receipt": {
+        "transactionHash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+        "blockHash": "0x27bd43aa4111dac245ee76d24d703853f5c6d7641517edfa19412a6f7fcafe2e",
+        "blockNumber": "0x1009fb6",
+        "transactionIndex": "0x21",
+        "status": "0x1"
+      }
+    },
+    {
+      "label": "split_a",
+      "transaction": {
+        "hash": "0x79c10cf538667a0a7de40ce54d2444c9e9e17b5c62b321e739020df0015baeda",
+        "blockHash": "0x4f769d2e7afb5e88770dcd7fe0b52f715bd441049167da29d96192542c18f97b",
+        "blockNumber": "0x101f48c",
+        "transactionIndex": "0x17",
+        "from": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+        "to": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+        "value": "0x1a37dca9ffe8e810000"
+      },
+      "receipt": {
+        "transactionHash": "0x79c10cf538667a0a7de40ce54d2444c9e9e17b5c62b321e739020df0015baeda",
+        "blockHash": "0x4f769d2e7afb5e88770dcd7fe0b52f715bd441049167da29d96192542c18f97b",
+        "blockNumber": "0x101f48c",
+        "transactionIndex": "0x17",
+        "status": "0x1"
+      }
+    },
+    {
+      "label": "merge_a",
+      "transaction": {
+        "hash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+        "blockHash": "0xefe4fb3f75192fd6980bcec2a5938a7aa965eba8b65a924b0dd40be54ebb698f",
+        "blockNumber": "0x1022f6e",
+        "transactionIndex": "0x37",
+        "from": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+        "to": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+        "value": "0x1a37b04150dd36d0000"
+      },
+      "receipt": {
+        "transactionHash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+        "blockHash": "0xefe4fb3f75192fd6980bcec2a5938a7aa965eba8b65a924b0dd40be54ebb698f",
+        "blockNumber": "0x1022f6e",
+        "transactionIndex": "0x37",
+        "status": "0x1"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "retrieved_at": "2026-07-29T14:58:32.515362+00:00"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "retrieved_at": "2026-07-29T14:58:46.375333+00:00"
+    }
+  ],
+  "internal_edges": [
+    {
+      "path": [
+        0
+      ],
+      "type": "call",
+      "from": "0x036cec1a199234fc02f72d29e596a09440825f1c",
+      "to": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+      "value_hex": "0x12cb4b1a4bc509b42bf3",
+      "value_raw": "88752697459828535340019"
+    }
+  ]
+}

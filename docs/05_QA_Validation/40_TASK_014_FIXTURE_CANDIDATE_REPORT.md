@@ -1,7 +1,7 @@
 # TASK-014 PATH 공개 Fixture 후보 선정 보고서
 > Created: 2026-07-29 23:25
-> Last Updated: 2026-07-29 23:25
-> Status: Candidate Pack Complete · Replay/Oracle/Verifier Not Executed · Implementation Locked
+> Last Updated: 2026-07-30 00:08
+> Status: Candidate Selection Superseded · Fixture 3 Verifying · Implementation Locked
 
 ## 1. 목적
 
@@ -25,9 +25,9 @@ transaction·receipt·block과 Blockscout internal transaction에서 얻었다.
 
 | Fixture | 문제 | 공개 범위 | 고정한 1차 정답 | 상태 |
 |:---|:---|:---|:---|:---:|
-| `FX-FLOW-PATH-001` | FLOW-EVM-001 | internal 1 + top-level 2, 3홉 | ordered endpoints·TX·raw amount·terminal | candidate |
-| `FX-FLOW-REMERGE-001` | FLOW-EVM-002 | seed 1 → branch 4 → merge 1 | split `30953 ETH`, merge `30951.4 ETH`, residual `1.6 ETH`, dust 분리 | candidate |
-| `FX-FLOW-MULTI-001` | FLOW-MULTI-001 | origin 4 → exit 1 | origin별 raw contribution·dedup total `30951.4 ETH` | candidate |
+| `FX-FLOW-PATH-001` | FLOW-EVM-001 | internal 1 + top-level 2, 3홉 | ordered endpoints·TX·raw amount·terminal | verifying |
+| `FX-FLOW-REMERGE-001` | FLOW-EVM-002 | seed 1 → branch 4 → merge 1 | split `30953 ETH`, merge `30951.4 ETH`, residual `1.6 ETH`, dust 분리 | verifying |
+| `FX-FLOW-MULTI-001` | FLOW-MULTI-001 | origin 4 → exit 1 | origin별 raw contribution·dedup total `30951.4 ETH` | verifying |
 
 세 fixture는 같은 공개 사건을 서로 다른 request scope로 잘랐다. 이는
 node/edge 재사용과 query별 정답 차이를 검증하기 위한 선택이다. 사건·자산
@@ -85,16 +85,16 @@ endpoint·credential·환경변수 값은 저장하지 않았다.
 | partial 후보 | 확인 edge는 유효하지만 trace/range/frontier/한 branch가 누락되며 중단 지점 보존 |
 | failed 후보 | edge endpoint 불연속, 다른 asset, 중복 집계, 외부 inflow 오염, source reconciliation 불일치 |
 
-## 7. 남은 승격 Gate
+## 7. 승격 Gate 진행
 
-- [ ] primary provider 또는 고정 artifact로 두 번째 raw replay
-- [ ] internal edge 독립 trace
-- [ ] capability별 canonical raw SHA-256
-- [ ] selected transaction scope와 continuous range scope 결정
-- [ ] residual 분류와 branch별 balance/fee/later-output 경계
-- [ ] cycle·중복·unrelated·budget·asset mismatch negative oracle
-- [ ] 같은 replay 두 번의 canonical hash 일치
-- [ ] 독립 Verifier의 graph·ledger 재계산
+- [x] primary와 verify provider의 두 번째 raw replay
+- [x] primary callTracer로 internal edge 재현
+- [x] capability별 canonical raw SHA-256
+- [x] selected transaction scope만 scoring, continuous gap은 범위 밖으로 결정
+- [x] residual을 unresolved로 보존하고 근거 없는 fee 분류 금지
+- [x] cycle·중복·unrelated·budget·asset mismatch negative oracle 18개
+- [x] 같은 replay 두 번의 canonical hash 일치
+- [x] 독립 Verifier의 graph·ledger 재계산
 - [ ] `flow_path` Analysis I/O 대안 B 정식 승인
 - [ ] Context Receipt `PASS`와 사용자 analyzer 구현 승인
 
@@ -111,10 +111,10 @@ endpoint·credential·환경변수 값은 저장하지 않았다.
 
 ## 9. 판정
 
-세 공개 사례는 **candidate 선정 기준을 통과**한다. 하지만 한 공급자
-rate limit, internal trace 독립성, 연속 범위, negative oracle, Verifier가
-남아 있으므로 `verifying`이나 `confirmed`로 올리지 않는다. TASK-014
-구현도 계속 잠근다.
+세 공개 사례는 후속 replay·oracle·Verifier를 통과해 **`verifying`**이다.
+continuous gap과 완전 사건 ledger는 선택 범위 밖이며, residual은 unresolved로
+보존한다. 제품 analyzer·Analysis I/O 정식 승인·Context Receipt가 남았으므로
+`confirmed`로 올리지 않고 TASK-014 구현도 계속 잠근다.
 
 ## 10. Related Documents
 
