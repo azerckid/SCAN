@@ -1,7 +1,7 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
 > Last Updated: 2026-07-30 02:52
-> Status: Approved 1.8 · TASK-014 Complete · TASK-015 Preview User Review Pending
+> Status: Approved 1.9 · TASK-014 Complete · TASK-015 Preview User Review Passed
 
 ## 1. 문서 목적
 
@@ -411,7 +411,7 @@ heuristic으로 분리하는 docs-only 검토 트랙이다.
   score/confirmed owner를 각각 분리한다.
 - failed는 query별 code·stage를 표시하고 `results: []`를 유지한다.
 - [Intelligence Preview](./previews/08_task_015_intelligence_preview.html)는
-  정적 검사만 통과했으며 사용자 UI-First Gate 확인은 대기 중이다.
+  정적 검사와 사용자 UI-First Gate 확인을 통과했다(2026-07-30 02:52).
 - 공개 fixture·`intel_context` Schema·analyzer 구현은 승인 전까지 시작하지
   않는다.
 

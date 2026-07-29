@@ -1,7 +1,7 @@
 # TASK-015 Label·OSINT·Actor Intelligence UI
 > Created: 2026-07-30 02:37
-> Last Updated: 2026-07-30 02:37
-> Status: Draft 0.1 · User Review Pending · Runtime Not Implemented
+> Last Updated: 2026-07-30 02:52
+> Status: Approved 0.1 · User Review Passed · Automated Browser Check Not Executed · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -155,11 +155,14 @@ Preview는 query×결과 상태 15개를 전환한다. loading·empty·stale·Ru
 - [x] 개인정보·Terms·주소 비명시 경계 정의
 - [x] HTML Preview 작성
 - [ ] 브라우저 상호작용 검증
-- [ ] 사용자 Preview 확인
-- [ ] 사용자 피드백 반영
+- [x] 사용자 Preview 확인 — 2026-07-30 02:52
+- [x] 사용자 피드백 반영 — 추가 수정 요청 없이 승인
 
-사용자 승인 전에는 Context Receipt를 `PASS`로 전환하거나 analyzer 구현을
-시작하지 않는다.
+사용자는 PR #75의 query별 failed 분리와 Screen Flow 연결 보완 결과를
+확인한 뒤 2026-07-30 02:52 `"승인합니다"`로 Preview를 승인했다. 이 승인은
+docs-only 화면 계약에 한정되며 공개 fixture 선정 결과, source별 Terms,
+`intel_context` 정식 계약, Context Receipt `PASS`, analyzer 구현을 승인하지
+않는다.
 
 ## 11. 365 글로벌 평가 기준
 
@@ -168,7 +171,7 @@ Preview는 query×결과 상태 15개를 전환한다. loading·empty·stale·Ru
 | Functionality | Draft | query 5개·상태 3개 화면 계약 |
 | Potential Impact | Planned | Label·OSINT·Actor 문제와 후속 CASE 재사용 |
 | Novelty | Proposed | source assertion과 ownership truth 분리 |
-| UX | Draft | conflict·address explicit·timeline 우선 |
+| UX | Pass / Docs-only | 사용자 승인된 conflict·address explicit·timeline 화면 |
 | Open-source | Pass | 단일 HTML·외부 dependency 없음 |
 | Business Plan | N/A | 대회 준비 범위 |
 

@@ -1241,6 +1241,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     승격 Gate를 문서화한다.
   - [x] label·sanctions·ENS·common funder·actor relation ×
     complete·partial·failed HTML Preview를 작성한다.
+  - [x] TASK-015 Preview를 사용자가 검토하고 추가 수정 없이 승인한다
+    (2026-07-30 02:52, fixture·runtime 승인은 아님).
   - [ ] 공개 사례를 선정하고 fixture package를 만든다.
   - [ ] actor relation 후보와 반례를 검증한다.
   - [ ] AI 가설과 Python/source 증명을 분리한다.
@@ -1263,11 +1265,11 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Implementation Preconditions:
   - [ ] 공식 Rules·Terms·privacy와 source 최소 필드를 확인한다.
   - [ ] 충돌·주소 비명시·폐기 라벨 fixture를 확정한다.
-  - [ ] TASK-015 Preview에서 진입·전환·이탈과
+  - [x] TASK-015 Preview에서 진입·전환·이탈과
     loading·empty·stale·Rules·conflict·failed를 확인한다.
   - [ ] label 최소 필드·append-only provenance mutation·상태 관리를 승인한다.
-  - [ ] Intelligence Preview와 Workbench source 표시를 사용자 확인하고
-    피드백을 기록한다.
+  - [x] Intelligence Preview와 Workbench source 표시를 사용자 확인하고
+    피드백을 기록한다(2026-07-30 02:52).
   - [ ] `intel_context` Analysis I/O 대안과 source artifact 입력을 승인한다.
   - [ ] 공개 source snapshot·negative oracle·독립 Verifier를 통과한다.
   - [ ] live mode와 사용자 구현 승인을 별도로 기록한다.
@@ -1286,7 +1288,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] Rules·source registry·Workbench·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - 사용자 Preview·공개 fixture·계약 정식 승인 전 PASS 금지
+  - Status: PENDING - Preview 승인 완료, 공개 fixture·계약 정식 승인 전 PASS 금지
   - Required References Read:
     - [TASK-015 계약](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md)
     - [TASK-015 UI](../02_UI_Screens/09_TASK_015_INTELLIGENCE_UI.md)와
