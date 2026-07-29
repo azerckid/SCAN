@@ -17,7 +17,7 @@ def main() -> None:
     evidence_count = sum(item["evidence_value_checks"] for item in first)
     hashes = ", ".join(f"{item['fixture_id']}={item['calculated_sha256']}" for item in first)
     print(
-        f"PASS TASK-013 independent Verifier: {len(first)} candidates, "
+        f"PASS TASK-013 independent Verifier: {len(first)} fixtures (verifying), "
         f"{requirement_count} requirements, {evidence_count} evidence values, "
         "2 deterministic runs"
     )

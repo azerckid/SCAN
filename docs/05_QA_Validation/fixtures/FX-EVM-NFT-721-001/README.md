@@ -1,7 +1,7 @@
 # Fixture: FX-EVM-NFT-721-001
 > Created: 2026-07-29 14:38
-> Last Updated: 2026-07-29 15:38
-> Status: Candidate 0.1 · Replay, Negative Oracle, and Verifier Gates Passed
+> Last Updated: 2026-07-29 19:53
+> Status: Verifying 0.1 · Replay, Negative Oracle, and Verifier Gates Passed · UI 승인 대기
 
 ## 1. 목적
 
@@ -17,7 +17,7 @@
 | ApprovalForAll | TX `0x4501b47b...af9379`, block `25008826`, log `971` |
 | Approval reset + Transfer | TX `0x07ae8c28...a727d7`, block `25023516`, logs `417`·`418` |
 | Token ID | `9110` |
-| 상태 | candidate — 두 RPC receipt·filtered logs·raw SHA match Gate 통과 |
+| 상태 | verifying — 두 RPC receipt·filtered logs·raw SHA match·독립 Verifier Gate 통과 |
 
 범위 완전성은 선정된 두 TX와 각각의 정확한 block window에만 적용한다.
 두 block 사이의 연속 구간 전체를 스캔했다는 뜻이 아니다.
@@ -26,14 +26,19 @@
 
 - [x] 선정 TX receipt·정확한 block window filtered logs·raw replay SHA-256
 - [x] ERC-20/721 혼동·다른 contract·range 누락 negative oracle
-- [ ] Analysis I/O·UI Preview 승인
 - [x] 독립 Verifier와 두 번의 결정성
+- [x] 승격 검토 통과 · `candidate` → `verifying`
+- [x] Analysis I/O 대안 B(`evm_special`) 확정
+- [ ] UI Preview 사용자 승인
+- [ ] Context Receipt `PASS`·사용자 구현 승인
 
 ## 4. Related Documents
 
 - **Technical_Specs**: [TASK-013 계약](../../../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) - ERC-721 해석 경계
-- **QA_Validation**: [TASK-013 후보 보고서](../../32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - 선정·승격 Gate
+- **UI_Screens**: [TASK-013 NFT·Proxy UI](../../../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md) - 사용자 승인 대기 중인 Preview
+- **QA_Validation**: [TASK-013 후보 보고서](../../32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - 선정 Gate
 - **QA_Validation**: [TASK-013 Negative Oracle](../../33_TASK_013_NEGATIVE_ORACLE_REPORT.md) - 표준·범위 반례
 - **QA_Validation**: [TASK-013 독립 Verifier](../../34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md) - raw-first 재계산
+- **QA_Validation**: [TASK-013 승격 검토](../../35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) - `verifying` 승격 판정
 - **QA_Validation**: [Raw replay](./raw-replay.json) · [Provider replay](./provider-replay.json) - raw evidence와 공급자별 SHA
 - **External**: [ERC-721](https://eips.ethereum.org/EIPS/eip-721) - 공식 event 정의

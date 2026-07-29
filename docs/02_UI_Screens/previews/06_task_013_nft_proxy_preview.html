@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCAN TASK-013 NFT·Proxy Preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page: #070a10;
+      --panel: #0d131d;
+      --raised: #141c29;
+      --terminal: #080d14;
+      --border: #29364a;
+      --fg: #dce3ec;
+      --muted: #8491a5;
+      --accent: #75a9ff;
+      --success: #52d39a;
+      --warning: #f2c14e;
+      --danger: #ff6f7f;
+      --context: #bc9cff;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: Inter, Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; color: var(--fg); font-family: var(--sans);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(64, 111, 178, .18), transparent 34rem),
+        radial-gradient(circle at 92% 25%, rgba(111, 75, 170, .12), transparent 30rem),
+        var(--page);
+    }
+    button, code, pre { font-family: var(--mono); }
+    button { cursor: pointer; }
+    button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .page { width: min(1480px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 52px; }
+    header { display: flex; justify-content: space-between; gap: 24px; align-items: end; }
+    .eyebrow { color: var(--accent); font: 700 11px var(--mono); letter-spacing: .12em; }
+    h1 { margin: 8px 0 0; font-size: clamp(26px, 4vw, 44px); letter-spacing: -.04em; }
+    .lede { max-width: 860px; margin: 12px 0 0; color: #aab5c6; line-height: 1.65; }
+    .gate {
+      min-width: 245px; padding: 13px 15px; border: 1px solid var(--border);
+      border-radius: 10px; background: rgba(13, 19, 29, .9);
+    }
+    .gate span { display: block; color: var(--muted); font: 10px var(--mono); }
+    .gate strong { display: block; margin-top: 5px; color: var(--warning); font: 700 12px var(--mono); }
+    .notice {
+      margin-top: 20px; padding: 12px 14px; border: 1px solid #4a3d1b;
+      border-radius: 9px; background: #211c10; color: #e7d99f; font: 12px/1.55 var(--mono);
+    }
+    .standard-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 18px; }
+    .standard-tab {
+      min-height: 70px; padding: 11px 13px; border: 1px solid var(--border);
+      border-radius: 9px; background: var(--panel); color: #aeb9c9; text-align: left;
+    }
+    .standard-tab[aria-pressed="true"] { border-color: #42679b; background: #14243b; color: #f3f7fc; }
+    .standard-tab b { display: block; font-size: 12px; }
+    .standard-tab span { display: block; margin-top: 5px; color: var(--muted); font-size: 10px; }
+    .workspace { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 14px; margin-top: 14px; }
+    .panel { border: 1px solid var(--border); border-radius: 11px; background: var(--panel); overflow: hidden; }
+    .panel-head {
+      display: flex; justify-content: space-between; align-items: center; min-height: 48px;
+      padding: 0 15px; border-bottom: 1px solid var(--border); color: #edf2f8;
+      font: 700 11px var(--mono); letter-spacing: .05em;
+    }
+    .panel-body { padding: 15px; }
+    .standard-copy { margin: 0 0 14px; color: #aab6c7; font-size: 13px; line-height: 1.6; }
+    .field-list { display: grid; gap: 8px; margin: 0; }
+    .field {
+      display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 10px;
+      padding: 9px 10px; border: 1px solid #202b3c; border-radius: 7px; background: #0a0f17;
+    }
+    .field dt { color: var(--muted); font: 10px var(--mono); }
+    .field dd { margin: 0; color: #e2e8f0; font: 11px/1.45 var(--mono); overflow-wrap: anywhere; }
+    .state-label { margin: 18px 0 8px; color: var(--muted); font: 10px var(--mono); letter-spacing: .09em; }
+    .state-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .state-tab { padding: 9px 6px; border: 1px solid var(--border); border-radius: 7px; background: var(--raised); color: #aeb8c7; font-size: 10px; }
+    .state-tab[data-state="complete"][aria-pressed="true"] { color: var(--success); border-color: var(--success); }
+    .state-tab[data-state="partial"][aria-pressed="true"] { color: var(--warning); border-color: var(--warning); }
+    .state-tab[data-state="failed"][aria-pressed="true"] { color: var(--danger); border-color: var(--danger); }
+    .fixture-note { margin-top: 14px; padding: 9px 10px; border: 1px solid #202b3c; border-radius: 7px; background: #0a0f17; color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .fixture-note code { color: #9fd4c1; }
+    .terminal { min-height: 640px; background: var(--terminal); font-family: var(--mono); }
+    .terminal-head { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid #202b3c; color: var(--muted); font-size: 10px; }
+    .terminal-body { padding: 18px 22px 24px; }
+    .stream { margin: 0 0 4px; font: 12px/1.6 var(--mono); overflow-wrap: anywhere; }
+    .stream .tag { color: var(--muted); }
+    .stream .accent { color: var(--accent); }
+    .divider { margin: 14px 0; border-top: 1px dashed #202938; }
+    .status-row { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; padding-bottom: 10px; }
+    .badge { padding: 3px 8px; border: 1px solid currentColor; border-radius: 4px; font: 800 10px var(--mono); }
+    .badge.complete { color: var(--success); background: #102b23; }
+    .badge.partial { color: var(--warning); background: #2e2612; }
+    .badge.failed { color: var(--danger); background: #31171f; }
+    .section-title { margin-top: 16px; color: #74839a; font: 700 10px var(--mono); letter-spacing: .12em; }
+    .row-group { display: grid; gap: 5px; margin-top: 8px; }
+    .result-line { display: grid; grid-template-columns: 22ch minmax(0, 1fr); gap: 2ch; font: 12px/1.55 var(--mono); }
+    .result-line .key { color: #8492a6; }
+    .result-line .value.complete { color: var(--success); }
+    .result-line .value.partial { color: var(--warning); }
+    .result-line .value.failed { color: var(--danger); }
+    .array-line { padding: 8px 10px; border: 1px solid #202b3c; border-radius: 6px; background: #0a0f17; font: 11px/1.5 var(--mono); overflow-wrap: anywhere; }
+    .array-line .idx { color: var(--muted); margin-right: 6px; }
+    .callout { margin-top: 15px; padding: 11px 12px; border: 1px solid var(--border); border-left: 3px solid var(--context); border-radius: 7px; background: #101722; font: 11px/1.55 var(--mono); }
+    .callout b { color: var(--context); }
+    .not-assessed { margin-top: 10px; padding: 9px 12px; border: 1px solid #3a2c1c; border-left: 3px solid var(--warning); border-radius: 7px; background: #1c150c; color: #e3cf9e; font: 11px/1.55 var(--mono); }
+    .next { margin-top: 12px; color: #f2f5f9; font: 12px/1.6 var(--mono); }
+    footer { display: flex; justify-content: space-between; gap: 16px; margin-top: 18px; color: #6f7d91; font: 10px var(--mono); }
+    @media (max-width: 940px) {
+      header, .workspace { display: grid; grid-template-columns: 1fr; }
+      .gate { min-width: 0; }
+      .standard-tabs { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .page { width: min(100% - 18px, 560px); padding-top: 20px; }
+      .field, .result-line { grid-template-columns: 1fr; }
+      footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <p class="eyebrow">TASK-013 · NFT·PROXY DECODER</p>
+        <h1>NFT·Proxy Preview</h1>
+        <p class="lede">
+          ERC-721 · ERC-1155 · EIP-1967 Proxy 세 표준이 <code>검증 중</code> fixture의
+          실제 재계산 값으로 어떻게 표시되는지 확인합니다. 정적 검토용이며 실제
+          RPC·API·DB에 연결하지 않습니다.
+        </p>
+      </div>
+      <div class="gate">
+        <span>UI-FIRST GATE</span>
+        <strong>사용자 확인 대기</strong>
+        <span style="margin-top:8px">ANALYSIS I/O 0.2 · 변경 없음</span>
+        <span>대안 B · evm_special 확정</span>
+      </div>
+    </header>
+
+    <p class="notice">
+      Docs-only Preview입니다. fixture는 <code>후보 → 검증 중</code>으로
+      승격됐지만 <code>확정</code>은 아닙니다. 이 화면과 계약이 승인되기
+      전에는 Python decoder를 구현하지 않습니다.
+    </p>
+
+    <div class="standard-tabs" role="group" aria-label="표준 선택">
+      <button class="standard-tab" data-standard="erc721" aria-pressed="true">
+        <b>NFT · ERC-721</b><span>BAYC token 9110 · Transfer·Approval</span>
+      </button>
+      <button class="standard-tab" data-standard="erc1155" aria-pressed="false">
+        <b>NFT · ERC-1155</b><span>Rarible Single·Batch·ApprovalForAll</span>
+      </button>
+      <button class="standard-tab" data-standard="proxy" aria-pressed="false">
+        <b>Proxy · EIP-1967</b><span>Aave V3 Pool implementation history</span>
+      </button>
+    </div>
+
+    <div class="workspace">
+      <section class="panel" aria-label="요청 요약">
+        <div class="panel-head"><span>REQUEST</span><span id="standard-chip" class="warn">erc721</span></div>
+        <div class="panel-body">
+          <p class="standard-copy" id="standard-copy"></p>
+          <dl class="field-list" id="field-list"></dl>
+          <p class="state-label">RESULT STATE</p>
+          <div class="state-tabs" role="group" aria-label="결과 상태">
+            <button class="state-tab" data-state="complete" aria-pressed="true">complete</button>
+            <button class="state-tab" data-state="partial" aria-pressed="false">partial</button>
+            <button class="state-tab" data-state="failed" aria-pressed="false">failed</button>
+          </div>
+          <div class="fixture-note" id="fixture-note"></div>
+        </div>
+      </section>
+
+      <section class="panel terminal" aria-label="CLI 진행과 결과">
+        <div class="terminal-head"><span>scan analyze (reviewed replay)</span><span id="term-type">analysis_type=evm_special</span></div>
+        <div class="terminal-body" id="terminal-body"></div>
+      </section>
+    </div>
+
+    <footer>
+      <span>SCAN 2026 · TASK-013 NFT·Proxy Preview 0.1</span>
+      <span>ANALYSIS I/O 0.2 UNCHANGED · DOCS-ONLY</span>
+    </footer>
+  </div>
+
+  <script>
+    const standards = {
+      erc721: {
+        chip: "nft_activity · erc721",
+        copy: "BAYC token 9110의 실제 Transfer와 두 승인 이벤트입니다. tokenId는 topic3에서만 읽고 amount는 normalized_unit(1)로 표시합니다.",
+        fixtureId: "FX-EVM-NFT-721-001",
+        fields: [
+          ["standard_hint", "erc721"],
+          ["token_contract", "0xbc4ca0ed...a936f13d (BAYC)"],
+          ["subject_address", "0x28dda46b...29367a0"],
+          ["include_approvals", "true"],
+        ],
+      },
+      erc1155: {
+        chip: "nft_activity · erc1155",
+        copy: "Rarible 계열 token의 TransferSingle 1건과 TransferBatch 1건입니다. Batch ids/amounts 배열 순서·길이를 exact로 보존합니다.",
+        fixtureId: "FX-EVM-NFT-1155-001",
+        fields: [
+          ["standard_hint", "erc1155"],
+          ["token_contract", "0xb66a603f...6518b8 (Rarible)"],
+          ["subject_address", "0xed2da4a5...d6a2e79"],
+          ["include_approvals", "true"],
+        ],
+      },
+      proxy: {
+        chip: "proxy_history · eip1967",
+        copy: "Aave V3 Pool proxy의 EIP-1967 implementation slot 이력입니다. event와 historical state를 분리 증거로 보존합니다.",
+        fixtureId: "FX-EVM-PROXY-001",
+        fields: [
+          ["pattern_hint", "eip1967"],
+          ["proxy_address", "0x87870bca...b4fa4e2"],
+          ["include_admin", "true"],
+          ["include_beacon", "true"],
+        ],
+      },
+    };
+
+    const cases = {
+      erc721: {
+        complete: {
+          badge: "COMPLETE", cls: "complete",
+          sections: [
+            {
+              title: "MOVEMENTS", rows: [
+                ["tx_hash", "0x07ae8c28...e14a727d7"],
+                ["block · log_index", "25023516 · 418"],
+                ["from → to", "0x28dda46b...9367a0 → 0xe445283d...b91935"],
+                ["token_id_raw", "9110"],
+                ["amount_raw", "1 (amount_origin: normalized_unit)"],
+              ],
+            },
+            {
+              title: "APPROVALS", rows: [
+                ["operator_approval", "owner 0x28dda46b... → operator 0xf41b389e... · approved true"],
+                ["block · log_index", "25008826 · 971"],
+                ["token_approval_reset", "owner 0x28dda46b... → 0x000...000 · meaning approval_reset"],
+                ["block · log_index", "25023516 · 417"],
+              ],
+            },
+          ],
+          callout: "<b>독립 Verifier</b> raw topics에서 token_id 9110·from/to·두 approval을 재계산한 값이 evidence.json 13개 항목 중 3개와 정확히 일치합니다(FX-EVM-NFT-721-001).",
+        },
+        partial: {
+          badge: "PARTIAL", cls: "partial",
+          sections: [
+            {
+              title: "CONFIRMED", rows: [
+                ["movements", "token 9110 transfer 확정 (exact block 25023516)"],
+              ],
+            },
+            {
+              title: "MISSING", rows: [
+                ["reason", "approval completeness cannot be established in explicit selected scope"],
+                ["error", "source_unavailable · stage=approval_scope · retryable true"],
+              ],
+            },
+          ],
+          callout: "<b>partial</b> Transfer는 exact이지만 승인 완전성 범위를 벗어난 log가 있어 확보한 이동 사실만 유지합니다.",
+        },
+        failed: {
+          badge: "FAILED", cls: "failed",
+          sections: [
+            {
+              title: "RESULT", rows: [
+                ["data", "null"],
+                ["first_error", "nft_event_malformed"],
+                ["reason", "ERC-721 Transfer indexed tokenId was read from data instead of topic3"],
+              ],
+            },
+          ],
+          callout: "<b>failed</b> 표준 판별에 필요한 topic 구조가 어긋나 결과를 만들지 않고 구조화 오류로 종료합니다.",
+        },
+      },
+      erc1155: {
+        complete: {
+          badge: "COMPLETE", cls: "complete",
+          sections: [
+            {
+              title: "SINGLE CASE", rows: [
+                ["tx_hash", "0x49f0ce14...15fcfe2f0"],
+                ["block · log_index", "24609794 · 1035 (outgoing)"],
+                ["from → to", "0xed2da4a5...d6a2e79 → 0xa6d2351d...9943dcd8"],
+                ["token_id_raw", "56090175025510453004781233574040052668718235229192064098345825090519343038535"],
+                ["amount_raw", "1"],
+                ["approval_transitions", "log 1034 approved=true → log 1038 approved=false"],
+              ],
+            },
+            {
+              title: "BATCH CASE", rows: [
+                ["tx_hash", "0x94fcb633...032e3a230e"],
+                ["block · log_index", "23762140 · 646"],
+                ["operator/from → to", "0x7730c56f...50a7668b → 0x72b69c61...ec0345e"],
+              ],
+              arrays: [
+                ["ids_raw[0]", "98244132562950569486596469134463934172142786003734202593081146763200211976206"],
+                ["ids_raw[1]", "98244132562950569486596469134463934172142786003734202593081146763200211976193"],
+                ["amounts_raw[0..1]", "1, 1"],
+              ],
+            },
+          ],
+          callout: "<b>독립 Verifier</b> Batch ids/amounts 2개 배열의 순서·길이와 Single/Approval 4개 evidence를 raw에서 재계산해 evidence.json 5개 항목과 일치시켰습니다(FX-EVM-NFT-1155-001).",
+        },
+        partial: {
+          badge: "PARTIAL", cls: "partial",
+          sections: [
+            {
+              title: "CONFIRMED", rows: [
+                ["single_case", "TransferSingle + 두 approval transition 확정"],
+              ],
+            },
+            {
+              title: "MISSING", rows: [
+                ["reason", "Batch receipt is unavailable while Single case remains exact"],
+                ["error", "source_unavailable · stage=batch_receipt · retryable true"],
+              ],
+            },
+          ],
+          callout: "<b>partial</b> Single 사례는 exact이지만 Batch 영수증을 확보하지 못해 해당 부분만 부족으로 남깁니다.",
+        },
+        failed: {
+          badge: "FAILED", cls: "failed",
+          sections: [
+            {
+              title: "RESULT", rows: [
+                ["data", "null"],
+                ["first_error", "nft_batch_length_mismatch"],
+                ["reason", "TransferBatch ids and amounts arrays have different lengths"],
+              ],
+            },
+          ],
+          callout: "<b>failed</b> Batch ABI array 길이가 어긋나면 일부 항목을 추측하지 않고 전체를 실패로 처리합니다.",
+        },
+      },
+      proxy: {
+        complete: {
+          badge: "COMPLETE", cls: "complete",
+          sections: [
+            {
+              title: "CHANGE", rows: [
+                ["tx_hash", "0xe9949c36...5643fbc2b35"],
+                ["block · log_index", "25199939 · 1041"],
+                ["before_implementation", "0x8147b99d...60f119bd"],
+                ["after_implementation", "0x728a138a...526fe03cf"],
+                ["event_implementation", "0x728a138a...526fe03cf (matches after)"],
+              ],
+            },
+            {
+              title: "ADMIN / BEACON", rows: [
+                ["admin.before / after", "0x000...000 / 0x000...000"],
+                ["admin.change", "not_applicable"],
+                ["beacon.applicable", "false"],
+              ],
+            },
+          ],
+          callout: "<b>독립 Verifier</b> Upgraded event의 구현체 주소가 after-state storage slot 재계산값과 일치하고, admin 두 시점 모두 0임을 확인했습니다(FX-EVM-PROXY-001).",
+        },
+        partial: {
+          badge: "PARTIAL", cls: "partial",
+          sections: [
+            {
+              title: "CONFIRMED", rows: [
+                ["event", "Upgraded → 0x728a138a...526fe03cf 확정"],
+              ],
+            },
+            {
+              title: "MISSING", rows: [
+                ["reason", "one historical storage block is unavailable"],
+                ["error", "archive_required · stage=historical_slot · retryable true"],
+              ],
+            },
+          ],
+          callout: "<b>partial</b> event는 확보했지만 before 또는 after 중 한쪽 historical slot이 없으면 확보한 방향만 표시합니다.",
+        },
+        failed: {
+          badge: "FAILED", cls: "failed",
+          sections: [
+            {
+              title: "RESULT", rows: [
+                ["data", "null"],
+                ["first_error", "proxy_event_state_conflict"],
+                ["reason", "Upgraded event implementation differs from after-state slot value"],
+              ],
+            },
+          ],
+          callout: "<b>failed</b> event와 state가 충돌하면 조용히 하나를 선택하지 않고 구조화 오류로 종료합니다.",
+        },
+      },
+    };
+
+    let standard = "erc721", state = "complete";
+
+    function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+    function renderRequest() {
+      const s = standards[standard];
+      document.getElementById("standard-chip").textContent = s.chip;
+      document.getElementById("standard-copy").textContent = s.copy;
+      document.getElementById("term-type").textContent = `analysis_type=evm_special · ${s.chip}`;
+      document.getElementById("field-list").innerHTML = s.fields.map(([k, v]) =>
+        `<div class="field"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`
+      ).join("");
+      document.getElementById("fixture-note").innerHTML =
+        `fixture <code>${esc(s.fixtureId)}</code> · 상태 <code>검증 중 0.1</code> · 표시값은 독립 Verifier가 raw에서 재계산한 값입니다.`;
+    }
+
+    function renderTerminal() {
+      const c = cases[standard][state];
+      const body = document.getElementById("terminal-body");
+      const sections = c.sections.map((section) => {
+        const rows = section.rows.map(([k, v]) =>
+          `<div class="result-line"><span class="key">${esc(k)}</span><span class="value ${c.cls}">${esc(v)}</span></div>`
+        ).join("");
+        const arrays = (section.arrays || []).map(([k, v]) =>
+          `<div class="array-line"><span class="idx">${esc(k)}</span>${esc(v)}</div>`
+        ).join("");
+        return `<p class="section-title">${esc(section.title)}</p><div class="row-group">${rows}${arrays}</div>`;
+      }).join("");
+      body.innerHTML = `
+        <p class="stream"><span class="tag">[stderr]</span> <span class="accent">STARTING</span> analysis_id=AN-NFTPROXY-001 · type=evm_special</p>
+        <p class="stream"><span class="tag">[stderr]</span> <span class="accent">REPLAY</span> reviewed replay for ${esc(standards[standard].fixtureId)}</p>
+        <div class="divider"></div>
+        <div class="status-row"><span class="badge ${c.cls}">${c.badge}</span><span class="stream">AN-NFTPROXY-001 · ${esc(standards[standard].chip)}</span></div>
+        ${sections}
+        <div class="callout">${c.callout}</div>
+        <div class="not-assessed">NOT ASSESSED · ownership_dispute / malicious_upgrade claim: false — 온체인 사실과 소유권·악성 여부 판정은 분리됩니다.</div>
+        <p class="next">Next: ${c.cls === "failed" ? "요청 scope·표준 hint를 수정한 뒤 재실행" : c.cls === "partial" ? "누락된 archive/batch 범위를 확보한 뒤 scan resume" : "JSON·Markdown export 확인"}</p>
+      `;
+    }
+
+    function syncRoving(selector) {
+      const buttons = Array.from(document.querySelectorAll(selector));
+      buttons.forEach((btn) => {
+        btn.setAttribute("tabindex", btn.getAttribute("aria-pressed") === "true" ? "0" : "-1");
+      });
+    }
+
+    function activate(selector, attr, apply, btn) {
+      document.querySelectorAll(selector).forEach((b) => b.setAttribute("aria-pressed", "false"));
+      btn.setAttribute("aria-pressed", "true");
+      apply(btn.dataset[attr]);
+      syncRoving(selector);
+      renderRequest(); renderTerminal();
+    }
+
+    function bind(selector, attr, apply) {
+      const buttons = Array.from(document.querySelectorAll(selector));
+      buttons.forEach((btn, index) => {
+        btn.addEventListener("click", () => activate(selector, attr, apply, btn));
+        btn.addEventListener("keydown", (event) => {
+          const forwardKeys = ["ArrowRight", "ArrowDown"];
+          const backwardKeys = ["ArrowLeft", "ArrowUp"];
+          let targetIndex = null;
+          if (forwardKeys.includes(event.key)) {
+            targetIndex = (index + 1) % buttons.length;
+          } else if (backwardKeys.includes(event.key)) {
+            targetIndex = (index - 1 + buttons.length) % buttons.length;
+          } else if (event.key === "Home") {
+            targetIndex = 0;
+          } else if (event.key === "End") {
+            targetIndex = buttons.length - 1;
+          }
+          if (targetIndex === null) return;
+          event.preventDefault();
+          const target = buttons[targetIndex];
+          target.focus();
+          activate(selector, attr, apply, target);
+        });
+      });
+      syncRoving(selector);
+    }
+
+    bind(".standard-tab", "standard", (v) => { standard = v; });
+    bind(".state-tab", "state", (v) => { state = v; });
+
+    renderRequest(); renderTerminal();
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-PROXY-001",
-  "status": "candidate",
+  "status": "verifying",
   "captured_at": "2026-07-29T05:58:29Z",
   "event_evidence": [
     {
@@ -104,8 +104,8 @@
     "calculated_fact_sha256": "f0683ef2167e2e7799891a66e0b065300842fd46de5d63b84ebe440ee2f58d93"
   },
   "uncertainty": {
-    "candidate_only": true,
-    "remaining": "Analysis I/O/UI approval and fixture promotion review are not complete. Wider upgrade history is outside this selected-upgrade fixture scope."
+    "candidate_only": false,
+    "remaining": "Fixture promotion review passed (verifying). Analysis I/O UI approval, Context Receipt PASS, and user implementation approval are not complete. Wider upgrade history is outside this selected-upgrade fixture scope."
   },
   "provenance_notes": "Etherscan was used only to discover the public upgrade transaction. Scoring event and storage values were independently read from two archive RPC providers."
 }

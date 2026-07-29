@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 15:49
+> Last Updated: 2026-07-29 19:59
 > Status: Wave 1 TASK-012 Complete · Later Waves Proposed
 
 ## 1. 목적
@@ -116,8 +116,14 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] `TASK-013` negative oracle 16개와 두 번의 결정성 재현을 완성한다.
 - [x] `TASK-013` 독립 Verifier가 세 candidate의 13개 evidence 값과 7개
   requirement를 raw에서 두 번 재계산한다.
-- [ ] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 확정한다.
-- [ ] `TASK-013` Analysis I/O 대안과 전용 UI Preview를 승인한다.
+- [x] `TASK-013` 세 fixture를 [승격 검토](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md)로
+  `후보`에서 `검증 중`으로 승격한다(`확정`은 아니다).
+- [x] `TASK-013` Analysis I/O 대안 B(`evm_special`)를 확정하고
+  [전용 UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md)·[Preview](../02_UI_Screens/previews/06_task_013_nft_proxy_preview.html)를
+  작성한다.
+- [ ] `TASK-013` 사용자가 UI Preview를 확인하고 승인한다.
+- [ ] `TASK-013` ERC-721/1155와 EIP-1967 fixture를 `확정`으로 올린다
+  (Context Receipt `PASS`·사용자 구현 승인 이후).
 - [ ] `TASK-014` 단일 path와 분기·재병합 fixture를 확정한다.
 - [ ] graph node/edge·asset conservation·budget·partial 계약을 승인한다.
 - [ ] path 결과가 label/heuristic과 분리되는지 검증한다.
@@ -198,4 +204,6 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](../05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - Wave 1 후보 4개와 잔여 Gate
 - **QA_Validation**: [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) - smoke·secret·independence 체크
 - **QA_Validation**: [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) - NFT 표준 2종·Proxy 선정 Gate
+- **QA_Validation**: [TASK-013 Fixture 승격 검토 보고서](../05_QA_Validation/35_TASK_013_FIXTURE_PROMOTION_REVIEW.md) - `검증 중` 승격 판정
+- **UI_Screens**: [TASK-013 NFT·Proxy UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md) - 표준 3개·상태 3개 화면 계약과 Preview
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - runner·dry-run·미실행 경계
