@@ -61,7 +61,6 @@
     }
   ],
   "remaining_gate": [
-    "negative oracle",
     "independent verifier",
     "Analysis I/O and UI approval"
   ]

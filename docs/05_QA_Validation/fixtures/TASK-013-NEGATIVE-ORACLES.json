@@ -1,0 +1,267 @@
+{
+  "schema_version": "0.1",
+  "status": "verified",
+  "execution_mode": "synthetic_offline",
+  "cases": [
+    {
+      "oracle_id": "OR-NFT721-ERC20-SIGNATURE",
+      "fixture_id": "FX-EVM-NFT-721-001",
+      "category": "erc721",
+      "facts": {
+        "target_contract": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+        "observed_contract": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+        "range_complete": true,
+        "standard_evidence": "erc20",
+        "topic_count": 3,
+        "token_id_source": "data"
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "standard_mismatch"
+      }
+    },
+    {
+      "oracle_id": "OR-NFT721-DIFFERENT-CONTRACT",
+      "fixture_id": "FX-EVM-NFT-721-001",
+      "category": "erc721",
+      "facts": {
+        "target_contract": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+        "observed_contract": "0x0000000000000000000000000000000000000721",
+        "range_complete": true,
+        "standard_evidence": "erc721",
+        "topic_count": 4,
+        "token_id_source": "topic3"
+      },
+      "expected": {
+        "outcome": "complete",
+        "classification": "excluded"
+      }
+    },
+    {
+      "oracle_id": "OR-NFT721-RANGE-INCOMPLETE",
+      "fixture_id": "FX-EVM-NFT-721-001",
+      "category": "erc721",
+      "facts": {
+        "target_contract": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+        "observed_contract": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+        "range_complete": false,
+        "standard_evidence": "erc721",
+        "topic_count": 4,
+        "token_id_source": "topic3"
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "erc721"
+      }
+    },
+    {
+      "oracle_id": "OR-NFT721-TOKEN-ID-DATA",
+      "fixture_id": "FX-EVM-NFT-721-001",
+      "category": "erc721",
+      "facts": {
+        "target_contract": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+        "observed_contract": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+        "range_complete": true,
+        "standard_evidence": "erc721",
+        "topic_count": 4,
+        "token_id_source": "data"
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "malformed_event"
+      }
+    },
+    {
+      "oracle_id": "OR-NFT721-TOPIC-COUNT",
+      "fixture_id": "FX-EVM-NFT-721-001",
+      "category": "erc721",
+      "facts": {
+        "target_contract": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+        "observed_contract": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+        "range_complete": true,
+        "standard_evidence": "erc721",
+        "topic_count": 3,
+        "token_id_source": "topic3"
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "malformed_event"
+      }
+    },
+    {
+      "oracle_id": "OR-NFT1155-BATCH-LENGTH",
+      "fixture_id": "FX-EVM-NFT-1155-001",
+      "category": "erc1155",
+      "facts": {
+        "target_contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+        "observed_contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+        "log_page_complete": true,
+        "abi_complete": true,
+        "ids_length": 2,
+        "values_length": 1,
+        "approval_scope_complete": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "batch_length_mismatch"
+      }
+    },
+    {
+      "oracle_id": "OR-NFT1155-ABI-TRUNCATED",
+      "fixture_id": "FX-EVM-NFT-1155-001",
+      "category": "erc1155",
+      "facts": {
+        "target_contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+        "observed_contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+        "log_page_complete": true,
+        "abi_complete": false,
+        "ids_length": 2,
+        "values_length": 2,
+        "approval_scope_complete": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "malformed_event"
+      }
+    },
+    {
+      "oracle_id": "OR-NFT1155-DIFFERENT-CONTRACT",
+      "fixture_id": "FX-EVM-NFT-1155-001",
+      "category": "erc1155",
+      "facts": {
+        "target_contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+        "observed_contract": "0x0000000000000000000000000000000000001155",
+        "log_page_complete": true,
+        "abi_complete": true,
+        "ids_length": 2,
+        "values_length": 2,
+        "approval_scope_complete": true
+      },
+      "expected": {
+        "outcome": "complete",
+        "classification": "excluded"
+      }
+    },
+    {
+      "oracle_id": "OR-NFT1155-LOG-PAGE-INCOMPLETE",
+      "fixture_id": "FX-EVM-NFT-1155-001",
+      "category": "erc1155",
+      "facts": {
+        "target_contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+        "observed_contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+        "log_page_complete": false,
+        "abi_complete": true,
+        "ids_length": 2,
+        "values_length": 2,
+        "approval_scope_complete": true
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "erc1155"
+      }
+    },
+    {
+      "oracle_id": "OR-NFT1155-APPROVAL-INCOMPLETE",
+      "fixture_id": "FX-EVM-NFT-1155-001",
+      "category": "erc1155",
+      "facts": {
+        "target_contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+        "observed_contract": "0xb66a603f4cfe17e3d27b87a8bfcad319856518b8",
+        "log_page_complete": true,
+        "abi_complete": true,
+        "ids_length": 2,
+        "values_length": 2,
+        "approval_scope_complete": false
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "erc1155"
+      }
+    },
+    {
+      "oracle_id": "OR-PROXY-LATEST-AS-BEFORE",
+      "fixture_id": "FX-EVM-PROXY-001",
+      "category": "eip1967",
+      "facts": {
+        "pattern": "eip1967",
+        "historical_state_available": true,
+        "before_block_tag": "latest",
+        "decoded_slot_role": "implementation",
+        "event_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf",
+        "after_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf"
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "historical_state_mismatch"
+      }
+    },
+    {
+      "oracle_id": "OR-PROXY-ADMIN-AS-IMPLEMENTATION",
+      "fixture_id": "FX-EVM-PROXY-001",
+      "category": "eip1967",
+      "facts": {
+        "pattern": "eip1967",
+        "historical_state_available": true,
+        "before_block_tag": "0x1808542",
+        "decoded_slot_role": "admin",
+        "event_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf",
+        "after_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf"
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "slot_role_mismatch"
+      }
+    },
+    {
+      "oracle_id": "OR-PROXY-EVENT-STATE-CONFLICT",
+      "fixture_id": "FX-EVM-PROXY-001",
+      "category": "eip1967",
+      "facts": {
+        "pattern": "eip1967",
+        "historical_state_available": true,
+        "before_block_tag": "0x1808542",
+        "decoded_slot_role": "implementation",
+        "event_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf",
+        "after_implementation": "0x8147b99df7672a21809c9093e6f6ce1a60f119bd"
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "event_state_conflict"
+      }
+    },
+    {
+      "oracle_id": "OR-PROXY-HISTORICAL-STATE-MISSING",
+      "fixture_id": "FX-EVM-PROXY-001",
+      "category": "eip1967",
+      "facts": {
+        "pattern": "eip1967",
+        "historical_state_available": false,
+        "before_block_tag": "0x1808542",
+        "decoded_slot_role": "implementation",
+        "event_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf",
+        "after_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf"
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "state_unavailable"
+      }
+    },
+    {
+      "oracle_id": "OR-PROXY-PATTERN-UNSUPPORTED",
+      "fixture_id": "FX-EVM-PROXY-001",
+      "category": "eip1967",
+      "facts": {
+        "pattern": "custom_proxy",
+        "historical_state_available": true,
+        "before_block_tag": "0x1808542",
+        "decoded_slot_role": "implementation",
+        "event_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf",
+        "after_implementation": "0x728a138a4823392c2efa55e028d434f526fe03cf"
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "pattern_unsupported"
+      }
+    }
+  ]
+}

@@ -49,7 +49,6 @@
   "exact_block_window_logs_match_receipts": true,
   "continuous_gap_scanned": false,
   "remaining_gate": [
-    "negative oracle",
     "independent verifier",
     "Analysis I/O and UI approval"
   ]

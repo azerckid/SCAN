@@ -49,8 +49,8 @@ Phase 2 is documented as `TASK-012` through `TASK-019`: generic EVM, NFT/proxy,
 PATH, intelligence, service/xchain, Bitcoin, case reconciliation, and a final
 coverage gate. TASK-012 is complete; TASK-013 through TASK-019 remain proposed.
 TASK-013 now has three public NFT·Proxy candidate packages with two-provider
-raw SHA replay and explicit selected-scope integrity checks plus a docs-only
-analysis-contract Draft; negative oracle, Verifier, fixture confirmation,
+raw SHA replay, explicit selected-scope integrity checks, and 15 offline negative
+oracles passing twice plus a docs-only analysis-contract Draft; Verifier, fixture confirmation,
 UI approval, Context Receipt, and product runtime remain pending.
 Live AI and CTFd network submission remain unimplemented.
 `WP-INPUT-IMPL-02` connects explicit external replay and provided JSON/JSONL/CSV
@@ -124,14 +124,15 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-376 passed
+383 passed
 PASS 10 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 40 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 1241 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 126 runtime/evidence files
+PASS repository traceability: 1253 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 128 runtime/evidence files
 PASS TASK-013 replay Gate: 3 candidates, 2 providers, 16 capabilities, exact scoped raw values
+PASS 15 TASK-013 negative oracles twice (offline deterministic)
 ```
 
 The installed package exposes the approved analysis and local operations command surface:
