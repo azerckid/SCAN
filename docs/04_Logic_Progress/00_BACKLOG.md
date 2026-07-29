@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 15:49
+> Last Updated: 2026-07-29 19:59
 > Status: TASK-001~012 Done · WP-INPUT Done · TASK-013~019 Proposed
 
 ## 1. 문서 목적
@@ -1051,7 +1051,8 @@ Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] 명시 scope replay와 provider provenance를 고정한다.
   - [x] 세 fixture를 `검증 중`으로 승격한다(별도 승격 검토 문서로 판단).
   - [x] Analysis I/O 대안을 B(`evm_special`)로 확정한다.
-  - [x] CLI 진입·전환·이탈과 loading·empty·partial·failed 표시를 Preview로 작성한다.
+  - [x] CLI 진입·전환·이탈과 complete·partial·failed 표시를 Preview로
+    작성한다. loading·empty·stale·Rules는 기존 CLI 경계를 재사용한다.
   - [ ] 사용자가 UI Preview를 확인하고 승인한다.
   - [ ] log/state 최소 필드·mutation 없음·decode 상태 관리를 승인한다.
   - [ ] OSS/license를 확인한다.

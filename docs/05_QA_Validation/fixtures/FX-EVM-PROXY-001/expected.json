@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-EVM-PROXY-001",
-  "status": "candidate",
+  "status": "verifying",
   "pattern": "eip1967_direct_implementation",
   "proxy_address": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
   "implementation_slot": "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",

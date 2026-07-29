@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29
+> Last Updated: 2026-07-29 19:59
 > Status: Approved 1.4 · Phase 2 Confirmed Pack · TASK-013 검증 중
 
 ## 1. 문서 목적

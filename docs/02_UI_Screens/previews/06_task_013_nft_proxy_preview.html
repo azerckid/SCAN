@@ -434,15 +434,46 @@
       `;
     }
 
+    function syncRoving(selector) {
+      const buttons = Array.from(document.querySelectorAll(selector));
+      buttons.forEach((btn) => {
+        btn.setAttribute("tabindex", btn.getAttribute("aria-pressed") === "true" ? "0" : "-1");
+      });
+    }
+
+    function activate(selector, attr, apply, btn) {
+      document.querySelectorAll(selector).forEach((b) => b.setAttribute("aria-pressed", "false"));
+      btn.setAttribute("aria-pressed", "true");
+      apply(btn.dataset[attr]);
+      syncRoving(selector);
+      renderRequest(); renderTerminal();
+    }
+
     function bind(selector, attr, apply) {
-      document.querySelectorAll(selector).forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(selector).forEach((b) => b.setAttribute("aria-pressed", "false"));
-          btn.setAttribute("aria-pressed", "true");
-          apply(btn.dataset[attr]);
-          renderRequest(); renderTerminal();
+      const buttons = Array.from(document.querySelectorAll(selector));
+      buttons.forEach((btn, index) => {
+        btn.addEventListener("click", () => activate(selector, attr, apply, btn));
+        btn.addEventListener("keydown", (event) => {
+          const forwardKeys = ["ArrowRight", "ArrowDown"];
+          const backwardKeys = ["ArrowLeft", "ArrowUp"];
+          let targetIndex = null;
+          if (forwardKeys.includes(event.key)) {
+            targetIndex = (index + 1) % buttons.length;
+          } else if (backwardKeys.includes(event.key)) {
+            targetIndex = (index - 1 + buttons.length) % buttons.length;
+          } else if (event.key === "Home") {
+            targetIndex = 0;
+          } else if (event.key === "End") {
+            targetIndex = buttons.length - 1;
+          }
+          if (targetIndex === null) return;
+          event.preventDefault();
+          const target = buttons[targetIndex];
+          target.focus();
+          activate(selector, attr, apply, target);
         });
       });
+      syncRoving(selector);
     }
 
     bind(".standard-tab", "standard", (v) => { standard = v; });

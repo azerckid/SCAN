@@ -1,7 +1,7 @@
 # TASK-013 NFT·Proxy CLI UI
-> Created: 2026-07-29
-> Last Updated: 2026-07-29
-> Status: Proposed 0.1 · HTML Preview 작성 · 사용자 UI-First Gate 대기
+> Created: 2026-07-29 19:53
+> Last Updated: 2026-07-29 19:59
+> Status: Proposed 0.1 · HTML Preview 작성·브라우저 검증 완료 · 사용자 UI-First Gate 대기
 
 ## 1. 목적
 
@@ -159,6 +159,13 @@ Preview는 외부 요청, 파일 읽기, SQLite mutation, clipboard 외 데이�
 배열 2건, Proxy failed의 `proxy_event_state_conflict`·`data: null`
 표시를 스크린샷으로 확인했다. 콘솔 에러 0건이며 외부 요청은 발생하지
 않았다.
+
+표준 tab·상태 버튼 모두 roving tabindex(선택된 항목만 `tabindex="0"`)와
+`ArrowLeft`/`ArrowRight`/`Home`/`End` 이동을 구현했다. 포커스를 준 뒤
+`ArrowRight`로 ERC-721 → ERC-1155 → Proxy → ERC-721(wrap)로 이동하고
+선택·렌더링이 함께 전환됨을 `document.activeElement`·`aria-pressed`·
+`tabindex` 값으로 확인했다. 상태 버튼도 `ArrowLeft`로 `complete` →
+`failed`(wrap) 이동을 확인했다.
 
 ## 10. 365 글로벌 평가 기준
 

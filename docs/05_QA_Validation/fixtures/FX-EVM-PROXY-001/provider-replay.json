@@ -2,7 +2,7 @@
   "schema_version": "0.1",
   "fixture_id": "FX-EVM-PROXY-001",
   "captured_at": "2026-07-29T05:58:29Z",
-  "status": "candidate",
+  "status": "verifying",
   "scope_kind": "selected_upgrade_transaction_and_adjacent_state",
   "request_scope": {
     "proxy": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
@@ -52,7 +52,8 @@
   "adjacent_state_scope_complete": true,
   "wider_history_scanned": false,
   "remaining_gate": [
-    "fixture promotion review",
-    "Analysis I/O and UI approval"
+    "UI Preview user approval",
+    "Context Receipt PASS",
+    "user implementation approval"
   ]
 }
