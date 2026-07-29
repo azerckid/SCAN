@@ -125,7 +125,7 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-394 passed
+396 passed
 PASS 10 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 40 probes
@@ -134,7 +134,7 @@ PASS repository traceability: 1265 links, 19 TASK IDs, 36 QA IDs, 3 fixture/exam
 PASS repository security scan: 129 runtime/evidence files
 PASS TASK-013 replay Gate: 3 candidates, 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)
-PASS TASK-013 independent Verifier: 3 candidates, 7 requirements, 2 deterministic runs
+PASS TASK-013 independent Verifier: 3 candidates, 7 requirements, 13 evidence values, 2 deterministic runs
 ```
 
 The installed package exposes the approved analysis and local operations command surface:

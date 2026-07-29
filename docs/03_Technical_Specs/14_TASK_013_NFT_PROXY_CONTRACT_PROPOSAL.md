@@ -1,6 +1,6 @@
 # TASK-013 NFT·Proxy 분석 계약 제안
 > Created: 2026-07-29
-> Last Updated: 2026-07-29 15:38
+> Last Updated: 2026-07-29 15:49
 > Status: Candidate Replay, Negative Oracle, and Verifier Gates Passed · Implementation Not Approved
 
 ## 1. 목적
@@ -101,7 +101,8 @@ selected upgrade·adjacent state에만 적용한다. negative oracle 16개와
 - [x] 같은 signature의 무관 log, malformed ABI, 범위 누락 반례 포함
 - [x] complete·partial·failed가 두 번 결정적으로 재현
 - [x] fixture의 requirement→evidence→source 참조 무결성 통과
-- [x] 독립 Verifier가 필수 raw facts와 7개 requirement를 두 번 다시 계산
+- [x] 독립 Verifier가 필수 raw facts·13개 evidence 값·7개 requirement를
+  두 번 다시 계산
 - [x] fixture Schema 통과
 - [ ] 사용자 UI Gate 통과
 

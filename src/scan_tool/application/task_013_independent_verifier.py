@@ -77,17 +77,26 @@ def verify_fixture(
     if calculated != expected_facts:
         raise ValueError(f"{fixture_id} independently calculated facts differ")
 
-    requirement_checks = _verify_requirements(fixture_id, expected, evidence)
     canonical = json.dumps(
         calculated,
         sort_keys=True,
         separators=(",", ":"),
         ensure_ascii=True,
     ).encode()
+    calculated_sha256 = hashlib.sha256(canonical).hexdigest()
+    evidence_value_checks = _verify_evidence_values(
+        fixture_id,
+        raw,
+        calculated,
+        evidence,
+    )
+    _verify_verification_provenance(evidence, calculated_sha256)
+    requirement_checks = _verify_requirements(fixture_id, expected, evidence)
     return {
         "fixture_id": fixture_id,
         "status": "pass",
-        "calculated_sha256": hashlib.sha256(canonical).hexdigest(),
+        "calculated_sha256": calculated_sha256,
+        "evidence_value_checks": evidence_value_checks,
         "requirement_checks": requirement_checks,
     }
 
@@ -344,6 +353,177 @@ def _verify_requirements(
             raise ValueError(f"{requirement['requirement_id']} evidence linkage failed")
         checks.append({"requirement_id": requirement["requirement_id"], "status": "pass"})
     return checks
+
+
+def _verify_evidence_values(
+    fixture_id: str,
+    raw: dict[str, Any],
+    calculated: dict[str, Any],
+    evidence: dict[str, Any],
+) -> int:
+    items = {
+        item["evidence_id"]: item
+        for name in (
+            "event_evidence",
+            "call_evidence",
+            "state_evidence",
+            "context_evidence",
+        )
+        for item in _object_array(evidence, name)
+    }
+    expected_items = _calculated_evidence_projection(fixture_id, raw, calculated)
+    if set(items) != set(expected_items):
+        raise ValueError(f"{fixture_id} evidence item set differs")
+    for evidence_id, expected_fields in expected_items.items():
+        actual = items[evidence_id]
+        if any(actual.get(key) != value for key, value in expected_fields.items()):
+            raise ValueError(f"{evidence_id} value differs from calculated facts")
+    return len(expected_items)
+
+
+def _calculated_evidence_projection(
+    fixture_id: str,
+    raw: dict[str, Any],
+    calculated: dict[str, Any],
+) -> dict[str, dict[str, Any]]:
+    if fixture_id == "FX-EVM-NFT-721-001":
+        movement = calculated["movements"][0]
+        operator, token = calculated["approvals"]
+        return {
+            "EV-NFT721-OPERATOR-APPROVAL": {
+                "topic0": APPROVAL_FOR_ALL_TOPIC,
+                **{
+                    key: operator[key]
+                    for key in (
+                        "transaction_hash",
+                        "block_number",
+                        "log_index",
+                        "owner",
+                        "operator",
+                        "approved",
+                    )
+                },
+            },
+            "EV-NFT721-TOKEN-APPROVAL-RESET": {
+                "topic0": APPROVAL_TOPIC,
+                **{
+                    key: token[key]
+                    for key in (
+                        "transaction_hash",
+                        "block_number",
+                        "log_index",
+                        "owner",
+                        "approved_address",
+                        "token_id_raw",
+                    )
+                },
+            },
+            "EV-NFT721-TRANSFER": {
+                "topic0": TRANSFER_TOPIC,
+                **{
+                    key: movement[key]
+                    for key in (
+                        "transaction_hash",
+                        "block_number",
+                        "log_index",
+                        "from",
+                        "to",
+                        "token_id_raw",
+                    )
+                },
+            },
+        }
+    if fixture_id == "FX-EVM-NFT-1155-001":
+        logs = _logs(raw)
+        singles = sorted(
+            (item for item in logs if _topics(item)[0].lower() == TRANSFER_SINGLE_TOPIC),
+            key=_log_sort_key,
+        )
+        approvals = sorted(
+            (item for item in logs if _topics(item)[0].lower() == APPROVAL_FOR_ALL_TOPIC),
+            key=_log_sort_key,
+        )
+        batch = _one_log(logs, TRANSFER_BATCH_TOPIC, 4)
+        single_ids = ("EV-NFT1155-SINGLE-IN", "EV-NFT1155-SINGLE-OUT")
+        approval_ids = ("EV-NFT1155-APPROVAL-TRUE", "EV-NFT1155-APPROVAL-FALSE")
+        projection: dict[str, dict[str, Any]] = {}
+        for evidence_id, item in zip(single_ids, singles, strict=True):
+            projection[evidence_id] = {
+                **_log_location(item),
+                "from": _address(_topics(item)[2]),
+                "to": _address(_topics(item)[3]),
+                "token_id_raw": str(_data_word(item, 0)),
+                "amount_raw": str(_data_word(item, 1)),
+            }
+            if evidence_id == "EV-NFT1155-SINGLE-IN":
+                projection[evidence_id]["topic0"] = TRANSFER_SINGLE_TOPIC
+        for evidence_id, item in zip(approval_ids, approvals, strict=True):
+            projection[evidence_id] = {
+                **_log_location(item),
+                "owner": _address(_topics(item)[1]),
+                "operator": _address(_topics(item)[2]),
+                "approved": bool(_data_word(item, 0)),
+            }
+        projection["EV-NFT1155-BATCH"] = {
+            **_log_location(batch),
+            "topic0": TRANSFER_BATCH_TOPIC,
+            "ids_raw": calculated["batch_case"]["ids_raw"],
+            "amounts_raw": calculated["batch_case"]["amounts_raw"],
+        }
+        return projection
+    if fixture_id == "FX-EVM-PROXY-001":
+        change = calculated["change"]
+        snapshots = {_text(item, "role"): item for item in _object_array(raw, "storage_snapshots")}
+        return {
+            "EV-PROXY-UPGRADED": {
+                "transaction_hash": change["transaction_hash"],
+                "block_number": change["block_number"],
+                "log_index": change["log_index"],
+                "topic0": UPGRADED_TOPIC,
+                "implementation": change["event_implementation"],
+            },
+            "EV-PROXY-IMPLEMENTATION-BEFORE": {
+                "block_number": _hex_int(_text(snapshots["implementation_before"], "block_number")),
+                "slot": IMPLEMENTATION_SLOT,
+                "raw_word": _text(
+                    snapshots["implementation_before"],
+                    "raw_word",
+                ),
+            },
+            "EV-PROXY-IMPLEMENTATION-AFTER": {
+                "block_number": _hex_int(_text(snapshots["implementation_after"], "block_number")),
+                "slot": IMPLEMENTATION_SLOT,
+                "raw_word": _text(
+                    snapshots["implementation_after"],
+                    "raw_word",
+                ),
+            },
+            "EV-PROXY-ADMIN-BEFORE": {
+                "block_number": _hex_int(_text(snapshots["admin_before"], "block_number")),
+                "slot": ADMIN_SLOT,
+                "raw_word": _text(snapshots["admin_before"], "raw_word"),
+            },
+            "EV-PROXY-ADMIN-AFTER": {
+                "block_number": _hex_int(_text(snapshots["admin_after"], "block_number")),
+                "slot": ADMIN_SLOT,
+                "raw_word": _text(snapshots["admin_after"], "raw_word"),
+            },
+        }
+    raise ValueError("unsupported TASK-013 evidence fixture")
+
+
+def _verify_verification_provenance(
+    evidence: dict[str, Any],
+    calculated_sha256: str,
+) -> None:
+    provenance = _mapping(evidence, "verification_provenance")
+    expected = {
+        "negative_oracle_report": "../../33_TASK_013_NEGATIVE_ORACLE_REPORT.md",
+        "independent_verifier_report": "../../34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md",
+        "calculated_fact_sha256": calculated_sha256,
+    }
+    if provenance != expected:
+        raise ValueError("fixture verification provenance differs")
 
 
 def _require_complete_nft_scope(raw: dict[str, Any]) -> None:

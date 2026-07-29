@@ -1,6 +1,6 @@
 # TASK-013 NFT·Proxy Fixture 후보 보고서
 > Created: 2026-07-29
-> Last Updated: 2026-07-29 15:38
+> Last Updated: 2026-07-29 15:49
 > Status: Candidate Replay, Negative Oracle, and Verifier Gates Passed · Promotion Pending
 
 ## 1. 목적
@@ -138,7 +138,8 @@ expected 값은 제품 analyzer 입력으로 사용하지 않는다. 상세 결�
 - [x] selected TX·exact block window와 selected upgrade·adjacent state 범위를 검증했다.
 - [x] replay integrity checker가 raw topic/data/storage에서 expected 핵심 값을 재계산했다.
 - [x] negative oracle 16개를 두 번 실행해 결정성을 확인했다.
-- [x] 독립 Verifier가 세 candidate의 raw facts와 7개 requirement를 두 번 재계산했다.
+- [x] 독립 Verifier가 세 candidate의 raw facts·13개 evidence 값·7개 requirement를 두 번 재계산했다.
+- [x] evidence provenance에 Negative Oracle·Verifier 보고서 경로와 계산 fact hash를 고정했다.
 - [x] candidate package 3개를 포함한 fixture Schema 0.1을 통과했다.
 - [ ] Analysis I/O와 UI를 승인했다.
 - [ ] Context Receipt가 `PASS`다.

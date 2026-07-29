@@ -105,6 +105,11 @@
     "approval_transitions_preserved": true,
     "independent_verifier_pass": true
   },
+  "verification_provenance": {
+    "negative_oracle_report": "../../33_TASK_013_NEGATIVE_ORACLE_REPORT.md",
+    "independent_verifier_report": "../../34_TASK_013_INDEPENDENT_VERIFIER_REPORT.md",
+    "calculated_fact_sha256": "0caf8a09994abbff71cb4afddf9bb6e11fa5411ef0870c27d1a92ea324aade91"
+  },
   "uncertainty": {
     "candidate_only": true,
     "remaining": "Analysis I/O/UI approval and fixture promotion review are not complete. The continuous gap between exact block windows is outside this fixture scope."

@@ -32,6 +32,7 @@ def test_repository_verifier_passes_three_candidates_deterministically() -> None
     assert first == second
     assert tuple(item["fixture_id"] for item in first) == FIXTURE_IDS
     assert [len(item["requirement_checks"]) for item in first] == [2, 2, 3]
+    assert [item["evidence_value_checks"] for item in first] == [3, 5, 5]
     assert all(item["status"] == "pass" for item in first)
 
 
@@ -91,7 +92,25 @@ def test_missing_requirement_evidence_is_rejected() -> None:
     drifted = copy.deepcopy(evidence)
     drifted["event_evidence"] = drifted["event_evidence"][:-1]
 
-    with pytest.raises(ValueError, match="evidence linkage failed"):
+    with pytest.raises(ValueError, match="evidence item set differs"):
+        verify_fixture(raw, expected, drifted)
+
+
+def test_evidence_value_drift_is_rejected() -> None:
+    raw, expected, evidence = _documents("FX-EVM-NFT-1155-001")
+    drifted = copy.deepcopy(evidence)
+    drifted["event_evidence"][4]["amounts_raw"][0] = "2"
+
+    with pytest.raises(ValueError, match="EV-NFT1155-BATCH value differs"):
+        verify_fixture(raw, expected, drifted)
+
+
+def test_verification_provenance_is_required() -> None:
+    raw, expected, evidence = _documents("FX-EVM-PROXY-001")
+    drifted = copy.deepcopy(evidence)
+    drifted.pop("verification_provenance")
+
+    with pytest.raises(ValueError, match="verification_provenance must be an object"):
         verify_fixture(raw, expected, drifted)
 
 

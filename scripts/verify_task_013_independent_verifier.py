@@ -14,10 +14,12 @@ def main() -> None:
     if first != second:
         raise RuntimeError("TASK-013 independent verifier is not deterministic")
     requirement_count = sum(len(item["requirement_checks"]) for item in first)
+    evidence_count = sum(item["evidence_value_checks"] for item in first)
     hashes = ", ".join(f"{item['fixture_id']}={item['calculated_sha256']}" for item in first)
     print(
         f"PASS TASK-013 independent Verifier: {len(first)} candidates, "
-        f"{requirement_count} requirements, 2 deterministic runs"
+        f"{requirement_count} requirements, {evidence_count} evidence values, "
+        "2 deterministic runs"
     )
     print(f"TASK-013 calculated fact hashes: {hashes}")
 
