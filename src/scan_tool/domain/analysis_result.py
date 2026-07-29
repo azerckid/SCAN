@@ -1,4 +1,4 @@
-"""Analysis I/O 0.1 result, evidence, source, and run models."""
+"""Analysis I/O result, evidence, source, and run models."""
 
 from enum import StrEnum
 from typing import Annotated, Literal
@@ -176,7 +176,7 @@ class AnalysisResultBase(ContractModel):
         str,
         Field(alias="$schema", pattern=r"analysis-result\.schema\.json$"),
     ]
-    schema_version: Literal["0.1"]
+    schema_version: Literal["0.1", "0.2"]
     analysis_id: AnalysisId
     analysis_type: AnalysisType
     chain_id: Literal[1]
@@ -210,10 +210,51 @@ class FailedAnalysisResult(AnalysisResultBase):
     errors: list[AnalysisError] = Field(min_length=1)
 
 
-ResultVariant = Annotated[
-    CompleteAnalysisResult | PartialAnalysisResult | FailedAnalysisResult,
-    Field(discriminator="status"),
+LegacyAnalysisType = Literal[
+    AnalysisType.DEX_SWAP,
+    AnalysisType.AUTH_CONSUMPTION,
+    AnalysisType.ADDRESS_FREEZE,
 ]
+
+
+class LegacyCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.1"]
+    analysis_type: LegacyAnalysisType
+
+
+class LegacyPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.1"]
+    analysis_type: LegacyAnalysisType
+
+
+class LegacyFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.1"]
+    analysis_type: LegacyAnalysisType
+
+
+class EvmCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.EVM_CORE]
+
+
+class EvmPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.EVM_CORE]
+
+
+class EvmFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.EVM_CORE]
+
+
+ResultVariant = (
+    LegacyCompleteAnalysisResult
+    | LegacyPartialAnalysisResult
+    | LegacyFailedAnalysisResult
+    | EvmCompleteAnalysisResult
+    | EvmPartialAnalysisResult
+    | EvmFailedAnalysisResult
+)
 
 
 class AnalysisResult(RootModel[ResultVariant]):

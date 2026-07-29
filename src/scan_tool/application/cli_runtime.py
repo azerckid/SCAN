@@ -20,19 +20,23 @@ from scan_tool.domain.analysis_request import (
     AnalysisRequest,
     AuthAnalysisRequest,
     DexAnalysisRequest,
+    EvmCoreAnalysisRequest,
     FreezeAnalysisRequest,
 )
 from scan_tool.domain.analysis_result import AnalysisResult
 from scan_tool.domain.auth import AuthReplay
 from scan_tool.domain.dex import DexReplay
+from scan_tool.domain.evm_core import EvmCoreReplay
 from scan_tool.domain.freeze import FreezeReplay
 from scan_tool.slices.auth import analyze_auth_replay
 from scan_tool.slices.dex import analyze_dex_replay
+from scan_tool.slices.evm_core import analyze_evm_core_replay
 from scan_tool.slices.freeze import analyze_freeze_replay
 
 DEX_REPLAY_STAGE = "dex_replay_loaded"
 AUTH_REPLAY_STAGE = "auth_replay_loaded"
 FREEZE_REPLAY_STAGE = "freeze_replay_loaded"
+EVM_CORE_REPLAY_STAGE = "evm_core_replay_loaded"
 
 
 class AnalysisUnavailable(RuntimeError):
@@ -168,6 +172,22 @@ class CliRuntime:
                 resumed=resumed,
                 checkpoint_id=checkpoint_id,
             )
+        if isinstance(document, EvmCoreAnalysisRequest):
+            replay_body, checkpoint_id, resumed = self._load_replay(
+                document.analysis_id,
+                replay_path,
+                replay_body,
+                expected_replay_sha256,
+                stage=EVM_CORE_REPLAY_STAGE,
+                replay_model=EvmCoreReplay,
+                analysis_label="EVM Core",
+            )
+            return analyze_evm_core_replay(
+                document,
+                replay_body,
+                resumed=resumed,
+                checkpoint_id=checkpoint_id,
+            )
         raise AnalysisUnavailable("The selected vertical analyzer is not implemented.")
 
     def _load_replay(
@@ -178,7 +198,9 @@ class CliRuntime:
         expected_replay_sha256: str | None,
         *,
         stage: str,
-        replay_model: type[DexReplay] | type[AuthReplay] | type[FreezeReplay],
+        replay_model: (
+            type[DexReplay] | type[AuthReplay] | type[FreezeReplay] | type[EvmCoreReplay]
+        ),
         analysis_label: str,
     ) -> tuple[bytes, str | None, bool]:
         checkpoint = self.storage.latest_checkpoint(analysis_id, stage)

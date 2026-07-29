@@ -1,9 +1,9 @@
 {
   "$schema": "../../schemas/fixture-evidence.schema.json",
   "schema_version": "0.1",
-  "fixture_version": "0.1",
+  "fixture_version": "0.2",
   "fixture_id": "FX-BASIC-EVM-002",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-28T18:54:34.101826Z",
   "provider_replay_file": "provider-replay.json",
   "event_evidence": [],
@@ -114,8 +114,8 @@
   },
   "uncertainty": {
     "candidate_only": false,
-    "verifying": true,
-    "remaining": "Independent archive replay and offline timestamp-to-block oracles passed; state consumer contract remains"
+    "verifying": false,
+    "remaining": "None; archive replay, timestamp oracle, and Analysis I/O 0.2 consumer passed"
   },
   "provenance_notes": "All state values are historical post-state values at block 16642512. Latest balances are not acceptable substitutes."
 }

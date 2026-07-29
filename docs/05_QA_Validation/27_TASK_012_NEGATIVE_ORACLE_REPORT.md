@@ -5,14 +5,14 @@
 
 ## 1. 목적과 판정
 
-TASK-012 범용 EVM 분석기 구현 전에 네 `verifying` fixture의
+TASK-012 범용 EVM 분석기 구현 전에 당시 `verifying` 상태였던 네 fixture의
 complete·partial·failed 경계를 합성 반례로 고정한다. 이 작업은 제품
 Analysis type이나 live adapter를 구현하지 않고, fixture 승격에 사용할
 negative oracle 계약과 오프라인 판정기만 추가한다.
 
 **판정: 24개 oracle을 동일 입력으로 두 번 실행해 모두 같은 결과를 얻었다.
-독립 trace와 credential 회전은 미완료이므로 fixture는 계속
-`verifying`이다.**
+당시 독립 trace와 credential 회전은 미완료였다. 이후 offline provenance
+정책에 따라 fixture는 `confirmed 0.2`로 승격했다.**
 
 ## 2. 실행 범위
 
@@ -42,7 +42,7 @@ negative oracle 계약과 오프라인 판정기만 추가한다.
 - 네트워크 호출: `0`
 - endpoint·credential 사용: 없음
 - Analysis I/O·Operations Schema 변경: 없음
-- TASK-012 제품 analyzer·CLI wiring: 미구현
+- TASK-012 제품 analyzer·CLI wiring: 이 보고서 실행 당시 미구현, 이후 적용
 - live provider timeout/rate-limit 반례: 미실행
 - Alchemy 독립 trace 실패: 미해결
 

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-EVM-TOKEN-001",
+  "analysis_type": "evm_core",
+  "query_kind": "first_token_transfer",
+  "chain_id": 1,
+  "fixture_id": "FX-EVM-TOKEN-001",
+  "requested_at": "2026-07-29T12:00:00+09:00",
+  "inputs": {
+    "subject_address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+    "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "start_block": 16642512,
+    "direction": "outgoing",
+    "exclude_zero": true,
+    "require_success": true,
+    "ordering": "block_transaction_log_asc"
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": ["DS-EVM-RPC-ARCHIVE"],
+    "source_order": ["DS-EVM-RPC-ARCHIVE"],
+    "allow_fallback": true,
+    "offline_mode": true
+  }
+}

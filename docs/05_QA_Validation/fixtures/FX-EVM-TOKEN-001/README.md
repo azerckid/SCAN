@@ -1,7 +1,7 @@
 # Fixture: FX-EVM-TOKEN-001
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 04:25
-> Status: Verifying
+> Last Updated: 2026-07-29 12:30
+> Status: Confirmed 0.2
 
 ## 1. 목적
 
@@ -19,7 +19,7 @@
 | 첫 outgoing | TX `0xbbdaad89...55fa5`, log `275` |
 | To | `0xb4e16d01...8c9dc` |
 | 수량 | `25000000000` raw = `25000` USDC |
-| 상태 | `verifying` — 독립 block/filter 로그 재현 일치 |
+| 상태 | `confirmed` — 독립 filtered log·반례·Analysis I/O 0.2 replay 통과 |
 
 Blockscout 호환 API를 `startblock=16642512`, `sort=asc`로 조회했을 때 첫
 결과가 위 TX였고, receipt의 raw `Transfer` 로그와 일치했다.
@@ -31,11 +31,11 @@ Blockscout 호환 API를 `startblock=16642512`, `sort=asc`로 조회했을 때 �
 - 실패 receipt, 다른 토큰, `from` 불일치 이벤트는 후보에서 제외한다.
 - explorer의 현재 라벨이나 가격은 채점하지 않는다.
 
-## 4. 승격 전 잔여
+## 4. 승격 기록
 
 1. [x] QuickNode·Alchemy의 address+topic+block `eth_getLogs`가 1건으로 일치했다.
 2. [x] zero-value·다른 token·같은 블록 다중 로그·pagination 합성 oracle을 검증했다.
-3. [ ] 검색 범위·정렬·pagination 계약을 승인한다.
+3. [x] 검색 범위·정렬·pagination과 partial 오류 계약을 승인했다.
 
 Provider별 raw SHA-256과 filter 범위는
 [provider-replay.json](./provider-replay.json)에 고정했다.

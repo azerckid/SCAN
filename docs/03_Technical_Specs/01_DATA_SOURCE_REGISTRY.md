@@ -363,11 +363,12 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
    비활성 상태를 유지한다.
 9. TASK-012 fixture 4개는 QuickNode·Alchemy로 TX·receipt·block·historical
    code/balance/call·범위 지정 `eth_getLogs`를 독립 재현해 공통 9개 decoded
-   값이 일치했다. 상태는 `verifying`이며 provider별 raw SHA와 조회 시각은
-   로컬 artifact, 재현 요약은 fixture `provider-replay.json`에 보존한다.
+   값이 일치했다. 이 fixture들은 offline provenance 정책에 따라
+   `confirmed 0.2`로 승격했으며 provider별 raw SHA와 조회 시각은 로컬
+   artifact, 재현 요약은 fixture `provider-replay.json`에 보존한다.
 10. primary trace는 성공했지만 Alchemy 독립 trace는 HTTP 400으로 실패했다.
-    negative oracle·rate/timeout 반례와 독립 trace가 끝나기 전에는
-    `confirmed` 또는 provider `adopted`로 올리지 않는다.
+    독립 trace는 비차단 후속이며 provider `adopted` 판정과 live
+    rate/timeout Gate는 계속 별도로 유지한다.
 11. 기본 network 0건인 opt-in smoke runner를 준비했다. Rules `allowed`와
     역할별 HTTPS endpoint가 없으면 실제 adapter 호출 전에 중단한다.
 

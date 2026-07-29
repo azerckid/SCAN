@@ -1,0 +1,26 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-BASIC-EVM-002",
+  "chain_id": 1,
+  "query_kind": "historical_balance",
+  "captured_at": "2026-07-28T18:54:34.101826+00:00",
+  "subject_address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+  "block": {"number": "0xfdf1d0", "timestamp": "0x63ee5b0f"},
+  "native_balance": "0x8125df4a3696fff15",
+  "token_states": [
+    {
+      "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "symbol": "USDC",
+      "balance_result": "0x0000000000000000000000000000000000000000000000000000000629be8f08",
+      "decimals_result": "0x0000000000000000000000000000000000000000000000000000000000000006"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider_id": "provider-evm-primary",
+      "endpoint_host": "provider-primary.invalid",
+      "retrieved_at": "2026-07-28T18:54:34.101826+00:00"
+    }
+  ]
+}

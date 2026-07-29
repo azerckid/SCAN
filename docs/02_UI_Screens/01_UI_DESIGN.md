@@ -327,7 +327,8 @@ Preview의 버튼은 구현 API가 아니라 검토 편의를 위한 상태 전�
 TASK-012는 기존 Preview를 수정하지 않고
 [EVM Core Preview](./previews/04_task_012_evm_core_cli_preview.html)로 분리한다.
 이 Preview는 4 query × complete·partial·failed 3상태를 전환하며
-`0.2-draft`·runtime 미구현·fixture verifying을 화면 상단과 하단에 명시한다.
+Analysis I/O 0.2·reviewed replay·fixture evidence 경계를 화면 상단과 하단에
+명시한다.
 
 ## 13. UI Design Gate
 

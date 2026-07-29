@@ -127,7 +127,7 @@ ToolRequirementId = Annotated[
 ]
 FixtureRequirementId = Annotated[
     str,
-    StringConstraints(pattern=r"^REQ-(DEX|AUTH|FREEZE)-[A-Z0-9-]+$"),
+    StringConstraints(pattern=r"^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN)-[A-Z0-9-]+$"),
 ]
 BlockNumber = Annotated[StrictInt, Field(ge=0)]
 NonNegativeInt = Annotated[StrictInt, Field(ge=0)]

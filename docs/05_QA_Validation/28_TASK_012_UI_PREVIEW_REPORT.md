@@ -1,12 +1,13 @@
 # TASK-012 EVM Core UI Preview 보고서
 > Created: 2026-07-29 05:08
-> Last Updated: 2026-07-29 05:58
-> Status: UI Gate Passed · Runtime Not Implemented
+> Last Updated: 2026-07-29 12:40
+> Status: UI Gate Passed · Runtime Applied Separately
 
 ## 1. 범위
 
-이 보고서는 `evm_core` `0.2-draft`의 UI-First Gate만 검증한다. 제품 analyzer,
-Analysis I/O 정식 `0.2`, live provider, fixture `confirmed`는 범위 밖이다.
+이 보고서는 `evm_core` 0.2의 UI-First Gate 기록이다. 이후 제품 analyzer,
+Analysis I/O 0.2, fixture confirmed는 별도 TASK-012 구현 Gate에서
+적용됐다. live provider 실행은 계속 이 보고서 범위 밖이다.
 
 검토 대상:
 

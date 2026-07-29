@@ -209,6 +209,8 @@ ID는 24개 집계에서 한 번만 센다.
 
 ### 6.7 TASK-011 예상문제 Offline Benchmark
 
+- 아래 3/6/21은 TASK-011 최초 기준선이다. TASK-012 적용 뒤 현재 집계는
+  자동화 7·보조 2·미지원 21이다.
 - [x] 예상문제 은행의 정확한 30개 ID가 benchmark manifest에 한 번씩 존재한다.
 - [x] 자동화 3·보조 6·미지원 21을 분리하고 보조·미지원 문항을 성공으로
   계산하지 않는다.
@@ -225,9 +227,11 @@ ID는 24개 집계에서 한 번만 센다.
 - [x] 비자동 27문항을 EVM Core·NFT/Proxy·PATH·Intel·Service·BTC·Case로 묶었다.
 - [x] 엔진별 직접 대상 문제와 dependency를 기록했다.
 - [x] 공통 fixture-first·Analysis I/O·Verifier·Benchmark 승격 Gate를 작성했다.
-- [ ] TASK-012~019 개별 fixture와 Context Receipt를 승인한다.
-- [ ] QA-EXP-* 12개 시나리오를 실행한다.
-- [ ] 새 automated 집계와 잔여 assisted·unsupported를 기록한다.
+- [x] TASK-012 fixture·Context Receipt·구현을 승인한다.
+- [ ] TASK-013~019 개별 fixture와 Context Receipt를 승인한다.
+- [x] QA-EXP-EVM-001/002를 실행한다.
+- [ ] 나머지 QA-EXP-* 10개 시나리오를 실행한다.
+- [x] TASK-012 적용 집계 자동화 7·보조 2·미지원 21을 기록한다.
 
 ### 6.9 WP-INPUT-IMPL-02 CLI·Operations Wiring
 

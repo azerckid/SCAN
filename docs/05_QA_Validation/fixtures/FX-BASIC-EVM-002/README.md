@@ -1,7 +1,7 @@
 # Fixture: FX-BASIC-EVM-002
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 04:32
-> Status: Verifying
+> Last Updated: 2026-07-29 12:30
+> Status: Confirmed 0.2
 
 ## 1. 목적
 
@@ -17,7 +17,7 @@ historical state로 조회하고 raw 정수와 decimals 적용값을 함께 검�
 | 기준 블록 | `16642512` (`2023-02-16T16:34:23Z`) |
 | ETH | `148897435437879000853` wei |
 | USDC | `26470158088` raw, decimals `6` |
-| 상태 | `verifying` — 두 archive 공급자 결과 일치 |
+| 상태 | `confirmed` — archive 일치·반례·Analysis I/O 0.2 replay 통과 |
 
 블록 태그의 상태는 블록 실행이 끝난 뒤의 post-state로 해석한다. 거래 직전
 잔액과 혼동하지 않는다.
@@ -28,11 +28,11 @@ historical state로 조회하고 raw 정수와 decimals 적용값을 함께 검�
 - `decimals`만 누락되면 raw 잔액은 보존하되 사람이 읽는 수량은 `partial`이다.
 - 부동소수점으로 raw 값을 손실하거나 조회 블록을 생략하면 실패다.
 
-## 4. 승격 전 잔여
+## 4. 승격 기록
 
 1. [x] QuickNode·Alchemy에서 ETH·USDC·decimals를 재현했다.
 2. [x] timestamp exact·between·범위 밖·오선택 합성 oracle을 검증했다.
-3. [ ] state 결과 계약과 `archive_required` 오류를 승인한다.
+3. [x] `evm_core/historical_balance`와 `archive_required` 오류 계약을 승인했다.
 
 Provider별 raw SHA-256과 일치 결과는 [provider-replay.json](./provider-replay.json)에
 고정했다.

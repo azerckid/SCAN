@@ -15,11 +15,13 @@ from scan_tool.domain.analysis_request import (
     AnalysisRequest,
     AuthAnalysisRequest,
     DexAnalysisRequest,
+    EvmCoreAnalysisRequest,
     FreezeAnalysisRequest,
 )
 from scan_tool.domain.analysis_result import AnalysisResult, AnalysisStatus
 from scan_tool.slices.auth import analyze_auth_replay
 from scan_tool.slices.dex import analyze_dex_replay
+from scan_tool.slices.evm_core import analyze_evm_core_replay
 from scan_tool.slices.freeze import analyze_freeze_replay
 
 APPROVED_EXPECTED_PROBLEM_IDS = frozenset(
@@ -56,7 +58,17 @@ APPROVED_EXPECTED_PROBLEM_IDS = frozenset(
         "SVC-MIX-001",
     }
 )
-APPROVED_AUTOMATED_PROBLEM_IDS = frozenset({"EVM-AUTH-001", "EVM-FREEZE-001", "SVC-DEX-001"})
+APPROVED_AUTOMATED_PROBLEM_IDS = frozenset(
+    {
+        "BASIC-EVM-001",
+        "BASIC-EVM-002",
+        "EVM-AUTH-001",
+        "EVM-FREEZE-001",
+        "EVM-TOKEN-001",
+        "EVM-TOKEN-002",
+        "SVC-DEX-001",
+    }
+)
 
 
 class CoverageLevel(StrEnum):
@@ -248,4 +260,6 @@ def _analyze(request: AnalysisRequest, replay: bytes) -> AnalysisResult:
         return analyze_auth_replay(document, replay)
     if isinstance(document, FreezeAnalysisRequest):
         return analyze_freeze_replay(document, replay)
+    if isinstance(document, EvmCoreAnalysisRequest):
+        return analyze_evm_core_replay(document, replay)
     raise ValueError("unsupported benchmark analysis type")

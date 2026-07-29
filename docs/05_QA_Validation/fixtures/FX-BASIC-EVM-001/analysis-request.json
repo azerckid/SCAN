@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-BASIC-EVM-001",
+  "analysis_type": "evm_core",
+  "query_kind": "object_summary",
+  "chain_id": 1,
+  "fixture_id": "FX-BASIC-EVM-001",
+  "requested_at": "2026-07-29T12:00:00+09:00",
+  "inputs": {
+    "values": [
+      "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+      "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+      "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+      16642512,
+      "0x1234"
+    ],
+    "block_number": 16642512,
+    "include_transaction_fee": true
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": ["DS-EVM-RPC-PUBLIC", "DS-EVM-RPC-ARCHIVE"],
+    "source_order": ["DS-EVM-RPC-PUBLIC", "DS-EVM-RPC-ARCHIVE"],
+    "allow_fallback": true,
+    "offline_mode": true
+  }
+}

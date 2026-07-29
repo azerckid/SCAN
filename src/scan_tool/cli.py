@@ -85,7 +85,7 @@ def main(
 
 @app.command()
 def validate(path: Annotated[Path, typer.Argument(help="Analysis I/O JSON file.")]) -> None:
-    """Validate an Analysis I/O 0.1 request, result, or error document."""
+    """Validate an Analysis I/O 0.1/0.2 request, result, or error document."""
     document = _read_json(path)
     schema = str(document.get("$schema", ""))
     try:
@@ -109,7 +109,7 @@ def validate(path: Annotated[Path, typer.Argument(help="Analysis I/O JSON file."
 def analyze(
     request: Annotated[
         Path,
-        typer.Option("--request", help="Analysis Request 0.1 JSON file."),
+        typer.Option("--request", help="Analysis Request 0.1 or 0.2 JSON file."),
     ],
     evidence: Annotated[
         Path | None,

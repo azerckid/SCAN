@@ -5,34 +5,117 @@
     {
       "problem_id": "BASIC-EVM-001",
       "difficulty": "low",
-      "coverage": "assisted",
-      "reason": "The source and provenance layers are reusable, but no generic object-identification analyzer is exposed.",
+      "coverage": "automated",
+      "reason": "TASK-012 EVM Core classifies objects and recomputes the transaction fee from reviewed RPC replay.",
       "reusable_capabilities": ["EVM-TX", "BASE-PROVENANCE", "BASE-EXPORT"],
-      "blocking_gaps": ["GENERIC-QUERY"]
+      "blocking_gaps": [],
+      "fixture": {
+        "fixture_id": "FX-BASIC-EVM-001",
+        "request_path": "docs/05_QA_Validation/fixtures/FX-BASIC-EVM-001/analysis-request.json",
+        "replay_path": "docs/05_QA_Validation/fixtures/FX-BASIC-EVM-001/raw-replay.json",
+        "expected_results": [
+          {
+            "result_type": "object_summary",
+            "value": {
+              "objects": [
+                {"input": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf", "classification": "address", "account_kind": "eoa"},
+                {"input": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b", "classification": "address", "account_kind": "contract"},
+                {"input": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5", "classification": "transaction_hash"},
+                {"input": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644", "classification": "block_hash"},
+                {"input": 16642512, "classification": "block_number"},
+                {"input": "0x1234", "classification": "invalid"}
+              ],
+              "fee_paid_wei": "8115326069137440"
+            }
+          }
+        ],
+        "required_fixture_requirements": ["REQ-BASIC-EVM-OBJECT-TYPES", "REQ-BASIC-EVM-TX-SUMMARY", "REQ-BASIC-EVM-BLOCK-LINK"]
+      }
     },
     {
       "problem_id": "BASIC-EVM-002",
       "difficulty": "low",
-      "coverage": "assisted",
-      "reason": "Historical state storage and source policy exist, but there is no generic balance-state analyzer.",
+      "coverage": "automated",
+      "reason": "TASK-012 EVM Core decodes native and ERC-20 historical state at an explicit block.",
       "reusable_capabilities": ["EVM-STATE", "BASE-CACHE", "BASE-PROVENANCE"],
-      "blocking_gaps": ["GENERIC-STATE"]
+      "blocking_gaps": [],
+      "fixture": {
+        "fixture_id": "FX-BASIC-EVM-002",
+        "request_path": "docs/05_QA_Validation/fixtures/FX-BASIC-EVM-002/analysis-request.json",
+        "replay_path": "docs/05_QA_Validation/fixtures/FX-BASIC-EVM-002/raw-replay.json",
+        "expected_results": [
+          {
+            "result_type": "historical_balance",
+            "value": {
+              "block_number": 16642512,
+              "block_timestamp": 1676565263,
+              "state_semantics": "post_state",
+              "balances": [
+                {"symbol": "ETH", "decimals": 18, "amount_raw": "148897435437879000853"},
+                {"symbol": "USDC", "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", "decimals": 6, "amount_raw": "26470158088"}
+              ]
+            }
+          }
+        ],
+        "required_fixture_requirements": ["REQ-BASIC-STATE-BLOCK", "REQ-BASIC-STATE-NATIVE", "REQ-BASIC-STATE-USDC"]
+      }
     },
     {
       "problem_id": "EVM-TOKEN-001",
       "difficulty": "low",
-      "coverage": "assisted",
-      "reason": "Confirmed slices decode ERC-20 Transfer logs, but no standalone transfer reconstruction request exists.",
+      "coverage": "automated",
+      "reason": "TASK-012 EVM Core orders filtered Transfer logs and selects the first successful outgoing transfer.",
       "reusable_capabilities": ["EVM-LOG", "DECODE", "RECON"],
-      "blocking_gaps": ["TOKEN-TRANSFER"]
+      "blocking_gaps": [],
+      "fixture": {
+        "fixture_id": "FX-EVM-TOKEN-001",
+        "request_path": "docs/05_QA_Validation/fixtures/FX-EVM-TOKEN-001/analysis-request.json",
+        "replay_path": "docs/05_QA_Validation/fixtures/FX-EVM-TOKEN-001/raw-replay.json",
+        "expected_results": [
+          {
+            "result_type": "first_token_transfer",
+            "value": {
+              "range_complete": true,
+              "transfer": {
+                "transaction_hash": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+                "block_number": 16642512,
+                "transaction_index": 104,
+                "log_index": 275,
+                "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "from": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+                "to": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+                "amount_raw": "25000000000"
+              }
+            }
+          }
+        ],
+        "required_fixture_requirements": ["REQ-TOKEN-FIRST-ORDER", "REQ-TOKEN-FIRST-EVENT"]
+      }
     },
     {
       "problem_id": "EVM-TOKEN-002",
       "difficulty": "medium",
-      "coverage": "assisted",
-      "reason": "Internal-call evidence is represented in DEX and AUTH, but a generic native-flow analyzer is absent.",
+      "coverage": "automated",
+      "reason": "TASK-012 EVM Core separates the outer value from successful internal native inflows.",
       "reusable_capabilities": ["EVM-TX", "EVM-TRACE", "RECON"],
-      "blocking_gaps": ["NATIVE-FLOW"]
+      "blocking_gaps": [],
+      "fixture": {
+        "fixture_id": "FX-EVM-TOKEN-002",
+        "request_path": "docs/05_QA_Validation/fixtures/FX-EVM-TOKEN-002/analysis-request.json",
+        "replay_path": "docs/05_QA_Validation/fixtures/FX-EVM-TOKEN-002/raw-replay.json",
+        "expected_results": [
+          {
+            "result_type": "native_inflow",
+            "value": {
+              "top_level_value_wei": "0",
+              "internal_inflow_wei": "14449515027026387018",
+              "successful_call_count": 1,
+              "trace_complete": true
+            }
+          }
+        ],
+        "required_fixture_requirements": ["REQ-TOKEN-INTERNAL-OUTER", "REQ-TOKEN-INTERNAL-INFLOW"]
+      }
     },
     {
       "problem_id": "EVM-NFT-001",

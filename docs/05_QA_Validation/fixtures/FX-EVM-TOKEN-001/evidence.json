@@ -1,9 +1,9 @@
 {
   "$schema": "../../schemas/fixture-evidence.schema.json",
   "schema_version": "0.1",
-  "fixture_version": "0.1",
+  "fixture_version": "0.2",
   "fixture_id": "FX-EVM-TOKEN-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-28T18:54:34.101826Z",
   "provider_replay_file": "provider-replay.json",
   "event_evidence": [
@@ -101,8 +101,8 @@
   },
   "uncertainty": {
     "candidate_only": false,
-    "verifying": true,
-    "remaining": "Independent eth_getLogs replay and offline transfer negative oracles passed; consumer contract remains"
+    "verifying": false,
+    "remaining": "None; filtered-log replay, ordering oracle, and Analysis I/O 0.2 consumer passed"
   },
   "provenance_notes": "The explorer range query establishes ordering while the raw receipt event establishes deterministic event fields. Neither source substitutes for the other."
 }

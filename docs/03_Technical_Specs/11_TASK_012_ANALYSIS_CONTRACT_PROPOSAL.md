@@ -1,13 +1,13 @@
-# TASK-012 범용 EVM Analysis Contract 제안
+# TASK-012 범용 EVM Analysis Contract
 > Created: 2026-07-29 04:46
-> Last Updated: 2026-07-29 05:58
-> Status: Proposed 0.2 Draft · Analysis I/O 0.1 Unchanged · Runtime Not Implemented
+> Last Updated: 2026-07-29 12:30
+> Status: Approved 0.2 · Runtime Implemented · 0.1 Backward Compatible
 
 ## 1. 목적과 판정
 
-TASK-012의 네 `verifying` fixture를 하나의 범용 EVM 분석기가 소비할 수
-있도록 request·result·partial/error 계약을 제안한다. 이 문서는 승인된
-Analysis I/O 0.1이나 Python runtime을 변경하지 않는다.
+TASK-012의 네 confirmed fixture를 하나의 범용 EVM 분석기가 소비할 수
+있도록 request·result·partial/error 계약을 고정한다. Analysis I/O 0.2는
+`evm_core`를 추가하고 기존 DEX·AUTH·FREEZE 0.1 문서를 계속 허용한다.
 
 **제안: `analysis_type: evm_core` 하나와 네 `query_kind`를 사용한다.**
 
@@ -89,19 +89,10 @@ negative oracle이 검출한 latest 대체, gas limit fee, 잘못된 token/순�
 
 ## 6. 버전·Migration 판정
 
-현재 승인 계약은 `schema_version: 0.1`이며 세 Analysis type만 허용한다.
-이 제안은 별도 `proposal_version: 0.2-draft` 파일로 격리했다.
-
-구현 승인 시 선택지는 다음 둘이다.
-
-1. Analysis I/O를 `0.2`로 올리고 `evm_core` discriminated variant 추가
-2. 0.1 envelope를 유지하면서 payload extension 규칙을 별도 승인
-
-**권장안은 1번**이다. 승인 Schema와 runtime enum이 같은 truth source를
-유지하고 unknown type을 0.1에서 계속 거부할 수 있기 때문이다. SQLite
-Schema v2는 analysis type 문자열을 저장하므로 DDL migration은 현재
-필요하지 않지만, runtime model·CLI dispatcher·operations planner는 함께
-변경해야 한다.
+승인안은 Analysis I/O `0.2`의 `evm_core` discriminated variant다. 기존 세
+Analysis type은 `schema_version: 0.1`, EVM Core는 `0.2`만 허용한다. SQLite
+Schema v2는 analysis type 문자열을 저장하므로 DDL migration은 필요하지
+않으며 runtime model·CLI dispatcher·operations enum을 함께 갱신했다.
 
 ## 7. CLI·UI 영향
 
@@ -128,7 +119,7 @@ Schema v2는 analysis type 문자열을 저장하므로 DDL migration은 현재
 - fixture exact raw 값 drift 검사
 - extra field·wrong input·status/error·failed null/error·ERC-20·fee·range·trace
   조건을 다루는 14 probes
-- 현재 Analysis I/O 0.1 Schema와 runtime enum 미변경 검사
+- Analysis I/O 0.2 `evm_core` 채택과 0.1 세 type 호환 검사
 
 실행:
 
@@ -136,15 +127,16 @@ Schema v2는 analysis type 문자열을 저장하므로 DDL migration은 현재
 uv run python scripts/check_task_012_analysis_contract_proposal.py
 ```
 
-## 9. 승인 전 잔여
+## 9. 승인·구현 기록
 
-- [ ] 사용자 계약 승인
+- [x] 사용자 계약 승인
 - [x] TASK-012 전용 HTML Preview 작성·정적 검증
 - [x] CLI Preview의 네 query 입력·complete·partial·failed 사용자 검토
-- [ ] Analysis I/O 0.2 정식 Schema·Pydantic 모델 승인
-- [ ] credential 회전·독립 trace·live rate/timeout Gate
-- [ ] fixture conditional confirmed
-- [ ] TASK-012 제품 analyzer 구현 승인
+- [x] Analysis I/O 0.2 정식 Schema·Pydantic 모델 승인
+- [ ] credential 회전·live rate/timeout은 live 입력 운영 Gate로 유지
+- [x] 독립 trace는 비차단 provenance 항목으로 분리
+- [x] fixture 4개 confirmed 0.2
+- [x] TASK-012 제품 analyzer 구현 승인·offline replay 구현
 
 ## 10. 365 글로벌 평가 기준
 
@@ -159,13 +151,13 @@ uv run python scripts/check_task_012_analysis_contract_proposal.py
 
 ## 11. Related Documents
 
-- **Technical_Specs**: [Analysis I/O Schema 0.1](./05_ANALYSIS_IO_SCHEMA.md) - 현재 승인 기준선
+- **Technical_Specs**: [Analysis I/O Schema](./05_ANALYSIS_IO_SCHEMA.md) - 0.2와 0.1 호환 기준선
 - **Technical_Specs**: [Coverage 확장 Brief](./09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-EVM-CORE
 - **Technical_Specs**: [Live Provider Readiness](./10_LIVE_PROVIDER_READINESS.md) - source·Trace Gate
 - **UI_Screens**: [TASK-012 EVM Core UI](../02_UI_Screens/05_TASK_012_EVM_CORE_UI.md) - 4 query·3상태 Draft
 - **UI_Screens**: [TASK-012 EVM Core Preview](../02_UI_Screens/previews/04_task_012_evm_core_cli_preview.html) - 사용자 확인 대상
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012 Context Lock
-- **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 네 verifying fixture
+- **QA_Validation**: [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) - 네 confirmed 0.2 fixture
 - **QA_Validation**: [제안 예제](../05_QA_Validation/examples/task-012/README.md) - 12개 contract case
 - **QA_Validation**: [Negative Oracle 보고서](../05_QA_Validation/27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 24개 offline 반례
 - **QA_Validation**: [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) - 자동·브라우저·사용자 Gate

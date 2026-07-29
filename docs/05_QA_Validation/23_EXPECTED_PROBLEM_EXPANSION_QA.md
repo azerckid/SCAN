@@ -1,12 +1,12 @@
 # 예상문제 Coverage 확장 QA 계획
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 11:10
-> Status: Proposed 0.1 · Not Executed
+> Last Updated: 2026-07-29 12:40
+> Status: TASK-012 Passed · TASK-013~019 Not Executed
 
 ## 1. 목적
 
 이 문서는 TASK-012~019가 새 예상문제를 automated로 승격할 때 적용할
-검증 기준을 정의한다. 아직 새 분석기는 구현되지 않았으므로 모든 Phase 2
+검증 기준을 정의한다. TASK-012 EVM Core는 통과했으며, TASK-013~019
 시나리오는 `not_executed`다.
 
 ## 2. 공통 자동화 승격 Gate
@@ -29,8 +29,8 @@
 
 | QA ID | Work Package | 필수 시나리오 | 상태 |
 |:---|:---|:---|:---:|
-| QA-EXP-EVM-001 | EVM Core | TX·receipt·block·state·ERC-20/native flow exact 정합 | not_executed |
-| QA-EXP-EVM-002 | EVM Core | failed TX·archive/trace 누락 partial | not_executed |
+| QA-EXP-EVM-001 | EVM Core | TX·receipt·block·state·ERC-20/native flow exact 정합 | pass |
+| QA-EXP-EVM-002 | EVM Core | failed TX·archive/trace 누락 partial | pass |
 | QA-EXP-SPECIAL-001 | NFT/Proxy | ERC-721/1155·EIP-1967 raw decode와 block state | not_executed |
 | QA-EXP-PATH-001 | PATH | N홉 단일 경로·cycle·budget | not_executed |
 | QA-EXP-PATH-002 | PATH | 분기·재병합·unrelated fund·residual | not_executed |
@@ -46,9 +46,9 @@
 
 ### 4.1 EVM Core
 
-- 네 공개 fixture 패키지는 `verifying`이며 제품 analyzer QA는
-  `not_executed`를 유지한다. 별도 fixture Gate에서 합성 negative oracle
-  24개는 두 번 통과했다.
+- 네 공개 fixture 패키지는 `confirmed 0.2`이며 제품 analyzer QA는
+  `pass`다. 별도 fixture Gate에서 합성 negative oracle 24개도 두 번
+  통과했다.
 - raw uint256과 decimals를 분리한다.
 - failed transaction을 성공 이동에서 제외한다.
 - historical state에 `latest`를 사용하지 않는다.
@@ -112,9 +112,9 @@
 | Open-source | Planned | 공개 Schema·fixture·재현 명령·license provenance |
 | Business Plan | N/A | 대회 준비 범위, 제품화는 별도 승인 |
 
-TASK-012의 `evm_core` 계약 제안 12개와 Schema probe 14개는 통과했지만,
-이는 계약 Draft의 정합성만 검증한다. 제품 analyzer와 QA-EXP-EVM-001/002는
-계속 `not_executed`이며 fixture도 `verifying` 상태다.
+TASK-012의 `evm_core` 계약 12개와 제안 checker 14개, 공개 Analysis I/O
+Schema probe 40개가 통과했다. 제품 analyzer와
+QA-EXP-EVM-001/002도 통과했으며 fixture는 `confirmed 0.2`다.
 
 ## 7. Originality·Ethics
 

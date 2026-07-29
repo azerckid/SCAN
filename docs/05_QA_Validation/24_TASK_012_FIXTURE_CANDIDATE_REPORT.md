@@ -1,18 +1,19 @@
-# TASK-012 범용 EVM Fixture 후보 선정 보고서
+# TASK-012 범용 EVM Fixture 승격·구현 보고서
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 11:00
-> Status: Provider Replay Passed · Four Fixtures Verifying · Implementation Not Started
+> Last Updated: 2026-07-29 12:30
+> Status: Passed · Four Fixtures Confirmed 0.2 · EVM Core Implemented
 
 ## 1. 목적과 판정
 
 TASK-012의 구현 전 첫 Gate로 `BASIC-EVM-001/002`,
 `EVM-TOKEN-001/002`에 사용할 공개 사례와 reference answer 후보를
-선정하고 QuickNode·Alchemy provider replay를 실행했다. 네 패키지는 Schema
-`0.1`, fixture `0.1`, 상태 `verifying`이다.
+선정하고 provider replay·negative oracle·Analysis I/O consumer를 실행했다.
+네 패키지는 fixture Schema `0.1`, fixture version `0.2`, 상태
+`confirmed`다.
 
-**판정: 공통 provider 재현과 offline 반례는 완료했다. fixture
-`confirmed` 정책·정식 계약·Context Receipt·구현 착수는 미완료다. 독립
-Trace는 엄격한 fixture 교차검증을 위한 비차단 후속이다.**
+**판정: 공통 provider 재현, offline 반례, Analysis I/O 0.2, Context Receipt,
+제품 analyzer, Benchmark 7/7을 통과했다. 독립 Trace는 provenance 강화를
+위한 비차단 후속이며 live credential·rate/timeout Gate와 분리한다.**
 
 ## 2. 공통 기준점
 
@@ -37,10 +38,10 @@ historical state, token transfer range, internal call에서 별도로 계산한�
 
 | Fixture | 문제 | 결정적 답 | 현재 상태 |
 |:---|:---|:---|:---:|
-| [FX-BASIC-EVM-001](./fixtures/FX-BASIC-EVM-001/README.md) | 객체 식별 | EOA·contract·TX·block hash/number·invalid, fee `8115326069137440` wei | verifying |
-| [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | 과거 잔액 | ETH `148897435437879000853` wei, USDC `26470158088` raw | verifying |
-| [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | 첫 ERC-20 outgoing | log `275`, pool 수신, USDC `25000000000` raw | verifying |
-| [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | internal ETH 유입 | outer `0`, Router→EOA `14449515027026387018` wei | verifying |
+| [FX-BASIC-EVM-001](./fixtures/FX-BASIC-EVM-001/README.md) | 객체 식별 | EOA·contract·TX·block hash/number·invalid, fee `8115326069137440` wei | confirmed 0.2 |
+| [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | 과거 잔액 | ETH `148897435437879000853` wei, USDC `26470158088` raw | confirmed 0.2 |
+| [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | 첫 ERC-20 outgoing | log `275`, pool 수신, USDC `25000000000` raw | confirmed 0.2 |
+| [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | internal ETH 유입 | outer `0`, Router→EOA `14449515027026387018` wei | confirmed 0.2 |
 
 모든 raw 금액 허용 오차는 `0`이다.
 
@@ -106,8 +107,8 @@ fixture `confirmed`는 장기 기준 데이터의 provenance·교차검증 수�
 
 `provider-replay.json`은 현재 Reference Fixture Schema 0.1의 직접 검증
 대상이 아닌 보조 provenance 파일이다. `input/expected/evidence`의
-`verifying` 상태와 source 참조가 규범적이며, replay 파일의 package
-Schema 편입 여부는 `confirmed` 승격 전 후속 계약으로 결정한다.
+`confirmed` 상태와 source 참조가 규범적이다. replay 파일의 별도 package
+Schema 편입은 향후 포맷 재사용 시 검토한다.
 
 ## 6. 문제별 partial·failed 조건
 
@@ -127,29 +128,37 @@ Schema 편입 여부는 `confirmed` 승격 전 후속 계약으로 결정한다.
    zero-value Transfer, failed internal call 등 **합집합** 24개를 synthetic
    offline으로 두 번 통과
 5. [x] timestamp exact·between·범위 밖·오선택 oracle 5개 통과
-6. [ ] Analysis I/O version 영향과 네 result type 승인
-   - [x] 격리된 `evm_core` `0.2-draft`·4개 query kind·12개 사례·14개
-     Schema probe를 작성하고 기존 `0.1` 비변경을 확인
-   - [ ] 정식 version·runtime model·migration 사용자 승인
+6. [x] Analysis I/O 0.2와 네 result type 승인
+   - [x] `evm_core` 4개 query kind·12개 사례·14개 proposal probe 작성
+   - [x] 정식 version·runtime model 승인, SQLite DDL migration 불필요 확인
 7. [x] CLI Preview의 complete·partial·failed 표시 재검토
    - [x] TASK-012 전용 UI 문서·HTML Preview·정적 checker 작성
    - [x] 브라우저 12개 조합·키보드·모바일·console 검증
    - [x] 사용자 확인과 P2 피드백 반영
-8. [ ] TASK-012 Context Receipt `PASS`
-9. [ ] 사용자 구현 착수 승인
+8. [x] TASK-012 Context Receipt `PASS`
+9. [x] 사용자 구현 착수 승인
+10. [x] EVM Core complete·partial·failed unit와 Benchmark 7/7 통과
 
-이 아홉 조건 전에는 `TASK-012`를 `In Progress`로 바꾸거나 제품 분석기
-코드를 작성하지 않는다. fixture QA runner·negative oracle은 제품 분석기
-구현이 아니며 이 Gate의 검증 증거다.
+### 7.1 구현·검증 결과
+
+| 항목 | 결과 |
+|:---|:---|
+| 공개 계약 | Analysis I/O 0.2 `evm_core`, 기존 세 type 0.1 호환 |
+| Query | object summary·historical balance·first Transfer·native inflow |
+| Replay | fixture별 reviewed `raw-replay.json`, 원시 hex/로그/call에서 계산 |
+| 상태 경계 | complete 4·partial 4·failed 4 unit |
+| Benchmark | automated 7 / assisted 2 / unsupported 21, 7/7 pass |
+| 저장소 영향 | SQLite v2 DDL 변경 없음, 새 dependency 없음 |
+| 네트워크 | benchmark·unit 0건, live credential Gate 별도 유지 |
 
 ## 8. 365 글로벌 평가 기준
 
 | 기준 | 판정 | 증거 |
 |:---|:---:|:---|
-| Functionality | Partial | 공통 9개 공급자 2차 재현·offline 반례 완료, 정식 계약·분석기 구현 미완료 |
-| Potential Impact | Planned | 네 예상문항과 후속 PATH/INTEL 공통 입력 기반 |
-| Novelty | Planned | 한 블록의 object/state/event/trace 교차 fixture |
-| UX | Not Executed | CLI complete·partial·failed 재검토 전 |
+| Functionality | Pass / Offline | 네 query exact·evidence·determinism과 Benchmark 7/7 |
+| Potential Impact | Partial | 네 예상문항 자동화, 후속 PATH/INTEL은 미구현 |
+| Novelty | Pass / Offline | 한 블록의 object/state/event/trace 교차 fixture |
+| UX | Pass / CLI | 승인 Preview와 공통 terminal renderer |
 | Open-source | Pass | 공개 RPC·Blockscout·재현 파라미터와 raw 값 기록 |
 | Business Plan | N/A | 대회 준비 QA 범위 |
 

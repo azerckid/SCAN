@@ -1,4 +1,4 @@
-"""Validate the isolated TASK-012 Analysis I/O 0.2 proposal."""
+"""Validate the TASK-012 proposal matrix and its Analysis I/O 0.2 adoption."""
 
 import copy
 import json
@@ -57,11 +57,11 @@ def main() -> None:
     _validate_case_matrix(cases)
     _validate_reference_values(cases)
     probes = _run_schema_probes(validator, manifest)
-    _validate_approved_contract_is_unchanged()
+    _validate_approved_contract_adoption()
 
     print(
-        f"PASS TASK-012 Analysis Contract proposal: "
-        f"{len(cases)} cases, {probes} probes, Analysis I/O 0.1 unchanged"
+        f"PASS TASK-012 Analysis Contract: "
+        f"{len(cases)} cases, {probes} probes, Analysis I/O 0.2 adopted"
     )
 
 
@@ -224,13 +224,13 @@ def _run_schema_probes(
     return len(probes)
 
 
-def _validate_approved_contract_is_unchanged() -> None:
+def _validate_approved_contract_adoption() -> None:
     approved = load_json(APPROVED_REQUEST_SCHEMA)
     approved_types = set(approved["$defs"]["analysisType"]["enum"])
     runtime_types = {item.value for item in AnalysisType}
-    expected = {"dex_swap", "auth_consumption", "address_freeze"}
+    expected = {"dex_swap", "auth_consumption", "address_freeze", "evm_core"}
     if approved_types != expected or runtime_types != expected:
-        raise ValueError("Analysis I/O 0.1 was modified by the proposal")
+        raise ValueError("Analysis I/O 0.2 does not expose the approved analysis types")
 
 
 if __name__ == "__main__":

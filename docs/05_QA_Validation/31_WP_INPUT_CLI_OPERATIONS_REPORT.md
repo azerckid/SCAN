@@ -1,7 +1,7 @@
 # WP-INPUT-IMPL-02 CLI·Operations Wiring 구현 보고서
 > Created: 2026-07-29 12:54
 > Last Updated: 2026-07-29 12:54
-> Status: Passed · Offline Wiring Applied · TASK-012 Not Started
+> Status: Passed · Offline Wiring Applied · TASK-012 Applied Later
 
 ## 1. 목적과 승인 범위
 
@@ -28,7 +28,7 @@ DEX·AUTH·FREEZE 계산 규칙을 변경하지 않는다.
 - 명시적 `external_rpc` replay와 `provided_artifact`가 기존 analyzer를
   같은 raw replay로 실행한다.
 - 옵션 없는 기존 `--evidence` 경로는 회귀 호환을 위해 유지한다.
-- 현재 분석기는 EVM 세 종류뿐이므로 다른 chain scope는 실행 전에
+- 이 보고서 실행 당시 분석기는 EVM 세 종류뿐이었으며 다른 chain scope는 실행 전에
   `chain_scope_mismatch`로 종료한다.
 - `contest_rpc` endpoint는 환경변수에서만 읽고 안전한 HTTPS 여부를
   확인한다. 문제별 query mapping이 승인되지 않았으므로 네트워크 호출 없이

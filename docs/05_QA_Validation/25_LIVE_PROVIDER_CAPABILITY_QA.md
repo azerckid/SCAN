@@ -61,9 +61,10 @@ negative oracle 24개는 합성 offline 입력으로 두 번 통과했다. crede
 | internal native inflow trace | pass | deferred | QuickNode raw 값 확보, 독립 trace는 fixture 교차검증 후속 |
 
 공통 9개 조회는 두 공급자의 raw response에서 각각 decode했다. 네 fixture는
-`verifying`으로 올렸다. §5 합성 반례는 통과했지만 credential 회전,
-live rate/timeout·fallback과 provenance 승격 정책이 남아 `confirmed`는
-아니다. 독립 Trace는 이 판정을 보강하는 비차단 후속이다.
+처음 `verifying`으로 올렸고, 이후 §5 합성 반례와 package 참조·결정성을
+통과해 offline provenance 정책상 `confirmed 0.2`로 승격했다. credential
+회전과 live rate/timeout·fallback은 provider 운영 Gate로 남는다. 독립
+Trace는 이 판정을 보강하는 비차단 후속이다.
 
 ### 3.2 Chainstack 독립 Trace 시도
 

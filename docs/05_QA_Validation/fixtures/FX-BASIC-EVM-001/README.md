@@ -1,7 +1,7 @@
 # Fixture: FX-BASIC-EVM-001
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 04:25
-> Status: Verifying
+> Last Updated: 2026-07-29 12:30
+> Status: Confirmed 0.2
 
 ## 1. 목적
 
@@ -18,7 +18,7 @@ Ethereum 입력 문자열을 주소, transaction hash, block hash/number와 잘�
 | 기준 TX | `0xbbdaad89...55fa5` |
 | EOA | `0xA406bC6E...A7FDF` |
 | Contract | `0xEf1c6E67...4BF6B` |
-| 상태 | `verifying` — QuickNode·Alchemy decoded 결과 일치 |
+| 상태 | `confirmed` — 공급자 decoded 일치·반례·Analysis I/O 0.2 replay 통과 |
 | 재사용 기준점 | confirmed `FX-SVC-DEX-001`의 공개 TX |
 
 ## 3. 채점 범위
@@ -30,11 +30,11 @@ Ethereum 입력 문자열을 주소, transaction hash, block hash/number와 잘�
 - block hash와 number가 같은 block을 가리키는지 확인한다.
 - 잘못된 짧은 hex는 `invalid`로 남기며 RPC 오류 원문을 답에 섞지 않는다.
 
-## 4. 승격 전 잔여
+## 4. 승격 기록
 
 1. [x] transaction·receipt·block·code를 QuickNode·Alchemy에서 재현했다.
 2. [x] malformed/checksum 분류 합성 oracle을 두 번 검증했다.
-3. [ ] fixture를 소비할 Analysis type과 오류 계약을 승인한다.
+3. [x] `evm_core/object_summary` Analysis I/O 0.2 consumer와 오류 계약을 승인했다.
 
 Provider별 raw SHA-256과 일치 결과는 [provider-replay.json](./provider-replay.json)에
 고정했다.

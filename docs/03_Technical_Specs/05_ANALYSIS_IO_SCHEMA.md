@@ -1,14 +1,14 @@
 # SCAN 2026 공통 분석 I/O Schema
 > Created: 2026-07-26 12:26
-> Last Updated: 2026-07-29 04:58
-> Status: Contract Approved 0.1 · TASK-002·005·006·007·008·009 Applied
-> Schema Version: 0.1
+> Last Updated: 2026-07-29 12:30
+> Status: Contract Approved 0.2 · 0.1 Backward Compatible · TASK-012 Applied
+> Schema Version: 0.2
 
 ## 1. 문서 목적
 
-이 문서는 DEX·AUTH·FREEZE 분석기가 공유하는 요청, 결과, 오류 JSON 계약
-`0.1`을 정의한다. fixture 패키지는 회귀 검증의 입력·정답이며, 이 계약은 실제
-도구 실행의 입력·출력이다. 두 스키마 버전은 독립적으로 관리한다.
+이 문서는 DEX·AUTH·FREEZE 0.1과 EVM Core 0.2 분석기가 공유하는 요청,
+결과, 오류 JSON 계약을 정의한다. fixture 패키지는 회귀 검증의 입력·정답이며,
+이 계약은 실제 도구 실행의 입력·출력이다.
 
 공통 계약의 목표는 다음과 같다.
 
@@ -31,7 +31,7 @@
 | 검증 API | `../../src/scan_tool/domain/validation.py` | `invalid_input`·`schema_invalid` 분류와 pair 검증 |
 | 예제 | `../05_QA_Validation/examples/analysis/` | confirmed fixture 3개의 요청·결과 변환 예 |
 | 검증기 | `../05_QA_Validation/scripts/validate_analysis_schemas.py` | Schema와 ID·참조·요청↔결과 불변조건 검증 |
-| Schema 의미 비교 | `../../scripts/check_analysis_schema.py` | 생성·승인 Schema의 35개 양성·음성 probe 비교 |
+| Schema 의미 비교 | `../../scripts/check_analysis_schema.py` | 생성·승인 Schema의 40개 양성·음성 probe 비교 |
 
 공개 계약은 JSON Schema Draft 2020-12를 사용한다. 구현 단계에서는 Pydantic
 v2 모델에서 생성한 스키마와 저장된 파일의 의미 차이를 offline Gate에서
@@ -43,7 +43,7 @@ uv run python scripts/check_analysis_schema.py
 
 Pydantic의 discriminated `oneOf`와 승인 Schema의 `if/then`은 문법 표현이
 다르므로 JSON 텍스트를 동일하다고 가정하지 않는다. 세 유효 예제와 계약
-경계의 35개 음성·양성 probe를 두 Schema에 모두 적용하고 수락 결과가 다르면
+경계의 40개 음성·양성 probe를 두 Schema에 모두 적용하고 수락 결과가 다르면
 실패한다.
 
 ## 3. 요청 계약
@@ -53,9 +53,9 @@ Pydantic의 discriminated `oneOf`와 승인 Schema의 `if/then`은 문법 표현
 | 필드 | 필수 | 규칙 |
 |:---|:---:|:---|
 | `$schema` | 예 | 요청 스키마 상대 경로 |
-| `schema_version` | 예 | `0.1` |
+| `schema_version` | 예 | 기존 세 type은 `0.1`, `evm_core`는 `0.2` |
 | `analysis_id` | 예 | 한 실행의 유일한 `AN-...` ID |
-| `analysis_type` | 예 | `dex_swap`, `auth_consumption`, `address_freeze` |
+| `analysis_type` | 예 | `dex_swap`, `auth_consumption`, `address_freeze`, `evm_core` |
 | `chain_id` | 예 | V1은 Ethereum mainnet `1`만 허용 |
 | `inputs` | 예 | 분석 유형별 strict object |
 | `source_policy` | 예 | 허용 소스, 순서, fallback, offline, 규정 상태 |
@@ -73,6 +73,7 @@ Pydantic의 discriminated `oneOf`와 승인 Schema의 `if/then`은 문법 표현
 | `dex_swap` | `transaction_hash` |
 | `auth_consumption` | 대상·토큰·spender, 승인·소비 TX, 과거 상태 블록 |
 | `address_freeze` | 토큰·대상·mode, 이벤트 TX 목록, 과거 상태 블록 |
+| `evm_core` | `query_kind`별 object·historical balance·first transfer·native inflow 입력 |
 
 AUTH의 `excluded_transaction_hashes`와 FREEZE의 `context_urls`는 선택 필드다.
 과거 상태 블록은 이름이 있는 정수 map으로 받고 `latest` 문자열을 허용하지
@@ -252,8 +253,8 @@ JSON Schema 검사 외에 검증기는 다음을 확인한다.
 
 ### 8.1 Agentic orchestration과의 경계
 
-Analysis I/O `0.1`은 병렬 문제풀이에서도 하나의 leaf 분석 요청·결과 계약으로
-유지한다.
+Analysis I/O `0.1/0.2`는 병렬 문제풀이에서도 하나의 leaf 분석 요청·결과
+계약으로 유지한다.
 
 - 한 CTFd 문제는 여러 `analysis_id`를 가질 수 있다.
 - `problem_id`, worker assignment, verification, submission candidate는
@@ -268,22 +269,23 @@ Analysis I/O `0.1`은 병렬 문제풀이에서도 하나의 leaf 분석 요청�
 
 | 변경 | 버전 처리 |
 |:---|:---|
-| 설명·예제·검증 오류 문구 수정 | `0.1` 유지 |
-| 선택 `value` 확장 | `0.1` 유지 |
+| 설명·예제·검증 오류 문구 수정 | 해당 minor 유지 |
+| 선택 `value` 확장 | 해당 minor 유지 |
 | 공통 필수 필드 추가·삭제 | minor version 증가 |
 | 기존 필드 의미·자료형 변경 | minor version 증가 |
 | fixture 정답·증거 변경 | analysis schema와 무관, fixture version만 검토 |
 
-Schema `0.1`은 Python 모델 구현 전에 승인한 설계 계약이다. `TASK-002`에서
+Schema `0.1`은 Python 모델 구현 전에 승인한 기준선이며, `0.2`는
+`evm_core`만 추가하고 기존 세 type의 0.1 입력을 유지한다. `TASK-002`에서
 Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. 차이가 생기면
 코드가 아니라 승인된 공개 계약을 기준으로 결정한다.
 
 ## 9. 365 글로벌 평가 기준 연결
 
-| 기준 | Schema 0.1 대응 |
+| 기준 | Schema 0.2 대응 |
 |:---|:---|
 | Functionality | strict 입력·결과·오류와 자동 참조 검증 |
-| Potential Impact | 세 분석 유형과 복수 공급자가 공유하는 확장 경계 |
+| Potential Impact | 네 분석 유형과 복수 공급자가 공유하는 확장 경계 |
 | Novelty | 확정 사실·맥락·휴리스틱·미평가와 raw evidence 분리 |
 | UX | 부분 성공·구조화 오류·진행 기록을 CLI가 일관되게 표시 가능 |
 | Open-source | 공개 JSON Schema·예제·독립 검증기 |
@@ -320,12 +322,10 @@ Pydantic 생성본과 수기 스키마의 의미 probe diff 0을 확인했다. �
     transition과 `external_context` scope를 생성한다.
 16. `TASK-009`에서 공개 오류 enum 11개 전체의 status·exit code, 세 fixture
     result 결정성, result→evidence→source 참조를 회귀했다.
-17. 계약 변경이 없어 Schema 버전은 `0.1`을 유지한다.
-18. `TASK-012`는 기존 `0.1`을 암묵적으로 확장하지 않고, 격리된
-    `evm_core` `0.2-draft` 제안과 4개 query kind·12개
-    complete/partial/failed 사례·14개 Schema probe를 작성했다. 명시적 승인
-    전에는 `0.1` 계약과
-    runtime `AnalysisType`을 변경하지 않는다.
+17. `TASK-009`까지 계약 변경이 없어 Schema 버전 `0.1`을 유지했다.
+18. `TASK-012`에서 `evm_core` 4개 query kind를 Analysis I/O `0.2`로
+    승인·구현했다. 기존 DEX·AUTH·FREEZE는 `0.1`만 허용하고, 생성·승인
+    Schema의 40개 probe로 호환성을 검증한다.
 
 ## 12. Related Documents
 

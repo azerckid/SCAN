@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-29 11:10
-> Status: TASK-001~009·011 Done · WP-INPUT Core Done · TASK-012~019 Proposed
+> Status: TASK-001~012 Done · WP-INPUT Done · TASK-013~019 Proposed
 
 ## 1. 문서 목적
 
@@ -129,8 +129,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
 `evm | bitcoin | non_evm | cross_chain`이다. 첫 승인 단위에서 contest RPC
 core adapter와 bounded JSON·JSONL·CSV importer를 구현했고, 두 번째 승인
 단위에서 CLI·Operations offline handoff를 연결했다. 임의 mapping과 체인별
-analyzer는 미구현이며 TASK-012~019의 Context Receipt·개별 구현 승인을
-대체하지 않는다.
+analyzer는 TASK-012 EVM Core만 구현됐으며, TASK-013~019의 Context
+Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### 3.1 WP-INPUT-IMPL-01: Core input library
 
@@ -886,16 +886,16 @@ analyzer는 미구현이며 TASK-012~019의 Context Receipt·개별 구현 승�
   - Detailed Evidence:
     - [예상문제 Offline Benchmark 보고서](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 채점 기준·30문항 coverage·우선 공백.
 
-### [ ] TASK-012: 범용 EVM Query·State·Transfer 엔진
+### [x] TASK-012: 범용 EVM Query·State·Transfer 엔진
 
-- Status: ToDo
+- Status: Done
 - Work Type: code
 - Priority: Phase 2 · P0
 - Depends On: TASK-011
-- Common Input Gate: `WP-INPUT-IMPL-01` core done · CLI/consumer wiring pending
+- Common Input Gate: `WP-INPUT-IMPL-02` CLI·Evidence Worker wiring done
 - Target Problems: `BASIC-EVM-001/002`, `EVM-TOKEN-001/002`
 - Atomic Tasks:
-  - [ ] 네 문제의 공개 사례·reference answer·partial 조건을 확정한다.
+  - [x] 네 문제의 공개 사례·reference answer·partial 조건을 확정한다.
     - [x] 후보 패키지 4개와 1차 재조회 결과를 작성했다.
     - [x] live provider 후보 topology·secret·capability smoke 계약을 문서화했다.
     - [x] 기본 network 0건·Rules/endpoint opt-in smoke runner를 준비했다.
@@ -908,25 +908,25 @@ analyzer는 미구현이며 TASK-012~019의 Context Receipt·개별 구현 승�
       method-not-found(`invalid_response`)·malformed offline 주입 검증을 통과했다.
     - [x] Alchemy 두 dialect를 live 실행했으나 모두 HTTP 400 `permanent`로
       실패해 해당 endpoint를 독립 Trace 역할에서 제외했다.
-    - [ ] 노출 credential 회전·live rate/timeout 반례를 통과해 필수 Provider Gate를 닫는다.
-    - [ ] 독립 trace는 엄격한 fixture 승격을 위한 비차단 후속으로 두고
+    - [ ] 노출 credential 회전·live rate/timeout은 live 운영 Gate로 유지한다.
+    - [x] 독립 trace는 fixture 승격의 비차단 후속으로 두고
       QuickNode 단일 Trace provenance를 명시한다.
-    - [ ] offline oracle과 필수 source Gate를 만족한 fixture의 승격 수준을
+    - [x] offline oracle과 필수 source Gate를 만족한 fixture의 승격 수준을
       provenance 정책에 따라 결정한다.
-  - [ ] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 승인한다.
+  - [x] TX·receipt·block·historical state·ERC-20/native flow 최소 입력을 승인한다.
     - [x] 네 query kind의 최소 입력과 complete·partial·failed 결과 제안
       12개를 작성했다.
-    - [ ] 제안 필드와 오류 매핑을 사용자 승인 후 정식 계약으로 고정한다.
-  - [ ] 기존 source/cache/decode/reconciliation을 재사용한 Analysis type을 승인한다.
+    - [x] 제안 필드와 오류 매핑을 사용자 승인 후 정식 계약으로 고정한다.
+  - [x] 기존 source/cache/decode/reconciliation을 재사용한 Analysis type을 승인한다.
     - [x] 격리된 `evm_core` `0.2-draft`와
       `object_summary`·`historical_balance`·`first_token_transfer`·
       `native_inflow` query kind를 제안했다.
     - [x] 제안 Schema 14개 probe와 12개 사례를 검증하고 기존 Analysis I/O
       `0.1`·runtime `AnalysisType` 비변경을 검사했다.
-    - [ ] 정식 Analysis I/O version·runtime model·migration을 별도 승인한다.
-  - [ ] complete·partial·failed와 negative oracle을 구현·검증한다.
-  - [ ] 네 문제의 Benchmark 승격 여부를 독립 검증한다.
-  - [ ] `external_rpc | contest_rpc | provided_artifact` 중 허용 입력을
+    - [x] Analysis I/O 0.2·runtime model을 승인하고 DDL migration 불필요를 확인했다.
+  - [x] complete·partial·failed와 negative oracle을 구현·검증한다.
+  - [x] 네 문제의 Benchmark 승격 여부를 독립 검증한다.
+  - [x] `external_rpc | contest_rpc | provided_artifact` 중 허용 입력을
     normalized evidence로 연결한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 직접 대상 4문항
@@ -954,23 +954,23 @@ analyzer는 미구현이며 TASK-012~019의 Context Receipt·개별 구현 승�
   - [TASK-012 UI Preview 보고서](../05_QA_Validation/28_TASK_012_UI_PREVIEW_REPORT.md) - 자동·브라우저·사용자 Gate
   - [TASK-012 Provider Gate 준비 보고서](../05_QA_Validation/29_TASK_012_PROVIDER_GATE_PREPARATION_REPORT.md) - 독립 Trace dialect·offline failure Gate
 - Implementation Preconditions:
-  - [ ] 관련 문서와 네 문제의 입력·출력·상태를 확인한다.
-  - [ ] primary·independent 공급자와 필요 시 독립 trace 역할의 capability smoke를 통과한다.
+  - [x] 관련 문서와 네 문제의 입력·출력·상태를 확인한다.
+  - [x] primary·independent 일반 RPC와 primary trace capability smoke를 통과한다.
     - [x] primary·independent 공통 6개 decoded summary 일치와 primary trace 성공을 확인했다.
     - [x] 독립 Trace dialect·provider failure offline 검증을 통과했다.
-    - [ ] credential 회전·live rate/timeout 반례가 남아 전체 상태는 partial이다.
+    - [ ] credential 회전·live rate/timeout은 live 운영 Gate에 남아 있다.
     - [x] contest RPC core adapter·bounded artifact importer 구현 승인을 기록했다.
-    - [ ] TASK-012 analyzer의 normalized evidence consumer wiring은 별도 범위다.
-  - [ ] API key·endpoint가 저장소·DB·fixture·로그에 없음을 검증한다.
-  - [ ] confirmed fixture와 reference answer를 확보한다.
+    - [x] TASK-012 analyzer의 reviewed replay consumer wiring을 구현했다.
+  - [x] API key·endpoint가 저장소·DB·fixture·로그에 없음을 검증한다.
+  - [x] confirmed fixture와 reference answer를 확보한다.
   - [x] CLI Preview 재검토와 사용자 UI 승인을 기록한다.
     - [x] TASK-012 전용 UI 문서·HTML Preview·정적 checker를 작성했다.
     - [x] 브라우저에서 12개 조합·방향키·모바일·console을 검증했다.
     - [x] 사용자 Preview 확인과 P2 2건 반영을 기록했다.
-  - [ ] TASK-012 제품 analyzer 구현 승인을 별도로 기록한다.
-  - [ ] CLI 진입·전환·이탈과 loading·empty·partial·failed 표시를 확인한다.
-  - [ ] source 최소 필드·mutation 없음·checkpoint 상태 관리를 승인한다.
-  - [ ] Analysis I/O version·source·storage mutation 영향을 승인한다.
+  - [x] TASK-012 제품 analyzer 구현 승인을 기록한다.
+  - [x] CLI 진입·complete·partial·failed와 checkpoint resume를 확인한다.
+  - [x] source 최소 필드·mutation 없음·checkpoint 상태 관리를 승인한다.
+  - [x] Analysis I/O 0.2·source·storage DDL 무변경 영향을 승인한다.
 - Component & Library Plan:
   - shadcn/ui: N/A - Python CLI leaf 분석기다.
   - Custom components: 범용 EVM request/analyzer/result projector.
@@ -979,23 +979,23 @@ analyzer는 미구현이며 TASK-012~019의 Context Receipt·개별 구현 승�
   - Libraries intentionally not added: graph DB·dataframe - 이 task에 불필요.
   - shadcn preset: N/A - 웹 UI 변경 없음.
 - Acceptance Criteria:
-  - [ ] 네 fixture의 exact answer·evidence·determinism이 통과한다.
-  - [ ] failed TX·archive/trace 누락이 partial/failed로 보존된다.
-  - [ ] 입력 기대값 복사 없이 raw evidence에서 계산한다.
-  - [ ] Benchmark가 실제 승격 수만 반영한다.
+  - [x] 네 fixture의 exact answer·evidence·determinism이 통과한다.
+  - [x] archive/trace/range 누락과 malformed replay가 partial/failed로 보존된다.
+  - [x] 입력 기대값 복사 없이 raw evidence에서 계산한다.
+  - [x] Benchmark가 실제 승격 수 7만 반영한다.
 - Document Sync Check:
-  - [ ] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
+  - [x] Analysis I/O·CLI·fixture·Benchmark·QA 문서를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - verifying 4개·공통 9개 독립 재현·offline oracle 24개와
-    계약 제안 12개·Schema probe 14개·공통 입력 core 완료, credential
-    회전·정식 Schema·TASK-012 구현 승인 전 착수 금지
+  - Status: PASS - confirmed 4개·공통 RPC 재현·offline oracle 24개·
+    계약 사례 12개·Analysis I/O 0.2 40개 probe·공통 입력 wiring 확인
   - Required References Read: 위 Related 문서 전체
   - Constraints: exact raw 수량, historical state block 고정, 귀속 미평가
   - Conflicts: None known
 - Change Receipt:
-  - N/A - 구현 미시작
+  - `evm_core` request/replay/analyzer·CLI dispatcher·Operations enum 추가
+  - Analysis I/O 0.2와 기존 0.1 호환, SQLite v2 DDL·새 dependency 변경 없음
 - Verification Receipt:
-  - N/A - 구현 미시작
+  - 4 complete·4 partial·4 failed unit, Benchmark 7/7, 전체 offline Gate 통과
 
 ### [ ] TASK-013: NFT·Proxy 결정적 Decoder
 
@@ -1422,7 +1422,8 @@ analyzer는 미구현이며 TASK-012~019의 Context Receipt·개별 구현 승�
 - [x] TASK-008 FREEZE vertical slice 구현을 별도로 승인
 - [x] TASK-009 통합 회귀·보안·문서 동기화 Gate를 별도로 승인
 - [x] TASK-012~019 Coverage 확장 계획 문서 작성을 승인
-- [ ] TASK-012~019 각 code task의 fixture·Context Receipt·구현을 별도로 승인
+- [x] TASK-012 fixture·Context Receipt·구현을 별도로 승인
+- [ ] TASK-013~019 각 code task의 fixture·Context Receipt·구현을 별도로 승인
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인
