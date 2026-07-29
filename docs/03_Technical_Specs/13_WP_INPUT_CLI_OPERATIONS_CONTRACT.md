@@ -61,7 +61,7 @@ artifact     ─┘   (§5 규칙, §8 보안)                                  
 |:---|:---|:---|:---|
 | `--input-mode` | `external_rpc \| contest_rpc \| provided_artifact` | `external_rpc` | 선택한 모드만 아래 입력 소스를 요구한다. |
 | `--chain-scope` | `evm \| bitcoin \| non_evm \| cross_chain` | `evm` | analyzer의 체인 모델과 반드시 일치한다. |
-| `--contest-rpc-endpoint` | HTTPS URL | 없음 | `contest_rpc` 전용. 미지정 시 `SCAN_CONTEST_RPC_ENDPOINT` 환경변수. |
+| `--contest-rpc-endpoint-env` | 환경변수 **이름** | `SCAN_CONTEST_RPC_ENDPOINT` | `contest_rpc` 전용. CLI에는 endpoint 값이 아니라 환경변수 이름만 전달한다. 실제 HTTPS URL은 그 환경변수에서 읽는다. |
 | `--artifact` | 파일 경로 | 없음 | `provided_artifact` 전용. |
 | `--artifact-format` | `json \| jsonl \| csv` | 확장자 추론 | 추론 실패·불일치 시 명시 필수. |
 | `--evidence` | 파일 경로 | 없음 | `external_rpc` offline replay(기존 계약 유지). |
@@ -71,14 +71,20 @@ artifact     ─┘   (§5 규칙, §8 보안)                                  
 종료한다. `--chain-scope`가 analyzer의 체인 모델과 다르면
 `require_chain_scope`가 `chain_scope_mismatch`로 거부한다.
 
+endpoint 값은 CLI 인자로 받지 않는다. shell history·process list 노출을 막기
+위해 CLI에는 환경변수 **이름**만 전달하고 실제 endpoint(QuickNode·Alchemy처럼
+URL path가 credential인 경우 포함)는 그 환경변수에서 읽는다. 지정한 환경변수가
+없거나 비었으면 `invalid_input`(exit 2)으로 종료한다.
+
 ### 4.2 모드별 CLI 계약
 
 - `external_rpc`: 사용자가 준비한 외부 공급자. 기존 source policy
   (`offline_mode`, `rule_status`, `allowed_source_ids`)와 `--evidence` offline
   replay 경로를 그대로 사용한다. Explorer 자동 fallback은 없다.
-- `contest_rpc`: 주최 HTTPS endpoint를 composition root에서 주입한다. endpoint는
-  §8에 따라 저장·로그·export·repr에 남기지 않는다. read-only allowlist(§5.1)
-  외 method는 호출 전에 거부한다.
+- `contest_rpc`: 주최 HTTPS endpoint를 환경변수에서 읽어 composition root에서
+  주입한다. CLI에는 환경변수 이름만 전달하며 endpoint 값은 §8에 따라
+  저장·로그·export·repr에 남기지 않는다. read-only allowlist(§5.1) 외 method는
+  호출 전에 거부한다.
 - `provided_artifact`: `--artifact` 파일을 bounded importer(§5.2)로 읽어
   normalized bundle을 만든다. 파일명·column 이름만으로 체인 의미를 추정하지
   않는다.
@@ -86,10 +92,11 @@ artifact     ─┘   (§5 규칙, §8 보안)                                  
 ### 4.3 예시
 
 ```bash
-# 주최 제공 read-only RPC
+# 주최 제공 read-only RPC (endpoint 값은 환경변수에만 존재)
+export SCAN_CONTEST_RPC_ENDPOINT="https://…"   # shell 밖에서 설정
 scan analyze --request requests/evm_core.json \
   --input-mode contest_rpc --chain-scope evm \
-  --contest-rpc-endpoint "$SCAN_CONTEST_RPC_ENDPOINT"
+  --contest-rpc-endpoint-env SCAN_CONTEST_RPC_ENDPOINT
 
 # 문제 첨부 artifact
 scan analyze --request requests/evm_core.json \
@@ -135,7 +142,32 @@ scan analyze --request requests/evm_core.json \
 
 ## 6. Operations Queue → Evidence Worker 전달 구조
 
-### 6.1 입력 → 승인 replay 핸드오프
+### 6.1 raw bytes 보존 계약 (Input Evidence Envelope)
+
+`NormalizedEvidenceBundle`은 `raw_sha256`만 보존하고 원본 bytes를 담지
+않는다. 따라서 bundle 하나만으로는 `ApprovedReplay(body, sha256)`를 만들 수
+없다. 이 계약은 다음을 명시한다.
+
+- ingest 시점에 원본 bytes를 확보한다. `contest_rpc`/`external_rpc`는
+  `SourcePayload.raw_bytes`, `provided_artifact`는 읽은 파일 bytes다.
+- 원본 bytes를 정규화 **전에** content-addressed artifact로 저장한다. URI는
+  `artifact://sha256/<raw_sha256>`이며 저장된 hash는 `bundle.raw_sha256`과
+  같아야 한다.
+- bundle과 그 raw artifact reference를 하나의 `InputEvidenceEnvelope`로 묶어
+  전달한다.
+
+```text
+InputEvidenceEnvelope
+  bundle: NormalizedEvidenceBundle        # raw_sha256, records, provenance
+  raw_artifact_uri: "artifact://sha256/<raw_sha256>"   # 원본 bytes 참조
+```
+
+`ApprovedReplay.body`는 정규화 전에 저장한 raw artifact의 bytes를 읽어
+채우고, `ApprovedReplay.sha256`은 `envelope.bundle.raw_sha256`
+(= `raw_artifact_uri`의 sha256)이다. `EvidenceWorkerService`의 기존 hash
+검증(`sha256(body) == sha256`)이 그대로 적용된다.
+
+### 6.2 Queue → Evidence Worker 핸드오프
 
 Competition Operations에서 입력 계층은 다음 순서로 `EvidenceWorkerCommand`에
 연결된다. 기존 offline 실행 불변식(worker가 `offline_mode`·`rule_status`를
@@ -146,12 +178,12 @@ ProblemRecord
   (provided_urls, provided_file_artifacts[sha256], answer_format)
       │  Operator가 input_mode·chain_scope 선택
       ▼
-input adapter/importer (§5)
-      │
-      ▼
-NormalizedEvidenceBundle ──> content-addressed artifact (artifact://sha256/…)
-      │                            │ raw_sha256
-      ▼                            ▼
+input adapter/importer (§5)  ──> raw bytes를 content-addressed artifact로 저장
+      │                                    │ artifact://sha256/<raw_sha256>
+      ▼                                    ▼
+InputEvidenceEnvelope { bundle, raw_artifact_uri }
+      │                                    │ artifact bytes 로드
+      ▼                                    ▼
 LeafJobSpec(inputs_projection == request.inputs)   ApprovedReplay(body, sha256)
       └──────────────┬──────────────────────────────────┘
                      ▼
@@ -160,11 +192,10 @@ LeafJobSpec(inputs_projection == request.inputs)   ApprovedReplay(body, sha256)
         Analysis I/O 0.1 result ─> independent Verifier
 ```
 
-### 6.2 계약 규칙
+### 6.3 계약 규칙
 
-- normalized bundle의 원본 bytes와 `raw_sha256`이 `ApprovedReplay.body`·
-  `sha256`이 된다. `EvidenceWorkerService`의 기존 hash 검증과
-  `SensitiveDataGuard`가 그대로 적용된다.
+- `ApprovedReplay`는 §6.1 raw artifact에서 재구성하며 `SensitiveDataGuard`가
+  그대로 적용된다. bundle에서 bytes를 추출한다고 가정하지 않는다.
 - `LeafJobSpec.inputs_projection`은 계속 `request.inputs`와 동일하다. 입력
   모드는 job 입력 계약을 바꾸지 않고 provenance로만 기록한다.
 - `input_mode`·`chain_scope`·`source_id`·`provider_id`·record locator는
@@ -216,9 +247,12 @@ LeafJobSpec(inputs_projection == request.inputs)   ApprovedReplay(body, sha256)
 
 ## 8. endpoint·API 키 비저장·로그 비노출과 read-only allowlist
 
-- endpoint·API key는 CLI 옵션 또는 환경변수로 composition root에 주입만 하고
-  SQLite·artifact·export·checkpoint·OperationEvent·progress·result repr 어디에도
-  저장·출력하지 않는다.
+- endpoint·API key 값은 CLI 인자로 받지 않는다. CLI에는 환경변수 이름만
+  전달하고 실제 값은 환경변수에서 읽어 composition root에 주입한다. 이는
+  shell history·process list 노출(특히 URL path가 credential인 공급자)을 막기
+  위함이다.
+- endpoint·API key는 SQLite·artifact·export·checkpoint·OperationEvent·progress·
+  result repr 어디에도 저장·출력하지 않는다.
 - `contest_rpc` adapter는 URL userinfo를 금지하고 명시 endpoint 한 곳만
   호출한다. Explorer/network fallback은 0건이다.
 - read-only method allowlist(§5.1)를 유지하고 그 외 method는 네트워크 호출
@@ -253,9 +287,11 @@ LeafJobSpec(inputs_projection == request.inputs)   ApprovedReplay(body, sha256)
 
 ### 9.4 Operations 핸드오프
 
-- normalized bundle artifact의 `raw_sha256`이 `ApprovedReplay.sha256`과 같고,
-  Evidence Worker가 offline replay와 동등한 결과를 만든다.
-- endpoint·secret이 SQLite v2·snapshot·export에 저장되지 않는다.
+- `InputEvidenceEnvelope.raw_artifact_uri`의 sha256이 `bundle.raw_sha256`·
+  `ApprovedReplay.sha256`과 같고, Evidence Worker가 offline replay와 동등한
+  결과를 만든다.
+- CLI가 환경변수 이름만 받고, endpoint 값·secret이 shell history·process
+  list·SQLite v2·snapshot·export에 저장되지 않는다.
 
 core library 범위(RPC↔artifact record 동등성, 단일 endpoint 호출, JSON/JSONL/
 CSV, size/count, chain mismatch, repr 비반사)는 이미 자동화됐다. CLI·Operations

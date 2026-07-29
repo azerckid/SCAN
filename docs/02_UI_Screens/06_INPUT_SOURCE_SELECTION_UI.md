@@ -29,8 +29,9 @@ Analysis I/O `0.1`과 기존 CLI V1 화면(SCREEN_FLOW 1.5)은 변경하지 않�
 
 - 한 번에 한 입력 모드만 활성화하고, 그 모드에 필요한 입력 소스를 정확히
   하나 요구한다.
-- `contest_rpc` endpoint는 HTTPS만 허용하고 화면·로그에 host만 마스킹 표시,
-  전체 endpoint·query·API key는 표시하지 않는다.
+- `contest_rpc` endpoint는 HTTPS만 허용한다. 사용자는 CLI에 endpoint 값이
+  아니라 환경변수 **이름**을 전달하고, 화면·로그에는 환경변수 이름만
+  표시한다. 실제 endpoint·query·API key는 표시하지 않는다.
 - `provided_artifact`는 파일명과 형식(JSON/JSONL/CSV)만 표시하고 내용을
   자동 해석해 화면에 노출하지 않는다.
 - `chain_scope`가 analyzer 모델과 다르면 실행 전에 `chain_scope_mismatch`를
@@ -65,8 +66,8 @@ Analysis I/O `0.1`과 기존 CLI V1 화면(SCREEN_FLOW 1.5)은 변경하지 않�
 
 Preview는 다음을 보여준다.
 
-- 세 입력 모드 탭과 모드별 입력 소스 필드(endpoint 마스킹·artifact 파일·형식)
-- 네 체인 범위 선택과 mismatch 차단 표시
+- 세 입력 모드 탭과 모드별 입력 소스 필드(endpoint 환경변수 이름·artifact 파일·형식)
+- 네 체인 범위 선택과 analyzer 불일치 시 자동 `FAILED`·`chain_scope_mismatch` 차단
 - CLI 진행(STARTING·INPUT)과 complete·partial·failed 상태 조합
 - Operations Queue → Evidence Worker 핸드오프 요약과 입력 배지
 - endpoint·secret 비노출과 read-only allowlist 안내
