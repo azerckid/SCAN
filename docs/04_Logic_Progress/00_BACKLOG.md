@@ -1300,7 +1300,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - N/A - docs-only Gate, 구현 미시작
 - Verification Receipt:
   - Docs-only Gate: 468 tests PASS, fixture 13, schema 48 probes,
-    traceability 1538 links, security 162 files.
+    traceability 1543 links, security 162 files.
   - Preview static check: query 5 × state 3, duplicate ID 0,
     fetch/XHR/WebSocket/EventSource 0. 브라우저 사용자 검토·runtime은 미실행.
 

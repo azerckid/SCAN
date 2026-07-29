@@ -103,6 +103,7 @@
   const queries = {
     label: {
       name:"collect_label_claims", copy:"같은 주소에 대한 provider·first-party·public report 주장을 병합하지 않고 충돌 그룹으로 보존합니다.",
+      failedCode:"reconciliation_failed", failedStage:"claim_binding", failedMessage:"claim subject or content hash does not bind to the reviewed source snapshot",
       fields:[["subject","0x1111…1111"],["window","2026-07-01 → 07-30"],["source budget","20"],["network mode","offline"]],
       claims:[
         ["claim","[SOURCE ASSERTION] Provider A: “Example Service” · address explicit yes · unresolved"],
@@ -112,6 +113,7 @@
     },
     sanctions: {
       name:"check_sanctions_exposure", copy:"공식 목록의 직접 주소 match와 1홉 상대방 match를 별도 결과로 표시하고 지정·해제 시점을 함께 봅니다.",
+      failedCode:"reconciliation_failed", failedStage:"sanctions_list_version", failedMessage:"the sanctions list version or effective date cannot be reconciled with the request",
       fields:[["subject","0x2222…2222"],["hop limit","1"],["list version","2026-07 snapshot"],["network mode","artifact_only"]],
       claims:[
         ["claim","[OFFICIAL / DIRECT] subject explicitly listed in historical notice · withdrawn later"],
@@ -121,6 +123,7 @@
     },
     identity: {
       name:"resolve_identity_clues", copy:"ENS forward/reverse·설정 TX·도메인·SNS 주장을 분리하고 만료·사칭·주소 비명시를 충돌로 보존합니다.",
+      failedCode:"reconciliation_failed", failedStage:"identity_resolution", failedMessage:"ENS resolution and the reviewed on-chain configuration refer to different subjects",
       fields:[["subject","0x3333…3333"],["name hint","example.eth"],["window","2025-01 → 2026-07"],["network mode","offline"]],
       claims:[
         ["claim","[ONCHAIN] ENS forward resolves to subject at block 200"],
@@ -130,6 +133,7 @@
     },
     funder: {
       name:"find_common_funder", copy:"대상 주소별 초기 funding TX를 집계하고 공통 source가 공용 서비스인지 반례와 함께 검토합니다.",
+      failedCode:"reconciliation_failed", failedStage:"funding_scope", failedMessage:"initial funding transactions fall outside the bounded subject or observation scope",
       fields:[["subjects","0xA…, 0xB…, 0xC…"],["initial inflows","3 per subject"],["asset","ETH native"],["network mode","offline"]],
       claims:[
         ["claim","[ONCHAIN] 0xF… funds A/B/C · tx 0x01/0x02/0x03"],
@@ -139,6 +143,7 @@
     },
     relation: {
       name:"score_actor_relations", copy:"공통 출처·목적지·호출·시간 component와 공용 hub 반례를 함께 표시하며 score를 소유 사실로 승격하지 않습니다.",
+      failedCode:"evidence_incomplete", failedStage:"relation_evidence", failedMessage:"required on-chain components or counterexample evidence are missing",
       fields:[["seed","0xAAAA…"],["candidate limit","12"],["hop limit","2"],["network mode","offline"]],
       claims:[
         ["claim","[HEURISTIC] candidate 0xB… score 0.68 · common_source 0.30 · temporal 0.18"],
@@ -159,9 +164,9 @@
     document.querySelector("#query-chip").textContent=q.name;
     document.querySelector("#copy").textContent=q.copy;
     document.querySelector("#fields").innerHTML=q.fields.map(([k,v])=>`<div class="field"><span>${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
-    let html=`<div class="status"><span class="badge ${state}">${state.toUpperCase()}</span><span class="${state}">${state==="complete"?"review_scope_complete":state==="partial"?"source_scope_incomplete":"source_reconciliation_failed"}</span></div>`;
+    let html=`<div class="status"><span class="badge ${state}">${state.toUpperCase()}</span><span class="${state}">${state==="complete"?"review_scope_complete":state==="partial"?"source_scope_incomplete":esc(q.failedCode)}</span></div>`;
     if(state==="failed"){
-      html+=`<div class="section">STRUCTURED ERROR</div><div class="error">results=[] · stage=source_reconciliation · subject, version, or content hash does not bind to the reviewed snapshot</div>`;
+      html+=`<div class="section">STRUCTURED ERROR</div><div class="error">results=[] · code=${esc(q.failedCode)} · stage=${esc(q.failedStage)} · ${esc(q.failedMessage)}</div>`;
       html+=`<div class="next">NEXT: replace the mismatched artifact or correct the bounded subject scope. Do not interpret failure as “no relationship”.</div>`;
     }else{
       const claims=state==="partial"?q.claims.slice(0,2):q.claims;

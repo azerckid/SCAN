@@ -1,7 +1,7 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-29 23:09
-> Status: Approved 1.7 · V1·TASK-012/013 Gates Passed · TASK-014 Preview User Review Passed
+> Last Updated: 2026-07-30 02:52
+> Status: Approved 1.8 · TASK-014 Complete · TASK-015 Preview User Review Pending
 
 ## 1. 문서 목적
 
@@ -397,6 +397,24 @@ contest_rpc | provided_artifact` 세 입력 모드와 네 체인 범위를 `scan
 - 정적 Preview는 작성했고 사용자 UI-First Gate 확인은 대기 중이다. CLI·
   Operations wiring은 승인 전까지 구현하지 않는다.
 
+## 16.6 TASK-015 Intelligence Draft
+
+[TASK-015 Intelligence UI](./09_TASK_015_INTELLIGENCE_UI.md)는 label·sanctions·
+ENS·common funder·actor relation을 source assertion과 onchain observation,
+heuristic으로 분리하는 docs-only 검토 트랙이다.
+
+- query 5개를 같은 화면 골격에서 전환하고 complete·partial·failed를 총
+  15개 사례로 표시한다.
+- source role, 주소 직접 명시, 조회 시각, conflict, stale·withdrawn을
+  라벨 문자열보다 먼저 표시한다.
+- sanctions direct/indirect, common funder/common owner, relation
+  score/confirmed owner를 각각 분리한다.
+- failed는 query별 code·stage를 표시하고 `results: []`를 유지한다.
+- [Intelligence Preview](./previews/08_task_015_intelligence_preview.html)는
+  정적 검사만 통과했으며 사용자 UI-First Gate 확인은 대기 중이다.
+- 공개 fixture·`intel_context` Schema·analyzer 구현은 승인 전까지 시작하지
+  않는다.
+
 ## 17. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위
@@ -413,6 +431,8 @@ contest_rpc | provided_artifact` 세 입력 모드와 네 체인 범위를 `scan
 - **UI_Screens**: [입력 소스 선택 Preview](./previews/05_input_source_selection_preview.html) - 세 입력 모드·체인 범위 검토 화면
 - **UI_Screens**: [TASK-014 PATH UI](./08_TASK_014_PATH_UI.md) - bounded graph·ledger·상태 화면 계약
 - **UI_Screens**: [TASK-014 PATH Preview](./previews/07_task_014_path_preview.html) - query 3개·상태 3개 docs-only 검토 화면
+- **UI_Screens**: [TASK-015 Intelligence UI](./09_TASK_015_INTELLIGENCE_UI.md) - source assertion·conflict·actor relation 화면 계약
+- **UI_Screens**: [TASK-015 Intelligence Preview](./previews/08_task_015_intelligence_preview.html) - query 5개·상태 3개 docs-only 검토 화면
 - **Technical_Specs**: [WP-INPUT-GATE CLI·Operations 연결 계약](../03_Technical_Specs/13_WP_INPUT_CLI_OPERATIONS_CONTRACT.md) - 명령·핸드오프·보안·QA 계약
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·Queue·독립 검증·수동 제출 계약
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - CLI·log·보안 경계
@@ -420,6 +440,7 @@ contest_rpc | provided_artifact` 세 입력 모드와 네 체인 범위를 `scan
 - **Technical_Specs**: [공통 분석 I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - 요청·결과·오류 계약
 - **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - EVM Core 0.2 Draft
 - **Technical_Specs**: [TASK-014 PATH Contract Proposal](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) - graph·reconciliation·partial/failed 계약
+- **Technical_Specs**: [TASK-015 Intelligence Contract Proposal](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md) - source·claim·conflict·relation 계약
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - CLI·vertical slice 구현 순서
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 명령·상태·종료 코드 검증
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - preview 기준값
