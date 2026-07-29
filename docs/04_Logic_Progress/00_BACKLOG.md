@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-30 03:27
+> Last Updated: 2026-07-30 03:37
 > Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 Source Resolution 5 Viable / Snapshot Basis · TASK-016~019 Proposed
 
 ## 1. 문서 목적
@@ -1318,7 +1318,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     schema 48 probes, traceability 1554 links, security 162 files.
     4 viable·1 source-blocked이며 package·runtime은 미작성.
   - Source resolution·snapshot basis: 468 tests PASS, fixture 13,
-    schema 48 probes, traceability 1567 links, security 162 files.
+    schema 48 probes, traceability 1569 links, security 162 files.
     label blocker를 교체해 5 viable이며 package·TASK-015 runtime은 미작성.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter

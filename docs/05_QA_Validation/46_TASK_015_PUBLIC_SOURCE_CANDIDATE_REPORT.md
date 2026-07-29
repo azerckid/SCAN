@@ -1,6 +1,6 @@
 # TASK-015 공개 Source·Fixture 후보 조사 보고서
 > Created: 2026-07-30 03:07
-> Last Updated: 2026-07-30 03:27
+> Last Updated: 2026-07-30 03:37
 > Status: Historical Candidate Baseline · Source Blocker Resolved by Report 47 · No Fixture Packages
 
 ## 1. 목적과 경계
@@ -46,7 +46,7 @@ conflict로 재구성했다. 현재 판정은
 
 | 문제 | Fixture ID | 공개 후보 | 현재 판정 | 다음 Gate |
 |:---|:---|:---|:---:|:---|
-| OSINT-LBL-001 | `FX-OSINT-LABEL-CONFLICT-001` | Tornado Cash 주소의 공식 OFAC 2022 지정·2025 해제와 현재 제3자 label 충돌 관찰 | source-blocked | 재사용 가능한 open-license 제2 label source 선정 |
+| OSINT-LBL-001 | `FX-OSINT-LABEL-CONFLICT-001` | Tornado Cash 주소의 공식 OFAC 2022 지정·2025 해제와 현재 제3자 label 충돌 관찰 | source-blocked (historical) | [Report 47](./47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md)에서 새 subject·source로 교체 |
 | OSINT-SAN-001 | `FX-OSINT-SANCTIONS-HISTORY-001` | `0x12D66f87A04A9E220743712cE6d9bB1B5616B8Fc`의 OFAC 지정·해제 이력 | viable candidate | SLS snapshot·1홉 반례·현재 상태 분리 |
 | OSINT-ENS-001 | `FX-OSINT-ENS-CONFLICT-001` | `nick.eth` ↔ `0xb8c2C29ee19D8307cb7255e1Cd9CbDE883A267d5` | viable candidate | 고정 block forward/reverse replay·불일치 반례 |
 | ACTOR-REL-001 | `FX-ACTOR-COMMON-FUNDER-001` | Euler seed와 네 branch의 confirmed FLOW 관계 | viable candidate | 각 대상의 initial-inflow 범위 완전성·service exclusion |
@@ -58,6 +58,9 @@ oracle·독립 Verifier가 없으므로 package 생성과 `verifying` 승격은 
 ## 4. 후보별 사실과 잔여
 
 ### 4.1 Label conflict — source-blocked
+
+이 절은 교체 전 실패 이력이다. 현재 5 viable 판정과 replacement 근거는
+[Report 47](./47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md)을 따른다.
 
 - 후보 주소:
   `0xd96f2B1c14Db8458374d9Aca76E26c3D18364307`

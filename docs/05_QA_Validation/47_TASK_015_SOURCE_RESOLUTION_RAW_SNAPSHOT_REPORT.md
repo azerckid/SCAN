@@ -1,6 +1,6 @@
 # TASK-015 Source 교체·Raw Snapshot 기준선 보고서
 > Created: 2026-07-30 03:27
-> Last Updated: 2026-07-30 03:27
+> Last Updated: 2026-07-30 03:37
 > Status: Source Blocker Resolved · 5 Viable Candidates · Snapshot Basis Recorded · No Fixture Packages · Runtime Not Implemented
 
 ## 1. 목적과 경계
@@ -166,12 +166,12 @@ hub exclusion 후 ownership을 `not_assessed`로 유지하는 것이다.
 
 ## 7. Verification Receipt
 
-2026-07-30 03:27 KST 기준 `scripts/verify.py` 전체 Gate:
+2026-07-30 03:37 KST 기준 `scripts/verify.py` 전체 Gate:
 
 - 468 tests PASS
 - fixture Schema 0.1: 13 packages PASS
 - Analysis I/O 0.2: 48 semantic probes PASS, 0.1 compatible
-- repository traceability: 1,567 links PASS
+- repository traceability: 1,569 links PASS
 - repository security scan: 162 runtime/evidence files PASS
 - TASK-012~014 oracle·독립 Verifier·analyzer verification PASS
 
