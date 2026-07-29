@@ -19,6 +19,15 @@ from scan_tool.domain.source import JsonRpcSourceRequest
 type TraceDialect = Literal["debug_call_tracer", "parity_trace_transaction"]
 
 
+def preserve_dialect_report(report_path: Path, dialect: TraceDialect) -> Path:
+    """Keep each dialect result instead of overwriting the shared provider latest file."""
+    suffix = f"-{dialect}-latest.json"
+    base_name = report_path.name.removesuffix("-latest.json")
+    destination = report_path.with_name(f"{base_name}{suffix}")
+    report_path.replace(destination)
+    return destination
+
+
 def trace_request(dialect: TraceDialect) -> JsonRpcSourceRequest:
     """Build one bounded read-only trace request for the selected provider dialect."""
     if dialect == "debug_call_tracer":

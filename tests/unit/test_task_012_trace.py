@@ -9,6 +9,7 @@ from scan_tool.application.task_012_replay import SUBJECT
 from scan_tool.application.task_012_trace import (
     decode_trace_summary,
     dry_run_trace_plan,
+    preserve_dialect_report,
     run_task_012_trace_replay,
     trace_request,
 )
@@ -30,6 +31,17 @@ def test_trace_profiles_are_read_only_and_network_free_by_default() -> None:
     assert trace_request("debug_call_tracer").method == "debug_traceTransaction"
     assert trace_request("parity_trace_transaction").method == "trace_transaction"
     assert trace_request("parity_trace_transaction").params == [TASK_012_TX_HASH]
+
+
+def test_trace_reports_are_preserved_per_dialect(tmp_path) -> None:
+    shared = tmp_path / "provider-evm-trace-verify-latest.json"
+    shared.write_text('{"status":"failed"}')
+
+    destination = preserve_dialect_report(shared, "debug_call_tracer")
+
+    assert destination.name == ("provider-evm-trace-verify-debug_call_tracer-latest.json")
+    assert destination.read_text() == '{"status":"failed"}'
+    assert not shared.exists()
 
 
 def test_debug_call_tracer_normalizes_successful_nested_inflow() -> None:

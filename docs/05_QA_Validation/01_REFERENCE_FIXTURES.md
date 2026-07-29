@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 04:58
+> Last Updated: 2026-07-29 09:50
 > Status: Approved 1.1 · Phase 2 Verifying Pack
 
 ## 1. 문서 목적
@@ -346,7 +346,7 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | EVM-TOKEN-002 |
-| 상태 | 검증 중 — primary trace 성공, Alchemy trace HTTP 400 |
+| 상태 | 검증 중 — primary trace 성공, Alchemy debug·parity trace 모두 HTTP 400 |
 | 패키지 | [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) |
 | 데이터 형태 | 공개 TX·receipt·internal call / JSON fixture |
 | 체인 | Ethereum (`chain_id` 1) |
@@ -356,8 +356,8 @@ fixture는 패키지의 JSON과 raw replay를 기준 정답·provenance 원본�
 | 확정 전 증거 | Publicnode outer TX·Withdrawal, Blockscout internal call, DEX raw replay의 call index |
 | 부분·실패 | trace 누락은 partial; outer value만 답·실패 call 합산은 failed |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM` 또는 trace RPC |
-| 승격 잔여 | offline 실패·복수 call 반례 통과, 다른 독립 trace·consumer contract 승인 |
-| 마지막 확인 | 2026-07-29 03:55 |
+| 승격 잔여 | offline 실패·복수 call 반례 통과, 성공 가능한 다른 독립 trace·consumer contract 승인 |
+| 마지막 확인 | 2026-07-29 09:50 |
 
 ## 7. 승격 기준
 

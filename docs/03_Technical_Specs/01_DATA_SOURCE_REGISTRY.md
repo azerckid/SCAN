@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-29 03:59
+> Last Updated: 2026-07-29 09:50
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -90,14 +90,14 @@
 | 논리 역할 | 후보 | 문서상 capability | 미확정 사항 | 상태 |
 |:---|:---|:---|:---|:---:|
 | `PROVIDER-EVM-PRIMARY` | QuickNode Ethereum | archive·Debug·Trace·Ethereum JSON-RPC | smoke 7/7·fixture replay 10/10; credential 회전·rate/timeout 반례 | verifying |
-| `PROVIDER-EVM-VERIFY` | Alchemy Ethereum | 기본 RPC·historical archive·filtered logs | smoke 6/6·fixture replay 9/9; trace HTTP 400·credential 회전·반례 | verifying |
+| `PROVIDER-EVM-VERIFY` | Alchemy Ethereum | 기본 RPC·historical archive·filtered logs | smoke 6/6·fixture replay 9/9; debug·parity trace 모두 HTTP 400 | verifying / trace rejected |
 | `PROVIDER-EVM-EXPLORER` | Blockscout | transaction·log·internal transaction 교차확인 | 원본 RPC·독립 trace 대체 불가 | supporting |
 | `PROVIDER-EVM-TRACE-VERIFY` | 미선정 | trace-dependent fixture 독립 검증 | 공급자·plan·비용 | unresolved |
 
 이 topology는 채택 기록이 아니다. pre-event read-only smoke 이후 TASK-012
 fixture 공통 9개 조회도 두 공급자에서 독립 실행해 decoded summary가 모두
-일치했고 primary trace도 성공했다. Alchemy의 `debug_traceTransaction`은
-HTTP 400으로 실패했으므로 독립 trace·rate behavior·반례는 미완료다.
+일치했고 primary trace도 성공했다. Alchemy의 debug·parity trace는
+각각 HTTP 400으로 실패했으므로 독립 trace·rate behavior는 미완료다.
 설정 중 대화에 노출된 credential은 대회 사용과 후속 지속 호출 전 회전해야 한다. 회전한
 endpoint·API key는 로컬 secret 환경에만 두고 source record에는 논리
 provider ID, method, block tag, 조회 시각, 안전한 오류 코드, raw SHA-256만

@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 06:14
+> Last Updated: 2026-07-29 09:50
 > Status: TASK-001~009·011 Done · TASK-012~019 Proposed · Implementation Not Approved
 
 ## 1. 문서 목적
@@ -854,6 +854,8 @@ TASK-017은 fixture·source 준비가 독립적이면 병렬 가능하고, TASK-
     - [x] 네 fixture의 합성 negative oracle 24개를 두 번 실행해 결정성을 확인했다.
     - [x] 독립 Trace 두 dialect 정규화·교차 동등성과 timeout·429·
       method-not-found(`invalid_response`)·malformed offline 주입 검증을 통과했다.
+    - [x] Alchemy 두 dialect를 live 실행했으나 모두 HTTP 400 `permanent`로
+      실패해 해당 endpoint를 독립 Trace 역할에서 제외했다.
     - [ ] 노출 credential 회전·독립 trace·live rate/timeout 반례를 통과해 Provider Gate를 닫는다.
     - [ ] offline oracle 통과와 독립 trace·잔여 Gate를 모두 만족한 fixture만
       `confirmed`로 승격한다.

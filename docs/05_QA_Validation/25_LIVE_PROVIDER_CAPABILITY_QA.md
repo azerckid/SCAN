@@ -1,6 +1,6 @@
 # Live Provider·AI Planner Capability QA
 > Created: 2026-07-29 02:35
-> Last Updated: 2026-07-29 06:14
+> Last Updated: 2026-07-29 09:50
 > Status: EVM Fixture Common Replay Passed · Overall Partial
 
 ## 1. 목적
@@ -13,7 +13,8 @@ Planner가 필요한 능력을 제공하는지 검증하는 실행 체크리스�
 계속 `rules_gated`다.
 
 fixture 공통 9개 decoded summary와 primary trace는 성공했다. Alchemy의
-독립 trace는 HTTP 400으로 실패했다. credential 회전, rate/timeout·negative
+독립 trace는 debug·parity 두 dialect 모두 HTTP 400으로 실패했다.
+credential 회전, rate/timeout·negative
 oracle 24개는 합성 offline 입력으로 두 번 통과했다. credential 회전,
 live rate/timeout 반례, 독립 trace와 AI Planner capability는 아직
 미실행이므로 최종 상태는 `partial`이다.
@@ -42,7 +43,7 @@ live rate/timeout 반례, 독립 trace와 AI Planner capability는 아직
 | block | pass | pass | number·hash·timestamp 일치 |
 | filtered logs | pass | pass | USDC Transfer 23건·첫 5개 요약 일치 |
 | historical call/state | pass | pass | block `0xfdf1d0`, decimals `6` 일치 |
-| trace | pass | failed/conditional | primary callTracer 성공, Alchemy HTTP 400·대체 독립 trace 미선정 |
+| trace | pass | failed | primary callTracer 성공, Alchemy debug·parity 각 HTTP 400·대체 독립 trace 미선정 |
 | rate/timeout | offline injected pass | live not_executed | timeout·429·method-not-found→`invalid_response`·malformed 구조화, 실제 provider 측정 잔여 |
 
 결과는 provider 문서의 지원 표시가 아니라 실제 계정과 대상 block에서
@@ -57,7 +58,7 @@ live rate/timeout 반례, 독립 trace와 AI Planner capability는 아직
 | historical native balance | pass | pass | raw wei 일치 |
 | historical USDC balance·decimals | pass | pass | raw 값 일치 |
 | address·topic·block 제한 USDC logs | pass | pass | 1건·TX/log index·amount 일치 |
-| internal native inflow trace | pass | failed | Alchemy HTTP 400, 독립 trace unresolved |
+| internal native inflow trace | pass | failed | Alchemy debug·parity HTTP 400, 독립 trace unresolved |
 
 공통 9개 조회는 두 공급자의 raw response에서 각각 decode했다. 네 fixture는
 `verifying`으로 올렸다. §5 합성 반례는 통과했지만 독립 trace,
@@ -73,6 +74,7 @@ credential 회전, live rate/timeout·fallback 검증이 남아 `confirmed`는
 - [x] decoded 값은 raw response에서 다시 계산됐다.
 - [x] capability smoke에서 두 공급자의 공통 6개 decoded summary가 모두 일치했다.
 - [x] TASK-012 fixture replay에서 두 공급자의 공통 9개 decoded summary가 모두 일치했다.
+- [x] Alchemy 독립 Trace 두 dialect 실패를 각각 보존했다.
 - [ ] mismatch·method-not-found·timeout·fallback 반례를 실행한다.
   - [x] timeout·429·method not found·malformed JSON offline 주입 검증
   - [ ] live provider rate/timeout·dialect method-not-found 검증

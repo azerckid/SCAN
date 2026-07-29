@@ -1,6 +1,6 @@
 # TASK-012 범용 EVM Fixture 후보 선정 보고서
 > Created: 2026-07-29 02:08
-> Last Updated: 2026-07-29 06:14
+> Last Updated: 2026-07-29 09:50
 > Status: Provider Replay Passed · Four Fixtures Verifying · Implementation Not Started
 
 ## 1. 목적과 판정
@@ -85,9 +85,10 @@ log는 1건이며 기준 TX, transaction index `104`, log index `275`, raw
 `25000000000`과 일치했다.
 
 QuickNode callTracer는 Router→EOA의 성공 native inflow
-`14449515027026387018` wei를 재현했다. Alchemy의 독립
-`debug_traceTransaction`은 HTTP 400/permanent였으므로 TOKEN-002는 독립
-trace Gate가 남는다. Provider별 raw SHA-256은 각 패키지의
+`14449515027026387018` wei를 재현했다. Alchemy의 독립 debug·parity
+dialect는 2026-07-29 재실행에서도 각각 HTTP 400/permanent였으므로
+TOKEN-002는 성공 가능한 제3의 독립 trace Gate가 남는다. Provider별 raw
+SHA-256은 각 패키지의
 `provider-replay.json`에 고정했다.
 
 `provider-replay.json`은 현재 Reference Fixture Schema 0.1의 직접 검증
