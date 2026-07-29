@@ -1,7 +1,7 @@
 # TASK-014 `flow_path` Analysis I/O 계약 (대안 B 확정안)
 
 > Created: 2026-07-30
-> Last Updated: 2026-07-30 10:40
+> Last Updated: 2026-07-30 10:52
 > Status: **Proposed · docs-only · 사용자 승인 대기** · Fixture 3 Verifying · Runtime Not Implemented
 
 ## 0. 이 문서의 위치
@@ -564,6 +564,12 @@ analyzer는 internal edge가 미확인이면 §5의 `trace_unavailable`·`partia
 - `check_analysis_schema.py`에 `flow_path` family probe(교차 조합 거부)와
   0.1 하위호환 probe를 추가한다.
 - `operations-contract.schema.json`의 `AnalysisType` enum에 `flow_path` 동기화.
+- `scope_status`가 필수 결과 필드가 되었으므로 세 fixture `expected.json`의
+  `graph.edges[]`·`excluded_edges[]`에 적용 값을 추가하고,
+  `task_014_independent_verifier.py`의 raw-first recompute와
+  `_expected_projection`도 같은 값을 산출·대조하도록 갱신한다. 이후 기존
+  pinned `calculated_fact_sha256` 3개를 재계산하고, analyzer 결과와 독립
+  Verifier hash가 다시 일치함을 Verification Receipt에 기록한다.
 - **새 공개 `ErrorCode`는 추가하지 않는다**(§5).
 
 ## 10. 남은 승인 Gate (이 문서 이후)
