@@ -1,7 +1,7 @@
 # 다중 입력 모드와 체인 범위 설계
 > Created: 2026-07-29 10:38
-> Last Updated: 2026-07-29 10:38
-> Status: Proposed 0.1 · Docs Only · Implementation Not Approved
+> Last Updated: 2026-07-29 11:10
+> Status: Approved 0.2 · Core Input Library Implemented · CLI Wiring Pending
 
 ## 1. 목적
 
@@ -9,17 +9,18 @@ SCAN이 대회 규정과 제공 데이터에 따라 입력 공급자를 교체�
 증거 계약·Python 분석기·독립 Verifier를 사용할 수 있도록 입력 모드와 체인
 범위를 고정한다.
 
-이 문서는 구현 승인이 아니다. `contest_rpc` adapter, 범용 artifact importer,
-Bitcoin·비EVM 분석기는 아직 구현되지 않았다. Analysis I/O `0.1`, 기존
-DEX·AUTH·FREEZE 분석기와 TASK-012 fixture 상태도 변경하지 않는다.
+사용자는 2026-07-29 `WP-INPUT-GATE` 첫 구현 단위를 승인했다. core library의
+`contest_rpc` adapter와 bounded artifact importer는 구현됐지만 CLI·Operations
+wiring, Bitcoin·비EVM 분석기는 아직 구현되지 않았다. Analysis I/O `0.1`,
+기존 DEX·AUTH·FREEZE 분석기와 TASK-012 fixture 상태는 변경하지 않는다.
 
 ## 2. 입력 모드
 
 | 입력 모드 | 공급 주체 | 허용 입력 예 | 현재 구현 상태 |
 |:---|:---|:---|:---:|
 | `external_rpc` | 사용자가 준비한 외부 공급자 | JSON-RPC, Debug/Trace RPC | smoke·저장 replay 기반 일부 가능 |
-| `contest_rpc` | 주최 측 | read-only RPC endpoint, chain/fixture 전용 RPC | 미구현 |
-| `provided_artifact` | 주최 측 또는 문제 첨부 | JSON, JSONL, CSV, raw transaction, receipt, logs, trace | 범용 importer 미구현 |
+| `contest_rpc` | 주최 측 | read-only RPC endpoint, chain/fixture 전용 RPC | core adapter 구현, CLI 미연결 |
+| `provided_artifact` | 주최 측 또는 문제 첨부 | JSON, JSONL, CSV, raw transaction, receipt, logs, trace | bounded importer 구현, CLI 미연결 |
 
 `external_rpc`가 규정상 제한되면 Etherscan·Blockscout 같은 Explorer를 자동
 fallback으로 가정하지 않는다. Explorer 역시 외부 API·웹서비스 제한에 함께
@@ -77,8 +78,9 @@ migration 승인을 먼저 받는다.
 - endpoint 형식·인증 방식이 달라도 analyzer 코드를 변경하지 않는다.
 - send/sign/mutation method는 허용하지 않는다.
 
-현재 필요한 구현은 **대회 RPC를 즉시 꽂을 수 있는 교체형 adapter와
-composition 설정**이다. 아직 구현되지 않았다.
+교체형 core adapter는 구현됐다. HTTPS·URL userinfo 금지, 명시 endpoint
+한 곳만 호출, 기존 JSON-RPC source port 재사용을 강제한다. 대회 당일
+CLI/composition에서 endpoint를 선택하는 wiring은 아직 구현되지 않았다.
 
 ### 4.3 `provided_artifact`
 
@@ -91,8 +93,9 @@ composition 설정**이다. 아직 구현되지 않았다.
 - archive/trace가 없는 artifact에서는 필요한 결과를 complete로 승격하지
   않는다.
 
-현재 필요한 구현은 **임의 주최 JSON/CSV/trace를 normalized evidence로
-변환하는 범용 importer**다. 아직 구현되지 않았다.
+JSON·JSONL·CSV core importer는 구현됐다. 기본 한도는 3MB·2,000 record이며
+raw SHA-256·record locator·record hash·observed time을 보존한다. 문제별
+임의 column mapping과 CLI 파일 선택은 아직 구현되지 않았다.
 
 ## 5. 체인 범위
 
@@ -135,11 +138,13 @@ state 모델을 먼저 고정한다. Cross-chain은 한쪽 거래만으로 완�
 - QuickNode Debug Trace
 - 저장된 replay를 이용한 DEX·AUTH·FREEZE 분석과 독립 Verifier
 - input/source/evidence/result artifact와 provenance 보존
+- 주최 HTTPS JSON-RPC를 명시적으로 주입하고 normalized evidence로 변환
+- JSON·JSONL·CSV artifact를 bounded import하고 chain scope를 검증
 
 현재 SCAN이 아직 할 수 없는 일:
 
-- 대회 RPC endpoint를 사용자 입력만으로 즉시 교체하는 정식 adapter
-- 임의 JSON/CSV/trace artifact의 범용 import
+- CLI·Operations Board에서 contest RPC/artifact를 선택·실행
+- 문제마다 다른 임의 CSV column·provider envelope의 mapping 자동 추론
 - TASK-012 범용 EVM Core 제품 analyzer
 - Bitcoin UTXO·CoinJoin 분석
 - 비EVM instruction/state 분석
@@ -174,7 +179,9 @@ TASK-012~019의 기존 fixture·UI·Schema·Context Receipt·개별 구현 승�
 - artifact의 원본 hash와 record locator가 evidence ref로 연결된다.
 - Bitcoin/non-EVM 입력을 EVM analyzer가 받으면 명시적 타입 오류다.
 
-모든 항목은 현재 `not_executed`이며 구현 TASK 승인 후에만 실행한다.
+core library 범위의 RPC↔artifact 동등성, 명시 endpoint 단일 호출,
+JSON·JSONL·CSV, size/count, chain mismatch와 repr 비반사는 자동화됐다.
+CLI·Operations·실제 대회 artifact 시나리오는 `not_executed`다.
 
 ## 10. Related Documents
 
@@ -185,3 +192,25 @@ TASK-012~019의 기존 fixture·UI·Schema·Context Receipt·개별 구현 승�
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 승인 잠금
 - **Logic_Progress**: [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md) - `WP-INPUT-GATE` 선행 순서
 - **QA_Validation**: [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 향후 동등성·격리 기준
+- **QA_Validation**: [WP-INPUT-GATE Core 보고서](../05_QA_Validation/30_WP_INPUT_GATE_CORE_REPORT.md) - 구현·테스트·잔여 경계
+
+## 11. 구현 Receipt
+
+| 항목 | 결과 |
+|:---|:---|
+| 입력 enum | `external_rpc`, `contest_rpc`, `provided_artifact` |
+| 체인 enum | `evm`, `bitcoin`, `non_evm`, `cross_chain` |
+| contest RPC | 기존 HTTPX JSON-RPC adapter 재사용, HTTPS·userinfo 검증 |
+| artifact | JSON·JSONL·CSV, 3MB·2,000 record 기본 한도 |
+| provenance | input mode·chain scope·source/provider·media type·raw/record SHA·observed time·locator |
+| 격리 | chain mismatch·null·malformed·oversize·record 초과 거부 |
+| 동등성 | 같은 JSON-RPC result의 RPC↔artifact normalized record 일치 |
+| 외부 fallback | adapter가 명시 contest endpoint 한 곳만 호출, Explorer 호출 없음 |
+| 집중 검증 | 22 tests PASS |
+
+Implementation files:
+
+- `src/scan_tool/domain/input_source.py`
+- `src/scan_tool/adapters/input_source.py`
+- `tests/unit/test_input_source.py`
+- `tests/integration/test_contest_rpc_input.py`
