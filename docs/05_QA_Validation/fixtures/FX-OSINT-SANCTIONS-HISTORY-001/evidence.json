@@ -24,6 +24,15 @@
       "action_date": "2025-03-21",
       "address_match_count": 1,
       "html_sha256": "630ff0e4efa827bb95fd4d00e2ecd0072daff56e966f9fa3536dcd07b4ead465"
+    },
+    {
+      "evidence_id": "EV-INTEL-SAN-CURRENT-SLS-CONTEXT",
+      "evidence_type": "official_current_sdn_csv_absence_context",
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "snapshot_file": "sls-snapshot.json",
+      "raw_sha256": "464a917d662b9de3a26588499a8f1a4cfea341a70f3ace64038a5f8cb2b85b65",
+      "address_match_count": 0,
+      "required_for_scoring": false
     }
   ],
   "source_requirements": [
@@ -41,7 +50,8 @@
       "retrieved_at": "2026-07-29T18:27:00Z",
       "urls": [
         "https://ofac.treasury.gov/recent-actions/20220808",
-        "https://ofac.treasury.gov/recent-actions/20250321"
+        "https://ofac.treasury.gov/recent-actions/20250321",
+        "https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.CSV"
       ]
     }
   ],
@@ -49,13 +59,13 @@
     "designation_address_match": true,
     "removal_address_match": true,
     "timeline_ordered": true,
-    "sls_version_pinned": false,
+    "sls_version_pinned": true,
     "negative_oracle_pass": true,
     "independent_verifier_pass": false
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Pin the applicable SLS version and run an independent Verifier."
+    "remaining": "Run an independent Verifier."
   },
   "provenance_notes": "The two official pages establish a historical timeline only. Current status and criminality are not assessed."
 }

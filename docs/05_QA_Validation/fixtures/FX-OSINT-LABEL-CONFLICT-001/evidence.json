@@ -69,21 +69,22 @@
     },
     {
       "source_id": "DS-ENS",
-      "provider": "PROVIDER-EVM-VERIFY",
-      "retrieved_at": "2026-07-29T18:37:00Z"
+      "provider": "PROVIDER-EVM-VERIFY+BLOCKSCOUT-ETH-RPC",
+      "retrieved_at": "2026-07-29T19:21:24Z",
+      "provider_replay": "provider-replay.json"
     }
   ],
   "consistency_checks": {
     "selected_row_hash_matches": true,
     "config_hash_matches": true,
     "ens_fixed_block_repeated": true,
-    "second_ens_provider_match": false,
+    "second_ens_provider_match": true,
     "negative_oracle_pass": true,
     "independent_verifier_pass": false
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Second ENS provider or independently reproducible stored replay and an independent Verifier are required before verifying."
+    "remaining": "An independent Verifier is required before verifying."
   },
   "provenance_notes": "Etherscan content is not used. The OpenRAIL sample is limited to research/testing use; all assertions remain source-scoped."
 }

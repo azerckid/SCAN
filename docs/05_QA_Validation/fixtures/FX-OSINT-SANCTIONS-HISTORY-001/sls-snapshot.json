@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+  "captured_at": "2026-07-29T19:23:30Z",
+  "status": "candidate",
+  "scope_kind": "current_sdn_csv_absence_context",
+  "source": {
+    "provider_id": "OFAC-SANCTIONS-LIST-SERVICE",
+    "url": "https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.CSV",
+    "retrieved_at": "2026-07-29T19:23:30Z",
+    "http_status": 200,
+    "byte_length": 5624423,
+    "line_count": 19175,
+    "raw_sha256": "464a917d662b9de3a26588499a8f1a4cfea341a70f3ace64038a5f8cb2b85b65"
+  },
+  "query": {
+    "address": "0x722122df12d4e14e13ac3b6895a86e84145b6967",
+    "case_insensitive_match_count": 0
+  },
+  "interpretation": {
+    "role": "context",
+    "historical_designation_changed": false,
+    "historical_removal_changed": false,
+    "current_criminality_assessed": false
+  },
+  "remaining_gate": ["independent_verifier"]
+}

@@ -171,6 +171,8 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] selected raw artifact를 포함한 다섯 candidate package를 작성한다.
 - [x] official·provider·heuristic·onchain 상충과 truth 비승격 반례 30개를
   오프라인에서 두 번 결정적으로 실행한다.
+- [x] ENS 두 fixture를 Alchemy·Blockscout fixed block에서 재현하고 OFAC
+  current SLS snapshot metadata를 고정한다.
 - [ ] official과 heuristic의 상충 사례를 독립 Verifier로 재계산한다.
 - [ ] AI가 만든 label 가설이 evidence 없는 confirmed fact가 되지 않게 한다.
 - [ ] Context Receipt PASS와 별도 구현 승인을 기록한다.

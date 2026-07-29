@@ -1251,6 +1251,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] label·sanctions·ENS·actor relation 반례 30개를 두 번 결정적으로 실행한다.
   - [x] AI/heuristic 가설이 evidence 없는 ownership·범죄 truth로 승격되지
     않는 반례를 고정한다.
+  - [x] ENS 두 fixture를 Alchemy·Blockscout 고정 block에서 재현하고
+    공급자별 raw SHA-256·decoded 일치·실패 이력을 보존한다.
+  - [x] OFAC current SLS SDN.CSV의 URL·조회시각·크기·행 수·raw SHA-256을
+    고정하고 현재 주소 부재를 역사 action과 분리한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - OSINT·Actor 5문항
   - [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 외부 전송·API Rules
@@ -1270,6 +1274,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [TASK-015 Source 교체·Raw Snapshot 기준선](../05_QA_Validation/47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) - 5 viable·artifact hash
   - [TASK-015 Candidate Fixture Package 보고서](../05_QA_Validation/48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md) - 5 package·Schema·artifact hash
   - [TASK-015 Negative Oracle 보고서](../05_QA_Validation/49_TASK_015_NEGATIVE_ORACLE_REPORT.md) - 30개 offline 반례·결정성
+  - [TASK-015 Source Readiness 보고서](../05_QA_Validation/50_TASK_015_SOURCE_READINESS_REPORT.md) - ENS 두 공급자·OFAC SLS·Actor 잔여
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001
 - Implementation Preconditions:
   - [ ] 공식 대회 Rules와 채택 source snapshot의 Terms·privacy·최소 필드를 확정한다
@@ -1307,9 +1312,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     - 위 Related Concept·Technical·QA 문서 전체
   - Constraints: privacy 최소 수집, Terms·Rules Gate, source assertion과
     ownership/crime truth 분리, AI hypothesis 비승격
-  - Conflicts: 공식 대회 Rules 미확정, ENS 제2 provider replay·독립
-    Verifier 미실행. label source blocker·snapshot 기준선·다섯
-    candidate package·negative oracle 30개 작성은 해소
+  - Conflicts: 공식 대회 Rules 미확정, Actor bounded prehistory·service
+    exclusion·독립 Verifier 미실행. label source blocker·snapshot 기준선·
+    다섯 candidate package·negative oracle 30개·ENS 제2 provider·OFAC
+    current SLS pin은 해소
 - Change Receipt:
   - Offline oracle Gate만 구현했다. 제품 `intel_context` analyzer·live
     source adapter·fixture 승격은 미착수다.
@@ -1331,6 +1337,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     전체 Gate는 474 tests, fixture 18, schema 48 probes, traceability
     1602 links, security 186 files PASS다. 다섯 package는 계속 `candidate`;
     Verifier·runtime은 미실행.
+  - Source Readiness Gate: ENS 두 fixture는 Alchemy·Blockscout fixed-block
+    decoded 값이 일치하고, OFAC current SLS snapshot metadata를 고정했다.
+    Actor prehistory·service exclusion과 독립 Verifier는 계속 미완료다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 

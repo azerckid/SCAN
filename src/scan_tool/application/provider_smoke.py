@@ -202,9 +202,10 @@ async def run_read_only_probe(
     requests: Sequence[JsonRpcSourceRequest],
     summary_decoder: SummaryDecoder,
     configured_secrets: Sequence[str] = (),
+    provider_id_override: str | None = None,
 ) -> SmokeReport:
     """Execute a bounded read-only request set with the smoke security contract."""
-    provider_id = ROLE_PROVIDER_ID[role]
+    provider_id = provider_id_override or ROLE_PROVIDER_ID[role]
     guard = SensitiveDataGuard(
         (*_endpoint_secret_candidates(endpoint), *(value for value in configured_secrets if value))
     )

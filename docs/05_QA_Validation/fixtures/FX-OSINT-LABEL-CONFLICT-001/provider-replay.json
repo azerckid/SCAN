@@ -1,0 +1,61 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+  "captured_at": "2026-07-29T19:21:24Z",
+  "status": "candidate",
+  "scope_kind": "fixed_block_ens_resolution",
+  "request_scope": {
+    "chain_id": 1,
+    "block_tag": "0x1873d4e",
+    "block_number": 25640270,
+    "name": "team4.vesting.contract.tornadocash.eth",
+    "methods": ["eth_call"],
+    "calls": ["resolver(bytes32)", "addr(bytes32)"]
+  },
+  "providers": [
+    {
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T19:18:48Z",
+      "raw_sha256": {
+        "resolver": "aca15c37ecbe70d0fc93a82c7c2c171d43e1e5cab058b293036cfa18f960f3f1",
+        "address": "a4f5dc68478f8d2890c0eed15058820a69f774e1a21da0f4af4c705f10143895"
+      },
+      "decoded": {
+        "resolver": "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
+        "address": "0xc3877028655ebe90b9447dd33de391c955ead267"
+      }
+    },
+    {
+      "provider_id": "BLOCKSCOUT-ETH-RPC",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T19:21:24Z",
+      "raw_sha256": {
+        "resolver": "e774d26dfefad6545aa96eda709344ea1a6797954032210ca0bf6e790d998a1d",
+        "address": "d6cf34abcf098f8e4482a612fcb1a94741bb879a2a41e94748807643c9ebba44"
+      },
+      "decoded": {
+        "resolver": "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
+        "address": "0xc3877028655ebe90b9447dd33de391c955ead267"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "status": "failed",
+      "retrieved_at": "2026-07-29T19:18:47Z",
+      "failure_kind": "rate_limited",
+      "http_status": 429,
+      "raw_sha256": null
+    },
+    {
+      "provider_id": "PROVIDER-EVM-TRACE",
+      "status": "failed",
+      "retrieved_at": "2026-07-29T19:19:52Z",
+      "failure_kind": "permanent",
+      "http_status": 403,
+      "raw_sha256": null
+    }
+  ],
+  "decoded_match": true,
+  "remaining_gate": ["independent_verifier"]
+}

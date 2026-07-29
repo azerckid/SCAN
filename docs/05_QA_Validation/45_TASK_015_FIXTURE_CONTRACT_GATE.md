@@ -46,6 +46,8 @@ config·onchain ENS의 `team4 vesting` 역할을 보존하는 새 subject로 교
   Verifier 전 보강
 - [ ] requirement→evidence→source 참조 무결성
 - [x] negative oracle 30개 두 번 결정성 실행
+- [x] ENS fixed-block Alchemy·Blockscout decoded 교차검증
+- [x] OFAC current SLS URL·조회시각·raw SHA-256·주소 부재 context 고정
 - [ ] 독립 Verifier 재계산
 - [x] fixture package Schema 0.1 통과 — 전체 18 package
 - [ ] 제품 `intel_context` Analysis I/O Schema — 계약·구현 미승인
@@ -157,3 +159,4 @@ Context Receipt `PASS` 전:
 - **QA_Validation**: [Source 교체·Raw Snapshot 기준선](./47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) - 5 viable·snapshot hash 판정
 - **QA_Validation**: [Candidate Fixture Package 보고서](./48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md) - 5 package·artifact hash·잔여 Gate
 - **QA_Validation**: [TASK-015 Negative Oracle 보고서](./49_TASK_015_NEGATIVE_ORACLE_REPORT.md) - 30개 반례·두 번 결정성
+- **QA_Validation**: [TASK-015 Source Readiness 보고서](./50_TASK_015_SOURCE_READINESS_REPORT.md) - ENS replay·OFAC SLS·Actor 잔여

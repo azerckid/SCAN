@@ -39,21 +39,22 @@
   "sources": [
     {
       "source_id": "DS-ENS",
-      "provider": "PROVIDER-EVM-VERIFY",
-      "retrieved_at": "2026-07-29T18:37:00Z",
-      "methods": ["eth_call"]
+      "provider": "PROVIDER-EVM-VERIFY+BLOCKSCOUT-ETH-RPC",
+      "retrieved_at": "2026-07-29T19:21:26Z",
+      "methods": ["eth_call"],
+      "provider_replay": "provider-replay.json"
     }
   ],
   "consistency_checks": {
     "forward_reverse_match": true,
     "fixed_block_repeated": true,
-    "second_provider_match": false,
+    "second_provider_match": true,
     "negative_oracle_pass": true,
     "independent_verifier_pass": false
   },
   "uncertainty": {
     "candidate_only": true,
-    "remaining": "Second provider replay and an independent Verifier are required before verifying."
+    "remaining": "An independent Verifier is required before verifying."
   },
-  "provenance_notes": "The replay is a fixed-block onchain observation from one logical provider. It is not ownership proof."
+  "provenance_notes": "Two fixed-block provider replays have matching decoded values. Forward/reverse agreement is not ownership proof."
 }
