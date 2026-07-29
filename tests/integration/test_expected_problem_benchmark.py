@@ -31,9 +31,9 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
 
     assert {item.problem_id for item in manifest.cases} == APPROVED_EXPECTED_PROBLEM_IDS
     assert counts == {
-        CoverageLevel.AUTOMATED: 9,
-        CoverageLevel.ASSISTED: 0,
-        CoverageLevel.UNSUPPORTED: 21,
+        CoverageLevel.AUTOMATED: 11,
+        CoverageLevel.ASSISTED: 1,
+        CoverageLevel.UNSUPPORTED: 18,
     }
     assert {
         item.problem_id for item in manifest.cases if item.coverage is CoverageLevel.AUTOMATED
@@ -46,6 +46,8 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
         "EVM-PROXY-001",
         "EVM-TOKEN-001",
         "EVM-TOKEN-002",
+        "FLOW-EVM-001",
+        "FLOW-EVM-002",
         "SVC-DEX-001",
     }
 
@@ -53,7 +55,7 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
 def test_confirmed_expected_problems_match_answers_evidence_and_requirements() -> None:
     report = _runner().run(_runner().load_manifest(MANIFEST))
 
-    assert report.executed == report.passed == 9
+    assert report.executed == report.passed == 11
     assert report.failed == 0
     assert report.automated_pass_rate == 1
     assert all(item.answer_exact for item in report.cases)
@@ -120,5 +122,5 @@ def test_benchmark_cli_runs_offline_and_reports_coverage(
     )
 
     assert result.exit_code == 0
-    assert "AUTOMATED 9 · ASSISTED 0 · UNSUPPORTED 21" in result.stdout
-    assert "BENCHMARK 9/9 automated cases passed · network_mode offline" in result.stdout
+    assert "AUTOMATED 11 · ASSISTED 1 · UNSUPPORTED 18" in result.stdout
+    assert "BENCHMARK 11/11 automated cases passed · network_mode offline" in result.stdout

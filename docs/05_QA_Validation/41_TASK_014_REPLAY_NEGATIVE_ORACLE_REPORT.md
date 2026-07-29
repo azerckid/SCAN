@@ -1,7 +1,7 @@
 # TASK-014 PATH Replay·Negative Oracle 보고서
 > Created: 2026-07-30 00:08
-> Last Updated: 2026-07-30 00:08
-> Status: Passed · Fixture 3 Verifying · Product Runtime Not Implemented
+> Last Updated: 2026-07-30
+> Status: Passed · Historical Verifying Gate · Final Promotion Completed
 
 ## 1. 범위
 
@@ -62,8 +62,14 @@ source 일부 누락은 확인 edge를 보존한 `partial`로 분리했다.
 Replay와 negative oracle Gate는 **Pass**다. fixture는 `verifying`으로 올리되,
 제품 analyzer와 최종 promotion 전에는 `confirmed`로 올리지 않는다.
 
+이 문서는 당시 `verifying` 승격 Gate의 판정을 보존한다. 이후 제품 analyzer,
+독립 canonical hash 검증과 PATH internal edge의 Blockscout API 교차검증을
+통과해 세 fixture는 [최종 승격 Receipt](./44_TASK_014_FINAL_PROMOTION_RECEIPT.md)에서
+`confirmed`로 승격됐다.
+
 ## 7. Related Documents
 
 - **QA_Validation**: [Fixture Gate](./39_TASK_014_FIXTURE_CONTRACT_GATE.md) - 전체 Stop/Go
 - **QA_Validation**: [독립 Verifier](./42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md) - raw-first 재계산
+- **QA_Validation**: [최종 승격 Receipt](./44_TASK_014_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 11/11
 - **Technical_Specs**: [PATH 계약](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) - graph·ledger 계약

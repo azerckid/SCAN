@@ -332,26 +332,153 @@
     {
       "problem_id": "FLOW-EVM-001",
       "difficulty": "medium",
-      "coverage": "unsupported",
-      "reason": "The current runtime has no N-hop graph traversal or service-label candidate generator.",
-      "reusable_capabilities": ["BASE-CACHE", "BASE-PROVENANCE", "BASE-EXPORT"],
-      "blocking_gaps": ["PATH", "LABEL"]
+      "coverage": "automated",
+      "reason": "A confirmed bounded three-hop fixture and strict flow_path analyzer recover the final address, raw amounts, and ordered transaction evidence; service attribution remains explicitly not assessed.",
+      "reusable_capabilities": ["PATH", "RECON", "BASE-PROVENANCE", "BASE-EXPORT"],
+      "blocking_gaps": [],
+      "fixture": {
+        "fixture_id": "FX-FLOW-PATH-001",
+        "request_path": "docs/05_QA_Validation/fixtures/FX-FLOW-PATH-001/analysis-request.json",
+        "replay_path": "docs/05_QA_Validation/fixtures/FX-FLOW-PATH-001/raw-replay.json",
+        "expected_results": [
+          {
+            "result_type": "trace_path",
+            "value": {
+              "graph": {
+                "node_count": 4,
+                "edge_count": 3,
+                "nodes": [
+                  "0x036cec1a199234fc02f72d29e596a09440825f1c",
+                  "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+                  "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+                  "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5"
+                ],
+                "edges": [
+                  {
+                    "edge_id": "EDGE-PATH-001",
+                    "from_node": "0x036cec1a199234fc02f72d29e596a09440825f1c",
+                    "to_node": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+                    "amount_raw": "88752697459828535340019",
+                    "transaction_hash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+                    "block_number": 16818102,
+                    "transfer_kind": "native_internal",
+                    "scope_status": "included"
+                  },
+                  {
+                    "edge_id": "EDGE-PATH-002",
+                    "from_node": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+                    "to_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+                    "amount_raw": "7738250000000000000000",
+                    "transaction_hash": "0x79c10cf538667a0a7de40ce54d2444c9e9e17b5c62b321e739020df0015baeda",
+                    "block_number": 16905356,
+                    "transaction_index": 23,
+                    "transfer_kind": "native_top_level",
+                    "scope_status": "included"
+                  },
+                  {
+                    "edge_id": "EDGE-PATH-003",
+                    "from_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+                    "to_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+                    "amount_raw": "7738050000000000000000",
+                    "transaction_hash": "0xe3f67f8e50042f09a3d9b6873bd15c14fa8b8176cfa1069bc1d3ab71e4b3fd0d",
+                    "block_number": 16920430,
+                    "transaction_index": 55,
+                    "transfer_kind": "native_top_level",
+                    "scope_status": "included"
+                  }
+                ]
+              },
+              "path_candidates": [
+                {
+                  "ordered_edge_ids": ["EDGE-PATH-001", "EDGE-PATH-002", "EDGE-PATH-003"],
+                  "hop_count": 3,
+                  "terminal_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+                  "termination": "selected_terminal_reached"
+                }
+              ],
+              "reconciliation": {
+                "status": "unresolved_selected_path_scope",
+                "reason": "The selected path does not claim a continuous scan of the seed's other outputs.",
+                "raw_amounts_must_not_be_equalized": true
+              }
+            }
+          }
+        ],
+        "required_fixture_requirements": ["REQ-FLOW-PATH-ORDER", "REQ-FLOW-PATH-SCOPE"]
+      }
     },
     {
       "problem_id": "FLOW-EVM-002",
       "difficulty": "high",
-      "coverage": "unsupported",
-      "reason": "Branching, re-merging, unrelated-fund exclusion, and graph reconciliation are not implemented.",
-      "reusable_capabilities": ["BASE-CACHE", "BASE-PROVENANCE"],
-      "blocking_gaps": ["PATH", "GRAPH-RECON"]
+      "coverage": "automated",
+      "reason": "A confirmed four-branch remerge fixture and strict flow_path analyzer recover the merge address, branch set, excluded external inflow, and exact residual ledger.",
+      "reusable_capabilities": ["PATH", "GRAPH-RECON", "BASE-PROVENANCE"],
+      "blocking_gaps": [],
+      "fixture": {
+        "fixture_id": "FX-FLOW-REMERGE-001",
+        "request_path": "docs/05_QA_Validation/fixtures/FX-FLOW-REMERGE-001/analysis-request.json",
+        "replay_path": "docs/05_QA_Validation/fixtures/FX-FLOW-REMERGE-001/raw-replay.json",
+        "expected_results": [
+          {
+            "result_type": "trace_remerge",
+            "value": {
+              "branches": [
+                {
+                  "branch_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+                  "input_raw": "7738250000000000000000",
+                  "merge_output_raw": "7738050000000000000000",
+                  "residual_raw": "200000000000000000"
+                },
+                {
+                  "branch_node": "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e",
+                  "input_raw": "7738250000000000000000",
+                  "merge_output_raw": "7738050000000000000000",
+                  "residual_raw": "200000000000000000"
+                },
+                {
+                  "branch_node": "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55",
+                  "input_raw": "7738250000000000000000",
+                  "merge_output_raw": "7737250000000000000000",
+                  "residual_raw": "1000000000000000000"
+                },
+                {
+                  "branch_node": "0x8765a35394c98e81b9d56d44248e1199d8e38a4c",
+                  "input_raw": "7738250000000000000000",
+                  "merge_output_raw": "7738050000000000000000",
+                  "residual_raw": "200000000000000000"
+                }
+              ],
+              "reconciliation": {
+                "confirmed_input_raw": "30953000000000000000000",
+                "confirmed_included_output_raw": "30951400000000000000000",
+                "confirmed_scoped_excluded_output_raw": "0",
+                "explicit_fee_or_context_raw": "0",
+                "unresolved_residual_raw": "1600000000000000000",
+                "external_inflow_raw_not_in_seed_ledger": "1000000000000"
+              },
+              "excluded_edges": [
+                {
+                  "transaction_hash": "0xcfec4f86f6d81c83b9b3520d6966936d17490988739a794bf1391562ecb909b6",
+                  "from_node": "0xfa24ea2318dbc719b9d1a0d8eb7f282255c5bde0",
+                  "to_node": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+                  "amount_raw": "1000000000000",
+                  "reason": "external_inflow_not_from_seed",
+                  "scope_status": "excluded"
+                }
+              ]
+            }
+          }
+        ],
+        "required_fixture_requirements": ["REQ-FLOW-REMERGE-BRANCHES", "REQ-FLOW-REMERGE-LEDGER"]
+      }
     },
     {
       "problem_id": "FLOW-MULTI-001",
       "difficulty": "high",
-      "coverage": "unsupported",
-      "reason": "Multi-victim attribution, graph accounting, and historical price conversion are absent.",
-      "reusable_capabilities": ["BASE-CACHE", "BASE-EXPORT"],
-      "blocking_gaps": ["PATH", "MULTI-VICTIM", "PRICE"]
+      "coverage": "assisted",
+      "reason": "The confirmed fixture and analyzer automate origin contributions and deduplicated raw totals, but the expected problem also requires historical price conversion and victim-attribution review.",
+      "reusable_capabilities": ["PATH", "MULTI-VICTIM", "RECON", "BASE-EXPORT"],
+      "blocking_gaps": ["PRICE", "ATTRIBUTION"]
     },
     {
       "problem_id": "SVC-DEX-001",

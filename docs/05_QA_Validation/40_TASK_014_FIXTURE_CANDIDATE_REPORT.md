@@ -1,7 +1,7 @@
 # TASK-014 PATH 공개 Fixture 후보 선정 보고서
 > Created: 2026-07-29 23:25
-> Last Updated: 2026-07-30 00:08
-> Status: Candidate Selection Superseded · Fixture 3 Verifying · Implementation Locked
+> Last Updated: 2026-07-30
+> Status: Historical Candidate Selection · Final Promotion Completed
 
 ## 1. 목적
 
@@ -9,6 +9,10 @@
 공개 사례를 선정한다. 이 보고서는 사례·입력·예상 정답 골격을 고정하지만
 `verifying`/`confirmed`, Analysis I/O 승인, Context Receipt, analyzer 구현,
 Benchmark 승격을 주장하지 않는다.
+
+이 문서는 후보 선정 당시의 경계를 보존한다. 후속 replay·oracle·Verifier·
+제품 analyzer·독립 internal-edge 교차검증 결과와 최종 상태는
+[최종 승격 Receipt](./44_TASK_014_FINAL_PROMOTION_RECEIPT.md)를 따른다.
 
 ## 2. 선정 사건과 사용 경계
 

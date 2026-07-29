@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "fixture_id": "FX-FLOW-REMERGE-001",
-  "status": "verifying",
+  "status": "confirmed",
   "chain_id": 1,
   "captured_at": "2026-07-29T14:58:46.375333+00:00",
   "scope": {

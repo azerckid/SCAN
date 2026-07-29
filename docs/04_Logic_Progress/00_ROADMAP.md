@@ -87,15 +87,15 @@
 | [Live Provider Readiness](../03_Technical_Specs/10_LIVE_PROVIDER_READINESS.md) | Pre-event Smoke Partial Pass · Fixture Common 9/9 Match · Primary Trace Pass | TASK-012 전 credential 회전·독립 trace·반례 |
 | [TASK-012 Analysis Contract](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) | Approved 0.2 · 12 Cases · 14 Probes | runtime·Schema 적용, 0.1 세 type 호환 |
 | [TASK-013 NFT·Proxy Contract](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) | Approved 1.0 · Runtime Applied | fixture 3 confirmed·Benchmark 9/9 |
-| [TASK-014 PATH Contract](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) | Proposed 0.1 · Preview Approved | fixture 사례·정식 계약·Context Receipt 대기 |
+| [TASK-014 PATH Contract](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md) | Approved 1.0 · Runtime Applied | fixture 3 confirmed·Benchmark 11/11 |
 
 ### 3.4 Logic Progress
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~013 Done · TASK-014~019 Proposed | 후속 Phase 2 code는 개별 승인 대기 |
-| 이 문서 | Approved 2.8 Baseline · TASK-012 Complete | 후속 Phase 2 승인 경계 유지 |
-| [Coverage 확장 Execution Plan](./01_EXECUTION_PLAN.md) | Proposed 0.1 | fixture·dependency 기반 Wave, 날짜 약속 아님 |
+| [P0·V1 구현 Backlog](./00_BACKLOG.md) | TASK-001~014 Done · TASK-015~019 Proposed | 후속 Phase 2 code는 개별 승인 대기 |
+| 이 문서 | Approved 2.9 Baseline · TASK-014 Complete | 후속 Phase 2 승인 경계 유지 |
+| [Coverage 확장 Execution Plan](./01_EXECUTION_PLAN.md) | TASK-012~014 Complete | fixture·dependency 기반 Wave, 날짜 약속 아님 |
 | `02_ROADMAP_BACKLOG_SYNC.md` | 조건부 미작성 | 구현 시작 전 Roadmap↔Backlog 상태 동기화 규칙 작성 |
 
 ### 3.5 QA Validation
@@ -251,7 +251,8 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 13 | 완료 (2026-07-29) | Backlog `TASK-011` 예상문제 Offline Benchmark | 최초 자동화 3/3, 보조 6·미지원 21 기준선 |
 | 14 | 완료 (2026-07-29) | `TASK-012` EVM Core | 자동화 7/7, 보조 2·미지원 21 |
 | 15 | 완료 (2026-07-29) | `TASK-013` NFT·Proxy | fixture 3 confirmed·remediation·자동화 9/9 |
-| 16 | 계획 승인 대기 | `TASK-014~019` Coverage 확장 | fixture·Context Receipt·개별 code 승인 전 미착수 |
+| 16 | 완료 (2026-07-30) | `TASK-014` PATH Graph·금액 정합 | fixture 3 confirmed·자동화 11/11·assisted 1 |
+| 17 | 계획 승인 대기 | `TASK-015~019` Coverage 확장 | fixture·Context Receipt·개별 code 승인 전 미착수 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.
 `DOC-M2`~`DOC-M5`나 `TASK-001`의 선행 조건으로 추가하지 않는다. 실제 웹

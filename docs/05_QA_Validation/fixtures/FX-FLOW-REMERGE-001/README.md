@@ -1,7 +1,7 @@
 # Fixture: FX-FLOW-REMERGE-001
 > Created: 2026-07-29 23:25
-> Last Updated: 2026-07-30 00:08
-> Status: Verifying 0.1 · Two-provider Replay/Oracle/Verifier Passed
+> Last Updated: 2026-07-30
+> Status: Confirmed 0.1 · Analyzer/Verifier Passed
 
 ## 1. 목적
 
@@ -31,7 +31,8 @@ branch 네 개는 `0xa1b44d...8e676`, `0xc4e04a...b208e`,
 - [x] residual은 근거 없이 fee로 승격하지 않고 unresolved로 보존
 - [x] cycle·중복·budget·외부 inflow negative oracle
 - [x] 두 번 결정성·독립 Verifier
-- [ ] 제품 analyzer·최종 fixture 승격
+- [x] 제품 analyzer·canonical hash 독립 검증
+- [x] bounded selected-transaction scope로 최종 fixture 승격
 
 ## 4. Related Documents
 

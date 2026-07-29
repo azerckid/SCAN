@@ -1,7 +1,7 @@
 # Fixture: FX-FLOW-MULTI-001
 > Created: 2026-07-29 23:25
-> Last Updated: 2026-07-30 00:08
-> Status: Verifying 0.1 · Two-provider Replay/Oracle/Verifier Passed
+> Last Updated: 2026-07-30
+> Status: Confirmed 0.1 · Raw Contribution Analyzer/Verifier Passed
 
 ## 1. 목적
 
@@ -30,7 +30,9 @@ exit는 `0xee009f...c8c5`다. 가격 환산과 네 주소의 동일 소유자 �
 - [x] 명시 origin set와 transaction hash 중복 제거 결정성
 - [x] 중복·누락·다른 exit·price 누락 negative oracle
 - [x] 두 번 결정성·독립 Verifier contribution·total 재계산
-- [ ] 제품 analyzer·최종 fixture 승격
+- [x] 제품 analyzer·canonical hash 독립 검증
+- [x] raw contribution 범위로 최종 fixture 승격
+- [ ] 가격·피해자 귀속은 TASK-015 이후 별도 문제 자동화 Gate
 
 ## 4. Related Documents
 

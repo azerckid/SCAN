@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-FLOW-REMERGE-001",
-  "status": "verifying",
+  "status": "confirmed",
   "query_kind": "trace_remerge",
   "seed_node": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
   "merge_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",

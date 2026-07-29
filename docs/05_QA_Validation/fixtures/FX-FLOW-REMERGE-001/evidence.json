@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-FLOW-REMERGE-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-29T14:25:33Z",
   "event_evidence": [],
   "call_evidence": [
@@ -114,7 +114,7 @@
   },
   "uncertainty": {
     "candidate_only": false,
-    "remaining": "Product analyzer and final fixture promotion remain pending. Residual stays explicitly unresolved and the long continuous range is outside this selected-transaction scope."
+    "remaining": "Residual stays explicitly unresolved and the long continuous range remains outside this selected-transaction scope."
   },
   "provenance_notes": "The graph uses public transaction facts only. The official incident article is context. Common control, intent, criminal attribution, and victim labels are not scored."
 }

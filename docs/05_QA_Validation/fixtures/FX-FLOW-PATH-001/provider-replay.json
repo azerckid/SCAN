@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "fixture_id": "FX-FLOW-PATH-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-29T14:58:46.375333+00:00",
   "scope_kind": "selected_transactions_and_exact_blocks",
   "providers": [
@@ -43,10 +43,22 @@
     "raw_sha256": "725d89870d4ed3efb365ea29ca4daca8638021a1b3f11c86d619f618f564d149",
     "decoded_match_to_expected_edge": true
   },
+  "internal_edge_cross_check": {
+    "provider_id": "BLOCKSCOUT-ETHEREUM-COMPATIBILITY-API",
+    "status": "complete",
+    "retrieved_at": "2026-07-29T17:18:40Z",
+    "method": "account.txlistinternal",
+    "transaction_hash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+    "index": 1,
+    "from": "0x036cec1a199234fc02f72d29e596a09440825f1c",
+    "to": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+    "value_raw": "88752697459828535340019",
+    "is_error": false,
+    "raw_sha256": "5159d2bca1e4b7c2c2489f54ab118a5aea5826d159b4d773c54dcbef0edb6de3",
+    "decoded_match_to_primary_trace": true,
+    "v2_attempt": "timeout_20s"
+  },
   "negative_oracle_status": "pass_18_shared_cases",
   "independent_verifier_status": "pass",
-  "remaining_gate": [
-    "product_analyzer",
-    "final_promotion"
-  ]
+  "remaining_gate": []
 }

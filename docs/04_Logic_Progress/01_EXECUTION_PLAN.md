@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-30 00:08
-> Status: TASK-012·013 Complete · TASK-014 Fixture 3 Verifying · Benchmark 9/9
+> Last Updated: 2026-07-30
+> Status: TASK-012~014 Complete · FLOW Fixture 3 Confirmed · Benchmark 11/11
 
 ## 1. 목적
 
@@ -11,8 +11,9 @@
 
 ## 2. 기준선
 
-- [x] DEX·AUTH·FREEZE, EVM Core 네 query, NFT·Proxy 9문항이 automated로 실증됐다.
-- [x] assisted 0·unsupported 21의 기능 공백이 manifest에 기록됐다.
+- [x] DEX·AUTH·FREEZE, EVM Core 네 query, NFT·Proxy, FLOW 두 문항 등
+  11문항이 automated로 실증됐다.
+- [x] assisted 1·unsupported 18의 기능 공백이 manifest에 기록됐다.
 - [x] 공통 source·storage·artifact·Queue·Verifier 기반이 있다.
 - [x] Wave 1의 새 4문항용 confirmed fixture가 확보됐다.
 - [x] `evm_core` Analysis type과 Analysis I/O 0.2 변경이 승인됐다.
@@ -103,7 +104,7 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [ ] change·CoinJoin heuristic과 deterministic 사실을 분리한다.
 - [ ] `contest_rpc`/artifact 입력의 Bitcoin normalized evidence를 승인한다.
 
-### [ ] Wave 3 — NFT·Proxy 완료 · PATH 대기
+### [x] Wave 3 — NFT·Proxy·PATH 완료
 
 - [x] `TASK-013`의 ERC-721·ERC-1155·EIP-1967 fixture ID와 선정 기준을
   docs-only Draft로 고정한다.
@@ -148,7 +149,10 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] `flow_path` analyzer 3 query를 구현하고 독립 Verifier와 canonical hash를
   대조한다([검증 Receipt](../05_QA_Validation/43_TASK_014_ANALYZER_VERIFICATION_RECEIPT.md)).
 - [x] path 결과가 label/price/heuristic과 분리되는지 검증한다(`not_assessed`·별도 context).
-- [ ] 단일-trace 하드 게이트 충족 후 fixture `확정`·Benchmark 자동화 승격.
+- [x] Blockscout internal-tx 독립 교차검증으로 단일-trace 하드 게이트를
+  닫고 fixture 3개를 `확정`으로 승격한다.
+- [x] FLOW-EVM-001/002를 Benchmark automated로 승격해 11/11을 통과하고,
+  PRICE·피해자 귀속이 남은 FLOW-MULTI-001은 assisted로 유지한다.
 - [x] 기존 Workbench는 상위 read-only 화면으로 유지하고 TASK-014 전용
   Preview를 별도로 사용하기로 결정한다.
 
@@ -233,5 +237,6 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - **UI_Screens**: [TASK-014 PATH UI](../02_UI_Screens/08_TASK_014_PATH_UI.md) - query 3개·상태 3개 UI Gate
 - **QA_Validation**: [TASK-014 Fixture·Contract Gate](../05_QA_Validation/39_TASK_014_FIXTURE_CONTRACT_GATE.md) - fixture·oracle·Verifier Stop/Go
 - **QA_Validation**: [TASK-014 Fixture 후보 보고서](../05_QA_Validation/40_TASK_014_FIXTURE_CANDIDATE_REPORT.md) - 공개 3홉·재병합·multi-origin 선정 근거
+- **QA_Validation**: [TASK-014 최종 승격 Receipt](../05_QA_Validation/44_TASK_014_FINAL_PROMOTION_RECEIPT.md) - FLOW confirmed·Benchmark 11/11 최종 판정
 - **UI_Screens**: [TASK-013 NFT·Proxy UI](../02_UI_Screens/07_TASK_013_NFT_PROXY_UI.md) - 표준 3개·상태 3개 화면 계약과 Preview
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - runner·dry-run·미실행 경계
