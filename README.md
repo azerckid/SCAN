@@ -109,6 +109,9 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | Phase 2 QA | [`23_EXPECTED_PROBLEM_EXPANSION_QA.md`](docs/05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) | fixture-first promotion, negative cases, package QA, and integration gates |
 | WP-INPUT wiring | [`31_WP_INPUT_CLI_OPERATIONS_REPORT.md`](docs/05_QA_Validation/31_WP_INPUT_CLI_OPERATIONS_REPORT.md) | CLI mode selection, raw artifact envelope, Operations handoff, and secret-boundary evidence |
 | TASK-013 final promotion | [`38_TASK_013_FINAL_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/38_TASK_013_FINAL_PROMOTION_RECEIPT.md) | NFT·Proxy confirmed fixtures, remediation, and Benchmark 9/9 evidence |
+| TASK-014 PATH contract | [`15_TASK_014_PATH_CONTRACT_PROPOSAL.md`](docs/03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) | proposed bounded graph, exclusion, reconciliation, and error contract |
+| TASK-014 PATH UI | [`08_TASK_014_PATH_UI.md`](docs/02_UI_Screens/08_TASK_014_PATH_UI.md) | docs-only query/state Preview with user review pending |
+| TASK-014 PATH Gate | [`39_TASK_014_FIXTURE_CONTRACT_GATE.md`](docs/05_QA_Validation/39_TASK_014_FIXTURE_CONTRACT_GATE.md) | fixture, oracle, Verifier, and UI Stop/Go criteria |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -131,7 +134,7 @@ PASS 10 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 44 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 1364 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository traceability: 1398 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
 PASS repository security scan: 135 runtime/evidence files
 PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)

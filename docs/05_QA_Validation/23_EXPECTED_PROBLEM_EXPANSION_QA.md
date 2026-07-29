@@ -1,7 +1,7 @@
 # 예상문제 Coverage 확장 QA 계획
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-29 22:13
-> Status: TASK-012·013 Passed · TASK-014~019 Not Executed
+> Last Updated: 2026-07-29 22:52
+> Status: TASK-012·013 Passed · TASK-014 Contract Proposed · TASK-014~019 Runtime Not Executed
 
 ## 1. 목적
 
@@ -154,6 +154,7 @@ Benchmark 기준선은 automated 9·assisted 0·unsupported 21이다.
 - **Logic_Progress**: [Backlog](../04_Logic_Progress/00_BACKLOG.md) - TASK-012~019 Context Lock
 - **QA_Validation**: [Offline Benchmark](./22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 현재 coverage 기준선
 - **QA_Validation**: [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md) - confirmed fixture 3개·Benchmark 9/9 근거
+- **QA_Validation**: [TASK-014 Fixture·Contract Gate](./39_TASK_014_FIXTURE_CONTRACT_GATE.md) - PATH fixture·oracle·Verifier·UI Stop/Go
 - **QA_Validation**: [TASK-012 Fixture 후보 보고서](./24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) - 4개 candidate와 1차 source 재조회
 - **QA_Validation**: [Live Provider Capability QA](./25_LIVE_PROVIDER_CAPABILITY_QA.md) - 실제 smoke·독립성·반례
 - **QA_Validation**: [TASK-012 Negative Oracle 보고서](./27_TASK_012_NEGATIVE_ORACLE_REPORT.md) - 제품 analyzer 전 24개 fixture 반례

@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCAN TASK-014 PATH Preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page:#070a0f; --panel:#0d131c; --raised:#141d2a; --border:#2a3749;
+      --fg:#dce5ef; --muted:#8391a5; --accent:#75a9ff; --ok:#51d49a;
+      --warn:#f2c14e; --bad:#ff7180; --violet:#bb9cff;
+      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      --sans:Inter,Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;color:var(--fg);font-family:var(--sans);
+      background:radial-gradient(circle at 15% 0,rgba(54,105,180,.2),transparent 32rem),var(--page)}
+    button,code,pre{font-family:var(--mono)} button{cursor:pointer}
+    button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .page{width:min(1440px,calc(100% - 30px));margin:auto;padding:30px 0 50px}
+    header{display:flex;justify-content:space-between;align-items:end;gap:20px}
+    .eyebrow{color:var(--accent);font:700 11px var(--mono);letter-spacing:.12em}
+    h1{margin:7px 0 0;font-size:clamp(28px,4vw,44px);letter-spacing:-.04em}
+    .lede{max-width:850px;color:#aab6c6;line-height:1.65}
+    .gate,.notice,.panel{border:1px solid var(--border);background:var(--panel);border-radius:10px}
+    .gate{min-width:250px;padding:13px 15px;font:11px/1.6 var(--mono)}
+    .gate b{color:var(--warn)} .notice{margin-top:18px;padding:12px 14px;color:#eadca8;background:#211b0f;font:11px/1.6 var(--mono)}
+    .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+    .tab{padding:12px;border:1px solid var(--border);border-radius:8px;background:var(--panel);color:#aeb9c9;text-align:left}
+    .tab b{display:block;font-size:12px}.tab span{display:block;margin-top:5px;color:var(--muted);font-size:10px}
+    .tab[aria-pressed=true]{border-color:#4d79b3;background:#14253c;color:#f4f8fd}
+    .workspace{display:grid;grid-template-columns:350px minmax(0,1fr);gap:12px;margin-top:12px}
+    .panel{overflow:hidden}.head{display:flex;justify-content:space-between;padding:13px 15px;border-bottom:1px solid var(--border);font:700 10px var(--mono);letter-spacing:.08em}
+    .body{padding:15px}.copy{color:#a9b5c6;font-size:12px;line-height:1.55}
+    .fields{display:grid;gap:7px}.field{display:grid;grid-template-columns:112px 1fr;gap:8px;padding:8px 9px;border:1px solid #202b3a;border-radius:6px;background:#090e15;font:10px/1.45 var(--mono)}
+    .field span:first-child{color:var(--muted)}.states{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:13px}
+    .state{padding:8px 4px;border:1px solid var(--border);border-radius:6px;background:var(--raised);color:#aeb9c9;font-size:10px}
+    .state[data-state=complete][aria-pressed=true]{color:var(--ok);border-color:var(--ok)}
+    .state[data-state=partial][aria-pressed=true]{color:var(--warn);border-color:var(--warn)}
+    .state[data-state=failed][aria-pressed=true]{color:var(--bad);border-color:var(--bad)}
+    .terminal{background:#080d13;min-height:650px}.term{padding:18px 20px;font-family:var(--mono)}
+    .status{display:flex;gap:8px;align-items:center}.badge{padding:3px 8px;border:1px solid currentColor;border-radius:4px;font-size:10px;font-weight:800}
+    .complete{color:var(--ok)}.partial{color:var(--warn)}.failed{color:var(--bad)}
+    .section{margin-top:16px;color:#74839a;font:700 10px var(--mono);letter-spacing:.12em}
+    .edge,.ledger,.error,.next{margin-top:7px;padding:8px 10px;border:1px solid #202b3a;border-radius:6px;background:#0b1119;font:11px/1.55 var(--mono);overflow-wrap:anywhere}
+    .edge.included{border-left:3px solid var(--ok)}.edge.excluded{border-left:3px solid var(--violet)}.edge.unresolved{border-left:3px solid var(--warn)}
+    .ledger{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.cell{padding:6px;background:#111925;border-radius:4px}
+    .cell b{display:block;color:var(--muted);font-size:9px}.cell span{font-size:10px}
+    .error{border-left:3px solid var(--bad);color:#f0a1aa}.next{border-left:3px solid var(--accent);color:#d8e7fb}
+    .na{margin-top:12px;color:#e4cf9e;font:10px/1.55 var(--mono)}
+    footer{display:flex;justify-content:space-between;margin-top:16px;color:#6f7d91;font:10px var(--mono)}
+    @media(max-width:900px){header,.workspace{display:grid;grid-template-columns:1fr}.tabs{grid-template-columns:1fr}.gate{min-width:0}}
+    @media(max-width:560px){.ledger,.field{grid-template-columns:1fr}footer{display:grid;gap:5px}}
+  </style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div>
+      <div class="eyebrow">TASK-014 · BOUNDED PATH GRAPH</div>
+      <h1>PATH Evidence Preview</h1>
+      <p class="lede">단일 경로, 분기·재병합, 다중 origin 집계를 graph 모양보다 edge 증거·제외 이유·raw residual 중심으로 검토합니다.</p>
+    </div>
+    <div class="gate">UI-FIRST GATE<br><b>사용자 확인 대기</b><br>RUNTIME NOT IMPLEMENTED</div>
+  </header>
+  <div class="notice">Docs-only synthetic Preview입니다. 공개 fixture·제품 analyzer 결과가 아니며 RPC·API·DB를 호출하지 않습니다.</div>
+  <div class="tabs" role="group" aria-label="PATH query 선택">
+    <button class="tab" data-query="path" aria-pressed="true" tabindex="0"><b>trace_path</b><span>ordered N-hop · terminal</span></button>
+    <button class="tab" data-query="remerge" aria-pressed="false" tabindex="-1"><b>trace_remerge</b><span>branches · merge · residual</span></button>
+    <button class="tab" data-query="multi" aria-pressed="false" tabindex="-1"><b>aggregate_origins</b><span>contribution · dedup total</span></button>
+  </div>
+  <div class="workspace">
+    <section class="panel">
+      <div class="head"><span>REQUEST</span><span id="query-chip">trace_path</span></div>
+      <div class="body">
+        <p class="copy" id="copy"></p>
+        <div class="fields" id="fields"></div>
+        <div class="states" role="group" aria-label="결과 상태">
+          <button class="state" data-state="complete" aria-pressed="true" tabindex="0">complete</button>
+          <button class="state" data-state="partial" aria-pressed="false" tabindex="-1">partial</button>
+          <button class="state" data-state="failed" aria-pressed="false" tabindex="-1">failed</button>
+        </div>
+      </div>
+    </section>
+    <section class="panel terminal">
+      <div class="head"><span>SCAN PATH RESULT</span><span>synthetic_contract_preview</span></div>
+      <div class="term" id="result"></div>
+    </section>
+  </div>
+  <footer><span>SCAN 2026 · TASK-014 PATH Preview 0.1</span><span>NO EXTERNAL CALLS · NO MUTATION</span></footer>
+</main>
+<script>
+  const queries = {
+    path: {
+      name:"trace_path",
+      copy:"Seed A에서 terminal D까지 같은 자산의 ordered edge를 추적하고 무관 후보를 제외합니다.",
+      fields:[["seed_node","0xA…"],["asset_scope","ETH native"],["block_range","100–140"],["budgets","hops 4 · nodes 12 · edges 20"]],
+      complete:[
+        ["included","[INCLUDED] A --(12.5 ETH · tx 0x01 · block 101)--> B"],
+        ["included","[INCLUDED] B --(12.48 ETH · tx 0x02 · block 110)--> C"],
+        ["included","[INCLUDED] C --(12.46 ETH · tx 0x03 · block 121)--> D"],
+        ["excluded","[EXCLUDED] X --(12.5 ETH · unrelated_origin)--> C"]
+      ]
+    },
+    remerge: {
+      name:"trace_remerge",
+      copy:"Seed A의 두 분기를 따라 공통 merge M을 찾고 unrelated inflow를 ledger에서 분리합니다.",
+      fields:[["seed_node","0xA…"],["asset_scope","USDC 0xToken"],["block_range","200–260"],["budgets","hops 5 · nodes 24 · edges 40"]],
+      complete:[
+        ["included","[INCLUDED] A --(6000 USDC · tx 0x11)--> B1 --(5990)--> M"],
+        ["included","[INCLUDED] A --(4000 USDC · tx 0x12)--> B2 --(3992)--> M"],
+        ["excluded","[EXCLUDED] X --(500 USDC · unrelated_origin)--> M"]
+      ]
+    },
+    multi: {
+      name:"aggregate_origins",
+      copy:"둘 이상의 origin이 동일 exit로 보낸 contribution을 중복 없이 집계합니다. 가격은 별도 context입니다.",
+      fields:[["origin_nodes","0xV1…, 0xV2…, 0xV3…"],["exit_node","0xE…"],["asset_scope","ETH native"],["budgets","hops 3 · nodes 32 · edges 64"]],
+      complete:[
+        ["included","[INCLUDED] V1 --(3.0 ETH)--> H1 --(2.99)--> E"],
+        ["included","[INCLUDED] V2 --(5.0 ETH)--> H2 --(4.99)--> E"],
+        ["included","[INCLUDED] V3 --(2.0 ETH)-------------> E"],
+        ["excluded","[EXCLUDED] N --(1.0 ETH · not_in_origin_set)--> E"]
+      ]
+    }
+  };
+  let query="path", state="complete";
+  const esc = value => String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  function ledger(q,s){
+    if(s==="failed") return null;
+    if(s==="partial") return ["10.00 ETH","7.98 ETH","0.00 ETH","0.02 ETH","2.00 ETH unresolved"];
+    if(q==="path") return ["12.50 ETH","12.46 ETH","0.00 ETH","0.04 ETH","0.00 ETH"];
+    if(q==="remerge") return ["10000 USDC","9982 USDC","0 scoped · 500 external context","18 USDC","0 USDC"];
+    return ["10.00 ETH","9.98 ETH","0 scoped · 1 external context","0.02 ETH","0.00 ETH"];
+  }
+  function render(){
+    const q=queries[query], cls=state;
+    document.querySelector("#query-chip").textContent=q.name;
+    document.querySelector("#copy").textContent=q.copy;
+    document.querySelector("#fields").innerHTML=q.fields.map(([k,v])=>`<div class="field"><span>${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
+    let html=`<div class="status"><span class="badge ${cls}">${state.toUpperCase()}</span><span class="${cls}">${state==="complete"?"terminal_reached":state==="partial"?"budget_exhausted":"path_reconciliation_failed"}</span></div>`;
+    if(state==="failed"){
+      html+=`<div class="section">ERROR</div><div class="error">stage=reconciliation · data=null · source scope does not bind to requested seed/asset</div>`;
+    }else{
+      const edges=state==="partial"?q.complete.slice(0,2).concat([["unresolved","[UNRESOLVED] frontier --(max_hops reached)--> ?"]]):q.complete;
+      html+=`<div class="section">GRAPH EDGES</div>`+edges.map(([kind,text])=>`<div class="edge ${kind}">${esc(text)}</div>`).join("");
+      const values=ledger(query,state), keys=["input","included","excluded","fee/context","residual"];
+      html+=`<div class="section">RECONCILIATION LEDGER</div><div class="ledger">`+keys.map((k,i)=>`<div class="cell"><b>${k}</b><span>${esc(values[i])}</span></div>`).join("")+`</div>`;
+      if(state==="partial") html+=`<div class="next">NEXT: resume from frontier cursor after increasing an explicitly approved budget or supplying the missing artifact.</div>`;
+      else html+=`<div class="next">EVIDENCE: every included edge resolves to TX/block/source refs. Independent Verifier is required before promotion.</div>`;
+    }
+    html+=`<div class="na">NOT ASSESSED: actor identity, criminal intent, victim status, service ownership. AI may propose the method; Python evidence proves the path.</div>`;
+    document.querySelector("#result").innerHTML=html;
+  }
+  function bind(selector,key,setter){
+    const buttons=[...document.querySelectorAll(selector)];
+    buttons.forEach((button,index)=>{
+      button.addEventListener("click",()=>setter(button.dataset[key]));
+      button.addEventListener("keydown",event=>{
+        let next=null;
+        if(event.key==="ArrowRight") next=(index+1)%buttons.length;
+        if(event.key==="ArrowLeft") next=(index-1+buttons.length)%buttons.length;
+        if(event.key==="Home") next=0;
+        if(event.key==="End") next=buttons.length-1;
+        if(next!==null){event.preventDefault();buttons[next].focus();buttons[next].click();}
+      });
+    });
+  }
+  function chooseQuery(value){
+    query=value;
+    document.querySelectorAll(".tab").forEach(b=>{const on=b.dataset.query===value;b.setAttribute("aria-pressed",String(on));b.tabIndex=on?0:-1;});
+    render();
+  }
+  function chooseState(value){
+    state=value;
+    document.querySelectorAll(".state").forEach(b=>{const on=b.dataset.state===value;b.setAttribute("aria-pressed",String(on));b.tabIndex=on?0:-1;});
+    render();
+  }
+  bind(".tab","query",chooseQuery);bind(".state","state",chooseState);render();
+</script>
+</body>
+</html>

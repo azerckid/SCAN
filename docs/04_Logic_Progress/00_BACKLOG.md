@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-29 22:13
+> Last Updated: 2026-07-29 22:52
 > Status: TASK-001~013 Done · WP-INPUT Done · TASK-014~019 Proposed
 
 ## 1. 문서 목적
@@ -1119,29 +1119,35 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Depends On: TASK-012
 - Target Problems: `FLOW-EVM-001/002`, `FLOW-MULTI-001` 및 후속 범죄·복합 문제
 - Atomic Tasks:
+  - [x] proposed fixture 3개 ID와 공개 사례 선정 기준을 docs-only로 고정한다.
+  - [x] `flow_path` Analysis type 대안·bounded graph·ledger·오류 계약을 작성한다.
+  - [x] single·remerge·multi-origin × complete·partial·failed HTML Preview를 작성한다.
   - [ ] 단일 path와 분기·재병합 공개 fixture를 확정한다.
-  - [ ] bounded node/edge·hop/time·asset conservation 계약을 설계한다.
+  - [ ] `flow_path` 대안 B와 bounded node/edge·hop/time·asset conservation 계약을 승인한다.
   - [ ] cycle·unrelated fund·residual·budget partial을 구현한다.
   - [ ] path artifact와 read-only graph 출력 경계를 검증한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - FLOW 3문항
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - PATH 18개 필수 근거
 - Related UI Docs:
+  - [TASK-014 PATH UI](../02_UI_Screens/08_TASK_014_PATH_UI.md) - query·상태·edge·ledger 화면 계약
   - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - graph·timeline read-only UX
   - [CLI Screen Flow](../02_UI_Screens/00_SCREEN_FLOW.md) - partial·export 흐름
 - Related HTML Preview:
-  - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - path 검토 화면 후보
+  - [TASK-014 PATH Preview](../02_UI_Screens/previews/07_task_014_path_preview.html) - query 3개·상태 3개 사용자 검토 화면
 - Related Technical Docs:
+  - [TASK-014 PATH 계약](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) - graph·ledger·상태·오류 계약
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-PATH 계약
   - [Analysis I/O](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) - path evidence 봉투
 - Related QA Docs:
+  - [TASK-014 Fixture·Contract Gate](../05_QA_Validation/39_TASK_014_FIXTURE_CONTRACT_GATE.md) - fixture·oracle·Verifier·UI Stop/Go
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-PATH-001/002
 - Implementation Preconditions:
   - [ ] 두 종류 path fixture와 exclusion 정답을 확정한다.
   - [ ] graph artifact·메모리 budget·partial 상태를 승인한다.
   - [ ] CLI/Workbench 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
   - [ ] edge 최소 필드·artifact mutation·bounded graph 상태 관리를 승인한다.
-  - [ ] Workbench Preview의 사용자 검토 필요 여부를 결정한다.
+  - [ ] TASK-014 PATH Preview를 사용자가 검토하고 피드백을 승인한다.
   - [ ] graph DB 미도입과 사용자 구현 승인을 기록한다.
 - Component & Library Plan:
   - shadcn/ui: N/A - Python engine 우선.
