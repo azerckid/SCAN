@@ -163,7 +163,7 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] label·sanctions·ENS·common funder·actor relation의 proposed fixture ID와
   negative oracle 범주를 고정한다.
 - [x] query 5개 × complete·partial·failed HTML Preview와 UI Gate를 작성한다.
-- [ ] 사용자 Preview 검토·피드백을 기록한다.
+- [x] 사용자 Preview 검토·피드백을 기록한다(2026-07-30 02:52).
 - [ ] 공개 사례를 선정하고 source snapshot·Terms·privacy를 검증한다.
 - [ ] official과 heuristic의 상충 사례를 fixture·독립 Verifier에 포함한다.
 - [ ] AI가 만든 label 가설이 evidence 없는 confirmed fact가 되지 않게 한다.

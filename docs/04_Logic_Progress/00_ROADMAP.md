@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-30 02:37
-> Status: Approved 3.2 Baseline · TASK-014 Complete · TASK-015 Docs Gate Draft
+> Last Updated: 2026-07-30 02:52
+> Status: Approved 3.3 Baseline · TASK-014 Complete · TASK-015 Preview User Review Passed
 
 ## 1. 문서 목적
 
@@ -88,7 +88,7 @@
 | [TASK-012 Analysis Contract](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) | Approved 0.2 · 12 Cases · 14 Probes | runtime·Schema 적용, 0.1 세 type 호환 |
 | [TASK-013 NFT·Proxy Contract](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) | Approved 1.0 · Runtime Applied | fixture 3 confirmed·Benchmark 9/9 |
 | [TASK-014 PATH Contract](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md) | Approved 1.0 · Runtime Applied | fixture 3 confirmed·Benchmark 11/11 |
-| [TASK-015 Intelligence Contract](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md) | Proposed 0.1 · Docs-only | Preview 사용자 검토·fixture·Context Receipt 대기 |
+| [TASK-015 Intelligence Contract](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md) | Proposed 0.1 · Preview Approved | fixture·source Terms·Context Receipt 대기 |
 
 ### 3.4 Logic Progress
 
@@ -253,7 +253,7 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 14 | 완료 (2026-07-29) | `TASK-012` EVM Core | 자동화 7/7, 보조 2·미지원 21 |
 | 15 | 완료 (2026-07-29) | `TASK-013` NFT·Proxy | fixture 3 confirmed·remediation·자동화 9/9 |
 | 16 | 완료 (2026-07-30) | `TASK-014` PATH Graph·금액 정합 | fixture 3 confirmed·자동화 11/11·assisted 1 |
-| 17 | 문서 Gate 진행 | `TASK-015` Label·OSINT·Actor | 계약·UI·QA Draft, 사용자 Preview·fixture 대기 |
+| 17 | Fixture Gate 진행 | `TASK-015` Label·OSINT·Actor | Preview 승인, 공개 fixture·source Terms 대기 |
 | 18 | 계획 승인 대기 | `TASK-016~019` Coverage 확장 | fixture·Context Receipt·개별 code 승인 전 미착수 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.

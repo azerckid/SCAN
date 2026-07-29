@@ -121,7 +121,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-014 verifier | [`42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md`](docs/05_QA_Validation/42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md) | raw-first graph/ledger recalculation for three FLOW fixtures |
 | TASK-014 final promotion | [`44_TASK_014_FINAL_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/44_TASK_014_FINAL_PROMOTION_RECEIPT.md) | FLOW confirmed fixtures, Blockscout edge cross-check, and Benchmark 11/11 evidence |
 | TASK-015 Intelligence contract | [`17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md`](docs/03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md) | proposed source assertion, conflict, sanctions, ENS, and actor-relation contract |
-| TASK-015 Intelligence UI | [`09_TASK_015_INTELLIGENCE_UI.md`](docs/02_UI_Screens/09_TASK_015_INTELLIGENCE_UI.md) | docs-only five-query Preview with user review pending |
+| TASK-015 Intelligence UI | [`09_TASK_015_INTELLIGENCE_UI.md`](docs/02_UI_Screens/09_TASK_015_INTELLIGENCE_UI.md) | docs-only five-query Preview with user review passed |
 | TASK-015 Intelligence Gate | [`45_TASK_015_FIXTURE_CONTRACT_GATE.md`](docs/05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) | proposed fixture, negative oracle, privacy, UI, and Verifier Stop/Go criteria |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
