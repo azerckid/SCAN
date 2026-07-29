@@ -1,7 +1,7 @@
 # TASK-015 Label·OSINT·Actor Fixture·Contract Gate
 > Created: 2026-07-30 02:37
-> Last Updated: 2026-07-30 02:52
-> Status: Preview User Review Passed · Fixture 5 Proposed · Runtime Not Implemented
+> Last Updated: 2026-07-30 03:07
+> Status: Preview User Review Passed · Candidate Research 4 Viable / 1 Source-Blocked · No Fixture Packages · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -16,16 +16,22 @@ relation 반례, UI 승인, Analysis I/O 계약, 독립 Verifier 및 Benchmark
 
 | 문제 | 제안 Fixture | 현재 coverage | Gate 상태 |
 |:---|:---|:---:|:---:|
-| OSINT-LBL-001 | `FX-OSINT-LABEL-CONFLICT-001` | unsupported | proposed |
-| OSINT-SAN-001 | `FX-OSINT-SANCTIONS-HISTORY-001` | unsupported | proposed |
-| OSINT-ENS-001 | `FX-OSINT-ENS-CONFLICT-001` | unsupported | proposed |
-| ACTOR-REL-001 | `FX-ACTOR-COMMON-FUNDER-001` | unsupported | proposed |
-| ACTOR-REL-002 | `FX-ACTOR-RELATION-HUB-001` | unsupported | proposed |
+| OSINT-LBL-001 | `FX-OSINT-LABEL-CONFLICT-001` | unsupported | source-blocked |
+| OSINT-SAN-001 | `FX-OSINT-SANCTIONS-HISTORY-001` | unsupported | viable candidate |
+| OSINT-ENS-001 | `FX-OSINT-ENS-CONFLICT-001` | unsupported | viable candidate |
+| ACTOR-REL-001 | `FX-ACTOR-COMMON-FUNDER-001` | unsupported | viable candidate |
+| ACTOR-REL-002 | `FX-ACTOR-RELATION-HUB-001` | unsupported | viable candidate |
+
+`FX-OSINT-LABEL-CONFLICT-001`은 공식 OFAC timeline 후보는 있으나,
+관찰된 Etherscan label을 Terms상 fixture/AI dataset source로 재사용할 수
+없어 `source-blocked`다. open-license 제2 label source 선정 전 package
+생성을 금지한다.
 
 ## 3. Fixture Gate
 
-- [ ] 공개 주소·source·관찰 시점·bounded onchain scope 선정
-- [ ] source Terms·license·privacy·재배포 가능 범위 기록
+- [x] bounded 후보 주소·source·관찰 시점 조사 — 4 viable, 1 source-blocked
+- [x] 후보 source Terms·license·privacy·재배포 가능 범위 조사
+- [ ] 다섯 fixture의 최종 공개 주소·bounded onchain scope 선정
 - [ ] source snapshot hash·locator·retrieved_at 고정
 - [ ] 주소 직접 명시와 주소 비명시 claim 분리
 - [ ] official/first-party/provider/public-report/heuristic role 분리
@@ -91,8 +97,8 @@ relation 반례, UI 승인, Analysis I/O 계약, 독립 Verifier 및 Benchmark
 - [x] 주소 비명시·충돌·해제·정정 기록을 숨기지 않음
 - [x] 개인정보 최소 수집과 원문 전체 복제 금지
 - [x] credential·session·검색 계정 token 저장 금지
-- [ ] 실제 fixture source license·Terms 확인
-- [ ] 제3자 OSS·dataset 고정 commit·license 기록
+- [x] 후보 source license·Terms 조사와 금지 source 제외
+- [ ] 채택 source snapshot·제3자 OSS 고정 commit·license 기록
 
 ## 8. 365 글로벌 평가 기준
 
@@ -107,18 +113,20 @@ relation 반례, UI 승인, Analysis I/O 계약, 독립 Verifier 및 Benchmark
 
 ## 9. Stop/Go
 
-현재 판정은 **GO for bounded public-source research and candidate discovery,
-STOP for fixture package promotion and implementation**이다.
+현재 판정은 **GO for raw snapshot planning on four viable candidates,
+STOP for the source-blocked label candidate, fixture package promotion and
+implementation**이다.
 
 Fixture 선정 전:
 
 1. ~~사용자 Preview 확인·피드백~~ → 2026-07-30 02:52 완료
 2. source role·claim·conflict 계약 승인
-3. 공식 Rules와 source별 Terms·privacy 범위 확인
+3. source별 Terms·privacy 범위 조사 → 2026-07-30 후보 단계 완료.
+   공식 대회 Rules와 채택 snapshot별 재배포 범위는 계속 미확정
 
 Context Receipt `PASS` 전:
 
-4. proposed fixture 5개 공개 사례 선정
+4. viable 후보 4개 raw scope 확정 + label conflict의 open-license 제2 source 선정
 5. snapshot/replay·negative oracle·독립 Verifier
 6. Analysis I/O `intel_context` 대안 B 정식 승인
 7. 문제별 complete/partial/failed와 UI 재검토
@@ -138,3 +146,4 @@ Context Receipt `PASS` 전:
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - Label·Sanctions·ENS·OSINT source 상태
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) - Context Lock·Acceptance Criteria
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001 상위 Gate
+- **QA_Validation**: [TASK-015 공개 Source·Fixture 후보 조사](./46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) - 4 viable·1 source-blocked 판정
