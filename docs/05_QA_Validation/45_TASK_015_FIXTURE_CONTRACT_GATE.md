@@ -47,22 +47,23 @@ config·onchain ENS의 `team4 vesting` 역할을 보존하는 새 subject로 교
 - [ ] requirement→evidence→source 참조 무결성
 - [x] negative oracle 30개 두 번 결정성 실행
 - [ ] 독립 Verifier 재계산
-- [ ] fixture Schema 통과
+- [x] fixture package Schema 0.1 통과 — 전체 18 package
+- [ ] 제품 `intel_context` Analysis I/O Schema — 계약·구현 미승인
 
 ## 4. Negative Oracle
 
-| Oracle 범주 | 입력 변형 | 기대 결과 |
-|:---|:---|:---|
-| address omitted | 보고서에 사건명만 있고 주소 없음 | direct claim 거부·context 보존 |
-| copied misinformation | 여러 재게시물이 동일 오주소 복제 | 독립 source 수로 과대 계산 금지 |
-| stale/withdrawn | 과거 지정 뒤 해제·정정 | 현재 상태로 자동 승격 금지 |
-| indirect service | 1홉 상대가 CEX hot wallet | sanctioned/owner 관계 단정 금지 |
-| ENS reverse mismatch | reverse와 forward 불일치 | conflict·unresolved |
-| impersonation | SNS 이름만 같고 주소 서명 없음 | rejected 또는 unresolved |
-| common funder service | paymaster/faucet가 여러 주소 funding | same owner 단정 금지 |
-| public hub | router/common contract 공유 | actor relation score 제한 |
-| source hash drift | snapshot hash 불일치 | failed·source reconciliation |
-| budget/source partial | 일부 source만 허용·조회 | 확인 claim 보존 partial |
+| Oracle 범주 | 입력 변형 | 기대 결과 | 상태 |
+|:---|:---|:---|:---:|
+| address omitted | 보고서에 사건명만 있고 주소 없음 | direct claim 거부·context 보존 | deferred / Verifier 전 |
+| copied misinformation | 여러 재게시물이 동일 오주소 복제 | 독립 source 수로 과대 계산 금지 | deferred / Verifier 전 |
+| stale/withdrawn | 과거 지정 뒤 해제·정정 | 현재 상태로 자동 승격 금지 | pass / oracle |
+| indirect service | 1홉 상대가 CEX hot wallet | sanctioned/owner 관계 단정 금지 | pass / oracle |
+| ENS reverse mismatch | reverse와 forward 불일치 | conflict·unresolved | pass / oracle |
+| impersonation | SNS 이름만 같고 주소 서명 없음 | rejected 또는 unresolved | deferred / Verifier 전 |
+| common funder service | paymaster/faucet가 여러 주소 funding | same owner 단정 금지 | pass / oracle |
+| public hub | router/common contract 공유 | actor relation score 제한 | pass / oracle |
+| source hash drift | snapshot hash 불일치 | failed·source reconciliation | pass / oracle |
+| budget/source partial | 일부 source만 허용·조회 | 확인 claim 보존 partial | pass / oracle |
 
 ## 5. 계약 QA
 

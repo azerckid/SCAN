@@ -1307,11 +1307,12 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     - 위 Related Concept·Technical·QA 문서 전체
   - Constraints: privacy 최소 수집, Terms·Rules Gate, source assertion과
     ownership/crime truth 분리, AI hypothesis 비승격
-  - Conflicts: 공식 대회 Rules 미확정, ENS 제2 provider replay·negative
-    독립 Verifier 미실행. label source blocker·snapshot 기준선·다섯
+  - Conflicts: 공식 대회 Rules 미확정, ENS 제2 provider replay·독립
+    Verifier 미실행. label source blocker·snapshot 기준선·다섯
     candidate package·negative oracle 30개 작성은 해소
 - Change Receipt:
-  - N/A - docs-only Gate, 구현 미시작
+  - Offline oracle Gate만 구현했다. 제품 `intel_context` analyzer·live
+    source adapter·fixture 승격은 미착수다.
 - Verification Receipt:
   - Docs-only Gate: 468 tests PASS, fixture 13, schema 48 probes,
     traceability 1543 links, security 162 files.
