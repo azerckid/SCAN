@@ -1,7 +1,7 @@
 # TASK-015 Label·OSINT·Actor Intelligence 계약 제안
 > Created: 2026-07-30 02:37
-> Last Updated: 2026-07-30 03:47
-> Status: Proposed 0.1 · Candidate Packages 5 · Runtime Not Implemented
+> Last Updated: 2026-07-30 05:20
+> Status: Superseded by I/O Contract Draft · Verifying 4 / Candidate 1 · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -39,7 +39,9 @@ assertion 계약으로 정규화한다.
 ### 3.1 Analysis type
 
 Analysis I/O `0.2`에 `analysis_type: "intel_context"`를 추가하는 대안 B를
-제안한다. 이 문서는 제안만 하며 enum·Pydantic·JSON Schema를 변경하지 않는다.
+제안한다. 구체 필드·오류·상태 계약은
+[I/O 확정안](./18_TASK_015_INTEL_CONTEXT_IO_CONTRACT.md)이 대체한다.
+아직 enum·Pydantic·JSON Schema를 변경하지 않는다.
 
 | query_kind | 대상 | 출력 |
 |:---|:---|:---|
@@ -285,6 +287,7 @@ Python worker는 다음을 수행한다.
 - **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 외부 API·AI·개인정보 Gate
 - **UI_Screens**: [TASK-015 Intelligence UI](../02_UI_Screens/09_TASK_015_INTELLIGENCE_UI.md) - claim·conflict·relation 화면
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - Label·Sanctions·ENS·OSINT source 상태
+- **Technical_Specs**: [TASK-015 intel_context I/O 확정안](./18_TASK_015_INTEL_CONTEXT_IO_CONTRACT.md) - request/result/error 검토안
 - **Technical_Specs**: [Coverage 확장 Brief](./09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-INTEL 상위 계약
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) - Context Lock·구현 승인
 - **QA_Validation**: [TASK-015 Fixture·Contract Gate](../05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) - Stop/Go 기준
