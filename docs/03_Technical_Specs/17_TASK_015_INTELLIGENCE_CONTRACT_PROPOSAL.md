@@ -218,11 +218,11 @@ Analysis I/O `0.2`에 `analysis_type: "intel_context"`를 추가하는 대안 B�
 
 | Fixture ID | 문제 | 필수 사실 | 상태 |
 |:---|:---|:---|:---:|
-| `FX-OSINT-LABEL-CONFLICT-001` | OSINT-LBL-001 | 동일 주소에 대한 source assertion·role conflict | candidate |
-| `FX-OSINT-SANCTIONS-HISTORY-001` | OSINT-SAN-001 | 직접 match·고시/해제 시점·현재 상태 분리 | candidate |
-| `FX-OSINT-ENS-CONFLICT-001` | OSINT-ENS-001 | 고정 block forward/reverse·소유권 분리 | candidate |
+| `FX-OSINT-LABEL-CONFLICT-001` | OSINT-LBL-001 | 동일 주소에 대한 source assertion·role conflict | verifying |
+| `FX-OSINT-SANCTIONS-HISTORY-001` | OSINT-SAN-001 | 직접 match·고시/해제 시점·현재 상태 분리 | verifying |
+| `FX-OSINT-ENS-CONFLICT-001` | OSINT-ENS-001 | 고정 block forward/reverse·소유권 분리 | verifying |
 | `FX-ACTOR-COMMON-FUNDER-001` | ACTOR-REL-001 | direct funding·initial-inflow·service exclusion | candidate |
-| `FX-ACTOR-RELATION-HUB-001` | ACTOR-REL-002 | 근거 component·공용 hub false-positive | candidate |
+| `FX-ACTOR-RELATION-HUB-001` | ACTOR-REL-002 | 근거 component·공용 hub false-positive | verifying |
 
 공개 사례·주소·source locator를 선정해 다섯 Schema 0.1 package를
 `candidate`로 작성했다. 이는 정식 계약 승인이나 `verifying` 승격이 아니다.

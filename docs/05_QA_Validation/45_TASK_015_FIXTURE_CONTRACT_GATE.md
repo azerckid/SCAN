@@ -1,7 +1,7 @@
 # TASK-015 Label·OSINT·Actor Fixture·Contract Gate
 > Created: 2026-07-30 02:37
 > Last Updated: 2026-07-30 04:00
-> Status: Preview / Oracle Passed · Candidate Packages 5 · Verifier Pending · Runtime Not Implemented
+> Status: Preview / Oracle Passed · Verifying 4 / Candidate 1 · Verifier Passed 4 · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -16,11 +16,11 @@ relation 반례, UI 승인, Analysis I/O 계약, 독립 Verifier 및 Benchmark
 
 | 문제 | 제안 Fixture | 현재 coverage | Gate 상태 |
 |:---|:---|:---:|:---:|
-| OSINT-LBL-001 | `FX-OSINT-LABEL-CONFLICT-001` | unsupported | candidate package |
-| OSINT-SAN-001 | `FX-OSINT-SANCTIONS-HISTORY-001` | unsupported | candidate package |
-| OSINT-ENS-001 | `FX-OSINT-ENS-CONFLICT-001` | unsupported | candidate package |
+| OSINT-LBL-001 | `FX-OSINT-LABEL-CONFLICT-001` | unsupported | verifying package |
+| OSINT-SAN-001 | `FX-OSINT-SANCTIONS-HISTORY-001` | unsupported | verifying package |
+| OSINT-ENS-001 | `FX-OSINT-ENS-CONFLICT-001` | unsupported | verifying package |
 | ACTOR-REL-001 | `FX-ACTOR-COMMON-FUNDER-001` | unsupported | candidate package |
-| ACTOR-REL-002 | `FX-ACTOR-RELATION-HUB-001` | unsupported | candidate package |
+| ACTOR-REL-002 | `FX-ACTOR-RELATION-HUB-001` | unsupported | verifying package |
 
 `FX-OSINT-LABEL-CONFLICT-001`은 Etherscan을 사용하지 않는다. OpenRAIL
 research/testing sample의 `Mixer;Sanctioned` assertion과 MIT Tornado
@@ -44,11 +44,11 @@ config·onchain ENS의 `team4 vesting` 역할을 보존하는 새 subject로 교
 - [x] common funder와 공용 service false positive 반례
 - [ ] actor relation subject 분리·hub exclusion 반례는 통과, component score는
   Verifier 전 보강
-- [ ] requirement→evidence→source 참조 무결성
+- [x] ready fixture 4개의 requirement→evidence 참조 무결성
 - [x] negative oracle 30개 두 번 결정성 실행
 - [x] ENS fixed-block Alchemy·Blockscout decoded 교차검증
 - [x] OFAC current SLS URL·조회시각·raw SHA-256·주소 부재 context 고정
-- [ ] 독립 Verifier 재계산
+- [x] ready fixture 4개의 독립 Verifier 재계산·두 번 결정성
 - [x] fixture package Schema 0.1 통과 — 전체 18 package
 - [ ] 제품 `intel_context` Analysis I/O Schema — 계약·구현 미승인
 
@@ -160,3 +160,4 @@ Context Receipt `PASS` 전:
 - **QA_Validation**: [Candidate Fixture Package 보고서](./48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md) - 5 package·artifact hash·잔여 Gate
 - **QA_Validation**: [TASK-015 Negative Oracle 보고서](./49_TASK_015_NEGATIVE_ORACLE_REPORT.md) - 30개 반례·두 번 결정성
 - **QA_Validation**: [TASK-015 Source Readiness 보고서](./50_TASK_015_SOURCE_READINESS_REPORT.md) - ENS replay·OFAC SLS·Actor 잔여
+- **QA_Validation**: [TASK-015 Independent Verifier 보고서](./51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md) - 4 verifying·common-funder candidate

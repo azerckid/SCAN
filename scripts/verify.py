@@ -78,6 +78,10 @@ COMMANDS = (
         sys.executable,
         "scripts/verify_task_015_negative_oracles.py",
     ),
+    (
+        sys.executable,
+        "scripts/verify_task_015_fixtures.py",
+    ),
 )
 
 

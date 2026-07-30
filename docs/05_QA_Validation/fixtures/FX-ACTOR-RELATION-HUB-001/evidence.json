@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-ACTOR-RELATION-HUB-001",
-  "status": "candidate",
+  "status": "verifying",
   "captured_at": "2026-07-29T18:27:00Z",
   "event_evidence": [],
   "call_evidence": [],
@@ -56,11 +56,16 @@
     "hub_address_match": true,
     "public_hub_excluded": true,
     "negative_oracle_pass": true,
-    "independent_verifier_pass": false
+    "independent_verifier_pass": true
+  },
+  "verification_provenance": {
+    "negative_oracle_report": "../../49_TASK_015_NEGATIVE_ORACLE_REPORT.md",
+    "independent_verifier_report": "../../51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md",
+    "calculated_fact_sha256": "135391fba32ff966bb6dd038c781f7daa121bea161b74f353465e069ceefe51f"
   },
   "uncertainty": {
-    "candidate_only": true,
-    "remaining": "Run an independent Verifier before verifying."
+    "candidate_only": false,
+    "remaining": "Product analyzer and final promotion remain pending."
   },
   "provenance_notes": "The fixture is a false-positive control. Sharing USDC interaction does not imply ownership or coordination."
 }

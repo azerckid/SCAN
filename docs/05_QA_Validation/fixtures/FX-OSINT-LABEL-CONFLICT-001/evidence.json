@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
-  "status": "candidate",
+  "status": "verifying",
   "captured_at": "2026-07-29T18:37:00Z",
   "event_evidence": [],
   "call_evidence": [
@@ -80,11 +80,16 @@
     "ens_fixed_block_repeated": true,
     "second_ens_provider_match": true,
     "negative_oracle_pass": true,
-    "independent_verifier_pass": false
+    "independent_verifier_pass": true
+  },
+  "verification_provenance": {
+    "negative_oracle_report": "../../49_TASK_015_NEGATIVE_ORACLE_REPORT.md",
+    "independent_verifier_report": "../../51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md",
+    "calculated_fact_sha256": "cd81fff476c9c1a66cde29501cb618313f8f3dcc2e91280f8cda13792803d116"
   },
   "uncertainty": {
-    "candidate_only": true,
-    "remaining": "An independent Verifier is required before verifying."
+    "candidate_only": false,
+    "remaining": "Product analyzer and final promotion remain pending."
   },
   "provenance_notes": "Etherscan content is not used. The OpenRAIL sample is limited to research/testing use; all assertions remain source-scoped."
 }

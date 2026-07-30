@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-30 03:47
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 Candidate Packages 5 · TASK-016~019 Proposed
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 Verifying 4 / Candidate 1 · TASK-016~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1275,6 +1275,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [TASK-015 Candidate Fixture Package 보고서](../05_QA_Validation/48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md) - 5 package·Schema·artifact hash
   - [TASK-015 Negative Oracle 보고서](../05_QA_Validation/49_TASK_015_NEGATIVE_ORACLE_REPORT.md) - 30개 offline 반례·결정성
   - [TASK-015 Source Readiness 보고서](../05_QA_Validation/50_TASK_015_SOURCE_READINESS_REPORT.md) - ENS 두 공급자·OFAC SLS·Actor 잔여
+  - [TASK-015 Independent Verifier 보고서](../05_QA_Validation/51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md) - 4 verifying·common-funder candidate
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001
 - Implementation Preconditions:
   - [ ] 공식 대회 Rules와 채택 source snapshot의 Terms·privacy·최소 필드를 확정한다
@@ -1286,7 +1287,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] Intelligence Preview와 Workbench source 표시를 사용자 확인하고
     피드백을 기록한다(2026-07-30 02:52).
   - [ ] `intel_context` Analysis I/O 대안과 source artifact 입력을 승인한다.
-  - [ ] 공개 source snapshot·negative oracle·독립 Verifier를 통과한다.
+  - [ ] 공개 source snapshot·negative oracle·독립 Verifier를 통과한다
+    (4개 verifying 통과, common-funder prehistory/service exclusion 대기).
   - [ ] live mode와 사용자 구현 승인을 별도로 기록한다.
 - Component & Library Plan:
   - shadcn/ui: N/A - Python source/intelligence core 우선.
@@ -1340,6 +1342,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Source Readiness Gate: ENS 두 fixture는 Alchemy·Blockscout fixed-block
     decoded 값이 일치하고, OFAC current SLS snapshot metadata를 고정했다.
     Actor prehistory·service exclusion과 독립 Verifier는 계속 미완료다.
+  - Independent Verifier Gate: LABEL·SANCTIONS·ENS·RELATION-HUB 4개,
+    8 requirements를 raw/source-first로 두 번 결정적으로 검증해
+    `verifying`으로 승격했다. common-funder는 `candidate`, Benchmark는 11이다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 

@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
-  "status": "candidate",
+  "status": "verifying",
   "captured_at": "2026-07-29T18:27:00Z",
   "event_evidence": [],
   "call_evidence": [],
@@ -61,11 +61,16 @@
     "timeline_ordered": true,
     "sls_version_pinned": true,
     "negative_oracle_pass": true,
-    "independent_verifier_pass": false
+    "independent_verifier_pass": true
+  },
+  "verification_provenance": {
+    "negative_oracle_report": "../../49_TASK_015_NEGATIVE_ORACLE_REPORT.md",
+    "independent_verifier_report": "../../51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md",
+    "calculated_fact_sha256": "cc7b10781b557de2facd31d86040e08c3d1fa678f16ce52c807ae4e2389999e3"
   },
   "uncertainty": {
-    "candidate_only": true,
-    "remaining": "Run an independent Verifier."
+    "candidate_only": false,
+    "remaining": "Product analyzer and final promotion remain pending."
   },
   "provenance_notes": "The two official pages establish a historical timeline only. Current status and criminality are not assessed."
 }
