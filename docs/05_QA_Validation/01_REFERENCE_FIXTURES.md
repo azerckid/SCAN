@@ -1,7 +1,7 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 03:37
-> Status: Approved 1.8 · 13 Confirmed · TASK-015 Candidate Packages 5
+> Last Updated: 2026-07-30 14:19
+> Status: Approved 1.8 · 13 Confirmed · TASK-015 Verifying 4 / Candidate 1
 
 ## 1. 문서 목적
 
@@ -17,9 +17,11 @@ TASK-014 세 공개 PATH 사례는 Euler 공개 사건의 서로 다른 request 
 oracle 18개·독립 Verifier·제품 analyzer를 통과했다. PATH internal seed
 edge는 Blockscout API로 독립 교차검증해 세 fixture를 `확정`으로 관리한다.
 
-TASK-015 다섯 package는 source blocker 교체와 selected artifact/hash,
-negative oracle 30개·두 번 결정성까지 완료한 `후보`다. 독립 Verifier·
-계약·Context Receipt 전에는 `verifying` 또는 자동화 coverage로 승격하지 않는다.
+TASK-015 네 package는 source blocker 교체와 selected artifact/hash,
+negative oracle 30개·두 번 결정성, 독립 Verifier와 제품 analyzer hash
+대조를 통과한 `검증 중`이다. common-funder는 completeness 미증명으로
+`후보`·`partial`을 유지한다. source permission과 fixture별 Promotion
+Hard Gate를 닫기 전에는 `확정` 또는 자동화 coverage로 승격하지 않는다.
 
 입력 문서:
 

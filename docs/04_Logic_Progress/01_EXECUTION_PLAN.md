@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-30 03:47
-> Status: TASK-012~014 Complete · TASK-015 Verifying 4 / Candidate 1 · Benchmark 11/11
+> Last Updated: 2026-07-30 14:19
+> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · Verifying 4 / Candidate 1 · Benchmark 11/11
 
 ## 1. 목적
 
@@ -175,9 +175,15 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   current SLS snapshot metadata를 고정한다.
 - [x] LABEL·SANCTIONS·ENS·RELATION-HUB 4개를 독립 Verifier로 재계산하고
   `verifying`으로 승격한다.
+- [x] `intel_context` 계약·Context Receipt·구현 승인을 기록하고 5 query
+  analyzer와 독립 hash 대조를 통과한다.
+- [x] AI가 만든 label 가설이 evidence 없는 confirmed fact가 되지 않게 한다.
+- [x] source permission·live 필요성·fixture별 Promotion Hard Gate를
+  docs-only Readiness로 분리한다.
 - [ ] common-funder bounded prehistory·service exclusion을 닫는다.
-- [ ] AI가 만든 label 가설이 evidence 없는 confirmed fact가 되지 않게 한다.
-- [ ] Context Receipt PASS와 별도 구현 승인을 기록한다.
+- [ ] label exact OpenRAIL license text·notice·재배포 의무를 pin한다.
+- [ ] 네 verifying fixture를 별도 Promotion Receipt로 판정하고, 실제 confirmed
+  문제만 Benchmark에 반영한다.
 
 ### [ ] Wave 5 — 서비스·Cross-chain
 

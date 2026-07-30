@@ -1,6 +1,6 @@
 # Fixture: FX-ACTOR-RELATION-HUB-001
 > Created: 2026-07-30 03:37
-> Last Updated: 2026-07-30 04:00
+> Last Updated: 2026-07-30 14:19
 > Status: Verifying 0.1 · Negative Oracle / Independent Verifier Passed
 
 ## 1. 목적
@@ -19,10 +19,13 @@
 - [x] public-hub·subject-swap negative oracle — 6개·2회 결정성
 - [x] 독립 Verifier·두 번 결정성
 - [x] `verifying` 승격
-- [ ] 제품 analyzer·최종 승격
+- [x] 제품 analyzer·독립 canonical hash 대조
+- [ ] ownership/coordination `not_assessed` 회귀 재확인
+- [ ] 최종 승격
 
 ## 4. Related Documents
 
 - [DEX source fixture](../FX-SVC-DEX-001/README.md)
 - [AUTH source fixture](../FX-EVM-AUTH-001/README.md)
 - [Source-resolution report](../../47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md)
+- [Promotion Readiness](../../54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md)

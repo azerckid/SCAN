@@ -1,0 +1,134 @@
+# TASK-015 Live Source·Terms·Fixture 승격 Readiness
+> Created: 2026-07-30 14:19
+> Last Updated: 2026-07-30 14:19
+> Status: Draft · Terms Decision Prepared · Live Not Executed · Promotion Not Approved
+
+## 1. 목적과 현재 판정
+
+이 문서는 `intel_context` analyzer 구현 이후 남은 source 사용 조건과 fixture
+승격 조건을 분리해 고정한다. 문서 작성 시점에 live source를 호출하거나
+fixture를 `확정`으로 승격하지 않는다.
+
+**현재 판정:**
+
+- 네 `verifying` fixture는 analyzer·negative oracle·독립 Verifier를 통과했다.
+- `FX-ACTOR-RELATION-HUB-001`은 저장된 confirmed fixture만으로 재현되므로
+  live source 없이 최종 승격 검토가 가능하다.
+- ENS 관련 fixture는 고정 block artifact로 재현할 수 있다. 새 live RPC 호출은
+  승격의 필수 조건이 아니며, 실행할 때만 `RULE-API-001`과 provider Terms를
+  다시 확인한다.
+- OFAC fixture는 공식 action locator·whole-file hash·bounded match를 유지한다.
+  현재 SLS 전체 CSV는 repository에 재배포하지 않는다.
+- label fixture의 선택 CSV 행은 공개 dataset card가 OpenRAIL·연구/테스트
+  용도를 명시하지만, 정확한 license text와 재배포 의무가 package에 고정되지
+  않았다. **license text를 pin하기 전 최종 승격은 보류한다.**
+- common-funder는 bounded prehistory와 service exclusion이 없으므로
+  `candidate`·`partial`만 허용한다.
+
+## 2. Source permission과 사실 정확성의 분리
+
+| Gate | 질문 | 현재 증거 | 실패 시 처리 |
+|:---|:---|:---|:---|
+| Source permission | 이 원문·선택 행·파생 fact를 저장·재배포·대회 중 사용할 수 있는가 | license/Terms URL, pin, 조회 시각 | source 제외 또는 locator/hash-only |
+| Retrieval permission | live API/RPC 호출이 공식 Rules와 provider 조건에 허용되는가 | `RULE-API-001`, provider terms, operator opt-in | `rules_gated`·stored artifact 사용 |
+| Artifact integrity | 선택 artifact가 content-addressed이며 변조되지 않았는가 | SHA-256·byte length·독립 재계산 | `decode_failed` / 승격 금지 |
+| Fact correctness | analyzer와 독립 Verifier가 같은 raw-first fact를 계산하는가 | canonical hash·2회 결정성 | `reconciliation_failed` / 승격 금지 |
+| Claim boundary | source assertion을 소유·범죄·공모 사실로 과장하지 않는가 | `not_assessed`, `auto_merge:false` | `evidence_incomplete` / 승격 금지 |
+
+Source permission을 통과했다고 fact가 정확해지는 것은 아니며, fact가 정확해도
+재배포 권한이 자동으로 생기지 않는다.
+
+## 3. Source별 Terms·사용 경계
+
+2026-07-30 기준 공식·first-party 페이지를 재확인했다. 이는 법률 자문이
+아니며, 대회 Rules 또는 원문 Terms가 바뀌면 다시 검토한다.
+
+| Source | 공식 근거 | 확인 사실 | SCAN 결정 |
+|:---|:---|:---|:---|
+| Codatta 10K sample | [Dataset card](https://huggingface.co/datasets/Humanbased-AI/Crypto-Address-Annotation-10K) | license 표시는 `openrail`; 공개 sample은 research·testing 용도, full commercial use는 별도 문의로 안내 | 현재 선택 행은 research/testing fixture에만 사용. exact license text·notice·재배포 의무 pin 전 `확정` 금지 |
+| Tornado community config | [torn-token repository](https://github.com/tornadocash-community/torn-token) | repository와 README가 MIT를 표시 | pinned commit·config hash·MIT notice를 provenance로 보존. label은 source assertion이며 범죄 사실이 아님 |
+| OFAC action·SLS | [Sanctions List Service](https://ofac.treasury.gov/sanctions-list-service) · [2022 action](https://ofac.treasury.gov/recent-actions/20220808) · [2025 removal](https://ofac.treasury.gov/recent-actions/20250321) | SLS는 최신 sanctions data의 다운로드와 archive를 제공 | action URL·hash·bounded address match를 scoring/context로 사용. 현재 full SLS CSV는 locator/hash/metadata-only, repository 재배포 안 함 |
+| ENS Protocol | [Reverse resolution](https://docs.ens.domains/web/reverse/) · [ENS Terms](https://ens.domains/legal/terms-of-use) · [ensjs MIT](https://github.com/ensdomains/ensjs) | Interface IP와 공개 Ethereum Protocol을 구분하며 ensjs는 MIT | 웹 Interface 내용을 복제하지 않음. 고정 block onchain raw와 content-addressed artifact만 scoring에 사용 |
+| Blockscout | [API documentation](https://docs.blockscout.com/devs/apis) | API·RPC 경로와 별도 PRO key 체계를 제공 | 자동 fallback 금지. stored fixed-block artifact는 재현 근거, 새 호출은 Rules·명시 endpoint·read-only Gate 필요 |
+| confirmed local fixture | DEX·AUTH·FLOW package | 이미 pin된 raw/expected hash와 승격 Receipt | relation-hub/common-funder의 입력 provenance로 재사용. 새 소유·공모 사실을 만들지 않음 |
+
+## 4. Fixture별 승격 준비도
+
+| Fixture | 현재 | 허용 승격 입력 | 닫힌 Gate | 남은 Hard Gate | 판정 |
+|:---|:---:|:---|:---|:---|:---|
+| `FX-OSINT-LABEL-CONFLICT-001` | verifying | `provided_artifact` | 30 oracle 일부·Verifier·analyzer·artifact hash | OpenRAIL exact license text·notice·selected-row 재배포 조건 pin | HOLD |
+| `FX-OSINT-SANCTIONS-HISTORY-001` | verifying | `provided_artifact`; Rules 허용 시 official locator 재확인 | action timeline·SLS context·Verifier·analyzer | full CSV 미재배포 확인, `retrieved_at`/as-of 의미 최종 고정 | READY AFTER DOC CHECK |
+| `FX-OSINT-ENS-CONFLICT-001` | verifying | `provided_artifact`; live는 optional | fixed-block 두 source decoded match·Verifier·analyzer | fixed block fact와 현재 소유권을 동일시하지 않는 승격 문구 확인 | READY AFTER DOC CHECK |
+| `FX-ACTOR-RELATION-HUB-001` | verifying | confirmed local fixture | DEX/AUTH hash·hub exclusion·Verifier·analyzer | regression 재실행, ownership/coordination `not_assessed` 확인 | READY FOR PROMOTION REVIEW |
+| `FX-ACTOR-COMMON-FUNDER-001` | candidate | confirmed FLOW + 후속 bounded evidence | oracle·partial analyzer | bounded prehistory·initial inflow completeness·faucet/paymaster/service exclusion·Verifier | BLOCKED |
+
+`READY`는 `confirmed`가 아니다. 별도 Promotion Receipt에서 fixture JSON·문서·
+Benchmark를 한 번에 동기화해야 한다.
+
+## 5. Live source 실행 Gate
+
+새 live 호출은 fixture 승격의 자동 선행 조건이 아니다. 필요할 때만 아래를
+모두 만족해야 한다.
+
+- [ ] 공식 대회 Rules에서 해당 API/RPC·외부 전송 mode가 `allowed`다.
+- [ ] provider/source Terms와 개인정보 최소 수집 범위를 다시 확인한다.
+- [ ] 노출 이력이 있는 credential은 회전하고 local environment에만 둔다.
+- [ ] `--execute`와 역할별 HTTPS endpoint를 명시한다.
+- [ ] read-only method allowlist 밖의 send/sign/mutation 호출은 0건이다.
+- [ ] endpoint·credential·응답 원문 secret은 fixture·SQLite·로그에 저장하지 않는다.
+- [ ] 실패·429·timeout은 성공으로 추론하지 않고 structured attempt로 보존한다.
+
+Rules가 `unclear` 또는 `restricted`면 `provided_artifact`·confirmed local
+fixture만 사용하고 live adapter 호출은 0건이어야 한다. Explorer는 자동
+대안이 아니다.
+
+## 6. Promotion 실행 순서
+
+1. label exact OpenRAIL license text와 notice/redistribution 조건을 pin한다.
+2. sanctions·ENS·relation-hub의 남은 문서 체크를 닫는다.
+3. 네 verifying fixture에서 analyzer·Verifier·negative oracle을 두 번 재실행한다.
+4. expected/evidence/provider replay의 canonical hash가 불변인지 확인한다.
+5. 각 fixture를 별도 판단해 `confirmed`로 승격하고 Promotion Receipt를 쓴다.
+6. Benchmark는 실제 `confirmed` fixture가 대표하는 문제만 승격한다.
+7. common-funder는 위 네 fixture와 분리해 bounded evidence 이후 다시 검토한다.
+
+## 7. 실패·중단 조건
+
+| 조건 | 결과 |
+|:---|:---|
+| exact license text 또는 재배포 의무 불명 | label fixture `verifying` 유지 |
+| Rules/API mode 불명 | live 0건, stored artifact 경로만 사용 |
+| current snapshot을 historical action으로 대체 | `reconciliation_failed` |
+| fixed-block ENS를 현재 ownership으로 승격 | `evidence_incomplete` |
+| public hub/common funder로 동일 소유·공모 확정 | `evidence_incomplete` |
+| artifact hash·analyzer hash·Verifier hash 불일치 | 승격 금지 |
+| common-funder completeness 미증명 | `partial`·candidate 유지 |
+
+## 8. Verification Receipt
+
+- `scripts/verify.py`: **535 tests PASS**
+- Reference Fixture Schema: **18 packages PASS**
+- Analysis I/O Schema: **52 probes PASS**
+- Repository traceability: **1,676 links PASS**
+- Security scan: **204 runtime/evidence files PASS**
+- TASK-015: negative oracle **30×2**, 독립 Verifier **4×2**, analyzer 독립
+  verification **4 fixtures**, common-funder `partial` PASS
+- 이 문서 작성 중 live source 호출·fixture 상태 변경·Benchmark 승격은 0건이다.
+
+## 9. 365 글로벌 평가 기준
+
+| 기준 | 적용 |
+|:---|:---|
+| Functionality | live가 없어도 고정 artifact로 결정적 재현이 가능한지 분리 검증 |
+| Potential Impact | 잘못된 label·제재·소유 귀속이 답으로 승격되는 위험을 차단 |
+| Novelty | source permission·fact correctness·claim boundary를 독립 Gate로 관리 |
+| UX | 상태·남은 Gate·다음 행동을 fixture별 표로 표시 |
+| Open-source | license/Terms·pinned source·notice와 파생 fact 경계를 기록 |
+| Business Plan | 대회 준비 QA 문서이므로 N/A |
+
+## 10. Related Documents
+
+- **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) · [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md)
+- **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) · [intel_context I/O 계약](../03_Technical_Specs/18_TASK_015_INTEL_CONTEXT_IO_CONTRACT.md)
+- **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) · [Coverage Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md)
+- **QA_Validation**: [Source Readiness](./50_TASK_015_SOURCE_READINESS_REPORT.md) · [Independent Verifier](./51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md) · [Provenance Hardening](./52_TASK_015_PROVENANCE_HARDENING_RECEIPT.md) · [Analyzer Verification](./53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md) · [Reference Fixtures](./01_REFERENCE_FIXTURES.md)

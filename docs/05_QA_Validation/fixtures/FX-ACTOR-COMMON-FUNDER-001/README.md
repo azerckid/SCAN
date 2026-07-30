@@ -1,7 +1,7 @@
 # Fixture: FX-ACTOR-COMMON-FUNDER-001
 > Created: 2026-07-30 03:37
-> Last Updated: 2026-07-30 04:00
-> Status: Candidate 0.1 · Negative Oracle Passed · Verifier pending
+> Last Updated: 2026-07-30 14:19
+> Status: Candidate 0.1 · Negative Oracle Passed · Analyzer Partial · Verifier Pending
 
 ## 1. 목적
 
@@ -19,6 +19,7 @@
 - [ ] 각 주소의 bounded prehistory·initial-inflow completeness
 - [ ] faucet·paymaster·service exclusion
 - [x] common-funder scope·금액·truth-promotion negative oracle — 6개·2회 결정성
+- [x] 제품 analyzer가 completeness 미증명을 `partial`로 보존
 - [ ] 독립 Verifier
 - [ ] `verifying` 승격 검토
 
@@ -26,3 +27,4 @@
 
 - [Source FLOW fixture](../FX-FLOW-REMERGE-001/README.md)
 - [Source-resolution report](../../47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md)
+- [Promotion Readiness](../../54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md)
