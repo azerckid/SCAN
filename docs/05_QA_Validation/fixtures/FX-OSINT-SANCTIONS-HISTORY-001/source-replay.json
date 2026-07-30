@@ -1,0 +1,26 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+  "status": "verifying",
+  "captured_at": "2026-07-29T19:21:26+00:00",
+  "query_kind": "check_sanctions_exposure",
+  "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+  "official_actions": [
+    {
+      "date": "2022-08-08",
+      "action": "designation",
+      "address_match_count": 1
+    },
+    {
+      "date": "2025-03-21",
+      "action": "removal",
+      "address_match_count": 1
+    }
+  ],
+  "current_snapshot": {
+    "case_insensitive_match_count": 0,
+    "historical_designation_changed": false,
+    "historical_removal_changed": false,
+    "current_criminality_assessed": false
+  }
+}

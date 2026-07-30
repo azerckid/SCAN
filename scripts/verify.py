@@ -82,6 +82,10 @@ COMMANDS = (
         sys.executable,
         "scripts/verify_task_015_fixtures.py",
     ),
+    (
+        sys.executable,
+        "scripts/verify_task_015_analyzer_independent_verification.py",
+    ),
 )
 
 

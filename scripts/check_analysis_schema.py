@@ -27,6 +27,10 @@ EVM_SPECIAL_EXAMPLE = (
 FLOW_PATH_EXAMPLE = (
     REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-FLOW-PATH-001/analysis-request.json"
 )
+INTEL_CONTEXT_EXAMPLE = (
+    REPOSITORY_ROOT
+    / "docs/05_QA_Validation/fixtures/FX-OSINT-LABEL-CONFLICT-001/analysis-request.json"
+)
 SCHEMA_FILES = {
     "request": "analysis-request.schema.json",
     "result": "analysis-result.schema.json",
@@ -233,6 +237,32 @@ def flow_path_family_probes(evm_request: dict[str, object]) -> list[Probe]:
             "flow_path request with evm_special query_kind",
             "request",
             changed(flow_request, "query_kind", value="nft_activity"),
+            False,
+        ),
+    ]
+
+
+def intel_context_family_probes(evm_request: dict[str, object]) -> list[Probe]:
+    """Ensure analysis_type and query_kind cannot cross into the intel_context family."""
+    intel_request = load_json(INTEL_CONTEXT_EXAMPLE)
+    return [
+        Probe("intel_context request", "request", intel_request, True),
+        Probe(
+            "evm core request with intel_context query_kind",
+            "request",
+            changed(evm_request, "query_kind", value="collect_label_claims"),
+            False,
+        ),
+        Probe(
+            "intel_context request with evm_core query_kind",
+            "request",
+            changed(intel_request, "query_kind", value="object_summary"),
+            False,
+        ),
+        Probe(
+            "intel_context request with flow_path query_kind",
+            "request",
+            changed(intel_request, "query_kind", value="trace_path"),
             False,
         ),
     ]
@@ -470,6 +500,7 @@ def build_probes() -> list[Probe]:
         *request_input_probes(dex_request, auth_request, freeze_request, evm_request),
         *evm_special_family_probes(evm_request),
         *flow_path_family_probes(evm_request),
+        *intel_context_family_probes(evm_request),
         *result_status_probes(dex_result, auth_result, freeze_result, error, evm_result),
         *result_component_probes(dex_result),
         *error_probes(error),

@@ -30,6 +30,7 @@ class AnalysisType(StrEnum):
     EVM_CORE = "evm_core"
     EVM_SPECIAL = "evm_special"
     FLOW_PATH = "flow_path"
+    INTEL_CONTEXT = "intel_context"
 
 
 class EvmQueryKind(StrEnum):
@@ -270,6 +271,67 @@ class AggregateOriginsInputs(ContractModel):
 FlowPathInputs = TracePathInputs | TraceRemergeInputs | AggregateOriginsInputs
 
 
+class IntelContextQueryKind(StrEnum):
+    COLLECT_LABEL_CLAIMS = "collect_label_claims"
+    CHECK_SANCTIONS_EXPOSURE = "check_sanctions_exposure"
+    RESOLVE_IDENTITY_CLUES = "resolve_identity_clues"
+    FIND_COMMON_FUNDER = "find_common_funder"
+    SCORE_ACTOR_RELATIONS = "score_actor_relations"
+
+
+ArtifactRef = Annotated[str, Field(pattern=r"^artifact://sha256/[a-f0-9]{64}$")]
+
+
+class CommonFunderCompleteness(ContractModel):
+    require_initial_inflow_complete: ContractBool
+    require_service_exclusion: ContractBool
+    excluded_service_roles: NonEmptyUniqueList[str]
+
+
+class LabelClaimsInputs(ContractModel):
+    subject_addresses: NonEmptyUniqueList[Address]
+    source_artifact_refs: NonEmptyUniqueList[ArtifactRef]
+    observation_block: BlockNumber
+    max_sources: PositiveInt
+
+
+class SanctionsExposureInputs(ContractModel):
+    subject_addresses: NonEmptyUniqueList[Address]
+    official_action_refs: NonEmptyUniqueList[str]
+    current_list_snapshot_ref: str
+    max_hops: Literal[0, 1]
+
+
+class IdentityCluesInputs(ContractModel):
+    subject_addresses: NonEmptyUniqueList[Address]
+    names: NonEmptyUniqueList[str]
+    observation_block: BlockNumber
+    provider_replay_ref: str
+
+
+class CommonFunderInputs(ContractModel):
+    subject_addresses: NonEmptyUniqueList[Address]
+    block_range: FlowBlockWindow
+    source_fixture_ref: FixtureId
+    completeness: CommonFunderCompleteness
+
+
+class ActorRelationsInputs(ContractModel):
+    subject_addresses: NonEmptyUniqueList[Address]
+    hub_address: Address
+    source_fixture_refs: NonEmptyUniqueList[FixtureId]
+    component_weights: NonEmptyUniqueList[str]
+
+
+IntelContextInputs = (
+    LabelClaimsInputs
+    | SanctionsExposureInputs
+    | IdentityCluesInputs
+    | CommonFunderInputs
+    | ActorRelationsInputs
+)
+
+
 class AnalysisRequestBase(ContractModel):
     schema_uri: Annotated[
         str,
@@ -409,13 +471,51 @@ class FlowPathAnalysisRequest(AnalysisRequestBase):
         return self
 
 
+class IntelContextAnalysisRequest(AnalysisRequestBase):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "allOf": [
+                {
+                    "if": {"properties": {"query_kind": {"const": query_kind}}},
+                    "then": {"properties": {"inputs": {"required": required_fields}}},
+                }
+                for query_kind, required_fields in (
+                    ("collect_label_claims", ["subject_addresses", "source_artifact_refs"]),
+                    ("check_sanctions_exposure", ["subject_addresses", "official_action_refs"]),
+                    ("resolve_identity_clues", ["subject_addresses", "names"]),
+                    ("find_common_funder", ["subject_addresses", "source_fixture_ref"]),
+                    ("score_actor_relations", ["subject_addresses", "hub_address"]),
+                )
+            ]
+        }
+    )
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.INTEL_CONTEXT]
+    query_kind: IntelContextQueryKind
+    inputs: IntelContextInputs
+
+    @model_validator(mode="after")
+    def inputs_match_query_kind(self) -> "IntelContextAnalysisRequest":
+        expected = {
+            IntelContextQueryKind.COLLECT_LABEL_CLAIMS: LabelClaimsInputs,
+            IntelContextQueryKind.CHECK_SANCTIONS_EXPOSURE: SanctionsExposureInputs,
+            IntelContextQueryKind.RESOLVE_IDENTITY_CLUES: IdentityCluesInputs,
+            IntelContextQueryKind.FIND_COMMON_FUNDER: CommonFunderInputs,
+            IntelContextQueryKind.SCORE_ACTOR_RELATIONS: ActorRelationsInputs,
+        }[self.query_kind]
+        if not isinstance(self.inputs, expected):
+            raise PydanticCustomError("invalid_input", "inputs must match query_kind")
+        return self
+
+
 RequestVariant = Annotated[
     DexAnalysisRequest
     | AuthAnalysisRequest
     | FreezeAnalysisRequest
     | EvmCoreAnalysisRequest
     | EvmSpecialAnalysisRequest
-    | FlowPathAnalysisRequest,
+    | FlowPathAnalysisRequest
+    | IntelContextAnalysisRequest,
     Field(discriminator="analysis_type"),
 ]
 

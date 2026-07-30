@@ -1,0 +1,37 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-OSINT-LABEL-CONFLICT-001",
+  "analysis_type": "intel_context",
+  "query_kind": "collect_label_claims",
+  "chain_id": 1,
+  "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+  "requested_at": "2026-07-30T00:00:00+00:00",
+  "inputs": {
+    "subject_addresses": [
+      "0xc3877028655ebe90b9447dd33de391c955ead267"
+    ],
+    "source_artifact_refs": [
+      "artifact://sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475",
+      "artifact://sha256/84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32",
+      "artifact://sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b"
+    ],
+    "observation_block": 25640270,
+    "max_sources": 3
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": [
+      "DS-LABEL-PUBLIC",
+      "DS-OSINT-WEB",
+      "DS-ENS"
+    ],
+    "source_order": [
+      "DS-LABEL-PUBLIC",
+      "DS-OSINT-WEB",
+      "DS-ENS"
+    ],
+    "allow_fallback": false,
+    "offline_mode": true
+  }
+}

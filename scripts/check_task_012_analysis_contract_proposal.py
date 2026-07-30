@@ -235,6 +235,7 @@ def _validate_approved_contract_adoption() -> None:
         "evm_core",
         "evm_special",
         "flow_path",
+        "intel_context",
     }
     if approved_types != expected or runtime_types != expected:
         raise ValueError("Analysis I/O 0.2 does not expose the approved analysis types")

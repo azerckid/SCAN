@@ -1,0 +1,25 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+  "status": "verifying",
+  "captured_at": "2026-07-29T19:21:26+00:00",
+  "query_kind": "collect_label_claims",
+  "subject_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+  "dataset": {
+    "entity": "Tornado.Cash",
+    "categories": [
+      "Mixer",
+      "Sanctioned"
+    ],
+    "source_value": "external"
+  },
+  "ens": {
+    "name": "team4.vesting.contract.tornadocash.eth",
+    "address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+    "block_number": 25640270
+  },
+  "community_config": {
+    "name": "team4.vesting.contract.tornadocash.eth",
+    "role": "team4_vesting_contract"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-ACTOR-COMMON-FUNDER-001",
+  "status": "candidate",
+  "captured_at": "2026-07-29T19:21:26+00:00",
+  "query_kind": "find_common_funder",
+  "seed_address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+  "relations": [
+    {
+      "subject_address": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    },
+    {
+      "subject_address": "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    },
+    {
+      "subject_address": "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    },
+    {
+      "subject_address": "0x8765a35394c98e81b9d56d44248e1199d8e38a4c",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    }
+  ],
+  "initial_inflow_complete": false,
+  "service_exclusion_complete": false,
+  "coverage_gaps": [
+    "bounded_prehistory_unavailable",
+    "service_exclusion_unavailable"
+  ]
+}

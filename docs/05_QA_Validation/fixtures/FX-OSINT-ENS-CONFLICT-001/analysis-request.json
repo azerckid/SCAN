@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-OSINT-ENS-CONFLICT-001",
+  "analysis_type": "intel_context",
+  "query_kind": "resolve_identity_clues",
+  "chain_id": 1,
+  "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+  "requested_at": "2026-07-30T00:00:00+00:00",
+  "inputs": {
+    "subject_addresses": [
+      "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5"
+    ],
+    "names": [
+      "nick.eth"
+    ],
+    "observation_block": 25640270,
+    "provider_replay_ref": "provider-replay.json"
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": [
+      "DS-ENS",
+      "DS-OSINT-WEB"
+    ],
+    "source_order": [
+      "DS-ENS",
+      "DS-OSINT-WEB"
+    ],
+    "allow_fallback": false,
+    "offline_mode": true
+  }
+}

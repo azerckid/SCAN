@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-30 03:47
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 Verifying 4 / Candidate 1 · TASK-016~019 Proposed
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(analyzer 구현·독립 검증, 확정 승격은 별도 Gate) · TASK-016~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1229,7 +1229,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-015: Label·OSINT·Actor Intelligence 엔진
 
-- Status: ToDo
+- Status: In Progress — 계약 승인·Context Receipt PASS·구현 승인(2026-07-30).
+  `intel_context` analyzer 5 query 구현·독립 검증 완료. fixture 4 verifying /
+  common-funder candidate, Benchmark 11 유지. live adapter·`확정` 승격은 별도 Gate
 - Work Type: code
 - Priority: Phase 2 · P1
 - Depends On: TASK-012
@@ -1307,11 +1309,14 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] Rules·source registry·Workbench·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PREPARED — 참조 문서 정독·Constraints·Conflicts 확정(2026-07-30).
+  - Status: PASS — 참조 문서 정독·Constraints·Conflicts 확정(2026-07-30).
     `intel_context` I/O 계약(doc 18)은 PR #84로 병합됐고 §5 result value가
-    독립 Verifier fact와 canonical hash 단위로 일치한다(#84 재검토에서 확인).
-    **`PASS` 전환과 사용자 analyzer 구현 승인은 사용자 명시 행위로 남긴다.**
-    그 전까지 코드 착수 금지.
+    독립 Verifier fact와 canonical hash 단위로 일치한다. 사용자가 2026-07-30
+    "intel_context 대안 B 계약을 정식 승인하며 Context Receipt를 PASS로
+    전환합니다. TASK-015 analyzer 구현을 진행해 주세요"로 계약 승인·PASS·
+    구현 착수를 명시 승인함. 승인 범위: doc 18 §10 계약 확장·CLI 연결·독립
+    Verifier hash 대조·offline 테스트. **live source adapter와 fixture 최종
+    승격(`확정`)은 별도 Gate로 유지.**
   - Required References Read:
     - [17 Intelligence 계약 제안](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md)(Superseded) →
       [18 intel_context I/O 확정안](../03_Technical_Specs/18_TASK_015_INTEL_CONTEXT_IO_CONTRACT.md)(authoritative) —
@@ -1326,7 +1331,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
       [FX-OSINT-ENS-CONFLICT-001](../05_QA_Validation/fixtures/FX-OSINT-ENS-CONFLICT-001/README.md) ·
       [FX-ACTOR-RELATION-HUB-001](../05_QA_Validation/fixtures/FX-ACTOR-RELATION-HUB-001/README.md) ·
       [FX-ACTOR-COMMON-FUNDER-001](../05_QA_Validation/fixtures/FX-ACTOR-COMMON-FUNDER-001/README.md)(candidate)
-  - Verification: `scripts/verify.py` 전체 PASS — 489 tests, fixture 18, schema 48 probes, traceability 1648 links, TASK-015 negative oracle 30×2·독립 Verifier 4×2 PASS(docs-only, 코드 변경 없음).
+  - Verification(Context Receipt 준비, PR #85 시점): `scripts/verify.py` 전체 PASS — 489 tests, fixture 18, schema 48 probes, traceability 1648 links, TASK-015 negative oracle 30×2·독립 Verifier 4×2 PASS(docs-only). analyzer 구현 이후 최신 수치는 아래 Verification Receipt를 따른다.
   - Constraints:
     - privacy 최소 수집·Terms/Rules Gate·`offline_mode`면 live adapter 0회
     - source assertion / onchain observation / heuristic_candidate 분리, **AI 가설은 `confirmed_fact`로 승격 금지**, ownership·criminality·coordination는 `not_assessed`
@@ -1338,12 +1343,21 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     - (해소) label source blocker 교체·snapshot 기준선·5 candidate package·negative oracle 30×2·ENS 2nd provider·OFAC SLS pin·4 fixture 독립 Verifier·provenance hardening·§5↔Verifier hash 정렬(PR #84)
     - (열림) 공식 대회 Rules·채택 snapshot 재배포 Terms 미확정 → live mode·package 재배포는 별도 승인
     - (열림) `FX-ACTOR-COMMON-FUNDER-001`의 bounded prehistory·service exclusion 미완료 → `candidate`·`partial`만, confirmed 승격은 후속
-    - (게이트) `intel_context` 대안 B 정식 승인·Context Receipt `PASS`·analyzer 구현 승인은 사용자 명시 행위로 미실행
+    - (해소) `intel_context` 대안 B 정식 승인·Context Receipt `PASS`·analyzer 구현 승인 모두 2026-07-30 사용자 명시 승인 완료. analyzer 구현·독립 검증도 완료([53 검증 Receipt](../05_QA_Validation/53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md))
 - Change Receipt:
-  - Offline oracle·Source Readiness·독립 Verifier·Provenance hardening Gate와
-    `intel_context` I/O 계약 확정안까지 완료했다(아래 항목별 기록). 제품
-    `intel_context` analyzer·live source adapter·fixture `확정` 승격은
-    미착수이며, 4개 fixture는 `verifying`·common-funder는 `candidate`다.
+  - Offline oracle·Source Readiness·독립 Verifier·Provenance hardening·
+    `intel_context` I/O 계약 확정안·**제품 analyzer 구현·독립 검증**까지
+    완료했다(아래 항목별 기록). live source adapter·fixture `확정` 승격은
+    별도 Gate이며, 4개 fixture는 `verifying`·common-funder는 `candidate`다.
+  - intel_context analyzer 구현: `src/scan_tool/domain/{intel_context,analysis_request,
+    analysis_result,_types}.py`, `src/scan_tool/slices/intel_context.py`,
+    `src/scan_tool/application/cli_runtime.py`, schema 3종·
+    `check_analysis_schema.py`(48→52 probe)·`check_task_012_analysis_contract_proposal.py`,
+    fixture 5개 `analysis-request.json`·`source-replay.json`(신규),
+    `tests/unit/test_intel_context_slice.py`(19)·`tests/integration/test_intel_context_cli.py`(6),
+    `scripts/verify_task_015_analyzer_independent_verification.py`(verify.py 연결).
+    새 공개 `ErrorCode` 없음. 4 verifying fixture는 canonical hash가 독립
+    Verifier와 일치, common-funder는 partial 유지.
 - Verification Receipt:
   - Docs-only Gate: 468 tests PASS, fixture 13, schema 48 probes,
     traceability 1543 links, security 162 files.
@@ -1374,6 +1388,13 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     request/result/error·정렬·partial 경계를 docs-only로 작성했다.
     JSON 예제 9개 parse, 전체 489 tests·1,631 links PASS이며 사용자 계약
     승인·Context Receipt·구현 승인은 미완료다.
+  - Analyzer 구현·독립 검증 Gate: `intel_context` 5 query analyzer를 구현하고
+    독립 Verifier와 canonical hash를 대조했다. 전체 514 tests PASS, fixture 18,
+    schema 52 probes, traceability 1656 links, security 204 files, TASK-015
+    negative oracle 30×2·독립 Verifier 4×2·analyzer 독립 검증 4 fixtures
+    (canonical hash 일치)·common-funder partial PASS. fixture 4 `verifying` /
+    common-funder `candidate`, Benchmark 11 유지. live adapter·`확정` 승격은
+    별도 Gate로 남는다([53 검증 Receipt](../05_QA_Validation/53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md)).
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
