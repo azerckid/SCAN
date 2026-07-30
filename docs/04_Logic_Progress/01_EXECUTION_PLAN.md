@@ -213,6 +213,10 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] `TASK-016` Lending 리뷰 확정 계약 구조를 [WP-SERVICE 공통 계약
   요소](../03_Technical_Specs/20_TASK_016_SERVICE_COMMON_CONTRACT.md)로 추출하고
   Bridge/Mixer/CEX 적용 경계·Lending 고유 요소를 docs-only로 고정한다.
+- [x] `TASK-016` Bridge/XChain(`SVC-BRG-001`)을 공통 불변식 위에서 양단 evidence·
+  결정적 매칭 키·미확보/모순 분리·candidate 매칭·Analysis I/O 대안 B로 docs-only
+  [계약 제안](../03_Technical_Specs/21_TASK_016_BRIDGE_XCHAIN_CONTRACT_PROPOSAL.md)한다
+  (MIXED-XCHAIN은 조합 Gate, coverage 무변동).
 - [ ] `TASK-016` bridge/CEX/mixer/lending 중 confirmed fixture가 있는 adapter만 선택한다.
 - [ ] 양단 체인·message·amount 또는 서비스 휴리스틱 증거 계약을 승인한다.
 - [ ] EVM과 Bitcoin 결과가 같은 공통 evidence 봉투를 유지하는지 검증한다.
