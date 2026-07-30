@@ -2,33 +2,32 @@
   "schema_version": "0.1",
   "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
   "status": "verifying",
-  "captured_at": "2026-07-29T19:21:26+00:00",
+  "captured_at": "2026-07-30T07:05:38+00:00",
   "query_kind": "collect_label_claims",
-  "subject_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+  "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
   "dataset": {
-    "entity": "Tornado.Cash",
+    "entity": "TORNADO CASH",
     "categories": [
-      "Mixer",
-      "Sanctioned"
+      "historical_designation"
     ],
-    "source_value": "external"
+    "source_value": "2022-08-08"
   },
   "ens": {
-    "name": "team4.vesting.contract.tornadocash.eth",
-    "address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+    "name": "eth-01.tornadocash.eth",
+    "address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
     "block_number": 25640270
   },
   "community_config": {
-    "name": "team4.vesting.contract.tornadocash.eth",
-    "role": "team4_vesting_contract"
+    "name": "eth-01.tornadocash.eth",
+    "role": "eth_0_1_instance"
   },
   "sources": [
     {
-      "source_record_id": "SRC-INTEL-LABEL-DATASET",
-      "source_id": "DS-LABEL-PUBLIC",
-      "source_role": "provider_label",
-      "artifact_ref": "artifact://sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475",
-      "content_sha256": "15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475"
+      "source_record_id": "SRC-INTEL-LABEL-OFFICIAL-HISTORY",
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "source_role": "official_record",
+      "artifact_ref": "artifact://sha256/2ddb426a2d404d4984345fb6026ca02932cd4313dd0db79b36f41617f34a9a34",
+      "content_sha256": "2ddb426a2d404d4984345fb6026ca02932cd4313dd0db79b36f41617f34a9a34"
     },
     {
       "source_record_id": "SRC-INTEL-LABEL-CONFIG",
@@ -41,8 +40,8 @@
       "source_record_id": "SRC-INTEL-LABEL-ENS",
       "source_id": "DS-ENS",
       "source_role": "onchain_registry",
-      "artifact_ref": "artifact://sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b",
-      "content_sha256": "762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b"
+      "artifact_ref": "artifact://sha256/c5da8824427364b20cc4582cb15a3704f20e4b15bb16b81dd52f7e5d6203bf4d",
+      "content_sha256": "c5da8824427364b20cc4582cb15a3704f20e4b15bb16b81dd52f7e5d6203bf4d"
     }
   ]
 }

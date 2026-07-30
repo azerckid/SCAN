@@ -27,7 +27,7 @@ ENS_REGISTRY = "0x00000000000c2e074ec69a0dfb2997ba6c7d2e1e"
 PUBLIC_RESOLVER = "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41"
 REVERSE_RESOLVER = "0xa2c122be93b0074270ebee7f6b7292c7deb45047"
 
-TEAM4_NODE = "89658e012376b43a5108744fbe66ad3c8c14d2713bd74e4d9109b3e7a4b496d4"
+ETH_01_NODE = "c041982b4f77cbbd82ef3b9ea748738ac6c281d3f1af198770d29f75ac32d80a"
 NICK_NODE = "05a67c0ee82964c4f7394cdd47fee7f4d9503a23c09c38341779ea012afe6e00"
 NICK_REVERSE_NODE = "e78fb51f6a12a1a1675dd4dc3cbae52b360fd1b58a4725fd03abff93586071d1"
 
@@ -38,8 +38,8 @@ def task_015_ens_requests(
     """Return the fixed read-only call set for one ENS candidate."""
     if fixture_id == LABEL_CONFLICT:
         return (
-            _call("label_resolver", ENS_REGISTRY, f"0x0178b8bf{TEAM4_NODE}"),
-            _call("label_address", PUBLIC_RESOLVER, f"0x3b3b57de{TEAM4_NODE}"),
+            _call("label_resolver", ENS_REGISTRY, f"0x0178b8bf{ETH_01_NODE}"),
+            _call("label_address", PUBLIC_RESOLVER, f"0x3b3b57de{ETH_01_NODE}"),
         )
     if fixture_id == ENS_CONFLICT:
         return (

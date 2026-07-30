@@ -7,42 +7,42 @@
       "oracle_id": "OR-INTEL-LABEL-SUBJECT-SWAP",
       "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
       "category": "label_conflict",
-      "facts": {"subject_matches": false, "selected_row_hash_matches": true, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
+      "facts": {"subject_matches": false, "official_history_projection_matches": true, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
       "expected": {"outcome": "failed", "classification": "subject_mismatch"}
     },
     {
-      "oracle_id": "OR-INTEL-LABEL-ROW-HASH-MISMATCH",
+      "oracle_id": "OR-INTEL-LABEL-OFFICIAL-HISTORY-MISMATCH",
       "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
       "category": "label_conflict",
-      "facts": {"subject_matches": true, "selected_row_hash_matches": false, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
+      "facts": {"subject_matches": true, "official_history_projection_matches": false, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
       "expected": {"outcome": "failed", "classification": "source_integrity_failed"}
     },
     {
       "oracle_id": "OR-INTEL-LABEL-AUTO-MERGE",
       "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
       "category": "label_conflict",
-      "facts": {"subject_matches": true, "selected_row_hash_matches": true, "auto_merged": true, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
+      "facts": {"subject_matches": true, "official_history_projection_matches": true, "auto_merged": true, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
       "expected": {"outcome": "failed", "classification": "source_assertion_merged"}
     },
     {
       "oracle_id": "OR-INTEL-LABEL-TRUTH-PROMOTION",
       "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
       "category": "label_conflict",
-      "facts": {"subject_matches": true, "selected_row_hash_matches": true, "auto_merged": false, "ownership_promoted": true, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
+      "facts": {"subject_matches": true, "official_history_projection_matches": true, "auto_merged": false, "ownership_promoted": true, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
       "expected": {"outcome": "failed", "classification": "unsupported_truth_promotion"}
     },
     {
       "oracle_id": "OR-INTEL-LABEL-ENS-MISSING",
       "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
       "category": "label_conflict",
-      "facts": {"subject_matches": true, "selected_row_hash_matches": true, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": false},
+      "facts": {"subject_matches": true, "official_history_projection_matches": true, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": false},
       "expected": {"outcome": "partial", "classification": "source_unavailable"}
     },
     {
       "oracle_id": "OR-INTEL-LABEL-VALID-CONFLICT",
       "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
       "category": "label_conflict",
-      "facts": {"subject_matches": true, "selected_row_hash_matches": true, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
+      "facts": {"subject_matches": true, "official_history_projection_matches": true, "auto_merged": false, "ownership_promoted": false, "criminality_promoted": false, "conflict_preserved": true, "ens_binding_available": true},
       "expected": {"outcome": "complete", "classification": "label_conflict"}
     },
     {

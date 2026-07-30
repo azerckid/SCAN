@@ -1,7 +1,7 @@
 # TASK-015 LABEL Source Replacement Review
 > Created: 2026-07-30 15:37
-> Last Updated: 2026-07-30 15:48
-> Status: Proposed · Replacement Route Selected · Fixture Migration Not Executed
+> Last Updated: 2026-07-30 16:28
+> Status: Applied · Replacement Route Migrated · Promotion Review Pending
 
 ## 1. 목적과 판정
 
@@ -85,28 +85,28 @@ Verifier는 두 필드를 혼합하지 않고, ENS name의 address binding을 �
 
 ### 3.3 Fixed-block ENS
 
-새 ENS replay는 아직 실행하지 않았다. migration Gate에서 다음을 고정한다.
+ENS replay는 migration에서 실행해 다음을 고정했다.
 
 - name: `eth-01.tornadocash.eth`
-- fixed block: replay 실행 전 명시
+- fixed block: `25,640,270`
 - provider 2개 또는 provider + 저장 artifact 독립 재현
 - decoded address:
   `0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc`
-- 실패·429·timeout은 일치로 추론하지 않음
+- QuickNode JSON-RPC `-32003`·Chainstack 403은 일치로 추론하지 않음
 
 ## 4. Fixture migration 범위
 
 이번 Review에서는 fixture JSON·artifact·analyzer·Verifier를 변경하지 않는다.
 후속 migration은 다음 원자 단위로 수행한다.
 
-1. [ ] 새 subject와 세 source assertion을 `input.json`·`expected.json`에 반영한다.
-2. [ ] OpenRAIL selected row artifact와 scoring reference를 새 package에서 제거한다.
-3. [ ] confirmed SANCTIONS fixture provenance를 hash로 연결한다.
-4. [ ] pinned MIT config에서 instance name·address를 raw-first로 재계산한다.
-5. [ ] fixed-block ENS를 독립 재현하고 raw SHA-256을 고정한다.
-6. [ ] negative oracle의 subject·historical/current·role conflict 경계를 갱신한다.
-7. [ ] 독립 Verifier와 analyzer canonical hash를 다시 계산한다.
-8. [ ] fixture를 `verifying`으로 유지한 채 Promotion Review를 요청한다.
+1. [x] 새 subject와 세 source assertion을 `input.json`·`expected.json`에 반영한다.
+2. [x] OpenRAIL selected row artifact와 scoring reference를 새 package에서 제거한다.
+3. [x] confirmed SANCTIONS fixture provenance를 hash로 연결한다.
+4. [x] pinned MIT config에서 instance name·address를 raw-first로 재계산한다.
+5. [x] fixed-block ENS를 독립 재현하고 raw SHA-256을 고정한다.
+6. [x] negative oracle의 subject·historical/current·role conflict 경계를 갱신한다.
+7. [x] 독립 Verifier와 analyzer canonical hash를 다시 계산한다.
+8. [x] fixture를 `verifying`으로 유지한 채 Promotion Review를 요청한다.
 9. [ ] 기존 OpenRAIL artifact 삭제는 별도 승인과 history 보존 정책에 따른다.
 
 ## 5. 승격·실패 조건
@@ -137,8 +137,8 @@ Verifier는 두 필드를 혼합하지 않고, ENS name의 address binding을 �
 - fixture status 변경: 0 (`LABEL verifying` 유지)
 - OpenRAIL artifact 삭제: 0
 - TASK-016 착수: 0
-- `scripts/verify.py`: 537 tests, fixture 18, Analysis I/O 52 probes,
-  traceability 1,728 links, security 205 files PASS
+- `scripts/verify.py`: 542 tests, fixture 18, Analysis I/O 52 probes,
+  traceability 1,742 links, security 207 files PASS
 
 ## 7. 365 글로벌 평가 기준
 
@@ -165,5 +165,6 @@ Verifier는 두 필드를 혼합하지 않고, ENS name의 address binding을 �
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - label·sanctions·ENS source 정책
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) · [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md)
 - **QA_Validation**: [OpenRAIL Resolution](./55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md) · [Promotion Readiness](./54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md) · [비격리 Promotion Receipt](./56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)
+- **QA_Validation**: [LABEL Migration Receipt](./58_TASK_015_LABEL_FIXTURE_MIGRATION_RECEIPT.md) - replacement replay·oracle·Verifier·analyzer 적용 증거
 - **Fixture**: [LABEL conflict fixture](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) · [confirmed SANCTIONS fixture](./fixtures/FX-OSINT-SANCTIONS-HISTORY-001/README.md)
 - **External**: [OFAC 2022 action](https://ofac.treasury.gov/recent-actions/20220808) · [Haas Labs Apache-2.0 candidate file](https://github.com/haas-labs/ext-sentinel-py-sdk/blob/2a68b314fec45d234c6157c92c9f539af546a331/examples/block_tx/data/mixers.list) · [GraphSense Etherscan-derived tagpack](https://github.com/graphsense/graphsense-tagpacks/blob/921ae2ba98fe9f4050f46c80583cd4b98ced1042/packs/etherscan-wordcloud-mixing_service.yaml)

@@ -1,6 +1,5 @@
 """Independent source-first verifier for ready TASK-015 candidate fixtures."""
 
-import csv
 import hashlib
 import json
 import re
@@ -75,32 +74,63 @@ def verify_fixture(fixtures_root: Path, fixture_id: str) -> dict[str, Any]:
 
 def _label(package: Path) -> dict[str, Any]:
     artifact_root = package / "artifacts/sha256"
-    csv_path = artifact_root / (
-        "15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475.csv"
+    official_path = artifact_root / (
+        "2ddb426a2d404d4984345fb6026ca02932cd4313dd0db79b36f41617f34a9a34.json"
     )
-    _require_file_hash(csv_path)
     ens_snapshot_path = artifact_root / (
-        "762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b.json"
+        "c5da8824427364b20cc4582cb15a3704f20e4b15bb16b81dd52f7e5d6203bf4d.json"
     )
     config_path = artifact_root / (
         "84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32.js"
     )
+    _require_file_hash(official_path)
     _require_file_hash(ens_snapshot_path)
     _require_file_hash(config_path)
-    rows = list(csv.reader(csv_path.read_text(encoding="utf-8").splitlines()))
-    if len(rows) != 1 or len(rows[0]) != 6:
-        raise ValueError("label selected-row artifact shape differs")
-    chain, address, entity, _, categories, source_value = rows[0]
-    if chain != "Ethereum":
-        raise ValueError("label chain differs")
+    official = load_json(official_path)
+    sanctions_package = package.parent / official["source_fixture_id"]
+    sanctions_input = load_json(sanctions_package / "input.json")
+    sanctions_evidence = _evidence_map(load_json(sanctions_package / "evidence.json"))
+    designation = sanctions_evidence["EV-INTEL-SAN-DESIGNATION"]
+    if (
+        official.get("source_fixture_status") != "confirmed"
+        or sanctions_input.get("status") != "confirmed"
+        or sanctions_input.get("subject_address") != official.get("subject_address")
+        or designation.get("action_date") != official.get("action_date")
+        or designation.get("html_sha256") != official.get("action_html_sha256")
+        or designation.get("address_match_count") != official.get("address_match_count")
+        or official.get("current_status") != "not_assessed"
+        or official.get("criminality_assessment") != "not_assessed"
+    ):
+        raise ValueError("official historical action projection differs")
     ens = _matching_complete_providers(load_json(package / "provider-replay.json"))
     decoded = ens[0]["decoded"]
+    ens_snapshot = load_json(ens_snapshot_path)
     evidence = _evidence_map(load_json(package / "evidence.json"))
+    official_evidence = evidence["EV-INTEL-LABEL-OFFICIAL-HISTORY"]
     config_evidence = evidence["EV-INTEL-LABEL-CONFIG"]
+    ens_evidence = evidence["EV-INTEL-LABEL-ENS"]
     fixture_input = load_json(package / "input.json")
+    official_input = next(
+        item
+        for item in fixture_input["source_locators"]
+        if item["source_id"] == "DS-SANCTIONS-PUBLIC"
+    )
     config_input = next(
         item for item in fixture_input["source_locators"] if item["source_id"] == "DS-OSINT-WEB"
     )
+    ens_input = next(
+        item for item in fixture_input["source_locators"] if item["source_id"] == "DS-ENS"
+    )
+    if (
+        official_evidence.get("source_fixture_id") != official["source_fixture_id"]
+        or official_evidence.get("subject_address") != official["subject_address"]
+        or official_evidence.get("action_date") != official["action_date"]
+        or official_evidence.get("action_html_sha256") != official["action_html_sha256"]
+        or official_input.get("source_fixture_id") != official["source_fixture_id"]
+        or official_input.get("action_date") != official["action_date"]
+        or official_input.get("bounded_fact_sha256") != official_path.stem
+    ):
+        raise ValueError("official historical action evidence differs")
     if (
         config_evidence.get("license") != "MIT"
         or config_evidence.get("config_sha256") != config_path.stem
@@ -108,33 +138,52 @@ def _label(package: Path) -> dict[str, Any]:
     ):
         raise ValueError("community config provenance differs")
     config_text = config_path.read_text(encoding="utf-8")
-    team4 = re.search(
-        r"team4:\s*\{\s*address:\s*'([^']+)',\s*beneficiary:\s*'([^']+)',"
-        r"\s*cliff:\s*(\d+),\s*duration:\s*(\d+),",
+    mining_rate = re.search(
+        r"\{\s*instance:\s*'eth-01\.tornadocash\.eth',\s*value:\s*'([^']+)'\s*\}",
         config_text,
     )
-    if team4 is None:
-        raise ValueError("community config team4 entry is missing")
-    config_name, _, cliff, duration = team4.groups()
-    if (cliff, duration) != ("12", "36"):
-        raise ValueError("community config team4 vesting terms differ")
-    if decoded["address"] != address.lower():
-        raise ValueError("label dataset and ENS addresses differ")
+    instance = re.search(
+        r"netId1:\s*\{\s*eth:\s*\{\s*instanceAddress:\s*\{\s*"
+        r"0\.1:\s*'([^']+)'",
+        config_text,
+    )
+    if mining_rate is None or instance is None:
+        raise ValueError("community config ETH 0.1 instance projection is missing")
+    address = instance.group(1).lower()
+    if mining_rate.group(1) != "10":
+        raise ValueError("community config mining rate differs")
+    if (
+        official.get("subject_address") != address
+        or config_evidence.get("instance_name") != "eth-01.tornadocash.eth"
+        or config_evidence.get("denomination") != "0.1"
+        or config_evidence.get("instance_address") != address
+        or config_evidence.get("mining_rate_value") != mining_rate.group(1)
+        or ens_input.get("name") != ens_snapshot.get("name")
+        or ens_input.get("block_number") != ens_snapshot.get("block_number")
+        or ens_evidence.get("name") != ens_snapshot.get("name")
+        or ens_evidence.get("resolved_address") != address
+        or ens_evidence.get("artifact_uri") != f"artifact://sha256/{ens_snapshot_path.stem}"
+        or ens_snapshot.get("name") != "eth-01.tornadocash.eth"
+        or ens_snapshot.get("address") != address
+        or ens_snapshot.get("block_number") != 25_640_270
+        or decoded["address"] != address
+    ):
+        raise ValueError("official, config, and ENS subject binding differs")
     return {
-        "subject_address": address.lower(),
+        "subject_address": address,
         "dataset": {
-            "entity": entity,
-            "categories": categories.split(";"),
-            "source_value": source_value,
+            "entity": official["entity"],
+            "categories": [official["category"]],
+            "source_value": official["action_date"],
         },
         "ens": {
-            "name": "team4.vesting.contract.tornadocash.eth",
+            "name": ens_snapshot["name"],
             "address": decoded["address"],
             "block_number": 25_640_270,
         },
         "community_config": {
-            "name": config_name,
-            "role": "team4_vesting_contract",
+            "name": "eth-01.tornadocash.eth",
+            "role": "eth_0_1_instance",
         },
         "conflict": {
             "auto_merge": False,

@@ -9,16 +9,16 @@
     "name": "ethereum",
     "chain_id": 1
   },
-  "subject_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+  "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
   "scope_kind": "bounded_source_assertion_conflict",
   "observation_block": 25640270,
   "source_locators": [
     {
-      "source_id": "DS-LABEL-PUBLIC",
-      "repository": "Humanbased-AI/Crypto-Address-Annotation-10K",
-      "commit": "865b4b7ca276ffa50255f5fa751227b3c666dbf1",
-      "path": "Crypto-Address-Annotation-10K.csv",
-      "selected_row_sha256": "15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475"
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "source_fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+      "action_date": "2022-08-08",
+      "url": "https://ofac.treasury.gov/recent-actions/20220808",
+      "bounded_fact_sha256": "2ddb426a2d404d4984345fb6026ca02932cd4313dd0db79b36f41617f34a9a34"
     },
     {
       "source_id": "DS-OSINT-WEB",
@@ -28,9 +28,9 @@
     },
     {
       "source_id": "DS-ENS",
-      "name": "team4.vesting.contract.tornadocash.eth",
+      "name": "eth-01.tornadocash.eth",
       "block_number": 25640270
     }
   ],
-  "selection_notes": "Etherscan-free conflict case. A research/testing dataset assertion is preserved beside a community-maintained role config and fixed-block ENS binding. No source is promoted to ownership or criminal truth."
+  "selection_notes": "Etherscan-free replacement case. A confirmed official historical action is preserved beside a pinned MIT instance config and fixed-block ENS binding. The historical action is not promoted to current sanctions, ownership, or criminal truth."
 }

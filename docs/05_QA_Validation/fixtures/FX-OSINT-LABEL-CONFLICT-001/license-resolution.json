@@ -1,6 +1,6 @@
 {
   "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
-  "status": "blocked",
+  "status": "superseded",
   "retrieved_at": "2026-07-30T14:38:00+09:00",
   "source": {
     "repository": "Humanbased-AI/Crypto-Address-Annotation-10K",
@@ -54,13 +54,20 @@
   "decision": {
     "exact_license_text_pinned": false,
     "redistribution_permission_confirmed": false,
-    "selected_row_status": "promotion_and_export_quarantined",
+    "selected_row_status": "retained_unreferenced_historical_artifact",
     "existing_offline_regression_allowed": true,
     "allowed_scope": "dataset-card-stated research/testing only",
     "promotion_allowed": false,
-    "next_actions": [
-      "obtain publisher-provided exact license terms",
-      "or replace the dataset assertion with an exactly licensed source"
-    ]
+    "next_actions": []
+  },
+  "supersession": {
+    "migrated_at": "2026-07-30T16:28:00+09:00",
+    "replacement_sources": [
+      "DS-SANCTIONS-PUBLIC",
+      "DS-OSINT-WEB",
+      "DS-ENS"
+    ],
+    "scoring_dependency_removed": true,
+    "historical_artifact_deleted": false
   }
 }

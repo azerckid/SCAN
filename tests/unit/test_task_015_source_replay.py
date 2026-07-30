@@ -25,6 +25,12 @@ def test_label_replay_is_two_fixed_block_read_only_calls() -> None:
     ]
     assert {request.method for request in requests} == {"eth_call"}
     assert {request.params[-1] for request in requests} == {"0x1873d4e"}
+    assert all(
+        request.params[0]["data"].endswith(
+            "c041982b4f77cbbd82ef3b9ea748738ac6c281d3f1af198770d29f75ac32d80a"
+        )
+        for request in requests
+    )
 
 
 def test_ens_replay_is_four_fixed_block_read_only_calls() -> None:
@@ -60,7 +66,7 @@ def test_trace_role_can_supply_independent_ens_calls(tmp_path: Path) -> None:
         body = json.loads(request.content)
         result = "0x" + "00" * 12 + "4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41"
         if body["params"][0]["to"] != "0x00000000000c2e074ec69a0dfb2997ba6c7d2e1e":
-            result = "0x" + "00" * 12 + "c3877028655ebe90b9447dd33de391c955ead267"
+            result = "0x" + "00" * 12 + "12d66f87a04a9e220743712ce6d9bb1b5616b8fc"
         return httpx.Response(200, json={"jsonrpc": "2.0", "id": body["id"], "result": result})
 
     async def execute() -> object:
@@ -107,7 +113,15 @@ def test_pinned_provider_replay_has_two_matching_complete_providers(
     }
     assert len({json.dumps(item["decoded"], sort_keys=True) for item in complete}) == 1
     assert set(complete[0]["decoded"]) == decoded_keys
-    assert {item["http_status"] for item in failed} == {403, 429}
+    expected_failures = (
+        {("invalid_response", 200), ("permanent", 403)}
+        if fixture_id == LABEL_CONFLICT
+        else {("rate_limited", 429), ("permanent", 403)}
+    )
+    assert {(item["failure_kind"], item["http_status"]) for item in failed} == expected_failures
+    if fixture_id == LABEL_CONFLICT:
+        primary = next(item for item in failed if item["provider_id"] == "PROVIDER-EVM-PRIMARY")
+        assert primary.get("json_rpc_error_code") == -32003
     assert replay["decoded_match"] is True
 
 

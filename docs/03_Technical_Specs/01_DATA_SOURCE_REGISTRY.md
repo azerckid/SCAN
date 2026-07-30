@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 15:37
+> Last Updated: 2026-07-30 16:28
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -190,7 +190,7 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
 | 상태 | 후보 | 검증 중 |
 | 마지막 확인 | 2026-07-30 03:07 | 2026-07-30 03:07 |
 | 관련 fixture | FLOW-EVM-001 등 | EVM-FREEZE-001 (`FX-EVM-FREEZE-001`) |
-| 비고 | Etherscan public label/name tag는 Terms 때문에 fixture source에서 제외. 기존 OpenRAIL selected row는 quarantine. replacement route는 confirmed OFAC historical action fact + pinned MIT Tornado config + fixed-block ENS이며 migration 전까지 후보 상태 | OFAC SLS의 공개 download/API와 2022 지정·2025 해제 원문에서 주소·timeline 후보를 확인. 고시 시점의 역사적 맥락이며 현재 제재 상태로 자동 간주하지 않음 |
+| 비고 | Etherscan public label/name tag는 Terms 때문에 fixture source에서 제외. 기존 OpenRAIL selected row는 scoring·provenance dependency에서 제거하고 historical artifact로만 보존. replacement는 confirmed OFAC historical action fact + pinned MIT Tornado config + fixed-block ENS이며 최종 Promotion Review 전까지 verifying | OFAC SLS의 공개 download/API와 2022 지정·2025 해제 원문에서 주소·timeline 후보를 확인. 고시 시점의 역사적 맥락이며 현재 제재 상태로 자동 간주하지 않음 |
 
 ### 5.5 ENS·OSINT
 

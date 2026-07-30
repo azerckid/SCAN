@@ -4,28 +4,32 @@
   "fixture_version": "0.1",
   "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
   "status": "verifying",
-  "captured_at": "2026-07-29T18:37:00Z",
+  "captured_at": "2026-07-30T07:05:38Z",
   "event_evidence": [],
   "call_evidence": [
     {
       "evidence_id": "EV-INTEL-LABEL-ENS",
       "evidence_type": "ens_fixed_block_resolution",
       "source_id": "DS-ENS",
-      "name": "team4.vesting.contract.tornadocash.eth",
+      "name": "eth-01.tornadocash.eth",
       "block_number": 25640270,
-      "resolved_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
-      "artifact_uri": "artifact://sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b"
+      "resolved_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+      "artifact_uri": "artifact://sha256/c5da8824427364b20cc4582cb15a3704f20e4b15bb16b81dd52f7e5d6203bf4d"
     }
   ],
   "state_evidence": [],
   "context_evidence": [
     {
-      "evidence_id": "EV-INTEL-LABEL-DATASET",
-      "evidence_type": "pinned_dataset_row",
-      "source_id": "DS-LABEL-PUBLIC",
-      "selected_row_sha256": "15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475",
-      "artifact_uri": "artifact://sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475",
-      "license_scope": "research_and_testing_only"
+      "evidence_id": "EV-INTEL-LABEL-OFFICIAL-HISTORY",
+      "evidence_type": "confirmed_historical_action_projection",
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "source_fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+      "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+      "action_date": "2022-08-08",
+      "action_html_sha256": "a6160e2d63d9c13ac8ca60778b48c778e94dc84e10b6ef4cacadd337f34df74c",
+      "artifact_uri": "artifact://sha256/2ddb426a2d404d4984345fb6026ca02932cd4313dd0db79b36f41617f34a9a34",
+      "current_status": "not_assessed",
+      "criminality_assessment": "not_assessed"
     },
     {
       "evidence_id": "EV-INTEL-LABEL-CONFIG",
@@ -34,15 +38,19 @@
       "commit": "4dea68f71633dab37e3cb4c8b4d8dca3479891c6",
       "config_sha256": "84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32",
       "artifact_uri": "artifact://sha256/84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32",
-      "license": "MIT"
+      "license": "MIT",
+      "instance_name": "eth-01.tornadocash.eth",
+      "denomination": "0.1",
+      "instance_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+      "mining_rate_value": "10"
     }
   ],
   "source_requirements": [
     {
-      "source_id": "DS-LABEL-PUBLIC",
+      "source_id": "DS-SANCTIONS-PUBLIC",
       "role": "scoring",
       "required": true,
-      "purpose": "Pinned research/testing sample assertion"
+      "purpose": "Confirmed official historical action projection"
     },
     {
       "source_id": "DS-OSINT-WEB",
@@ -59,9 +67,10 @@
   ],
   "sources": [
     {
-      "source_id": "DS-LABEL-PUBLIC",
-      "provider": "HUMANBASED-AI-HF-PINNED",
-      "retrieved_at": "2026-07-29T18:27:00Z"
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "provider": "OFAC-RECENT-ACTIONS+CONFIRMED-FIXTURE",
+      "retrieved_at": "2026-07-29T18:27:00Z",
+      "source_fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001"
     },
     {
       "source_id": "DS-OSINT-WEB",
@@ -71,12 +80,12 @@
     {
       "source_id": "DS-ENS",
       "provider": "PROVIDER-EVM-VERIFY+BLOCKSCOUT-ETH-RPC",
-      "retrieved_at": "2026-07-29T19:21:24Z",
+      "retrieved_at": "2026-07-30T07:05:38Z",
       "provider_replay": "provider-replay.json"
     }
   ],
   "consistency_checks": {
-    "selected_row_hash_matches": true,
+    "official_history_projection_matches": true,
     "config_hash_matches": true,
     "ens_fixed_block_repeated": true,
     "second_ens_provider_match": true,
@@ -86,11 +95,11 @@
   "verification_provenance": {
     "negative_oracle_report": "../../49_TASK_015_NEGATIVE_ORACLE_REPORT.md",
     "independent_verifier_report": "../../51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md",
-    "calculated_fact_sha256": "4ae17221fe5e0642c588723bd89db1ee6f9e39d19f2d6c1dce85dd2e2990d399"
+    "calculated_fact_sha256": "972a154d20846478774f9fb7b685f7db1d7c5c8eac37fa1c5cd2cb444514d1a9"
   },
   "uncertainty": {
     "candidate_only": false,
-    "remaining": "Product analyzer and final promotion remain pending."
+    "remaining": "Replacement migration passed; final promotion remains pending."
   },
-  "provenance_notes": "Etherscan content is not used. The OpenRAIL sample is limited to research/testing use; all assertions remain source-scoped."
+  "provenance_notes": "Etherscan and OpenRAIL content are not used for scoring. The official historical action, MIT config role, and fixed-block ENS binding remain separate source-scoped assertions."
 }

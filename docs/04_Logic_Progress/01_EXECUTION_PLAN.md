@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-30 15:37
-> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · 3 Confirmed / LABEL Verifying / Common-funder Candidate · Benchmark 11 Automated / 4 Assisted
+> Last Updated: 2026-07-30 16:28
+> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · 3 Confirmed / LABEL Replacement Verifying / Common-funder Candidate · Benchmark 11 Automated / 4 Assisted
 
 ## 1. 목적
 
@@ -185,7 +185,7 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   고정하고 selected row를 quarantine한다.
 - [x] publisher 확인 경로와 대체 source를 비교해 official OFAC historical
   action + MIT config + fixed-block ENS subject 교체안을 선정한다.
-- [ ] LABEL fixture를 새 subject로 migration하고 replay·oracle·Verifier·
+- [x] LABEL fixture를 새 subject로 migration하고 replay·oracle·Verifier·
   analyzer hash를 재검증해 OpenRAIL scoring dependency를 제거한다.
 - [x] non-quarantined SANCTIONS·ENS·RELATION-HUB 3개를 별도
   [Promotion Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)로
