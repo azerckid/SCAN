@@ -1230,8 +1230,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 ### [ ] TASK-015: Label·OSINT·Actor Intelligence 엔진
 
 - Status: In Progress — 계약 승인·Context Receipt PASS·구현 승인(2026-07-30).
-  `intel_context` analyzer 5 query 구현·독립 검증 완료. SANCTIONS·ENS·
-  LABEL·SANCTIONS·ENS·RELATION-HUB confirmed, common-funder candidate.
+  `intel_context` analyzer 5 query 구현·독립 검증 완료. LABEL·SANCTIONS·
+  ENS·RELATION-HUB confirmed, common-funder candidate.
   Benchmark 12 automated / 4 assisted / 14 unsupported(OSINT-LBL-001 automated
   승격). live adapter·common-funder 승격은 별도 Gate.
 - Work Type: code

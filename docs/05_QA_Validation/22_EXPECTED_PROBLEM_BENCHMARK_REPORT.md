@@ -58,6 +58,7 @@ PASS EVM-TOKEN-002 · FX-EVM-TOKEN-002
 PASS FLOW-EVM-001 · FX-FLOW-PATH-001
 PASS FLOW-EVM-002 · FX-FLOW-REMERGE-001
 PASS SVC-DEX-001 · FX-SVC-DEX-001
+PASS OSINT-LBL-001 · FX-OSINT-LABEL-CONFLICT-001
 BENCHMARK 12/12 automated cases passed · network_mode offline
 ```
 
@@ -70,7 +71,7 @@ BENCHMARK 12/12 automated cases passed · network_mode offline
 | 자동 실행 | 12 |
 | 자동 통과 | 12 |
 | 자동 범위 정확도 | 100% |
-| 30문항 직접 자동화율 | 36.7% |
+| 30문항 직접 자동화율 | 40.0% |
 
 ## 4. 30문항 Coverage Matrix
 
