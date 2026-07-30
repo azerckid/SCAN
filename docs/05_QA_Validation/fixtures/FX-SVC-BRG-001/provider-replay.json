@@ -94,8 +94,14 @@
     "deterministic_runs": 2,
     "status": "verified"
   },
+  "independent_verifier": {
+    "module": "src/scan_tool/application/task_016_bridge_independent_verifier.py",
+    "method": "raw-first ABI log decode from raw-replay.json topics/data, no shared code with the candidate-capture module",
+    "requirements_verified": 3,
+    "deterministic_runs": 2,
+    "status": "pass"
+  },
   "remaining_gate": [
-    "independent verifier",
     "candidate-to-verifying review"
   ]
 }

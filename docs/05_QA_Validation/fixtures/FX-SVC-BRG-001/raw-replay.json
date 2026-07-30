@@ -28,85 +28,22 @@
   "raw_observations": [
     {
       "chain": "base",
-      "transaction": {
-        "hash": "0x95714346d20bfaa328b75e4e6cf980d9620c4c4331af935032f848a118f05a1b",
-        "block_hash": "0xc828bea26f678a5728bd3326291ff56eb81e786ba96928b905333f4483c87064",
-        "block_number": "0x14e5a4b",
-        "from": "0xdd8591007149631190f1013ac1067305f191cd0a",
-        "to": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
-        "value": "0x494654067e10000"
-      },
-      "receipt": {
-        "transaction_hash": "0x95714346d20bfaa328b75e4e6cf980d9620c4c4331af935032f848a118f05a1b",
-        "block_hash": "0xc828bea26f678a5728bd3326291ff56eb81e786ba96928b905333f4483c87064",
-        "block_number": "0x14e5a4b",
-        "transaction_index": "0x77",
-        "status": "0x1",
-        "selected_log_count": 1
-      },
-      "block": {
-        "number": "0x14e5a4b",
-        "hash": "0xc828bea26f678a5728bd3326291ff56eb81e786ba96928b905333f4483c87064",
-        "timestamp": "0x67271179"
-      },
-      "event": {
-        "input_token": "0x4200000000000000000000000000000000000006",
-        "output_token": "0x0000000000000000000000000000000000000000",
-        "input_amount_raw": "330000000000000000",
-        "output_amount_raw": "329132286989970407",
-        "deposit_id": 2395968,
-        "destination_chain_id": 1,
-        "depositor": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
-        "recipient": "0xdd8591007149631190f1013ac1067305f191cd0a",
-        "quote_timestamp": 1730613371,
-        "fill_deadline": 4294967295,
-        "exclusivity_deadline": 0,
-        "exclusive_relayer": "0x0000000000000000000000000000000000000000",
-        "message": "0x",
-        "transaction_hash": "0x95714346d20bfaa328b75e4e6cf980d9620c4c4331af935032f848a118f05a1b",
-        "log_index": "0x160"
+      "provider_id": "PROVIDER-BASE-PRIMARY",
+      "artifacts": {
+        "transaction": "artifact://sha256/40c0d700dd8c9483f6ccaa554ef4a2509873b670e4784f7c67fed8a6e0e9442b",
+        "receipt": "artifact://sha256/9c45186b9fcd051b0660b5cc0e012173ec4120c6c1392e63769f15d1d195ae9e",
+        "block": "artifact://sha256/370cc0339568ef51b2321341111fc0b6a51b3e07eaa7ffdc2c8d0f3bdca1e649",
+        "bridge_logs": "artifact://sha256/48a7bf594aae155aa9a780e8b0025141961ed16c5d7e500e1c696754d84b593b"
       }
     },
     {
       "chain": "ethereum",
-      "transaction": {
-        "hash": "0x816ebca944c8cf40309c8c2ec4bd0f6e25f78d782cf7732f93ca771e55b8f8a0",
-        "block_hash": "0x7c7b21ef53786851bb78302e2c18b3e8c1f5ed1a9aaa19519f596b12a559c12f",
-        "block_number": "0x1420a1e",
-        "from": "0x18105a39db36eb6f865704be858bcc7954c66467",
-        "to": "0x5c7bcd6e7de5423a257d81b442095a1a6ced35c5",
-        "value": "0x0"
-      },
-      "receipt": {
-        "transaction_hash": "0x816ebca944c8cf40309c8c2ec4bd0f6e25f78d782cf7732f93ca771e55b8f8a0",
-        "block_hash": "0x7c7b21ef53786851bb78302e2c18b3e8c1f5ed1a9aaa19519f596b12a559c12f",
-        "block_number": "0x1420a1e",
-        "transaction_index": "0x10",
-        "status": "0x1",
-        "selected_log_count": 1
-      },
-      "block": {
-        "number": "0x1420a1e",
-        "hash": "0x7c7b21ef53786851bb78302e2c18b3e8c1f5ed1a9aaa19519f596b12a559c12f",
-        "timestamp": "0x67271183"
-      },
-      "event": {
-        "input_token": "0x4200000000000000000000000000000000000006",
-        "output_token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-        "input_amount_raw": "330000000000000000",
-        "output_amount_raw": "329132286989970407",
-        "deposit_id": 2395968,
-        "origin_chain_id": 8453,
-        "repayment_chain_id": 8453,
-        "depositor": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
-        "recipient": "0xdd8591007149631190f1013ac1067305f191cd0a",
-        "relayer": "0x18105a39db36eb6f865704be858bcc7954c66467",
-        "fill_deadline": 4294967295,
-        "exclusivity_deadline": 0,
-        "exclusive_relayer": "0x0000000000000000000000000000000000000000",
-        "message": "0x",
-        "transaction_hash": "0x816ebca944c8cf40309c8c2ec4bd0f6e25f78d782cf7732f93ca771e55b8f8a0",
-        "log_index": "0x6a"
+      "provider_id": "PROVIDER-ETHEREUM-VERIFY",
+      "artifacts": {
+        "transaction": "artifact://sha256/a0c3952f4069a78aade61e538a79a7623a517150b4e32b35e567a3a3ce9bbbe9",
+        "receipt": "artifact://sha256/6c3bbceecb2e4bebd59424d5299c9115e684a771d430a699717793d355aefcc1",
+        "block": "artifact://sha256/ed69873dbc026b3e83e7dca16ab1586bb359c32fbc33eb576be5194cde5a63d0",
+        "bridge_logs": "artifact://sha256/a1de285501a1e707649b6d0e80894a695386df7399a6ab987d431e040ae7400f"
       }
     }
   ],
@@ -125,7 +62,6 @@
     "message": "0x"
   },
   "remaining_gate": [
-    "independent verifier",
     "candidate-to-verifying review"
   ]
 }

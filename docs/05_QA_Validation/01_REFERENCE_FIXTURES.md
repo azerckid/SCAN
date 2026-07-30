@@ -101,7 +101,7 @@ subject로 migration했다. 새 canonical hash를 Verifier·analyzer가 재현�
 | [FX-FLOW-PATH-001](./fixtures/FX-FLOW-PATH-001/README.md) | FLOW-EVM-001 | 1 | 확정 0.1 | 두 RPC·Blockscout edge·18 oracle·Verifier·analyzer | PATH, internal/top-level edge |
 | [FX-FLOW-REMERGE-001](./fixtures/FX-FLOW-REMERGE-001/README.md) | FLOW-EVM-002 | 1 | 확정 0.1 | 두 RPC·18 oracle·Verifier·analyzer | PATH, RECON, exclusion |
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
-| [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) | SVC-BRG-001 | 1 | 후보 0.1 | Across 공개 후보·양단 두 role live replay·cross-provider match·negative oracle 8개 2회 결정성, 독립 Verifier 대기 | XCHAIN, BRIDGE, RECON |
+| [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) | SVC-BRG-001 | 1 | 후보 0.1 | Across 공개 후보·양단 두 role live replay·cross-provider match·negative oracle 8개·독립 raw-first Verifier 통과, candidate→verifying 판정 대기 | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | V1 기준선 | AUTH-DECODE, allowance 연결 |
 | [FX-EVM-NFT-721-001](./fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·analyzer remediation | ERC-721 event·tokenId |
 | [FX-EVM-NFT-1155-001](./fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·subject 분리 | ERC-1155 Single·Batch |
@@ -210,19 +210,19 @@ adjacent state만 완전성을 주장한다.
 |:---|:---|
 | 연결 문제 ID | SVC-BRG-001 |
 | 상태 | 후보 |
-| DOC-M3 결정 | Across V3 candidate package·16-call raw replay·cross-provider match·negative oracle 8개 2회 결정성 완료 |
+| DOC-M3 결정 | Across V3 candidate package·16-call raw replay·cross-provider match·negative oracle 8개·독립 raw-first Verifier 완료 |
 | 패키지 | [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) |
 | 데이터 형태 | 공개 온체인 |
 | 체인 | 후보: Base `8453` → Ethereum `1` |
 | 주소·TX | Across V3. 출발 `0x957143...05a1b`, 도착 `0x816ebc...8f8a0`; 전체 값은 [후보 보고서](./61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) |
 | 기준 정답 | 도착 `0xdd8591...1cd0a`, deposit ID `2395968`, source `330000000000000000`, destination `329132286989970407` |
 | 허용 오차 | 후보 `max_abs_delta_raw=0`; event amount 차이 `867713010029593`을 fee candidate로 재계산 |
-| 확정 사실 | 공식 Across chain/contract/event 규칙과 양단 raw replay 값. fixture 승격은 oracle·Verifier 전 candidate |
+| 확정 사실 | 공식 Across chain/contract/event 규칙과 양단 raw replay 값. 독립 Verifier canonical hash `d6609bb4...`. fixture 승격은 candidate→verifying 사용자 판정 전 candidate |
 | 휴리스틱 | 금액·10초 시간차만으로 연결 금지; composite domain·공통 event parameter 필요 |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` |
 | 재현 절차 | 1) 양단 TX/receipt/block 2) exact-block event logs 3) Across composite domain 4) amount/asset/transfer 정합 5) 두 provider SHA |
 | 저작권·출처 | Across 공식 문서 URL·BaseScan/Etherscan supporting URL만 기록. 페이지/API 응답 미복제 |
-| 마지막 확인 | 2026-07-31 01:30 (candidate package Schema PASS, live calls 16, decoded match, negative oracle 8/8 PASS) |
+| 마지막 확인 | 2026-07-31 02:10 (candidate package Schema PASS, live calls 16, decoded match, negative oracle 8/8, 독립 Verifier PASS) |
 
 ---
 

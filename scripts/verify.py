@@ -90,6 +90,10 @@ COMMANDS = (
         sys.executable,
         "scripts/verify_task_016_bridge_negative_oracles.py",
     ),
+    (
+        sys.executable,
+        "scripts/verify_task_016_bridge_independent_verifier.py",
+    ),
 )
 
 

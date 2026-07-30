@@ -256,7 +256,10 @@ doc 20 §1.6을 따른다. 매핑: 입력 경계 `invalid_input`, 지원 안 되
    §6의 negative oracle 7개 범주를 8개 synthetic case·2회 결정성으로
    [manifest](../05_QA_Validation/oracles/task-016-bridge-negative-oracles-v0.1.json)에
    고정했다.
-5. 독립 Verifier raw-first 재계산·canonical hash 대조.
+5. 완료 — 독립 작성된 raw-first Verifier가 `raw-replay.json`의 raw
+   `topics`/`data`를 처음부터 다시 디코딩해 canonical hash를 계산했다
+   ([62 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) §10).
+   candidate-capture 모듈과 코드를 공유하지 않는다.
 6. `candidate → verifying → confirmed` 승격 검토(사용자 Gate).
 7. Context Receipt PASS·구현 승인 후 analyzer 구현.
 8. (별도) `MIXED-XCHAIN-001` 조합 Gate — DEX+Bridge+CEX leg 결합.
