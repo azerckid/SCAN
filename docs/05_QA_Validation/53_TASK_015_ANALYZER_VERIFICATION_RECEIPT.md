@@ -77,7 +77,7 @@ source-first 결론에 도달하는지 검증한다. 두 코드는 서로 import
 - `src/scan_tool/application/cli_runtime.py` — dispatch·`INTEL_CONTEXT_REPLAY_STAGE`
 - `docs/05_QA_Validation/fixtures/FX-{OSINT,ACTOR}-*/analysis-request.json`·`source-replay.json`(신규)
 - schema 3종·`check_analysis_schema.py`·`check_task_012_analysis_contract_proposal.py` — 갱신
-- `tests/unit/test_intel_context_slice.py`(26)·`tests/integration/test_intel_context_cli.py`(6)
+- `tests/unit/test_intel_context_slice.py`(40)·`tests/integration/test_intel_context_cli.py`(6)
 - `scripts/verify_task_015_analyzer_independent_verification.py` — verify.py 연결
 
 ## 5.1 재검토(Request changes) P1 4건·P2 3건 정정
@@ -141,7 +141,7 @@ hash는 여전히 불변이다.
 
 - Fixture: 4개 `검증 중` / common-funder `candidate` 유지(확정 승격 없음).
 - Benchmark: 11 유지(자동화 승격 없음).
-- 전체 게이트: 514 tests PASS, fixture 18, schema 52 probes, traceability 1656 links, security 204 files, TASK-015 negative oracle 30×2·독립 Verifier
+- 전체 게이트: 535 tests PASS, fixture 18, schema 52 probes, traceability 1657 links, security 204 files, TASK-015 negative oracle 30×2·독립 Verifier
   4×2·analyzer 독립 검증 4 fixtures PASS.
 - **다음(별도 Gate): live source adapter·Terms 확정, common-funder bounded
   prehistory·service exclusion, fixture `확정`·Benchmark 자동화 승격.**
