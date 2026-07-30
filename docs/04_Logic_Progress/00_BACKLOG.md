@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-31 04:55
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 13·4·13) · TASK-016 Bridge Confirmed·Automated · TASK-017~019 Proposed
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress · TASK-016 Bridge Confirmed·Automated · TASK-017 In Progress(UTXO automated · change/CoinJoin assisted · Benchmark 14·6·10) · TASK-018~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1679,16 +1679,16 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 
-- Status: ToDo
+- Status: In Progress - exact UTXO automated · change/CoinJoin assisted
 - Work Type: code
 - Priority: Phase 2 · P2
 - Depends On: TASK-011
 - Target Problems: `BTC-UTXO-001/002`, `BTC-CJ-001`
 - Atomic Tasks:
-  - [ ] UTXO·change·CoinJoin 후보/반례 fixture를 확정한다.
-  - [ ] prevout·input/output·fee·script·satoshi 계약을 설계한다.
-  - [ ] UTXO graph와 heuristic 경계를 구현한다.
-  - [ ] 세 문제의 Benchmark 승격 여부를 기록한다.
+  - [x] UTXO confirmed fixture와 CoinJoin candidate·반례를 고정한다.
+  - [x] prevout·input/output·fee·script·satoshi 계약을 설계한다.
+  - [x] bounded UTXO path와 heuristic 경계를 구현한다.
+  - [x] 세 문제의 Benchmark 승격 여부를 기록한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - BTC 3문항
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - BTC-UTXO 승격 조건
@@ -1703,12 +1703,12 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Related QA Docs:
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-BTC-001/002
 - Implementation Preconditions:
-  - [ ] 공개 BTC source·fixture·반례를 확보한다.
-  - [ ] chain-specific request/result와 공통 evidence 호환을 승인한다.
-  - [ ] Workbench 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
-  - [ ] prevout 최소 필드·artifact mutation·UTXO graph 상태 관리를 승인한다.
-  - [ ] UTXO graph UI 필요성을 검토한다.
-  - [ ] 사용자 구현 승인을 기록한다.
+  - [x] 공개 BTC source·fixture·반례를 확보한다.
+  - [x] chain-specific request/result와 공통 evidence 호환을 승인한다.
+  - [x] Workbench 상태 계약을 확인한다.
+  - [x] prevout 최소 필드·artifact mutation·UTXO path 상태를 승인한다.
+  - [x] UTXO graph UI 필요성을 검토한다.
+  - [x] 사용자 일괄 구현 승인을 기록한다.
 - Component & Library Plan:
   - shadcn/ui: N/A - Python engine 우선.
   - Custom components: BTC parser projection, UTXO ledger, heuristic classifier.
@@ -1717,20 +1717,23 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Libraries intentionally not added: full node/indexer - fixture 단계 범위 밖.
   - shadcn preset: N/A - 웹 runtime 미구현.
 - Acceptance Criteria:
-  - [ ] prevout·outputs·fee가 exact satoshi로 정합된다.
-  - [ ] change/CoinJoin은 heuristic과 반례를 포함한다.
-  - [ ] 세 문제의 승격은 confirmed fixture로 제한된다.
+  - [x] prevout·outputs·fee가 exact satoshi로 정합된다.
+  - [x] change/CoinJoin은 heuristic과 반례를 포함한다.
+  - [x] 세 문제의 승격은 confirmed fixture로 제한된다.
 - Document Sync Check:
-  - [ ] source·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
+  - [x] source·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - fixture·source·사용자 구현 승인 전 착수 금지
+  - Status: PASS - public source·UI/contract·사용자 일괄 승인 확인
   - Required References Read: 위 Related 문서 전체
   - Constraints: satoshi exact, heuristic 비단정
-  - Conflicts: Bitcoin source selection unresolved
+  - Conflicts: resolved for UTXO; CoinJoin methodology provenance remains
 - Change Receipt:
-  - N/A - 구현 미시작
+  - bitcoin_utxo Analysis I/O·offline analyzer·CLI/Benchmark wiring 구현
 - Verification Receipt:
-  - N/A - 구현 미시작
+  - independent stored-artifact-first verifier·negative oracle·legacy SQLite v1
+    비자동변형/명시 거부 회귀·full regression Gate
+  - `scripts/verify.py`: 598 tests, fixture 21, Schema 62 probes,
+    traceability 1951 links, security 245 files PASS
 
 ### [ ] TASK-018: 범죄·복합 사건 Reconciliation
 

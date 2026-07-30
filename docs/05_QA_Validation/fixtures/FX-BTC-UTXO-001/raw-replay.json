@@ -1,0 +1,104 @@
+{
+  "replay_version": "0.1",
+  "fixture_id": "FX-BTC-UTXO-001",
+  "observations_complete": true,
+  "source_ids": ["DS-BTC-NODE", "DS-BTC-API"],
+  "transaction": {
+    "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+    "network": "bitcoin_mainnet",
+    "block_height": 800000,
+    "block_hash": "00000000000000000002a7c4c1e48d76c5a37902165a270156b7a8d72728a054",
+    "block_time": 1690168629,
+    "fee_sat": 169125,
+    "inputs": [
+      {
+        "prevout": {
+          "transaction_id": "a992dbddbeb7382e3defc6914f970ea769ef813e69a923afa336976f2cbf0465",
+          "vout": 1,
+          "value_sat": 604308,
+          "script_type": "v0_p2wpkh",
+          "address": "bc1qvndmep839uexn899qy865cvddgj4txm0nkjua9"
+        },
+        "sequence": 4294967295
+      }
+    ],
+    "outputs": [
+      {
+        "vout": 0,
+        "value_sat": 143332,
+        "script_type": "v1_p2tr",
+        "address": "bc1p94scc8mn65fnlhyh64zml064kn9692e2n4q7gkttrhmt365ajdyq0m2mzh"
+      },
+      {
+        "vout": 1,
+        "value_sat": 291851,
+        "script_type": "v0_p2wpkh",
+        "address": "bc1qvndmep839uexn899qy865cvddgj4txm0nkjua9"
+      }
+    ],
+    "providers": [
+      {
+        "provider_id": "publicnode.bitcoin",
+        "role": "primary",
+        "retrieved_at": "2026-07-31T01:00:00+09:00",
+        "artifact_file": "artifacts/publicnode-primary.json",
+        "artifact_sha256": "44bb9556c0773063c2250c9cdff855d1b3aa982c7d3dd3ede4384f59c6fdabec",
+        "decoded_match": true
+      },
+      {
+        "provider_id": "mempool.space",
+        "role": "verify",
+        "retrieved_at": "2026-07-31T01:00:01+09:00",
+        "artifact_file": "artifacts/mempool-verify.json",
+        "artifact_sha256": "08f42db51b88efa4bde6ff9541288a02db715d90d3e47c49ecbea74d0151f816",
+        "decoded_match": true
+      },
+      {
+        "provider_id": "blockstream.info",
+        "role": "supporting",
+        "retrieved_at": "2026-07-31T01:00:02+09:00",
+        "artifact_file": "artifacts/blockstream-supporting.json",
+        "artifact_sha256": "08f42db51b88efa4bde6ff9541288a02db715d90d3e47c49ecbea74d0151f816",
+        "decoded_match": true
+      }
+    ]
+  },
+  "spend_path": [
+    {
+      "depth": 1,
+      "spent_transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+      "spent_vout": 0,
+      "spent_value_sat": 143332,
+      "spending_transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f",
+      "spending_vin": 0,
+      "block_height": 800897,
+      "fee_sat": 1234,
+      "created_outputs": [
+        {
+          "vout": 0,
+          "value_sat": 142098,
+          "script_type": "v0_p2wpkh",
+          "address": "bc1qdankrh3grx3vuqnv54zyphl0sdel0g4ag0l5p4"
+        }
+      ],
+      "providers": [
+        {
+          "provider_id": "mempool.space",
+          "role": "primary",
+          "retrieved_at": "2026-07-31T01:01:00+09:00",
+          "artifact_file": "artifacts/mempool-hop1.json",
+          "artifact_sha256": "8017b3791d1b66f9606a31c0e435fe30f2630fb71ad002f36e4776d7450ec1f5",
+          "decoded_match": true
+        },
+        {
+          "provider_id": "blockstream.info",
+          "role": "verify",
+          "retrieved_at": "2026-07-31T01:01:01+09:00",
+          "artifact_file": "artifacts/blockstream-hop1.json",
+          "artifact_sha256": "8017b3791d1b66f9606a31c0e435fe30f2630fb71ad002f36e4776d7450ec1f5",
+          "decoded_match": true
+        }
+      ]
+    }
+  ]
+}

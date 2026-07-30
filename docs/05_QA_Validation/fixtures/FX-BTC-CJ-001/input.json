@@ -1,0 +1,11 @@
+{
+  "$schema": "../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-BTC-CJ-001",
+  "problem_id": "BTC-CJ-001",
+  "status": "candidate",
+  "chain": {"name": "bitcoin", "chain_id": 0},
+  "transaction_id": "074b02b446a3d55b26c33582f7a1b44691cd94ae87f50f430288b3213fea596a",
+  "selection_notes": "The public transaction has 103 inputs and 194 outputs with repeated equal-value groups. Those are observable facts; CoinJoin identification, ownership, and post-mix linkage remain heuristic candidates."
+}

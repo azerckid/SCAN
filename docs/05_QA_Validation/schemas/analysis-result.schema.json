@@ -32,9 +32,7 @@
     "analysis_type": {
       "$ref": "#/$defs/analysisType"
     },
-    "chain_id": {
-      "const": 1
-    },
+    "chain_id": {"enum": [0, 1]},
     "status": {
       "enum": ["complete", "partial", "failed"]
     },
@@ -78,11 +76,19 @@
   "allOf": [
     {
       "if": {
-        "properties": {"analysis_type": {"enum": ["evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer"]}},
+        "properties": {"analysis_type": {"enum": ["evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer", "bitcoin_utxo"]}},
         "required": ["analysis_type"]
       },
       "then": {"properties": {"schema_version": {"const": "0.2"}}},
       "else": {"properties": {"schema_version": {"const": "0.1"}}}
+    },
+    {
+      "if": {
+        "properties": {"analysis_type": {"const": "bitcoin_utxo"}},
+        "required": ["analysis_type"]
+      },
+      "then": {"properties": {"chain_id": {"const": 0}}},
+      "else": {"properties": {"chain_id": {"const": 1}}}
     },
     {
       "if": {
@@ -161,7 +167,7 @@
       "pattern": "^AN-[A-Z0-9][A-Z0-9-]{2,63}$"
     },
     "analysisType": {
-      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer"]
+      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer", "bitcoin_utxo"]
     },
     "resultId": {
       "type": "string",
@@ -228,7 +234,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE)-[A-Z0-9-]+$"
+          "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|BTC)-[A-Z0-9-]+$"
           },
           "uniqueItems": true
         },

@@ -1,0 +1,96 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-BTC-UTXO-001",
+  "problem_id": "BTC-UTXO-001",
+  "status": "confirmed",
+  "expected_results": [
+    {
+      "result_type": "bitcoin_utxo_summary",
+      "classification": "confirmed_fact",
+      "value": {
+        "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+        "network": "bitcoin_mainnet",
+        "block_height": 800000,
+        "block_hash": "00000000000000000002a7c4c1e48d76c5a37902165a270156b7a8d72728a054",
+        "input_count": 1,
+        "output_count": 2,
+        "input_sum_sat": 604308,
+        "output_sum_sat": 435183,
+        "fee_sat": 169125,
+        "spent_outpoints": [
+          {
+            "transaction_id": "a992dbddbeb7382e3defc6914f970ea769ef813e69a923afa336976f2cbf0465",
+            "vout": 1,
+            "value_sat": 604308
+          }
+        ],
+        "created_utxos": [
+          {
+            "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+            "vout": 0,
+            "value_sat": 143332,
+            "script_type": "v1_p2tr",
+            "address": "bc1p94scc8mn65fnlhyh64zml064kn9692e2n4q7gkttrhmt365ajdyq0m2mzh"
+          },
+          {
+            "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+            "vout": 1,
+            "value_sat": 291851,
+            "script_type": "v0_p2wpkh",
+            "address": "bc1qvndmep839uexn899qy865cvddgj4txm0nkjua9"
+          }
+        ],
+        "start_outpoint": {
+          "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+          "vout": 0
+        },
+        "max_hops": 1,
+        "spend_path": [
+          {
+            "depth": 1,
+            "spent_outpoint": {
+              "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+              "vout": 0,
+              "value_sat": 143332
+            },
+            "spending_transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f",
+            "spending_vin": 0,
+            "created_outpoints": [
+              {
+                "transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f",
+                "vout": 0,
+                "value_sat": 142098
+              }
+            ]
+          }
+        ],
+        "frontier_outpoints": [
+          {
+            "transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f",
+            "vout": 0,
+            "value_sat": 142098
+          }
+        ]
+      }
+    }
+  ],
+  "tolerance": {"max_abs_delta_raw": "0"},
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-BTC-PREVOUT",
+        "description": "The start outpoint and one-hop spend path are reconstructed exactly.",
+        "mandatory": true,
+        "evidence_refs": ["EV-BTC-PRIMARY", "EV-BTC-VERIFY"]
+      },
+      {
+        "requirement_id": "REQ-BTC-FEE",
+        "description": "Input minus outputs equals the integer satoshi fee.",
+        "mandatory": true,
+        "evidence_refs": ["EV-BTC-PRIMARY", "EV-BTC-VERIFY"]
+      }
+    ]
+  }
+}

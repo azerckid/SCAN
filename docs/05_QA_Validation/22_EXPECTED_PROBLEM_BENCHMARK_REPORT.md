@@ -1,7 +1,7 @@
 # 예상문제 Offline Benchmark 0.1 검증 보고서
 > Created: 2026-07-29 01:16
-> Last Updated: 2026-07-31 04:55
-> Status: Passed · 13 Automated / 4 Assisted / 13 Unsupported
+> Last Updated: 2026-07-31 05:35
+> Status: Passed · 14 Automated / 6 Assisted / 10 Unsupported
 
 ## 1. 목적과 판정 경계
 
@@ -17,7 +17,7 @@
 | `assisted` | 현재 deterministic primitive를 재사용할 수 있지만 전용 request·analyzer·reference fixture가 없어 사람이 정합 |
 | `unsupported` | 문제의 핵심 기능 자체가 없어 현재 프로그램으로 답을 도출할 수 없음 |
 
-따라서 `13/13 pass`는 automated 열세 문제의 정확도이며 30문항 전체 정확도가
+따라서 `14/14 pass`는 automated 열네 문제의 정확도이며 30문항 전체 정확도가
 아니다. Assisted와 Unsupported 문제를 성공으로 계산하지 않는다.
 
 ## 2. 실행 방법과 채점
@@ -46,7 +46,7 @@ integration test가 `socket.socket`을 실패하도록 바꾼 상태에서 동�
 ## 3. 실행 결과
 
 ```text
-EXPECTED PROBLEMS 30 · AUTOMATED 13 · ASSISTED 4 · UNSUPPORTED 13
+EXPECTED PROBLEMS 30 · AUTOMATED 14 · ASSISTED 6 · UNSUPPORTED 10
 PASS BASIC-EVM-001 · FX-BASIC-EVM-001
 PASS BASIC-EVM-002 · FX-BASIC-EVM-002
 PASS EVM-AUTH-001 · FX-EVM-AUTH-001
@@ -60,19 +60,20 @@ PASS FLOW-EVM-002 · FX-FLOW-REMERGE-001
 PASS SVC-DEX-001 · FX-SVC-DEX-001
 PASS SVC-BRG-001 · FX-SVC-BRG-001
 PASS OSINT-LBL-001 · FX-OSINT-LABEL-CONFLICT-001
-BENCHMARK 13/13 automated cases passed · network_mode offline
+PASS BTC-UTXO-001 · FX-BTC-UTXO-001
+BENCHMARK 14/14 automated cases passed · network_mode offline
 ```
 
 | 항목 | 결과 |
 |:---|---:|
 | 전체 예상문제 | 30 |
-| 완전자동 | 13 |
-| 도구보조 | 4 |
-| 미지원 | 13 |
-| 자동 실행 | 13 |
-| 자동 통과 | 13 |
+| 완전자동 | 14 |
+| 도구보조 | 6 |
+| 미지원 | 10 |
+| 자동 실행 | 14 |
+| 자동 통과 | 14 |
 | 자동 범위 정확도 | 100% |
-| 30문항 직접 자동화율 | 43.3% |
+| 30문항 직접 자동화율 | 46.7% |
 
 ## 4. 30문항 Coverage Matrix
 
@@ -104,9 +105,9 @@ BENCHMARK 13/13 automated cases passed · network_mode offline
 | CRIME-POISON-001 | Unsupported | provenance | POISON·HEUR |
 | CRIME-EXP-001 | Unsupported | EVM-LOG·provenance | EVM-TRACE·EXPLOIT-DECODE·PATH |
 | CRIME-RUG-001 | Unsupported | EVM-LOG·provenance | LP-RUG·PATH·LABEL |
-| BTC-UTXO-001 | Unsupported | 공통 기반 | BTC-UTXO |
-| BTC-UTXO-002 | Unsupported | provenance | BTC-UTXO·HEUR |
-| BTC-CJ-001 | Unsupported | provenance·export | BTC-UTXO·COINJOIN·HEUR |
+| BTC-UTXO-001 | **Pass / Automated** | confirmed exact-satoshi fixture | BTC-UTXO |
+| BTC-UTXO-002 | Assisted | change candidate·반례 | BTC-UTXO·HEUR |
+| BTC-CJ-001 | Assisted | separate CoinJoin candidate·비단정 경계 | BTC-UTXO·COINJOIN·HEUR |
 | OSINT-LBL-001 | Automated | intel_context collect_label_claims·confirmed LABEL fixture | 없음 |
 | OSINT-SAN-001 | Assisted | official historical timeline·direct match | 1-hop indirect expansion·LABEL |
 | OSINT-ENS-001 | Assisted | fixed-block ENS forward/reverse | domain·DNS·SNS·impersonation |
@@ -134,7 +135,7 @@ coverage를 가장 크게 늘리는 순서는
 
 | 기준 | 판정 | 증거·경계 |
 |:---|:---:|:---|
-| Functionality | Partial | automated 13개 exact/evidence/requirement/determinism 통과, 17개 비자동 |
+| Functionality | Partial | automated 14개 exact/evidence/requirement/determinism 통과, 16개 비자동 |
 | Potential Impact | Partial | 공백이 큰 PATH·LABEL·OSINT 우선순위를 수치화, 실대회 효과 미측정 |
 | Novelty | Pass / Offline | 답 문자열이 아니라 answer→evidence→fixture requirement를 함께 채점 |
 | UX | Pass / CLI | 한 명령으로 coverage와 자동 사례 결과를 표시 |

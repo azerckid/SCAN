@@ -1,0 +1,44 @@
+{
+  "fixture_id": "FX-BTC-CJ-001",
+  "status": "candidate",
+  "network": "bitcoin_mainnet",
+  "transaction_id": "074b02b446a3d55b26c33582f7a1b44691cd94ae87f50f430288b3213fea596a",
+  "observed_facts": {
+    "block_height": 576833,
+    "input_count": 103,
+    "output_count": 194,
+    "fee_sat": 28996,
+    "largest_equal_output_groups": [
+      {"value_sat": 9650742, "count": 84},
+      {"value_sat": 19264270, "count": 20},
+      {"value_sat": 38528540, "count": 12},
+      {"value_sat": 77057080, "count": 4}
+    ]
+  },
+  "providers": [
+    {
+      "provider_id": "mempool.space",
+      "role": "primary",
+      "raw_sha256": "e628c76bbba1f694dfabe543b598e82b78ddbff870a945da1c66e60bc41f214a",
+      "decoded_match": true
+    },
+    {
+      "provider_id": "blockstream.info",
+      "role": "verify",
+      "raw_sha256": "bfdc256a4ce8f4b790f919cd6f8314e3ec2b5057367e3523ae844188b3f02629",
+      "decoded_match": true
+    }
+  ],
+  "claims": {
+    "coinjoin": "heuristic_candidate",
+    "ownership": "not_assessed",
+    "criminality": "not_assessed",
+    "single_exit": "not_assessed"
+  },
+  "remaining_gate": [
+    "pinned full raw artifacts",
+    "published detection methodology source",
+    "independent verifier",
+    "product analyzer fixture binding"
+  ]
+}

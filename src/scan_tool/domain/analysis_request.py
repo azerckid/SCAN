@@ -10,6 +10,7 @@ from pydantic_core import PydanticCustomError
 from scan_tool.domain._types import (
     Address,
     AnalysisId,
+    BitcoinTxId,
     BlockNumber,
     ContractBool,
     ContractDatetime,
@@ -17,6 +18,7 @@ from scan_tool.domain._types import (
     ExactlyTwoUniqueList,
     FixtureId,
     NonEmptyUniqueList,
+    NonNegativeInt,
     SourceId,
     TransactionHash,
     UniqueList,
@@ -32,6 +34,7 @@ class AnalysisType(StrEnum):
     FLOW_PATH = "flow_path"
     INTEL_CONTEXT = "intel_context"
     BRIDGE_TRANSFER = "bridge_transfer"
+    BITCOIN_UTXO = "bitcoin_utxo"
 
 
 class EvmQueryKind(StrEnum):
@@ -346,6 +349,26 @@ class LinkBridgeTransferInputs(ContractModel):
     destination_transaction_hash: TransactionHash | MISSING = MISSING
 
 
+class BitcoinQueryKind(StrEnum):
+    SUMMARIZE_TRANSACTION = "summarize_transaction"
+    ASSESS_HEURISTICS = "assess_heuristics"
+
+
+class BitcoinTransactionInputs(ContractModel):
+    transaction_id: BitcoinTxId
+    network: Literal["bitcoin_mainnet"]
+    start_vout: NonNegativeInt
+    max_hops: PositiveInt
+
+
+class BitcoinHeuristicInputs(BitcoinTransactionInputs):
+    assess_change: ContractBool
+    assess_coinjoin: ContractBool
+
+
+BitcoinInputs = BitcoinTransactionInputs | BitcoinHeuristicInputs
+
+
 class AnalysisRequestBase(ContractModel):
     schema_uri: Annotated[
         str,
@@ -353,31 +376,35 @@ class AnalysisRequestBase(ContractModel):
     ]
     schema_version: Literal["0.1", "0.2"]
     analysis_id: AnalysisId
-    chain_id: Literal[1]
+    chain_id: StrictInt
     fixture_id: FixtureId | MISSING = MISSING
     requested_at: ContractDatetime
     source_policy: SourcePolicy
 
 
 class DexAnalysisRequest(AnalysisRequestBase):
+    chain_id: Literal[1]
     schema_version: Literal["0.1"]
     analysis_type: Literal[AnalysisType.DEX_SWAP]
     inputs: DexInputs
 
 
 class AuthAnalysisRequest(AnalysisRequestBase):
+    chain_id: Literal[1]
     schema_version: Literal["0.1"]
     analysis_type: Literal[AnalysisType.AUTH_CONSUMPTION]
     inputs: AuthInputs
 
 
 class FreezeAnalysisRequest(AnalysisRequestBase):
+    chain_id: Literal[1]
     schema_version: Literal["0.1"]
     analysis_type: Literal[AnalysisType.ADDRESS_FREEZE]
     inputs: FreezeInputs
 
 
 class EvmCoreAnalysisRequest(AnalysisRequestBase):
+    chain_id: Literal[1]
     model_config = ConfigDict(
         json_schema_extra={
             "allOf": [
@@ -416,6 +443,7 @@ class EvmCoreAnalysisRequest(AnalysisRequestBase):
 
 
 class EvmSpecialAnalysisRequest(AnalysisRequestBase):
+    chain_id: Literal[1]
     model_config = ConfigDict(
         json_schema_extra={
             "allOf": [
@@ -450,6 +478,7 @@ class EvmSpecialAnalysisRequest(AnalysisRequestBase):
 
 
 class FlowPathAnalysisRequest(AnalysisRequestBase):
+    chain_id: Literal[1]
     model_config = ConfigDict(
         json_schema_extra={
             "allOf": [
@@ -486,6 +515,7 @@ class FlowPathAnalysisRequest(AnalysisRequestBase):
 
 
 class IntelContextAnalysisRequest(AnalysisRequestBase):
+    chain_id: Literal[1]
     model_config = ConfigDict(
         json_schema_extra={
             "allOf": [
@@ -523,10 +553,29 @@ class IntelContextAnalysisRequest(AnalysisRequestBase):
 
 
 class BridgeTransferAnalysisRequest(AnalysisRequestBase):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.BRIDGE_TRANSFER]
     query_kind: Literal[BridgeTransferQueryKind.LINK_BRIDGE_TRANSFER]
     inputs: LinkBridgeTransferInputs
+
+
+class BitcoinUtxoAnalysisRequest(AnalysisRequestBase):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.BITCOIN_UTXO]
+    chain_id: Literal[0]
+    query_kind: BitcoinQueryKind
+    inputs: BitcoinInputs
+
+    @model_validator(mode="after")
+    def inputs_match_query_kind(self) -> "BitcoinUtxoAnalysisRequest":
+        expected = {
+            BitcoinQueryKind.SUMMARIZE_TRANSACTION: BitcoinTransactionInputs,
+            BitcoinQueryKind.ASSESS_HEURISTICS: BitcoinHeuristicInputs,
+        }[self.query_kind]
+        if type(self.inputs) is not expected:
+            raise PydanticCustomError("invalid_input", "inputs must match query_kind")
+        return self
 
 
 RequestVariant = Annotated[
@@ -537,7 +586,8 @@ RequestVariant = Annotated[
     | EvmSpecialAnalysisRequest
     | FlowPathAnalysisRequest
     | IntelContextAnalysisRequest
-    | BridgeTransferAnalysisRequest,
+    | BridgeTransferAnalysisRequest
+    | BitcoinUtxoAnalysisRequest,
     Field(discriminator="analysis_type"),
 ]
 

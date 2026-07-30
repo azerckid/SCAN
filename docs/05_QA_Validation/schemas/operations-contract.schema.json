@@ -107,7 +107,11 @@
         "auth_consumption",
         "address_freeze",
         "evm_core",
-        "evm_special", "flow_path", "intel_context", "bridge_transfer"
+        "evm_special",
+        "flow_path",
+        "intel_context",
+        "bridge_transfer",
+        "bitcoin_utxo"
       ],
       "title": "AnalysisType",
       "type": "string"

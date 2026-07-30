@@ -42,16 +42,17 @@ SQLite Board input, and an atomic human-confirmed local submission record.
 adds Analysis I/O 0.2 `evm_core` object·historical balance·first Transfer·native
 inflow queries while retaining the three 0.1 verticals. `TASK-013` adds
 subject-scoped ERC-721/1155 and EIP-1967 event/state analysis. `TASK-014` adds
-bounded path, remerge, and multi-origin graph/ledger analysis. Thirteen cases are now
-directly automated, 4 are assisted, and 13 remain unsupported. The thirteen automated
+bounded path, remerge, and multi-origin graph/ledger analysis. Fourteen cases are now
+directly automated, 6 are assisted, and 10 remain unsupported. The fourteen automated
 cases pass exact answer, evidence, fixture-requirement, and deterministic replay
-checks. This is 13/13 accuracy within the automated scope, not 30/30 problem
+checks. This is 14/14 accuracy within the automated scope, not 30/30 problem
 coverage.
 Phase 2 is documented as `TASK-012` through `TASK-019`: generic EVM, NFT/proxy,
 PATH, intelligence, service/xchain, Bitcoin, case reconciliation, and a final
 coverage gate. TASK-012 through TASK-014 are complete; TASK-015 is in progress with
 four confirmed fixtures; TASK-016 Bridge is confirmed and automated, while CEX·Mixer·
-Lending and TASK-017 through TASK-019 remain proposed under contest feature freeze.
+Lending remain proposed under contest feature freeze. TASK-017 now automates exact
+bounded UTXO traversal while change/CoinJoin remain assisted; TASK-018~019 are proposed.
 TASK-013 has three confirmed public NFT·Proxy packages with two-provider
 raw SHA replay, explicit selected-scope integrity checks, and 16 offline negative
 oracles, an independent raw-first Verifier, approved UI·Context, product analyzer,
@@ -157,13 +158,13 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-570 passed
-PASS 19 fixture packages validated against schema 0.1
+598 passed
+PASS 21 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
-PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 57 probes
+PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 62 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 1907 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 226 runtime/evidence files
+PASS repository traceability: 1951 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 245 runtime/evidence files
 PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)
 PASS TASK-013 independent Verifier: 3 fixtures (confirmed), 7 requirements, 13 evidence values, 2 deterministic runs
@@ -216,11 +217,12 @@ A supported request without `--evidence` stops explicitly with
 baseline and expected-problem Benchmark 0.1 are closed.
 `TASK-012` is complete with four confirmed fixtures and a PASS Context Receipt.
 `TASK-013` is complete with three confirmed fixtures and Benchmark 9/9.
-`TASK-014` is complete with three confirmed fixtures; Benchmark is 13/13 automated (LABEL via TASK-015, Bridge via TASK-016).
+`TASK-014` is complete with three confirmed fixtures; Benchmark is 14/14 automated (LABEL via TASK-015, Bridge via TASK-016, exact Bitcoin UTXO via TASK-017).
 `TASK-015` is in progress: four bounded fixtures are confirmed, `OSINT-LBL-001`
 is automated, and common-funder remains candidate. `TASK-016` Bridge is confirmed
-and automated; CEX·Mixer·Lending and `TASK-017` through `TASK-019` remain under
-contest feature freeze until actual problem demand appears.
+and automated. `TASK-017` automates exact bounded Bitcoin UTXO traversal while
+change/CoinJoin remain assisted; CEX·Mixer·Lending and `TASK-018` through
+`TASK-019` remain under contest feature freeze until actual problem demand appears.
 `TASK-010` offline Operations V1 is complete through human-confirmed local
 submission recording. No live provider configuration exists; live transport still
 requires authoritative Rules and `rule_status: allowed`. The CLI never calls CTFd,

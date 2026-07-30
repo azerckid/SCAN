@@ -100,9 +100,10 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 
 ### [ ] Wave 2 — Bitcoin Core
 
-- [ ] `TASK-017` BTC UTXO·prevout·fee fixture를 확정한다.
-- [ ] change·CoinJoin heuristic과 deterministic 사실을 분리한다.
-- [ ] `contest_rpc`/artifact 입력의 Bitcoin normalized evidence를 승인한다.
+- [x] `TASK-017` BTC UTXO·prevout·fee fixture를 확정한다.
+- [x] change·CoinJoin heuristic과 deterministic 사실을 분리한다.
+- [x] artifact 입력의 Bitcoin normalized evidence를 승인한다.
+- [ ] contest RPC Bitcoin query mapping은 실제 대회 endpoint 제공 시 승인한다.
 
 ### [x] Wave 3 — NFT·Proxy·PATH 완료
 

@@ -11,4 +11,4 @@ def test_generated_schemas_match_approved_contract_probes() -> None:
     )
 
     assert completed.returncode == 0, completed.stderr
-    assert "across 57 probes" in completed.stdout
+    assert "across 62 probes" in completed.stdout
