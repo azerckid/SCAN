@@ -44,7 +44,11 @@
   근거)과 정합해야 집계에 포함한다.
 - 의미가 다른 leg(예: Lending의 principal·fee·debt·collateral)는 **자산·방향
   별로 분리**한다. 하나의 이벤트가 서로 다른 자산의 유입·유출을 만들 수 있다.
-- 정합되지 않는 leg → partial(과장 금지).
+- **미확보와 모순을 분리**한다(Backlog "누락은 partial, conflict는 보존" 경계).
+  - value evidence가 **빠진** leg → `partial`(아직 확정할 수 없음, 과장 금지).
+  - 확보된 근거끼리 **실제 충돌**(예: Bridge 양단 amount/message/asset 불일치,
+    이벤트 amount ≠ 매칭된 Transfer) → `failed`/`reconciliation_failed`로
+    보존한다. 충돌을 partial로 덮어 "곧 채워질 공백"처럼 보이게 하지 않는다.
 
 ### 1.3 Value-movement evidence 완결성 (trace는 그 한 형태)
 - 공통 규칙은 "집계에 필요한 각 leg의 **value-movement evidence가 확보될
@@ -77,8 +81,9 @@ assertion·heuristic을 confirmed fact나 truth로 승격하지 않는다.
 - evidence: `event_evidence`·`transfer_evidence`·(선택)`call_evidence`·
   (선택)`state_evidence`를 각각 `source_requirements`로 연결.
 - 이벤트 정렬 키는 `(block_number, transactionIndex, logIndex)`로 고정.
-- 후속 PATH seed는 계산된 집계에서 subject가 실제 수령한 leg의 수령 주소에서
-  유도한다(임의 주소 금지).
+- 후속 PATH seed는 **adapter가 정합한 결정적 output leg에서 유도**한다(임의
+  주소 금지). 결정적 output leg가 없거나 연결이 heuristic인 경우(예: Mixer
+  입금↔출금 귀속)에는 PATH를 만들지 않거나 `candidate`로만 표시한다.
 
 ### 1.6 오류 계약 — 기존 `ErrorCode` 재사용
 - 핵심 원칙은 **새 public `ErrorCode` 금지**이며 "5개만 허용"이 아니다.
@@ -94,10 +99,10 @@ assertion·heuristic을 confirmed fact나 truth로 승격하지 않는다.
 ### 1.7 상태·negative oracle 계열
 - complete/partial/failed 정의(§1.2·§1.3 기준).
 - oracle 계열: ①타 프로토콜/서비스 오귀속 ②시간창 밖 포함 ③adapter가 trace를
-  필수로 선언한 fixture의 evidence-only complete ④event↔value 불일치 합산
-  ⑤scope/역할 합성(요청에 없는 주소·역할) ⑥heuristic/assertion을 confirmed
-  fact나 truth로 승격 ⑦소유·본인성·범죄성 자동 단정. 캡처 Gate에서 2회
-  결정성으로 고정.
+  필수로 선언한 fixture에서 required trace 없이 complete(trace-less complete)
+  ④event↔value 불일치(모순)를 partial로 덮음 ⑤scope/역할 합성(요청에 없는
+  주소·역할) ⑥heuristic/assertion을 confirmed fact나 truth로 승격 ⑦소유·
+  본인성·범죄성 자동 단정. 캡처 Gate에서 2회 결정성으로 고정.
 
 ### 1.8 Analysis I/O 접근
 - vertical 패턴(evm_special·flow_path·intel_context, 그리고 Lending의 전용
@@ -136,6 +141,9 @@ assertion·heuristic을 confirmed fact나 truth로 승격하지 않는다.
 - **단일 `scoped_subjects[]` 항목 + 역할 exact-set 강제**는 단일 체인·완전한 한
   사건을 전제한 lending 규칙이다. 양단·부분 확보 adapter는 §1.1대로 항목 수와
   부분 확보 partial 허용 여부를 자신의 Gate에서 다시 정한다.
+- **PATH seed = "subject가 실제 수령한 leg"**는 lending 전용 구체화다. 공통
+  규칙은 §1.5의 "정합한 결정적 output leg에서 유도"이며, 각 adapter는 자신의
+  결정적 output이 무엇인지(또는 없어서 candidate/미생성인지)를 다시 정한다.
 - "공격 vs 정상 청산" 경계는 §1.4 not_assessed 규칙의 lending 사례일 뿐이며,
   각 adapter는 자신의 도메인 판단 항목을 not_assessed로 별도 식별한다.
 
