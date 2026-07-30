@@ -8,7 +8,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 VALIDATORS = (
     (
         "docs/05_QA_Validation/scripts/validate_fixture_schemas.py",
-        "PASS 19 fixture packages",
+        "PASS 20 fixture packages",
     ),
     (
         "docs/05_QA_Validation/scripts/validate_analysis_schemas.py",

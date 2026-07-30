@@ -307,6 +307,21 @@ class BridgeTransferFailedAnalysisResult(FailedAnalysisResult):
     analysis_type: Literal[AnalysisType.BRIDGE_TRANSFER]
 
 
+class CexClusterCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CEX_CLUSTER]
+
+
+class CexClusterPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CEX_CLUSTER]
+
+
+class CexClusterFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CEX_CLUSTER]
+
+
 ResultVariant = (
     LegacyCompleteAnalysisResult
     | LegacyPartialAnalysisResult
@@ -326,6 +341,9 @@ ResultVariant = (
     | BridgeTransferCompleteAnalysisResult
     | BridgeTransferPartialAnalysisResult
     | BridgeTransferFailedAnalysisResult
+    | CexClusterCompleteAnalysisResult
+    | CexClusterPartialAnalysisResult
+    | CexClusterFailedAnalysisResult
 )
 
 

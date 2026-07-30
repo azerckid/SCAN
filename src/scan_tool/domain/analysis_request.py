@@ -32,6 +32,7 @@ class AnalysisType(StrEnum):
     FLOW_PATH = "flow_path"
     INTEL_CONTEXT = "intel_context"
     BRIDGE_TRANSFER = "bridge_transfer"
+    CEX_CLUSTER = "cex_cluster"
 
 
 class EvmQueryKind(StrEnum):
@@ -337,6 +338,27 @@ class BridgeTransferQueryKind(StrEnum):
     LINK_BRIDGE_TRANSFER = "link_bridge_transfer"
 
 
+class CexClusterQueryKind(StrEnum):
+    EVALUATE_CEX_CLUSTER = "evaluate_cex_cluster"
+
+
+class ObservationWindowInputs(ContractModel):
+    start_block: BlockNumber
+    end_block: BlockNumber
+
+    @model_validator(mode="after")
+    def window_is_ordered(self) -> "ObservationWindowInputs":
+        if self.end_block < self.start_block:
+            raise PydanticCustomError("invalid_input", "observation window end must follow start")
+        return self
+
+
+class EvaluateCexClusterInputs(ContractModel):
+    deposit_candidates: NonEmptyUniqueList[Address]
+    observation_window: ObservationWindowInputs
+    expected_hot_wallet: Address | MISSING = MISSING
+
+
 class LinkBridgeTransferInputs(ContractModel):
     source_subject: Address
     destination_chain_id: StrictInt
@@ -529,6 +551,13 @@ class BridgeTransferAnalysisRequest(AnalysisRequestBase):
     inputs: LinkBridgeTransferInputs
 
 
+class CexClusterAnalysisRequest(AnalysisRequestBase):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CEX_CLUSTER]
+    query_kind: Literal[CexClusterQueryKind.EVALUATE_CEX_CLUSTER]
+    inputs: EvaluateCexClusterInputs
+
+
 RequestVariant = Annotated[
     DexAnalysisRequest
     | AuthAnalysisRequest
@@ -537,7 +566,8 @@ RequestVariant = Annotated[
     | EvmSpecialAnalysisRequest
     | FlowPathAnalysisRequest
     | IntelContextAnalysisRequest
-    | BridgeTransferAnalysisRequest,
+    | BridgeTransferAnalysisRequest
+    | CexClusterAnalysisRequest,
     Field(discriminator="analysis_type"),
 ]
 

@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-CEX-001",
+  "problem_id": "SVC-CEX-001",
+  "status": "confirmed",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "mode": "discovery",
+  "deposit_candidates": [
+    "0x8dce2aac0de82bdcaf6b4373b79f94331b8e4995",
+    "0xb338962b92cd818d6aef0a32a9ecd01212a71f33",
+    "0xf4377eda661e04b6dda78969796ed31658d602d4"
+  ],
+  "observation_window": {
+    "start_block": 18215900,
+    "end_block": 18216000
+  },
+  "hot_wallet_candidate": {
+    "address": "0xdbaef73d20b0ca4abc72e8daf97af36626e3b973",
+    "note": "Result field only; not provided in discovery request"
+  },
+  "scope_kind": "deposit_candidates_and_bounded_block_window",
+  "selection_notes": "OFAC SDN GARANTEX-listed deposit candidates sweep native ETH to a shared destination. Three outbound transfers in blocks 18215917-18215925 were pinned via publicnode JSON-RPC. Label assertions use the US Treasury SDN excerpt (public domain). Hot wallet candidate is pattern-derived and not claimed as ownership. Analyzer, independent verifier, negative oracles, Verification, and confirmed promotion are complete. Benchmark automated registration is included."
+}

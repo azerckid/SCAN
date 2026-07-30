@@ -1,7 +1,7 @@
 # 예상문제 Offline Benchmark 0.1 검증 보고서
 > Created: 2026-07-29 01:16
-> Last Updated: 2026-07-31 04:55
-> Status: Passed · 13 Automated / 4 Assisted / 13 Unsupported
+> Last Updated: 2026-07-31 05:40
+> Status: Passed · 14 Automated / 4 Assisted / 12 Unsupported
 
 ## 1. 목적과 판정 경계
 
@@ -17,7 +17,7 @@
 | `assisted` | 현재 deterministic primitive를 재사용할 수 있지만 전용 request·analyzer·reference fixture가 없어 사람이 정합 |
 | `unsupported` | 문제의 핵심 기능 자체가 없어 현재 프로그램으로 답을 도출할 수 없음 |
 
-따라서 `13/13 pass`는 automated 열세 문제의 정확도이며 30문항 전체 정확도가
+따라서 `14/14 pass`는 automated 열네 문제의 정확도이며 30문항 전체 정확도가
 아니다. Assisted와 Unsupported 문제를 성공으로 계산하지 않는다.
 
 ## 2. 실행 방법과 채점
@@ -46,7 +46,7 @@ integration test가 `socket.socket`을 실패하도록 바꾼 상태에서 동�
 ## 3. 실행 결과
 
 ```text
-EXPECTED PROBLEMS 30 · AUTOMATED 13 · ASSISTED 4 · UNSUPPORTED 13
+EXPECTED PROBLEMS 30 · AUTOMATED 14 · ASSISTED 4 · UNSUPPORTED 12
 PASS BASIC-EVM-001 · FX-BASIC-EVM-001
 PASS BASIC-EVM-002 · FX-BASIC-EVM-002
 PASS EVM-AUTH-001 · FX-EVM-AUTH-001
@@ -59,20 +59,21 @@ PASS FLOW-EVM-001 · FX-FLOW-PATH-001
 PASS FLOW-EVM-002 · FX-FLOW-REMERGE-001
 PASS SVC-DEX-001 · FX-SVC-DEX-001
 PASS SVC-BRG-001 · FX-SVC-BRG-001
+PASS SVC-CEX-001 · FX-SVC-CEX-001
 PASS OSINT-LBL-001 · FX-OSINT-LABEL-CONFLICT-001
-BENCHMARK 13/13 automated cases passed · network_mode offline
+BENCHMARK 14/14 automated cases passed · network_mode offline
 ```
 
 | 항목 | 결과 |
 |:---|---:|
 | 전체 예상문제 | 30 |
-| 완전자동 | 13 |
+| 완전자동 | 14 |
 | 도구보조 | 4 |
-| 미지원 | 13 |
-| 자동 실행 | 13 |
-| 자동 통과 | 13 |
+| 미지원 | 12 |
+| 자동 실행 | 14 |
+| 자동 통과 | 14 |
 | 자동 범위 정확도 | 100% |
-| 30문항 직접 자동화율 | 43.3% |
+| 30문항 직접 자동화율 | 46.7% |
 
 ## 4. 30문항 Coverage Matrix
 
@@ -95,7 +96,7 @@ BENCHMARK 13/13 automated cases passed · network_mode offline
 | FLOW-MULTI-001 | Assisted | origin contribution·dedup total | PRICE·피해자 귀속 |
 | SVC-DEX-001 | Automated | DEX strict vertical | 없음 |
 | SVC-BRG-001 | Automated | Across V3 bridge_transfer·confirmed fixture | live Rules adapter·ownership |
-| SVC-CEX-001 | Unsupported | provenance | CEX-CLUSTER·LABEL·HEUR |
+| SVC-CEX-001 | Automated | cex_cluster·OFAC label assertion·confirmed fixture | ownership·criminality `not_assessed` |
 | SVC-MIX-001 | Unsupported | provenance·export | MIXER·PATH·HEUR |
 | SVC-LEND-001 | Unsupported | EVM-LOG·RECON | DEFI-LEND·EVM-TRACE |
 | ACTOR-REL-001 | Unsupported | provenance | ACTOR-REL·HEUR |
@@ -110,7 +111,7 @@ BENCHMARK 13/13 automated cases passed · network_mode offline
 | OSINT-LBL-001 | Automated | intel_context collect_label_claims·confirmed LABEL fixture | 없음 |
 | OSINT-SAN-001 | Assisted | official historical timeline·direct match | 1-hop indirect expansion·LABEL |
 | OSINT-ENS-001 | Assisted | fixed-block ENS forward/reverse | domain·DNS·SNS·impersonation |
-| MIXED-XCHAIN-001 | Unsupported | DECODE·RECON·provenance·single-hop BRIDGE | CEX·COMPOSITION·PATH·LABEL |
+| MIXED-XCHAIN-001 | Unsupported | DECODE·RECON·provenance·single-hop BRIDGE·CEX | COMPOSITION·PATH·LABEL |
 | MIXED-CASE-001 | Unsupported | 공통 기반 | SEED-DISCOVERY·PATH·OSINT·VIZ |
 
 ## 5. 해석과 다음 구현 우선순위
@@ -124,8 +125,8 @@ coverage를 가장 크게 늘리는 순서는
 1. `PRICE`·`LABEL`·`OSINT`를 확정 사실과 heuristic으로 분리해
    `FLOW-MULTI-001`과 후속 FLOW·CRIME 문제의 남은 공백을 해소한다.
 2. PATH를 CRIME·MIXED에 연결하되 문제별 confirmed fixture로 범위를 제한한다.
-3. `BTC-UTXO`, CEX/Mixer/Lending, 전문 decoder는 실제 fixture가 확보된 순서로
-   별도 vertical을 추가한다. Bridge 단일 hop은 이미 automated다.
+3. `BTC-UTXO`, Mixer/Lending, 전문 decoder는 실제 fixture가 확보된 순서로
+   별도 vertical을 추가한다. Bridge·CEX 단일 hop은 이미 automated다.
 
 새 기능은 문항 수만 보고 구현하지 않는다. 공개 사례와 reference answer를
 먼저 확보한 뒤 automated로 승격하고 같은 benchmark에서 회귀시킨다.
@@ -134,7 +135,7 @@ coverage를 가장 크게 늘리는 순서는
 
 | 기준 | 판정 | 증거·경계 |
 |:---|:---:|:---|
-| Functionality | Partial | automated 13개 exact/evidence/requirement/determinism 통과, 17개 비자동 |
+| Functionality | Partial | automated 14개 exact/evidence/requirement/determinism 통과, 16개 비자동 |
 | Potential Impact | Partial | 공백이 큰 PATH·LABEL·OSINT 우선순위를 수치화, 실대회 효과 미측정 |
 | Novelty | Pass / Offline | 답 문자열이 아니라 answer→evidence→fixture requirement를 함께 채점 |
 | UX | Pass / CLI | 한 명령으로 coverage와 자동 사례 결과를 표시 |
@@ -144,15 +145,16 @@ coverage를 가장 크게 늘리는 순서는
 ## 7. Known Issues
 
 - automated 사례는 Ethereum mainnet DEX·AUTH·FREEZE, EVM Core 네 query,
-  NFT·Proxy, bounded FLOW path·remerge, `OSINT-LBL-001`, 그리고
-  `SVC-BRG-001`(Across V3 bridge_transfer, confirmed fixture)에 한정된다.
+  NFT·Proxy, bounded FLOW path·remerge, `OSINT-LBL-001`, `SVC-BRG-001`
+  (Across V3 bridge_transfer), `SVC-CEX-001`(GARANTEX cex_cluster, confirmed
+  fixture)에 한정된다.
   나머지 TASK-015 confirmed fixture(SANCTIONS·ENS·RELATION-HUB)는 문제 전체가
   아니라 조사 primitive이므로 assisted다.
 - fixture oracle은 reviewed 공개 사례에 고정되어 새로운 실전 입력의 일반화
   성능을 측정하지 않는다.
 - `FLOW-MULTI-001`은 raw contribution·합계만, OSINT-SAN/ENS와
   ACTOR-REL-002는 bounded intelligence fact만 도구보조다. 전체 정답 필드가
-  없어 네 문제를 Assisted로 유지하며 핵심 분석기가 없는 13개는
+  없어 네 문제를 Assisted로 유지하며 핵심 분석기가 없는 12개는
   Unsupported다.
 - Challenge Pack 10개에는 confirmed reference fixture가 없어 이번 0.1에서
   실행하지 않는다.
@@ -171,6 +173,7 @@ coverage를 가장 크게 늘리는 순서는
 - **QA_Validation**: [TASK-014 최종 승격 Receipt](./44_TASK_014_FINAL_PROMOTION_RECEIPT.md) - FLOW confirmed·11/11 근거
 - **QA_Validation**: [TASK-015 비격리 Fixture 승격 Receipt](./56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md) - 세 confirmed fixture를 assisted로만 반영한 근거
 - **QA_Validation**: [TASK-016 Bridge 최종 승격 Receipt](./65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md) - Bridge confirmed·13/13 근거
+- **QA_Validation**: [TASK-016 CEX 최종 승격 Receipt](./68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md) - CEX confirmed·14/14 근거
 - **QA_Validation**: [Contest Stabilization Runbook](./66_CONTEST_STABILIZATION_RUNBOOK.md) - 대회용 freeze·실행 절차
 - **QA_Validation**: [TASK-009 통합 보고서](./13_TASK_009_INTEGRATION_REPORT.md) - 기존 vertical 회귀와 보안 Gate
 - **QA_Validation**: [OPS-IMPL-08 보고서](./21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - 병렬 운영과 수동 제출 기준선

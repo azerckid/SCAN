@@ -98,6 +98,18 @@ COMMANDS = (
         sys.executable,
         "scripts/verify_task_016_bridge_analyzer_independent_verification.py",
     ),
+    (
+        sys.executable,
+        "scripts/verify_task_016_cex_negative_oracles.py",
+    ),
+    (
+        sys.executable,
+        "scripts/verify_task_016_cex_independent_verifier.py",
+    ),
+    (
+        sys.executable,
+        "scripts/verify_task_016_cex_analyzer_independent_verification.py",
+    ),
 )
 
 
