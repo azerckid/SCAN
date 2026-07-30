@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-31 04:25
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 12·4·14) · TASK-016 Bridge Analyzer Verification PASS · TASK-017~019 Proposed
+> Last Updated: 2026-07-31 04:55
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 13·4·13) · TASK-016 Bridge Confirmed·Automated · TASK-017~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1454,9 +1454,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
-- Status: In Progress — Bridge(`SVC-BRG-001`) offline analyzer 독립
-  Verification Receipt PASS. Fixture는 `verifying` 유지 · `confirmed`·Benchmark
-  승격 별도 판정 대기.
+- Status: In Progress — Bridge(`SVC-BRG-001`) fixture confirmed · Benchmark
+  automated. CEX·Mixer·Lending·`MIXED-XCHAIN-001`은 미착수.
 - Work Type: code
 - Priority: Phase 2 · P2
 - Depends On: TASK-014, TASK-015
@@ -1467,8 +1466,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     다른 adapter는 confirmed fixture 확보 전 구현하지 않는다.
   - [x] Bridge 양단 chain/message/asset/amount 계약을 확정한다.
   - [x] `bridge_transfer` offline analyzer와 전용 request/result dispatch를 구현한다.
-  - [ ] adapter별 exact·partial·conflict를 검증한다.
-  - [ ] Benchmark를 실제 완료 문제만 승격한다.
+  - [x] Bridge exact·partial·conflict와 Benchmark automated를 검증한다.
+  - [ ] adapter별(CEX·Mixer·Lending) exact·partial·conflict를 검증한다.
+  - [ ] 남은 서비스 문제의 Benchmark를 실제 완료 범위만 승격한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 서비스·크로스체인 5문항
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P2/P3 승격 조건
@@ -1493,6 +1493,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [Bridge Raw Replay 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) - 16 read-only calls·SHA·decoded match·negative oracle 8개
   - [Bridge Fixture 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md) - `candidate → verifying` 판정·잔여 Gate
   - [Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md) - analyzer↔verifier hash·Schema P1 sync·PASS
+  - [Bridge Final Promotion Receipt](../05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 13/13
+  - [Contest Stabilization Runbook](../05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md) - 대회용 freeze·실행 절차
 - Implementation Preconditions:
   - [x] Bridge official ABI/address·두 provider replay·독립 Verifier를 확보하고
     `verifying → analyzer → confirmed review` 예외 경로를 승인했다.
@@ -1544,16 +1546,18 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
       [Bridge 후보 보고서](../05_QA_Validation/61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) ·
       [Bridge Raw Replay](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) ·
       [Bridge 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md) ·
-      [Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md) —
-      verifying lifecycle·8 negative oracle·canonical hash·analyzer 독립 검증
-      PASS를 확인했다.
+      [Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md) ·
+      [Bridge Final Promotion Receipt](../05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md) ·
+      [Contest Stabilization Runbook](../05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md) —
+      verifying lifecycle·8 negative oracle·canonical hash·analyzer 독립 검증·
+      confirmed·Benchmark 13/13·대회 freeze를 확인했다.
   - Constraints:
     - `AnalysisType.BRIDGE_TRANSFER` + `link_bridge_transfer` 전용 dispatch
       guard로 기존 analyzer·일반 Workbench 동작과 격리한다.
-    - `FX-SVC-BRG-001`은 `verifying`을 유지하며 analyzer canonical hash를
+    - `FX-SVC-BRG-001`은 `confirmed`이며 analyzer canonical hash를
       독립 Verifier hash `d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`와 대조한다.
     - live Rules가 확정될 때까지 offline/artifact replay만 구현한다.
-    - Benchmark 12 automated·4 assisted·14 unsupported를 유지하고
+    - Benchmark는 Bridge automated 승격 후 13·4·13을 유지하고
       `MIXED-XCHAIN-001`은 별도 조합 Gate로 둔다.
     - ownership·service identity·criminality는 `not_assessed`; amount/time
       유사성만으로 deterministic destination을 만들지 않는다.
@@ -1646,28 +1650,32 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     경로 전용임을 명시했다. CLI 성공·byte-only 거부 회귀 테스트 2건 추가
     (`tests/integration/test_task_016_bridge_cli.py`).
 - Verification Receipt:
-  - Status: PASS — Bridge offline analyzer 독립 검증 완료. Fixture는
-    `verifying` 유지, Benchmark 12·4·14 무변동.
+  - Status: PASS — Bridge offline analyzer 독립 검증·fixture confirmed·
+    Benchmark automated 완료. CEX·Mixer·Lending·MIXED-XCHAIN은 잔여.
   - Commands and Results:
     - `scripts/verify_task_016_bridge_analyzer_independent_verification.py` —
       PASS — hash `d6609bb4…00ac`, 2 deterministic runs, AST isolation
     - `scripts/verify_task_016_bridge_independent_verifier.py` — PASS —
       same hash
     - focused bridge analyzer/CLI pytest — PASS — 6
-    - `scripts/verify.py` — PASS — 570 tests, 1925 links, 226 security
+    - Benchmark integration/CLI — PASS — 13/13 automated
+    - `scripts/verify.py` — PASS — recorded with contest stabilization runbook
     - `scripts/check_analysis_schema.py` — PASS — 57 probes; bridge result
-      probe now exercises `REQ-BRIDGE-*`
+      probe exercises `REQ-BRIDGE-*`
     - public `analysis-result.schema.json` — PASS after adding `BRIDGE` to
-      `FixtureRequirementId` pattern (P1 found during independent review)
+      `FixtureRequirementId` pattern
   - Unrun Checks:
     - N/A — planned independent checks ran; live Rules/network remain out
       of approved offline scope
   - Detailed Evidence:
     - [64 Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)
+    - [65 Bridge Final Promotion Receipt](../05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)
+    - [66 Contest Stabilization Runbook](../05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md)
     - [PR #108](https://github.com/azerckid/SCAN/pull/108) — analyzer
       implementation and Evidence Worker boundary
-  - Residual: `verifying → confirmed` review and Benchmark automated
-    promotion remain separate Gates.
+    - [PR #109](https://github.com/azerckid/SCAN/pull/109) — Verification Receipt
+  - Residual: CEX·Mixer·Lending adapters and `MIXED-XCHAIN-001` remain
+    separate Gates under feature freeze until contest start.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 

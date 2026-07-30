@@ -1,13 +1,13 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-31 04:25
-> Status: Approved 2.0 · 17 Confirmed · 1 Verifying · 1 Candidate · 1 Deferred
+> Last Updated: 2026-07-31 04:55
+> Status: Approved 2.0 · 18 Confirmed · 0 Verifying · 1 Candidate · 1 Deferred
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
-있는 reference fixture를 관리한다. 현재 등록한 20개 중 17개는 `확정`,
-1개는 `검증 중`, 1개는 `후보`이며 Deferred 1개는 문서 후보만 있다.
+있는 reference fixture를 관리한다. 현재 등록한 20개 중 18개는 `확정`,
+0개는 `검증 중`, 1개는 `후보`이며 Deferred 1개는 문서 후보만 있다.
 19개는 Schema package가 있다. TASK-013 세 공개 사례는 remediation
 재검토와 [최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
 통과해 `확정`으로 관리한다.
@@ -26,6 +26,12 @@ claim boundary·negative oracle·독립 Verifier·제품 analyzer를 통과해
 subject로 migration했다. 새 canonical hash를 Verifier·analyzer가 재현했고,
 [LABEL 확정 승격 Receipt](./59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md)에서
 재배포 허가 미확인 OpenRAIL CSV artifact를 삭제한 뒤 `확정`으로 승격했다.
+
+TASK-016 Bridge(`FX-SVC-BRG-001`)는 양단 replay·negative oracle·독립
+Verifier·analyzer hash·Verification Receipt를 통과한 뒤
+[최종 승격 Receipt](./65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)에서
+`확정`과 Benchmark automated로 등록했다. CEX·Mixer·Lending과
+`MIXED-XCHAIN-001`은 별도 Gate로 남는다.
 
 입력 문서:
 
@@ -101,7 +107,7 @@ subject로 migration했다. 새 canonical hash를 Verifier·analyzer가 재현�
 | [FX-FLOW-PATH-001](./fixtures/FX-FLOW-PATH-001/README.md) | FLOW-EVM-001 | 1 | 확정 0.1 | 두 RPC·Blockscout edge·18 oracle·Verifier·analyzer | PATH, internal/top-level edge |
 | [FX-FLOW-REMERGE-001](./fixtures/FX-FLOW-REMERGE-001/README.md) | FLOW-EVM-002 | 1 | 확정 0.1 | 두 RPC·18 oracle·Verifier·analyzer | PATH, RECON, exclusion |
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
-| [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) | SVC-BRG-001 | 1 | 검증 중 0.1 | Across 공개 후보·양단 두 role live replay·cross-provider match·negative oracle 8개·독립 raw-first Verifier·analyzer hash 일치·Verification Receipt PASS · verifying 유지 | XCHAIN, BRIDGE, RECON |
+| [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) | SVC-BRG-001 | 1 | 확정 0.1 | Across confirmed·양단 replay·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | V1 기준선 | AUTH-DECODE, allowance 연결 |
 | [FX-EVM-NFT-721-001](./fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·analyzer remediation | ERC-721 event·tokenId |
 | [FX-EVM-NFT-1155-001](./fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·subject 분리 | ERC-1155 Single·Batch |
@@ -209,20 +215,20 @@ adjacent state만 완전성을 주장한다.
 | 필드 | 내용 |
 |:---|:---|
 | 연결 문제 ID | SVC-BRG-001 |
-| 상태 | 검증 중 ([승격 검토](./63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)) |
-| DOC-M3 결정 | Across V3 candidate package·16-call raw replay·cross-provider match·negative oracle 8개·독립 raw-first Verifier·candidate→verifying 승격 완료 |
+| 상태 | 확정 ([최종 승격 Receipt](./65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)) |
+| DOC-M3 결정 | Across V3 confirmed package·16-call raw replay·cross-provider match·negative oracle 8개·독립 raw-first Verifier·analyzer hash·Benchmark automated |
 | 패키지 | [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) |
 | 데이터 형태 | 공개 온체인 |
 | 체인 | Base `8453` → Ethereum `1` |
 | 주소·TX | Across V3. 출발 `0x957143...05a1b`, 도착 `0x816ebc...8f8a0`; 전체 값은 [후보 보고서](./61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) |
 | 기준 정답 | 도착 `0xdd8591...1cd0a`, deposit ID `2395968`, source `330000000000000000`, destination `329132286989970407` |
 | 허용 오차 | `max_abs_delta_raw=0`; event amount 차이 `867713010029593`을 fee candidate로 재계산 |
-| 확정 사실 | 공식 Across chain/contract/event 규칙과 양단 raw replay 값. 독립 Verifier·analyzer canonical hash `d6609bb4...`(evidence.json pin). Verification Receipt PASS. `확정(confirmed)`은 별도 판정 |
+| 확정 사실 | 공식 Across chain/contract/event 규칙과 양단 raw replay 값. 독립 Verifier·analyzer canonical hash `d6609bb4...`(evidence.json pin). Verification Receipt PASS. confirmed·Benchmark automated |
 | 휴리스틱 | 금액·10초 시간차만으로 연결 금지; composite domain·공통 event parameter 필요 |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` |
 | 재현 절차 | 1) 양단 TX/receipt/block 2) exact-block event logs 3) Across composite domain 4) amount/asset/transfer 정합 5) 두 provider SHA |
 | 저작권·출처 | Across 공식 문서 URL·BaseScan/Etherscan supporting URL만 기록. 페이지/API 응답 미복제 |
-| 마지막 확인 | 2026-07-31 04:25 (analyzer Verification Receipt PASS, verifying 유지) |
+| 마지막 확인 | 2026-07-31 04:55 (confirmed 승격·Benchmark 13/13) |
 
 ---
 

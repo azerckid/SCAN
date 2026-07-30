@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-SVC-BRG-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-30T15:39:46Z",
   "event_evidence": [
     {
@@ -96,9 +96,7 @@
   },
   "uncertainty": {
     "candidate_only": false,
-    "remaining": [
-      "verifying-to-confirmed review"
-    ]
+    "remaining": []
   },
   "verification_provenance": {
     "independent_verifier_module": "src/scan_tool/application/task_016_bridge_independent_verifier.py",

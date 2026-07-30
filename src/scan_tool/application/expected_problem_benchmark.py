@@ -14,6 +14,7 @@ from scan_tool.domain._types import ContractModel
 from scan_tool.domain.analysis_request import (
     AnalysisRequest,
     AuthAnalysisRequest,
+    BridgeTransferAnalysisRequest,
     DexAnalysisRequest,
     EvmCoreAnalysisRequest,
     EvmSpecialAnalysisRequest,
@@ -23,6 +24,7 @@ from scan_tool.domain.analysis_request import (
 )
 from scan_tool.domain.analysis_result import AnalysisResult, AnalysisStatus
 from scan_tool.slices.auth import analyze_auth_replay
+from scan_tool.slices.bridge_transfer import analyze_bridge_transfer_replay
 from scan_tool.slices.dex import analyze_dex_replay
 from scan_tool.slices.evm_core import analyze_evm_core_replay
 from scan_tool.slices.evm_special import analyze_evm_special_replay
@@ -77,6 +79,7 @@ APPROVED_AUTOMATED_PROBLEM_IDS = frozenset(
         "FLOW-EVM-001",
         "FLOW-EVM-002",
         "OSINT-LBL-001",
+        "SVC-BRG-001",
         "SVC-DEX-001",
     }
 )
@@ -222,10 +225,12 @@ class ExpectedProblemBenchmarkRunner:
         request = validate_analysis_request(
             json.loads(_safe_path(self.repository_root, Path(fixture.request_path)).read_text())
         )
-        replay = _safe_path(self.repository_root, Path(fixture.replay_path)).read_bytes()
+        replay_path = _safe_path(self.repository_root, Path(fixture.replay_path))
+        replay = replay_path.read_bytes()
+        package_dir = replay_path.parent
         started = perf_counter()
-        first = _analyze(request, replay)
-        second = _analyze(request, replay)
+        first = _analyze(request, replay, package_dir=package_dir)
+        second = _analyze(request, replay, package_dir=package_dir)
         elapsed_ms = (perf_counter() - started) * 1000
         expected = {item.result_type: item.value for item in fixture.expected_results}
         actual_result_count = len(first.root.results)
@@ -263,7 +268,12 @@ def _safe_path(repository_root: Path, path: Path) -> Path:
     return resolved
 
 
-def _analyze(request: AnalysisRequest, replay: bytes) -> AnalysisResult:
+def _analyze(
+    request: AnalysisRequest,
+    replay: bytes,
+    *,
+    package_dir: Path,
+) -> AnalysisResult:
     document = request.root
     if isinstance(document, DexAnalysisRequest):
         return analyze_dex_replay(document, replay)
@@ -279,4 +289,6 @@ def _analyze(request: AnalysisRequest, replay: bytes) -> AnalysisResult:
         return analyze_flow_path_replay(document, replay)
     if isinstance(document, IntelContextAnalysisRequest):
         return analyze_intel_context_replay(document, replay)
+    if isinstance(document, BridgeTransferAnalysisRequest):
+        return analyze_bridge_transfer_replay(document, replay, package_dir=package_dir)
     raise ValueError("unsupported benchmark analysis type")

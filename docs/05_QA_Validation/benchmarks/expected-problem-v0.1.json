@@ -647,16 +647,52 @@
     {
       "problem_id": "SVC-BRG-001",
       "difficulty": "medium",
-      "coverage": "unsupported",
-      "reason": "Bridge metadata and cross-chain event matching are not implemented.",
+      "coverage": "automated",
+      "reason": "A confirmed Across V3 Base-to-Ethereum fixture, strict bridge_transfer analyzer, evidence export, negative oracle, and independent verifier hash match are implemented.",
       "reusable_capabilities": [
+        "XCHAIN",
+        "BRIDGE",
+        "RECON",
         "BASE-PROVENANCE",
         "BASE-EXPORT"
       ],
-      "blocking_gaps": [
-        "XCHAIN",
-        "BRIDGE"
-      ]
+      "blocking_gaps": [],
+      "fixture": {
+        "fixture_id": "FX-SVC-BRG-001",
+        "request_path": "docs/05_QA_Validation/fixtures/FX-SVC-BRG-001/analysis-request.json",
+        "replay_path": "docs/05_QA_Validation/fixtures/FX-SVC-BRG-001/raw-replay.json",
+        "expected_results": [
+          {
+            "result_type": "bridge_transfer",
+            "value": {
+              "protocol": "across_v3",
+              "origin_chain_id": 8453,
+              "destination_chain_id": 1,
+              "deposit_id": 2395968,
+              "source_spoke_pool": "0x09aea4b2242abc8bb4bb78d537a67a245a7bec64",
+              "destination_spoke_pool": "0x5c7bcd6e7de5423a257d81b442095a1a6ced35c5",
+              "depositor": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
+              "recipient": "0xdd8591007149631190f1013ac1067305f191cd0a",
+              "source_asset": "0x4200000000000000000000000000000000000006",
+              "destination_asset": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+              "source_raw": "330000000000000000",
+              "protocol_fee_raw_candidate": "867713010029593",
+              "expected_destination_raw": "329132286989970407",
+              "observed_destination_raw": "329132286989970407",
+              "message": "0x",
+              "attribution": {
+                "recipient_ownership": "not_assessed",
+                "criminality": "not_assessed"
+              }
+            }
+          }
+        ],
+        "required_fixture_requirements": [
+          "REQ-BRIDGE-SOURCE",
+          "REQ-BRIDGE-DESTINATION",
+          "REQ-BRIDGE-DOMAIN"
+        ]
+      }
     },
     {
       "problem_id": "SVC-CEX-001",
@@ -909,15 +945,17 @@
       "problem_id": "MIXED-XCHAIN-001",
       "difficulty": "high",
       "coverage": "unsupported",
-      "reason": "Cross-chain DEX, bridge, exchange, and path reconciliation are not implemented.",
+      "reason": "Single-hop bridge transfer is automated, but DEX-to-bridge-to-CEX composition and the CEX leg remain unimplemented.",
       "reusable_capabilities": [
         "DECODE",
         "RECON",
-        "BASE-PROVENANCE"
+        "BASE-PROVENANCE",
+        "XCHAIN",
+        "BRIDGE"
       ],
       "blocking_gaps": [
-        "XCHAIN",
-        "BRIDGE",
+        "CEX-CLUSTER",
+        "COMPOSITION",
         "PATH",
         "LABEL"
       ]

@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-31 04:25
-> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · TASK-016 Bridge Analyzer Verification PASS · Benchmark 12 Automated / 4 Assisted / 14 Unsupported
+> Last Updated: 2026-07-31 04:55
+> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · TASK-016 Bridge Confirmed·Automated · Benchmark 13 Automated / 4 Assisted / 13 Unsupported
 
 ## 1. 목적
 
@@ -247,9 +247,12 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   Verifier canonical hash `d6609bb4...`와 대조한다(2026-07-31).
 - [x] Bridge analyzer 독립 Verification Receipt를 기록한다
   ([64 Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)).
-  Fixture는 `verifying` 유지, Benchmark 12·4·14 무변동.
-- [ ] `verifying → confirmed`와 Benchmark 승격을 각각 별도 판정한다
-  (`MIXED-XCHAIN-001` 제외).
+- [x] `verifying → confirmed`와 Benchmark automated(12→13)를 판정한다
+  ([65 Receipt](../05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)).
+  `MIXED-XCHAIN-001`은 unsupported 유지.
+- [x] 대회용 Stabilization Runbook·Feature Freeze를 기록한다
+  ([66 Runbook](../05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md)).
+- [ ] CEX·Mixer·Lending adapter는 confirmed fixture 확보 전 구현하지 않는다.
 
 ### [ ] Wave 6 — 출제가 확인된 비EVM
 
