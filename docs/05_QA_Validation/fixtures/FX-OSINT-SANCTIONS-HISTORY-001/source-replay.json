@@ -22,5 +22,14 @@
     "historical_designation_changed": false,
     "historical_removal_changed": false,
     "current_criminality_assessed": false
-  }
+  },
+  "sources": [
+    {
+      "source_record_id": "SRC-INTEL-SAN-SLS",
+      "source_id": "DS-OFAC-SLS",
+      "source_role": "official_record",
+      "artifact_ref": "artifact://sha256/464a917d662b9de3a26588499a8f1a4cfea341a70f3ace64038a5f8cb2b85b65",
+      "content_sha256": "464a917d662b9de3a26588499a8f1a4cfea341a70f3ace64038a5f8cb2b85b65"
+    }
+  ]
 }

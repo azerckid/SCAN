@@ -113,6 +113,16 @@ def _binding_error(
             "Request query_kind and replay shape differ.",
             "source_reconciliation",
         )
+    # Provenance is taken from the reviewed replay's own source records; every
+    # one must sit inside the request allowlist, so a tampered allowlist cannot
+    # manufacture a source of truth.
+    allowed = set(request.source_policy.allowed_source_ids)
+    if not {record.source_id for record in replay.sources} <= allowed:
+        return (
+            "rule_restricted",
+            "Replay source record uses a source outside the allowed policy.",
+            "source_policy",
+        )
     return None
 
 
@@ -135,6 +145,8 @@ def _label(
     resumed: bool,
     checkpoint_id: str | None,
 ) -> AnalysisResult:
+    inputs = request.inputs
+    assert isinstance(inputs, LabelClaimsInputs)
     _require_subject(request, replay.subject_address)
     if replay.ens.address != replay.subject_address:
         raise _DecodeFailure(
@@ -142,6 +154,13 @@ def _label(
             "Label dataset subject and ENS-resolved address differ.",
             "source_reconciliation",
         )
+    if replay.ens.block_number != inputs.observation_block:
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Replay ENS observation block differs from the requested observation_block.",
+            "source_reconciliation",
+        )
+    _require_artifact_binding(inputs.source_artifact_refs, replay)
     # A category label and a first-party role are different assertion classes and
     # are never silently auto-merged into one identity.
     auto_merge = not (replay.dataset.categories and replay.community_config.role)
@@ -168,8 +187,18 @@ def _label(
         },
     }
     evidence = [
-        _evidence(replay, "EV-INTEL-LABEL-ASSERTIONS", "context", request.source_policy),
-        _evidence(replay, "EV-INTEL-LABEL-CONFLICT", "context", request.source_policy, index=1),
+        _evidence(
+            replay,
+            "EV-INTEL-LABEL-ASSERTIONS",
+            "context",
+            0,
+        ),
+        _evidence(
+            replay,
+            "EV-INTEL-LABEL-CONFLICT",
+            "context",
+            1,
+        ),
     ]
     result = _result_item(
         "RES-INTEL-LABEL",
@@ -190,12 +219,30 @@ def _sanctions(
     resumed: bool,
     checkpoint_id: str | None,
 ) -> AnalysisResult:
+    inputs = request.inputs
+    assert isinstance(inputs, SanctionsExposureInputs)
     _require_subject(request, replay.subject_address)
+    # Every requested official action must be present in the replay: a dropped
+    # designation/removal must not still read as complete.
+    if len(replay.official_actions) != len(inputs.official_action_refs):
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Replay official actions do not match the requested official_action_refs.",
+            "source_reconciliation",
+        )
     for action in replay.official_actions:
         if action.address_match_count != 1:
             raise _DecodeFailure(
                 "reconciliation_failed",
                 "An official action does not explicitly match the subject exactly once.",
+                "source_reconciliation",
+            )
+        if not any(
+            action.date in ref and action.action in ref for ref in inputs.official_action_refs
+        ):
+            raise _DecodeFailure(
+                "reconciliation_failed",
+                "A replay official action is not covered by the requested official_action_refs.",
                 "source_reconciliation",
             )
     timeline = [
@@ -209,8 +256,18 @@ def _sanctions(
         "criminality_assessment": NOT_ASSESSED,
     }
     evidence = [
-        _evidence(replay, "EV-INTEL-SAN-TIMELINE", "context", request.source_policy),
-        _evidence(replay, "EV-INTEL-SAN-CURRENT", "context", request.source_policy, index=1),
+        _evidence(
+            replay,
+            "EV-INTEL-SAN-TIMELINE",
+            "context",
+            0,
+        ),
+        _evidence(
+            replay,
+            "EV-INTEL-SAN-CURRENT",
+            "context",
+            1,
+        ),
     ]
     result = _result_item(
         "RES-INTEL-SANCTIONS",
@@ -239,6 +296,18 @@ def _identity(
             "Replay ENS name is not bound to the requested names.",
             "source_reconciliation",
         )
+    if replay.forward.address not in inputs.subject_addresses:
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Replay ENS-resolved address is not bound to the requested subject_addresses.",
+            "source_reconciliation",
+        )
+    if replay.block_number != inputs.observation_block:
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Replay observation block differs from the requested observation_block.",
+            "source_reconciliation",
+        )
     value = {
         "block_number": replay.block_number,
         "forward": {
@@ -255,8 +324,18 @@ def _identity(
         "ownership_assessment": NOT_ASSESSED,
     }
     evidence = [
-        _evidence(replay, "EV-INTEL-ENS-FORWARD", "state", request.source_policy),
-        _evidence(replay, "EV-INTEL-ENS-REVERSE", "state", request.source_policy, index=1),
+        _evidence(
+            replay,
+            "EV-INTEL-ENS-FORWARD",
+            "state",
+            0,
+        ),
+        _evidence(
+            replay,
+            "EV-INTEL-ENS-REVERSE",
+            "state",
+            1,
+        ),
     ]
     result = _result_item(
         "RES-INTEL-ENS",
@@ -280,13 +359,22 @@ def _common_funder(
     inputs = request.inputs
     assert isinstance(inputs, CommonFunderInputs)
     relation_subjects = {item.subject_address for item in replay.relations}
-    if not relation_subjects <= set(inputs.subject_addresses):
+    # The requested subject set must match the replay exactly: dropping a subject
+    # (or requesting one not present) must not read as a completed set.
+    if relation_subjects != set(inputs.subject_addresses):
         raise _DecodeFailure(
             "reconciliation_failed",
-            "A replay relation subject is outside the requested subject set.",
+            "Replay relation subjects do not match the requested subject_addresses exactly.",
             "source_reconciliation",
         )
-    value = {
+    if replay.source_fixture_ref != inputs.source_fixture_ref:
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Replay source_fixture_ref differs from the requested source_fixture_ref.",
+            "source_reconciliation",
+        )
+    # Confirmed on-chain direct seed outputs (confirmed_fact).
+    relations_value = {
         "seed_address": replay.seed_address,
         "relations": [
             {
@@ -296,36 +384,54 @@ def _common_funder(
             }
             for item in replay.relations
         ],
+    }
+    # The common-funder assessment is a candidate hypothesis, not a confirmed
+    # fact, and stays partial-only until a real completeness evidence structure
+    # (bounded prehistory + service exclusion) exists. Claimed boolean flags are
+    # never treated as completeness proof.
+    assessment_value = {
         "common_funder_assessment": "candidate",
         "ownership_assessment": NOT_ASSESSED,
         "coordination_assessment": NOT_ASSESSED,
-        "initial_inflow_complete": replay.initial_inflow_complete,
-        "service_exclusion_complete": replay.service_exclusion_complete,
-        "coverage_gaps": list(replay.coverage_gaps),
+        "initial_inflow_complete": False,
+        "service_exclusion_complete": False,
+        "coverage_gaps": ["bounded_prehistory_unavailable", "service_exclusion_unavailable"],
     }
-    evidence = [_evidence(replay, "EV-INTEL-COMMON-FUNDER", "context", request.source_policy)]
-    result = _result_item(
-        "RES-INTEL-COMMON-FUNDER",
-        "find_common_funder",
-        value,
-        ["REQ-INTEL-FUNDER-RELATIONS", "REQ-INTEL-FUNDER-COMPLETENESS"],
-        [item["evidence_id"] for item in evidence],
-    )
-    # find_common_funder is complete only when both completeness proofs hold.
-    if not (replay.initial_inflow_complete and replay.service_exclusion_complete):
-        errors = [
-            _error(
-                "evidence_incomplete",
-                "Common-funder initial inflow / service exclusion completeness is unproven; "
-                "confirmed direct seed outputs are preserved.",
-                "intel_coverage",
-                [item["evidence_id"] for item in evidence],
-            )
-        ]
-        return _result(
-            request, replay, "partial", [result], evidence, errors, resumed, checkpoint_id
+    evidence = [
+        _evidence(replay, "EV-INTEL-COMMON-FUNDER-RELATIONS", "context", 0),
+        _evidence(
+            replay, "EV-INTEL-COMMON-FUNDER-ASSESSMENT", "context", min(1, len(replay.sources) - 1)
+        ),
+    ]
+    results = [
+        _result_item(
+            "RES-INTEL-COMMON-FUNDER-RELATIONS",
+            "find_common_funder_relations",
+            relations_value,
+            ["REQ-INTEL-FUNDER-RELATIONS"],
+            ["EV-INTEL-COMMON-FUNDER-RELATIONS"],
+            classification="confirmed_fact",
+        ),
+        _result_item(
+            "RES-INTEL-COMMON-FUNDER-ASSESSMENT",
+            "find_common_funder_assessment",
+            assessment_value,
+            ["REQ-INTEL-FUNDER-COMPLETENESS"],
+            ["EV-INTEL-COMMON-FUNDER-ASSESSMENT"],
+            classification="heuristic",
+        ),
+    ]
+    errors = [
+        _error(
+            "evidence_incomplete",
+            "Common-funder initial inflow / service exclusion completeness is unproven; "
+            "confirmed direct seed outputs are preserved as a candidate hypothesis only.",
+            "intel_coverage",
+            [item["evidence_id"] for item in evidence],
+            retryable=True,
         )
-    return _result(request, replay, "complete", [result], evidence, [], resumed, checkpoint_id)
+    ]
+    return _result(request, replay, "partial", results, evidence, errors, resumed, checkpoint_id)
 
 
 # --- score_actor_relations ------------------------------------------------
@@ -345,6 +451,21 @@ def _actor_relations(
             "Replay hub differs from the requested hub_address.",
             "source_reconciliation",
         )
+    requested_subjects = set(inputs.subject_addresses)
+    requested_fixtures = set(inputs.source_fixture_refs)
+    for item in replay.relations:
+        if item.subject_address not in requested_subjects:
+            raise _DecodeFailure(
+                "reconciliation_failed",
+                "A replay relation subject is outside the requested subject_addresses.",
+                "source_reconciliation",
+            )
+        if item.source_fixture_id not in requested_fixtures:
+            raise _DecodeFailure(
+                "reconciliation_failed",
+                "A replay relation source fixture is outside the requested source_fixture_refs.",
+                "source_reconciliation",
+            )
     value = {
         "hub": {
             "address": replay.hub.address,
@@ -364,8 +485,18 @@ def _actor_relations(
         "coordination_assessment": NOT_ASSESSED,
     }
     evidence = [
-        _evidence(replay, "EV-INTEL-ACTOR-RELATIONS", "context", request.source_policy),
-        _evidence(replay, "EV-INTEL-ACTOR-EXCLUSION", "context", request.source_policy, index=1),
+        _evidence(
+            replay,
+            "EV-INTEL-ACTOR-RELATIONS",
+            "context",
+            0,
+        ),
+        _evidence(
+            replay,
+            "EV-INTEL-ACTOR-EXCLUSION",
+            "context",
+            1,
+        ),
     ]
     result = _result_item(
         "RES-INTEL-ACTOR-HUB",
@@ -380,42 +511,52 @@ def _actor_relations(
 # --- envelope helpers -----------------------------------------------------
 
 
+def _require_artifact_binding(
+    requested_refs: list[str],
+    replay: IntelSourceReplayDocument,
+) -> None:
+    replay_refs = {record.artifact_ref for record in replay.sources}
+    if not replay_refs <= set(requested_refs):
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "A replay source artifact is not present in the requested source_artifact_refs.",
+            "source_reconciliation",
+        )
+
+
 def _evidence(
     replay: IntelSourceReplayDocument,
     evidence_id: str,
     evidence_type: str,
-    source_policy: object,
-    *,
-    index: int = 0,
+    source_index: int,
 ) -> dict[str, object]:
-    source_ids = source_policy.allowed_source_ids  # type: ignore[attr-defined]
-    source_id = source_ids[min(index, len(source_ids) - 1)]
+    index = min(source_index, len(replay.sources) - 1)
+    record = replay.sources[index]
     return {
         "evidence_id": evidence_id,
         "evidence_type": evidence_type,
-        "source_id": source_id,
-        "source_record_ref": f"SRC-INTEL-{min(index, len(source_ids) - 1) + 1}",
+        "source_id": record.source_id,
+        "source_record_ref": record.source_record_id,
         "method": "reviewed_source_replay",
         "retrieved_at": replay.captured_at,
         "locator": {"chain_id": 1},
         "decoded": {"fixture_id": replay.fixture_id, "query_kind": replay.query_kind},
         "raw_artifact": {
-            "artifact_uri": f"fixture://intel-context/source-replay.json#{evidence_id}",
+            "artifact_uri": record.artifact_ref,
+            "sha256": record.content_sha256,
             "media_type": "application/json",
         },
     }
 
 
 def _source_records(
-    source_policy: object,
     replay: IntelSourceReplayDocument,
     referenced_ids: set[str],
 ) -> list[dict[str, object]]:
-    source_ids = source_policy.allowed_source_ids  # type: ignore[attr-defined]
     return [
         {
-            "source_record_id": f"SRC-INTEL-{index}",
-            "source_id": source_id,
+            "source_record_id": record.source_record_id,
+            "source_id": record.source_id,
             "provider_id": "reviewed-source-replay",
             "role": "scoring",
             "required": True,
@@ -423,8 +564,8 @@ def _source_records(
             "endpoint_host": "reviewed.replay.invalid",
             "retrieved_at": replay.captured_at,
         }
-        for index, source_id in enumerate(source_ids, start=1)
-        if f"SRC-INTEL-{index}" in referenced_ids
+        for record in replay.sources
+        if record.source_record_id in referenced_ids
     ]
 
 
@@ -434,11 +575,13 @@ def _result_item(
     value: dict[str, object],
     fixture_requirement_ids: list[str],
     evidence_refs: list[str],
+    *,
+    classification: str = "confirmed_fact",
 ) -> dict[str, object]:
     return {
         "result_id": result_id,
         "result_type": result_type,
-        "classification": "confirmed_fact",
+        "classification": classification,
         "value": value,
         "tool_requirement_ids": ["REQ-P0-EVM-001"],
         "fixture_requirement_ids": fixture_requirement_ids,
@@ -451,13 +594,15 @@ def _error(
     message: str,
     stage: str,
     evidence_ids: list[str],
+    *,
+    retryable: bool = False,
 ) -> dict[str, object]:
     value: dict[str, object] = {
         "error_id": f"ERR-INTEL-{code.upper().replace('_', '-')}",
         "code": code,
         "message": message,
         "stage": stage,
-        "retryable": True,
+        "retryable": retryable,
         "attempt_count": 0,
     }
     if evidence_ids:
@@ -487,7 +632,7 @@ def _result(
             "status": status,
             "results": results,
             "evidence": evidence,
-            "sources": _source_records(request.source_policy, replay, referenced),
+            "sources": _source_records(replay, referenced),
             "warnings": [],
             "errors": errors,
             "run": _run(

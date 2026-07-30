@@ -14,5 +14,14 @@
     "name": "nick.eth",
     "address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
     "resolver": "0xa2c122be93b0074270ebee7f6b7292c7deb45047"
-  }
+  },
+  "sources": [
+    {
+      "source_record_id": "SRC-INTEL-ENS-SNAPSHOT",
+      "source_id": "DS-ENS",
+      "source_role": "onchain_registry",
+      "artifact_ref": "artifact://sha256/a1ed2bfc3bb65b0717afeb979fc92b68658f2ee9391f458a67ad2c5ef246ce2c",
+      "content_sha256": "a1ed2bfc3bb65b0717afeb979fc92b68658f2ee9391f458a67ad2c5ef246ce2c"
+    }
+  ]
 }

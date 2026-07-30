@@ -60,26 +60,106 @@ def test_complete_results_keep_attribution_not_assessed(fixture_id: str) -> None
             assert f'"{key}": "not_assessed"' in json.dumps(value, separators=(", ", ": "))
 
 
-def test_common_funder_is_partial_until_completeness_proven() -> None:
+def test_common_funder_is_partial_and_splits_confirmed_from_candidate() -> None:
     fixture_id = "FX-ACTOR-COMMON-FUNDER-001"
     result = analyze_intel_context_replay(
         _request(fixture_id), json.dumps(_replay(fixture_id)).encode()
     )
     assert result.root.status == "partial"
     assert result.root.errors[0].code == "evidence_incomplete"
-    value = result.root.results[0].value
-    assert value["common_funder_assessment"] == "candidate"
-    assert value["initial_inflow_complete"] is False
+    by_type = {item.result_type: item for item in result.root.results}
+    relations = by_type["find_common_funder_relations"]
+    assessment = by_type["find_common_funder_assessment"]
+    # confirmed on-chain seed outputs vs candidate hypothesis are separate results
+    assert relations.classification == "confirmed_fact"
+    assert assessment.classification == "heuristic"
+    assert assessment.value["common_funder_assessment"] == "candidate"
 
 
-def test_common_funder_complete_when_both_completeness_hold() -> None:
+def test_common_funder_claimed_completeness_flags_do_not_force_complete() -> None:
+    """Reviewer P1: flipping the claimed completeness booleans must not manufacture
+    a complete common-funder result — it stays partial-only."""
     fixture_id = "FX-ACTOR-COMMON-FUNDER-001"
     replay = _replay(fixture_id)
     replay["initial_inflow_complete"] = True
     replay["service_exclusion_complete"] = True
     replay["coverage_gaps"] = []
     result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
-    assert result.root.status == "complete"
+    assert result.root.status == "partial"
+    assessment = next(
+        item for item in result.root.results if item.result_type == "find_common_funder_assessment"
+    )
+    assert assessment.value["initial_inflow_complete"] is False
+
+
+def test_common_funder_subject_set_must_match_exactly() -> None:
+    fixture_id = "FX-ACTOR-COMMON-FUNDER-001"
+    replay = _replay(fixture_id)
+    replay["relations"] = replay["relations"][:1]
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_ens_unrelated_address_or_block_is_rejected() -> None:
+    fixture_id = "FX-OSINT-ENS-CONFLICT-001"
+    replay = _replay(fixture_id)
+    replay["block_number"] = 1
+    replay["forward"]["address"] = "0x00000000000000000000000000000000000000ff"
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_actor_unrequested_relation_source_fixture_is_rejected() -> None:
+    fixture_id = "FX-ACTOR-RELATION-HUB-001"
+    replay = _replay(fixture_id)
+    replay["relations"][0]["source_fixture_id"] = "FX-UNRELATED-999"
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_sanctions_dropped_official_action_is_rejected() -> None:
+    fixture_id = "FX-OSINT-SANCTIONS-HISTORY-001"
+    replay = _replay(fixture_id)
+    replay["official_actions"] = replay["official_actions"][:1]
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_label_observation_block_mismatch_is_rejected() -> None:
+    fixture_id = "FX-OSINT-LABEL-CONFLICT-001"
+    document = _request_document(fixture_id)
+    cast(dict[str, object], document["inputs"])["observation_block"] = 1
+    request = validate_analysis_request(document).root
+    assert isinstance(request, IntelContextAnalysisRequest)
+    result = analyze_intel_context_replay(request, json.dumps(_replay(fixture_id)).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_provenance_source_outside_allowlist_is_rejected() -> None:
+    """Reviewer P1: a replay source record outside the request allowlist must not
+    be recorded as a real source of truth."""
+    fixture_id = "FX-OSINT-ENS-CONFLICT-001"
+    document = _request_document(fixture_id)
+    cast(dict[str, object], document["source_policy"])["allowed_source_ids"] = ["DS-EVM-RPC-PUBLIC"]
+    cast(dict[str, object], document["source_policy"])["source_order"] = ["DS-EVM-RPC-PUBLIC"]
+    request = validate_analysis_request(document).root
+    assert isinstance(request, IntelContextAnalysisRequest)
+    result = analyze_intel_context_replay(request, json.dumps(_replay(fixture_id)).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "rule_restricted"
+
+
+def test_binding_failures_are_not_retryable() -> None:
+    fixture_id = "FX-OSINT-SANCTIONS-HISTORY-001"
+    replay = _replay(fixture_id)
+    replay["official_actions"] = replay["official_actions"][:1]
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.errors[0].retryable is False
 
 
 @pytest.mark.parametrize("fixture_id", COMPLETE_CASES)

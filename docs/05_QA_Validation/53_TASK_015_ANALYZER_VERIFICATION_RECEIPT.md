@@ -77,8 +77,28 @@ source-first 결론에 도달하는지 검증한다. 두 코드는 서로 import
 - `src/scan_tool/application/cli_runtime.py` — dispatch·`INTEL_CONTEXT_REPLAY_STAGE`
 - `docs/05_QA_Validation/fixtures/FX-{OSINT,ACTOR}-*/analysis-request.json`·`source-replay.json`(신규)
 - schema 3종·`check_analysis_schema.py`·`check_task_012_analysis_contract_proposal.py` — 갱신
-- `tests/unit/test_intel_context_slice.py`(19)·`tests/integration/test_intel_context_cli.py`(6)
+- `tests/unit/test_intel_context_slice.py`(26)·`tests/integration/test_intel_context_cli.py`(6)
 - `scripts/verify_task_015_analyzer_independent_verification.py` — verify.py 연결
+
+## 5.1 재검토(Request changes) P1 4건·P2 3건 정정
+
+PR #86 재검토에서 fixture 정상값에 가려진 request↔replay 결합 구멍(변조
+replay 7종이 잘못 complete)이 발견돼 같은 브랜치에서 수정하고 회귀 테스트를
+추가했다. 네 verifying fixture의 `results[].value`와 canonical hash는 불변이다.
+
+| # | 결함 | 정정 후 |
+|:---:|:---|:---|
+| P1-1 | query별 scope 필드가 replay와 결합되지 않음 | ENS block/address·label observation_block·actor subject/fixture·sanctions 요청 action 전건·label artifact ref를 replay와 대조, 불일치 시 `reconciliation_failed` |
+| P1-2 | boolean 두 개로 common-funder completion 위조 | `find_common_funder`를 **partial-only**로 고정. claimed boolean은 증명이 아니며 항상 `initial/service_exclusion_complete: false` |
+| P1-3 | evidence provenance가 allowlist에서 합성됨 | reviewed replay의 실제 source record(`source_id`·`artifact_ref`·`content_sha256`)에서 provenance를 취하고, 모든 source가 request allowlist 안인지 대조(아니면 `rule_restricted`) |
+| P1-4 | candidate 평가가 `confirmed_fact`로 출력 | 확정 relations(`confirmed_fact`)와 candidate assessment(`heuristic`)를 별도 result item으로 분할 |
+| P2 | 날짜·빈 문자열·중복 relation 검증 약함 | `IsoDate` 패턴·`NonEmptyString`·relation subject·source record uniqueness 모델 검증 추가 |
+| P2 | 모든 오류 `retryable: true` | 결합/정합 실패는 `retryable: false`, coverage(`evidence_incomplete`)만 `true` |
+| P2 | doc 18 §11 승인 체크박스 미갱신 | §11·§5.4(partial-only·분할) 갱신 |
+
+변조 7종을 회귀 테스트로 고정했다(ENS 무관 주소/블록·actor 무관 subject/fixture·
+sanctions action 누락·label observation block·common-funder subject 축소+boolean·
+allowlist 임의 교체·binding 오류 non-retryable).
 
 ## 6. 상태 경계와 다음 Gate
 

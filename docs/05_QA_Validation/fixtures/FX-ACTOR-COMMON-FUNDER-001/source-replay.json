@@ -32,5 +32,15 @@
   "coverage_gaps": [
     "bounded_prehistory_unavailable",
     "service_exclusion_unavailable"
-  ]
+  ],
+  "sources": [
+    {
+      "source_record_id": "SRC-INTEL-FUNDER-REMERGE",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_role": "onchain_registry",
+      "artifact_ref": "artifact://sha256/16ff54e8a12245d3d23a6c8954604db6c1ce371558a47645c8f58307be526ab5",
+      "content_sha256": "16ff54e8a12245d3d23a6c8954604db6c1ce371558a47645c8f58307be526ab5"
+    }
+  ],
+  "source_fixture_ref": "FX-FLOW-REMERGE-001"
 }

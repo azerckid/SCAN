@@ -268,8 +268,20 @@ docs-only 검토안이다.
 }
 ```
 
-이 fixture는 두 completeness 필드가 `false`이므로 status가 반드시
-`partial`이어야 한다.
+이 fixture는 반드시 `partial`이며, `find_common_funder`는 **partial-only**다.
+claimed completeness boolean은 증명으로 취급하지 않으므로 analyzer는 실제
+completeness 증거 구조(bounded prehistory + service exclusion)가 생기기
+전까지 절대 `complete`를 반환하지 않는다(입력 boolean을 true로 바꿔도
+partial 유지).
+
+결과는 두 result item으로 분할한다. 확정 온체인 사실과 후보 가설을 한
+`confirmed_fact`로 섞지 않는다.
+
+- `find_common_funder_relations` — `classification: confirmed_fact`,
+  `{seed_address, relations[]}`(direct seed output).
+- `find_common_funder_assessment` — `classification: heuristic`,
+  `{common_funder_assessment: candidate, ownership/coordination not_assessed,
+  initial_inflow_complete, service_exclusion_complete, coverage_gaps[]}`.
 
 ### 5.5 `score_actor_relations`
 
@@ -380,13 +392,14 @@ Benchmark는 11을 유지한다.
 
 ## 11. 승인 Gate
 
-- [ ] 이 계약의 대안 B·필드·오류 매핑 사용자 승인
+- [x] 이 계약의 대안 B·필드·오류 매핑 사용자 승인(2026-07-30)
 - [x] Preview 사용자 승인
 - [x] negative oracle 30개·두 번 결정성
 - [x] 네 fixture independent Verifier·provenance hardening
-- [ ] common-funder partial 경계 승인
-- [ ] Context Receipt `PASS`
-- [ ] 사용자 analyzer 구현 명시 승인
+- [x] common-funder partial-only 경계 확정(리뷰 P1 반영, 확정 사실/후보 가설 분할)
+- [x] Context Receipt `PASS`(2026-07-30)
+- [x] 사용자 analyzer 구현 명시 승인(2026-07-30) · analyzer 구현·독립 검증 완료
+  ([53 검증 Receipt](../05_QA_Validation/53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md))
 
 ## 12. Related Documents
 

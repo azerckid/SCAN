@@ -10,17 +10,30 @@ files through a separate plain-dict code path.
 
 from typing import Annotated, Literal
 
-from pydantic import Discriminator, Field, RootModel, Tag
+from pydantic import Discriminator, Field, RootModel, Tag, model_validator
+from pydantic_core import PydanticCustomError
 
 from scan_tool.domain._types import (
     Address,
     ContractDatetime,
     ContractModel,
     FixtureId,
+    NonEmptyString,
+    SourceId,
 )
 
 Uint256Decimal = Annotated[str, Field(pattern=r"^(?:0|[1-9][0-9]*)$")]
-NotAssessed = Literal["not_assessed"]
+IsoDate = Annotated[str, Field(pattern=r"^\d{4}-\d{2}-\d{2}$")]
+ArtifactRef = Annotated[str, Field(pattern=r"^artifact://sha256/[a-f0-9]{64}$")]
+Sha256Hex = Annotated[str, Field(pattern=r"^[a-f0-9]{64}$")]
+
+
+class IntelSourceRecord(ContractModel):
+    source_record_id: Annotated[str, Field(pattern=r"^SRC-[A-Z0-9][A-Z0-9-]{2,127}$")]
+    source_id: SourceId
+    source_role: NonEmptyString
+    artifact_ref: ArtifactRef
+    content_sha256: Sha256Hex
 
 
 class IntelReplayBase(ContractModel):
@@ -28,15 +41,27 @@ class IntelReplayBase(ContractModel):
     fixture_id: FixtureId
     status: Literal["candidate", "verifying", "confirmed"]
     captured_at: ContractDatetime
+    sources: list[IntelSourceRecord] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def source_records_are_unique(self) -> "IntelReplayBase":
+        ids = [item.source_record_id for item in self.sources]
+        refs = [item.artifact_ref for item in self.sources]
+        if len(ids) != len(set(ids)) or len(refs) != len(set(refs)):
+            raise PydanticCustomError(
+                "reconciliation_failed",
+                "reviewed source records must have unique ids and artifact refs",
+            )
+        return self
 
 
 # --- collect_label_claims -------------------------------------------------
 
 
 class LabelDataset(ContractModel):
-    entity: str
-    categories: list[str] = Field(min_length=1)
-    source_value: str
+    entity: NonEmptyString
+    categories: list[NonEmptyString] = Field(min_length=1)
+    source_value: NonEmptyString
 
 
 class LabelEnsResolution(ContractModel):
@@ -62,7 +87,7 @@ class LabelSourceReplay(IntelReplayBase):
 
 
 class OfficialAction(ContractModel):
-    date: str
+    date: IsoDate
     action: Literal["designation", "removal"]
     address_match_count: int = Field(ge=0)
 
@@ -109,10 +134,24 @@ class CommonFunderRelation(ContractModel):
 class CommonFunderSourceReplay(IntelReplayBase):
     query_kind: Literal["find_common_funder"]
     seed_address: Address
+    source_fixture_ref: FixtureId
     relations: list[CommonFunderRelation] = Field(min_length=1)
+    # Completeness is a claimed input flag only; the analyzer does not treat it
+    # as proof and keeps common-funder partial until a real completeness
+    # evidence structure exists.
     initial_inflow_complete: bool
     service_exclusion_complete: bool
-    coverage_gaps: list[str] = Field(default_factory=list)
+    coverage_gaps: list[NonEmptyString] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def relation_subjects_are_unique(self) -> "CommonFunderSourceReplay":
+        subjects = [item.subject_address for item in self.relations]
+        if len(subjects) != len(set(subjects)):
+            raise PydanticCustomError(
+                "reconciliation_failed",
+                "common-funder relation subjects must be unique",
+            )
+        return self
 
 
 # --- score_actor_relations ------------------------------------------------
@@ -127,7 +166,7 @@ class ActorHub(ContractModel):
 class ActorRelation(ContractModel):
     subject_address: Address
     source_fixture_id: FixtureId
-    relation: str
+    relation: NonEmptyString
 
 
 class ActorRelationsSourceReplay(IntelReplayBase):
@@ -135,6 +174,16 @@ class ActorRelationsSourceReplay(IntelReplayBase):
     hub: ActorHub
     relations: list[ActorRelation] = Field(min_length=1)
     hub_excluded_from_actor_link: Literal[True]
+
+    @model_validator(mode="after")
+    def relation_subjects_are_unique(self) -> "ActorRelationsSourceReplay":
+        subjects = [item.subject_address for item in self.relations]
+        if len(subjects) != len(set(subjects)):
+            raise PydanticCustomError(
+                "reconciliation_failed",
+                "actor relation subjects must be unique",
+            )
+        return self
 
 
 IntelSourceReplayDocument = (
