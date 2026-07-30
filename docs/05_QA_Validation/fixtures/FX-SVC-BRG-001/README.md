@@ -1,11 +1,11 @@
-# FX-SVC-BRG-001 — Across V3 Base→Ethereum 후보
+# FX-SVC-BRG-001 — Across V3 Base→Ethereum
 
 > Status: 검증 중(verifying) · raw provider replay·negative oracle·independent Verifier complete
 
 ## 범위
 
-Across V3의 공개 Base→Ethereum 전송 한 건을 `SVC-BRG-001`의 fixture
-후보로 고정한다.
+Across V3의 공개 Base→Ethereum 전송 한 건을 `SVC-BRG-001`의 fixture로
+고정한다.
 
 - source: Base `8453`, TX
   `0x95714346d20bfaa328b75e4e6cf980d9620c4c4331af935032f848a118f05a1b`
@@ -37,7 +37,7 @@ Verification Receipt 등 잔여 Gate를 닫은 뒤 별도 판정한다.
 ## 파일
 
 - `input.json`: 발견 모드 request와 양단 고정 scope
-- `expected.json`: 후보 정답·composite match·정수 금액 계약
+- `expected.json`: 검증된 정답·composite match·정수 금액 계약
 - `evidence.json`: 공식 문서·Explorer supporting evidence·독립 Verifier
   canonical hash pin
 - `raw-replay.json`: 양단 raw JSON-RPC 아티팩트 참조(`artifact://sha256/...`)

@@ -102,6 +102,10 @@
     "status": "pass"
   },
   "remaining_gate": [
-    "candidate-to-verifying review"
+    "Analysis I/O alternative decision",
+    "Context Receipt PASS",
+    "bridge_transfer analyzer implementation",
+    "analyzer independent Verification Receipt",
+    "verifying-to-confirmed review"
   ]
 }

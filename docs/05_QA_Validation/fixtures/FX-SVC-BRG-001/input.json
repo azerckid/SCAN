@@ -33,5 +33,5 @@
     "spoke_pool": "0x5c7bcd6e7de5423a257d81b442095a1a6ced35c5"
   },
   "scope_kind": "selected_transactions_and_exact_block_windows",
-  "selection_notes": "Across official chain/event rules and public explorer pages identify one Base-to-Ethereum candidate. Recipient remains a result field. Two-role raw RPC replay and cross-provider decoded-fact matching are complete; negative oracle, independent verifier, and candidate-to-verifying promotion are not."
+  "selection_notes": "Across official chain/event rules and public explorer pages identified one Base-to-Ethereum transfer. Recipient remains a result field. Two-role raw RPC replay, cross-provider decoded-fact matching, negative oracle, independent verifier, and candidate-to-verifying promotion are all complete. The Analysis I/O alternative decision, Context Receipt PASS, bridge_transfer analyzer implementation, its independent Verification Receipt, and verifying-to-confirmed review remain."
 }
