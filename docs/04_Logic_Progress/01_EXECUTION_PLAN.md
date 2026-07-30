@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-30 16:28
-> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · 3 Confirmed / LABEL Replacement Verifying / Common-funder Candidate · Benchmark 11 Automated / 4 Assisted
+> Last Updated: 2026-07-30 20:20
+> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · 4 Confirmed / Common-funder Candidate · Benchmark 12 Automated / 4 Assisted / 14 Unsupported
 
 ## 1. 목적
 
@@ -190,8 +190,12 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] non-quarantined SANCTIONS·ENS·RELATION-HUB 3개를 별도
   [Promotion Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)로
   confirmed 판정하고, 미완성 문제 범위는 Benchmark `assisted`로 반영한다.
-- [ ] LABEL은 source 교체·재검증 후 별도 Promotion
-  Review에 다시 진입한다.
+- [x] LABEL은 source 교체·재검증 후 별도 Promotion Review(6기준 대조·재배포
+  허가 미확인 OpenRAIL CSV 삭제)로 `confirmed` 승격한다
+  ([59 Promotion Receipt](../05_QA_Validation/59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md)).
+- [x] confirmed LABEL을 executable benchmark case로 등록해 OSINT-LBL-001을
+  automated 11→12(12/12 pass·assisted 4·unsupported 14)로 승격한다.
+- [ ] common-funder confirmed 이후 필요한 나머지 자동화 승격을 판정한다.
 
 ### [ ] Wave 5 — 서비스·Cross-chain
 

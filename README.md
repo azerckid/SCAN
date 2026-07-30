@@ -45,7 +45,7 @@ subject-scoped ERC-721/1155 and EIP-1967 event/state analysis. `TASK-014` adds
 bounded path, remerge, and multi-origin graph/ledger analysis. Eleven cases are now
 directly automated, 4 are assisted, and 15 remain unsupported. The eleven automated
 cases pass exact answer, evidence, fixture-requirement, and deterministic replay
-checks. This is 11/11 accuracy within
+checks. This is 12/12 accuracy within
 the automated scope, not 30/30 problem coverage.
 Phase 2 is documented as `TASK-012` through `TASK-019`: generic EVM, NFT/proxy,
 PATH, intelligence, service/xchain, Bitcoin, case reconciliation, and a final
@@ -208,7 +208,7 @@ A supported request without `--evidence` stops explicitly with
 baseline and expected-problem Benchmark 0.1 are closed.
 `TASK-012` is complete with four confirmed fixtures and a PASS Context Receipt.
 `TASK-013` is complete with three confirmed fixtures and Benchmark 9/9.
-`TASK-014` is complete with three confirmed fixtures and Benchmark 11/11.
+`TASK-014` is complete with three confirmed fixtures; Benchmark is 12/12 automated (LABEL added via TASK-015).
 `TASK-015` is in progress: three bounded fixtures are confirmed, LABEL is
 quarantined, and common-funder remains candidate. `TASK-016` through `TASK-019`
 remain proposals requiring their own fixture, Context Receipt, and implementation approval.

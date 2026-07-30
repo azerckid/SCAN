@@ -7,7 +7,11 @@
       "difficulty": "low",
       "coverage": "automated",
       "reason": "TASK-012 EVM Core classifies objects and recomputes the transaction fee from reviewed RPC replay.",
-      "reusable_capabilities": ["EVM-TX", "BASE-PROVENANCE", "BASE-EXPORT"],
+      "reusable_capabilities": [
+        "EVM-TX",
+        "BASE-PROVENANCE",
+        "BASE-EXPORT"
+      ],
       "blocking_gaps": [],
       "fixture": {
         "fixture_id": "FX-BASIC-EVM-001",
@@ -18,18 +22,42 @@
             "result_type": "object_summary",
             "value": {
               "objects": [
-                {"input": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf", "classification": "address", "account_kind": "eoa"},
-                {"input": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b", "classification": "address", "account_kind": "contract"},
-                {"input": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5", "classification": "transaction_hash"},
-                {"input": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644", "classification": "block_hash"},
-                {"input": 16642512, "classification": "block_number"},
-                {"input": "0x1234", "classification": "invalid"}
+                {
+                  "input": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+                  "classification": "address",
+                  "account_kind": "eoa"
+                },
+                {
+                  "input": "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b",
+                  "classification": "address",
+                  "account_kind": "contract"
+                },
+                {
+                  "input": "0xbbdaad89cb0d0d452663b7cb341f642b613d3563411807bcd990d1fffd855fa5",
+                  "classification": "transaction_hash"
+                },
+                {
+                  "input": "0x0a0aaeb9145e6b602f25d066505d9af4ddbce99312619eb11d2ecd01ac2d1644",
+                  "classification": "block_hash"
+                },
+                {
+                  "input": 16642512,
+                  "classification": "block_number"
+                },
+                {
+                  "input": "0x1234",
+                  "classification": "invalid"
+                }
               ],
               "fee_paid_wei": "8115326069137440"
             }
           }
         ],
-        "required_fixture_requirements": ["REQ-BASIC-EVM-OBJECT-TYPES", "REQ-BASIC-EVM-TX-SUMMARY", "REQ-BASIC-EVM-BLOCK-LINK"]
+        "required_fixture_requirements": [
+          "REQ-BASIC-EVM-OBJECT-TYPES",
+          "REQ-BASIC-EVM-TX-SUMMARY",
+          "REQ-BASIC-EVM-BLOCK-LINK"
+        ]
       }
     },
     {
@@ -37,7 +65,11 @@
       "difficulty": "low",
       "coverage": "automated",
       "reason": "TASK-012 EVM Core decodes native and ERC-20 historical state at an explicit block.",
-      "reusable_capabilities": ["EVM-STATE", "BASE-CACHE", "BASE-PROVENANCE"],
+      "reusable_capabilities": [
+        "EVM-STATE",
+        "BASE-CACHE",
+        "BASE-PROVENANCE"
+      ],
       "blocking_gaps": [],
       "fixture": {
         "fixture_id": "FX-BASIC-EVM-002",
@@ -51,13 +83,26 @@
               "block_timestamp": 1676565263,
               "state_semantics": "post_state",
               "balances": [
-                {"symbol": "ETH", "decimals": 18, "amount_raw": "148897435437879000853"},
-                {"symbol": "USDC", "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", "decimals": 6, "amount_raw": "26470158088"}
+                {
+                  "symbol": "ETH",
+                  "decimals": 18,
+                  "amount_raw": "148897435437879000853"
+                },
+                {
+                  "symbol": "USDC",
+                  "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                  "decimals": 6,
+                  "amount_raw": "26470158088"
+                }
               ]
             }
           }
         ],
-        "required_fixture_requirements": ["REQ-BASIC-STATE-BLOCK", "REQ-BASIC-STATE-NATIVE", "REQ-BASIC-STATE-USDC"]
+        "required_fixture_requirements": [
+          "REQ-BASIC-STATE-BLOCK",
+          "REQ-BASIC-STATE-NATIVE",
+          "REQ-BASIC-STATE-USDC"
+        ]
       }
     },
     {
@@ -65,7 +110,11 @@
       "difficulty": "low",
       "coverage": "automated",
       "reason": "TASK-012 EVM Core orders filtered Transfer logs and selects the first successful outgoing transfer.",
-      "reusable_capabilities": ["EVM-LOG", "DECODE", "RECON"],
+      "reusable_capabilities": [
+        "EVM-LOG",
+        "DECODE",
+        "RECON"
+      ],
       "blocking_gaps": [],
       "fixture": {
         "fixture_id": "FX-EVM-TOKEN-001",
@@ -89,7 +138,10 @@
             }
           }
         ],
-        "required_fixture_requirements": ["REQ-TOKEN-FIRST-ORDER", "REQ-TOKEN-FIRST-EVENT"]
+        "required_fixture_requirements": [
+          "REQ-TOKEN-FIRST-ORDER",
+          "REQ-TOKEN-FIRST-EVENT"
+        ]
       }
     },
     {
@@ -97,7 +149,11 @@
       "difficulty": "medium",
       "coverage": "automated",
       "reason": "TASK-012 EVM Core separates the outer value from successful internal native inflows.",
-      "reusable_capabilities": ["EVM-TX", "EVM-TRACE", "RECON"],
+      "reusable_capabilities": [
+        "EVM-TX",
+        "EVM-TRACE",
+        "RECON"
+      ],
       "blocking_gaps": [],
       "fixture": {
         "fixture_id": "FX-EVM-TOKEN-002",
@@ -114,7 +170,10 @@
             }
           }
         ],
-        "required_fixture_requirements": ["REQ-TOKEN-INTERNAL-OUTER", "REQ-TOKEN-INTERNAL-INFLOW"]
+        "required_fixture_requirements": [
+          "REQ-TOKEN-INTERNAL-OUTER",
+          "REQ-TOKEN-INTERNAL-INFLOW"
+        ]
       }
     },
     {
@@ -122,7 +181,12 @@
       "difficulty": "medium",
       "coverage": "automated",
       "reason": "A confirmed ERC-721 fixture, strict subject-scoped analyzer, evidence export, negative oracle, and independent replay path are implemented.",
-      "reusable_capabilities": ["EVM-LOG", "NFT-DECODE", "RECON", "BASE-PROVENANCE"],
+      "reusable_capabilities": [
+        "EVM-LOG",
+        "NFT-DECODE",
+        "RECON",
+        "BASE-PROVENANCE"
+      ],
       "blocking_gaps": [],
       "fixture": {
         "fixture_id": "FX-EVM-NFT-721-001",
@@ -181,7 +245,13 @@
       "difficulty": "medium",
       "coverage": "automated",
       "reason": "A confirmed AUTH fixture, strict analyzer, evidence export, and independent replay path are implemented.",
-      "reusable_capabilities": ["EVM-TX", "EVM-STATE", "EVM-LOG", "AUTH-DECODE", "RECON"],
+      "reusable_capabilities": [
+        "EVM-TX",
+        "EVM-STATE",
+        "EVM-LOG",
+        "AUTH-DECODE",
+        "RECON"
+      ],
       "blocking_gaps": [],
       "fixture": {
         "fixture_id": "FX-EVM-AUTH-001",
@@ -237,7 +307,13 @@
       "difficulty": "medium",
       "coverage": "automated",
       "reason": "A confirmed EIP-1967 fixture, strict event-state analyzer, evidence export, negative oracle, and independent replay path are implemented.",
-      "reusable_capabilities": ["EVM-STATE", "EVM-LOG", "PROXY", "RECON", "BASE-PROVENANCE"],
+      "reusable_capabilities": [
+        "EVM-STATE",
+        "EVM-LOG",
+        "PROXY",
+        "RECON",
+        "BASE-PROVENANCE"
+      ],
       "blocking_gaps": [],
       "fixture": {
         "fixture_id": "FX-EVM-PROXY-001",
@@ -282,7 +358,13 @@
       "difficulty": "medium",
       "coverage": "automated",
       "reason": "A confirmed address-blacklist lifecycle fixture and strict state/event/context analyzer are implemented.",
-      "reusable_capabilities": ["EVM-STATE", "EVM-LOG", "FREEZE", "RECON", "BASE-PROVENANCE"],
+      "reusable_capabilities": [
+        "EVM-STATE",
+        "EVM-LOG",
+        "FREEZE",
+        "RECON",
+        "BASE-PROVENANCE"
+      ],
       "blocking_gaps": [],
       "fixture": {
         "fixture_id": "FX-EVM-FREEZE-001",
@@ -334,7 +416,12 @@
       "difficulty": "medium",
       "coverage": "automated",
       "reason": "A confirmed bounded three-hop fixture and strict flow_path analyzer recover the final address, raw amounts, and ordered transaction evidence; service attribution remains explicitly not assessed.",
-      "reusable_capabilities": ["PATH", "RECON", "BASE-PROVENANCE", "BASE-EXPORT"],
+      "reusable_capabilities": [
+        "PATH",
+        "RECON",
+        "BASE-PROVENANCE",
+        "BASE-EXPORT"
+      ],
       "blocking_gaps": [],
       "fixture": {
         "fixture_id": "FX-FLOW-PATH-001",
@@ -390,7 +477,11 @@
               },
               "path_candidates": [
                 {
-                  "ordered_edge_ids": ["EDGE-PATH-001", "EDGE-PATH-002", "EDGE-PATH-003"],
+                  "ordered_edge_ids": [
+                    "EDGE-PATH-001",
+                    "EDGE-PATH-002",
+                    "EDGE-PATH-003"
+                  ],
                   "hop_count": 3,
                   "terminal_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
                   "termination": "selected_terminal_reached"
@@ -404,7 +495,10 @@
             }
           }
         ],
-        "required_fixture_requirements": ["REQ-FLOW-PATH-ORDER", "REQ-FLOW-PATH-SCOPE"]
+        "required_fixture_requirements": [
+          "REQ-FLOW-PATH-ORDER",
+          "REQ-FLOW-PATH-SCOPE"
+        ]
       }
     },
     {
@@ -412,7 +506,11 @@
       "difficulty": "high",
       "coverage": "automated",
       "reason": "A confirmed four-branch remerge fixture and strict flow_path analyzer recover the merge address, branch set, excluded external inflow, and exact residual ledger.",
-      "reusable_capabilities": ["PATH", "GRAPH-RECON", "BASE-PROVENANCE"],
+      "reusable_capabilities": [
+        "PATH",
+        "GRAPH-RECON",
+        "BASE-PROVENANCE"
+      ],
       "blocking_gaps": [],
       "fixture": {
         "fixture_id": "FX-FLOW-REMERGE-001",
@@ -469,7 +567,10 @@
             }
           }
         ],
-        "required_fixture_requirements": ["REQ-FLOW-REMERGE-BRANCHES", "REQ-FLOW-REMERGE-LEDGER"]
+        "required_fixture_requirements": [
+          "REQ-FLOW-REMERGE-BRANCHES",
+          "REQ-FLOW-REMERGE-LEDGER"
+        ]
       }
     },
     {
@@ -477,15 +578,28 @@
       "difficulty": "high",
       "coverage": "assisted",
       "reason": "The confirmed fixture and analyzer automate origin contributions and deduplicated raw totals, but the expected problem also requires historical price conversion and victim-attribution review.",
-      "reusable_capabilities": ["PATH", "MULTI-VICTIM", "RECON", "BASE-EXPORT"],
-      "blocking_gaps": ["PRICE", "ATTRIBUTION"]
+      "reusable_capabilities": [
+        "PATH",
+        "MULTI-VICTIM",
+        "RECON",
+        "BASE-EXPORT"
+      ],
+      "blocking_gaps": [
+        "PRICE",
+        "ATTRIBUTION"
+      ]
     },
     {
       "problem_id": "SVC-DEX-001",
       "difficulty": "medium",
       "coverage": "automated",
       "reason": "A confirmed Uniswap swap fixture and strict pool-output versus user-net-output analyzer are implemented.",
-      "reusable_capabilities": ["EVM-TX", "EVM-LOG", "DECODE", "RECON"],
+      "reusable_capabilities": [
+        "EVM-TX",
+        "EVM-LOG",
+        "DECODE",
+        "RECON"
+      ],
       "blocking_gaps": [],
       "fixture": {
         "fixture_id": "FX-SVC-DEX-001",
@@ -535,144 +649,295 @@
       "difficulty": "medium",
       "coverage": "unsupported",
       "reason": "Bridge metadata and cross-chain event matching are not implemented.",
-      "reusable_capabilities": ["BASE-PROVENANCE", "BASE-EXPORT"],
-      "blocking_gaps": ["XCHAIN", "BRIDGE"]
+      "reusable_capabilities": [
+        "BASE-PROVENANCE",
+        "BASE-EXPORT"
+      ],
+      "blocking_gaps": [
+        "XCHAIN",
+        "BRIDGE"
+      ]
     },
     {
       "problem_id": "SVC-CEX-001",
       "difficulty": "high",
       "coverage": "unsupported",
       "reason": "Address clustering, exchange labels, and collection-pattern evaluation are not implemented.",
-      "reusable_capabilities": ["BASE-PROVENANCE"],
-      "blocking_gaps": ["CEX-CLUSTER", "LABEL", "HEUR"]
+      "reusable_capabilities": [
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "CEX-CLUSTER",
+        "LABEL",
+        "HEUR"
+      ]
     },
     {
       "problem_id": "SVC-MIX-001",
       "difficulty": "high",
       "coverage": "unsupported",
       "reason": "Mixer candidate-set analysis and uncertainty scoring are not implemented.",
-      "reusable_capabilities": ["BASE-PROVENANCE", "BASE-EXPORT"],
-      "blocking_gaps": ["MIXER", "PATH", "HEUR"]
+      "reusable_capabilities": [
+        "BASE-PROVENANCE",
+        "BASE-EXPORT"
+      ],
+      "blocking_gaps": [
+        "MIXER",
+        "PATH",
+        "HEUR"
+      ]
     },
     {
       "problem_id": "SVC-LEND-001",
       "difficulty": "high",
       "coverage": "unsupported",
       "reason": "Flash-loan, lending, liquidation, and protocol accounting decoders are absent.",
-      "reusable_capabilities": ["EVM-LOG", "RECON"],
-      "blocking_gaps": ["DEFI-LEND", "EVM-TRACE"]
+      "reusable_capabilities": [
+        "EVM-LOG",
+        "RECON"
+      ],
+      "blocking_gaps": [
+        "DEFI-LEND",
+        "EVM-TRACE"
+      ]
     },
     {
       "problem_id": "ACTOR-REL-001",
       "difficulty": "medium",
       "coverage": "unsupported",
       "reason": "Fee-payer relationship extraction and entity-candidate heuristics are not implemented.",
-      "reusable_capabilities": ["BASE-PROVENANCE"],
-      "blocking_gaps": ["ACTOR-REL", "HEUR"]
+      "reusable_capabilities": [
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "ACTOR-REL",
+        "HEUR"
+      ]
     },
     {
       "problem_id": "ACTOR-REL-002",
       "difficulty": "high",
       "coverage": "assisted",
       "reason": "The confirmed public-hub fixture automatically proves two separate interactions and prevents a false ownership merge, but it does not generate a same-actor candidate set from multiple positive heuristics.",
-      "reusable_capabilities": ["ACTOR-REL", "BASE-PROVENANCE"],
-      "blocking_gaps": ["CLUSTER", "HEUR"]
+      "reusable_capabilities": [
+        "ACTOR-REL",
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "CLUSTER",
+        "HEUR"
+      ]
     },
     {
       "problem_id": "CRIME-PHISH-001",
       "difficulty": "medium",
       "coverage": "unsupported",
       "reason": "The tool can prove AUTH consumption but cannot trace laundering paths or assign phishing labels.",
-      "reusable_capabilities": ["AUTH-DECODE", "BASE-PROVENANCE"],
-      "blocking_gaps": ["PATH", "LABEL", "OSINT"]
+      "reusable_capabilities": [
+        "AUTH-DECODE",
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "PATH",
+        "LABEL",
+        "OSINT"
+      ]
     },
     {
       "problem_id": "CRIME-POISON-001",
       "difficulty": "medium",
       "coverage": "unsupported",
       "reason": "Lookalike-address similarity and mistaken-transfer recovery classification are absent.",
-      "reusable_capabilities": ["BASE-PROVENANCE"],
-      "blocking_gaps": ["POISON", "HEUR"]
+      "reusable_capabilities": [
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "POISON",
+        "HEUR"
+      ]
     },
     {
       "problem_id": "CRIME-EXP-001",
       "difficulty": "high",
       "coverage": "unsupported",
       "reason": "Attack-trace interpretation, protocol exploit decoding, and post-exploit path analysis are absent.",
-      "reusable_capabilities": ["EVM-LOG", "BASE-PROVENANCE"],
-      "blocking_gaps": ["EVM-TRACE", "EXPLOIT-DECODE", "PATH"]
+      "reusable_capabilities": [
+        "EVM-LOG",
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "EVM-TRACE",
+        "EXPLOIT-DECODE",
+        "PATH"
+      ]
     },
     {
       "problem_id": "CRIME-RUG-001",
       "difficulty": "high",
       "coverage": "unsupported",
       "reason": "LP ownership, liquidity-removal accounting, insider attribution, and exit tracing are absent.",
-      "reusable_capabilities": ["EVM-LOG", "BASE-PROVENANCE"],
-      "blocking_gaps": ["LP-RUG", "PATH", "LABEL"]
+      "reusable_capabilities": [
+        "EVM-LOG",
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "LP-RUG",
+        "PATH",
+        "LABEL"
+      ]
     },
     {
       "problem_id": "BTC-UTXO-001",
       "difficulty": "medium",
       "coverage": "unsupported",
       "reason": "The current Analysis I/O supports Ethereum chain 1 only and has no UTXO collector.",
-      "reusable_capabilities": ["BASE-CACHE", "BASE-PROVENANCE"],
-      "blocking_gaps": ["BTC-UTXO"]
+      "reusable_capabilities": [
+        "BASE-CACHE",
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "BTC-UTXO"
+      ]
     },
     {
       "problem_id": "BTC-UTXO-002",
       "difficulty": "high",
       "coverage": "unsupported",
       "reason": "UTXO traversal, common-input ownership, change detection, and counterexamples are absent.",
-      "reusable_capabilities": ["BASE-PROVENANCE"],
-      "blocking_gaps": ["BTC-UTXO", "HEUR"]
+      "reusable_capabilities": [
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "BTC-UTXO",
+        "HEUR"
+      ]
     },
     {
       "problem_id": "BTC-CJ-001",
       "difficulty": "high",
       "coverage": "unsupported",
       "reason": "CoinJoin detection, candidate tracking, and explicit untraceable boundaries are absent.",
-      "reusable_capabilities": ["BASE-PROVENANCE", "BASE-EXPORT"],
-      "blocking_gaps": ["BTC-UTXO", "COINJOIN", "HEUR"]
+      "reusable_capabilities": [
+        "BASE-PROVENANCE",
+        "BASE-EXPORT"
+      ],
+      "blocking_gaps": [
+        "BTC-UTXO",
+        "COINJOIN",
+        "HEUR"
+      ]
     },
     {
       "problem_id": "OSINT-LBL-001",
       "difficulty": "low",
-      "coverage": "unsupported",
-      "reason": "Provenance can store a reviewed citation, but no OSINT search or label-resolution worker exists.",
-      "reusable_capabilities": ["BASE-PROVENANCE", "BASE-EXPORT"],
-      "blocking_gaps": ["OSINT", "LABEL"]
+      "coverage": "automated",
+      "reason": "LABEL source-conflict fixture is confirmed; the intel_context collect_label_claims analyzer resolves official/first-party/onchain assertions with an independent Verifier hash match.",
+      "reusable_capabilities": [
+        "BASE-PROVENANCE",
+        "BASE-EXPORT",
+        "INTEL-LABEL"
+      ],
+      "blocking_gaps": [],
+      "fixture": {
+        "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+        "request_path": "docs/05_QA_Validation/fixtures/FX-OSINT-LABEL-CONFLICT-001/analysis-request.json",
+        "replay_path": "docs/05_QA_Validation/fixtures/FX-OSINT-LABEL-CONFLICT-001/source-replay.json",
+        "expected_results": [
+          {
+            "result_type": "collect_label_claims",
+            "value": {
+              "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+              "dataset": {
+                "entity": "TORNADO CASH",
+                "categories": [
+                  "historical_designation"
+                ],
+                "source_value": "2022-08-08"
+              },
+              "ens": {
+                "name": "eth-01.tornadocash.eth",
+                "address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+                "block_number": 25640270
+              },
+              "community_config": {
+                "name": "eth-01.tornadocash.eth",
+                "role": "eth_0_1_instance"
+              },
+              "conflict": {
+                "auto_merge": false,
+                "ownership_assessment": "not_assessed",
+                "criminality_assessment": "not_assessed"
+              }
+            }
+          }
+        ],
+        "required_fixture_requirements": [
+          "REQ-INTEL-LABEL-ASSERTIONS",
+          "REQ-INTEL-LABEL-CONFLICT"
+        ]
+      }
     },
     {
       "problem_id": "OSINT-SAN-001",
       "difficulty": "medium",
       "coverage": "assisted",
       "reason": "The confirmed historical fixture automatically preserves direct official designation and removal facts, but the full problem still requires one-hop counterpart expansion and direct-versus-indirect matching.",
-      "reusable_capabilities": ["SANCTIONS", "BASE-PROVENANCE"],
-      "blocking_gaps": ["PATH", "LABEL"]
+      "reusable_capabilities": [
+        "SANCTIONS",
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "PATH",
+        "LABEL"
+      ]
     },
     {
       "problem_id": "OSINT-ENS-001",
       "difficulty": "medium",
       "coverage": "assisted",
       "reason": "The confirmed fixed-block fixture automatically validates ENS forward and reverse resolution, but domain, DNS, SNS, and impersonation checks remain outside the analyzer.",
-      "reusable_capabilities": ["ENS-OSINT", "BASE-PROVENANCE"],
-      "blocking_gaps": ["OSINT", "LABEL"]
+      "reusable_capabilities": [
+        "ENS-OSINT",
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "OSINT",
+        "LABEL"
+      ]
     },
     {
       "problem_id": "MIXED-XCHAIN-001",
       "difficulty": "high",
       "coverage": "unsupported",
       "reason": "Cross-chain DEX, bridge, exchange, and path reconciliation are not implemented.",
-      "reusable_capabilities": ["DECODE", "RECON", "BASE-PROVENANCE"],
-      "blocking_gaps": ["XCHAIN", "BRIDGE", "PATH", "LABEL"]
+      "reusable_capabilities": [
+        "DECODE",
+        "RECON",
+        "BASE-PROVENANCE"
+      ],
+      "blocking_gaps": [
+        "XCHAIN",
+        "BRIDGE",
+        "PATH",
+        "LABEL"
+      ]
     },
     {
       "problem_id": "MIXED-CASE-001",
       "difficulty": "high",
       "coverage": "unsupported",
       "reason": "Open-ended seed discovery, hypothesis search, multi-tool planning, and case reconstruction are not implemented end to end.",
-      "reusable_capabilities": ["BASE-CACHE", "BASE-PROVENANCE", "BASE-EXPORT"],
-      "blocking_gaps": ["SEED-DISCOVERY", "PATH", "OSINT", "VIZ"]
+      "reusable_capabilities": [
+        "BASE-CACHE",
+        "BASE-PROVENANCE",
+        "BASE-EXPORT"
+      ],
+      "blocking_gaps": [
+        "SEED-DISCOVERY",
+        "PATH",
+        "OSINT",
+        "VIZ"
+      ]
     }
   ]
 }
