@@ -1,7 +1,7 @@
 # TASK-016 Bridge/XChain(SVC-BRG-001) Analysis 계약 제안 (docs-only)
 > Created: 2026-07-30 20:45
-> Last Updated: 2026-07-31 04:25
-> Status: Docs Contract Approved · Fixture Verifying · Offline Analyzer Implemented · Verification Receipt PASS · confirmed Pending
+> Last Updated: 2026-07-31 04:55
+> Status: Docs Contract Approved · Fixture Confirmed · Benchmark Automated · MIXED-XCHAIN Pending
 
 ## 0. 이 문서의 위치
 
@@ -16,11 +16,11 @@ Analysis I/O Schema가 구현됐으며 fixture·Benchmark 승격은 별도 Gate�
 단일 bridge hop(출발↔도착 연결)이다.
 
 **현재 전제(Context Receipt 요지).** `SVC-BRG-001` fixture는 양단 replay·
-negative oracle·독립 Verifier를 통과한 `verifying`이며 아직 `confirmed`는
-아니다. source/Rules 미확정은 live adapter blocker로 유지하되,
-content-addressed artifact 기반 offline analyzer는 2026-07-31 Context Receipt
-PASS·사용자 구현 승인을 받았다. 다른 TASK-016 adapter와 `MIXED-XCHAIN-001`,
-fixture·Benchmark 승격은 승인 범위가 아니다.
+negative oracle·독립 Verifier·analyzer·Verification Receipt를 통과한
+`confirmed`이며 Benchmark automated다. source/Rules 미확정은 live adapter
+blocker로 유지하되, offline-addressed artifact 기반 offline analyzer는
+2026-07-31 Context Receipt PASS·사용자 구현 승인을 받았다. 다른 TASK-016
+adapter와 `MIXED-XCHAIN-001`은 승인 범위가 아니다.
 
 ## 1. 대상 문제·정답 범위 확정
 
@@ -191,8 +191,8 @@ destination chain만 필수로 둔다. destination recipient는 양단 evidence�
   - complete/partial/failed 상태는 공통 result 봉투의 `status`로 표현한다.
 
 Context Receipt PASS·사용자 구현 승인·offline analyzer 구현·독립
-Verification Receipt는 완료됐다. 남은 Gate는 별도 fixture
-`verifying → confirmed` 승격 검토와 Benchmark 판정이다(§10 참고).
+Verification Receipt·fixture confirmed·Benchmark automated는 완료됐다.
+남은 Gate는 다른 adapter와 `MIXED-XCHAIN-001` 조합이다(§10 참고).
 
 ## 6. complete · partial · failed · negative oracle 계약
 
@@ -280,14 +280,16 @@ doc 20 §1.6을 따른다. 매핑: 입력 경계 `invalid_input`, 지원 안 되
 9. 완료 — `bridge_transfer` analyzer 구현과 독립 Verification Receipt를
    기록했다([64 Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)).
    공개 Schema `FixtureRequirementId`에 `BRIDGE`를 추가하고 probe를
-   보강했다. `verifying → confirmed`는 별도 판정한다.
-10. (별도) `MIXED-XCHAIN-001` 조합 Gate — DEX+Bridge+CEX leg 결합.
+   보강했다.
+10. 완료 — `FX-SVC-BRG-001`을 `confirmed`로 승격하고 `SVC-BRG-001`을
+    Benchmark automated로 등록했다
+    ([65 Receipt](../05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)).
+    Benchmark는 13 automated · 4 assisted · 13 unsupported다.
+11. (별도) `MIXED-XCHAIN-001` 조합 Gate — DEX+Bridge+CEX leg 결합.
 
-**Blocker(해소됨).** 4의 양단 캡처·live 조회는 이미 완료됐다(§10 4번).
-Context Receipt·구현 승인·offline analyzer·독립 Verification Receipt는
-완료됐다. fixture는 계속 `verifying`이고 Benchmark 12·4·14 및
-`MIXED-XCHAIN-001` 분류는 변경하지 않는다. 남은 잔여는
-`verifying → confirmed`와 Benchmark 자동화 승격 판정이다.
+**Blocker(해소됨).** Bridge offline 경로의 fixture·analyzer·Benchmark Gate는
+완료됐다. fixture는 `confirmed`이고 Benchmark 13·4·13이다. 남은 잔여는
+CEX·Mixer·Lending adapter와 `MIXED-XCHAIN-001` 조합 Gate다.
 
 ## 11. Related Documents
 
@@ -298,5 +300,7 @@ Context Receipt·구현 승인·offline analyzer·독립 Verification Receipt는
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - 체인·provider source
 - **QA_Validation**: [예상문제 Benchmark 보고서](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 12·4·14 coverage
 - **QA_Validation**: [Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md) - analyzer 독립 검증 PASS
+- **QA_Validation**: [Bridge Final Promotion Receipt](../05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 13/13
+- **QA_Validation**: [Contest Stabilization Runbook](../05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md) - 대회용 freeze
 - **Logic_Progress**: [Backlog TASK-016](../04_Logic_Progress/00_BACKLOG.md) - adapter 범위·Context Receipt
 - **Logic_Progress**: [Execution Plan Wave 5](../04_Logic_Progress/01_EXECUTION_PLAN.md) - 서비스·Cross-chain 순서

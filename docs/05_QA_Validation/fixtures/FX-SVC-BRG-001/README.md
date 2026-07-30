@@ -1,6 +1,6 @@
 # FX-SVC-BRG-001 — Across V3 Base→Ethereum
 
-> Status: 검증 중(verifying) · raw provider replay·negative oracle·independent Verifier complete
+> Status: 확정(confirmed) · raw provider replay·negative oracle·independent Verifier·analyzer·Benchmark automated complete
 
 ## 범위
 
@@ -31,11 +31,11 @@ signature·log-receipt-transaction-block exact binding까지 처음부터 다시
 `d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`를
 계산했다(candidate-capture 모듈과 코드 비공유, `evidence.json`에 pin).
 [승격 검토](../../63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)를 통과해
-`검증 중(verifying)`으로 승격했다. Context Receipt PASS·구현 승인 후
-`bridge_transfer` analyzer를 구현했고, 그 canonical hash도 독립 Verifier
-hash와 일치한다. 독립 Verification Receipt
-([64](../../64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md))도 PASS다.
-`확정(confirmed)`과 Benchmark 승격은 별도 판정한다.
+`검증 중(verifying)`으로 승격한 뒤, Context Receipt PASS·구현 승인·
+analyzer·[Verification Receipt](../../64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)
+PASS를 거쳐
+[최종 승격 Receipt](../../65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)에서
+`확정(confirmed)`과 Benchmark automated로 등록했다.
 
 ## 파일
 
@@ -50,20 +50,14 @@ hash와 일치한다. 독립 Verification Receipt
 ## 다음 Gate
 
 1. ~~negative oracle과 2회 결정성 Gate~~ — 완료
-   ([manifest](../../oracles/task-016-bridge-negative-oracles-v0.1.json)).
 2. ~~독립 Verifier의 raw-first 재계산~~ — 완료
-   ([62 §10](../../62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).
 3. ~~candidate → verifying 별도 판정~~ — 완료
-   ([63 승격 검토](../../63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)).
-4. ~~Analysis I/O 대안 결정~~ — 완료. 대안 B(전용 leaf
-   `bridge_transfer`) 확정([Bridge 계약 §5](../../../03_Technical_Specs/21_TASK_016_BRIDGE_XCHAIN_CONTRACT_PROPOSAL.md)).
-5. ~~Context Receipt PASS·구현 승인~~ — 완료(2026-07-31, offline/artifact
-   범위로 제한). Backlog TASK-016 Context Receipt 참고.
-6. ~~`bridge_transfer` analyzer 구현~~ — 완료. canonical hash가 독립
-   Verifier hash `d6609bb4...`와 일치(`analyzer_hash_matches_independent_verifier`).
+4. ~~Analysis I/O 대안 결정~~ — 완료
+5. ~~Context Receipt PASS·구현 승인~~ — 완료
+6. ~~`bridge_transfer` analyzer 구현~~ — 완료
 7. ~~독립 Verification Receipt 문서화~~ — 완료
-   ([64 Receipt](../../64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)).
-8. `confirmed` 승격·Benchmark 승격은 별도 판정.
+8. ~~`confirmed` 승격·Benchmark 자동화~~ — 완료
+   ([65 Receipt](../../65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md))
 
 endpoint·credential·Explorer 본문은 이 package에 저장하지 않는다.
 QuickNode의 bounded 호출은 429, PublicNode의 exact-block log는 403이었고
@@ -76,5 +70,7 @@ public RPC와 Ethereum managed/supporting explorer-backed RPC로 완료했다.
 - [Bridge Raw Replay 보고서](../../62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)
 - [Bridge 승격 검토](../../63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)
 - [Bridge Analyzer Verification Receipt](../../64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)
+- [Bridge Final Promotion Receipt](../../65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)
+- [Contest Stabilization Runbook](../../66_CONTEST_STABILIZATION_RUNBOOK.md)
 - [Bridge 계약](../../../03_Technical_Specs/21_TASK_016_BRIDGE_XCHAIN_CONTRACT_PROPOSAL.md)
 - [Reference Fixtures](../../01_REFERENCE_FIXTURES.md)

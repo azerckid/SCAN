@@ -1,7 +1,7 @@
 # TASK-016 Bridge Fixture 승격 검토 보고서
 > Created: 2026-07-31 03:20
-> Last Updated: 2026-07-31 04:25
-> Status: Promoted to 검증 중 (Verifying) · Analysis I/O 대안 B 확정 · Context Receipt PASS · Analyzer Verification Receipt PASS · confirmed 별도
+> Last Updated: 2026-07-31 04:55
+> Status: Promoted to 확정 (Confirmed) · Benchmark Automated 13/13 · MIXED-XCHAIN Unsupported
 
 ## 1. 목적
 
@@ -48,12 +48,14 @@
 `FX-SVC-BRG-001`을 `후보(candidate)`에서 `검증 중(verifying)`으로 승격한다.
 `확정(confirmed)`은 §2의 잔여 Gate(6~10)를 순서대로 닫은 뒤 별도로 판단한다.
 
-이 승격은 다음을 바꾸지 않는다.
+이 승격(당시)은 다음을 바꾸지 않았다.
 
-- Benchmark 자동화 수(계속 12 automated·4 assisted·14 unsupported)
+- Benchmark 자동화 수(당시 12 automated·4 assisted·14 unsupported)
 - `MIXED-XCHAIN-001` 조합 Gate(별도, DEX+Bridge+CEX leg 결합)
-- fixture `verifying` 상태 자체(analyzer 구현은 §5에서 완료됐지만 `confirmed`
-  승격은 별도 판정)
+- fixture `verifying` 상태 자체
+
+이후 Gate는 [65 최종 승격 Receipt](./65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)에서
+`confirmed`와 Benchmark 13/13으로 닫혔다.
 
 ## 5. 다음 Gate
 
@@ -68,14 +70,17 @@
 4. ~~독립 Verification Receipt 문서화(analyzer 전용)~~ — 완료
    ([64 Receipt](./64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)).
    공개 Schema `BRIDGE` 패턴·probe 보강도 함께 반영했다.
-5. `verifying → confirmed` 승격을 별도 판정
-6. Benchmark automated 승격 여부를 별도 판정
+5. ~~`verifying → confirmed` 승격~~ — 완료
+   ([65 Receipt](./65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)).
+6. ~~Benchmark automated 승격~~ — 완료(12→13, `SVC-BRG-001`).
+7. (별도) `MIXED-XCHAIN-001` 조합 Gate — CEX·Lending·Mixer와 함께 잔여
 
 ## 6. Related Documents
 
 - [Bridge 후보 선정 보고서](./61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) - 승격 이전 candidate 근거
 - [Bridge Raw Replay 보고서](./62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) - 16 call·negative oracle 8개·독립 Verifier·P1 remediation 전체 기록
 - [Bridge Analyzer Verification Receipt](./64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md) - analyzer 독립 검증 PASS
+- [Bridge Final Promotion Receipt](./65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 13/13
 - [Bridge/XChain 계약 제안](../03_Technical_Specs/21_TASK_016_BRIDGE_XCHAIN_CONTRACT_PROPOSAL.md) - 정답·evidence·오라클 계약
 - [Bridge/XChain UI](../02_UI_Screens/11_TASK_016_BRIDGE_XCHAIN_UI.md) - 사용자 승인된 Preview
 - [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - fixture 상태 목록
