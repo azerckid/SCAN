@@ -101,7 +101,7 @@ subject로 migration했다. 새 canonical hash를 Verifier·analyzer가 재현�
 | [FX-FLOW-PATH-001](./fixtures/FX-FLOW-PATH-001/README.md) | FLOW-EVM-001 | 1 | 확정 0.1 | 두 RPC·Blockscout edge·18 oracle·Verifier·analyzer | PATH, internal/top-level edge |
 | [FX-FLOW-REMERGE-001](./fixtures/FX-FLOW-REMERGE-001/README.md) | FLOW-EVM-002 | 1 | 확정 0.1 | 두 RPC·18 oracle·Verifier·analyzer | PATH, RECON, exclusion |
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
-| [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) | SVC-BRG-001 | 1 | 후보 0.1 | Across 공개 후보·양단 두 role live replay·cross-provider match, negative oracle 대기 | XCHAIN, BRIDGE, RECON |
+| [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) | SVC-BRG-001 | 1 | 후보 0.1 | Across 공개 후보·양단 두 role live replay·cross-provider match·negative oracle 8개 2회 결정성, 독립 Verifier 대기 | XCHAIN, BRIDGE, RECON |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | V1 기준선 | AUTH-DECODE, allowance 연결 |
 | [FX-EVM-NFT-721-001](./fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·analyzer remediation | ERC-721 event·tokenId |
 | [FX-EVM-NFT-1155-001](./fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·subject 분리 | ERC-1155 Single·Batch |
@@ -210,7 +210,7 @@ adjacent state만 완전성을 주장한다.
 |:---|:---|
 | 연결 문제 ID | SVC-BRG-001 |
 | 상태 | 후보 |
-| DOC-M3 결정 | Across V3 candidate package·16-call raw replay·두 source role decoded match 완료 |
+| DOC-M3 결정 | Across V3 candidate package·16-call raw replay·cross-provider match·negative oracle 8개 2회 결정성 완료 |
 | 패키지 | [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) |
 | 데이터 형태 | 공개 온체인 |
 | 체인 | 후보: Base `8453` → Ethereum `1` |
@@ -222,7 +222,7 @@ adjacent state만 완전성을 주장한다.
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` |
 | 재현 절차 | 1) 양단 TX/receipt/block 2) exact-block event logs 3) Across composite domain 4) amount/asset/transfer 정합 5) 두 provider SHA |
 | 저작권·출처 | Across 공식 문서 URL·BaseScan/Etherscan supporting URL만 기록. 페이지/API 응답 미복제 |
-| 마지막 확인 | 2026-07-31 00:35 (candidate package Schema PASS, live calls 16, decoded match) |
+| 마지막 확인 | 2026-07-31 01:30 (candidate package Schema PASS, live calls 16, decoded match, negative oracle 8/8 PASS) |
 
 ---
 

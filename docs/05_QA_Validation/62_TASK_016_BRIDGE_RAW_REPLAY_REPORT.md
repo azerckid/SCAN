@@ -149,7 +149,36 @@ verify를 비교하는 코드가 없는 채로 `cross_provider_decoded_match: tr
 topic0 상수(`V3FundsDeposited`/`FilledV3Relay`)는 재검토 결과 실제 ABI
 signature와 일치함이 확인됐다(잔여 리스크 해소).
 
-## 9. Related Documents
+## 9. Negative Oracle Gate
+
+doc 21 §6의 7개 negative oracle 범주(오매칭·domain 충돌·tolerance 남용·
+evidence 누락·scope 합성·heuristic 승격·amount 공식 불일치)를 완전한
+`bridge_transfer` analyzer 없이 synthetic offline case로 먼저 고정한다.
+TASK-014의 `flow_path` 대비 동일한 선례를 따른다: 독립 작성된 참조
+classifier(`_evaluate_bridge`)가 fixture의 결정 경계를 얼려두고, 이후
+analyzer 구현이 이 경계와 일치하는지는 별도 analyzer-independent-verification
+Gate에서 확인한다.
+
+| Oracle ID | 범주(doc 21 §6) | 결과 |
+|:---|:---|:---:|
+| `OR-BRIDGE-SCOPE-SYNTHESIS` | 5. request에 없는 주소·체인 합성 | failed |
+| `OR-BRIDGE-DOMAIN-COLLISION` | 6. domain 분리 없이 같은 key 연결 | failed |
+| `OR-BRIDGE-WRONG-DEPOSIT-MATCH` | 1. 유사 금액 다른 전송 오매칭 | failed |
+| `OR-BRIDGE-HEURISTIC-NOT-PROMOTED` | 2. 결정적 키 없이 confirmed 승격 시도 | partial |
+| `OR-BRIDGE-DESTINATION-EVIDENCE-MISSING` | 4. 도착 evidence 미확보를 complete 처리 | partial |
+| `OR-BRIDGE-TOLERANCE-WITHOUT-MAPPING` | 3. 공식 mapping 없이 임의 tolerance 승격 | failed |
+| `OR-BRIDGE-AMOUNT-FORMULA-MISMATCH` | 7. 공식 fee/asset mapping 있어도 정수 공식 불일치 | failed |
+| `OR-BRIDGE-COMPLETE-MATCH` | 양성 대조군(FX-SVC-BRG-001 실제 재검증 facts와 정합) | complete |
+
+manifest: [`task-016-bridge-negative-oracles-v0.1.json`](./oracles/task-016-bridge-negative-oracles-v0.1.json).
+구현: `src/scan_tool/application/task_016_bridge_negative_oracles.py`,
+`scripts/verify_task_016_bridge_negative_oracles.py`(`scripts/verify.py`에
+연결), `tests/unit/test_task_016_bridge_negative_oracles.py`.
+
+**검증.** `PASS 8 TASK-016 Bridge negative oracles twice (offline
+deterministic)`. 전체 게이트 553 passed·traceability·security 유지.
+
+## 10. Related Documents
 
 - [Bridge candidate package](./fixtures/FX-SVC-BRG-001/README.md)
 - [Bridge 후보 선정 보고서](./61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md)

@@ -1485,7 +1485,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Related QA Docs:
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-SERVICE-001
   - [Bridge/XChain 공개 Fixture 후보 보고서](../05_QA_Validation/61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) - Across V3 Base→Ethereum 후보·raw replay 완료
-  - [Bridge Raw Replay 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) - 16 read-only calls·SHA·decoded match·실패 이력
+  - [Bridge Raw Replay 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) - 16 read-only calls·SHA·decoded match·negative oracle 8개
 - Implementation Preconditions:
   - [ ] adapter별 confirmed fixture·official ABI/address를 확보한다.
   - [ ] PATH·INTEL 결과 계약이 안정됐다.
@@ -1523,11 +1523,18 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     16 read-only call·`cross_provider_decoded_match: true`(코드 계산)를
     확인했다([62 §8 Remediation](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).
     회귀 테스트 4건 추가.
+  - Negative Oracle Gate - doc 21 §6의 7개 negative oracle 범주(오매칭·
+    domain 충돌·tolerance 남용·evidence 누락·scope 합성·heuristic 승격·
+    amount 공식 불일치)를 8개 synthetic case로 고정하고 2회 결정성으로
+    통과했다([62 §9](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md),
+    [manifest](../05_QA_Validation/oracles/task-016-bridge-negative-oracles-v0.1.json)).
+    독립 작성된 참조 classifier이며 `bridge_transfer` analyzer는 아직 없다.
 - Verification Receipt:
-  - N/A - 구현 미시작(fixture Gate만 진행). 위 remediation은
+  - N/A - 구현 미시작(fixture Gate만 진행). 위 remediation·negative oracle은
     `uv run pytest tests/unit/test_task_016_bridge_replay.py` 10 PASS,
-    전체 `scripts/verify.py` 552 passed·traceability 1862·security 213로
-    확인했다.
+    `tests/unit/test_task_016_bridge_negative_oracles.py` 1 PASS,
+    `PASS 8 TASK-016 Bridge negative oracles twice (offline deterministic)`,
+    전체 `scripts/verify.py` 553 passed로 확인했다.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 
