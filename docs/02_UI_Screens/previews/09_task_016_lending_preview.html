@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCAN TASK-016 Lending Preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page:#06090e; --panel:#0d141d; --raised:#131e2b; --border:#2a394b;
+      --fg:#e0e8f1; --muted:#8290a3; --accent:#70adff; --ok:#55d59e;
+      --warn:#f0c75e; --bad:#ff7684; --violet:#c0a0ff; --cyan:#67d4e8;
+      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      --sans:Inter,Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;color:var(--fg);font-family:var(--sans);
+      background:radial-gradient(circle at 12% 0,rgba(43,100,175,.2),transparent 32rem),var(--page)}
+    button,code{font-family:var(--mono)} button{cursor:pointer}
+    button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .page{width:min(1500px,calc(100% - 28px));margin:auto;padding:28px 0 48px}
+    header{display:flex;justify-content:space-between;align-items:end;gap:20px}
+    .eyebrow{color:var(--accent);font:700 11px var(--mono);letter-spacing:.13em}
+    h1{margin:7px 0 0;font-size:clamp(28px,4vw,45px);letter-spacing:-.04em}
+    .lede{max-width:880px;color:#aab6c5;line-height:1.65}
+    .gate,.notice,.panel{border:1px solid var(--border);background:var(--panel);border-radius:10px}
+    .gate{min-width:260px;padding:13px 15px;font:11px/1.65 var(--mono)}
+    .gate b{color:var(--warn)} .notice{margin-top:18px;padding:12px 14px;color:#ebdba6;background:#211b0e;font:11px/1.6 var(--mono)}
+    .chiprow{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+    .chip{padding:8px 12px;border:1px solid #4d7bb8;border-radius:8px;background:#14263e;color:#f5f8fc;font:700 11px var(--mono)}
+    .chip span{color:var(--muted);font-weight:400}
+    .workspace{display:grid;grid-template-columns:340px minmax(0,1fr) 320px;gap:11px;margin-top:11px}
+    .panel{overflow:hidden}.head{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);font:700 10px var(--mono);letter-spacing:.08em}
+    .body{padding:14px}.copy{color:#a9b5c5;font-size:12px;line-height:1.55}
+    .fields{display:grid;gap:7px;margin-top:11px}.field{display:grid;grid-template-columns:112px 1fr;gap:8px;padding:8px 9px;border:1px solid #202d3c;border-radius:6px;background:#090e15;font:10px/1.45 var(--mono)}
+    .field span:first-child{color:var(--muted)}.states{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:13px}
+    .state{padding:8px 3px;border:1px solid var(--border);border-radius:6px;background:var(--raised);color:#aeb9c9;font-size:10px}
+    .state[data-state=complete][aria-pressed=true]{color:var(--ok);border-color:var(--ok)}
+    .state[data-state=partial][aria-pressed=true]{color:var(--warn);border-color:var(--warn)}
+    .state[data-state=failed][aria-pressed=true]{color:var(--bad);border-color:var(--bad)}
+    .result{background:#080d13;min-height:690px}.term{padding:17px 18px;font-family:var(--mono)}
+    .status{display:flex;gap:8px;align-items:center}.badge{padding:3px 8px;border:1px solid currentColor;border-radius:4px;font-size:10px;font-weight:800}
+    .complete{color:var(--ok)}.partial{color:var(--warn)}.failed{color:var(--bad)}
+    .section{margin-top:15px;color:#73839a;font:700 10px var(--mono);letter-spacing:.12em}
+    .event,.leg,.hop,.error,.next{margin-top:7px;padding:9px 10px;border:1px solid #202d3c;border-radius:6px;background:#0b121a;font:10px/1.6 var(--mono);overflow-wrap:anywhere}
+    .event{border-left:3px solid var(--cyan)}.event.flash{border-left-color:var(--violet)}
+    .leg{border-left:3px solid var(--ok)}.leg.premium{border-left-color:var(--warn)}.leg.unresolved{border-left-color:var(--bad);color:#f0a5ad}
+    .hop{border-left:3px solid var(--accent);color:#d9e8fb}
+    .error{border-left:3px solid var(--bad);color:#f0a5ad}.next{border-left:3px solid var(--accent);color:#d9e8fb}
+    .mini{display:inline-block;margin:0 4px 3px 0;padding:2px 5px;border:1px solid #41536a;border-radius:3px;color:#aebbd0;font-size:9px}
+    .roles{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+    .ledger-total{margin-top:9px;padding:8px 10px;border:1px dashed #3a4c63;border-radius:6px;color:#cdd9e8;font:10px/1.5 var(--mono)}
+    .source-list{display:grid;gap:8px}.source b{display:block;color:#dce7f3;font-size:10px}.source span{display:block;margin-top:5px;color:#8998aa}
+    .truth{margin-top:11px;padding:9px;border:1px solid #5a4930;border-radius:6px;color:#e8d29c;background:#18140d;font:10px/1.55 var(--mono)}
+    footer{display:flex;justify-content:space-between;margin-top:15px;color:#6f7e91;font:10px var(--mono)}
+    @media(max-width:1120px){.workspace{grid-template-columns:320px 1fr}.sources{grid-column:1/-1}.source-list{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:820px){header,.workspace{display:grid;grid-template-columns:1fr}.sources{grid-column:auto}.source-list{grid-template-columns:1fr}.gate{min-width:0}}
+    @media(max-width:520px){.field{grid-template-columns:1fr}footer{display:grid;gap:5px}.source-list{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div>
+      <div class="eyebrow">TASK-016 · DEFI LENDING RECONSTRUCTION</div>
+      <h1>Lending Flow Preview</h1>
+      <p class="lede">차입·플래시론·청산·담보 이벤트를 디코딩하고, subject가 실제 sender/receiver인 value leg만 자산별로 정합해 순자산 변화와 후속 유출 경로를 복원합니다. 공격 여부는 판정하지 않습니다.</p>
+    </div>
+    <div class="gate">UI-FIRST GATE<br><b>사용자 확인 대기</b><br>FIXTURE FX-SVC-LEND-001 PROPOSED<br>RUNTIME NOT IMPLEMENTED</div>
+  </header>
+  <div class="notice">Docs-only synthetic Preview입니다. 외부 RPC·탐색기·DB를 호출하지 않으며 정상 청산과 공격을 자동으로 구분하지 않습니다. 서비스 귀속·불법성은 not_assessed입니다.</div>
+  <div class="chiprow">
+    <div class="chip">reconstruct_lending_flow <span>단일 query</span></div>
+    <div class="chip">defi_lending <span>전용 leaf (대안 B)</span></div>
+    <div class="chip">event ↔ transfer 정합 <span>leg 분리</span></div>
+  </div>
+  <div class="workspace">
+    <section class="panel">
+      <div class="head"><span>REQUEST</span><span id="query-chip">reconstruct_lending_flow</span></div>
+      <div class="body">
+        <p class="copy">subject_address와 중복 없는 subject_roles[]를 고정하고, 시간 창 안의 lending 이벤트를 대상 프로토콜로만 디코딩합니다. 역할은 binding·검증용이며 leg 필터가 아닙니다.</p>
+        <div class="fields" id="fields"></div>
+        <div class="roles" id="roles"></div>
+        <div class="states" role="group" aria-label="결과 상태">
+          <button class="state" data-state="complete" aria-pressed="true" tabindex="0">complete</button>
+          <button class="state" data-state="partial" aria-pressed="false" tabindex="-1">partial</button>
+          <button class="state" data-state="failed" aria-pressed="false" tabindex="-1">failed</button>
+        </div>
+        <div class="truth">AI PLANNER: 프로토콜·경로 가설만 제안<br>PYTHON: 이벤트·leg·순자산·PATH 계산<br>VERIFIER: raw log/transfer에서 독립 재계산</div>
+        <div class="truth">RULES: LIVE OFF · ARTIFACT ONLY<br>ATTACK vs NORMAL: 사람 판단 · not_assessed</div>
+      </div>
+    </section>
+    <section class="panel result">
+      <div class="head"><span>LENDING RESULT</span><span>synthetic_contract_preview</span></div>
+      <div class="term" id="result"></div>
+    </section>
+    <section class="panel sources">
+      <div class="head"><span>EVIDENCE INSPECTOR</span><span>NO LIVE CALLS</span></div>
+      <div class="body source-list" id="sources"></div>
+    </section>
+  </div>
+  <footer><span>SCAN 2026 · TASK-016 Lending Preview 0.1</span><span>NO EXTERNAL CALLS · NO MUTATION · NO ATTACK LABEL</span></footer>
+</main>
+<script>
+  const fields=[
+    ["subject","0x9a1c…4e2b"],
+    ["subject_roles","[receiver, liquidator]"],
+    ["protocol","Aave-family (pinned)"],
+    ["window","block 18.44M → 18.44M+3"],
+    ["network mode","artifact_only"]
+  ];
+  const roleTags=["receiver","liquidator"];
+  const esc=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const events=[
+    ["flash","T0 · FlashLoan · receiver=subject · asset USDC · raw 5,000,000000 · premium 4,500000"],
+    ["event","T1 · LiquidationCall · user=0xVICTIM · liquidator=subject · debtAsset USDC · collateralAsset WETH"],
+    ["event","T2 · Repay · user=0xVICTIM(onBehalfOf) · asset USDC · raw 4,812,340000"],
+    ["event","T3 · FlashLoan repay · receiver=subject · asset USDC · raw 5,000,000000 + premium"]
+  ];
+  const legs=[
+    ["leg","IN · WETH collateral seized → subject · raw 2,140000000000000000 · matched ERC-20 Transfer"],
+    ["leg","OUT · USDC debt repaid on behalf of victim · raw 4,812,340000 · matched Transfer"],
+    ["leg premium","OUT · flashloan premium · USDC raw 4,500000 · matched Transfer"]
+  ];
+  const partialLeg=["leg unresolved","native ETH gas-refund leg → subject · needs trace · UNRESOLVED (partial)"];
+  const hops=[
+    ["hop","PATH seed = subject collateral-receipt address 0x9a1c…4e2b (from net-asset leg)"],
+    ["hop","hop1 · subject → 0x5f…c7 · WETH raw 2,140000000000000000"],
+    ["hop","hop2 · 0x5f…c7 → DEX router · swap scope bounded · label not_assessed"]
+  ];
+  const sourceCards=[
+    ["EV-LEND-EVENTS · event_evidence","decoded borrow/flash/liquidation/repay · topic0 pinned","block·txIndex·logIndex ordered"],
+    ["EV-LEND-TRANSFER · transfer_evidence","ERC-20 Transfer + native legs matched to events","asset·addr·raw amount reconciled"],
+    ["EV-LEND-TRACE · call_evidence","value-bearing internal calls (conditional)","required only when a native/internal leg exists"]
+  ];
+  let state="complete";
+  function render(){
+    document.querySelector("#fields").innerHTML=fields.map(([k,v])=>`<div class="field"><span>${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
+    document.querySelector("#roles").innerHTML=roleTags.map(r=>`<span class="mini">${esc(r)}</span>`).join("");
+    const label=state==="complete"?"lending_flow_complete":state==="partial"?"value_leg_incomplete":"reconciliation_failed";
+    let html=`<div class="status"><span class="badge ${state}">${state.toUpperCase()}</span><span class="${state}">${esc(label)}</span></div>`;
+    if(state==="failed"){
+      html+=`<div class="section">STRUCTURED ERROR</div><div class="error">results=[] · code=reconciliation_failed · stage=role_set_binding · observed roles {receiver} ≠ request subject_roles[] {receiver, liquidator}</div>`;
+      html+=`<div class="next">NEXT: request 역할 집합을 실제 관찰과 일치시키거나 subject scope를 교정합니다. 실패를 "관계 없음"으로 해석하지 않습니다.</div>`;
+    }else{
+      const evs=state==="partial"?events.slice(0,3):events;
+      html+=`<div class="section">EVENT TIMELINE (block, txIndex, logIndex)</div>`+evs.map(([k,t])=>`<div class="event ${k==="flash"?"flash":""}">${esc(t)}</div>`).join("");
+      html+=`<div class="section">NET-ASSET LEDGER · subject only · leg separated</div>`;
+      const ll=state==="partial"?[...legs.slice(0,2),partialLeg]:legs;
+      html+=ll.map(([k,t])=>`<div class="leg ${k.replace("leg","").trim()}">${esc(t)}</div>`).join("");
+      html+=state==="complete"
+        ? `<div class="ledger-total">NET · WETH +2,140000000000000000 · USDC −4,816,840000 (debt+premium) · all value legs matched → complete</div>`
+        : `<div class="ledger-total">NET · WETH +2,140000000000000000 · USDC −4,816,840000 · 1 native leg UNRESOLVED (trace required) → partial</div>`;
+      html+=`<div class="section">SUBSEQUENT OUTFLOW PATH</div>`;
+      const hh=state==="partial"?hops.slice(0,2):hops;
+      html+=hh.map(([,t])=>`<div class="hop">${esc(t)}</div>`).join("");
+      html+=`<div class="next">${state==="complete"?"NEXT: independent Verifier가 이벤트·정합 leg·순자산·PATH seed를 raw log/transfer에서 재계산합니다.":"NEXT: 필요한 trace(call_evidence)를 확보해 native leg를 정합한 뒤 재개합니다."}</div>`;
+    }
+    html+=`<div class="truth">NOT ASSESSED: 공격 vs 정상 청산, 서비스 귀속, 의도·불법성. 계산 결과는 관찰된 이벤트·금액·경로라는 사실이며 범죄 판정이 아닙니다.</div>`;
+    document.querySelector("#result").innerHTML=html;
+    document.querySelector("#sources").innerHTML=sourceCards.map(([a,b,c])=>`<div class="source"><b>${esc(a)}</b><span>${esc(b)}</span><span>${esc(c)}</span></div>`).join("");
+  }
+  function bind(selector,key,setter){
+    const buttons=[...document.querySelectorAll(selector)];
+    buttons.forEach((button,index)=>{
+      button.addEventListener("click",()=>setter(button.dataset[key]));
+      button.addEventListener("keydown",event=>{
+        let next=null;
+        if(event.key==="ArrowRight") next=(index+1)%buttons.length;
+        if(event.key==="ArrowLeft") next=(index-1+buttons.length)%buttons.length;
+        if(event.key==="Home") next=0;
+        if(event.key==="End") next=buttons.length-1;
+        if(next!==null){event.preventDefault();buttons[next].focus();buttons[next].click();}
+      });
+    });
+  }
+  function chooseState(value){
+    state=value;
+    document.querySelectorAll(".state").forEach(b=>{const on=b.dataset.state===value;b.setAttribute("aria-pressed",String(on));b.tabIndex=on?0:-1;});
+    render();
+  }
+  bind(".state","state",chooseState);render();
+</script>
+</body>
+</html>

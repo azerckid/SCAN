@@ -1469,8 +1469,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P2/P3 승격 조건
 - Related UI Docs:
   - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - 다중 체인 graph·evidence
+  - [Lending(SVC-LEND-001) UI](../02_UI_Screens/10_TASK_016_LENDING_UI.md) - 첫 adapter 화면 계약
 - Related HTML Preview:
   - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - 다중 source 검토 후보
+  - [Lending Preview](../02_UI_Screens/previews/09_task_016_lending_preview.html) - complete/partial/failed 정적 화면
 - Related Technical Docs:
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-SERVICE 계약
   - [Lending(SVC-LEND-001) 계약 제안](../03_Technical_Specs/19_TASK_016_LENDING_CONTRACT_PROPOSAL.md) - 첫 adapter docs-only 계약
