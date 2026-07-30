@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-30 23:30
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 12·4·14) · TASK-016~019 Proposed
+> Last Updated: 2026-07-31 04:10
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 12·4·14) · TASK-016 Bridge Context PASS·구현 승인 · TASK-017~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1454,14 +1454,17 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
-- Status: ToDo
+- Status: ToDo — Bridge(`SVC-BRG-001`) Context Receipt PASS·offline analyzer
+  구현 승인(2026-07-31). 제품 코드 미착수.
 - Work Type: code
 - Priority: Phase 2 · P2
 - Depends On: TASK-014, TASK-015
 - Target Problems: `SVC-BRG/CEX/MIX/LEND-001`, `MIXED-XCHAIN-001`
 - Atomic Tasks:
-  - [ ] confirmed fixture가 있는 전문 adapter만 구현 대상으로 선택한다.
-  - [ ] 양단 chain/message/asset/amount 또는 서비스 휴리스틱 계약을 확정한다.
+  - [x] Bridge는 독립 검증된 `verifying` fixture로 analyzer를 먼저 구현하고
+    Verification Receipt 후 `confirmed`를 별도 판정하는 예외 경로를 승인한다.
+    다른 adapter는 confirmed fixture 확보 전 구현하지 않는다.
+  - [x] Bridge 양단 chain/message/asset/amount 계약을 확정한다.
   - [ ] adapter별 exact·partial·conflict를 검증한다.
   - [ ] Benchmark를 실제 완료 문제만 승격한다.
 - Related Concept Docs:
@@ -1486,13 +1489,16 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-SERVICE-001
   - [Bridge/XChain 공개 Fixture 후보 보고서](../05_QA_Validation/61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) - Across V3 Base→Ethereum 후보·raw replay 완료
   - [Bridge Raw Replay 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) - 16 read-only calls·SHA·decoded match·negative oracle 8개
+  - [Bridge Fixture 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md) - `candidate → verifying` 판정·잔여 Gate
 - Implementation Preconditions:
-  - [ ] adapter별 confirmed fixture·official ABI/address를 확보한다.
-  - [ ] PATH·INTEL 결과 계약이 안정됐다.
-  - [ ] Workbench 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
-  - [ ] chain/message 최소 필드·artifact mutation·adapter 상태 관리를 승인한다.
-  - [ ] chain/source/Rules·UI·Schema 영향을 승인한다.
-  - [ ] adapter별 사용자 구현 승인을 기록한다.
+  - [x] Bridge official ABI/address·두 provider replay·독립 Verifier를 확보하고
+    `verifying → analyzer → confirmed review` 예외 경로를 승인했다.
+  - [x] PATH·INTEL 결과 계약이 안정됐다.
+  - [x] Bridge Preview에서 진입·전환과 loading·empty·partial·failed를 확인했다.
+  - [x] chain/message 최소 필드·offline artifact 입력·adapter 상태를 승인했다.
+  - [x] Bridge source·Rules·UI·Schema 영향을 승인했다. live Rules는 미확정이므로
+    구현을 offline/artifact replay로 제한한다.
+  - [x] Bridge analyzer 구현 승인을 기록했다(2026-07-31).
 - Component & Library Plan:
   - shadcn/ui: N/A - Python adapter 우선.
   - Custom components: 선택된 bridge/service/lending adapter.
@@ -1507,10 +1513,53 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] source·ABI·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - adapter별 fixture·승인 전 착수 금지
-  - Required References Read: 위 Related 문서 전체
-  - Constraints: confirmed adapter only, multi-chain bounded scope
-  - Conflicts: source/Rules unresolved
+  - Status: PASS — Bridge(`SVC-BRG-001`) 계약·UI·fixture replay·negative
+    oracle·독립 Verifier·Analysis I/O 대안 B를 정독하고, 사용자가
+    2026-07-31 Context Receipt PASS 기록과 offline analyzer 구현을 승인했다.
+    이 PASS는 다른 TASK-016 adapter를 승인하지 않는다.
+  - Required References Read:
+    - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) ·
+      [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) —
+      SVC-BRG-001 정답 범위와 P2 Gate를 확인했다.
+    - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) ·
+      [Lending UI](../02_UI_Screens/10_TASK_016_LENDING_UI.md) ·
+      [Bridge/XChain UI](../02_UI_Screens/11_TASK_016_BRIDGE_XCHAIN_UI.md) —
+      공통 상태 의미, first-adapter 선례, Bridge discovery/verify 흐름을 확인했다.
+    - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) ·
+      [Lending Preview](../02_UI_Screens/previews/09_task_016_lending_preview.html) ·
+      [Bridge/XChain Preview](../02_UI_Screens/previews/10_task_016_bridge_xchain_preview.html) —
+      complete/partial/failed·late-arrival 화면과 외부 호출 0을 확인했다.
+    - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) ·
+      [Lending 계약](../03_Technical_Specs/19_TASK_016_LENDING_CONTRACT_PROPOSAL.md) ·
+      [WP-SERVICE 공통 계약](../03_Technical_Specs/20_TASK_016_SERVICE_COMMON_CONTRACT.md) ·
+      [Bridge 계약](../03_Technical_Specs/21_TASK_016_BRIDGE_XCHAIN_CONTRACT_PROPOSAL.md) —
+      전용 leaf·공통 evidence 봉투·matching/fee/partial 불변식을 확인했다.
+    - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) ·
+      [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) —
+      기존 EVM source 재사용과 신규 multi-chain SDK 미도입을 확인했다.
+    - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) ·
+      [Bridge 후보 보고서](../05_QA_Validation/61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) ·
+      [Bridge Raw Replay](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) ·
+      [Bridge 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md) —
+      verifying lifecycle·8 negative oracle·canonical hash를 확인했다.
+  - Constraints:
+    - `AnalysisType.BRIDGE_TRANSFER` + `link_bridge_transfer` 전용 dispatch
+      guard로 기존 analyzer·일반 Workbench 동작과 격리한다.
+    - `FX-SVC-BRG-001`은 `verifying`을 유지하며 analyzer canonical hash를
+      독립 Verifier hash `d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`와 대조한다.
+    - live Rules가 확정될 때까지 offline/artifact replay만 구현한다.
+    - Benchmark 12 automated·4 assisted·14 unsupported를 유지하고
+      `MIXED-XCHAIN-001`은 별도 조합 Gate로 둔다.
+    - ownership·service identity·criminality는 `not_assessed`; amount/time
+      유사성만으로 deterministic destination을 만들지 않는다.
+  - Conflicts:
+    - (해소) “confirmed fixture만 구현” 원칙은 Bridge에 한해
+      `verifying → analyzer+Verification → confirmed review`로 예외 승인했다.
+      CEX·Mixer·Lending 등 다른 adapter에는 적용하지 않는다.
+    - (경계 고지) source/Rules 미확정은 live adapter blocker로 유지하되,
+      content-addressed artifact 기반 offline analyzer를 막지 않는다.
+    - (경계 고지) Lending은 docs-only 선례이며 runtime 재사용 대상은 기존
+      `flow_path`·`intel_context` leaf dispatch와 공통 evidence 봉투다.
 - Change Receipt:
   - fixture Gate - Lending/Bridge 계약·UI Gate와 Across Bridge 공개 후보를
     선정했다. Phase A bounded runner·candidate package와 두 chain×두 role

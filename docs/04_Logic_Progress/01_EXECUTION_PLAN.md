@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-30 23:30
-> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · 4 Confirmed / Common-funder Candidate · Benchmark 12 Automated / 4 Assisted / 14 Unsupported
+> Last Updated: 2026-07-31 04:10
+> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · TASK-016 Bridge Context PASS·구현 승인 · Benchmark 12 Automated / 4 Assisted / 14 Unsupported
 
 ## 1. 목적
 
@@ -234,10 +234,19 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   ([62 준비 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).
 - [x] Base primary/verify endpoint 준비 후 두 chain×두 role live replay 16건·
   capability별 SHA·decoded match를 pin하고 Phase A를 완료한다.
-- [ ] `TASK-016` bridge/CEX/mixer/lending 중 confirmed fixture가 있는 adapter만 선택한다.
-- [ ] 양단 체인·message·amount 또는 서비스 휴리스틱 증거 계약을 승인한다.
+- [x] `TASK-016` Bridge는 독립 검증된 `verifying` fixture에서 analyzer를 먼저
+  구현한 뒤 `confirmed`를 별도 판정하는 예외 경로를 승인한다. CEX·Mixer·
+  Lending은 confirmed fixture 확보 전 구현하지 않는다.
+- [x] Bridge 양단 chain·message·asset·amount·partial/conflict 증거 계약과
+  Analysis I/O 대안 B를 승인한다.
+- [x] Bridge Context Receipt PASS·사용자 구현 승인을 기록하고 live Rules
+  미확정 동안 offline/artifact replay로 범위를 제한한다(2026-07-31).
 - [ ] EVM과 Bitcoin 결과가 같은 공통 evidence 봉투를 유지하는지 검증한다.
-- [ ] 양단 transaction·message·asset·amount 정합을 승인한다.
+- [x] Bridge 양단 transaction·message·asset·amount 정합 계약을 승인한다.
+- [ ] `bridge_transfer` analyzer를 전용 type/query guard로 구현하고 독립
+  Verifier canonical hash와 대조한다.
+- [ ] analyzer Verification Receipt 후 `verifying → confirmed`와 Benchmark
+  승격을 각각 별도 판정한다(`MIXED-XCHAIN-001` 제외).
 
 ### [ ] Wave 6 — 출제가 확인된 비EVM
 

@@ -1,7 +1,7 @@
 # TASK-016 Bridge/XChain(SVC-BRG-001) Analysis 계약 제안 (docs-only)
 > Created: 2026-07-30 20:45
-> Last Updated: 2026-07-31 03:40
-> Status: Docs Contract Approved · Fixture Verifying · Alternative B(`bridge_transfer`) Confirmed · Context Receipt·구현 승인 대기
+> Last Updated: 2026-07-31 04:10
+> Status: Docs Contract Approved · Fixture Verifying · Alternative B Confirmed · Context Receipt PASS · Offline Analyzer 구현 승인
 
 ## 0. 이 문서의 위치
 
@@ -15,11 +15,12 @@ Context Receipt PASS·구현 승인을 자가 판정하지 않는다.
 합성이므로, Bridge leg 확정 후 별도 **조합 Gate**로 둔다. 이 문서 범위는
 단일 bridge hop(출발↔도착 연결)이다.
 
-**현재 전제(Context Receipt 요지).** `SVC-BRG-001`용 confirmed fixture는 없고
-source/Rules는 미확정이다. achievable 범위는 문제·정답 계약, 브리지 프로토콜·
-컨트랙트·체인 ID **후보 조사**, candidate fixture·선정 기준, 양단 evidence
-분리, complete/partial/failed·negative oracle, UI 요구까지이며, 실제 캡처·live
-조회는 이후 Gate로 유예한다.
+**현재 전제(Context Receipt 요지).** `SVC-BRG-001` fixture는 양단 replay·
+negative oracle·독립 Verifier를 통과한 `verifying`이며 아직 `confirmed`는
+아니다. source/Rules 미확정은 live adapter blocker로 유지하되,
+content-addressed artifact 기반 offline analyzer는 2026-07-31 Context Receipt
+PASS·사용자 구현 승인을 받았다. 다른 TASK-016 adapter와 `MIXED-XCHAIN-001`,
+fixture·Benchmark 승격은 승인 범위가 아니다.
 
 ## 1. 대상 문제·정답 범위 확정
 
@@ -271,15 +272,18 @@ doc 20 §1.6을 따른다. 매핑: 입력 경계 `invalid_input`, 지원 안 되
    candidate-capture 모듈과 코드를 공유하지 않는다.
 6. 완료 — `FX-SVC-BRG-001`을 `candidate → verifying`으로 승격했다
    ([63 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)).
-   `verifying → confirmed`는 8의 analyzer 구현 이후 별도 판정한다.
+   `verifying → confirmed`는 9의 analyzer 구현·독립 검증 이후 별도 판정한다.
 7. 완료 — Analysis I/O 대안 B(`bridge_transfer` 전용 leaf)를 정식
    확정했다(§5).
-8. Context Receipt PASS·구현 승인 후 analyzer 구현.
-9. (별도) `MIXED-XCHAIN-001` 조합 Gate — DEX+Bridge+CEX leg 결합.
+8. 완료 — Context Receipt PASS·offline/artifact analyzer 구현 승인을
+   기록했다(2026-07-31). live Rules 미확정 범위와 다른 adapter는 제외한다.
+9. `bridge_transfer` analyzer 구현·독립 Verification Receipt 후
+   `verifying → confirmed`를 별도 판정한다.
+10. (별도) `MIXED-XCHAIN-001` 조합 Gate — DEX+Bridge+CEX leg 결합.
 
 **Blocker(해소됨).** 4의 양단 캡처·live 조회는 이미 완료됐다(§10 4번).
-남은 것은 8의 analyzer 구현·Context Receipt PASS이며 이는 사용자 구현
-승인이 필요한 별도 Gate다. `SVC-BRG-001`·`MIXED-XCHAIN-001`은 현재
+Context Receipt·구현 승인도 완료됐으며 남은 것은 9의 analyzer 구현·독립
+Verification Receipt다. `SVC-BRG-001`·`MIXED-XCHAIN-001`은 현재
 analyzer가 없어 `unsupported`이며 이 문서로 coverage를 바꾸지 않는다
 (Benchmark 12·4·14 무변동).
 
