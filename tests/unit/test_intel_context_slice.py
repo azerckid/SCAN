@@ -238,6 +238,68 @@ def test_artifact_ref_and_content_sha_mismatch_is_rejected() -> None:
     assert result.root.errors[0].code == "decode_failed"
 
 
+def test_sanctions_removal_replaced_by_duplicate_designation_is_rejected() -> None:
+    fixture_id = "FX-OSINT-SANCTIONS-HISTORY-001"
+    replay = _replay(fixture_id)
+    first = replay["official_actions"][0]
+    replay["official_actions"][1] = {
+        "date": first["date"],
+        "action": "designation",
+        "address_match_count": 1,
+    }
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_label_source_record_removed_is_rejected() -> None:
+    fixture_id = "FX-OSINT-LABEL-CONFLICT-001"
+    replay = _replay(fixture_id)
+    replay["sources"] = replay["sources"][:2]
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_actor_duplicate_component_leaving_one_uncovered_is_rejected() -> None:
+    fixture_id = "FX-ACTOR-RELATION-HUB-001"
+    replay = _replay(fixture_id)
+    replay["relations"][1]["relation"] = replay["relations"][0]["relation"]
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_empty_fact_strings_are_rejected() -> None:
+    for fixture_id, mutate in (
+        ("FX-OSINT-LABEL-CONFLICT-001", lambda r: r["community_config"].update(role="")),
+        ("FX-ACTOR-RELATION-HUB-001", lambda r: r["hub"].update(role="")),
+    ):
+        replay = _replay(fixture_id)
+        mutate(replay)
+        result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+        assert result.root.status == "failed"
+        assert result.root.errors[0].code == "decode_failed"
+
+
+def test_non_calendar_date_is_rejected() -> None:
+    fixture_id = "FX-OSINT-SANCTIONS-HISTORY-001"
+    replay = _replay(fixture_id)
+    replay["official_actions"][0]["date"] = "2022-99-99"
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "decode_failed"
+
+
+def test_arbitrary_source_role_is_rejected() -> None:
+    fixture_id = "FX-OSINT-ENS-CONFLICT-001"
+    replay = _replay(fixture_id)
+    replay["sources"][0]["source_role"] = "made_up_role"
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "decode_failed"
+
+
 def test_binding_failures_are_not_retryable() -> None:
     fixture_id = "FX-OSINT-SANCTIONS-HISTORY-001"
     replay = _replay(fixture_id)

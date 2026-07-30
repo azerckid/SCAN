@@ -8,9 +8,10 @@ independently derives the query result; the fixture verifier
 files through a separate plain-dict code path.
 """
 
+from datetime import date
 from typing import Annotated, Literal
 
-from pydantic import Discriminator, Field, RootModel, Tag, model_validator
+from pydantic import AfterValidator, Discriminator, Field, RootModel, Tag, model_validator
 from pydantic_core import PydanticCustomError
 
 from scan_tool.domain._types import (
@@ -22,16 +23,35 @@ from scan_tool.domain._types import (
     SourceId,
 )
 
+
+def _real_calendar_date(value: str) -> str:
+    try:
+        date.fromisoformat(value)
+    except ValueError as error:
+        raise ValueError("date must be a real calendar date") from error
+    return value
+
+
 Uint256Decimal = Annotated[str, Field(pattern=r"^(?:0|[1-9][0-9]*)$")]
-IsoDate = Annotated[str, Field(pattern=r"^\d{4}-\d{2}-\d{2}$")]
+CalendarDate = Annotated[
+    str, Field(pattern=r"^\d{4}-\d{2}-\d{2}$"), AfterValidator(_real_calendar_date)
+]
 ArtifactRef = Annotated[str, Field(pattern=r"^artifact://sha256/[a-f0-9]{64}$")]
 Sha256Hex = Annotated[str, Field(pattern=r"^[a-f0-9]{64}$")]
+SourceRole = Literal[
+    "official_record",
+    "first_party",
+    "provider_label",
+    "public_report",
+    "onchain_registry",
+    "heuristic",
+]
 
 
 class IntelSourceRecord(ContractModel):
     source_record_id: Annotated[str, Field(pattern=r"^SRC-[A-Z0-9][A-Z0-9-]{2,127}$")]
     source_id: SourceId
-    source_role: NonEmptyString
+    source_role: SourceRole
     artifact_ref: ArtifactRef
     content_sha256: Sha256Hex
 
@@ -85,14 +105,14 @@ class LabelDataset(ContractModel):
 
 
 class LabelEnsResolution(ContractModel):
-    name: str
+    name: NonEmptyString
     address: Address
     block_number: int = Field(ge=0)
 
 
 class LabelCommunityConfig(ContractModel):
-    name: str
-    role: str
+    name: NonEmptyString
+    role: NonEmptyString
 
 
 class LabelSourceReplay(IntelReplayBase):
@@ -107,7 +127,7 @@ class LabelSourceReplay(IntelReplayBase):
 
 
 class OfficialAction(ContractModel):
-    date: IsoDate
+    date: CalendarDate
     action: Literal["designation", "removal"]
     address_match_count: int = Field(ge=0)
 
@@ -130,7 +150,7 @@ class SanctionsSourceReplay(IntelReplayBase):
 
 
 class EnsSide(ContractModel):
-    name: str
+    name: NonEmptyString
     address: Address
     resolver: Address
 
@@ -180,8 +200,8 @@ class CommonFunderSourceReplay(IntelReplayBase):
 
 class ActorHub(ContractModel):
     address: Address
-    role: str
-    symbol: str
+    role: NonEmptyString
+    symbol: NonEmptyString
 
 
 class ActorRelation(ContractModel):

@@ -120,6 +120,23 @@ allowlist 임의 교체·binding 오류 non-retryable).
 8종을 모두 회귀 테스트로 고정했다(unit 34). 네 verifying fixture의
 `results[].value`·canonical hash는 여전히 불변이다.
 
+## 5.3 인접 변형 6건·strict 모델 정정
+
+재재검토에서 일대일 대응·strict 모델의 인접 변형 6건이 여전히 complete로
+확인돼 마저 닫았다.
+
+| # | 결함 | 정정 후 |
+|:---:|:---|:---|
+| 1 | sanctions 요청 action이 일대일 대응이 아님(removal→designation 복제) | 요청 ref를 `(date, action)`로 parse해 replay action multiset과 **정확 일치** |
+| 2 | label source record 1개 제거가 complete | `_require_artifact_binding`을 subset → **정확 집합 일치**로 강화 |
+| 3 | actor component 중복(한 weight 미커버) | relation type multiset == `component_weights` 정확 일치 |
+| 4·5 | label role·actor hub role 빈 문자열 | 사실 판정 문자열(dataset/ens/community_config/hub)을 모두 `NonEmptyString`으로 |
+| 6 | `2022-99-99` 등 비달력 날짜 허용 | `CalendarDate`가 정규식 + `date.fromisoformat` 실제 달력 검증 |
+| P2 | `source_role` 임의 문자열 허용 | 계약 6개 값 `Literal`(official_record/first_party/provider_label/public_report/onchain_registry/heuristic) |
+
+6종을 회귀 테스트로 고정했다(unit 40). 네 verifying fixture의 canonical
+hash는 여전히 불변이다.
+
 ## 6. 상태 경계와 다음 Gate
 
 - Fixture: 4개 `검증 중` / common-funder `candidate` 유지(확정 승격 없음).

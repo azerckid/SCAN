@@ -7,6 +7,7 @@ separate code paths. Ownership, criminality, and coordination stay
 ``not_assessed``; AI/heuristic hypotheses are never promoted to confirmed fact.
 """
 
+import re
 from datetime import datetime
 
 from pydantic import ValidationError
@@ -229,14 +230,6 @@ def _sanctions(
     assert isinstance(inputs, SanctionsExposureInputs)
     _require_subject(request, replay.subject_address)
     _require_source_ref(inputs.current_list_snapshot_ref, replay, "current_list_snapshot_ref")
-    # Every requested official action must be present in the replay: a dropped
-    # designation/removal must not still read as complete.
-    if len(replay.official_actions) != len(inputs.official_action_refs):
-        raise _DecodeFailure(
-            "reconciliation_failed",
-            "Replay official actions do not match the requested official_action_refs.",
-            "source_reconciliation",
-        )
     for action in replay.official_actions:
         if action.address_match_count != 1:
             raise _DecodeFailure(
@@ -244,14 +237,16 @@ def _sanctions(
                 "An official action does not explicitly match the subject exactly once.",
                 "source_reconciliation",
             )
-        if not any(
-            action.date in ref and action.action in ref for ref in inputs.official_action_refs
-        ):
-            raise _DecodeFailure(
-                "reconciliation_failed",
-                "A replay official action is not covered by the requested official_action_refs.",
-                "source_reconciliation",
-            )
+    # One-to-one correspondence between requested action refs and replay actions:
+    # replacing a removal with a duplicate designation must not still read complete.
+    requested = sorted(_parse_action_ref(ref) for ref in inputs.official_action_refs)
+    present = sorted((action.date, action.action) for action in replay.official_actions)
+    if requested != present:
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Replay official actions are not a one-to-one match with the requested actions.",
+            "source_reconciliation",
+        )
     timeline = [
         {"date": action.date, "action": action.action}
         for action in sorted(replay.official_actions, key=lambda item: item.date)
@@ -474,7 +469,6 @@ def _actor_relations(
             "Replay hub differs from the requested hub_address.",
             "source_reconciliation",
         )
-    requested_weights = set(inputs.component_weights)
     if {item.subject_address for item in replay.relations} != set(inputs.subject_addresses):
         raise _DecodeFailure(
             "reconciliation_failed",
@@ -487,13 +481,14 @@ def _actor_relations(
             "Replay relation source fixtures do not match the requested source_fixture_refs exactly.",
             "source_reconciliation",
         )
-    for item in replay.relations:
-        if item.relation not in requested_weights:
-            raise _DecodeFailure(
-                "reconciliation_failed",
-                "A replay relation type is outside the requested component_weights.",
-                "source_reconciliation",
-            )
+    # One-to-one: each requested component weight is covered by exactly one relation
+    # type, so duplicating a component (leaving another uncovered) must fail.
+    if sorted(item.relation for item in replay.relations) != sorted(inputs.component_weights):
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Replay relation types are not a one-to-one match with the requested component_weights.",
+            "source_reconciliation",
+        )
     value = {
         "hub": {
             "address": replay.hub.address,
@@ -539,15 +534,27 @@ def _actor_relations(
 # --- envelope helpers -----------------------------------------------------
 
 
+def _parse_action_ref(ref: str) -> tuple[str, str]:
+    match = re.search(r"(\d{4}-\d{2}-\d{2}).*?(designation|removal)", ref)
+    if match is None:
+        raise _DecodeFailure(
+            "invalid_input",
+            "official_action_ref must carry a date and designation/removal action.",
+            "intel_input",
+        )
+    return match.group(1), match.group(2)
+
+
 def _require_artifact_binding(
     requested_refs: list[str],
     replay: IntelSourceReplayDocument,
 ) -> None:
-    replay_refs = {record.artifact_ref for record in replay.sources}
-    if not replay_refs <= set(requested_refs):
+    # Exact set: a removed replay source (subset) must not read as complete, and a
+    # requested artifact absent from the replay must fail.
+    if {record.artifact_ref for record in replay.sources} != set(requested_refs):
         raise _DecodeFailure(
             "reconciliation_failed",
-            "A replay source artifact is not present in the requested source_artifact_refs.",
+            "Replay source artifacts do not match the requested source_artifact_refs exactly.",
             "source_reconciliation",
         )
 
