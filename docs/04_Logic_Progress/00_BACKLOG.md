@@ -1516,8 +1516,18 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     선정했다. Phase A bounded runner·candidate package와 두 chain×두 role
     live replay 16건·SHA·decoded match를 완료했다. 제품 analyzer·Analysis
     I/O·Benchmark는 변경하지 않았고 adapter 구현은 미시작이다.
+  - PR 리뷰(P1 2건) 반영 - `exclusive_relayer`를 required_equal에 추가하고
+    zero-output-token→공식 Base WETH/Ethereum WETH 매핑 검증을 추가했다.
+    `assert_matching_provider_facts`로 primary·verify 두 role의 canonical
+    facts를 실제로 비교하는 코드를 추가하고 `--role both`로 다시 실행해
+    16 read-only call·`cross_provider_decoded_match: true`(코드 계산)를
+    확인했다([62 §8 Remediation](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).
+    회귀 테스트 4건 추가.
 - Verification Receipt:
-  - N/A - 구현 미시작
+  - N/A - 구현 미시작(fixture Gate만 진행). 위 remediation은
+    `uv run pytest tests/unit/test_task_016_bridge_replay.py` 10 PASS,
+    전체 `scripts/verify.py` 552 passed·traceability 1861·security 213로
+    확인했다.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 

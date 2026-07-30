@@ -16,6 +16,7 @@ from scan_tool.application.task_016_bridge_replay import (
     SOURCE_EVENT_TOPIC,
     SOURCE_SPOKE_POOL,
     SOURCE_TX,
+    assert_matching_provider_facts,
     bridge_pair_facts,
     bridge_requests,
     resolve_bridge_endpoints,
@@ -287,3 +288,89 @@ def test_exact_event_must_exist_in_receipt(tmp_path) -> None:
     source = replace(reports["base"], observations=tuple(observations))
     with pytest.raises(ValueError, match="not present"):
         bridge_pair_facts(source, reports["ethereum"])
+
+
+def test_exclusive_relayer_mismatch_is_rejected(tmp_path) -> None:
+    original = _event("ethereum")
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        payload = json.loads(request.content)
+        if payload["method"] == "eth_getLogs":
+            event = dict(original)
+            words = event["data"][2:]
+            replacement = _address("0x0000000000000000000000000000000000000002")
+            event["data"] = f"0x{words[: 7 * 64]}{replacement}{words[8 * 64 :]}"
+            return httpx.Response(200, json={"jsonrpc": "2.0", "id": 1, "result": [event]})
+        return _handler("ethereum")(request)
+
+    async def execute():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(_handler("base"))) as c:
+            source = await run_task_016_bridge_replay(
+                chain="base",
+                role="primary",
+                endpoint="https://base.example/provider-test-secret",
+                output_root=tmp_path / "base",
+                client=c,
+            )
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as c:
+            destination = await run_task_016_bridge_replay(
+                chain="ethereum",
+                role="primary",
+                endpoint="https://eth.example/provider-test-secret",
+                output_root=tmp_path / "ethereum",
+                client=c,
+            )
+        return source, destination
+
+    source, destination = asyncio.run(execute())
+    with pytest.raises(ValueError, match="exclusive_relayer"):
+        bridge_pair_facts(source, destination)
+
+
+def test_zero_output_token_must_match_pinned_default_mapping(tmp_path) -> None:
+    original = _event("ethereum")
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        payload = json.loads(request.content)
+        if payload["method"] == "eth_getLogs":
+            event = dict(original)
+            words = event["data"][2:]
+            replacement = _address("0x0000000000000000000000000000000000000003")
+            event["data"] = f"0x{words[:64]}{replacement}{words[2 * 64 :]}"
+            return httpx.Response(200, json={"jsonrpc": "2.0", "id": 1, "result": [event]})
+        return _handler("ethereum")(request)
+
+    async def execute():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(_handler("base"))) as c:
+            source = await run_task_016_bridge_replay(
+                chain="base",
+                role="primary",
+                endpoint="https://base.example/provider-test-secret",
+                output_root=tmp_path / "base",
+                client=c,
+            )
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as c:
+            destination = await run_task_016_bridge_replay(
+                chain="ethereum",
+                role="primary",
+                endpoint="https://eth.example/provider-test-secret",
+                output_root=tmp_path / "ethereum",
+                client=c,
+            )
+        return source, destination
+
+    source, destination = asyncio.run(execute())
+    with pytest.raises(ValueError, match="asset mapping mismatch"):
+        bridge_pair_facts(source, destination)
+
+
+def test_cross_provider_matching_facts_are_accepted() -> None:
+    facts = {"deposit_id": EXPECTED_DEPOSIT_ID, "recipient": RECIPIENT, "input_amount_raw": "1"}
+    assert_matching_provider_facts(facts, dict(facts))
+
+
+def test_cross_provider_fact_mismatch_is_rejected() -> None:
+    primary = {"deposit_id": EXPECTED_DEPOSIT_ID, "recipient": RECIPIENT}
+    verify = {"deposit_id": EXPECTED_DEPOSIT_ID, "recipient": "0xdifferent"}
+    with pytest.raises(ValueError, match="recipient"):
+        assert_matching_provider_facts(primary, verify)

@@ -64,6 +64,13 @@
   "decoded_match": true,
   "same_role_chain_pair_match": true,
   "cross_provider_decoded_match": true,
+  "cross_provider_verification": {
+    "method": "assert_matching_provider_facts",
+    "code_ref": "src/scan_tool/application/task_016_bridge_replay.py",
+    "re_verified_at": "2026-07-31T00:12:00Z",
+    "result": "match",
+    "note": "Independent --role both re-run reproduced identical primary/verify bridge_pair_facts. PROVIDER-ETHEREUM-PRIMARY's raw response bytes differed from the pinned raw_sha256 above (different RPC provider JSON formatting for the same immutable on-chain data); decoded_summary values were identical, so pinned raw_sha256 values are left unchanged pending the independent Verifier Gate."
+  },
   "failed_attempts": [
     {
       "chain_id": 1,

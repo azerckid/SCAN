@@ -17,8 +17,12 @@ Across V3의 공개 Base→Ethereum 전송 한 건을 `SVC-BRG-001`의 fixture
 
 현재 값은 Across 공식 문서와 BaseScan/Etherscan supporting 화면에서
 선정한 뒤 Base·Ethereum 각 두 source role에서 재현했다. 16개 read-only
-관찰의 SHA-256과 decoded match는 고정됐지만 negative oracle·독립 Verifier가
-남아 있으므로 아직 `verifying` 상태가 아니다.
+관찰의 SHA-256과 decoded match는 고정됐고, `assert_matching_provider_facts`가
+primary·verify 두 role의 canonical facts(deposit ID·자산·금액·deadline·
+exclusive relayer·message)가 실제로 동일함을 코드로 재확인했다. `exclusive_relayer`
+비교와 zero-output-token → 공식 Base WETH↔Ethereum WETH 매핑 검증도
+`bridge_pair_facts`에 포함됐다. negative oracle·독립 Verifier가 남아 있으므로
+아직 `verifying` 상태가 아니다.
 
 ## 파일
 

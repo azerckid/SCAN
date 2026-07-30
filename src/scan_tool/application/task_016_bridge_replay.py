@@ -36,6 +36,18 @@ EXPECTED_ORIGIN_CHAIN_ID = 8453
 EXPECTED_DESTINATION_CHAIN_ID = 1
 EXPECTED_DEPOSIT_ID = 2395968
 
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+BASE_WETH = "0x4200000000000000000000000000000000000006"
+ETHEREUM_WETH = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+
+# Across V3 lets a depositor set outputToken=address(0) to request the
+# protocol's own default output token for inputToken on the destination
+# chain. A zero outputToken must resolve to this pinned official mapping,
+# never to whatever the destination side happens to report.
+DEFAULT_OUTPUT_TOKEN_MAP: Mapping[str, str] = {
+    BASE_WETH: ETHEREUM_WETH,
+}
+
 BRIDGE_ENDPOINT_ENV: Mapping[BridgeProviderRole, Mapping[BridgeChain, str]] = {
     "primary": {
         "base": "SCAN_BASE_PRIMARY_RPC_URL",
@@ -149,6 +161,7 @@ def bridge_pair_facts(
         "output_amount_raw",
         "fill_deadline",
         "exclusivity_deadline",
+        "exclusive_relayer",
         "depositor",
         "recipient",
         "message",
@@ -162,6 +175,16 @@ def bridge_pair_facts(
         raise ValueError("destination origin chain mismatch")
     if source["deposit_id"] != EXPECTED_DEPOSIT_ID:
         raise ValueError("bridge deposit ID mismatch")
+    source_output_token = str(source["output_token"])
+    destination_output_token = str(destination["output_token"])
+    if source_output_token == ZERO_ADDRESS:
+        expected_output_token = DEFAULT_OUTPUT_TOKEN_MAP.get(str(source["input_token"]))
+        if expected_output_token is None:
+            raise ValueError("bridge default output token mapping is not pinned")
+        if destination_output_token != expected_output_token:
+            raise ValueError("bridge output asset mapping mismatch")
+    elif source_output_token != destination_output_token:
+        raise ValueError("bridge output asset mismatch")
     source_raw = int(str(source["input_amount_raw"]))
     destination_raw = int(str(destination["output_amount_raw"]))
     if source_raw < destination_raw:
@@ -176,12 +199,33 @@ def bridge_pair_facts(
         "depositor": source["depositor"],
         "recipient": source["recipient"],
         "input_token": source["input_token"],
-        "destination_token": destination["output_token"],
+        "destination_token": destination_output_token,
         "input_amount_raw": str(source_raw),
         "output_amount_raw": str(destination_raw),
         "fee_difference_raw": str(source_raw - destination_raw),
+        "exclusive_relayer": source["exclusive_relayer"],
         "message": source["message"],
     }
+
+
+def assert_matching_provider_facts(
+    primary_facts: Mapping[str, object],
+    verify_facts: Mapping[str, object],
+) -> None:
+    """Fail unless two independently captured provider roles agree on every fact.
+
+    ``bridge_pair_facts`` only reconciles Base<->Ethereum within one provider
+    role. This is the separate check that two independent roles (primary and
+    verify) computed the identical canonical facts, and it is the only place
+    a ``cross_provider_decoded_match`` claim may legitimately come from.
+    """
+    mismatched = sorted(
+        key
+        for key in set(primary_facts) | set(verify_facts)
+        if primary_facts.get(key) != verify_facts.get(key)
+    )
+    if mismatched:
+        raise ValueError(f"cross-provider bridge fact mismatch: {mismatched}")
 
 
 def _summary(
