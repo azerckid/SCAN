@@ -226,8 +226,9 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   [후보](../05_QA_Validation/61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md)로
   선정하고 공식 chain/contract/event 규칙·양단 explorer 값을 기록한다
   (package·raw replay·Benchmark 승격 없음).
-- [ ] Bridge 후보를 두 RPC raw replay·SHA·negative oracle·독립 Verifier로
-  검증해 `candidate → verifying` 승격 여부를 별도 판정한다.
+- [x] Bridge 후보를 두 RPC raw replay·SHA·negative oracle 8개·독립
+  raw-first Verifier로 검증해 `candidate → verifying` 승격을 완료한다
+  ([63 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)).
 - [x] Phase A offline 준비로 Bridge bounded runner·candidate package·Schema
   검증·primary/verify dry-run network 0건을 완료한다
   ([62 준비 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).

@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "fixture_id": "FX-SVC-BRG-001",
-  "status": "candidate",
+  "status": "verifying",
   "captured_at": "2026-07-30T15:39:46Z",
   "providers": [
     {
@@ -102,6 +102,10 @@
     "status": "pass"
   },
   "remaining_gate": [
-    "candidate-to-verifying review"
+    "Analysis I/O alternative decision",
+    "Context Receipt PASS",
+    "bridge_transfer analyzer implementation",
+    "analyzer independent Verification Receipt",
+    "verifying-to-confirmed review"
   ]
 }
