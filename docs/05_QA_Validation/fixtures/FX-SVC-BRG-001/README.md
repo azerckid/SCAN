@@ -33,8 +33,9 @@ signature·log-receipt-transaction-block exact binding까지 처음부터 다시
 [승격 검토](../../63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)를 통과해
 `검증 중(verifying)`으로 승격했다. Context Receipt PASS·구현 승인 후
 `bridge_transfer` analyzer를 구현했고, 그 canonical hash도 독립 Verifier
-hash와 일치한다. `확정(confirmed)`은 독립 Verification Receipt 문서화 후
-별도 판정한다.
+hash와 일치한다. 독립 Verification Receipt
+([64](../../64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md))도 PASS다.
+`확정(confirmed)`과 Benchmark 승격은 별도 판정한다.
 
 ## 파일
 
@@ -60,8 +61,9 @@ hash와 일치한다. `확정(confirmed)`은 독립 Verification Receipt 문서�
    범위로 제한). Backlog TASK-016 Context Receipt 참고.
 6. ~~`bridge_transfer` analyzer 구현~~ — 완료. canonical hash가 독립
    Verifier hash `d6609bb4...`와 일치(`analyzer_hash_matches_independent_verifier`).
-7. 독립 Verification Receipt 문서화 → `confirmed` 승격·Benchmark 승격은
-   별도 판정.
+7. ~~독립 Verification Receipt 문서화~~ — 완료
+   ([64 Receipt](../../64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)).
+8. `confirmed` 승격·Benchmark 승격은 별도 판정.
 
 endpoint·credential·Explorer 본문은 이 package에 저장하지 않는다.
 QuickNode의 bounded 호출은 429, PublicNode의 exact-block log는 403이었고
@@ -73,5 +75,6 @@ public RPC와 Ethereum managed/supporting explorer-backed RPC로 완료했다.
 - [Bridge 후보 보고서](../../61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md)
 - [Bridge Raw Replay 보고서](../../62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)
 - [Bridge 승격 검토](../../63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)
+- [Bridge Analyzer Verification Receipt](../../64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)
 - [Bridge 계약](../../../03_Technical_Specs/21_TASK_016_BRIDGE_XCHAIN_CONTRACT_PROPOSAL.md)
 - [Reference Fixtures](../../01_REFERENCE_FIXTURES.md)

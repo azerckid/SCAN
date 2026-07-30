@@ -1,7 +1,7 @@
 # TASK-016 Bridge/XChain(SVC-BRG-001) Analysis 계약 제안 (docs-only)
 > Created: 2026-07-30 20:45
-> Last Updated: 2026-07-31 04:10
-> Status: Docs Contract Approved · Fixture Verifying · Offline Analyzer Implemented · Verification Receipt Pending
+> Last Updated: 2026-07-31 04:25
+> Status: Docs Contract Approved · Fixture Verifying · Offline Analyzer Implemented · Verification Receipt PASS · confirmed Pending
 
 ## 0. 이 문서의 위치
 
@@ -190,8 +190,9 @@ destination chain만 필수로 둔다. destination recipient는 양단 evidence�
     matching 사실을 인코딩하므로 별도 nested leg를 중복하지 않는다.
   - complete/partial/failed 상태는 공통 result 봉투의 `status`로 표현한다.
 
-Context Receipt PASS·사용자 구현 승인·offline analyzer 구현은 완료됐다.
-남은 Gate는 독립 Verification Receipt와 별도 fixture 승격 검토다(§10 참고).
+Context Receipt PASS·사용자 구현 승인·offline analyzer 구현·독립
+Verification Receipt는 완료됐다. 남은 Gate는 별도 fixture
+`verifying → confirmed` 승격 검토와 Benchmark 판정이다(§10 참고).
 
 ## 6. complete · partial · failed · negative oracle 계약
 
@@ -276,14 +277,17 @@ doc 20 §1.6을 따른다. 매핑: 입력 경계 `invalid_input`, 지원 안 되
    확정했다(§5).
 8. 완료 — Context Receipt PASS·offline/artifact analyzer 구현 승인을
    기록했다(2026-07-31). live Rules 미확정 범위와 다른 adapter는 제외한다.
-9. 진행 중 — `bridge_transfer` analyzer 구현은 완료됐다. 독립 Verification
-   Receipt 후 `verifying → confirmed`를 별도 판정한다.
+9. 완료 — `bridge_transfer` analyzer 구현과 독립 Verification Receipt를
+   기록했다([64 Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)).
+   공개 Schema `FixtureRequirementId`에 `BRIDGE`를 추가하고 probe를
+   보강했다. `verifying → confirmed`는 별도 판정한다.
 10. (별도) `MIXED-XCHAIN-001` 조합 Gate — DEX+Bridge+CEX leg 결합.
 
 **Blocker(해소됨).** 4의 양단 캡처·live 조회는 이미 완료됐다(§10 4번).
-Context Receipt·구현 승인·offline analyzer 구현은 완료됐으며 남은 것은 9의
-독립 Verification Receipt다. fixture는 계속 `verifying`이고 Benchmark
-12·4·14 및 `MIXED-XCHAIN-001` 분류는 변경하지 않는다.
+Context Receipt·구현 승인·offline analyzer·독립 Verification Receipt는
+완료됐다. fixture는 계속 `verifying`이고 Benchmark 12·4·14 및
+`MIXED-XCHAIN-001` 분류는 변경하지 않는다. 남은 잔여는
+`verifying → confirmed`와 Benchmark 자동화 승격 판정이다.
 
 ## 11. Related Documents
 
@@ -293,5 +297,6 @@ Context Receipt·구현 승인·offline analyzer 구현은 완료됐으며 남�
 - **Technical_Specs**: [flow_path IO Contract](./16_TASK_014_FLOW_PATH_IO_CONTRACT.md) - 도착 후 PATH 재사용
 - **Technical_Specs**: [데이터 소스 등록부](./01_DATA_SOURCE_REGISTRY.md) - 체인·provider source
 - **QA_Validation**: [예상문제 Benchmark 보고서](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 12·4·14 coverage
+- **QA_Validation**: [Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md) - analyzer 독립 검증 PASS
 - **Logic_Progress**: [Backlog TASK-016](../04_Logic_Progress/00_BACKLOG.md) - adapter 범위·Context Receipt
 - **Logic_Progress**: [Execution Plan Wave 5](../04_Logic_Progress/01_EXECUTION_PLAN.md) - 서비스·Cross-chain 순서

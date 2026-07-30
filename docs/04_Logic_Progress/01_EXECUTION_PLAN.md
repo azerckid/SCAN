@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-31 04:10
-> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · TASK-016 Bridge Context PASS·구현 승인 · Benchmark 12 Automated / 4 Assisted / 14 Unsupported
+> Last Updated: 2026-07-31 04:25
+> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · TASK-016 Bridge Analyzer Verification PASS · Benchmark 12 Automated / 4 Assisted / 14 Unsupported
 
 ## 1. 목적
 
@@ -245,8 +245,11 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] Bridge 양단 transaction·message·asset·amount 정합 계약을 승인한다.
 - [x] `bridge_transfer` analyzer를 전용 type/query guard로 구현하고 독립
   Verifier canonical hash `d6609bb4...`와 대조한다(2026-07-31).
-- [ ] analyzer Verification Receipt 후 `verifying → confirmed`와 Benchmark
-  승격을 각각 별도 판정한다(`MIXED-XCHAIN-001` 제외).
+- [x] Bridge analyzer 독립 Verification Receipt를 기록한다
+  ([64 Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)).
+  Fixture는 `verifying` 유지, Benchmark 12·4·14 무변동.
+- [ ] `verifying → confirmed`와 Benchmark 승격을 각각 별도 판정한다
+  (`MIXED-XCHAIN-001` 제외).
 
 ### [ ] Wave 6 — 출제가 확인된 비EVM
 

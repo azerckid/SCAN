@@ -97,7 +97,6 @@
   "uncertainty": {
     "candidate_only": false,
     "remaining": [
-      "analyzer independent Verification Receipt",
       "verifying-to-confirmed review"
     ]
   },
