@@ -1,7 +1,7 @@
 # TASK-016 Bridge/XChain(SVC-BRG-001) Linkage UI
 > Created: 2026-07-30 21:56
-> Last Updated: 2026-07-30 21:56
-> Status: Proposed 0.1 · 사용자 검토 대기 · Browser Check Passed · Runtime Not Implemented
+> Last Updated: 2026-07-30 22:35
+> Status: UI-First Approved 0.2 · Browser Check Passed · Runtime Not Implemented
 
 ## 1. 목적
 
@@ -116,23 +116,25 @@ candidate/partial에서는 PATH 버튼과 seed를 비활성화한다.
 - 외부 fetch/XHR/WebSocket/EventSource 0건, mutation 0건, 인라인 script 1개,
   중복 ID 0개를 목표로 한다.
 
-2026-07-30 브라우저 검증에서 세 상태, roving tabindex·ArrowRight·Home 전환,
+2026-07-30 브라우저 재검증에서 세 상태, roving tabindex·ArrowRight·Home 전환,
 request의 recipient 미입력, complete의 resolved recipient·정수식·arrival·PATH,
-partial의 candidate·PATH 비활성화, failed의 `results: []`·금액 모순을
-확인했다. 사용자 UI 승인과 runtime 실행은 별도다.
+partial의 destination-missing과 late-arrival 변형·PATH 비활성화, failed의
+`results: []`·금액 모순을 확인했다. runtime 실행은 별도다.
 
 ## 10. UI-First Gate
 
-- [ ] 사용자가 Preview를 브라우저에서 확인한다.
-- [ ] request의 미지 recipient와 result의 resolved recipient 분리를 승인한다.
-- [ ] deterministic/candidate, raw 정수식, arrival window와 conflict 표현을
-  승인한다.
-- [ ] partial에서 recipient·PATH 미승격, failed에서 구조화 오류 보존을 승인한다.
-- [ ] 승인 후 브리지/체인/메시지 스키마 pin과 `FX-SVC-BRG-001` 캡처 Gate로
-  이동한다.
+- [x] 사용자가 Preview를 브라우저에서 확인했다(2026-07-30 22:35).
+- [x] request의 미지 recipient와 result의 resolved recipient 분리를 승인했다.
+- [x] deterministic/candidate, raw 정수식, arrival window와 conflict 표현을
+  승인했다.
+- [x] partial에서 recipient·PATH 미승격, late-arrival conflict 보존,
+  failed에서 구조화 오류 보존을 승인했다.
+- [x] 다음 단계가 브리지/체인/메시지 스키마 pin과 `FX-SVC-BRG-001` 캡처
+  Gate임을 확인했다(캡처 착수 승인은 아님).
 
 이 Gate는 UI 계약 확인이며 fixture 캡처, Schema 변경, analyzer 구현 또는
-Benchmark 승격을 승인하지 않는다.
+Benchmark 승격을 승인하지 않는다. 사용자의 “권장 순서대로 진행 승인”은
+Preview 보완·브라우저 재검증과 이 UI-First Gate에만 적용한다.
 
 ## 11. 365 글로벌 평가 기준
 

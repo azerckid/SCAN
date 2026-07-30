@@ -52,7 +52,7 @@
       <h1>Bridge Transfer Preview</h1>
       <p class="lede">출발 체인의 lock/burn과 도착 체인의 mint/unlock을 bridge domain으로 분리된 결정적 키와 raw 정수 산술로 연결합니다. recipient는 입력에 누출하지 않고 양단 evidence에서 발견합니다.</p>
     </div>
-    <div class="gate">UI-FIRST GATE<br><b>사용자 확인 대기</b><br>FX-SVC-BRG-001 PROPOSED<br>RUNTIME NOT IMPLEMENTED</div>
+    <div class="gate">UI-FIRST GATE<br><b>사용자 확인 완료</b><br>FX-SVC-BRG-001 PROPOSED<br>RUNTIME NOT IMPLEMENTED</div>
   </header>
   <div class="notice">Docs-only synthetic Preview입니다. 브리지·체인·주소·TX·topic0은 실제 사례가 아니며 외부 RPC·탐색기·DB 호출이 없습니다. recipient 소유·본인성·불법성은 not_assessed입니다.</div>
   <div class="chiprow">
@@ -84,7 +84,7 @@
       <div class="body source-list" id="sources"></div>
     </section>
   </div>
-  <footer><span>SCAN 2026 · TASK-016 Bridge Preview 0.1</span><span>NO EXTERNAL CALLS · NO MUTATION · NO OWNERSHIP CLAIM</span></footer>
+  <footer><span>SCAN 2026 · TASK-016 Bridge Preview 0.2</span><span>NO EXTERNAL CALLS · NO MUTATION · NO OWNERSHIP CLAIM</span></footer>
 </main>
 <script>
   const fields=[
@@ -123,6 +123,7 @@
         html+=`<div class="section">DESTINATION CANDIDATE</div><div class="leg destination">chain-Y · recipient UNKNOWN · destination event evidence missing</div>`;
         html+=`<div class="section">MATCHING EVIDENCE</div><div class="match candidate">CANDIDATE ONLY · similar asset/amount/time · deterministic key unavailable · no promotion</div>`;
         html+=`<div class="section">PARTIAL CONDITIONS</div><div class="calc">source leg confirmed · destination leg unresolved · resolved_scoped_subjects contains source only<br>PATH seed disabled · recipient placeholder forbidden</div>`;
+        html+=`<div class="section">LATE-ARRIVAL VARIANT</div><div class="match candidate">DETERMINISTIC KEY MATCH · arrival window Y500–Y520 · observed Y530 OUTSIDE<br>status remains PARTIAL · late-arrival conflict/evidence preserved · COMPLETE FORBIDDEN · PATH seed disabled</div>`;
         html+=`<div class="next">NEXT: destination event/message artifact를 확보해 domain-separated key와 arrival window를 검증합니다.</div>`;
       }
     }

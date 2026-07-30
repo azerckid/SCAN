@@ -430,8 +430,9 @@ docs-only 검토 트랙이다.
 - failed는 확보 근거의 amount/asset/message 모순을 구조화 오류와
   `results: []`로 표시한다.
 - [Bridge/XChain Preview](./previews/10_task_016_bridge_xchain_preview.html)는
-  synthetic 3상태이며 외부 호출·mutation이 없다. 사용자 확인과 fixture
-  캡처는 아직 승인되지 않았다.
+  synthetic 3상태와 late-arrival partial 변형이며 외부 호출·mutation이 없다.
+  사용자 UI-First Gate는 2026-07-30 22:35 통과했고, fixture 캡처·구현은
+  승인되지 않았다.
 
 ## 17. Related Documents
 
