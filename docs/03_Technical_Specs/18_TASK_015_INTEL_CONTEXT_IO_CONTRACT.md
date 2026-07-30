@@ -1,7 +1,7 @@
 # TASK-015 `intel_context` Analysis I/O 계약 (대안 B 확정안)
 > Created: 2026-07-30 05:20
-> Last Updated: 2026-07-30 15:01
-> Status: Approved 1.0 · Runtime Applied · 3 Non-Quarantined Fixtures Confirmed
+> Last Updated: 2026-07-30 16:28
+> Status: Approved 1.1 · Runtime Applied · LABEL Replacement Contract Synced
 
 ## 0. 문서 위치
 
@@ -46,12 +46,12 @@ docs-only 검토안으로 시작했으며, 사용자 승인·Context Receipt·�
   "requested_at": "2026-07-30T00:00:00+00:00",
   "inputs": {
     "subject_addresses": [
-      "0xc3877028655ebe90b9447dd33de391c955ead267"
+      "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc"
     ],
     "source_artifact_refs": [
-      "artifact://sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475",
+      "artifact://sha256/2ddb426a2d404d4984345fb6026ca02932cd4313dd0db79b36f41617f34a9a34",
       "artifact://sha256/84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32",
-      "artifact://sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b"
+      "artifact://sha256/c5da8824427364b20cc4582cb15a3704f20e4b15bb16b81dd52f7e5d6203bf4d"
     ],
     "observation_block": 25640270,
     "max_sources": 3
@@ -59,12 +59,12 @@ docs-only 검토안으로 시작했으며, 사용자 승인·Context Receipt·�
   "source_policy": {
     "rule_status": "allowed",
     "allowed_source_ids": [
-      "DS-LABEL-PUBLIC",
+      "DS-SANCTIONS-PUBLIC",
       "DS-OSINT-WEB",
       "DS-ENS"
     ],
     "source_order": [
-      "DS-LABEL-PUBLIC",
+      "DS-SANCTIONS-PUBLIC",
       "DS-OSINT-WEB",
       "DS-ENS"
     ],
@@ -123,9 +123,9 @@ docs-only 검토안으로 시작했으며, 사용자 승인·Context Receipt·�
   "source_id": "DS-ENS",
   "source_role": "onchain_registry",
   "publisher": "ENS",
-  "locator": "artifact://sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b",
+  "locator": "artifact://sha256/c5da8824427364b20cc4582cb15a3704f20e4b15bb16b81dd52f7e5d6203bf4d",
   "retrieved_at": "2026-07-29T19:21:26+00:00",
-  "content_sha256": "762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b",
+  "content_sha256": "c5da8824427364b20cc4582cb15a3704f20e4b15bb16b81dd52f7e5d6203bf4d",
   "address_explicit": true,
   "terms_mode": "artifact_only"
 }
@@ -145,9 +145,9 @@ docs-only 검토안으로 시작했으며, 사용자 승인·Context Receipt·�
 ```json
 {
   "claim_id": "CLM-INTEL-001",
-  "subject_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
-  "claim_type": "service_category",
-  "claim_value": "Mixer",
+  "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+  "claim_type": "historical_designation",
+  "claim_value": "2022-08-08",
   "assertion_class": "source_assertion",
   "source_refs": ["SRC-INTEL-001"],
   "evidence_refs": ["EV-INTEL-001"],
@@ -168,20 +168,20 @@ docs-only 검토안으로 시작했으며, 사용자 승인·Context Receipt·�
 
 ```json
 {
-  "subject_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+  "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
   "dataset": {
-    "entity": "Tornado.Cash",
-    "categories": ["Mixer", "Sanctioned"],
-    "source_value": "external"
+    "entity": "TORNADO CASH",
+    "categories": ["historical_designation"],
+    "source_value": "2022-08-08"
   },
   "ens": {
-    "name": "team4.vesting.contract.tornadocash.eth",
-    "address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+    "name": "eth-01.tornadocash.eth",
+    "address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
     "block_number": 25640270
   },
   "community_config": {
-    "name": "team4.vesting.contract.tornadocash.eth",
-    "role": "team4_vesting_contract"
+    "name": "eth-01.tornadocash.eth",
+    "role": "eth_0_1_instance"
   },
   "conflict": {
     "auto_merge": false,
@@ -320,7 +320,7 @@ partial 유지).
 
 | query_kind | pinned calculated fact SHA-256 |
 |:---|:---|
-| `collect_label_claims` | `4ae17221fe5e0642c588723bd89db1ee6f9e39d19f2d6c1dce85dd2e2990d399` |
+| `collect_label_claims` | `972a154d20846478774f9fb7b685f7db1d7c5c8eac37fa1c5cd2cb444514d1a9` |
 | `check_sanctions_exposure` | `cc7b10781b557de2facd31d86040e08c3d1fa678f16ce52c807ae4e2389999e3` |
 | `resolve_identity_clues` | `4fd1ad43018cb0934809a9d8f04b2f52008f66524c4d96d285b9737e0e017f4d` |
 | `score_actor_relations` | `135391fba32ff966bb6dd038c781f7daa121bea161b74f353465e069ceefe51f` |

@@ -9,12 +9,12 @@
   "requested_at": "2026-07-30T00:00:00+00:00",
   "inputs": {
     "subject_addresses": [
-      "0xc3877028655ebe90b9447dd33de391c955ead267"
+      "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc"
     ],
     "source_artifact_refs": [
-      "artifact://sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475",
+      "artifact://sha256/2ddb426a2d404d4984345fb6026ca02932cd4313dd0db79b36f41617f34a9a34",
       "artifact://sha256/84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32",
-      "artifact://sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b"
+      "artifact://sha256/c5da8824427364b20cc4582cb15a3704f20e4b15bb16b81dd52f7e5d6203bf4d"
     ],
     "observation_block": 25640270,
     "max_sources": 3
@@ -22,12 +22,12 @@
   "source_policy": {
     "rule_status": "allowed",
     "allowed_source_ids": [
-      "DS-LABEL-PUBLIC",
+      "DS-SANCTIONS-PUBLIC",
       "DS-OSINT-WEB",
       "DS-ENS"
     ],
     "source_order": [
-      "DS-LABEL-PUBLIC",
+      "DS-SANCTIONS-PUBLIC",
       "DS-OSINT-WEB",
       "DS-ENS"
     ],

@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-30 15:37
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(비격리 3 Confirmed · LABEL Quarantined · Common-funder Candidate) · TASK-016~019 Proposed
+> Last Updated: 2026-07-30 16:28
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(3 Confirmed · LABEL Replacement Verifying · Common-funder Candidate) · TASK-016~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1231,7 +1231,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 - Status: In Progress — 계약 승인·Context Receipt PASS·구현 승인(2026-07-30).
   `intel_context` analyzer 5 query 구현·독립 검증 완료. SANCTIONS·ENS·
-  RELATION-HUB confirmed, LABEL verifying/quarantined, common-funder candidate.
+  RELATION-HUB confirmed, LABEL replacement verifying, common-funder candidate.
   Benchmark 11 automated / 4 assisted / 15 unsupported. live adapter·나머지
   fixture 승격은 별도 Gate.
 - Work Type: code
@@ -1266,9 +1266,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] OpenRAIL publisher 확인 경로와 대체 후보를 비교하고, official OFAC
     historical action + MIT config + fixed-block ENS를 사용하는 subject 교체
     경로를 docs-only로 선정한다.
-  - [ ] replacement subject의 fixed-block ENS replay·artifact·negative oracle·
+  - [x] replacement subject의 fixed-block ENS replay·artifact·negative oracle·
     독립 Verifier·analyzer hash를 재검증하고 OpenRAIL scoring dependency를
     제거한다.
+  - [ ] LABEL replacement fixture를 별도 Promotion Receipt에서 최종 판정한다.
   - [x] sanctions·ENS·relation-hub의 fixture별 문서 Hard Gate를 닫고 별도
     [Promotion Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)에서
     bounded scope `confirmed`로 판정한다.
@@ -1298,6 +1299,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [TASK-015 Analyzer 독립 Verification Receipt](../05_QA_Validation/53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md) - analyzer 구현·hash 대조·4 verifying 유지
   - [TASK-015 Live Source·Terms·Promotion Readiness](../05_QA_Validation/54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md) - source permission·live optional·fixture별 Hard Gate
   - [TASK-015 OpenRAIL License Resolution Receipt](../05_QA_Validation/55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md) - exact text 부재·selected row quarantine
+  - [TASK-015 LABEL Migration Receipt](../05_QA_Validation/58_TASK_015_LABEL_FIXTURE_MIGRATION_RECEIPT.md) - replacement replay·oracle·Verifier·analyzer 재검증
   - [TASK-015 비격리 Fixture 최종 승격 Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md) - SANCTIONS·ENS·RELATION-HUB confirmed·Benchmark assisted
   - [TASK-015 LABEL Source Replacement Review](../05_QA_Validation/57_TASK_015_LABEL_SOURCE_REPLACEMENT_REVIEW.md) - upstream provenance 비교·official/MIT/onchain 대체 경로·migration Gate
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001
@@ -1312,7 +1314,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     피드백을 기록한다(2026-07-30 02:52).
   - [x] `intel_context` Analysis I/O 대안과 source artifact 입력을 승인한다.
   - [x] 공개 source snapshot·negative oracle·독립 Verifier·analyzer를 통과한다
-    (비격리 3개 confirmed, LABEL license·common-funder completeness는 별도 대기).
+    (비격리 3개 confirmed, LABEL replacement verifying,
+    common-funder completeness는 별도 대기).
   - [ ] live mode와 live source adapter 구현 승인을 별도로 기록한다.
 - Component & Library Plan:
   - shadcn/ui: N/A - Python source/intelligence core 우선.
@@ -1371,7 +1374,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Offline oracle·Source Readiness·독립 Verifier·Provenance hardening·
     `intel_context` I/O 계약 확정안·**제품 analyzer 구현·독립 검증**까지
     완료했다(아래 항목별 기록). SANCTIONS·ENS·RELATION-HUB는 별도
-    Promotion Gate에서 `confirmed`, LABEL은 `verifying`·quarantined,
+    Promotion Gate에서 `confirmed`, LABEL은 replacement migration 후 `verifying`,
     common-funder는 `candidate`다. live source adapter는 별도 Gate다.
   - intel_context analyzer 구현: `src/scan_tool/domain/{intel_context,analysis_request,
     analysis_result,_types}.py`, `src/scan_tool/slices/intel_context.py`,
@@ -1424,6 +1427,14 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     `confirmed`로 승격했다. 전체 문제 공백을 숨기지 않고 Benchmark는
     automated 11 / assisted 4 / unsupported 15로 반영했다
     ([56 승격 Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)).
+  - LABEL replacement migration Gate: subject를 `0x12d66…`으로 교체하고
+    official historical action·MIT config·fixed-block ENS를 재현했다.
+    OpenRAIL scoring dependency를 제거하고 negative oracle 30×2·독립
+    Verifier·제품 analyzer의 새 canonical hash `972a154d…`를 대조했다.
+    전체 542 tests, fixture 18, schema 52 probes, traceability 1742 links,
+    security 207 files PASS. fixture는 별도 Promotion Review 전까지
+    `verifying`, Benchmark는 11 / 4 / 15를 유지한다
+    ([58 Migration Receipt](../05_QA_Validation/58_TASK_015_LABEL_FIXTURE_MIGRATION_RECEIPT.md)).
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 

@@ -18,7 +18,7 @@ type OracleCategory = Literal[
 REQUIRED_ORACLE_IDS = frozenset(
     {
         "OR-INTEL-LABEL-SUBJECT-SWAP",
-        "OR-INTEL-LABEL-ROW-HASH-MISMATCH",
+        "OR-INTEL-LABEL-OFFICIAL-HISTORY-MISMATCH",
         "OR-INTEL-LABEL-AUTO-MERGE",
         "OR-INTEL-LABEL-TRUTH-PROMOTION",
         "OR-INTEL-LABEL-ENS-MISSING",
@@ -130,7 +130,7 @@ def verify_manifest(manifest: NegativeOracleManifest) -> tuple[str, ...]:
 def _evaluate_label(facts: dict[str, Any]) -> dict[str, str]:
     if not _boolean(facts, "subject_matches"):
         return _failed("subject_mismatch")
-    if not _boolean(facts, "selected_row_hash_matches"):
+    if not _boolean(facts, "official_history_projection_matches"):
         return _failed("source_integrity_failed")
     if _boolean(facts, "auto_merged"):
         return _failed("source_assertion_merged")

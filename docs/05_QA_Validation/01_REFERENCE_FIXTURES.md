@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 15:37
+> Last Updated: 2026-07-30 16:28
 > Status: Approved 1.9 · 16 Confirmed · TASK-015 LABEL Verifying 1 / Candidate 1
 
 ## 1. 문서 목적
@@ -21,11 +21,10 @@ TASK-015 SANCTIONS·ENS·RELATION-HUB는 source permission·bounded fact·
 claim boundary·negative oracle·독립 Verifier·제품 analyzer를 통과해
 `확정`이다. 문제 원문 전체 공백은 남아 Benchmark에서 `assisted`로만
 분류한다. common-funder는 completeness 미증명으로 `후보`·`partial`을
-유지한다. LABEL selected row는 exact OpenRAIL text가 pinned repository에
-없어 `검증 중`·quarantine이며 publisher 확인 또는 source 교체 전 승격할
-수 없다. official OFAC historical action + MIT config + fixed-block ENS
-subject 교체안은 선정했지만 fixture migration·재검증 전이므로 현재 상태와
-기존 canonical hash는 변경하지 않는다.
+유지한다. LABEL은 OpenRAIL selected row를 scoring·provenance dependency에서
+제거하고 official OFAC historical action + MIT config + fixed-block ENS
+subject로 migration했다. 새 canonical hash를 Verifier·analyzer가 재현했지만
+별도 Promotion Review 전이므로 `검증 중`을 유지한다.
 
 입력 문서:
 
@@ -113,7 +112,7 @@ subject 교체안은 선정했지만 fixture migration·재검증 전이므로 �
 | [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 확정 0.2 | archive replay·반례·consumer pass | EVM-STATE, decimals |
 | [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 확정 0.2 | filtered logs·ordering·consumer pass | EVM-LOG, first ordering |
 | [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | EVM-TOKEN-002 | 1 | 확정 0.2 | primary trace·cross-check·consumer pass | EVM-TRACE, native sum |
-| [FX-OSINT-LABEL-CONFLICT-001](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) | OSINT-LBL-001 | 2 | 검증 중 0.1 | selected row·config·ENS two-provider·Verifier PASS | LABEL, source conflict |
+| [FX-OSINT-LABEL-CONFLICT-001](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) | OSINT-LBL-001 | 2 | 검증 중 0.1 | official history·MIT config·ENS two-provider·Verifier/analyzer PASS | LABEL, source conflict |
 | [FX-OSINT-SANCTIONS-HISTORY-001](./fixtures/FX-OSINT-SANCTIONS-HISTORY-001/README.md) | OSINT-SAN-001 | 2 | 확정 0.1 | official timeline·subject-bound SLS context·Verifier/analyzer | SANCTIONS, timeline |
 | [FX-OSINT-ENS-CONFLICT-001](./fixtures/FX-OSINT-ENS-CONFLICT-001/README.md) | OSINT-ENS-001 | 2 | 확정 0.1 | fixed-block two-provider replay·Verifier/analyzer | ENS, forward/reverse |
 | [FX-ACTOR-COMMON-FUNDER-001](./fixtures/FX-ACTOR-COMMON-FUNDER-001/README.md) | ACTOR-REL-001 | 1 | 후보 0.1 | confirmed FLOW hash, prehistory·service exclusion 대기 | ACTOR, common funder |

@@ -1,0 +1,13 @@
+{
+  "source_fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
+  "source_fixture_status": "confirmed",
+  "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+  "entity": "TORNADO CASH",
+  "category": "historical_designation",
+  "action_date": "2022-08-08",
+  "action_url": "https://ofac.treasury.gov/recent-actions/20220808",
+  "action_html_sha256": "a6160e2d63d9c13ac8ca60778b48c778e94dc84e10b6ef4cacadd337f34df74c",
+  "address_match_count": 1,
+  "current_status": "not_assessed",
+  "criminality_assessment": "not_assessed"
+}
