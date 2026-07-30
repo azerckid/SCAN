@@ -31,9 +31,9 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
 
     assert {item.problem_id for item in manifest.cases} == APPROVED_EXPECTED_PROBLEM_IDS
     assert counts == {
-        CoverageLevel.AUTOMATED: 13,
+        CoverageLevel.AUTOMATED: 14,
         CoverageLevel.ASSISTED: 4,
-        CoverageLevel.UNSUPPORTED: 13,
+        CoverageLevel.UNSUPPORTED: 12,
     }
     assert {
         item.problem_id for item in manifest.cases if item.coverage is CoverageLevel.AUTOMATED
@@ -50,6 +50,7 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
         "FLOW-EVM-002",
         "OSINT-LBL-001",
         "SVC-BRG-001",
+        "SVC-CEX-001",
         "SVC-DEX-001",
     }
     assert {
@@ -65,7 +66,7 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
 def test_confirmed_expected_problems_match_answers_evidence_and_requirements() -> None:
     report = _runner().run(_runner().load_manifest(MANIFEST))
 
-    assert report.executed == report.passed == 13
+    assert report.executed == report.passed == 14
     assert report.failed == 0
     assert report.automated_pass_rate == 1
     assert all(item.answer_exact for item in report.cases)
@@ -75,6 +76,9 @@ def test_confirmed_expected_problems_match_answers_evidence_and_requirements() -
     bridge = next(item for item in report.cases if item.problem_id == "SVC-BRG-001")
     assert bridge.fixture_id == "FX-SVC-BRG-001"
     assert bridge.passed is True
+    cex = next(item for item in report.cases if item.problem_id == "SVC-CEX-001")
+    assert cex.fixture_id == "FX-SVC-CEX-001"
+    assert cex.passed is True
 
 
 def test_incorrect_answer_oracle_fails_the_automated_case() -> None:
@@ -135,5 +139,5 @@ def test_benchmark_cli_runs_offline_and_reports_coverage(
     )
 
     assert result.exit_code == 0
-    assert "AUTOMATED 13 · ASSISTED 4 · UNSUPPORTED 13" in result.stdout
-    assert "BENCHMARK 13/13 automated cases passed · network_mode offline" in result.stdout
+    assert "AUTOMATED 14 · ASSISTED 4 · UNSUPPORTED 12" in result.stdout
+    assert "BENCHMARK 14/14 automated cases passed · network_mode offline" in result.stdout

@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-31 04:55
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 13·4·13) · TASK-016 Bridge Confirmed·Automated · TASK-017~019 Proposed
+> Last Updated: 2026-07-31 05:40
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 14·4·12) · TASK-016 Bridge+CEX Confirmed·Automated · TASK-017~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1454,8 +1454,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
-- Status: In Progress — Bridge(`SVC-BRG-001`) fixture confirmed · Benchmark
-  automated. CEX·Mixer·Lending·`MIXED-XCHAIN-001`은 미착수.
+- Status: In Progress — Bridge(`SVC-BRG-001`)·CEX(`SVC-CEX-001`) fixture
+  confirmed · Benchmark automated (14·4·12). Mixer·Lending·`MIXED-XCHAIN-001`은
+  미착수.
 - Work Type: code
 - Priority: Phase 2 · P2
 - Depends On: TASK-014, TASK-015
@@ -1467,7 +1468,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] Bridge 양단 chain/message/asset/amount 계약을 확정한다.
   - [x] `bridge_transfer` offline analyzer와 전용 request/result dispatch를 구현한다.
   - [x] Bridge exact·partial·conflict와 Benchmark automated를 검증한다.
-  - [ ] adapter별(CEX·Mixer·Lending) exact·partial·conflict를 검증한다.
+  - [x] CEX exact·partial·conflict와 Benchmark automated를 검증한다.
+  - [ ] Mixer·Lending adapter별 exact·partial·conflict를 검증한다.
   - [ ] 남은 서비스 문제의 Benchmark를 실제 완료 범위만 승격한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 서비스·크로스체인 5문항
@@ -1476,15 +1478,18 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - 다중 체인 graph·evidence
   - [Lending(SVC-LEND-001) UI](../02_UI_Screens/10_TASK_016_LENDING_UI.md) - 첫 adapter 화면 계약
   - [Bridge/XChain(SVC-BRG-001) UI](../02_UI_Screens/11_TASK_016_BRIDGE_XCHAIN_UI.md) - 양단 leg·matching·fee/asset 화면 계약
+  - [CEX Cluster(SVC-CEX-001) UI](../02_UI_Screens/12_TASK_016_CEX_UI.md) - deposit cluster·hot wallet·label assertion 화면 계약
 - Related HTML Preview:
   - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - 다중 source 검토 후보
   - [Lending Preview](../02_UI_Screens/previews/09_task_016_lending_preview.html) - complete/partial/failed 정적 화면
   - [Bridge/XChain Preview](../02_UI_Screens/previews/10_task_016_bridge_xchain_preview.html) - discovery recipient·domain matching·정수 정합 화면
+  - [CEX Cluster Preview](../02_UI_Screens/previews/11_task_016_cex_preview.html) - discovery/verify·cluster judgment·label assertion 화면
 - Related Technical Docs:
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-SERVICE 계약
   - [Lending(SVC-LEND-001) 계약 제안](../03_Technical_Specs/19_TASK_016_LENDING_CONTRACT_PROPOSAL.md) - 첫 adapter docs-only 계약
   - [WP-SERVICE 공통 계약 요소](../03_Technical_Specs/20_TASK_016_SERVICE_COMMON_CONTRACT.md) - Lending 확정분 추출·adapter 적용 경계
   - [Bridge/XChain(SVC-BRG-001) 계약 제안](../03_Technical_Specs/21_TASK_016_BRIDGE_XCHAIN_CONTRACT_PROPOSAL.md) - 양단 매칭·미확보/모순 분리
+  - [CEX Cluster(SVC-CEX-001) 계약 제안](../03_Technical_Specs/22_TASK_016_CEX_CLUSTER_CONTRACT_PROPOSAL.md) - deposit cluster·label assertion·집금 패턴
   - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - chain/provider source
   - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - adapter 재사용 Gate
 - Related QA Docs:
@@ -1494,6 +1499,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [Bridge Fixture 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md) - `candidate → verifying` 판정·잔여 Gate
   - [Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md) - analyzer↔verifier hash·Schema P1 sync·PASS
   - [Bridge Final Promotion Receipt](../05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 13/13
+  - [CEX Fixture 후보 보고서](../05_QA_Validation/67_TASK_016_CEX_FIXTURE_CANDIDATE_REPORT.md) - GARANTEX OFAC SDN 후보·선정
+  - [CEX Final Promotion Receipt](../05_QA_Validation/68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 14/14
   - [Contest Stabilization Runbook](../05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md) - 대회용 freeze·실행 절차
 - Implementation Preconditions:
   - [x] Bridge official ABI/address·두 provider replay·독립 Verifier를 확보하고
@@ -1551,14 +1558,21 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
       [Contest Stabilization Runbook](../05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md) —
       verifying lifecycle·8 negative oracle·canonical hash·analyzer 독립 검증·
       confirmed·Benchmark 13/13·대회 freeze를 확인했다.
+    - [CEX Cluster UI](../02_UI_Screens/12_TASK_016_CEX_UI.md) ·
+      [CEX Cluster Preview](../02_UI_Screens/previews/11_task_016_cex_preview.html) ·
+      [CEX Cluster 계약](../03_Technical_Specs/22_TASK_016_CEX_CLUSTER_CONTRACT_PROPOSAL.md) ·
+      [CEX Fixture 후보 보고서](../05_QA_Validation/67_TASK_016_CEX_FIXTURE_CANDIDATE_REPORT.md) ·
+      [CEX Final Promotion Receipt](../05_QA_Validation/68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md) —
+      OFAC GARANTEX label assertion·세 deposit→공통 hot wallet·negative oracle·
+      독립 Verifier·analyzer hash·confirmed·Benchmark 14/14를 확인했다.
   - Constraints:
     - `AnalysisType.BRIDGE_TRANSFER` + `link_bridge_transfer` 전용 dispatch
       guard로 기존 analyzer·일반 Workbench 동작과 격리한다.
     - `FX-SVC-BRG-001`은 `confirmed`이며 analyzer canonical hash를
       독립 Verifier hash `d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`와 대조한다.
     - live Rules가 확정될 때까지 offline/artifact replay만 구현한다.
-    - Benchmark는 Bridge automated 승격 후 13·4·13을 유지하고
-      `MIXED-XCHAIN-001`은 별도 조합 Gate로 둔다.
+    - Benchmark는 Bridge automated 승격 후 13·4·13, CEX automated 승격 후
+      14·4·12를 기록하고 `MIXED-XCHAIN-001`은 별도 조합 Gate로 둔다.
     - ownership·service identity·criminality는 `not_assessed`; amount/time
       유사성만으로 deterministic destination을 만들지 않는다.
   - Conflicts:
@@ -1567,6 +1581,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
       CEX·Mixer·Lending 등 다른 adapter에는 적용하지 않는다.
     - (경계 고지) source/Rules 미확정은 live adapter blocker로 유지하되,
       content-addressed artifact 기반 offline analyzer를 막지 않는다.
+    - (해소) CEX `FX-SVC-CEX-001`는 Merkle VERIFY 9-call complete replay와
+      code-computed immutable fact match로 confirmed·Benchmark automated를
+      복구했다. transfer label을 독립 provider로 취급하던 이전 주장은 폐기.
     - (경계 고지) Lending은 docs-only 선례이며 runtime 재사용 대상은 기존
       `flow_path`·`intel_context` leaf dispatch와 공통 evidence 봉투다.
 - Change Receipt:
@@ -1650,32 +1667,38 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     경로 전용임을 명시했다. CLI 성공·byte-only 거부 회귀 테스트 2건 추가
     (`tests/integration/test_task_016_bridge_cli.py`).
 - Verification Receipt:
-  - Status: PASS — Bridge offline analyzer 독립 검증·fixture confirmed·
-    Benchmark automated 완료. CEX·Mixer·Lending·MIXED-XCHAIN은 잔여.
+  - Status: PASS — Bridge·CEX offline analyzer 독립 검증·fixture confirmed·
+    Benchmark automated 완료. Mixer·Lending·MIXED-XCHAIN은 잔여.
   - Commands and Results:
     - `scripts/verify_task_016_bridge_analyzer_independent_verification.py` —
       PASS — hash `d6609bb4…00ac`, 2 deterministic runs, AST isolation
     - `scripts/verify_task_016_bridge_independent_verifier.py` — PASS —
       same hash
+    - `scripts/verify_task_016_cex_analyzer_independent_verification.py` —
+      PASS — hash `20fc2777…83bf`, 2 deterministic runs, AST isolation
+    - `scripts/verify_task_016_cex_independent_verifier.py` — PASS —
+      same hash
     - focused bridge analyzer/CLI pytest — PASS — 6
-    - Benchmark integration/CLI — PASS — 13/13 automated
-    - `scripts/verify.py` — PASS — recorded with contest stabilization runbook
-    - `scripts/check_analysis_schema.py` — PASS — 57 probes; bridge result
-      probe exercises `REQ-BRIDGE-*`
-    - public `analysis-result.schema.json` — PASS after adding `BRIDGE` to
-      `FixtureRequirementId` pattern
+    - focused CEX unit+CLI pytest — PASS
+    - Benchmark integration/CLI — PASS — 14/14 automated
+    - `scripts/verify.py` — PASS — 584 tests, 2016 links, security 259
+    - `scripts/check_analysis_schema.py` — PASS — 62 probes; bridge·CEX
+      result probes exercise `REQ-BRIDGE-*`·`REQ-CEX-*`
+    - public `analysis-result.schema.json` — PASS after adding `BRIDGE`·`CEX`
+      to `FixtureRequirementId` pattern
   - Unrun Checks:
     - N/A — planned independent checks ran; live Rules/network remain out
       of approved offline scope
   - Detailed Evidence:
     - [64 Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)
     - [65 Bridge Final Promotion Receipt](../05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)
+    - [68 CEX Final Promotion Receipt](../05_QA_Validation/68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)
     - [66 Contest Stabilization Runbook](../05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md)
     - [PR #108](https://github.com/azerckid/SCAN/pull/108) — analyzer
       implementation and Evidence Worker boundary
     - [PR #109](https://github.com/azerckid/SCAN/pull/109) — Verification Receipt
-  - Residual: CEX·Mixer·Lending adapters and `MIXED-XCHAIN-001` remain
-    separate Gates under feature freeze until contest start.
+  - Residual: Mixer·Lending adapters and `MIXED-XCHAIN-001` remain separate
+    Gates under feature freeze until contest start.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 

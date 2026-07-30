@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-SVC-CEX-001",
+  "analysis_type": "cex_cluster",
+  "query_kind": "evaluate_cex_cluster",
+  "chain_id": 1,
+  "fixture_id": "FX-SVC-CEX-001",
+  "requested_at": "2026-07-31T08:00:00Z",
+  "inputs": {
+    "deposit_candidates": [
+      "0x8dce2aac0de82bdcaf6b4373b79f94331b8e4995",
+      "0xb338962b92cd818d6aef0a32a9ecd01212a71f33",
+      "0xf4377eda661e04b6dda78969796ed31658d602d4"
+    ],
+    "observation_window": {
+      "start_block": 18215900,
+      "end_block": 18216000
+    }
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": [
+      "DS-EVM-RPC-ARCHIVE",
+      "DS-SANCTIONS-PUBLIC"
+    ],
+    "source_order": [
+      "DS-EVM-RPC-ARCHIVE",
+      "DS-SANCTIONS-PUBLIC"
+    ],
+    "allow_fallback": false,
+    "offline_mode": true
+  }
+}

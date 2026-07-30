@@ -1,0 +1,183 @@
+{
+  "schema_version": "0.1",
+  "status": "verified",
+  "execution_mode": "synthetic_offline",
+  "cases": [
+    {
+      "oracle_id": "OR-CEX-SCOPE-SYNTHESIS",
+      "fixture_id": "FX-SVC-CEX-001",
+      "facts": {
+        "scope_bound": false,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "expected_hot_wallet_mismatch": false,
+        "label_outbound_conflict": false,
+        "label_source_present": true,
+        "common_destination_present": true,
+        "deposit_source_count": 3,
+        "single_counterparty_only": false,
+        "label_covers_deposits": true,
+        "pattern_present": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "scope_synthesis_rejected"
+      }
+    },
+    {
+      "oracle_id": "OR-CEX-LABEL-WITHOUT-SOURCE",
+      "fixture_id": "FX-SVC-CEX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "expected_hot_wallet_mismatch": false,
+        "label_outbound_conflict": false,
+        "label_source_present": false,
+        "common_destination_present": true,
+        "deposit_source_count": 3,
+        "single_counterparty_only": false,
+        "label_covers_deposits": false,
+        "pattern_present": true
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "estimated_without_label"
+      }
+    },
+    {
+      "oracle_id": "OR-CEX-SINGLE-COUNTERPARTY-CAP",
+      "fixture_id": "FX-SVC-CEX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "expected_hot_wallet_mismatch": false,
+        "label_outbound_conflict": false,
+        "label_source_present": false,
+        "common_destination_present": true,
+        "deposit_source_count": 2,
+        "single_counterparty_only": true,
+        "label_covers_deposits": false,
+        "pattern_present": true
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "estimated_without_label"
+      }
+    },
+    {
+      "oracle_id": "OR-CEX-EXPLORER-TAG-REJECTED",
+      "fixture_id": "FX-SVC-CEX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": true,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "expected_hot_wallet_mismatch": false,
+        "label_outbound_conflict": false,
+        "label_source_present": true,
+        "common_destination_present": true,
+        "deposit_source_count": 3,
+        "single_counterparty_only": false,
+        "label_covers_deposits": true,
+        "pattern_present": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "explorer_tag_rejected"
+      }
+    },
+    {
+      "oracle_id": "OR-CEX-WINDOW-OUT-OF-SCOPE",
+      "fixture_id": "FX-SVC-CEX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": true,
+        "expected_hot_wallet_mismatch": false,
+        "label_outbound_conflict": false,
+        "label_source_present": true,
+        "common_destination_present": true,
+        "deposit_source_count": 3,
+        "single_counterparty_only": false,
+        "label_covers_deposits": true,
+        "pattern_present": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "observation_window_violation"
+      }
+    },
+    {
+      "oracle_id": "OR-CEX-HOT-WALLET-MISMATCH",
+      "fixture_id": "FX-SVC-CEX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "expected_hot_wallet_mismatch": true,
+        "label_outbound_conflict": false,
+        "label_source_present": true,
+        "common_destination_present": true,
+        "deposit_source_count": 3,
+        "single_counterparty_only": false,
+        "label_covers_deposits": true,
+        "pattern_present": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "hot_wallet_binding_failed"
+      }
+    },
+    {
+      "oracle_id": "OR-CEX-ATTRIBUTION-ASSESSED-REJECTED",
+      "fixture_id": "FX-SVC-CEX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": true,
+        "window_violation": false,
+        "expected_hot_wallet_mismatch": false,
+        "label_outbound_conflict": false,
+        "label_source_present": true,
+        "common_destination_present": true,
+        "deposit_source_count": 3,
+        "single_counterparty_only": false,
+        "label_covers_deposits": true,
+        "pattern_present": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "attribution_assessed_rejected"
+      }
+    },
+    {
+      "oracle_id": "OR-CEX-COMPLETE-MATCH",
+      "fixture_id": "FX-SVC-CEX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "expected_hot_wallet_mismatch": false,
+        "label_outbound_conflict": false,
+        "label_source_present": true,
+        "common_destination_present": true,
+        "deposit_source_count": 3,
+        "single_counterparty_only": false,
+        "label_covers_deposits": true,
+        "pattern_present": true
+      },
+      "expected": {
+        "outcome": "complete",
+        "classification": "cex_cluster_confirmed"
+      }
+    }
+  ]
+}
