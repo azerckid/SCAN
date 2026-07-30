@@ -102,33 +102,43 @@
 </main>
 <script>
   const fields=[
-    ["subject","0x9a1c…4e2b"],
+    ["subject","0x9a1c…4e2b (synthetic)"],
     ["subject_roles","[receiver, liquidator]"],
-    ["protocol","Aave-family (pinned)"],
-    ["window","block 18.44M → 18.44M+3"],
+    ["protocol","Aave-family (candidate, not pinned)"],
+    ["window","block N → N+3 (synthetic)"],
     ["network mode","artifact_only"]
   ];
   const roleTags=["receiver","liquidator"];
   const esc=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  // USDC 6 decimals, WETH 18 decimals. raw는 순수 숫자열, 사람 단위는 별도 표기.
   const events=[
-    ["flash","T0 · FlashLoan · receiver=subject · asset USDC · raw 5,000,000000 · premium 4,500000"],
+    ["flash","T0 · FlashLoan · receiver=subject · asset USDC · principal raw 5000000000 (≈5000 USDC)"],
     ["event","T1 · LiquidationCall · user=0xVICTIM · liquidator=subject · debtAsset USDC · collateralAsset WETH"],
-    ["event","T2 · Repay · user=0xVICTIM(onBehalfOf) · asset USDC · raw 4,812,340000"],
-    ["event","T3 · FlashLoan repay · receiver=subject · asset USDC · raw 5,000,000000 + premium"]
+    ["event","T2 · Repay(on victim) · asset USDC · raw 4812340000 (≈4812.34 USDC)"],
+    ["event","T3 · FlashLoan repay · receiver=subject · principal raw 5000000000 · premium raw 4500000 (≈4.5 USDC)"]
   ];
-  const legs=[
-    ["leg","IN · WETH collateral seized → subject · raw 2,140000000000000000 · matched ERC-20 Transfer"],
-    ["leg","OUT · USDC debt repaid on behalf of victim · raw 4,812,340000 · matched Transfer"],
-    ["leg premium","OUT · flashloan premium · USDC raw 4,500000 · matched Transfer"]
+  // subject가 실제 sender/receiver인 정합 leg 전부(원금 IN/OUT 분리 포함).
+  const legsComplete=[
+    ["leg","IN · USDC flashloan principal · raw 5000000000 (≈5000 USDC) · matched Transfer · T0"],
+    ["leg","IN · WETH collateral seized · raw 2140000000000000000 (≈2.14 WETH) · matched Transfer · T1"],
+    ["leg","OUT · USDC debt repaid on behalf of victim · raw 4812340000 (≈4812.34 USDC) · matched Transfer · T2"],
+    ["leg","OUT · USDC flashloan principal repay · raw 5000000000 (≈5000 USDC) · matched Transfer · T3"],
+    ["leg premium","OUT · USDC flashloan premium · raw 4500000 (≈4.5 USDC) · matched Transfer · T3"]
   ];
-  const partialLeg=["leg unresolved","native ETH gas-refund leg → subject · needs trace · UNRESOLVED (partial)"];
+  // partial: T3(원금 상환+premium)은 후속 내부 이동 확인이 필요해 UNRESOLVED.
+  const legsPartialConfirmed=[
+    ["leg","IN · USDC flashloan principal · raw 5000000000 (≈5000 USDC) · matched Transfer · T0"],
+    ["leg","IN · WETH collateral seized · raw 2140000000000000000 (≈2.14 WETH) · matched Transfer · T1"],
+    ["leg","OUT · USDC debt repaid on behalf of victim · raw 4812340000 (≈4812.34 USDC) · matched Transfer · T2"]
+  ];
+  const partialLeg=["leg unresolved","USDC flashloan principal-repay + premium leg (T3) · needs trace · UNRESOLVED"];
   const hops=[
-    ["hop","PATH seed = subject collateral-receipt address 0x9a1c…4e2b (from net-asset leg)"],
-    ["hop","hop1 · subject → 0x5f…c7 · WETH raw 2,140000000000000000"],
+    ["hop","PATH seed = subject collateral-receipt address 0x9a1c…4e2b (from net-asset WETH leg)"],
+    ["hop","hop1 · subject → 0x5f…c7 · WETH raw 2140000000000000000 (≈2.14 WETH)"],
     ["hop","hop2 · 0x5f…c7 → DEX router · swap scope bounded · label not_assessed"]
   ];
   const sourceCards=[
-    ["EV-LEND-EVENTS · event_evidence","decoded borrow/flash/liquidation/repay · topic0 pinned","block·txIndex·logIndex ordered"],
+    ["EV-LEND-EVENTS · event_evidence","decoded flash/liquidation/repay · topic0 not pinned (candidate)","block·txIndex·logIndex ordered"],
     ["EV-LEND-TRANSFER · transfer_evidence","ERC-20 Transfer + native legs matched to events","asset·addr·raw amount reconciled"],
     ["EV-LEND-TRACE · call_evidence","value-bearing internal calls (conditional)","required only when a native/internal leg exists"]
   ];
@@ -145,11 +155,11 @@
       const evs=state==="partial"?events.slice(0,3):events;
       html+=`<div class="section">EVENT TIMELINE (block, txIndex, logIndex)</div>`+evs.map(([k,t])=>`<div class="event ${k==="flash"?"flash":""}">${esc(t)}</div>`).join("");
       html+=`<div class="section">NET-ASSET LEDGER · subject only · leg separated</div>`;
-      const ll=state==="partial"?[...legs.slice(0,2),partialLeg]:legs;
+      const ll=state==="partial"?[...legsPartialConfirmed,partialLeg]:legsComplete;
       html+=ll.map(([k,t])=>`<div class="leg ${k.replace("leg","").trim()}">${esc(t)}</div>`).join("");
       html+=state==="complete"
-        ? `<div class="ledger-total">NET · WETH +2,140000000000000000 · USDC −4,816,840000 (debt+premium) · all value legs matched → complete</div>`
-        : `<div class="ledger-total">NET · WETH +2,140000000000000000 · USDC −4,816,840000 · 1 native leg UNRESOLVED (trace required) → partial</div>`;
+        ? `<div class="ledger-total">NET (all 5 legs matched) · WETH +2140000000000000000 (≈+2.14) · USDC −4816840000 (=+5000000000 −4812340000 −5000000000 −4500000) → complete</div>`
+        : `<div class="ledger-total">NET (confirmed legs only) · WETH +2140000000000000000 (≈+2.14) · USDC +187660000 (=+5000000000 −4812340000) · T3 principal-repay+premium UNRESOLVED → partial</div>`;
       html+=`<div class="section">SUBSEQUENT OUTFLOW PATH</div>`;
       const hh=state==="partial"?hops.slice(0,2):hops;
       html+=hh.map(([,t])=>`<div class="hop">${esc(t)}</div>`).join("");

@@ -93,6 +93,11 @@ PATH 시작 주소는 순자산 ledger에서 subject가 자산을 실제 수령�
 
 이 Gate는 설계 확인이며, 코드·fixture 캡처·구현 승인을 포함하지 않는다.
 
+**loading·empty·stale 범위.** 이번 Preview는 결과 3상태(complete/partial/
+failed)에 집중하며, loading·empty·stale 전체 상태는 상위 Investigation
+Workbench Gate로 분리한다. 이 분리는 bounded 허용이며, **TASK-016 전체 UI
+Gate 승인 전에 loading·empty·stale을 별도로 확인**한다.
+
 ## 10. 365 글로벌 평가 기준
 
 | 기준 | 판정 | 증거·경계 |
