@@ -167,26 +167,21 @@ docs-only 검토안이다.
 ```json
 {
   "subject_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
-  "assertions": [
-    {
-      "source_role": "provider_label",
-      "claim_value": ["Mixer", "Sanctioned"],
-      "truth_status": "source_assertion_only"
-    },
-    {
-      "source_role": "first_party",
-      "claim_value": "team4_vesting_contract",
-      "truth_status": "role_assertion"
-    },
-    {
-      "source_role": "onchain_registry",
-      "claim_value": "team4.vesting.contract.tornadocash.eth",
-      "block_number": 25640270,
-      "truth_status": "confirmed_observation"
-    }
-  ],
+  "dataset": {
+    "entity": "Tornado.Cash",
+    "categories": ["Mixer", "Sanctioned"],
+    "source_value": "external"
+  },
+  "ens": {
+    "name": "team4.vesting.contract.tornadocash.eth",
+    "address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+    "block_number": 25640270
+  },
+  "community_config": {
+    "name": "team4.vesting.contract.tornadocash.eth",
+    "role": "team4_vesting_contract"
+  },
   "conflict": {
-    "kind": "category_role_conflict",
     "auto_merge": false,
     "ownership_assessment": "not_assessed",
     "criminality_assessment": "not_assessed"
@@ -198,23 +193,18 @@ docs-only 검토안이다.
 
 ```json
 {
-  "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
-  "direct_matches": [
+  "timeline": [
     {
       "date": "2022-08-08",
-      "action": "designation",
-      "address_explicit": true,
-      "historical": true
+      "action": "designation"
     },
     {
       "date": "2025-03-21",
-      "action": "removal",
-      "address_explicit": true,
-      "historical": true
+      "action": "removal"
     }
   ],
-  "indirect_matches": [],
   "current_status": "not_assessed",
+  "current_sls_address_match_count": 0,
   "criminality_assessment": "not_assessed"
 }
 ```
@@ -226,11 +216,13 @@ docs-only 검토안이다.
   "block_number": 25640270,
   "forward": {
     "name": "nick.eth",
-    "address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5"
+    "address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+    "resolver": "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41"
   },
   "reverse": {
     "address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
-    "name": "nick.eth"
+    "name": "nick.eth",
+    "resolver": "0xa2c122be93b0074270ebee7f6b7292c7deb45047"
   },
   "forward_reverse_match": true,
   "ownership_assessment": "not_assessed"
@@ -242,7 +234,28 @@ docs-only 검토안이다.
 ```json
 {
   "seed_address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
-  "relation_count": 4,
+  "relations": [
+    {
+      "subject_address": "0xa1b44d4b5b4c361f51e029b81bf2db9cf4d8e676",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    },
+    {
+      "subject_address": "0xc4e04ac48639ff077ebb36e7cfe0c4993b7b208e",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    },
+    {
+      "subject_address": "0x46e0be2df97dac791fc8e30cf2b2e4f58c50cf55",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    },
+    {
+      "subject_address": "0x8765a35394c98e81b9d56d44248e1199d8e38a4c",
+      "relation": "direct_seed_output",
+      "amount_raw": "7738250000000000000000"
+    }
+  ],
   "common_funder_assessment": "candidate",
   "ownership_assessment": "not_assessed",
   "coordination_assessment": "not_assessed",
@@ -267,16 +280,36 @@ docs-only 검토안이다.
     "role": "public_erc20_token_contract",
     "symbol": "USDC"
   },
-  "relation_count": 2,
+  "relations": [
+    {
+      "subject_address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "source_fixture_id": "FX-SVC-DEX-001",
+      "relation": "token_transfer_interaction"
+    },
+    {
+      "subject_address": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+      "source_fixture_id": "FX-EVM-AUTH-001",
+      "relation": "approval_and_consumption_interaction"
+    }
+  ],
   "hub_excluded_from_actor_link": true,
   "ownership_assessment": "not_assessed",
-  "coordination_assessment": "not_assessed",
-  "score": {
-    "status": "not_assessed",
-    "components": []
-  }
+  "coordination_assessment": "not_assessed"
 }
 ```
+
+§5.1·§5.2·§5.3·§5.5의 value는
+`task_015_independent_verifier.py`가 산출해 고정한 네 canonical fact와
+필드·배열 구조가 동일하다. 제품 analyzer의 `results[0].value` hash는 다음
+값과 일치해야 하며, 구현 단계에서 Verifier 형태를 다시 쓰거나 hash를
+재고정하지 않는다.
+
+| query_kind | pinned calculated fact SHA-256 |
+|:---|:---|
+| `collect_label_claims` | `4ae17221fe5e0642c588723bd89db1ee6f9e39d19f2d6c1dce85dd2e2990d399` |
+| `check_sanctions_exposure` | `cc7b10781b557de2facd31d86040e08c3d1fa678f16ce52c807ae4e2389999e3` |
+| `resolve_identity_clues` | `4fd1ad43018cb0934809a9d8f04b2f52008f66524c4d96d285b9737e0e017f4d` |
+| `score_actor_relations` | `135391fba32ff966bb6dd038c781f7daa121bea161b74f353465e069ceefe51f` |
 
 ## 6. Complete·Partial·Failed
 
