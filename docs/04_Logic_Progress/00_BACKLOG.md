@@ -1374,7 +1374,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Conflicts:
     - (해소) label source blocker 교체·snapshot 기준선·5 candidate package·negative oracle 30×2·ENS 2nd provider·OFAC SLS pin·4 fixture 독립 Verifier·provenance hardening·§5↔Verifier hash 정렬(PR #84)
     - (열림) 공식 대회 Rules·채택 snapshot 재배포 Terms 미확정 → live mode·package 재배포는 별도 승인
-    - (열림) `FX-ACTOR-COMMON-FUNDER-001`의 bounded prehistory·service exclusion 미완료 → `candidate`·`partial`만, confirmed 승격은 후속
+    - (열림) `FX-ACTOR-COMMON-FUNDER-001`의 bounded prehistory·service exclusion 미완료 → `candidate`·`partial`만, confirmed 승격은 후속. 완결성·제외·partial/failed/negative oracle 기준과 승격 blocker(continuous-scope archive·seed 분류 source 부재, live/archive Gate 대기)는 docs-only [60 완결성 계약](../05_QA_Validation/60_TASK_015_COMMON_FUNDER_COMPLETENESS_CONTRACT.md)으로 고정
     - (해소) `intel_context` 대안 B 정식 승인·Context Receipt `PASS`·analyzer 구현 승인 모두 2026-07-30 사용자 명시 승인 완료. analyzer 구현·독립 검증도 완료([53 검증 Receipt](../05_QA_Validation/53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md))
 - Change Receipt:
   - Offline oracle·Source Readiness·독립 Verifier·Provenance hardening·

@@ -180,7 +180,10 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] AI가 만든 label 가설이 evidence 없는 confirmed fact가 되지 않게 한다.
 - [x] source permission·live 필요성·fixture별 Promotion Hard Gate를
   docs-only Readiness로 분리한다.
-- [ ] common-funder bounded prehistory·service exclusion을 닫는다.
+- [x] common-funder bounded prehistory·service exclusion의 조회 범위·완결성·
+  제외·partial/failed/negative oracle 기준과 현재 승격 불가 blocker를 docs-only
+  [완결성 계약](../05_QA_Validation/60_TASK_015_COMMON_FUNDER_COMPLETENESS_CONTRACT.md)으로
+  고정한다(데이터는 live/archive Gate 대기, fixture `candidate` 유지).
 - [x] label pinned repository에 exact OpenRAIL text·version·notice가 없음을
   고정하고 selected row를 quarantine한다.
 - [x] publisher 확인 경로와 대체 source를 비교해 official OFAC historical
