@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-31 04:55
-> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · TASK-016 Bridge Confirmed·Automated · Benchmark 13 Automated / 4 Assisted / 13 Unsupported
+> Last Updated: 2026-07-31 06:30
+> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · TASK-016 Bridge+CEX Confirmed·Automated · TASK-017 UTXO Automated · Benchmark 15 Automated / 6 Assisted / 9 Unsupported
 
 ## 1. 목적
 
@@ -253,7 +253,17 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   `MIXED-XCHAIN-001`은 unsupported 유지.
 - [x] 대회용 Stabilization Runbook·Feature Freeze를 기록한다
   ([66 Runbook](../05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md)).
-- [ ] CEX·Mixer·Lending adapter는 confirmed fixture 확보 전 구현하지 않는다.
+- [x] CEX(`SVC-CEX-001`) docs Gate — 계약·UI·fixture 후보 선정 기준을 docs-only
+  [계약 제안](../03_Technical_Specs/22_TASK_016_CEX_CLUSTER_CONTRACT_PROPOSAL.md)·
+  [UI](../02_UI_Screens/12_TASK_016_CEX_UI.md)·
+  [Preview](../02_UI_Screens/previews/11_task_016_cex_preview.html)·
+  [후보 보고서](../05_QA_Validation/67_TASK_016_CEX_FIXTURE_CANDIDATE_REPORT.md)로
+  진행(2026-07-31 batch approval).
+- [x] CEX OFAC GARANTEX(`FX-SVC-CEX-001`) fixture package·negative oracle·독립
+  Verifier·analyzer·Benchmark automated(13→14)를 완료했다
+  ([68 Receipt](../05_QA_Validation/68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)).
+  `MIXED-XCHAIN-001`은 unsupported 유지.
+- [ ] Mixer·Lending adapter는 confirmed fixture 확보 전 구현하지 않는다.
 
 ### [ ] Wave 6 — 출제가 확인된 비EVM
 

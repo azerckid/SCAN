@@ -111,7 +111,8 @@
         "flow_path",
         "intel_context",
         "bridge_transfer",
-        "bitcoin_utxo"
+        "bitcoin_utxo",
+        "cex_cluster"
       ],
       "title": "AnalysisType",
       "type": "string"

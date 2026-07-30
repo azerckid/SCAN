@@ -1,0 +1,18 @@
+{
+  "source_url": "https://www.treasury.gov/ofac/downloads/sdn.xml",
+  "source_id": "DS-SANCTIONS-PUBLIC",
+  "full_sdn_sha256": "dbfaf0c020d646a9f28b19dc42be80ef2de571abd3b39f38fc4cbb713eb2a72e",
+  "full_sdn_bytes": 28779134,
+  "garantex_entry_sha256": "42e317a0e0fafd290add83e4f17fa0f4348167566a167ae716aed9a4323a18be",
+  "entity": "GARANTEX",
+  "listed_eth_addresses": [
+    "0x57ec89a0c056163a0314e413320f9b3abe761259",
+    "0x7ced75026204ac29c34bea98905d4c949f27361e",
+    "0x7ff9cfad3877f21d41da833e2f775db0569ee3d9",
+    "0x8dce2aac0de82bdcaf6b4373b79f94331b8e4995",
+    "0xb338962b92cd818d6aef0a32a9ecd01212a71f33",
+    "0xd8500c631dc32fa18645b7436344a99e4825e10e",
+    "0xf4377eda661e04b6dda78969796ed31658d602d4"
+  ],
+  "license": "US government work / public domain"
+}

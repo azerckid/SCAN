@@ -143,7 +143,7 @@ ToolRequirementId = Annotated[
 FixtureRequirementId = Annotated[
     str,
     StringConstraints(
-        pattern=r"^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|BTC)-[A-Z0-9-]+$"
+        pattern=r"^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|CEX|BTC)-[A-Z0-9-]+$"
     ),
 ]
 BlockNumber = Annotated[StrictInt, Field(ge=0)]

@@ -48,7 +48,8 @@
         "score_actor_relations",
         "link_bridge_transfer",
         "summarize_transaction",
-        "assess_heuristics"
+        "assess_heuristics",
+        "evaluate_cex_cluster"
       ]
     },
     "chain_id": {"enum": [0, 1]},
@@ -310,6 +311,31 @@
     {
       "if": {
         "properties": {
+          "analysis_type": {
+            "const": "cex_cluster"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "query_kind"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "0.2"
+          },
+          "query_kind": {
+            "const": "evaluate_cex_cluster"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
           "query_kind": {
             "const": "object_summary"
           }
@@ -453,6 +479,25 @@
         "required": ["query_kind"]
       },
       "then": {"properties": {"inputs": {"$ref": "#/$defs/bitcoinHeuristicInputs"}}}
+    },
+    {
+      "if": {
+        "properties": {
+          "query_kind": {
+            "const": "evaluate_cex_cluster"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/evaluateCexClusterInputs"
+          }
+        }
+      }
     }
   ],
   "additionalProperties": false,
@@ -471,7 +516,8 @@
         "flow_path",
         "intel_context",
         "bridge_transfer",
-        "bitcoin_utxo"
+        "bitcoin_utxo",
+        "cex_cluster"
       ]
     },
     "address": {
@@ -934,6 +980,48 @@
         "max_hops": {"type": "integer", "exclusiveMinimum": 0},
         "assess_change": {"type": "boolean"},
         "assess_coinjoin": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "observationWindowInputs": {
+      "type": "object",
+      "required": [
+        "start_block",
+        "end_block"
+      ],
+      "properties": {
+        "start_block": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_block": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "evaluateCexClusterInputs": {
+      "type": "object",
+      "required": [
+        "deposit_candidates",
+        "observation_window"
+      ],
+      "properties": {
+        "deposit_candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/address"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "observation_window": {
+          "$ref": "#/$defs/observationWindowInputs"
+        },
+        "expected_hot_wallet": {
+          "$ref": "#/$defs/address"
+        }
       },
       "additionalProperties": false
     },

@@ -2,28 +2,30 @@
 
 > Created: 2026-07-31 04:55
 > Last Updated: 2026-07-31 06:30
-> Status: Active · historical 13/13 baseline preserved · TASK-017 explicitly thawed in Draft PR #112
+> Status: Active · Bridge+CEX Confirmed · TASK-017 explicitly thawed in Draft PR #112 · combined Benchmark 15/15
 
 ## 1. 목적
 
 대회(2026-08-02 09:00 KST) 직전 프로그램의 **사용 가능한 안정 범위**와
-실행·복구 절차를 고정한다. 04:55 기준 신규 adapter(BTC·CEX·Mixer·
-Lending·TASK-018) 구현은 freeze했다. 이후 사용자가 TASK-017만 별도
-브랜치에서 일괄 승인해 thaw했다. CEX·Mixer·Lending·TASK-018/019 freeze는
-그대로다.
+실행·복구 절차를 고정한다. 신규 adapter(BTC·Mixer·Lending·TASK-018)
+구현은 freeze한다. TASK-016 CEX는 2026-07-31 batch approval로 thaw한 뒤
+PRIMARY/VERIFY dual-provider replay·analyzer·Benchmark automated Gate를
+완료했다. 이후 사용자가 TASK-017을 별도 브랜치에서 일괄 승인해 thaw했다.
+Mixer·Lending·TASK-018/019 freeze는 유지하며, 대회 중 실제 출제가 확인된
+경우에만 최소 범위로 재개한다.
 
 ## 2. 역사적 확정 Coverage · 04:55 기준
 
 | 수준 | 수 | 문제 |
 |:---|---:|:---|
-| Automated | 13 | BASIC×2, TOKEN×2, NFT, AUTH, PROXY, FREEZE, FLOW×2, DEX, LABEL, **BRG** |
+| Automated | 14 | BASIC×2, TOKEN×2, NFT, AUTH, PROXY, FREEZE, FLOW×2, DEX, LABEL, **BRG**, **CEX** |
 | Assisted | 4 | FLOW-MULTI, ENS, SANCTIONS, ACTOR-REL-002 |
-| Unsupported | 13 | BTC×3, CEX, MIX, LEND, CRIME×4, MIXED-XCHAIN, MIXED-CASE, ACTOR-REL-001 등 |
+| Unsupported | 12 | BTC×3, MIX, LEND, CRIME×4, MIXED-XCHAIN, MIXED-CASE, ACTOR-REL-001 등 |
 
-Fixture registry: **18 Confirmed · 0 Verifying · 1 Candidate · 1 Deferred**.
+Fixture registry: **19 Confirmed · 0 Verifying · 1 Candidate · 1 Deferred**.
 
-위 수치는 Runbook 생성 시점의 historical baseline이다. 현재 TASK-017
-Draft PR #112는 exact Bitcoin UTXO 1문항을 추가해 Benchmark **14 automated**
+위 수치는 CEX 병합 후 main 기준선이다. 현재 TASK-017 Draft PR #112는 exact
+Bitcoin UTXO 1문항을 추가해 결합 Benchmark **15 automated**
 를 주장하며, 최신 검증 수치는
 [TASK-017 구현 보고서](./67_TASK_017_BITCOIN_IMPLEMENTATION_REPORT.md)를
 따른다. Draft 병합 전까지 main 기준선과 혼동하지 않는다.
@@ -54,20 +56,25 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 
 | 점검 | 결과 |
 |:---|:---|
-| `scripts/verify.py` | PASS — 570 tests, 1951 links, security 226, schema 57 probes |
-| Benchmark CLI | PASS — 13/13 automated · ASSISTED 4 · UNSUPPORTED 13 |
+| `scripts/verify.py` | PASS — 584 tests, 2016 links, security 259, schema 62 probes |
+| Benchmark CLI | PASS — 14/14 automated · ASSISTED 4 · UNSUPPORTED 12 |
 | Bridge hash / oracle / verifier gates | PASS — hash `d6609bb4…00ac` |
+| CEX hash / oracle / verifier gates | PASS — hash `20fc2777…83bf`; VERIFY `https://eth.merkle.io` |
 | Bridge CLI `--evidence` (fresh cwd) | PASS — `COMPLETE AN-FX-SVC-BRG-001` |
 | Bridge byte-only path | PASS — rejects with `requires --evidence` |
 | Existing DEX/AUTH/PATH/LABEL regression | covered by full verify.py |
 
 ## 5. Feature Freeze 규칙
 
-- Freeze 대상: TASK-016 CEX/Mixer/Lending, TASK-018/019,
+- Freeze 대상: TASK-017 Bitcoin, TASK-016 Mixer/Lending, TASK-018/019,
   MIXED-XCHAIN 조합, live Rules adapter
-- 명시 예외: TASK-017 Bitcoin은 2026-07-31 사용자 전용 일괄 승인으로
+- **CEX (2026-07-31 remediation):** TASK-016 CEX(`SVC-CEX-001`)는 Merkle VERIFY
+  9-call complete replay와 code-computed cross-provider match로 `confirmed`·
+  Benchmark automated를 복구했다. `MIXED-XCHAIN-001`은 COMPOSITION 미구현으로
+  unsupported 유지.
+- **TASK-017 Bitcoin 예외:** 2026-07-31 사용자 전용 일괄 승인으로
   `codex/task-017-bitcoin`에서 thaw했다. 범위는 구현·검증·커밋·Draft PR
-  #112이며 다른 adapter 승인을 뜻하지 않는다.
+  #112이며 Mixer·Lending·TASK-018/019 승인을 뜻하지 않는다.
 - 허용: 문서 정합, 치명적 회귀 버그 수정, 대회 중 실제 출제 대응의
   최소 hotfix(별도 승인)
 - 금지: Benchmark unsupported를 숨기거나 fixture를 가짜 confirmed로 올리기
@@ -84,6 +91,7 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 ## 7. Related Documents
 
 - [Bridge Final Promotion Receipt](./65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)
+- [CEX Final Promotion Receipt](./68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)
 - [Benchmark Report](./22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md)
 - [Backlog](../04_Logic_Progress/00_BACKLOG.md)
 - [Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md)

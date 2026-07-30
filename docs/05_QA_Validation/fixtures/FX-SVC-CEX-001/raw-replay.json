@@ -1,0 +1,122 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-SVC-CEX-001",
+  "status": "confirmed",
+  "capture_status": "complete",
+  "captured_at": "2026-07-30T21:18:19Z",
+  "network_calls": 18,
+  "chain_id": 1,
+  "observation_window": {
+    "start_block": 18215900,
+    "end_block": 18216000
+  },
+  "hot_wallet_candidate": "0xdbaef73d20b0ca4abc72e8daf97af36626e3b973",
+  "deposit_candidates": [
+    "0x8dce2aac0de82bdcaf6b4373b79f94331b8e4995",
+    "0xb338962b92cd818d6aef0a32a9ecd01212a71f33",
+    "0xf4377eda661e04b6dda78969796ed31658d602d4"
+  ],
+  "methods_per_transfer": [
+    "eth_getTransactionByHash",
+    "eth_getTransactionReceipt",
+    "eth_getBlockByNumber"
+  ],
+  "transfers": [
+    {
+      "source_address": "0x8dce2aac0de82bdcaf6b4373b79f94331b8e4995",
+      "transaction_hash": "0x4448b91c3473144d93c90d83c3499ed047fceb4b81349f2a4b0f5e162e8ee2ea",
+      "block_number": 18215917,
+      "block_tag": "0x115f3ed"
+    },
+    {
+      "source_address": "0xb338962b92cd818d6aef0a32a9ecd01212a71f33",
+      "transaction_hash": "0x60afb23f8e0bcd2374e3c489df92f6725394b0cd1674ce3d99e614193c67306e",
+      "block_number": 18215920,
+      "block_tag": "0x115f3f0"
+    },
+    {
+      "source_address": "0xf4377eda661e04b6dda78969796ed31658d602d4",
+      "transaction_hash": "0xeeee1c9b6df17404ac03575b4cba55535c765ed1870c343e189b6098faaa4d5a",
+      "block_number": 18215925,
+      "block_tag": "0x115f3f5"
+    }
+  ],
+  "raw_observations": [
+    {
+      "transfer_index": 0,
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "artifacts": {
+        "transaction": "artifact://sha256/a8ebb52faf82ed5034ca8737d247598599f5db32b2c5d39cb63c49045c044347",
+        "receipt": "artifact://sha256/3e99c46b0d90351891c47e6e35eb0acd1e446bfa066e02e8350e38284b97d6e8",
+        "block": "artifact://sha256/b0f4d76f21f75795ce0a8a332551078a5a84479f51c45a2f14e0c3d4e4b0d753"
+      }
+    },
+    {
+      "transfer_index": 1,
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "artifacts": {
+        "transaction": "artifact://sha256/373bafa371bf74a64745f91a2f1d0588d5d7d0ee8fd4ffdf011ffa551b543dfb",
+        "receipt": "artifact://sha256/bac92e7d58814d94da4695960115ff6dc264b7dbcd58a06f3635e9a5bc711562",
+        "block": "artifact://sha256/22f69fda891f4c126a1c5572ee0a9cc9b76a5d4871964e3e2487a340de1efae4"
+      }
+    },
+    {
+      "transfer_index": 2,
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "artifacts": {
+        "transaction": "artifact://sha256/73b8545c2e1deb1526102fd6155c53372c874019f7416341f713a26d14c22548",
+        "receipt": "artifact://sha256/9319547af44e979a245e80a7db44f854c7853803b441e907317d2420d9202c97",
+        "block": "artifact://sha256/1bf88349d55512d865752258db411726444a7dea277870c58f32396cf3e50d6a"
+      }
+    },
+    {
+      "transfer_index": 0,
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "artifacts": {
+        "transaction": "artifact://sha256/15e6a29d286198f1864cfe20f72a682db8320c096e710f18175cb12dbfc4ecad",
+        "receipt": "artifact://sha256/c3e2d51e09ba659d70debd09506c1fece2647657a9d2e31286e2ea698861ebe3",
+        "block": "artifact://sha256/fed6791624034414d2c083f02830bb0d4ee785cc4dfdf146c1eb22f93c0438b2"
+      }
+    },
+    {
+      "transfer_index": 1,
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "artifacts": {
+        "transaction": "artifact://sha256/7cc5db17f706af9387acd8997970754b41ace3925d1f4508718289e97982e785",
+        "receipt": "artifact://sha256/b6b2c15119a0014959069be1b8f3cfb67e86aa880db47539fd6bc66e401ed343",
+        "block": "artifact://sha256/1943f920fe35363f0689ac6af362eeb41cb900be2feb2d4e0c1f4138645ab06c"
+      }
+    },
+    {
+      "transfer_index": 2,
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "artifacts": {
+        "transaction": "artifact://sha256/a422fca68dafbeb7e7767e2d841fc0a0ed69110cac9f36709158bb69100abff5",
+        "receipt": "artifact://sha256/94f182b5d64ddfde7e4b309b12ee4cba0d3eea19a6feb067c4af8a255d831250",
+        "block": "artifact://sha256/91f99aa66b8d72e9316081f78e0b3bb49bd5c5c6ea3d154a349e0987d0f68aea"
+      }
+    }
+  ],
+  "label_provenance": {
+    "artifact_path": "artifacts/ofac-garantex-provenance.json",
+    "source_id": "DS-SANCTIONS-PUBLIC"
+  },
+  "reconciled_facts": {
+    "cluster_judgment": "confirmed",
+    "hot_wallet_candidate": "0xdbaef73d20b0ca4abc72e8daf97af36626e3b973",
+    "deposit_source_count": 3,
+    "transfer_count": 3,
+    "cross_provider_matched_transfer_indices": [
+      0,
+      1,
+      2
+    ]
+  },
+  "remaining_gate": []
+}

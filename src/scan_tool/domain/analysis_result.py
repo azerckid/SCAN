@@ -343,6 +343,21 @@ class BitcoinUtxoFailedAnalysisResult(FailedAnalysisResult):
     chain_id: Literal[0]
 
 
+class CexClusterCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CEX_CLUSTER]
+
+
+class CexClusterPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CEX_CLUSTER]
+
+
+class CexClusterFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CEX_CLUSTER]
+
+
 ResultVariant = (
     LegacyCompleteAnalysisResult
     | LegacyPartialAnalysisResult
@@ -365,6 +380,9 @@ ResultVariant = (
     | BitcoinUtxoCompleteAnalysisResult
     | BitcoinUtxoPartialAnalysisResult
     | BitcoinUtxoFailedAnalysisResult
+    | CexClusterCompleteAnalysisResult
+    | CexClusterPartialAnalysisResult
+    | CexClusterFailedAnalysisResult
 )
 
 

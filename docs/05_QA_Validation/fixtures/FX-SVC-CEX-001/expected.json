@@ -1,0 +1,140 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-CEX-001",
+  "status": "confirmed",
+  "cex_cluster": {
+    "cluster_judgment": "confirmed",
+    "hot_wallet_candidates": [
+      {
+        "address": "0xdbaef73d20b0ca4abc72e8daf97af36626e3b973",
+        "classification": "evidence_backed_candidate",
+        "deposit_source_count": 3,
+        "total_raw_amount": "5544586400000000000"
+      }
+    ],
+    "common_destination_facts": [
+      {
+        "source_address": "0x8dce2aac0de82bdcaf6b4373b79f94331b8e4995",
+        "destination_address": "0xdbaef73d20b0ca4abc72e8daf97af36626e3b973",
+        "asset": "native_eth",
+        "raw_amount": "2553889800000000000",
+        "block_number": 18215917,
+        "transaction_hash": "0x4448b91c3473144d93c90d83c3499ed047fceb4b81349f2a4b0f5e162e8ee2ea",
+        "transaction_index": 27
+      },
+      {
+        "source_address": "0xb338962b92cd818d6aef0a32a9ecd01212a71f33",
+        "destination_address": "0xdbaef73d20b0ca4abc72e8daf97af36626e3b973",
+        "asset": "native_eth",
+        "raw_amount": "1324582200000000000",
+        "block_number": 18215920,
+        "transaction_hash": "0x60afb23f8e0bcd2374e3c489df92f6725394b0cd1674ce3d99e614193c67306e",
+        "transaction_index": 7
+      },
+      {
+        "source_address": "0xf4377eda661e04b6dda78969796ed31658d602d4",
+        "destination_address": "0xdbaef73d20b0ca4abc72e8daf97af36626e3b973",
+        "asset": "native_eth",
+        "raw_amount": "1666114400000000000",
+        "block_number": 18215925,
+        "transaction_hash": "0xeeee1c9b6df17404ac03575b4cba55535c765ed1870c343e189b6098faaa4d5a",
+        "transaction_index": 92
+      }
+    ],
+    "label_assertions": [
+      {
+        "address": "0x8dce2aac0de82bdcaf6b4373b79f94331b8e4995",
+        "claim": "GARANTEX",
+        "entity": "GARANTEX",
+        "source_id": "DS-SANCTIONS-PUBLIC",
+        "source_url": "https://www.treasury.gov/ofac/downloads/sdn.xml",
+        "lookup_key": "0x8dce2aac0de82bdcaf6b4373b79f94331b8e4995",
+        "classification": "evidence_backed_assertion"
+      },
+      {
+        "address": "0xb338962b92cd818d6aef0a32a9ecd01212a71f33",
+        "claim": "GARANTEX",
+        "entity": "GARANTEX",
+        "source_id": "DS-SANCTIONS-PUBLIC",
+        "source_url": "https://www.treasury.gov/ofac/downloads/sdn.xml",
+        "lookup_key": "0xb338962b92cd818d6aef0a32a9ecd01212a71f33",
+        "classification": "evidence_backed_assertion"
+      },
+      {
+        "address": "0xf4377eda661e04b6dda78969796ed31658d602d4",
+        "claim": "GARANTEX",
+        "entity": "GARANTEX",
+        "source_id": "DS-SANCTIONS-PUBLIC",
+        "source_url": "https://www.treasury.gov/ofac/downloads/sdn.xml",
+        "lookup_key": "0xf4377eda661e04b6dda78969796ed31658d602d4",
+        "classification": "evidence_backed_assertion"
+      }
+    ],
+    "false_positive_exclusions": [
+      {
+        "exclusion_kind": "single_counterparty_only",
+        "reason": "Common destination fact alone cannot confirm cluster; gov label assertions on deposit sources are required."
+      },
+      {
+        "exclusion_kind": "hot_wallet_not_sdn",
+        "reason": "Hot wallet candidate 0xdbaef73d20b0ca4abc72e8daf97af36626e3b973 is not on the pinned OFAC SDN list; ownership remains not_assessed."
+      }
+    ],
+    "pattern_evidence": {
+      "transfer_count": 3,
+      "unique_deposit_sources": 3,
+      "block_span": 8,
+      "classification": "confirmed_fact"
+    },
+    "attribution": {
+      "exchange_ownership": "not_assessed",
+      "criminality": "not_assessed"
+    }
+  },
+  "partial_conditions": [
+    "Common destination facts are present but gov label assertions are unavailable",
+    "Repeated collection pattern is weak and cluster_judgment remains estimated"
+  ],
+  "failed_conditions": [
+    "Single shared counterparty alone promotes cluster_judgment to confirmed",
+    "Etherscan community tag is promoted to label truth",
+    "Deposit source outbound transfer is synthesized outside deposit_candidates"
+  ],
+  "tolerance": {
+    "max_abs_delta_raw": "0"
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-CEX-CLUSTER",
+        "description": "At least two deposit sources must share the same hot wallet destination with confirmed native outbound transfers inside the observation window.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-CEX-OUT-1",
+          "EV-CEX-OUT-2",
+          "EV-CEX-OUT-3",
+          "EV-CEX-COMMON",
+          "EV-CEX-PAT"
+        ]
+      },
+      {
+        "requirement_id": "REQ-CEX-HOT-WALLET",
+        "description": "The hot wallet candidate must be derived from common destination facts without asserting exchange ownership.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-CEX-COMMON"
+        ]
+      },
+      {
+        "requirement_id": "REQ-CEX-LABEL",
+        "description": "Gov registry label assertions must cover every deposit source used in the confirmed cluster judgment.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-CEX-LABEL"
+        ]
+      }
+    ]
+  }
+}

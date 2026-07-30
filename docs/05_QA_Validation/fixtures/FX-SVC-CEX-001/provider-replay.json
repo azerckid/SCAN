@@ -1,0 +1,95 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-SVC-CEX-001",
+  "status": "confirmed",
+  "captured_at": "2026-07-30T21:18:19Z",
+  "providers": [
+    {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
+      "chain_id": 1,
+      "status": "complete",
+      "network_calls": 9,
+      "source_class": "public_rpc",
+      "retrieved_at": "2026-07-31T08:00:00Z",
+      "raw_sha256": {
+        "0": {
+          "transaction": "a8ebb52faf82ed5034ca8737d247598599f5db32b2c5d39cb63c49045c044347",
+          "receipt": "3e99c46b0d90351891c47e6e35eb0acd1e446bfa066e02e8350e38284b97d6e8",
+          "block": "b0f4d76f21f75795ce0a8a332551078a5a84479f51c45a2f14e0c3d4e4b0d753"
+        },
+        "1": {
+          "transaction": "373bafa371bf74a64745f91a2f1d0588d5d7d0ee8fd4ffdf011ffa551b543dfb",
+          "receipt": "bac92e7d58814d94da4695960115ff6dc264b7dbcd58a06f3635e9a5bc711562",
+          "block": "22f69fda891f4c126a1c5572ee0a9cc9b76a5d4871964e3e2487a340de1efae4"
+        },
+        "2": {
+          "transaction": "73b8545c2e1deb1526102fd6155c53372c874019f7416341f713a26d14c22548",
+          "receipt": "9319547af44e979a245e80a7db44f854c7853803b441e907317d2420d9202c97",
+          "block": "1bf88349d55512d865752258db411726444a7dea277870c58f32396cf3e50d6a"
+        }
+      }
+    },
+    {
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "chain_id": 1,
+      "status": "complete",
+      "network_calls": 9,
+      "source_class": "independent_public_rpc",
+      "retrieved_at": "2026-07-30T21:18:19Z",
+      "raw_sha256": {
+        "0": {
+          "transaction": "15e6a29d286198f1864cfe20f72a682db8320c096e710f18175cb12dbfc4ecad",
+          "receipt": "c3e2d51e09ba659d70debd09506c1fece2647657a9d2e31286e2ea698861ebe3",
+          "block": "fed6791624034414d2c083f02830bb0d4ee785cc4dfdf146c1eb22f93c0438b2"
+        },
+        "1": {
+          "transaction": "7cc5db17f706af9387acd8997970754b41ace3925d1f4508718289e97982e785",
+          "receipt": "b6b2c15119a0014959069be1b8f3cfb67e86aa880db47539fd6bc66e401ed343",
+          "block": "1943f920fe35363f0689ac6af362eeb41cb900be2feb2d4e0c1f4138645ab06c"
+        },
+        "2": {
+          "transaction": "a422fca68dafbeb7e7767e2d841fc0a0ed69110cac9f36709158bb69100abff5",
+          "receipt": "94f182b5d64ddfde7e4b309b12ee4cba0d3eea19a6feb067c4af8a255d831250",
+          "block": "91f99aa66b8d72e9316081f78e0b3bb49bd5c5c6ea3d154a349e0987d0f68aea"
+        }
+      }
+    }
+  ],
+  "cross_provider_comparison": {
+    "immutable_fields": [
+      "source_address",
+      "destination_address",
+      "asset",
+      "raw_amount",
+      "block_number",
+      "transaction_hash",
+      "transaction_index"
+    ],
+    "matched_transfer_indices": [
+      0,
+      1,
+      2
+    ],
+    "missing_verify_transfer_indices": [],
+    "result": "match",
+    "computed": true
+  },
+  "negative_oracle": {
+    "manifest": "docs/05_QA_Validation/oracles/task-016-cex-negative-oracles-v0.1.json",
+    "cases": 8,
+    "deterministic_runs": 2,
+    "status": "verified"
+  },
+  "independent_verifier": {
+    "module": "src/scan_tool/application/task_016_cex_independent_verifier.py",
+    "method": "raw-first native transfer decode from raw-replay.json, no shared code with the slice analyzer",
+    "requirements_verified": 3,
+    "deterministic_runs": 2,
+    "status": "pass"
+  },
+  "remaining_gate": []
+}

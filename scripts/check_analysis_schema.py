@@ -37,6 +37,9 @@ BRIDGE_TRANSFER_EXAMPLE = (
 BITCOIN_UTXO_EXAMPLE = (
     REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-BTC-UTXO-001/analysis-request.json"
 )
+CEX_CLUSTER_EXAMPLE = (
+    REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-SVC-CEX-001/analysis-request.json"
+)
 SCHEMA_FILES = {
     "request": "analysis-request.schema.json",
     "result": "analysis-result.schema.json",
@@ -351,6 +354,43 @@ def bitcoin_utxo_family_probes(
     ]
 
 
+def cex_cluster_family_probes(
+    evm_request: dict[str, object],
+    evm_result: dict[str, object],
+) -> list[Probe]:
+    """Keep cex_cluster dispatch isolated from every other 0.2 family."""
+    cex_request = load_json(CEX_CLUSTER_EXAMPLE)
+    cex_result = changed(
+        changed(evm_result, "analysis_type", value="cex_cluster"),
+        "results",
+        0,
+        "fixture_requirement_ids",
+        value=["REQ-CEX-CLUSTER", "REQ-CEX-HOT-WALLET", "REQ-CEX-LABEL"],
+    )
+    return [
+        Probe("cex_cluster request", "request", cex_request, True),
+        Probe("cex_cluster result", "result", cex_result, True),
+        Probe(
+            "evm core request with cex_cluster query_kind",
+            "request",
+            changed(evm_request, "query_kind", value="evaluate_cex_cluster"),
+            False,
+        ),
+        Probe(
+            "cex_cluster request with flow_path query_kind",
+            "request",
+            changed(cex_request, "query_kind", value="trace_path"),
+            False,
+        ),
+        Probe(
+            "cex_cluster request legacy schema version",
+            "request",
+            changed(cex_request, "schema_version", value="0.1"),
+            False,
+        ),
+    ]
+
+
 def request_input_probes(
     dex_request: dict[str, object],
     auth_request: dict[str, object],
@@ -586,6 +626,7 @@ def build_probes() -> list[Probe]:
         *intel_context_family_probes(evm_request),
         *bridge_transfer_family_probes(evm_request, evm_result),
         *bitcoin_utxo_family_probes(evm_request, evm_result),
+        *cex_cluster_family_probes(evm_request, evm_result),
         *result_status_probes(dex_result, auth_result, freeze_result, error, evm_result),
         *result_component_probes(dex_result),
         *error_probes(error),

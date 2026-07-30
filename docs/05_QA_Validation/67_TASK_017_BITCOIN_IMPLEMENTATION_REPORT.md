@@ -48,12 +48,12 @@ v1 DB는 `CHECK(chain_id IN (0, 1))`을 사용한다. 이전에 생성된
 
 ## 최종 검증
 
-- pytest: 603 passed
-- fixture Schema: 21 packages
-- Analysis I/O compatibility: 62 probes
-- traceability: 1973 links
-- security: 246 runtime/evidence files
-- Benchmark: 14 automated / 6 assisted / 10 unsupported, automated 14/14 PASS
+- pytest: 617 passed
+- fixture Schema: 22 packages
+- Analysis I/O compatibility: 67 probes
+- traceability: 2038 links
+- security: 279 runtime/evidence files
+- Benchmark: 15 automated / 6 assisted / 9 unsupported, automated 15/15 PASS
 
 ## 잔여
 

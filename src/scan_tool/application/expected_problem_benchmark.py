@@ -16,6 +16,7 @@ from scan_tool.domain.analysis_request import (
     AuthAnalysisRequest,
     BitcoinUtxoAnalysisRequest,
     BridgeTransferAnalysisRequest,
+    CexClusterAnalysisRequest,
     DexAnalysisRequest,
     EvmCoreAnalysisRequest,
     EvmSpecialAnalysisRequest,
@@ -27,6 +28,7 @@ from scan_tool.domain.analysis_result import AnalysisResult, AnalysisStatus
 from scan_tool.slices.auth import analyze_auth_replay
 from scan_tool.slices.bitcoin_utxo import analyze_bitcoin_utxo_replay
 from scan_tool.slices.bridge_transfer import analyze_bridge_transfer_replay
+from scan_tool.slices.cex_cluster import analyze_cex_cluster_replay
 from scan_tool.slices.dex import analyze_dex_replay
 from scan_tool.slices.evm_core import analyze_evm_core_replay
 from scan_tool.slices.evm_special import analyze_evm_special_replay
@@ -83,6 +85,7 @@ APPROVED_AUTOMATED_PROBLEM_IDS = frozenset(
         "FLOW-EVM-002",
         "OSINT-LBL-001",
         "SVC-BRG-001",
+        "SVC-CEX-001",
         "SVC-DEX-001",
     }
 )
@@ -296,4 +299,6 @@ def _analyze(
         return analyze_bridge_transfer_replay(document, replay, package_dir=package_dir)
     if isinstance(document, BitcoinUtxoAnalysisRequest):
         return analyze_bitcoin_utxo_replay(document, replay, package_dir=package_dir)
+    if isinstance(document, CexClusterAnalysisRequest):
+        return analyze_cex_cluster_replay(document, replay, package_dir=package_dir)
     raise ValueError("unsupported benchmark analysis type")
