@@ -2,7 +2,7 @@
   "schema_version": "0.1",
   "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
   "captured_at": "2026-07-29T19:23:30Z",
-  "status": "verifying",
+  "status": "confirmed",
   "scope_kind": "current_sdn_csv_absence_context",
   "source": {
     "provider_id": "OFAC-SANCTIONS-LIST-SERVICE",
@@ -14,7 +14,7 @@
     "raw_sha256": "464a917d662b9de3a26588499a8f1a4cfea341a70f3ace64038a5f8cb2b85b65"
   },
   "query": {
-    "address": "0x722122df12d4e14e13ac3b6895a86e84145b6967",
+    "address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
     "case_insensitive_match_count": 0
   },
   "interpretation": {
@@ -23,5 +23,5 @@
     "historical_removal_changed": false,
     "current_criminality_assessed": false
   },
-  "remaining_gate": ["product_analyzer", "final_promotion"]
+  "remaining_gate": []
 }

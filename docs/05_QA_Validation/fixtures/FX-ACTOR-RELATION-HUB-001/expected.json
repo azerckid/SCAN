@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-ACTOR-RELATION-HUB-001",
-  "status": "verifying",
+  "status": "confirmed",
   "hub": {
     "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     "role": "public_erc20_token_contract",

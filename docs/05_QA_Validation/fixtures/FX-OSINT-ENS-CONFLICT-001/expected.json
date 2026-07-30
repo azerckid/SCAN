@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
-  "status": "verifying",
+  "status": "confirmed",
   "block_number": 25640270,
   "forward": {
     "name": "nick.eth",

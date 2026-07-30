@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "fixture_id": "FX-ACTOR-RELATION-HUB-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-29T19:21:26+00:00",
   "query_kind": "score_actor_relations",
   "hub": {

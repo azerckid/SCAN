@@ -133,6 +133,7 @@ class OfficialAction(ContractModel):
 
 
 class CurrentSanctionsSnapshot(ContractModel):
+    subject_address: Address
     case_insensitive_match_count: int = Field(ge=0)
     historical_designation_changed: Literal[False]
     historical_removal_changed: Literal[False]

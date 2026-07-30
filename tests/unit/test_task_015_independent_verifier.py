@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 FIXTURE_ROOT = ROOT / "docs/05_QA_Validation/fixtures"
 
 
-def test_repository_verifies_four_ready_candidates_deterministically() -> None:
+def test_repository_verifies_four_reviewed_fixtures_deterministically() -> None:
     first = verify_repository(FIXTURE_ROOT)
     assert len(first) == 4
     assert first == verify_repository(FIXTURE_ROOT)
@@ -41,12 +41,26 @@ def test_sls_context_cannot_rewrite_history(tmp_path: Path) -> None:
     package = tmp_path / fixture_id
     package.mkdir()
     source = FIXTURE_ROOT / fixture_id
-    for name in ("expected.json", "evidence.json", "sls-snapshot.json"):
+    for name in ("input.json", "expected.json", "evidence.json", "sls-snapshot.json"):
         (package / name).write_bytes((source / name).read_bytes())
     snapshot = load_json(package / "sls-snapshot.json")
     snapshot["interpretation"]["historical_removal_changed"] = True
     (package / "sls-snapshot.json").write_text(json.dumps(snapshot))
     with pytest.raises(ValueError, match="rewrites historical facts"):
+        verify_fixture(tmp_path, fixture_id)
+
+
+def test_sls_context_must_match_fixture_subject(tmp_path: Path) -> None:
+    fixture_id = "FX-OSINT-SANCTIONS-HISTORY-001"
+    package = tmp_path / fixture_id
+    package.mkdir()
+    source = FIXTURE_ROOT / fixture_id
+    for name in ("input.json", "expected.json", "evidence.json", "sls-snapshot.json"):
+        (package / name).write_bytes((source / name).read_bytes())
+    snapshot = load_json(package / "sls-snapshot.json")
+    snapshot["query"]["address"] = "0x00000000000000000000000000000000000000ff"
+    (package / "sls-snapshot.json").write_text(json.dumps(snapshot))
+    with pytest.raises(ValueError, match="snapshot subject differs"):
         verify_fixture(tmp_path, fixture_id)
 
 

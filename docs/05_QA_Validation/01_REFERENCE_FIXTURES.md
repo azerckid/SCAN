@@ -1,13 +1,13 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 14:38
-> Status: Approved 1.8 · 13 Confirmed · TASK-015 Verifying 4 / Candidate 1
+> Last Updated: 2026-07-30 15:01
+> Status: Approved 1.9 · 16 Confirmed · TASK-015 LABEL Verifying 1 / Candidate 1
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
-있는 reference fixture를 관리한다. 현재 등록한 20개 중 13개는 `확정`,
-4개는 `검증 중`, 1개는 `후보`이며 기존 Deferred 2개는 문서 후보만 있다.
+있는 reference fixture를 관리한다. 현재 등록한 20개 중 16개는 `확정`,
+1개는 `검증 중`, 1개는 `후보`이며 기존 Deferred 2개는 문서 후보만 있다.
 18개는 Schema package가 있다. TASK-013 세 공개 사례는 remediation
 재검토와 [최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
 통과해 `확정`으로 관리한다.
@@ -17,13 +17,13 @@ TASK-014 세 공개 PATH 사례는 Euler 공개 사건의 서로 다른 request 
 oracle 18개·독립 Verifier·제품 analyzer를 통과했다. PATH internal seed
 edge는 Blockscout API로 독립 교차검증해 세 fixture를 `확정`으로 관리한다.
 
-TASK-015 네 package는 source blocker 교체와 selected artifact/hash,
-negative oracle 30개·두 번 결정성, 독립 Verifier와 제품 analyzer hash
-대조를 통과한 `검증 중`이다. common-funder는 completeness 미증명으로
-`후보`·`partial`을 유지한다. source permission과 fixture별 Promotion
-Hard Gate를 닫기 전에는 `확정` 또는 자동화 coverage로 승격하지 않는다.
-LABEL selected row는 exact OpenRAIL text가 pinned repository에 없어
-quarantine됐으며 publisher 확인 또는 source 교체 전 승격할 수 없다.
+TASK-015 SANCTIONS·ENS·RELATION-HUB는 source permission·bounded fact·
+claim boundary·negative oracle·독립 Verifier·제품 analyzer를 통과해
+`확정`이다. 문제 원문 전체 공백은 남아 Benchmark에서 `assisted`로만
+분류한다. common-funder는 completeness 미증명으로 `후보`·`partial`을
+유지한다. LABEL selected row는 exact OpenRAIL text가 pinned repository에
+없어 `검증 중`·quarantine이며 publisher 확인 또는 source 교체 전 승격할
+수 없다.
 
 입력 문서:
 
@@ -112,10 +112,10 @@ quarantine됐으며 publisher 확인 또는 source 교체 전 승격할 수 없�
 | [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 확정 0.2 | filtered logs·ordering·consumer pass | EVM-LOG, first ordering |
 | [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | EVM-TOKEN-002 | 1 | 확정 0.2 | primary trace·cross-check·consumer pass | EVM-TRACE, native sum |
 | [FX-OSINT-LABEL-CONFLICT-001](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) | OSINT-LBL-001 | 2 | 검증 중 0.1 | selected row·config·ENS two-provider·Verifier PASS | LABEL, source conflict |
-| [FX-OSINT-SANCTIONS-HISTORY-001](./fixtures/FX-OSINT-SANCTIONS-HISTORY-001/README.md) | OSINT-SAN-001 | 2 | 검증 중 0.1 | official action·current SLS context·Verifier PASS | SANCTIONS, timeline |
-| [FX-OSINT-ENS-CONFLICT-001](./fixtures/FX-OSINT-ENS-CONFLICT-001/README.md) | OSINT-ENS-001 | 2 | 검증 중 0.1 | fixed-block two-provider replay·Verifier PASS | ENS, forward/reverse |
+| [FX-OSINT-SANCTIONS-HISTORY-001](./fixtures/FX-OSINT-SANCTIONS-HISTORY-001/README.md) | OSINT-SAN-001 | 2 | 확정 0.1 | official timeline·subject-bound SLS context·Verifier/analyzer | SANCTIONS, timeline |
+| [FX-OSINT-ENS-CONFLICT-001](./fixtures/FX-OSINT-ENS-CONFLICT-001/README.md) | OSINT-ENS-001 | 2 | 확정 0.1 | fixed-block two-provider replay·Verifier/analyzer | ENS, forward/reverse |
 | [FX-ACTOR-COMMON-FUNDER-001](./fixtures/FX-ACTOR-COMMON-FUNDER-001/README.md) | ACTOR-REL-001 | 1 | 후보 0.1 | confirmed FLOW hash, prehistory·service exclusion 대기 | ACTOR, common funder |
-| [FX-ACTOR-RELATION-HUB-001](./fixtures/FX-ACTOR-RELATION-HUB-001/README.md) | ACTOR-REL-002 | 1 | 검증 중 0.1 | confirmed DEX/AUTH hash·hub exclusion·Verifier PASS | ACTOR, public hub |
+| [FX-ACTOR-RELATION-HUB-001](./fixtures/FX-ACTOR-RELATION-HUB-001/README.md) | ACTOR-REL-002 | 1 | 확정 0.1 | confirmed DEX/AUTH hash·hub exclusion·Verifier/analyzer | ACTOR, public hub |
 
 ## 6. Fixture 상세
 
@@ -521,6 +521,10 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 17. 이후 독립 Verifier·provenance hardening·제품 analyzer hash 대조를 통과한
     LABEL·SANCTIONS·ENS·RELATION-HUB 4개를 `verifying`으로 승격했다.
     common-funder는 completeness 미증명으로 `candidate`·`partial`을 유지한다.
+18. TASK-015 source permission·fact·claim boundary를 fixture별로 다시 검토해
+    SANCTIONS·ENS·RELATION-HUB를 `confirmed`로 승격했다. LABEL quarantine과
+    common-funder candidate는 유지한다. 세 문제는 원문 전체가 아니므로
+    Benchmark `assisted`로만 올렸다.
 
 ## 10. Related Documents
 
@@ -550,4 +554,5 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 - **QA_Validation**: [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 9/9 근거
 - **QA_Validation**: [TASK-014 최종 승격 Receipt](./44_TASK_014_FINAL_PROMOTION_RECEIPT.md) - FLOW confirmed·Benchmark 11/11 근거
 - **QA_Validation**: [TASK-015 Negative Oracle 보고서](./49_TASK_015_NEGATIVE_ORACLE_REPORT.md) - Intelligence 30개 반례·결정성
+- **QA_Validation**: [TASK-015 비격리 Fixture 승격 Receipt](./56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md) - SANCTIONS·ENS·RELATION-HUB confirmed·Benchmark assisted 근거
 - **Concept_Design**: [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 사전 fixture·cache와 source 허용 범위

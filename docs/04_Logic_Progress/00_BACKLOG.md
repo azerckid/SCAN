@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-30 03:47
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(analyzer 구현·독립 검증, 확정 승격은 별도 Gate) · TASK-016~019 Proposed
+> Last Updated: 2026-07-30 15:01
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(비격리 3 Confirmed · LABEL Quarantined · Common-funder Candidate) · TASK-016~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1230,9 +1230,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 ### [ ] TASK-015: Label·OSINT·Actor Intelligence 엔진
 
 - Status: In Progress — 계약 승인·Context Receipt PASS·구현 승인(2026-07-30).
-  `intel_context` analyzer 5 query 구현·독립 검증 완료. fixture 4 verifying /
-  common-funder candidate, Benchmark 11 유지. live adapter·`확정` 승격은 별도 Gate.
-  source permission·live 필요성·fixture별 승격 조건은 Promotion Readiness Draft로 준비
+  `intel_context` analyzer 5 query 구현·독립 검증 완료. SANCTIONS·ENS·
+  RELATION-HUB confirmed, LABEL verifying/quarantined, common-funder candidate.
+  Benchmark 11 automated / 4 assisted / 15 unsupported. live adapter·나머지
+  fixture 승격은 별도 Gate.
 - Work Type: code
 - Priority: Phase 2 · P1
 - Depends On: TASK-012
@@ -1264,8 +1265,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     version·notice 부재를 evidence로 고정해 selected row를 quarantine한다.
   - [ ] dataset publisher exact terms를 확보하거나 exact license가 있는
     replacement source를 선정·재검증한다.
-  - [ ] sanctions·ENS·relation-hub의 fixture별 문서 Hard Gate를 닫고 별도
-    Promotion Receipt에서 `confirmed` 여부를 판정한다.
+  - [x] sanctions·ENS·relation-hub의 fixture별 문서 Hard Gate를 닫고 별도
+    [Promotion Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)에서
+    bounded scope `confirmed`로 판정한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - OSINT·Actor 5문항
   - [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) - 외부 전송·API Rules
@@ -1292,6 +1294,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [TASK-015 Analyzer 독립 Verification Receipt](../05_QA_Validation/53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md) - analyzer 구현·hash 대조·4 verifying 유지
   - [TASK-015 Live Source·Terms·Promotion Readiness](../05_QA_Validation/54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md) - source permission·live optional·fixture별 Hard Gate
   - [TASK-015 OpenRAIL License Resolution Receipt](../05_QA_Validation/55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md) - exact text 부재·selected row quarantine
+  - [TASK-015 비격리 Fixture 최종 승격 Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md) - SANCTIONS·ENS·RELATION-HUB confirmed·Benchmark assisted
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001
 - Implementation Preconditions:
   - [ ] 공식 대회 Rules와 채택 source snapshot의 Terms·privacy·최소 필드를 확정한다
@@ -1303,8 +1306,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] Intelligence Preview와 Workbench source 표시를 사용자 확인하고
     피드백을 기록한다(2026-07-30 02:52).
   - [x] `intel_context` Analysis I/O 대안과 source artifact 입력을 승인한다.
-  - [ ] 공개 source snapshot·negative oracle·독립 Verifier·analyzer를 통과한다
-    (4개 verifying 통과, common-funder prehistory/service exclusion 대기).
+  - [x] 공개 source snapshot·negative oracle·독립 Verifier·analyzer를 통과한다
+    (비격리 3개 confirmed, LABEL license·common-funder completeness는 별도 대기).
   - [ ] live mode와 live source adapter 구현 승인을 별도로 기록한다.
 - Component & Library Plan:
   - shadcn/ui: N/A - Python source/intelligence core 우선.
@@ -1317,10 +1320,12 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] source role·주소 명시·조회 시각·충돌이 보존된다.
   - [x] direct/indirect, stale/withdrawn, onchain/heuristic이 분리된다.
   - [x] heuristic/AI 가설이 confirmed fact로 자동 승격되지 않는다.
-  - [ ] 다섯 문제의 승격은 문제별 confirmed fixture로 제한된다.
+  - [ ] 다섯 문제의 승격은 문제별 confirmed fixture와 전체 문제 완료 조건으로
+    제한된다(비격리 3 fixture는 confirmed이나 관련 문제는 `assisted`).
 - Document Sync Check:
   - [x] Rules·source registry·Workbench·Benchmark·QA의 승격 준비 경계를 동기화한다.
-  - [ ] 실제 fixture 승격 시 Reference Fixtures·Benchmark·QA 상태를 동기화한다.
+  - [x] 비격리 fixture 승격 시 Reference Fixtures·Benchmark·QA 상태를
+    동기화한다(LABEL·common-funder 잔여는 별도 Gate).
 - Context Receipt:
   - Status: PASS — 참조 문서 정독·Constraints·Conflicts 확정(2026-07-30).
     `intel_context` I/O 계약(doc 18)은 PR #84로 병합됐고 §5 result value가
@@ -1360,8 +1365,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Change Receipt:
   - Offline oracle·Source Readiness·독립 Verifier·Provenance hardening·
     `intel_context` I/O 계약 확정안·**제품 analyzer 구현·독립 검증**까지
-    완료했다(아래 항목별 기록). live source adapter·fixture `확정` 승격은
-    별도 Gate이며, 4개 fixture는 `verifying`·common-funder는 `candidate`다.
+    완료했다(아래 항목별 기록). SANCTIONS·ENS·RELATION-HUB는 별도
+    Promotion Gate에서 `confirmed`, LABEL은 `verifying`·quarantined,
+    common-funder는 `candidate`다. live source adapter는 별도 Gate다.
   - intel_context analyzer 구현: `src/scan_tool/domain/{intel_context,analysis_request,
     analysis_result,_types}.py`, `src/scan_tool/slices/intel_context.py`,
     `src/scan_tool/application/cli_runtime.py`, schema 3종·
@@ -1408,6 +1414,11 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     (canonical hash 일치)·common-funder partial PASS. fixture 4 `verifying` /
     common-funder `candidate`, Benchmark 11 유지. live adapter·`확정` 승격은
     별도 Gate로 남는다([53 검증 Receipt](../05_QA_Validation/53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md)).
+  - 비격리 Promotion Gate: SANCTIONS·ENS·RELATION-HUB의 source permission,
+    subject/scope binding, claim boundary와 canonical hash를 재검증해 세 fixture를
+    `confirmed`로 승격했다. 전체 문제 공백을 숨기지 않고 Benchmark는
+    automated 11 / assisted 4 / unsupported 15로 반영했다
+    ([56 승격 Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)).
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 

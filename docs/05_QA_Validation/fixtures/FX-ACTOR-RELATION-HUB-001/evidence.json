@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-ACTOR-RELATION-HUB-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-29T18:27:00Z",
   "event_evidence": [],
   "call_evidence": [],
@@ -65,7 +65,7 @@
   },
   "uncertainty": {
     "candidate_only": false,
-    "remaining": "Product analyzer and final promotion remain pending."
+    "remaining": "The fixture confirms two separate public-hub interactions only; ownership and coordination remain not_assessed."
   },
   "provenance_notes": "The fixture is a false-positive control. Sharing USDC interaction does not imply ownership or coordination."
 }

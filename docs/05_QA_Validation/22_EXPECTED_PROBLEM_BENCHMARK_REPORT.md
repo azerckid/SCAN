@@ -1,7 +1,7 @@
 # 예상문제 Offline Benchmark 0.1 검증 보고서
 > Created: 2026-07-29 01:16
 > Last Updated: 2026-07-30
-> Status: Passed · 11 Automated / 1 Assisted / 18 Unsupported
+> Status: Passed · 11 Automated / 4 Assisted / 15 Unsupported
 
 ## 1. 목적과 판정 경계
 
@@ -46,7 +46,7 @@ integration test가 `socket.socket`을 실패하도록 바꾼 상태에서 동�
 ## 3. 실행 결과
 
 ```text
-EXPECTED PROBLEMS 30 · AUTOMATED 11 · ASSISTED 1 · UNSUPPORTED 18
+EXPECTED PROBLEMS 30 · AUTOMATED 11 · ASSISTED 4 · UNSUPPORTED 15
 PASS BASIC-EVM-001 · FX-BASIC-EVM-001
 PASS BASIC-EVM-002 · FX-BASIC-EVM-002
 PASS EVM-AUTH-001 · FX-EVM-AUTH-001
@@ -65,8 +65,8 @@ BENCHMARK 11/11 automated cases passed · network_mode offline
 |:---|---:|
 | 전체 예상문제 | 30 |
 | 완전자동 | 11 |
-| 도구보조 | 1 |
-| 미지원 | 18 |
+| 도구보조 | 4 |
+| 미지원 | 15 |
 | 자동 실행 | 11 |
 | 자동 통과 | 11 |
 | 자동 범위 정확도 | 100% |
@@ -97,7 +97,7 @@ BENCHMARK 11/11 automated cases passed · network_mode offline
 | SVC-MIX-001 | Unsupported | provenance·export | MIXER·PATH·HEUR |
 | SVC-LEND-001 | Unsupported | EVM-LOG·RECON | DEFI-LEND·EVM-TRACE |
 | ACTOR-REL-001 | Unsupported | provenance | ACTOR-REL·HEUR |
-| ACTOR-REL-002 | Unsupported | provenance | ACTOR-REL·CLUSTER·HEUR |
+| ACTOR-REL-002 | Assisted | public-hub relation·false-positive exclusion | positive multi-heuristic candidate·CLUSTER |
 | CRIME-PHISH-001 | Unsupported | AUTH·provenance | PATH·LABEL·OSINT |
 | CRIME-POISON-001 | Unsupported | provenance | POISON·HEUR |
 | CRIME-EXP-001 | Unsupported | EVM-LOG·provenance | EVM-TRACE·EXPLOIT-DECODE·PATH |
@@ -106,8 +106,8 @@ BENCHMARK 11/11 automated cases passed · network_mode offline
 | BTC-UTXO-002 | Unsupported | provenance | BTC-UTXO·HEUR |
 | BTC-CJ-001 | Unsupported | provenance·export | BTC-UTXO·COINJOIN·HEUR |
 | OSINT-LBL-001 | Unsupported | provenance·export | OSINT·LABEL |
-| OSINT-SAN-001 | Unsupported | FREEZE context pattern | OSINT·SANCTIONS·LABEL |
-| OSINT-ENS-001 | Unsupported | provenance | ENS-OSINT·OSINT |
+| OSINT-SAN-001 | Assisted | official historical timeline·direct match | 1-hop indirect expansion·LABEL |
+| OSINT-ENS-001 | Assisted | fixed-block ENS forward/reverse | domain·DNS·SNS·impersonation |
 | MIXED-XCHAIN-001 | Unsupported | DECODE·RECON·provenance | XCHAIN·BRIDGE·PATH·LABEL |
 | MIXED-CASE-001 | Unsupported | 공통 기반 | SEED-DISCOVERY·PATH·OSINT·VIZ |
 
@@ -142,11 +142,14 @@ coverage를 가장 크게 늘리는 순서는
 ## 7. Known Issues
 
 - automated 사례는 Ethereum mainnet DEX·AUTH·FREEZE, EVM Core 네 query,
-  NFT·Proxy, bounded FLOW path·remerge에 한정된다.
+  NFT·Proxy, bounded FLOW path·remerge에 한정된다. TASK-015 세 confirmed
+  fixture는 문제 전체가 아니라 조사 primitive이므로 assisted다.
 - fixture oracle은 reviewed 공개 사례에 고정되어 새로운 실전 입력의 일반화
   성능을 측정하지 않는다.
-- `FLOW-MULTI-001`은 raw contribution·합계만 도구보조이며 가격·귀속이 없어
-  Assisted다. 핵심 분석기가 없는 18개는 Unsupported로 유지한다.
+- `FLOW-MULTI-001`은 raw contribution·합계만, OSINT-SAN/ENS와
+  ACTOR-REL-002는 bounded intelligence fact만 도구보조다. 전체 정답 필드가
+  없어 네 문제를 Assisted로 유지하며 핵심 분석기가 없는 15개는
+  Unsupported다.
 - Challenge Pack 10개에는 confirmed reference fixture가 없어 이번 0.1에서
   실행하지 않는다.
 - 실행 시간은 단일 로컬 관찰값이며 성능 benchmark로 사용하지 않는다.
@@ -162,6 +165,7 @@ coverage를 가장 크게 늘리는 순서는
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - confirmed fixture 10개 기준선
 - **QA_Validation**: [TASK-013 최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md) - NFT·Proxy confirmed·9/9 근거
 - **QA_Validation**: [TASK-014 최종 승격 Receipt](./44_TASK_014_FINAL_PROMOTION_RECEIPT.md) - FLOW confirmed·11/11 근거
+- **QA_Validation**: [TASK-015 비격리 Fixture 승격 Receipt](./56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md) - 세 confirmed fixture를 assisted로만 반영한 근거
 - **QA_Validation**: [TASK-009 통합 보고서](./13_TASK_009_INTEGRATION_REPORT.md) - 기존 vertical 회귀와 보안 Gate
 - **QA_Validation**: [OPS-IMPL-08 보고서](./21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - 병렬 운영과 수동 제출 기준선
 - **QA_Validation**: [Coverage 확장 QA](./23_EXPECTED_PROBLEM_EXPANSION_QA.md) - 새 분석기 승격·반례·통합 Gate

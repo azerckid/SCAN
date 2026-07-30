@@ -149,6 +149,9 @@ def _sanctions(package: Path, evidence: dict[str, Any]) -> dict[str, Any]:
     designation = context["EV-INTEL-SAN-DESIGNATION"]
     removal = context["EV-INTEL-SAN-REMOVAL"]
     snapshot = load_json(package / "sls-snapshot.json")
+    fixture_input = load_json(package / "input.json")
+    if snapshot["query"]["address"] != fixture_input["subject_address"]:
+        raise ValueError("current SLS snapshot subject differs")
     if designation.get("address_match_count") != 1 or removal.get("address_match_count") != 1:
         raise ValueError("official action address match count differs")
     if snapshot["query"]["case_insensitive_match_count"] != 0:

@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
 > Last Updated: 2026-07-30 14:38
-> Status: Approved 3.5 Baseline · TASK-015 Analyzer Passed · Label License Blocked · Verifying 4 / Candidate 1
+> Status: Approved 3.6 Baseline · TASK-015 비격리 3 Confirmed · LABEL Blocked · Common-funder Candidate
 
 ## 1. 문서 목적
 
@@ -51,7 +51,7 @@
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
 | [참가·분석 도구 준비 전략](../01_Concept_Design/01_SCAN_2026_PREPARATION_STRATEGY.md) | Draft · Approved Baseline | 공식 규정 변경 시에만 영향 항목 갱신 |
-| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 · Benchmark 0.1 Applied | 30문항 중 자동화 9·보조 0·미지원 21; 공백 우선순위 유지 |
+| [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) | Draft 2 · Benchmark 0.1 Applied | 30문항 중 자동화 11·보조 4·미지원 15; 공백 우선순위 유지 |
 | [공식 규정 Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md) | Baseline Confirmed 1.0 · Active Watch | Notification·이메일·공식 Rules 공개 시 Intake 실행 |
 | [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) | Draft 1 · Approved Baseline | 공식 규정 변경 시 위험 점수 갱신 |
 
@@ -88,7 +88,7 @@
 | [TASK-012 Analysis Contract](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) | Approved 0.2 · 12 Cases · 14 Probes | runtime·Schema 적용, 0.1 세 type 호환 |
 | [TASK-013 NFT·Proxy Contract](../03_Technical_Specs/14_TASK_013_NFT_PROXY_CONTRACT_PROPOSAL.md) | Approved 1.0 · Runtime Applied | fixture 3 confirmed·Benchmark 9/9 |
 | [TASK-014 PATH Contract](../03_Technical_Specs/16_TASK_014_FLOW_PATH_IO_CONTRACT.md) | Approved 1.0 · Runtime Applied | fixture 3 confirmed·Benchmark 11/11 |
-| [TASK-015 intel_context I/O Contract](../03_Technical_Specs/18_TASK_015_INTEL_CONTEXT_IO_CONTRACT.md) | Approved 1.0 · Runtime Applied | 4 verifying fixture의 source Terms·승격 판정, common-funder completeness |
+| [TASK-015 intel_context I/O Contract](../03_Technical_Specs/18_TASK_015_INTEL_CONTEXT_IO_CONTRACT.md) | Approved 1.0 · Runtime Applied | 비격리 3 confirmed, LABEL license·common-funder completeness 잔여 |
 
 ### 3.4 Logic Progress
 
@@ -103,12 +103,12 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.8 · 13 Confirmed · TASK-015 Verifying 4 / Candidate 1 | label exact license/source 교체·fixture별 promotion Gate 유지 |
+| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.9 · 16 Confirmed · LABEL Verifying / Common-funder Candidate | label exact license/source 교체·common-funder completeness 유지 |
 | [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Approved 1.9 · Integration Passed | 24 pass·0 partial·0 not_executed |
 | [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 2.9 · OPS-IMPL-01~08 Offline Passed | live Rules·실대회 성능 미실행 |
 | [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Contract Approved · Offline 6 QA Passed | live Rules·실대회 성능 별도 |
 | [OPS-IMPL-08 Final Integration Report](../05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) | Passed · Offline Operations V1 | 수동 제출·보안·leaf 병렬·6 QA |
-| [예상문제 Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | Passed · 9 Automated / 0 Assisted / 21 Unsupported | 자동화 9개 exact·evidence·결정성 통과, 30문항 전체 정확도로 해석 금지 |
+| [예상문제 Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | Passed · 11 Automated / 4 Assisted / 15 Unsupported | 자동화 11개 exact·evidence·결정성 통과, confirmed fixture를 문제 전체 성공으로 과장 금지 |
 | [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) | Proposed 0.1 · Not Executed | TASK-012~019 승격·반례·통합 Gate |
 | [Live Provider Capability QA](../05_QA_Validation/25_LIVE_PROVIDER_CAPABILITY_QA.md) | EVM Common Passed · Alchemy Trace Two Dialects Failed · Overall Partial | 성공 가능한 독립 trace·live rate/timeout·AI Planner Gate |
 | [TASK-013 Fixture 후보 보고서](../05_QA_Validation/32_TASK_013_FIXTURE_CANDIDATE_REPORT.md) | Candidate · Replay·Negative·Verifier Gates Passed | 별도 판단 후 조건부 승격 |
@@ -253,7 +253,7 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 14 | 완료 (2026-07-29) | `TASK-012` EVM Core | 자동화 7/7, 보조 2·미지원 21 |
 | 15 | 완료 (2026-07-29) | `TASK-013` NFT·Proxy | fixture 3 confirmed·remediation·자동화 9/9 |
 | 16 | 완료 (2026-07-30) | `TASK-014` PATH Graph·금액 정합 | fixture 3 confirmed·자동화 11/11·assisted 1 |
-| 17 | Analyzer 완료·승격 준비 | `TASK-015` Label·OSINT·Actor | 4 verifying·1 candidate, label license resolution BLOCKED·promotion 별도 Gate |
+| 17 | 부분 승격 완료 | `TASK-015` Label·OSINT·Actor | 비격리 3 confirmed·LABEL blocked·common-funder candidate |
 | 18 | 계획 승인 대기 | `TASK-016~019` Coverage 확장 | fixture·Context Receipt·개별 code 승인 전 미착수 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.

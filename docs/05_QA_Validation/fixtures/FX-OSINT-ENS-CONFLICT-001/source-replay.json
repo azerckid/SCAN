@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-29T19:21:26+00:00",
   "query_kind": "resolve_identity_clues",
   "block_number": 25640270,
