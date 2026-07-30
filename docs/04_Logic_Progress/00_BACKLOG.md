@@ -1271,7 +1271,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     제거한다.
   - [x] LABEL replacement fixture를 별도 Promotion Receipt에서 최종 판정하고
     재배포 허가 미확인 OpenRAIL CSV artifact를 삭제한 뒤 `confirmed`로
-    승격한다([58 Promotion Receipt](../05_QA_Validation/59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md)).
+    승격한다([59 Promotion Receipt](../05_QA_Validation/59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md)).
   - [ ] OSINT-LBL-001 Benchmark automated 11→12 승격 여부를 별도로 판정한다
     (executable benchmark case 등록 필요).
   - [x] sanctions·ENS·relation-hub의 fixture별 문서 Hard Gate를 닫고 별도

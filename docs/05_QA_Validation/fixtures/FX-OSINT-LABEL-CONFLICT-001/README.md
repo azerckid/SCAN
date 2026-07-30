@@ -27,7 +27,7 @@ Etherscan label은 사용하지 않는다.
 - [x] 제품 analyzer·독립 canonical hash 대조
 - [x] OpenRAIL scoring·provenance dependency 제거
 - [x] official projection·MIT config·ENS artifact에서 Verifier와 analyzer hash 재계산
-- [x] 재배포 허가 미확인 OpenRAIL CSV artifact 삭제(참조 0건)
+- [x] 재배포 허가 미확인 OpenRAIL CSV artifact 삭제(active scoring/provenance file reference 0건)
 - [x] 최종 승격 검토·`confirmed` 승격([Promotion Receipt](../../59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md))
 
 ## 4. Artifacts
