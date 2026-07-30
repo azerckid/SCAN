@@ -83,7 +83,7 @@ decoded match:    primary/verify PASS
 input/output:     330000000000000000 / 329132286989970407
 fee difference:   867713010029593
 focused unit:     6 PASS
-full Gate:        548 tests, fixture 19, Schema 52, links 1859, security 213 PASS
+full Gate:        552 tests, fixture 19, Schema 52, links 1862, security 213 PASS
 ```
 
 ## 7. Gate 상태

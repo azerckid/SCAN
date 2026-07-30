@@ -1526,7 +1526,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Verification Receipt:
   - N/A - 구현 미시작(fixture Gate만 진행). 위 remediation은
     `uv run pytest tests/unit/test_task_016_bridge_replay.py` 10 PASS,
-    전체 `scripts/verify.py` 552 passed·traceability 1861·security 213로
+    전체 `scripts/verify.py` 552 passed·traceability 1862·security 213로
     확인했다.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
