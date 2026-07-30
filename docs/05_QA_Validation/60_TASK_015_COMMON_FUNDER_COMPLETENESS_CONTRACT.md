@@ -42,24 +42,41 @@ analyzer는 이미 completeness 미증명을 `partial`로 보존하고, 독립 V
 명시적으로 고정한 연속 inbound 구간이다.
 
 - 종료 경계: 해당 subject가 seed로부터 `direct_seed_output`을 받은 block.
-- 시작 경계: 다음 중 하나를 fixture에 명시한다.
-  - 주소 최초 활동(first-seen) block, 또는
-  - 종료 경계에서 역방향으로 고정한 `prehistory_lookback_blocks` 만큼의 block.
-- 시작 경계 이전 구간은 완결성 주장 대상이 아니며 `partial`로 남긴다.
+- 시작 경계는 아래 두 주장 강도에 따라 달라진다.
+
+**두 주장 강도를 분리한다.** 고정 lookback은 "최초·유일 funder"를 증명하지
+못한다. `prehistory_lookback_blocks` **이전**의 입금이 미확인 상태로 남으므로,
+그 앞에 다른 funder가 있었을 가능성을 배제할 수 없다. 따라서 두 주장을 별도
+플래그로 구분한다.
+
+| 시작 경계 | 허용 주장 | 플래그 | 최초·유일 주장 |
+|:---|:---|:---|:---:|
+| 검증된 first-seen block | 최초·유일 funder | `initial_inflow_complete: true` 가능 | 허용 |
+| 고정 `prehistory_lookback_blocks` | window 내 연속성만 | `bounded_prehistory_complete`만 | **금지** |
 
 **연속성 요건.** window 안에서 subject로 들어온 모든 value 이동을 gap 없이
 스캔해야 한다. replay는 `continuous_gap_scanned: true`이어야 하며,
 `selected_transactions`(선택 TX만) scope는 완결성 증거로 사용할 수 없다.
 
-**완결성 판정(`initial_inflow_complete: true`) 조건 — 네 subject 전부 충족.**
+**최초·유일 funder 판정(`initial_inflow_complete: true`) 조건 — 네 subject 전부 충족.**
 
-1. window 연속 inbound 스캔이 gap 없이 완료됐다(`continuous_gap_scanned: true`).
-2. window 안에서 seed 이전에 subject를 funding한 **비-seed inbound value 이동이
-   0건**이다(= seed가 최초/유일 funder).
-3. 위 두 사실이 replay 자체의 source record에서 재계산 가능하다(request
+1. 시작 경계가 **검증된 first-seen block**이다. subject의 first-seen 이전
+   inbound가 존재하지 않음을 replay가 입증한다(고정 lookback은 이 조건을
+   충족하지 못한다).
+2. first-seen부터 seed 입금까지 연속 inbound 스캔이 gap 없이 완료됐다
+   (`continuous_gap_scanned: true`).
+3. 그 구간에서 seed 이전에 subject를 funding한 **비-seed inbound value 이동이
+   0건**이다(= seed가 최초·유일 funder).
+4. 위 사실이 replay 자체의 source record에서 재계산 가능하다(request
    allowlist에서 합성 금지).
 
-하나라도 미충족이면 `initial_inflow_complete: false`를 유지한다.
+**bounded prehistory 판정(`bounded_prehistory_complete: true`) — 약한 주장.**
+first-seen을 검증하지 못하고 고정 lookback window만 확보한 경우, window 내
+연속성과 비-seed inbound 0건까지만 주장할 수 있고 **최초·유일 funder는 주장할
+수 없다.** 이때 `initial_inflow_complete: false`를 유지하며
+`common_funder_assessment`는 `candidate`를 넘지 못한다.
+
+어느 조건이든 미충족이면 해당 플래그를 `false`로 유지한다.
 
 ## 4. Service / faucet / paymaster 제외 기준
 
@@ -87,11 +104,25 @@ source가 없거나 불명확하면 `service_exclusion_complete: false`를 유�
 
 ## 5. 필요한 archive 데이터와 source 역할
 
-| 데이터 | 목적 | source 역할 | 현재 확보 |
+`source_role`은 기존 허용 어휘(`official_record` · `first_party` ·
+`provider_label` · `public_report` · `onchain_registry` · `heuristic`)만
+사용하며 새 값을 도입하지 않는다.
+
+| 데이터 | 목적 | source_role | 현재 확보 |
 |:---|:---|:---|:---:|
-| subject별 bounded window 연속 inbound 스캔 | 최초/유일 funder 증명 | `onchain_registry` (archive RPC, 연속 scope) | ✗ |
-| seed service 분류 판정 | faucet/paymaster/service 제외 | reviewed registry·`official_designation`·`provider_dataset` | ✗ |
+| subject별 bounded window 연속 inbound 스캔 | 최초·유일 funder 증명 | `onchain_registry` (archive RPC, 연속 scope) | ✗ |
+| seed service 분류 판정 | faucet/paymaster/service 제외 | `official_record`·`provider_label`(reviewed registry), heuristic 신호는 `heuristic` | ✗ |
 | 위 데이터의 content-addressed artifact·SHA-256 | 무결성·독립 재계산 | 각 source record | ✗ |
+
+**inbound 자산 범위.** 연속 inbound 스캔은 subject로 들어오는 funding을
+누락 없이 포착해야 하므로 아래 세 경로를 **모두 포함**한다.
+
+- native ETH 이동(외부 TX의 `value`),
+- internal call로 전달된 ETH(trace의 value-bearing internal transfer),
+- ERC-20 `Transfer`(subject가 `to`인 토큰 입금).
+
+셋 중 하나라도 스캔에서 빠지면 "비-seed inbound 0건"을 주장할 수 없으므로
+완결성 플래그를 `false`로 유지한다.
 
 두 데이터 모두 새 **continuous-scope reviewed/archive 캡처**가 필요하며,
 confirmed `FX-FLOW-REMERGE-001` replay(선택 TX scope)에는 존재하지 않는다.
@@ -123,7 +154,32 @@ confirmed `FX-FLOW-REMERGE-001` replay(선택 TX scope)에는 존재하지 않�
 `evidence_incomplete`(retryable), request↔replay binding 불일치는
 `reconciliation_failed`(non-retryable). 새 public error code를 추가하지 않는다.
 
-## 7. Blocker: 현재 승격 불가
+## 7. 제품 계약·Verifier Migration Gate
+
+현재 `intel_context` analyzer와 독립 Verifier는 common-funder를 **의도적으로
+`partial`로 고정**하고, `initial_inflow_complete`·`service_exclusion_complete`
+같은 완결성 신호를 hardcoded `false`로 취급한다. 따라서 §5 데이터를 확보하는
+것만으로는 승격할 수 없으며, 아래 migration Gate를 **순서대로** 통과해야 한다.
+어느 단계도 건너뛰지 않는다.
+
+1. **replay evidence 구조 추가.** source-replay/evidence에 subject별 연속
+   inbound 스캔·seed 분류 evidence 구조(§3·§4)를 실제로 추가하고 content-
+   addressed artifact로 고정한다.
+2. **계약·Schema 갱신.** `intel_context` I/O 계약(doc 18)과 `find_common_funder`
+   result·replay Schema를 완결성 필드까지 확장하고, family/cross-family probe를
+   갱신한다. 새 public `ErrorCode`는 도입하지 않는다.
+3. **analyzer hardcoded false 제거.** analyzer가 완결성을 replay evidence에서
+   raw-first로 유도하도록 바꾸되, 미증명 시 `partial`을 유지하는 경로는
+   보존한다(§6 partial/failed).
+4. **독립 Verifier ready set 편입.** common-funder를 Verifier ready set에 넣어
+   edges·완결성 플래그를 두 번째 독립 코드 경로에서 raw-first로 재계산한다.
+5. **canonical hash·Verification Receipt 재고정.** analyzer hash ↔ 독립
+   Verifier hash 일치와 2회 결정성을 새 Verification Receipt로 고정한다.
+6. **이후에만 승격 검토.** 위 5단계를 통과한 뒤에야 `candidate → verifying →
+   confirmed` 및 Benchmark 자동화 승격을 **별도 Gate**에서 판정한다(이 문서는
+   그 판정을 하지 않는다).
+
+## 8. Blocker: 현재 승격 불가
 
 - confirmed `FX-FLOW-REMERGE-001` raw replay의 scope는
   `selected_transactions_and_exact_blocks` · `continuous_gap_scanned: false`
@@ -137,9 +193,10 @@ confirmed `FX-FLOW-REMERGE-001` replay(선택 TX scope)에는 존재하지 않�
 **결론.** common-funder는 `candidate`(fixture)·`assisted`/`unsupported`(문제
 coverage)로 유지한다. Benchmark automated 집계는 변동 없다
 (12 automated / 4 assisted / 14 unsupported). Rules·Terms 확정 후 별도 Gate로
-§5 데이터를 캡처하면 §3·§4·§6 기준으로 재진입한다.
+§5 데이터를 캡처하고 §7 migration Gate를 통과한 뒤에만 §3·§4·§6 기준으로
+재진입한다.
 
-## 8. Related Documents
+## 9. Related Documents
 
 - **QA_Validation**: [Common-funder Fixture](./fixtures/FX-ACTOR-COMMON-FUNDER-001/README.md) - candidate 근거와 남은 Gate
 - **QA_Validation**: [Source FLOW fixture](./fixtures/FX-FLOW-REMERGE-001/README.md) - 선택 TX scope raw replay
