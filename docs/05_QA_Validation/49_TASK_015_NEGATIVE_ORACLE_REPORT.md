@@ -67,8 +67,9 @@ Repository-wide Gate:
 
 ## 5. 다음 Gate
 
-1. ENS 두 fixture의 제2 provider 또는 독립 저장 replay를 확보한다.
-2. OFAC SLS version과 Actor bounded prehistory·service exclusion을 고정한다.
+1. ENS 두 fixture의 Alchemy·Blockscout fixed-block replay는 확보했다.
+2. OFAC current SLS snapshot은 고정했고, Actor bounded prehistory·service
+   exclusion은 미완료 상태로 보존한다.
 3. 독립 Verifier가 source/raw artifact에서 필수 사실을 재계산한다.
 4. 조건을 충족한 fixture만 `verifying` 승격을 검토한다.
 5. 그 뒤 `intel_context` 계약·Context Receipt·구현 승인을 진행한다.
@@ -77,5 +78,6 @@ Repository-wide Gate:
 
 - **QA_Validation**: [Fixture·Contract Gate](./45_TASK_015_FIXTURE_CONTRACT_GATE.md) - oracle·Verifier Stop/Go
 - **QA_Validation**: [Candidate Fixture Package 보고서](./48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md) - 다섯 candidate package
+- **QA_Validation**: [Source Readiness 보고서](./50_TASK_015_SOURCE_READINESS_REPORT.md) - ENS 두 공급자·OFAC SLS·Actor 잔여
 - **QA_Validation**: [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - 전체 fixture 상태
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) - Context Lock

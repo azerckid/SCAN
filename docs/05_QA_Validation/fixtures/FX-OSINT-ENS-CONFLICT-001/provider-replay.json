@@ -1,0 +1,75 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+  "captured_at": "2026-07-29T19:21:26Z",
+  "status": "candidate",
+  "scope_kind": "fixed_block_ens_forward_reverse",
+  "request_scope": {
+    "chain_id": 1,
+    "block_tag": "0x1873d4e",
+    "block_number": 25640270,
+    "name": "nick.eth",
+    "address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+    "methods": ["eth_call"],
+    "calls": [
+      "forward_resolver(bytes32)",
+      "forward_addr(bytes32)",
+      "reverse_resolver(bytes32)",
+      "reverse_name(bytes32)"
+    ]
+  },
+  "providers": [
+    {
+      "provider_id": "PROVIDER-EVM-VERIFY",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T19:18:50Z",
+      "raw_sha256": {
+        "forward_resolver": "aca15c37ecbe70d0fc93a82c7c2c171d43e1e5cab058b293036cfa18f960f3f1",
+        "forward_address": "92ba1051e89916a4d0465040696b06994a5cd628ece95821a5915bda6939d53d",
+        "reverse_resolver": "db6f07ab142e249f0f1e7f25080b74bc58a330da621009b6b7f097c595e6c91e",
+        "reverse_name": "bfb01713278b91584494cbe9d54250242284d048581cefb36aa37d3c6b1526f1"
+      },
+      "decoded": {
+        "forward_resolver": "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
+        "forward_address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+        "reverse_resolver": "0xa2c122be93b0074270ebee7f6b7292c7deb45047",
+        "reverse_name": "nick.eth"
+      }
+    },
+    {
+      "provider_id": "BLOCKSCOUT-ETH-RPC",
+      "status": "complete",
+      "retrieved_at": "2026-07-29T19:21:26Z",
+      "raw_sha256": {
+        "forward_resolver": "e774d26dfefad6545aa96eda709344ea1a6797954032210ca0bf6e790d998a1d",
+        "forward_address": "4c0f76ab902ff2dcbbb3841a043a4407ec503c4942768c0f0709416ce7092b4a",
+        "reverse_resolver": "272f5c665261d1acae4fdde519699c17d6258e55e99974325c5e1f07f7c2f3a5",
+        "reverse_name": "68e4724dac6111ff3c82ec0ff477d3224065f98a6007d3abd7e53aa21917e324"
+      },
+      "decoded": {
+        "forward_resolver": "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
+        "forward_address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+        "reverse_resolver": "0xa2c122be93b0074270ebee7f6b7292c7deb45047",
+        "reverse_name": "nick.eth"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-EVM-PRIMARY",
+      "status": "failed",
+      "retrieved_at": "2026-07-29T19:18:49Z",
+      "failure_kind": "rate_limited",
+      "http_status": 429,
+      "raw_sha256": null
+    },
+    {
+      "provider_id": "PROVIDER-EVM-TRACE",
+      "status": "failed",
+      "retrieved_at": "2026-07-29T19:19:54Z",
+      "failure_kind": "permanent",
+      "http_status": 403,
+      "raw_sha256": null
+    }
+  ],
+  "decoded_match": true,
+  "remaining_gate": ["independent_verifier"]
+}
