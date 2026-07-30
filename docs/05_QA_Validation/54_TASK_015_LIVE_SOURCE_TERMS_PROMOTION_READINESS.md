@@ -1,6 +1,6 @@
 # TASK-015 Live Source·Terms·Fixture 승격 Readiness
 > Created: 2026-07-30 14:19
-> Last Updated: 2026-07-30 15:01
+> Last Updated: 2026-07-30 15:24
 > Status: Applied · 3 Non-Quarantined Confirmed · LABEL Blocked · Common-funder Candidate
 
 ## 1. 목적과 현재 판정
@@ -63,8 +63,11 @@ Source permission을 통과했다고 fact가 정확해지는 것은 아니며, f
 | `FX-ACTOR-RELATION-HUB-001` | confirmed | confirmed local fixture | DEX/AUTH hash·hub exclusion·Verifier·analyzer·귀속 분리 | 없음(ownership/coordination `not_assessed`) | PROMOTED |
 | `FX-ACTOR-COMMON-FUNDER-001` | candidate | confirmed FLOW + 후속 bounded evidence | oracle·partial analyzer | bounded prehistory·initial inflow completeness·faucet/paymaster/service exclusion·Verifier | BLOCKED |
 
-`READY`는 `confirmed`가 아니다. 별도 Promotion Receipt에서 fixture JSON·문서·
-Benchmark를 한 번에 동기화해야 한다.
+SANCTIONS·ENS·RELATION-HUB는 별도
+[Promotion Receipt](./56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)에서
+fixture JSON·문서·Benchmark를 함께 동기화해 `confirmed` 승격을 완료했다.
+향후 `READY` 판정이 추가되더라도 별도 Promotion Receipt 적용 전에는
+`confirmed`로 간주하지 않는다.
 
 ## 5. Live source 실행 Gate
 
