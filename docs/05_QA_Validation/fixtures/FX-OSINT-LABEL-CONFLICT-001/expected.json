@@ -16,14 +16,14 @@
     },
     {
       "assertion_id": "ASSERT-LABEL-CONFIG",
-      "source_role": "community_config",
+      "source_role": "first_party",
       "name": "eth-01.tornadocash.eth",
       "role": "eth_0_1_instance",
       "truth_status": "role_assertion"
     },
     {
       "assertion_id": "ASSERT-LABEL-ENS",
-      "source_role": "onchain_binding",
+      "source_role": "onchain_registry",
       "name": "eth-01.tornadocash.eth",
       "resolved_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
       "block_number": 25640270,

@@ -55,8 +55,8 @@
     "exact_license_text_pinned": false,
     "redistribution_permission_confirmed": false,
     "selected_row_status": "retained_unreferenced_historical_artifact",
-    "existing_offline_regression_allowed": true,
-    "allowed_scope": "dataset-card-stated research/testing only",
+    "existing_offline_regression_scope": "historical_only",
+    "allowed_scope": "historical record only; excluded from active regression, scoring, and provenance",
     "promotion_allowed": false,
     "next_actions": []
   },

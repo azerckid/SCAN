@@ -1,6 +1,6 @@
 # Fixture: FX-OSINT-LABEL-CONFLICT-001
 > Created: 2026-07-30 03:37
-> Last Updated: 2026-07-30 16:15
+> Last Updated: 2026-07-30 18:51
 > Status: Verifying 0.1 · Replacement Migrated · Final Promotion Pending
 
 ## 1. 목적
@@ -39,3 +39,11 @@ Etherscan label은 사용하지 않는다.
 - [Promotion Readiness](../../54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md)
 - [OpenRAIL License Resolution Receipt](../../55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md)
 - [Source Replacement Review](../../57_TASK_015_LABEL_SOURCE_REPLACEMENT_REVIEW.md)
+
+## 5. Superseded Historical Artifacts
+
+아래 파일은 migration 이전 기록 보존용이며 active regression·scoring·
+provenance에서 참조하지 않는다.
+
+- [OpenRAIL selected row](./artifacts/sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475.csv)
+- [Previous fixed-block ENS replay](./artifacts/sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b.json) — former subject `0xc3877028655ebe90b9447dd33de391c955ead267`, name `team4.vesting.contract.tornadocash.eth`
