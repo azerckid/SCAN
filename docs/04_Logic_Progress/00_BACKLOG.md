@@ -1266,6 +1266,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - 상위 source inspector 흐름
 - Related Technical Docs:
   - [TASK-015 Intelligence 계약](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md) - source role·claim·conflict·actor relation 제안
+  - [TASK-015 intel_context I/O 확정안](../03_Technical_Specs/18_TASK_015_INTEL_CONTEXT_IO_CONTRACT.md) - request/result/error 사용자 승인 대기
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-INTEL 계약
   - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - source role·Terms
 - Related QA Docs:
@@ -1316,9 +1317,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Constraints: privacy 최소 수집, Terms·Rules Gate, source assertion과
     ownership/crime truth 분리, AI hypothesis 비승격
   - Conflicts: 공식 대회 Rules 미확정, Actor bounded prehistory·service
-    exclusion·독립 Verifier 미실행. label source blocker·snapshot 기준선·
+    exclusion·intel_context 계약 사용자 승인 미실행. label source blocker·snapshot 기준선·
     다섯 candidate package·negative oracle 30개·ENS 제2 provider·OFAC
-    current SLS pin은 해소
+    current SLS pin·ready fixture 4개 independent Verifier는 해소
 - Change Receipt:
   - Offline oracle Gate만 구현했다. 제품 `intel_context` analyzer·live
     source adapter·fixture 승격은 미착수다.
@@ -1348,6 +1349,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     `verifying`으로 승격했다. common-funder는 `candidate`, Benchmark는 11이다.
   - Provenance hardening: pinned community `config.js` 원문과 ENS snapshot을
     content-addressed artifact로 재검증하고 LABEL fact hash를 갱신했다.
+  - Intel context contract draft: `intel_context` 대안 B의 query 5개,
+    request/result/error·정렬·partial 경계를 docs-only로 작성했다.
+    JSON 예제 9개 parse, 전체 489 tests·1,631 links PASS이며 사용자 계약
+    승인·Context Receipt·구현 승인은 미완료다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
