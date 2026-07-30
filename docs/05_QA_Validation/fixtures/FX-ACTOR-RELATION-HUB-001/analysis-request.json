@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-ACTOR-RELATION-HUB-001",
+  "analysis_type": "intel_context",
+  "query_kind": "score_actor_relations",
+  "chain_id": 1,
+  "fixture_id": "FX-ACTOR-RELATION-HUB-001",
+  "requested_at": "2026-07-30T00:00:00+00:00",
+  "inputs": {
+    "subject_addresses": [
+      "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "0x193070aea3df0e8e0436f6ed810fd8bbe687af59"
+    ],
+    "hub_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "source_fixture_refs": [
+      "FX-SVC-DEX-001",
+      "FX-EVM-AUTH-001"
+    ],
+    "component_weights": [
+      "token_transfer_interaction",
+      "approval_and_consumption_interaction"
+    ]
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": [
+      "DS-EVM-RPC-ARCHIVE",
+      "DS-OSINT-WEB"
+    ],
+    "source_order": [
+      "DS-EVM-RPC-ARCHIVE",
+      "DS-OSINT-WEB"
+    ],
+    "allow_fallback": false,
+    "offline_mode": true
+  }
+}

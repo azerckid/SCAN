@@ -40,7 +40,12 @@
         "proxy_history",
         "trace_path",
         "trace_remerge",
-        "aggregate_origins"
+        "aggregate_origins",
+        "collect_label_claims",
+        "check_sanctions_exposure",
+        "resolve_identity_clues",
+        "find_common_funder",
+        "score_actor_relations"
       ]
     },
     "chain_id": {
@@ -233,6 +238,37 @@
     {
       "if": {
         "properties": {
+          "analysis_type": {
+            "const": "intel_context"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "query_kind"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "0.2"
+          },
+          "query_kind": {
+            "enum": [
+              "collect_label_claims",
+              "check_sanctions_exposure",
+              "resolve_identity_clues",
+              "find_common_funder",
+              "score_actor_relations"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
           "query_kind": {
             "const": "object_summary"
           }
@@ -358,7 +394,8 @@
         "address_freeze",
         "evm_core",
         "evm_special",
-        "flow_path"
+        "flow_path",
+        "intel_context"
       ]
     },
     "address": {

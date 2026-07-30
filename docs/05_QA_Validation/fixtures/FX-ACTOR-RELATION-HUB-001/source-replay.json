@@ -1,0 +1,41 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-ACTOR-RELATION-HUB-001",
+  "status": "verifying",
+  "captured_at": "2026-07-29T19:21:26+00:00",
+  "query_kind": "score_actor_relations",
+  "hub": {
+    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "role": "public_erc20_token_contract",
+    "symbol": "USDC"
+  },
+  "relations": [
+    {
+      "subject_address": "0xa406bc6e319cbe7ab2822cc55fa8376e9c3a7fdf",
+      "source_fixture_id": "FX-SVC-DEX-001",
+      "relation": "token_transfer_interaction"
+    },
+    {
+      "subject_address": "0x193070aea3df0e8e0436f6ed810fd8bbe687af59",
+      "source_fixture_id": "FX-EVM-AUTH-001",
+      "relation": "approval_and_consumption_interaction"
+    }
+  ],
+  "hub_excluded_from_actor_link": true,
+  "sources": [
+    {
+      "source_record_id": "SRC-INTEL-ACTOR-DEX",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_role": "onchain_registry",
+      "artifact_ref": "artifact://sha256/ff0924acb52db56c2a907d709f83c13b2ecdd5d5a17cae09da70e0aab422733c",
+      "content_sha256": "ff0924acb52db56c2a907d709f83c13b2ecdd5d5a17cae09da70e0aab422733c"
+    },
+    {
+      "source_record_id": "SRC-INTEL-ACTOR-AUTH",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "source_role": "onchain_registry",
+      "artifact_ref": "artifact://sha256/75f07f30863d958146f85052642be07b6d6478194672408f9b473b21ff554dd6",
+      "content_sha256": "75f07f30863d958146f85052642be07b6d6478194672408f9b473b21ff554dd6"
+    }
+  ]
+}

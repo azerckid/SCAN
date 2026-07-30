@@ -277,6 +277,21 @@ class FlowPathFailedAnalysisResult(FailedAnalysisResult):
     analysis_type: Literal[AnalysisType.FLOW_PATH]
 
 
+class IntelContextCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.INTEL_CONTEXT]
+
+
+class IntelContextPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.INTEL_CONTEXT]
+
+
+class IntelContextFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.INTEL_CONTEXT]
+
+
 ResultVariant = (
     LegacyCompleteAnalysisResult
     | LegacyPartialAnalysisResult
@@ -290,6 +305,9 @@ ResultVariant = (
     | FlowPathCompleteAnalysisResult
     | FlowPathPartialAnalysisResult
     | FlowPathFailedAnalysisResult
+    | IntelContextCompleteAnalysisResult
+    | IntelContextPartialAnalysisResult
+    | IntelContextFailedAnalysisResult
 )
 
 

@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
+  "status": "verifying",
+  "captured_at": "2026-07-29T19:21:26+00:00",
+  "query_kind": "resolve_identity_clues",
+  "block_number": 25640270,
+  "forward": {
+    "name": "nick.eth",
+    "address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+    "resolver": "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41"
+  },
+  "reverse": {
+    "name": "nick.eth",
+    "address": "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+    "resolver": "0xa2c122be93b0074270ebee7f6b7292c7deb45047"
+  },
+  "sources": [
+    {
+      "source_record_id": "SRC-INTEL-ENS-SNAPSHOT",
+      "source_id": "DS-ENS",
+      "source_role": "onchain_registry",
+      "artifact_ref": "artifact://sha256/a1ed2bfc3bb65b0717afeb979fc92b68658f2ee9391f458a67ad2c5ef246ce2c",
+      "content_sha256": "a1ed2bfc3bb65b0717afeb979fc92b68658f2ee9391f458a67ad2c5ef246ce2c"
+    }
+  ]
+}

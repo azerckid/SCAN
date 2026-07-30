@@ -1,0 +1,48 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+  "status": "verifying",
+  "captured_at": "2026-07-29T19:21:26+00:00",
+  "query_kind": "collect_label_claims",
+  "subject_address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+  "dataset": {
+    "entity": "Tornado.Cash",
+    "categories": [
+      "Mixer",
+      "Sanctioned"
+    ],
+    "source_value": "external"
+  },
+  "ens": {
+    "name": "team4.vesting.contract.tornadocash.eth",
+    "address": "0xc3877028655ebe90b9447dd33de391c955ead267",
+    "block_number": 25640270
+  },
+  "community_config": {
+    "name": "team4.vesting.contract.tornadocash.eth",
+    "role": "team4_vesting_contract"
+  },
+  "sources": [
+    {
+      "source_record_id": "SRC-INTEL-LABEL-DATASET",
+      "source_id": "DS-LABEL-PUBLIC",
+      "source_role": "provider_label",
+      "artifact_ref": "artifact://sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475",
+      "content_sha256": "15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475"
+    },
+    {
+      "source_record_id": "SRC-INTEL-LABEL-CONFIG",
+      "source_id": "DS-OSINT-WEB",
+      "source_role": "first_party",
+      "artifact_ref": "artifact://sha256/84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32",
+      "content_sha256": "84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32"
+    },
+    {
+      "source_record_id": "SRC-INTEL-LABEL-ENS",
+      "source_id": "DS-ENS",
+      "source_role": "onchain_registry",
+      "artifact_ref": "artifact://sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b",
+      "content_sha256": "762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b"
+    }
+  ]
+}
