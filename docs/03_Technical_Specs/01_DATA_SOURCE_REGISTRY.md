@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 14:38
+> Last Updated: 2026-07-30 15:37
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -190,7 +190,7 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
 | 상태 | 후보 | 검증 중 |
 | 마지막 확인 | 2026-07-30 03:07 | 2026-07-30 03:07 |
 | 관련 fixture | FLOW-EVM-001 등 | EVM-FREEZE-001 (`FX-EVM-FREEZE-001`) |
-| 비고 | Etherscan public label/name tag는 Terms 때문에 fixture source에서 제외. replacement는 pinned OpenRAIL research/testing sample row와 MIT Tornado config·onchain ENS의 category conflict이며 상업·전체 dataset 권한으로 확대하지 않음 | OFAC SLS의 공개 download/API와 2022 지정·2025 해제 원문에서 주소·timeline 후보를 확인. 고시 시점의 역사적 맥락이며 현재 제재 상태로 자동 간주하지 않음 |
+| 비고 | Etherscan public label/name tag는 Terms 때문에 fixture source에서 제외. 기존 OpenRAIL selected row는 quarantine. replacement route는 confirmed OFAC historical action fact + pinned MIT Tornado config + fixed-block ENS이며 migration 전까지 후보 상태 | OFAC SLS의 공개 download/API와 2022 지정·2025 해제 원문에서 주소·timeline 후보를 확인. 고시 시점의 역사적 맥락이며 현재 제재 상태로 자동 간주하지 않음 |
 
 ### 5.5 ENS·OSINT
 
@@ -409,6 +409,7 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
 - relation-hub는 confirmed DEX/AUTH local fixture만으로 승격 검토할 수 있다.
   common-funder는 bounded prehistory·service exclusion 전까지 candidate다.
 - 상세 판정은 [TASK-015 Live Source·Terms·Promotion Readiness](../05_QA_Validation/54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md)를 따른다.
+- LABEL source 교체안은 [TASK-015 LABEL Source Replacement Review](../05_QA_Validation/57_TASK_015_LABEL_SOURCE_REPLACEMENT_REVIEW.md)를 따른다. repository license가 명확해도 Etherscan 파생 또는 upstream provenance 불명 data는 자동 채택하지 않는다.
 
 ## 10. Related Documents
 
@@ -433,3 +434,4 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
 - **QA_Validation**: [Smoke Runner 준비 보고서](../05_QA_Validation/26_LIVE_PROVIDER_SMOKE_PREPARATION_REPORT.md) - dry-run·보안·미실행 경계
 - **QA_Validation**: [TASK-015 공개 Source·Fixture 후보 조사](../05_QA_Validation/46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) - Terms·privacy·후보 채택 가능성
 - **QA_Validation**: [TASK-015 Source 교체·Raw Snapshot 기준선](../05_QA_Validation/47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) - replacement와 artifact hash
+- **QA_Validation**: [TASK-015 LABEL Source Replacement Review](../05_QA_Validation/57_TASK_015_LABEL_SOURCE_REPLACEMENT_REVIEW.md) - license·upstream provenance 비교와 대체 subject Gate

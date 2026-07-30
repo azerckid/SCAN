@@ -1,6 +1,6 @@
 # TASK-015 OpenRAIL License Resolution Receipt
 > Created: 2026-07-30 14:38
-> Last Updated: 2026-07-30 14:38
+> Last Updated: 2026-07-30 15:37
 > Status: Blocked · Exact License Text Absent · Label Fixture Verifying / Quarantined
 
 ## 1. 목적과 판정
@@ -17,6 +17,12 @@ family만 표시한다. Hugging Face 공식 license registry도 `openrail`을 �
 `verifying`·HOLD를 유지하고 selected-row artifact는 README가 명시한
 research/testing regression에만 한정한다. promotion·export에는 사용하지 않는
 quarantine 상태로 둔다.
+
+후속 [LABEL Source Replacement Review](./57_TASK_015_LABEL_SOURCE_REPLACEMENT_REVIEW.md)는
+publisher license를 추정하지 않고 official OFAC historical action + MIT
+community config + fixed-block ENS로 subject를 교체하는 경로를 선택했다.
+fixture migration·재검증은 아직 실행하지 않았으므로 본 차단 기록은 기존
+OpenRAIL artifact에 계속 적용된다.
 
 ## 2. Pinned Source
 
@@ -123,4 +129,5 @@ provenance 검증을 필요로 한다.
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - label source·Terms 경계
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) · [Coverage Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md)
 - **QA_Validation**: [Promotion Readiness](./54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md) · [Source Resolution](./47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) · [Reference Fixtures](./01_REFERENCE_FIXTURES.md)
+- **QA_Validation**: [LABEL Source Replacement Review](./57_TASK_015_LABEL_SOURCE_REPLACEMENT_REVIEW.md) - exact text 추정 없이 선택한 대체 경로
 - **Fixture**: [FX-OSINT-LABEL-CONFLICT-001](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md)

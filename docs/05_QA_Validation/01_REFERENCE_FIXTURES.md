@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 15:01
+> Last Updated: 2026-07-30 15:37
 > Status: Approved 1.9 · 16 Confirmed · TASK-015 LABEL Verifying 1 / Candidate 1
 
 ## 1. 문서 목적
@@ -23,7 +23,9 @@ claim boundary·negative oracle·독립 Verifier·제품 analyzer를 통과해
 분류한다. common-funder는 completeness 미증명으로 `후보`·`partial`을
 유지한다. LABEL selected row는 exact OpenRAIL text가 pinned repository에
 없어 `검증 중`·quarantine이며 publisher 확인 또는 source 교체 전 승격할
-수 없다.
+수 없다. official OFAC historical action + MIT config + fixed-block ENS
+subject 교체안은 선정했지만 fixture migration·재검증 전이므로 현재 상태와
+기존 canonical hash는 변경하지 않는다.
 
 입력 문서:
 
@@ -525,6 +527,10 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
     SANCTIONS·ENS·RELATION-HUB를 `confirmed`로 승격했다. LABEL quarantine과
     common-funder candidate는 유지한다. 세 문제는 원문 전체가 아니므로
     Benchmark `assisted`로만 올렸다.
+19. LABEL 대체 source 조사에서 repository license와 upstream data provenance를
+    분리했다. Etherscan 파생·원천 불명 list는 채택하지 않고 confirmed OFAC
+    historical action + MIT config + fixed-block ENS subject 교체안을 선택했다.
+    migration·재검증 전까지 LABEL은 `verifying`·quarantined다.
 
 ## 10. Related Documents
 

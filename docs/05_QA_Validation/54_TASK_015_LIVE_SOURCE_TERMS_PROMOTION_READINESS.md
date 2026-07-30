@@ -1,6 +1,6 @@
 # TASK-015 Live Source·Terms·Fixture 승격 Readiness
 > Created: 2026-07-30 14:19
-> Last Updated: 2026-07-30 15:24
+> Last Updated: 2026-07-30 15:37
 > Status: Applied · 3 Non-Quarantined Confirmed · LABEL Blocked · Common-funder Candidate
 
 ## 1. 목적과 현재 판정
@@ -93,8 +93,11 @@ fixture만 사용하고 live adapter 호출은 0건이어야 한다. Explorer는
 3. [x] expected/evidence/provider replay의 canonical hash 불변을 확인한다.
 4. [x] 세 fixture를 별도 판단해 `confirmed`로 승격하고 Receipt를 쓴다.
 5. [x] 세 문제의 미완성 범위를 숨기지 않고 Benchmark `assisted`로 반영한다.
-6. [ ] label publisher exact terms를 확보하거나 exact license source로 교체한다.
-7. [ ] common-funder는 bounded evidence 이후 다시 검토한다.
+6. [x] label publisher 확인 경로와 대체 후보를 비교해 official OFAC
+   historical action + MIT config + fixed-block ENS 교체안을 선정한다.
+7. [ ] 새 subject의 replay·oracle·Verifier·analyzer hash를 재검증하고
+   OpenRAIL scoring dependency를 제거한다.
+8. [ ] common-funder는 bounded evidence 이후 다시 검토한다.
 
 ## 7. 실패·중단 조건
 
@@ -139,3 +142,4 @@ fixture만 사용하고 live adapter 호출은 0건이어야 한다. Explorer는
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) · [Coverage Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md)
 - **QA_Validation**: [Source Readiness](./50_TASK_015_SOURCE_READINESS_REPORT.md) · [Independent Verifier](./51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md) · [Provenance Hardening](./52_TASK_015_PROVENANCE_HARDENING_RECEIPT.md) · [Analyzer Verification](./53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md) · [Reference Fixtures](./01_REFERENCE_FIXTURES.md)
 - **QA_Validation**: [OpenRAIL License Resolution](./55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md) - exact text 부재·quarantine·대체 조건
+- **QA_Validation**: [LABEL Source Replacement Review](./57_TASK_015_LABEL_SOURCE_REPLACEMENT_REVIEW.md) - upstream provenance 비교·선택 subject·migration Gate
