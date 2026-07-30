@@ -1260,7 +1260,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     고정하고 현재 주소 부재를 역사 action과 분리한다.
   - [x] analyzer 이후 source permission·live 호출 필요성·네 verifying fixture
     승격 조건과 common-funder 차단 조건을 docs-only Readiness로 분리한다.
-  - [ ] label selected row의 exact OpenRAIL license text·notice·재배포 의무를 pin한다.
+  - [x] label pinned repository의 license resolution을 실행하고 exact text·
+    version·notice 부재를 evidence로 고정해 selected row를 quarantine한다.
+  - [ ] dataset publisher exact terms를 확보하거나 exact license가 있는
+    replacement source를 선정·재검증한다.
   - [ ] sanctions·ENS·relation-hub의 fixture별 문서 Hard Gate를 닫고 별도
     Promotion Receipt에서 `confirmed` 여부를 판정한다.
 - Related Concept Docs:
@@ -1288,6 +1291,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [TASK-015 Provenance Hardening Receipt](../05_QA_Validation/52_TASK_015_PROVENANCE_HARDENING_RECEIPT.md) - community config·ENS snapshot raw hash 재유도
   - [TASK-015 Analyzer 독립 Verification Receipt](../05_QA_Validation/53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md) - analyzer 구현·hash 대조·4 verifying 유지
   - [TASK-015 Live Source·Terms·Promotion Readiness](../05_QA_Validation/54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md) - source permission·live optional·fixture별 Hard Gate
+  - [TASK-015 OpenRAIL License Resolution Receipt](../05_QA_Validation/55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md) - exact text 부재·selected row quarantine
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001
 - Implementation Preconditions:
   - [ ] 공식 대회 Rules와 채택 source snapshot의 Terms·privacy·최소 필드를 확정한다

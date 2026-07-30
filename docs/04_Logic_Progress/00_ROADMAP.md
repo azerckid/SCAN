@@ -1,7 +1,7 @@
 # SCAN 2026 문서 완료 Roadmap
 > Created: 2026-07-26 18:28
-> Last Updated: 2026-07-30 14:19
-> Status: Approved 3.4 Baseline · TASK-014 Complete · TASK-015 Analyzer Passed · Verifying 4 / Candidate 1
+> Last Updated: 2026-07-30 14:38
+> Status: Approved 3.5 Baseline · TASK-015 Analyzer Passed · Label License Blocked · Verifying 4 / Candidate 1
 
 ## 1. 문서 목적
 
@@ -103,7 +103,7 @@
 
 | 문서 | 현재 상태 | 완료를 위해 남은 일 |
 |:---|:---|:---|
-| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.8 · 13 Confirmed · TASK-015 Verifying 4 / Candidate 1 | source Terms·fixture별 promotion Gate 유지 |
+| [Reference Fixtures](../05_QA_Validation/01_REFERENCE_FIXTURES.md) | Approved 1.8 · 13 Confirmed · TASK-015 Verifying 4 / Candidate 1 | label exact license/source 교체·fixture별 promotion Gate 유지 |
 | [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) | Approved 1.9 · Integration Passed | 24 pass·0 partial·0 not_executed |
 | [QA Checklist](../05_QA_Validation/02_QA_CHECKLIST.md) | Approved 2.9 · OPS-IMPL-01~08 Offline Passed | live Rules·실대회 성능 미실행 |
 | [Agentic Parallel Solve QA](../05_QA_Validation/03_AGENTIC_PARALLEL_SOLVE_QA.md) | Contract Approved · Offline 6 QA Passed | live Rules·실대회 성능 별도 |
@@ -253,7 +253,7 @@ API·AI·agent 활성화를 승인하지 않는다.
 | 14 | 완료 (2026-07-29) | `TASK-012` EVM Core | 자동화 7/7, 보조 2·미지원 21 |
 | 15 | 완료 (2026-07-29) | `TASK-013` NFT·Proxy | fixture 3 confirmed·remediation·자동화 9/9 |
 | 16 | 완료 (2026-07-30) | `TASK-014` PATH Graph·금액 정합 | fixture 3 confirmed·자동화 11/11·assisted 1 |
-| 17 | Analyzer 완료·승격 준비 | `TASK-015` Label·OSINT·Actor | 4 verifying·1 candidate, source Terms·promotion 별도 Gate |
+| 17 | Analyzer 완료·승격 준비 | `TASK-015` Label·OSINT·Actor | 4 verifying·1 candidate, label license resolution BLOCKED·promotion 별도 Gate |
 | 18 | 계획 승인 대기 | `TASK-016~019` Coverage 확장 | fixture·Context Receipt·개별 code 승인 전 미착수 |
 
 Web Workbench 문서·Preview는 위 순서와 병렬인 비차단 시연 UX 트랙이다.

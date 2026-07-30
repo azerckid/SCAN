@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 14:19
+> Last Updated: 2026-07-30 14:38
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -396,9 +396,11 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
 
 - `intel_context` analyzer와 독립 hash 대조는 통과했지만 source permission과
   fact correctness를 같은 Gate로 취급하지 않는다.
-- Codatta 선택 행은 dataset card의 OpenRAIL·research/testing 범위만 확인됐다.
-  exact license text·notice·재배포 의무를 pin하기 전 label fixture는
-  `verifying`을 유지한다.
+- Codatta pinned commit은 README의 `openrail` family 식별자만 제공하고
+  `LICENSE*` 파일·version·notice가 없다. selected row는 quarantine하며
+  publisher exact terms 확보 또는 명확한 license source 교체 전 label fixture는
+  `verifying`·BLOCKED를 유지한다
+  ([License Resolution Receipt](../05_QA_Validation/55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md)).
 - OFAC action은 공식 locator·whole-file hash·bounded match를 사용하고, 현재
   SLS 전체 CSV는 repository에 재배포하지 않는다.
 - ENS는 웹 Interface 내용을 복제하지 않고 fixed-block onchain artifact를

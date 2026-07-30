@@ -1,7 +1,7 @@
 # Fixture: FX-OSINT-LABEL-CONFLICT-001
 > Created: 2026-07-30 03:37
-> Last Updated: 2026-07-30 14:19
-> Status: Verifying 0.1 · Negative Oracle / Independent Verifier Passed
+> Last Updated: 2026-07-30 14:38
+> Status: Verifying 0.1 · Promotion/Export Quarantined · License Resolution Blocked
 
 ## 1. 목적
 
@@ -24,7 +24,8 @@ Etherscan label은 사용하지 않는다.
 - [x] 독립 Verifier·두 번 결정성
 - [x] `verifying` 승격
 - [x] 제품 analyzer·독립 canonical hash 대조
-- [ ] exact OpenRAIL license text·notice·selected-row 재배포 의무 pin
+- [x] pinned repository의 exact license text·version·notice 부재 증거 고정
+- [ ] publisher exact terms 확보 또는 exact license source 교체·재검증
 - [ ] 최종 승격
 
 ## 4. Artifacts
@@ -32,5 +33,7 @@ Etherscan label은 사용하지 않는다.
 - [Selected dataset row](./artifacts/sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475.csv)
 - [ENS fixed-block replay](./artifacts/sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b.json)
 - [Pinned community config](./artifacts/sha256/84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32.js)
+- [License resolution evidence](./license-resolution.json)
 - [Source-resolution report](../../47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md)
 - [Promotion Readiness](../../54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md)
+- [OpenRAIL License Resolution Receipt](../../55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md)
