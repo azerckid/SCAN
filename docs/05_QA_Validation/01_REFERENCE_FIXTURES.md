@@ -210,7 +210,7 @@ adjacent state만 완전성을 주장한다.
 |:---|:---|
 | 연결 문제 ID | SVC-BRG-001 |
 | 상태 | 후보 |
-| DOC-M3 결정 | Deferred — P2 XCHAIN·BRIDGE 승격 전 재검토 |
+| DOC-M3 결정 | Across V3 공개 후보 선정 완료 · fixture package와 두 RPC raw replay 대기 |
 | 데이터 형태 | 공개 온체인 |
 | 체인 | 후보: Base `8453` → Ethereum `1` |
 | 주소·TX | Across V3. 출발 `0x957143...05a1b`, 도착 `0x816ebc...8f8a0`; 전체 값은 [후보 보고서](./61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) |
