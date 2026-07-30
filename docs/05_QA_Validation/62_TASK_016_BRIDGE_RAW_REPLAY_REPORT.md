@@ -1,7 +1,7 @@
 # TASK-016 Bridge Raw Replay 준비 보고서
 > Created: 2026-07-30 23:30
-> Last Updated: 2026-07-31 02:10
-> Status: Live Replay·Negative Oracle·Independent Verifier Passed · Candidate
+> Last Updated: 2026-07-31 02:40
+> Status: Live Replay·Negative Oracle·Independent Verifier Passed (P1 Remediated) · Candidate
 
 ## 1. 목적
 
@@ -215,7 +215,61 @@ requirements, 2 deterministic runs`. 이 단계는 raw-first 재계산까지이�
 아직 없는 `bridge_transfer` product analyzer와의 hash 대조
 (analyzer-independent-verification)는 analyzer 구현 승인 이후 별도 Gate다.
 
-## 11. Related Documents
+## 11. Independent Verifier P1 Remediation (PR #103 리뷰 반영)
+
+리뷰에서 두 P1과 P2가 지적됐다. 모두 코드로 정정하고 tamper 회귀 테스트로
+확인했다.
+
+**P1 — raw event identity와 tx/block binding 미검증.** 최초 구현은 topic
+개수만 확인하고 topic0 signature·log-receipt-transaction-block 간 hash/number
+binding을 확인하지 않아, source topic0·transaction hash·block hash를
+각각 변조해도 통과했다.
+
+- `_decode_chain_event()`에 전체 binding 체인을 추가했다: `topics[0]`이
+  독립 선언된 `SOURCE_EVENT_TOPIC0`/`DESTINATION_EVENT_TOPIC0`와 정확히
+  일치해야 하고, log의 `address`·`transactionHash`·`blockNumber`가 각각
+  spoke pool·tx hash·block tag와 일치해야 한다. transaction의 `hash`·
+  `blockNumber`·`to`, receipt의 `transactionHash`·`blockNumber`·`status`,
+  block의 `number`·`hash`가 서로 exact binding되고, receipt의 `logs`
+  배열 안에 선택된 log와 동일한 address·topic0·transactionHash·logIndex를
+  가진 항목이 실제로 존재하는지도 확인한다.
+- 회귀 테스트로 topic0·transaction hash·block hash 각각의 변조를 재현해
+  거부됨을 확인했다(`test_wrong_topic0_is_rejected`,
+  `test_wrong_transaction_hash_is_rejected`,
+  `test_wrong_block_hash_is_rejected`).
+
+**P1 — committed raw log와 provider SHA의 기계적 연결 부재.** 최초 구현은
+`provider-replay.json`을 읽지 않았고, raw-replay.json에 손으로 옮겨 적은
+"log" 요약과 이미 pin된 raw_sha256을 연결할 방법이 없었다.
+
+- `raw-replay.json`을 pre-decoded 요약에서 벗어나 실제 JSON-RPC 응답
+  **content-addressed 아티팩트**(`artifacts/sha256/<hash>.json`, 8개:
+  Base=primary role, Ethereum=verify role)로 교체했다. 각 아티팩트는
+  `.scan/live-provider-smoke/task-016-bridge-replay/`의 실제 live 재실행
+  결과이며 `provider-replay.json`에 이미 pin된 `raw_sha256`과 바이트 단위로
+  일치한다.
+- Verifier가 각 capability의 artifact URI를 `provider-replay.json`의 같은
+  `provider_id`·capability의 pinned `raw_sha256`과 대조하고, 실제 아티팩트
+  파일 바이트의 SHA-256도 파일명과 재대조한 뒤에만 파싱한다.
+- 회귀 테스트로 artifact URI가 pinned raw_sha256과 다르면 거부됨을 확인했다
+  (`test_artifact_sha256_must_match_pinned_provider_value`).
+
+**P2 — canonical hash가 evidence에 pin되지 않음.** 계산한 hash를 출력만
+하고 기대값과 대조하지 않아 drift를 막지 못했다.
+
+- TASK-013 선례를 따라 `evidence.json.verification_provenance.calculated_fact_sha256`에
+  `d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`를
+  고정하고, `_verify_verification_provenance()`가 매 실행마다 재계산값과
+  정확히 일치하는지 확인한다(불일치 시 거부).
+- 회귀 테스트로 pinned 값을 임의로 바꾸면 거부됨을 확인했다
+  (`test_canonical_hash_drift_from_pinned_evidence_is_rejected`).
+
+**검증.** `tests/unit/test_task_016_bridge_independent_verifier.py` 8 PASS
+(신규 5건 포함). `PASS TASK-016 Bridge independent Verifier: 1 fixtures, 3
+requirements, 2 deterministic runs`(canonical hash 무변동). 전체 게이트
+561 passed·traceability 1870·security 223.
+
+## 12. Related Documents
 
 - [Bridge candidate package](./fixtures/FX-SVC-BRG-001/README.md)
 - [Bridge 후보 선정 보고서](./61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md)

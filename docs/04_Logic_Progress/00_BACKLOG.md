@@ -1540,14 +1540,25 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     raw log는 이미 pin된 raw_sha256과 바이트 단위로 일치하는 실제 live
     재실행 아티팩트에서 가져왔다. `evidence.json`의
     `independent_verifier_pass`를 `true`로 정정.
+    리뷰 P1 2건·P2 반영 - topic0 signature·log-receipt-transaction-block
+    exact binding 미검증을 정정(`_decode_chain_event`에 전체 binding 체인
+    추가), `raw-replay.json`을 pre-decoded 요약에서 실제 raw JSON-RPC
+    응답 content-addressed 아티팩트(`artifacts/sha256/`)로 교체해
+    provider-replay.json의 pinned raw_sha256과 기계적으로 연결,
+    canonical hash를 `evidence.json.verification_provenance`에 pin하고
+    매 실행마다 대조하도록 정정
+    ([62 §11](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).
+    tamper 회귀 테스트 5건 추가(topic0·tx hash·block hash·artifact sha256
+    불일치·canonical hash drift).
 - Verification Receipt:
   - N/A - 구현 미시작(fixture Gate만 진행). 위 remediation·negative oracle·
     독립 Verifier는 `uv run pytest tests/unit/test_task_016_bridge_replay.py`
     10 PASS, `test_task_016_bridge_negative_oracles.py` 1 PASS,
-    `test_task_016_bridge_independent_verifier.py` 3 PASS,
+    `test_task_016_bridge_independent_verifier.py` 8 PASS,
     `PASS 8 TASK-016 Bridge negative oracles twice`,
     `PASS TASK-016 Bridge independent Verifier: 1 fixtures, 3 requirements,
-    2 deterministic runs`, 전체 `scripts/verify.py` 556 passed로 확인했다.
+    2 deterministic runs`, 전체 `scripts/verify.py` 561 passed·
+    traceability 1870·security 223으로 확인했다.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 

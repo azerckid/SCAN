@@ -99,5 +99,9 @@
       "candidate-to-verifying review"
     ]
   },
+  "verification_provenance": {
+    "independent_verifier_module": "src/scan_tool/application/task_016_bridge_independent_verifier.py",
+    "calculated_fact_sha256": "d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac"
+  },
   "provenance_notes": "Across official documentation defines protocol rules. BaseScan and Etherscan were used only to select the public candidate. Sixteen bounded read-only RPC observations now pin per-capability SHA-256 values; endpoints, credentials, and raw explorer bodies are not stored."
 }

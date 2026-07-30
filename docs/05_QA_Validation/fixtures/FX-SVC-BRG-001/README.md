@@ -24,19 +24,23 @@ exclusive relayer·message)가 실제로 동일함을 코드로 재확인했다.
 `bridge_pair_facts`에 포함됐다. doc 21 §6의 7개 negative oracle 범주(오매칭·
 domain 충돌·tolerance 남용·evidence 누락·scope 합성·heuristic 승격·amount
 공식 불일치)를 8개 synthetic case로 고정해 2회 결정성으로 통과했다.
-독립 작성된 Verifier가 `raw-replay.json`의 raw ABI `topics`/`data`를
-처음부터 다시 디코딩해 canonical hash
+독립 작성된 Verifier가 실제 raw JSON-RPC 응답 아티팩트(`artifacts/sha256/`)를
+`provider-replay.json`에 이미 pin된 raw_sha256과 대조한 뒤, topic0
+signature·log-receipt-transaction-block exact binding까지 처음부터 다시
+검증하고 canonical hash
 `d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`를
-계산했다(candidate-capture 모듈과 코드 비공유). candidate→verifying 별도
-판정만 남아 아직 `verifying` 상태가 아니다.
+계산했다(candidate-capture 모듈과 코드 비공유, `evidence.json`에 pin).
+candidate→verifying 별도 판정만 남아 아직 `verifying` 상태가 아니다.
 
 ## 파일
 
 - `input.json`: 발견 모드 request와 양단 고정 scope
 - `expected.json`: 후보 정답·composite match·정수 금액 계약
-- `evidence.json`: 공식 문서와 Explorer supporting evidence
-- `raw-replay.json`: 양단 raw ABI log(`topics`/`data`)와 reconciled facts
+- `evidence.json`: 공식 문서·Explorer supporting evidence·독립 Verifier
+  canonical hash pin
+- `raw-replay.json`: 양단 raw JSON-RPC 아티팩트 참조(`artifact://sha256/...`)
 - `provider-replay.json`: 네 chain/provider 역할의 capability별 SHA-256
+- `artifacts/sha256/<hash>.json`: 실제 raw JSON-RPC 응답 8건(content-addressed)
 
 ## 다음 Gate
 
