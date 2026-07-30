@@ -90,13 +90,13 @@
     "integer_fee_equation_matches": true,
     "two_provider_decoded_match": true,
     "raw_sha256_recorded_per_capability": true,
-    "independent_verifier_pass": false
+    "negative_oracle_pass": true,
+    "independent_verifier_pass": true
   },
   "uncertainty": {
     "candidate_only": true,
     "remaining": [
-      "negative oracle",
-      "independent verifier"
+      "candidate-to-verifying review"
     ]
   },
   "provenance_notes": "Across official documentation defines protocol rules. BaseScan and Etherscan were used only to select the public candidate. Sixteen bounded read-only RPC observations now pin per-capability SHA-256 values; endpoints, credentials, and raw explorer bodies are not stored."

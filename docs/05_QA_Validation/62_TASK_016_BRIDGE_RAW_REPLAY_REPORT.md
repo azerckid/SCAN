@@ -1,7 +1,7 @@
 # TASK-016 Bridge Raw Replay 준비 보고서
 > Created: 2026-07-30 23:30
-> Last Updated: 2026-07-31 01:10
-> Status: Live Replay Passed · Cross-Provider Match Code-Verified (P1 Remediated) · Candidate
+> Last Updated: 2026-07-31 02:10
+> Status: Live Replay·Negative Oracle·Independent Verifier Passed · Candidate
 
 ## 1. 목적
 
@@ -178,7 +178,44 @@ manifest: [`task-016-bridge-negative-oracles-v0.1.json`](./oracles/task-016-brid
 **검증.** `PASS 8 TASK-016 Bridge negative oracles twice (offline
 deterministic)`. 전체 게이트 553 passed·traceability·security 유지.
 
-## 10. Related Documents
+## 10. Independent Verifier Gate
+
+`raw-replay.json`을 pre-decoded 요약(`event`)에서 진짜 raw ABI 로그
+(`log.topics`·`log.data`, address·block·tx 바인딩 필드)로 교체했다. 기존
+저장분은 이미 디코딩된 필드만 담고 있어 candidate-capture 모듈과 같은
+결과를 재확인하는 것 이상을 하지 못했다. 진짜 raw bytes가 있어야 별도로
+작성된 코드가 ABI를 처음부터 다시 해석해 같은 사실에 도달하는 실제
+독립성이 성립한다.
+
+- 교체한 raw log는 `.scan/live-provider-smoke/task-016-bridge-replay/`의
+  실제 live 재실행 아티팩트에서 가져왔다. Base는 primary role, Ethereum은
+  verify role의 raw 응답을 사용했다 — 둘 다 `provider-replay.json`에
+  이미 pin된 `raw_sha256`과 바이트 단위로 일치한다.
+- `task_016_bridge_independent_verifier.py`는 `task_016_bridge_replay.py`를
+  **import하지 않는다.** `V3FundsDeposited`/`FilledV3Relay` word 오프셋,
+  zero-output-token 매핑, 정수 fee 계산을 독립적으로 다시 구현하고,
+  `expected.json`의 `bridge_transfer` projection과 정확히 일치하는지
+  검증한 뒤 canonical SHA-256을 계산한다.
+- evidence·requirement 연결도 raw-first로 재검증한다
+  (`EV-BRIDGE-SOURCE-EVENT`/`EV-BRIDGE-DESTINATION-EVENT`의 chain/spoke
+  pool/deposit ID가 재계산된 facts와 일치, `REQ-BRIDGE-SOURCE/DESTINATION/DOMAIN`
+  세 requirement의 evidence_refs가 evidence.json에 실재).
+- `evidence.json`의 `independent_verifier_pass`를 `true`로, `uncertainty.remaining`을
+  `["candidate-to-verifying review"]`로 정정했다(negative oracle 완료 반영
+  누락분도 함께 정정).
+
+**계산된 canonical hash.** `FX-SVC-BRG-001=d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`.
+
+구현: `src/scan_tool/application/task_016_bridge_independent_verifier.py`,
+`scripts/verify_task_016_bridge_independent_verifier.py`(`scripts/verify.py`에
+연결), `tests/unit/test_task_016_bridge_independent_verifier.py`.
+
+**검증.** `PASS TASK-016 Bridge independent Verifier: 1 fixtures, 3
+requirements, 2 deterministic runs`. 이 단계는 raw-first 재계산까지이며,
+아직 없는 `bridge_transfer` product analyzer와의 hash 대조
+(analyzer-independent-verification)는 analyzer 구현 승인 이후 별도 Gate다.
+
+## 11. Related Documents
 
 - [Bridge candidate package](./fixtures/FX-SVC-BRG-001/README.md)
 - [Bridge 후보 선정 보고서](./61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md)

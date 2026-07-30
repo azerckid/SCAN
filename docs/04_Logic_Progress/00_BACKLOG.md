@@ -1529,12 +1529,25 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     통과했다([62 §9](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md),
     [manifest](../05_QA_Validation/oracles/task-016-bridge-negative-oracles-v0.1.json)).
     독립 작성된 참조 classifier이며 `bridge_transfer` analyzer는 아직 없다.
+    리뷰 P1(mapping 부재를 failed로 오분류) 반영 - 공식 fee/asset mapping
+    부재는 `partial/amount_mapping_unverified`로 정정(실제 모순인
+    `amount_reconciliation_failed`와 분리 유지).
+  - Independent Verifier Gate - `raw-replay.json`을 pre-decoded 요약에서
+    진짜 raw ABI 로그(`topics`/`data`)로 교체하고, `task_016_bridge_replay.py`를
+    import하지 않는 독립 verifier가 처음부터 다시 디코딩해 canonical hash
+    `d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`를
+    계산했다([62 §10](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).
+    raw log는 이미 pin된 raw_sha256과 바이트 단위로 일치하는 실제 live
+    재실행 아티팩트에서 가져왔다. `evidence.json`의
+    `independent_verifier_pass`를 `true`로 정정.
 - Verification Receipt:
-  - N/A - 구현 미시작(fixture Gate만 진행). 위 remediation·negative oracle은
-    `uv run pytest tests/unit/test_task_016_bridge_replay.py` 10 PASS,
-    `tests/unit/test_task_016_bridge_negative_oracles.py` 1 PASS,
-    `PASS 8 TASK-016 Bridge negative oracles twice (offline deterministic)`,
-    전체 `scripts/verify.py` 553 passed로 확인했다.
+  - N/A - 구현 미시작(fixture Gate만 진행). 위 remediation·negative oracle·
+    독립 Verifier는 `uv run pytest tests/unit/test_task_016_bridge_replay.py`
+    10 PASS, `test_task_016_bridge_negative_oracles.py` 1 PASS,
+    `test_task_016_bridge_independent_verifier.py` 3 PASS,
+    `PASS 8 TASK-016 Bridge negative oracles twice`,
+    `PASS TASK-016 Bridge independent Verifier: 1 fixtures, 3 requirements,
+    2 deterministic runs`, 전체 `scripts/verify.py` 556 passed로 확인했다.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 
