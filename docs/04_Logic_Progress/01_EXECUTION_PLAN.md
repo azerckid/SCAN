@@ -207,6 +207,9 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   negative oracle·UI 요구를 docs-only
   [계약 제안](../03_Technical_Specs/19_TASK_016_LENDING_CONTRACT_PROPOSAL.md)으로 작성한다
   (fixture 캡처·구현은 이후 Gate, coverage 무변동).
+- [x] `TASK-016` Lending 전용 [UI 계약](../02_UI_Screens/10_TASK_016_LENDING_UI.md)·
+  [Preview](../02_UI_Screens/previews/09_task_016_lending_preview.html)(complete/partial/
+  failed·정적·외부호출 0)를 작성하고 사용자 UI-First Gate 검토를 대기한다.
 - [ ] `TASK-016` bridge/CEX/mixer/lending 중 confirmed fixture가 있는 adapter만 선택한다.
 - [ ] 양단 체인·message·amount 또는 서비스 휴리스틱 증거 계약을 승인한다.
 - [ ] EVM과 Bitcoin 결과가 같은 공통 evidence 봉투를 유지하는지 검증한다.
