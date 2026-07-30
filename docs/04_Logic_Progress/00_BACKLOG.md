@@ -1307,22 +1307,43 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] Rules·source registry·Workbench·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - Preview 승인 완료, 공개 fixture·계약 정식 승인 전 PASS 금지
+  - Status: PREPARED — 참조 문서 정독·Constraints·Conflicts 확정(2026-07-30).
+    `intel_context` I/O 계약(doc 18)은 PR #84로 병합됐고 §5 result value가
+    독립 Verifier fact와 canonical hash 단위로 일치한다(#84 재검토에서 확인).
+    **`PASS` 전환과 사용자 analyzer 구현 승인은 사용자 명시 행위로 남긴다.**
+    그 전까지 코드 착수 금지.
   - Required References Read:
-    - [TASK-015 계약](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md)
-    - [TASK-015 UI](../02_UI_Screens/09_TASK_015_INTELLIGENCE_UI.md)와
-      [Preview](../02_UI_Screens/previews/08_task_015_intelligence_preview.html)
-    - [TASK-015 Gate](../05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md)
-    - 위 Related Concept·Technical·QA 문서 전체
-  - Constraints: privacy 최소 수집, Terms·Rules Gate, source assertion과
-    ownership/crime truth 분리, AI hypothesis 비승격
-  - Conflicts: 공식 대회 Rules 미확정, Actor bounded prehistory·service
-    exclusion·intel_context 계약 사용자 승인 미실행. label source blocker·snapshot 기준선·
-    다섯 candidate package·negative oracle 30개·ENS 제2 provider·OFAC
-    current SLS pin·ready fixture 4개 independent Verifier는 해소
+    - [17 Intelligence 계약 제안](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md)(Superseded) →
+      [18 intel_context I/O 확정안](../03_Technical_Specs/18_TASK_015_INTEL_CONTEXT_IO_CONTRACT.md)(authoritative) —
+      query 5종 request/result, 오류는 기존 `ErrorCode`+`stage` 매핑, §5가 Verifier fact와 일치
+    - [09 Intelligence UI](../02_UI_Screens/09_TASK_015_INTELLIGENCE_UI.md)·[Preview](../02_UI_Screens/previews/08_task_015_intelligence_preview.html) — 사용자 승인(2026-07-30 02:52)
+    - [45 Fixture·Contract Gate](../05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) · [46 Source 후보](../05_QA_Validation/46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) · [47 Raw Snapshot 기준선](../05_QA_Validation/47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) · [48 Candidate Package](../05_QA_Validation/48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md)
+    - [49 Negative Oracle](../05_QA_Validation/49_TASK_015_NEGATIVE_ORACLE_REPORT.md)(30×2) · [50 Source Readiness](../05_QA_Validation/50_TASK_015_SOURCE_READINESS_REPORT.md) · [51 Independent Verifier](../05_QA_Validation/51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md)(4×2) · [52 Provenance Hardening](../05_QA_Validation/52_TASK_015_PROVENANCE_HARDENING_RECEIPT.md)
+    - [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) · [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) · [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md)(OSINT-LBL/SAN/ENS·ACTOR-REL) · [Rules Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md)
+    - 5개 fixture의 input·expected·evidence·provider-replay/snapshot/artifacts:
+      [FX-OSINT-LABEL-CONFLICT-001](../05_QA_Validation/fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) ·
+      [FX-OSINT-SANCTIONS-HISTORY-001](../05_QA_Validation/fixtures/FX-OSINT-SANCTIONS-HISTORY-001/README.md) ·
+      [FX-OSINT-ENS-CONFLICT-001](../05_QA_Validation/fixtures/FX-OSINT-ENS-CONFLICT-001/README.md) ·
+      [FX-ACTOR-RELATION-HUB-001](../05_QA_Validation/fixtures/FX-ACTOR-RELATION-HUB-001/README.md) ·
+      [FX-ACTOR-COMMON-FUNDER-001](../05_QA_Validation/fixtures/FX-ACTOR-COMMON-FUNDER-001/README.md)(candidate)
+  - Verification: `scripts/verify.py` 전체 PASS — 489 tests, fixture 18, schema 48 probes, traceability 1648 links, TASK-015 negative oracle 30×2·독립 Verifier 4×2 PASS(docs-only, 코드 변경 없음).
+  - Constraints:
+    - privacy 최소 수집·Terms/Rules Gate·`offline_mode`면 live adapter 0회
+    - source assertion / onchain observation / heuristic_candidate 분리, **AI 가설은 `confirmed_fact`로 승격 금지**, ownership·criminality·coordination는 `not_assessed`
+    - **새 공개 `ErrorCode` 추가 금지** — 기존 11개 enum + query별 `stage`(doc 18 §7)
+    - 구현 확장(doc 18 §10): `AnalysisType.INTEL_CONTEXT`, query별 strict inputs/result 5개, `FixtureRequirementId`에 `REQ-INTEL-` 접두, request/result schema conditional·family probe·cross-family rejection, CLI guard, **analyzer hash ↔ 독립 Verifier hash 게이트**. §5가 이미 Verifier fact와 일치하므로 pinned hash 재계산 불필요
+    - `find_common_funder`는 initial_inflow_complete·service_exclusion 미완료 시 `partial`만 가능(common-funder fixture는 candidate 유지)
+    - 문제은행 OSINT/ACTOR의 운영 주체·동일 주체 귀속 full form은 source-claim/candidate로만 채점하고 truth 귀속은 `not_assessed`로 유예(구현·승격 문서에 채점 경계 명시)
+  - Conflicts:
+    - (해소) label source blocker 교체·snapshot 기준선·5 candidate package·negative oracle 30×2·ENS 2nd provider·OFAC SLS pin·4 fixture 독립 Verifier·provenance hardening·§5↔Verifier hash 정렬(PR #84)
+    - (열림) 공식 대회 Rules·채택 snapshot 재배포 Terms 미확정 → live mode·package 재배포는 별도 승인
+    - (열림) `FX-ACTOR-COMMON-FUNDER-001`의 bounded prehistory·service exclusion 미완료 → `candidate`·`partial`만, confirmed 승격은 후속
+    - (게이트) `intel_context` 대안 B 정식 승인·Context Receipt `PASS`·analyzer 구현 승인은 사용자 명시 행위로 미실행
 - Change Receipt:
-  - Offline oracle Gate만 구현했다. 제품 `intel_context` analyzer·live
-    source adapter·fixture 승격은 미착수다.
+  - Offline oracle·Source Readiness·독립 Verifier·Provenance hardening Gate와
+    `intel_context` I/O 계약 확정안까지 완료했다(아래 항목별 기록). 제품
+    `intel_context` analyzer·live source adapter·fixture `확정` 승격은
+    미착수이며, 4개 fixture는 `verifying`·common-funder는 `candidate`다.
 - Verification Receipt:
   - Docs-only Gate: 468 tests PASS, fixture 13, schema 48 probes,
     traceability 1543 links, security 162 files.
