@@ -166,9 +166,9 @@ Gate에서 확인한다.
 | `OR-BRIDGE-WRONG-DEPOSIT-MATCH` | 1. 유사 금액 다른 전송 오매칭 | failed |
 | `OR-BRIDGE-HEURISTIC-NOT-PROMOTED` | 2. 결정적 키 없이 confirmed 승격 시도 | partial |
 | `OR-BRIDGE-DESTINATION-EVIDENCE-MISSING` | 4. 도착 evidence 미확보를 complete 처리 | partial |
-| `OR-BRIDGE-TOLERANCE-WITHOUT-MAPPING` | 3. 공식 mapping 없이 임의 tolerance 승격 | failed |
-| `OR-BRIDGE-AMOUNT-FORMULA-MISMATCH` | 7. 공식 fee/asset mapping 있어도 정수 공식 불일치 | failed |
-| `OR-BRIDGE-COMPLETE-MATCH` | 양성 대조군(FX-SVC-BRG-001 실제 재검증 facts와 정합) | complete |
+| `OR-BRIDGE-TOLERANCE-WITHOUT-MAPPING` | 3. 공식 mapping 없이 임의 tolerance 승격 시도 → 승격 거부·candidate 유지 | partial |
+| `OR-BRIDGE-AMOUNT-FORMULA-MISMATCH` | 7. 공식 fee/asset mapping 있어도 정수 공식 불일치(실제 모순) | failed |
+| `OR-BRIDGE-COMPLETE-MATCH` | synthetic positive control(실제 raw replay를 읽지 않음, 결정 경계 회귀 방지용) | complete |
 
 manifest: [`task-016-bridge-negative-oracles-v0.1.json`](./oracles/task-016-bridge-negative-oracles-v0.1.json).
 구현: `src/scan_tool/application/task_016_bridge_negative_oracles.py`,

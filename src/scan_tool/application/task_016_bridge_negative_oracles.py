@@ -86,7 +86,10 @@ def _evaluate_bridge(facts: dict[str, Any]) -> dict[str, Any]:
     if not _boolean(facts, "official_asset_mapping_present") or not _boolean(
         facts, "official_fee_mapping_present"
     ):
-        return _failed("amount_asset_mapping_missing")
+        # doc 21 §6 negative oracle 3: reject the promotion but keep the
+        # destination at candidate/partial, not a hard failure — there is no
+        # contradiction yet, only an unverifiable amount claim.
+        return _partial("amount_mapping_unverified")
     if not _boolean(facts, "amount_matches_via_official_formula"):
         return _failed("amount_reconciliation_failed")
     return _complete("bridge_transfer_matched")

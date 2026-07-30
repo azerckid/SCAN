@@ -113,8 +113,8 @@
         "amount_matches_via_official_formula": true
       },
       "expected": {
-        "outcome": "failed",
-        "classification": "amount_asset_mapping_missing"
+        "outcome": "partial",
+        "classification": "amount_mapping_unverified"
       }
     },
     {
