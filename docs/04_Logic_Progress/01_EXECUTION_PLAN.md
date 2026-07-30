@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
 > Last Updated: 2026-07-30 14:46
-> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · Verifying 4 / Candidate 1 · Benchmark 11/11
+> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · 3 Confirmed / LABEL Verifying / Common-funder Candidate · Benchmark 11 Automated / 4 Assisted
 
 ## 1. 목적
 
@@ -184,8 +184,9 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] label pinned repository에 exact OpenRAIL text·version·notice가 없음을
   고정하고 selected row를 quarantine한다.
 - [ ] publisher exact terms를 확보하거나 exact license source로 교체한다.
-- [ ] non-quarantined SANCTIONS·ENS·RELATION-HUB 3개를 별도 Promotion
-  Receipt로 판정하고, 실제 confirmed 문제만 Benchmark에 반영한다.
+- [x] non-quarantined SANCTIONS·ENS·RELATION-HUB 3개를 별도
+  [Promotion Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)로
+  confirmed 판정하고, 미완성 문제 범위는 Benchmark `assisted`로 반영한다.
 - [ ] LABEL은 exact terms 확보 또는 source 교체·재검증 후 별도 Promotion
   Review에 다시 진입한다.
 

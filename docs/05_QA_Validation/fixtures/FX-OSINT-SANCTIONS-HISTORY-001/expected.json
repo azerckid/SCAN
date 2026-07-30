@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
-  "status": "verifying",
+  "status": "confirmed",
   "subject_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
   "timeline": [
     {

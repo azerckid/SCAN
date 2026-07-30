@@ -1,6 +1,6 @@
 """Cross-check the TASK-015 production analyzer against the pinned fact hash.
 
-The pinned ``calculated_fact_sha256`` in each verifying fixture's
+The pinned ``calculated_fact_sha256`` in each reviewed fixture's
 ``evidence.json`` was produced by ``task_015_independent_verifier.py``
 re-deriving facts from the raw package files. This script runs the production
 analyzer (``scan_tool.slices.intel_context``, a separate Pydantic-typed
@@ -20,7 +20,7 @@ from scan_tool.slices.intel_context import analyze_intel_context_replay
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "docs/05_QA_Validation/fixtures"
-VERIFYING = (
+REVIEWED = (
     "FX-OSINT-LABEL-CONFLICT-001",
     "FX-OSINT-SANCTIONS-HISTORY-001",
     "FX-OSINT-ENS-CONFLICT-001",
@@ -50,7 +50,7 @@ def _run(fixture_id: str):
 
 
 def main() -> None:
-    for fixture_id in VERIFYING:
+    for fixture_id in REVIEWED:
         package, result = _run(fixture_id)
         if result.root.status != "complete":
             raise RuntimeError(f"{fixture_id} analyzer did not reach complete")
@@ -69,7 +69,7 @@ def main() -> None:
 
     print(
         "PASS TASK-015 analyzer independent verification: "
-        f"{len(VERIFYING)} verifying fixtures canonical hash matches the independent "
+        f"{len(REVIEWED)} reviewed fixtures canonical hash matches the independent "
         "verifier, common-funder partial, 2 deterministic runs"
     )
 

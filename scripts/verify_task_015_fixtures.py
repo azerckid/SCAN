@@ -16,7 +16,7 @@ def main() -> None:
     hashes = ", ".join(f"{item['fixture_id']}={item['calculated_sha256']}" for item in first)
     print(
         "PASS TASK-015 independent Verifier: "
-        f"{len(first)} verifying fixtures, "
+        f"{len(first)} reviewed fixtures, "
         f"{sum(item['requirement_count'] for item in first)} requirements, "
         "2 deterministic runs"
     )

@@ -1,19 +1,19 @@
 # TASK-015 Live Source·Terms·Fixture 승격 Readiness
 > Created: 2026-07-30 14:19
-> Last Updated: 2026-07-30 14:38
-> Status: Draft · OpenRAIL Resolution Blocked · Live Not Executed · Promotion Not Approved
+> Last Updated: 2026-07-30 15:24
+> Status: Applied · 3 Non-Quarantined Confirmed · LABEL Blocked · Common-funder Candidate
 
 ## 1. 목적과 현재 판정
 
-이 문서는 `intel_context` analyzer 구현 이후 남은 source 사용 조건과 fixture
-승격 조건을 분리해 고정한다. 문서 작성 시점에 live source를 호출하거나
-fixture를 `확정`으로 승격하지 않는다.
+이 문서는 `intel_context` analyzer 구현 이후 source 사용 조건과 fixture
+승격 조건을 분리해 고정한 readiness 기준선이다. 비격리 세 fixture의 최종
+판정은 [승격 Receipt](./56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)에
+적용했다.
 
 **현재 판정:**
 
-- 네 `verifying` fixture는 analyzer·negative oracle·독립 Verifier를 통과했다.
-- `FX-ACTOR-RELATION-HUB-001`은 저장된 confirmed fixture만으로 재현되므로
-  live source 없이 최종 승격 검토가 가능하다.
+- SANCTIONS·ENS·RELATION-HUB는 analyzer·negative oracle·독립 Verifier와
+  fixture별 문서 Gate를 통과해 bounded scope에서 `confirmed`다.
 - ENS 관련 fixture는 고정 block artifact로 재현할 수 있다. 새 live RPC 호출은
   승격의 필수 조건이 아니며, 실행할 때만 `RULE-API-001`과 provider Terms를
   다시 확인한다.
@@ -58,13 +58,16 @@ Source permission을 통과했다고 fact가 정확해지는 것은 아니며, f
 | Fixture | 현재 | 허용 승격 입력 | 닫힌 Gate | 남은 Hard Gate | 판정 |
 |:---|:---:|:---|:---|:---|:---|
 | `FX-OSINT-LABEL-CONFLICT-001` | verifying | quarantine된 `provided_artifact` | 30 oracle 일부·Verifier·analyzer·artifact hash·license absence proof | publisher exact terms 확보 또는 source 교체 | BLOCKED |
-| `FX-OSINT-SANCTIONS-HISTORY-001` | verifying | `provided_artifact`; Rules 허용 시 official locator 재확인 | action timeline·SLS context·Verifier·analyzer | full CSV 미재배포 확인, `retrieved_at`/as-of 의미 최종 고정 | READY AFTER DOC CHECK |
-| `FX-OSINT-ENS-CONFLICT-001` | verifying | `provided_artifact`; live는 optional | fixed-block 두 source decoded match·Verifier·analyzer | fixed block fact와 현재 소유권을 동일시하지 않는 승격 문구 확인 | READY AFTER DOC CHECK |
-| `FX-ACTOR-RELATION-HUB-001` | verifying | confirmed local fixture | DEX/AUTH hash·hub exclusion·Verifier·analyzer | regression 재실행, ownership/coordination `not_assessed` 확인 | READY FOR PROMOTION REVIEW |
+| `FX-OSINT-SANCTIONS-HISTORY-001` | confirmed | `provided_artifact`; Rules 허용 시 official locator 재확인 | action timeline·subject-bound SLS context·Verifier·analyzer·미재배포 | 없음(현재 상태·범죄성은 `not_assessed`) | PROMOTED |
+| `FX-OSINT-ENS-CONFLICT-001` | confirmed | `provided_artifact`; live는 optional | fixed-block 두 source decoded match·Verifier·analyzer·소유권 분리 | 없음(고정 block 밖은 미확정) | PROMOTED |
+| `FX-ACTOR-RELATION-HUB-001` | confirmed | confirmed local fixture | DEX/AUTH hash·hub exclusion·Verifier·analyzer·귀속 분리 | 없음(ownership/coordination `not_assessed`) | PROMOTED |
 | `FX-ACTOR-COMMON-FUNDER-001` | candidate | confirmed FLOW + 후속 bounded evidence | oracle·partial analyzer | bounded prehistory·initial inflow completeness·faucet/paymaster/service exclusion·Verifier | BLOCKED |
 
-`READY`는 `confirmed`가 아니다. 별도 Promotion Receipt에서 fixture JSON·문서·
-Benchmark를 한 번에 동기화해야 한다.
+SANCTIONS·ENS·RELATION-HUB는 별도
+[Promotion Receipt](./56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)에서
+fixture JSON·문서·Benchmark를 함께 동기화해 `confirmed` 승격을 완료했다.
+향후 `READY` 판정이 추가되더라도 별도 Promotion Receipt 적용 전에는
+`confirmed`로 간주하지 않는다.
 
 ## 5. Live source 실행 Gate
 
@@ -85,13 +88,13 @@ fixture만 사용하고 live adapter 호출은 0건이어야 한다. Explorer는
 
 ## 6. Promotion 실행 순서
 
-1. label publisher exact terms를 확보하거나 exact license가 있는 source로 교체한다.
-2. sanctions·ENS·relation-hub의 남은 문서 체크를 닫는다.
-3. 네 verifying fixture에서 analyzer·Verifier·negative oracle을 두 번 재실행한다.
-4. expected/evidence/provider replay의 canonical hash가 불변인지 확인한다.
-5. 각 fixture를 별도 판단해 `confirmed`로 승격하고 Promotion Receipt를 쓴다.
-6. Benchmark는 실제 `confirmed` fixture가 대표하는 문제만 승격한다.
-7. common-funder는 위 네 fixture와 분리해 bounded evidence 이후 다시 검토한다.
+1. [x] sanctions·ENS·relation-hub의 문서·claim boundary를 닫는다.
+2. [x] 세 fixture에서 analyzer·Verifier·negative oracle을 재실행한다.
+3. [x] expected/evidence/provider replay의 canonical hash 불변을 확인한다.
+4. [x] 세 fixture를 별도 판단해 `confirmed`로 승격하고 Receipt를 쓴다.
+5. [x] 세 문제의 미완성 범위를 숨기지 않고 Benchmark `assisted`로 반영한다.
+6. [ ] label publisher exact terms를 확보하거나 exact license source로 교체한다.
+7. [ ] common-funder는 bounded evidence 이후 다시 검토한다.
 
 ## 7. 실패·중단 조건
 
@@ -107,14 +110,16 @@ fixture만 사용하고 live adapter 호출은 0건이어야 한다. Explorer는
 
 ## 8. Verification Receipt
 
-- `scripts/verify.py`: **535 tests PASS**
+- `scripts/verify.py`: **537 tests PASS**
 - Reference Fixture Schema: **18 packages PASS**
 - Analysis I/O Schema: **52 probes PASS**
-- Repository traceability: **1,676 links PASS**
+- Repository traceability: **1,710 links PASS**
 - Security scan: **204 runtime/evidence files PASS**
 - TASK-015: negative oracle **30×2**, 독립 Verifier **4×2**, analyzer 독립
   verification **4 fixtures**, common-funder `partial` PASS
-- 이 문서 작성 중 live source 호출·fixture 상태 변경·Benchmark 승격은 0건이다.
+- 제품 live adapter 호출은 0건이다. 최종 Promotion Review에서 공식 SLS CSV를
+  수동 read-only로 1회 재확인했으며 원문은 임시 파일 삭제 후 metadata/hash만
+  보존했다. 세 fixture 상태와 Benchmark 분류 변경은 별도 Receipt에 기록했다.
 
 ## 9. 365 글로벌 평가 기준
 

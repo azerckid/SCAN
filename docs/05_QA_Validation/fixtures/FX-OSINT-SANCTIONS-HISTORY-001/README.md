@@ -1,7 +1,7 @@
 # Fixture: FX-OSINT-SANCTIONS-HISTORY-001
 > Created: 2026-07-30 03:37
-> Last Updated: 2026-07-30 14:19
-> Status: Verifying 0.1 · Negative Oracle / Independent Verifier Passed
+> Last Updated: 2026-07-30 15:01
+> Status: Confirmed 0.1 · Analyzer/Verifier Passed · Historical Scope
 
 ## 1. 목적
 
@@ -24,11 +24,13 @@ address match만 보존한다.
 - [x] 독립 Verifier·두 번 결정성
 - [x] `verifying` 승격
 - [x] 제품 analyzer·독립 canonical hash 대조
-- [ ] full SLS CSV 미재배포·`retrieved_at`/as-of 의미 최종 확인
-- [ ] 최종 승격
+- [x] full SLS CSV 미재배포·`retrieved_at`/as-of 의미 최종 확인
+- [x] SLS snapshot 조회 주소를 fixture 주체와 결합하고 공식 CSV hash·0건을 재확인
+- [x] 역사적 action 범위로 최종 승격
 
 ## 4. Related Documents
 
 - [Source-resolution report](../../47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md)
 - [Fixture·Contract Gate](../../45_TASK_015_FIXTURE_CONTRACT_GATE.md)
 - [Promotion Readiness](../../54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md)
+- [Final Promotion Receipt](../../56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)

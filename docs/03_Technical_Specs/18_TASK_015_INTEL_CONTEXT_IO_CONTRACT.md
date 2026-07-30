@@ -1,18 +1,20 @@
 # TASK-015 `intel_context` Analysis I/O 계약 (대안 B 확정안)
 > Created: 2026-07-30 05:20
-> Last Updated: 2026-07-30 05:20
-> Status: Contract Draft · User Approval Pending · Runtime Not Implemented
+> Last Updated: 2026-07-30 15:01
+> Status: Approved 1.0 · Runtime Applied · 3 Non-Quarantined Fixtures Confirmed
 
 ## 0. 문서 위치
 
 [TASK-015 Intelligence 계약 제안](./17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md)은
 source role·claim·conflict·윤리 경계를 제안했다. 이 문서는 대안 B
 `analysis_type: intel_context`를 request/result/error 단위로 확정하기 위한
-docs-only 검토안이다.
+docs-only 검토안으로 시작했으며, 사용자 승인·Context Receipt·구현 검증을
+거쳐 현재 `intel_context` runtime의 authoritative 계약으로 적용됐다.
 
-이 문서만으로 공개 enum·Pydantic·JSON Schema·CLI를 변경하지 않는다.
-사용자 계약 승인, Context Receipt `PASS`, 별도 analyzer 구현 승인이 모두
-기록된 뒤에만 코드로 적용한다.
+구현 당시 공개 enum·Pydantic·JSON Schema·CLI 변경은 승인된 §10 범위로
+제한했다. SANCTIONS·ENS·RELATION-HUB의 최종 상태와 문제 전체 coverage
+경계는 [승격 Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)를
+따른다.
 
 ## 1. 대안 B 요지
 

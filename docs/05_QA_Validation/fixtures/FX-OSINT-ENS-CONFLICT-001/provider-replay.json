@@ -2,7 +2,7 @@
   "schema_version": "0.1",
   "fixture_id": "FX-OSINT-ENS-CONFLICT-001",
   "captured_at": "2026-07-29T19:21:26Z",
-  "status": "verifying",
+  "status": "confirmed",
   "scope_kind": "fixed_block_ens_forward_reverse",
   "request_scope": {
     "chain_id": 1,
@@ -71,5 +71,5 @@
     }
   ],
   "decoded_match": true,
-  "remaining_gate": ["product_analyzer", "final_promotion"]
+  "remaining_gate": []
 }

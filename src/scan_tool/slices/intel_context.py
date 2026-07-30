@@ -229,6 +229,12 @@ def _sanctions(
     inputs = request.inputs
     assert isinstance(inputs, SanctionsExposureInputs)
     _require_subject(request, replay.subject_address)
+    if replay.current_snapshot.subject_address != replay.subject_address:
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "The current sanctions snapshot is not bound to the requested subject.",
+            "source_reconciliation",
+        )
     _require_source_ref(inputs.current_list_snapshot_ref, replay, "current_list_snapshot_ref")
     for action in replay.official_actions:
         if action.address_match_count != 1:

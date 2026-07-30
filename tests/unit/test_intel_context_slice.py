@@ -218,6 +218,15 @@ def test_sanctions_snapshot_ref_must_bind_to_replay_source() -> None:
     assert result.root.errors[0].code == "reconciliation_failed"
 
 
+def test_sanctions_current_snapshot_must_bind_to_subject() -> None:
+    fixture_id = "FX-OSINT-SANCTIONS-HISTORY-001"
+    replay = _replay(fixture_id)
+    replay["current_snapshot"]["subject_address"] = "0x00000000000000000000000000000000000000ff"
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
 def test_common_funder_block_range_must_match_request() -> None:
     fixture_id = "FX-ACTOR-COMMON-FUNDER-001"
     document = _request_document(fixture_id)

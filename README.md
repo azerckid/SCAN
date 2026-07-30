@@ -43,20 +43,26 @@ adds Analysis I/O 0.2 `evm_core` object·historical balance·first Transfer·nat
 inflow queries while retaining the three 0.1 verticals. `TASK-013` adds
 subject-scoped ERC-721/1155 and EIP-1967 event/state analysis. `TASK-014` adds
 bounded path, remerge, and multi-origin graph/ledger analysis. Eleven cases are now
-directly automated, 1 is assisted, and 18 remain unsupported. The eleven automated
+directly automated, 4 are assisted, and 15 remain unsupported. The eleven automated
 cases pass exact answer, evidence, fixture-requirement, and deterministic replay
 checks. This is 11/11 accuracy within
 the automated scope, not 30/30 problem coverage.
 Phase 2 is documented as `TASK-012` through `TASK-019`: generic EVM, NFT/proxy,
 PATH, intelligence, service/xchain, Bitcoin, case reconciliation, and a final
-coverage gate. TASK-012 through TASK-014 are complete; TASK-015 through TASK-019
-remain proposed. TASK-013 has three confirmed public NFT·Proxy packages with two-provider
+coverage gate. TASK-012 through TASK-014 are complete; TASK-015 is in progress with
+three non-quarantined confirmed fixtures, while TASK-016 through TASK-019 remain
+proposed. TASK-013 has three confirmed public NFT·Proxy packages with two-provider
 raw SHA replay, explicit selected-scope integrity checks, and 16 offline negative
 oracles, an independent raw-first Verifier, approved UI·Context, product analyzer,
 remediation regression tests, and four subject-scoped deterministic runs.
 TASK-014 has three confirmed FLOW packages with two-provider selected-scope replay,
 18 deterministic counterexamples, an independent raw-first Verifier, a bounded
 product analyzer, and an independent Blockscout internal-edge cross-check.
+TASK-015 has confirmed bounded SANCTIONS history, fixed-block ENS, and public-hub
+false-positive fixtures. Their related expected problems remain assisted because
+one-hop sanctions expansion, domain/SNS checks, and positive multi-heuristic
+clustering are not complete. The LABEL fixture remains quarantined and the
+common-funder fixture remains candidate.
 Live AI and CTFd network submission remain unimplemented.
 `WP-INPUT-IMPL-02` connects explicit external replay and provided JSON/JSONL/CSV
 input selection to a normalized evidence envelope, content-addressed raw artifact,
@@ -121,12 +127,14 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-014 verifier | [`42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md`](docs/05_QA_Validation/42_TASK_014_INDEPENDENT_VERIFIER_REPORT.md) | raw-first graph/ledger recalculation for three FLOW fixtures |
 | TASK-014 final promotion | [`44_TASK_014_FINAL_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/44_TASK_014_FINAL_PROMOTION_RECEIPT.md) | FLOW confirmed fixtures, Blockscout edge cross-check, and Benchmark 11/11 evidence |
 | TASK-015 Intelligence contract | [`17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md`](docs/03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md) | proposed source assertion, conflict, sanctions, ENS, and actor-relation contract |
+| TASK-015 intel_context I/O | [`18_TASK_015_INTEL_CONTEXT_IO_CONTRACT.md`](docs/03_Technical_Specs/18_TASK_015_INTEL_CONTEXT_IO_CONTRACT.md) | approved five-query runtime contract and claim boundaries |
 | TASK-015 Intelligence UI | [`09_TASK_015_INTELLIGENCE_UI.md`](docs/02_UI_Screens/09_TASK_015_INTELLIGENCE_UI.md) | docs-only five-query Preview with user review passed |
 | TASK-015 Intelligence Gate | [`45_TASK_015_FIXTURE_CONTRACT_GATE.md`](docs/05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) | proposed fixture, negative oracle, privacy, UI, and Verifier Stop/Go criteria |
 | TASK-015 public-source candidates | [`46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md`](docs/05_QA_Validation/46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) | official Terms/privacy review with four viable candidates and one source-blocked label candidate |
 | TASK-015 source resolution | [`47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md`](docs/05_QA_Validation/47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) | Etherscan-free label replacement and five-candidate raw snapshot hash baseline |
 | TASK-015 candidate packages | [`48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md`](docs/05_QA_Validation/48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md) | five Schema-valid candidate packages with content-addressed selected artifacts |
 | TASK-015 negative oracles | [`49_TASK_015_NEGATIVE_ORACLE_REPORT.md`](docs/05_QA_Validation/49_TASK_015_NEGATIVE_ORACLE_REPORT.md) | 30 offline claim, history, ENS, and actor-relation counterexamples |
+| TASK-015 non-quarantined promotion | [`56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md) | SANCTIONS·ENS·RELATION-HUB confirmed; related problems remain assisted |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -147,10 +155,10 @@ Expected final outputs include:
 489 passed
 PASS 18 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
-PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 48 probes
+PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 52 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 1631 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 192 runtime/evidence files
+PASS repository traceability: 1710 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 205 runtime/evidence files
 PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)
 PASS TASK-013 independent Verifier: 3 fixtures (confirmed), 7 requirements, 13 evidence values, 2 deterministic runs
@@ -159,7 +167,7 @@ PASS 18 TASK-014 negative oracles twice (offline deterministic)
 PASS TASK-014 independent Verifier: 3 fixtures, 6 requirements, 2 deterministic runs
 PASS TASK-014 analyzer independent verification: 3 fixtures, canonical result hash matches the independent verifier, 2 deterministic runs
 PASS 30 TASK-015 negative oracles twice (offline deterministic)
-PASS TASK-015 independent Verifier: 4 verifying fixtures, 8 requirements, 2 deterministic runs
+PASS TASK-015 independent Verifier: 4 reviewed fixtures, 8 requirements, 2 deterministic runs
 ```
 
 The installed package exposes the approved analysis and local operations command surface:
@@ -201,8 +209,9 @@ baseline and expected-problem Benchmark 0.1 are closed.
 `TASK-012` is complete with four confirmed fixtures and a PASS Context Receipt.
 `TASK-013` is complete with three confirmed fixtures and Benchmark 9/9.
 `TASK-014` is complete with three confirmed fixtures and Benchmark 11/11.
-`TASK-015` through `TASK-019` remain proposals requiring their own fixture,
-Context Receipt, and implementation approval.
+`TASK-015` is in progress: three bounded fixtures are confirmed, LABEL is
+quarantined, and common-funder remains candidate. `TASK-016` through `TASK-019`
+remain proposals requiring their own fixture, Context Receipt, and implementation approval.
 `TASK-010` offline Operations V1 is complete through human-confirmed local
 submission recording. No live provider configuration exists; live transport still
 requires authoritative Rules and `rule_status: allowed`. The CLI never calls CTFd,

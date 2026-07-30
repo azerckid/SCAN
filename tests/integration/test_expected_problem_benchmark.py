@@ -32,8 +32,8 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
     assert {item.problem_id for item in manifest.cases} == APPROVED_EXPECTED_PROBLEM_IDS
     assert counts == {
         CoverageLevel.AUTOMATED: 11,
-        CoverageLevel.ASSISTED: 1,
-        CoverageLevel.UNSUPPORTED: 18,
+        CoverageLevel.ASSISTED: 4,
+        CoverageLevel.UNSUPPORTED: 15,
     }
     assert {
         item.problem_id for item in manifest.cases if item.coverage is CoverageLevel.AUTOMATED
@@ -49,6 +49,14 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
         "FLOW-EVM-001",
         "FLOW-EVM-002",
         "SVC-DEX-001",
+    }
+    assert {
+        item.problem_id for item in manifest.cases if item.coverage is CoverageLevel.ASSISTED
+    } == {
+        "ACTOR-REL-002",
+        "FLOW-MULTI-001",
+        "OSINT-ENS-001",
+        "OSINT-SAN-001",
     }
 
 
@@ -122,5 +130,5 @@ def test_benchmark_cli_runs_offline_and_reports_coverage(
     )
 
     assert result.exit_code == 0
-    assert "AUTOMATED 11 · ASSISTED 1 · UNSUPPORTED 18" in result.stdout
+    assert "AUTOMATED 11 · ASSISTED 4 · UNSUPPORTED 15" in result.stdout
     assert "BENCHMARK 11/11 automated cases passed · network_mode offline" in result.stdout

@@ -573,10 +573,10 @@
     {
       "problem_id": "ACTOR-REL-002",
       "difficulty": "high",
-      "coverage": "unsupported",
-      "reason": "Multi-feature entity clustering and counterexample handling are not implemented.",
-      "reusable_capabilities": ["BASE-PROVENANCE"],
-      "blocking_gaps": ["ACTOR-REL", "CLUSTER", "HEUR"]
+      "coverage": "assisted",
+      "reason": "The confirmed public-hub fixture automatically proves two separate interactions and prevents a false ownership merge, but it does not generate a same-actor candidate set from multiple positive heuristics.",
+      "reusable_capabilities": ["ACTOR-REL", "BASE-PROVENANCE"],
+      "blocking_gaps": ["CLUSTER", "HEUR"]
     },
     {
       "problem_id": "CRIME-PHISH-001",
@@ -645,18 +645,18 @@
     {
       "problem_id": "OSINT-SAN-001",
       "difficulty": "medium",
-      "coverage": "unsupported",
-      "reason": "The FREEZE fixture preserves official context, but general sanctions-list matching is absent.",
-      "reusable_capabilities": ["FREEZE", "BASE-PROVENANCE"],
-      "blocking_gaps": ["OSINT", "SANCTIONS", "LABEL"]
+      "coverage": "assisted",
+      "reason": "The confirmed historical fixture automatically preserves direct official designation and removal facts, but the full problem still requires one-hop counterpart expansion and direct-versus-indirect matching.",
+      "reusable_capabilities": ["SANCTIONS", "BASE-PROVENANCE"],
+      "blocking_gaps": ["PATH", "LABEL"]
     },
     {
       "problem_id": "OSINT-ENS-001",
       "difficulty": "medium",
-      "coverage": "unsupported",
-      "reason": "ENS, domain, and social-account collection and relationship validation are absent.",
-      "reusable_capabilities": ["BASE-PROVENANCE"],
-      "blocking_gaps": ["ENS-OSINT", "OSINT"]
+      "coverage": "assisted",
+      "reason": "The confirmed fixed-block fixture automatically validates ENS forward and reverse resolution, but domain, DNS, SNS, and impersonation checks remain outside the analyzer.",
+      "reusable_capabilities": ["ENS-OSINT", "BASE-PROVENANCE"],
+      "blocking_gaps": ["OSINT", "LABEL"]
     },
     {
       "problem_id": "MIXED-XCHAIN-001",

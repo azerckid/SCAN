@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-OSINT-SANCTIONS-HISTORY-001",
-  "status": "verifying",
+  "status": "confirmed",
   "captured_at": "2026-07-29T18:27:00Z",
   "event_evidence": [],
   "call_evidence": [],
@@ -70,7 +70,7 @@
   },
   "uncertainty": {
     "candidate_only": false,
-    "remaining": "Product analyzer and final promotion remain pending."
+    "remaining": "The current SLS absence is context only; current sanctions status and criminality remain not_assessed."
   },
   "provenance_notes": "The two official pages establish a historical timeline only. Current status and criminality are not assessed."
 }
