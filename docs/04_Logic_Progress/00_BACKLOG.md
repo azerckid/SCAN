@@ -1476,6 +1476,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Related Technical Docs:
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-SERVICE 계약
   - [Lending(SVC-LEND-001) 계약 제안](../03_Technical_Specs/19_TASK_016_LENDING_CONTRACT_PROPOSAL.md) - 첫 adapter docs-only 계약
+  - [WP-SERVICE 공통 계약 요소](../03_Technical_Specs/20_TASK_016_SERVICE_COMMON_CONTRACT.md) - Lending 확정분 추출·adapter 적용 경계
   - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - chain/provider source
   - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - adapter 재사용 Gate
 - Related QA Docs:

@@ -209,7 +209,10 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   (fixture 캡처·구현은 이후 Gate, coverage 무변동).
 - [x] `TASK-016` Lending 전용 [UI 계약](../02_UI_Screens/10_TASK_016_LENDING_UI.md)·
   [Preview](../02_UI_Screens/previews/09_task_016_lending_preview.html)(complete/partial/
-  failed·정적·외부호출 0)를 작성하고 사용자 UI-First Gate 검토를 대기한다.
+  failed·정적·외부호출 0)를 작성하고 사용자 UI-First Gate 승인을 받는다(PR #96).
+- [x] `TASK-016` Lending 리뷰 확정 계약 구조를 [WP-SERVICE 공통 계약
+  요소](../03_Technical_Specs/20_TASK_016_SERVICE_COMMON_CONTRACT.md)로 추출하고
+  Bridge/Mixer/CEX 적용 경계·Lending 고유 요소를 docs-only로 고정한다.
 - [ ] `TASK-016` bridge/CEX/mixer/lending 중 confirmed fixture가 있는 adapter만 선택한다.
 - [ ] 양단 체인·message·amount 또는 서비스 휴리스틱 증거 계약을 승인한다.
 - [ ] EVM과 Bitcoin 결과가 같은 공통 evidence 봉투를 유지하는지 검증한다.
