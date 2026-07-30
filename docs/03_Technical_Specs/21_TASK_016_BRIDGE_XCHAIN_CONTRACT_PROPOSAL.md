@@ -1,6 +1,6 @@
 # TASK-016 Bridge/XChain(SVC-BRG-001) Analysis 계약 제안 (docs-only)
 > Created: 2026-07-30 20:45
-> Last Updated: 2026-07-30 20:45
+> Last Updated: 2026-07-30 21:30
 > Status: docs-only Proposal · 사용자 승인 전 · 코드·fixture 캡처 미착수
 
 ## 0. 이 문서의 위치
@@ -27,14 +27,29 @@ source/Rules는 미확정이다. achievable 범위는 문제·정답 계약, 브
 어느 주소로 도착했는지 연결한다. 단서: 출발 체인 X·주소 A, 출발 TX 또는 시간
 창, 도착 체인 Y 후보.
 
+**Request와 Result scope 분리.** 발견해야 할 recipient를 request에 미리 넣어
+정답을 누출하지 않는다.
+
+- request 필수: `source_subject={chain,address,roles:[sender]}`,
+  `destination_chain`, `source_tx_hash` 또는 bounded source window.
+- request 선택: `expected_recipient`. 사용자가 이미 recipient 후보를 제공해
+  검증하는 mode에서만 사용하며, 없으면 discovery mode다.
+- result: `resolved_scoped_subjects[]`에 source subject와 발견된 destination
+  recipient `(chain,address,roles:[receiver])`를 넣는다. `expected_recipient`가
+  있으면 result recipient와 exact binding하고, 없으면 양단 evidence에서
+  recipient를 계산한다.
+- destination recipient를 찾지 못한 경우 request에 placeholder 주소를 만들지
+  않고 `partial`과 `partial_conditions`로 보존한다.
+
 **정답 형식(결정적 사실 + 근거 있는 매칭).**
 
 1. **출발 leg** — 출발 TX·브리지 컨트랙트·잠금/소각(lock/burn/deposit) 이벤트·
    자산·raw amount·destination 힌트(dstChainId·recipient).
 2. **도착 leg** — 도착 체인·주소·TX·해제/발행(unlock/mint/release) 이벤트·
    자산·raw amount.
-3. **연결 근거** — 매칭 키(§4): message/nonce 등 결정적 키 우선, 없으면 금액·
-   시간·자산 상관에 기반한 **candidate**.
+3. **연결 근거** — 매칭 키(§4): bridge domain으로 namespace된 message/nonce
+   또는 공식 derivation 우선, 없으면 금액·시간·자산 상관에 기반한
+   **candidate**.
 
 **판정 경계.** "유사 금액의 다른 브리지 전송 구분"과 "새 브리지 프로토콜
 해석"은 사람 몫이다. 결정적 매칭 키가 없으면 도착 leg를 확정하지 않고
@@ -64,9 +79,10 @@ candidate로만 둔다(§4·§6).
 **선정 기준.**
 
 - 출발 TX·브리지 컨트랙트·destination 힌트가 명확할 것.
-- 도착 체인 TX가 결정적 키(message/nonce/depositId)로 연결될 것(금액·시간만이
-  아니라).
-- 수수료 차감·지연 도착이 있으면 그 tolerance가 문서화될 것.
+- 도착 체인 TX가 domain-separated 결정적 키 또는 공식 derivation으로 연결될
+  것(금액·시간만이 아니라).
+- 수수료 차감·자산 표현·지연 도착이 있으면 §4의 정수 fee 식·asset mapping·
+  arrival window가 공식 근거와 함께 문서화될 것.
 - 양단 raw 데이터가 두 provider replay로 재현될 것(캡처 Gate).
 - 라벨 없이 사실·근거로 채점 가능할 것.
 
@@ -74,10 +90,12 @@ candidate로만 둔다(§4·§6).
 
 ## 4. 양단 evidence 분리와 매칭 키 (공통 §1.1·§1.2·§1.5 적용)
 
-**scoped_subjects[] (doc 20 §1.1).** 두 항목: `(chain X, address A, [sender])`,
-`(chain Y, recipient, [receiver])`. recipient는 초기 미지일 수 있고 이는
-정답이다. 한쪽(도착) 정보만 부족하면 `reconciliation_failed`가 아니라
-`partial`이다.
+**scoped subject binding(doc 20 §1.1).** request에는 알려진 source subject와
+destination chain만 필수로 둔다. destination recipient는 양단 evidence에서
+계산해 result `resolved_scoped_subjects[]`의 두 번째 항목으로 추가한다.
+`expected_recipient`가 제공된 검증 mode에서만 exact binding한다. 한쪽(도착)
+정보가 부족하면 placeholder를 합성하거나 `reconciliation_failed`로 만들지
+않고 `partial`이다.
 
 - **source_event_evidence** — 출발 체인 lock/burn/deposit 이벤트(브리지
   컨트랙트, 자산, raw amount, dstChainId·recipient 힌트, message/nonce).
@@ -89,20 +107,46 @@ candidate로만 둔다(§4·§6).
 
 **매칭 키(연결 근거).**
 
-- **결정적(confirmed)**: message/nonce/emitter+sequence/depositId가 양단에서
-  일치. 이는 **evidence-backed deterministic 매칭**이며 도착 leg를 확정한다.
+- **결정적(confirmed)**: 단독 nonce/message 값이 아니라 아래 composite
+  domain으로 namespace된 키가 양단에서 일치해야 한다.
+  `protocol_or_source_contract + source_chain + destination_chain + key_type +
+  key_value + emitter_or_sender(프로토콜이 요구할 때)`.
+- source와 destination에서 키 표현이 다른 브리지는 공식 message schema가
+  정의한 deterministic derivation을 사용하고 `source_key`·`destination_key`·
+  `derivation_rule_ref`·양단 evidence를 함께 보존한다. 임의 문자열 변환이나
+  금액·시간 상관으로 key를 만들지 않는다.
+- 위 domain과 derivation을 통과한 경우만 **evidence-backed deterministic
+  matching**이며 도착 leg를 확정한다.
 - **candidate(heuristic)**: 결정적 키 없이 금액·시간·자산 상관만 있는 경우.
   도착 leg를 확정하지 않고 candidate로 표기(사람 판단 필요).
 
 **미확보와 모순 분리(doc 20 §1.2).**
 
 - 도착 evidence가 **빠짐** → `partial`(도착 후보만 제시).
-- 양단 amount(수수료 tolerance 반영 후)·asset·message가 **실제 충돌** →
+- 양단 amount(§4 정수 fee·asset mapping 반영 후)·asset·message가 **실제 충돌** →
   `reconciliation_failed`로 보존(잘못된 쌍을 partial로 덮지 않음).
 
-**수수료·자산·지연 tolerance.** liquidity 브리지의 수수료 차감, 지연 도착,
-자산 표현 변경(예: 래핑)을 fixture별 tolerance로 명시한다. tolerance를 벗어난
-금액 차이는 매칭 실패다.
+**수수료·자산·지연 정합 계약.** 자유 형식 tolerance를 금지한다. fixture는
+아래 필드와 공식 근거를 고정하며, 모든 금액은 부호 없는 decimal string이다.
+
+- 자산: `source_asset_ref`·`destination_asset_ref`·각 `decimals`와 공식
+  `asset_mapping_ref`. 래핑·자산 변경은 이 mapping 없이는 candidate를 넘지
+  못한다.
+- 금액: `source_raw`·`protocol_fee_raw`·`expected_destination_raw`·
+  `observed_destination_raw`. 1:1 mapping은 정수 산술로
+  `(source_raw - protocol_fee_raw) × 10^destination_decimals ==
+  expected_destination_raw × 10^source_decimals`를 검증한다.
+- 비율 변환이 필요한 공식 route는 `ratio_numerator/ratio_denominator`와
+  반올림 규칙을 pin하고 정수 산술로 expected 값을 재계산한다.
+- `max_abs_delta_raw` 기본값은 `0`이다. 공식 프로토콜 문서·검증된 이벤트로
+  허용 오차가 입증된 경우에만 0보다 크게 설정한다. 근거가 없으면 tolerance
+  match는 candidate만 가능하다.
+- 지연: `arrival_window_start/end`를 block 또는 UTC timestamp로 고정한다.
+  창 밖 도착은 결정적 key가 같아도 conflict/late evidence로 보존하고 자동
+  complete하지 않는다.
+
+위 계산 뒤 expected와 observed가 다르거나 asset mapping이 모순되면
+`reconciliation_failed`다.
 
 **PATH seed(doc 20 §1.5).** 결정적으로 매칭된 도착 recipient leg를 seed로
 유도한다. 결정적 매칭이 없으면 PATH를 만들지 않거나 candidate로만 둔다.
@@ -114,15 +158,19 @@ candidate로만 둔다(§4·§6).
   result가 없어 자동 채점 불가 → `assisted`.
 - **대안 B(전용 leaf type, 권장).** 전용 `AnalysisType`(예: `bridge_transfer`)
   1종과 query(예: `link_bridge_transfer`)를 추가하고 result에 출발 leg·도착
-  leg·매칭 키·근거·상태를 담는다. 공통 봉투 유지, `inputs`·`result_type/value`
-  만 확장. 명칭·필드는 승인 후 최종 IO 계약에서 확정한다. Lending의
-  `defi_lending` 전용 leaf 선례와 동일한 방향이다.
+  leg·resolved subjects·composite 매칭 키·수수료/자산 정합 근거·상태를 담는다.
+  inputs는 §1의 source subject·destination chain·선택 expected recipient를
+  분리한다. 공통 봉투 유지, `inputs`·`result_type/value`만 확장. 명칭·필드는
+  승인 후 최종 IO 계약에서 확정한다. Lending의 `defi_lending` 전용 leaf
+  선례와 동일한 방향이다.
 
 ## 6. complete · partial · failed · negative oracle 계약
 
-**complete.** 출발·도착 leg가 모두 디코딩되고 **결정적 매칭 키로 연결**되며,
-양단 event↔transfer 정합(수수료 tolerance 포함)을 통과한다. 서비스 귀속·소유는
-not_assessed를 유지한 채 정답 3필드가 채워진다.
+**complete.** 출발·도착 leg가 모두 디코딩되고 **domain-separated 결정적
+매칭 키로 연결**되며, 양단 event↔transfer와 §4 정수 수수료·자산 mapping·
+arrival window 정합을 통과한다. 공식 브리지 컨트랙트 식별은
+evidence-backed assertion으로, recipient 소유·본인성·불법성은
+`not_assessed`로 유지한 채 정답 3필드가 채워진다.
 
 **partial.** 출발 TX·브리지는 확정됐으나 (a) 도착 evidence 미확보로 도착
 후보만, 또는 (b) 도착 주소는 있으나 message/nonce 근거 미확보. 미확보 항목을
@@ -132,16 +180,22 @@ not_assessed를 유지한 채 정답 3필드가 채워진다.
 
 - 라벨 출처 없이 주소 소유자·서비스 단정.
 - 확정 사실과 휴리스틱 후보를 구분하지 않음.
-- 양단 amount(tolerance 후)·asset·message **모순** → `reconciliation_failed`.
+- 양단 amount(§4 정수 fee·mapping 적용 후)·asset·message **모순** →
+  `reconciliation_failed`.
 - 잘못된 도착 쌍을 결정적 매칭으로 승격.
 
 **negative oracle(캡처 Gate 2회 결정성).**
 
 1. 유사 금액의 **다른** 브리지 전송을 도착 leg로 오매칭(결정적 키 불일치) → 거부.
 2. 결정적 키 없이 금액·시간만으로 도착을 confirmed로 승격 → candidate 강제.
-3. tolerance를 벗어난 금액 차이를 매칭으로 인정 → 거부.
+3. 공식 fee·asset mapping 없이 임의 tolerance로 금액 차이를 매칭 → 거부.
 4. 도착 evidence 미확보를 complete로 처리 → partial 강제.
-5. request scoped_subjects[]에 없는 체인·주소로 합성 → `reconciliation_failed`.
+5. request source subject 또는 destination chain에 없는 주소·체인으로 합성 →
+   `reconciliation_failed`.
+6. 같은 nonce/key_value이지만 다른 bridge contract·emitter·source chain인
+   전송을 같은 결정적 키로 연결 → 거부(domain separation 필수).
+7. 공식 fee/asset mapping 없이 임의 tolerance·잘못된 decimals·symbol 일치만으로
+   amount를 정합 → 거부(candidate 강제 또는 `reconciliation_failed`).
 
 ## 7. 오류 계약 — 기존 `ErrorCode` 재사용(신규 코드 없음)
 
@@ -164,7 +218,9 @@ doc 20 §1.6을 따른다. 매핑: 입력 경계 `invalid_input`, 지원 안 되
 
 - complete·partial·failed 3상태와 출발 leg·도착 leg·매칭 키·근거 표시.
 - 결정적 매칭과 candidate(금액·시간) 매칭을 시각적으로 구분.
-- 양단 금액 tolerance·수수료 차감을 표시하고 모순은 conflict로 노출.
+- request의 미지 recipient와 result의 resolved recipient를 분리해 표시.
+- 양단 raw 정수식·수수료·asset mapping·arrival window를 표시하고 모순은
+  conflict로 노출.
 - 외부 fetch/XHR/WebSocket/EventSource 0건(정적 검증).
 
 ## 10. 남은 Gate와 Blocker
