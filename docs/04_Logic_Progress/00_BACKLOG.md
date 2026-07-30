@@ -1558,6 +1558,14 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     일치하는지 확인하도록 확장했다([62 §12](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).
     tamper 회귀 테스트 3건 추가. doc 62·Backlog의 stale traceability
     수치(1870)를 1871로 정정.
+  - Fixture 승격 - 두 provider replay·negative oracle·독립 Verifier 3개
+    최소 조건을 모두 충족해 `FX-SVC-BRG-001`을 `후보(candidate)`에서
+    `검증 중(verifying)`으로 승격했다
+    ([63 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)).
+    5개 fixture JSON의 `status`를 `verifying`으로 갱신했다. `확정(confirmed)`은
+    Analysis I/O 대안 결정·Context Receipt PASS·`bridge_transfer` analyzer
+    구현·독립 Verification Receipt 잔여 Gate 후 별도 판정한다. Benchmark
+    자동화 수(12·4·14)는 무변동.
 - Verification Receipt:
   - N/A - 구현 미시작(fixture Gate만 진행). 위 remediation·negative oracle·
     독립 Verifier는 `uv run pytest tests/unit/test_task_016_bridge_replay.py`

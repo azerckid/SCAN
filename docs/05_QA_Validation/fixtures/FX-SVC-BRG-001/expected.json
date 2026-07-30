@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "fixture_version": "0.1",
   "fixture_id": "FX-SVC-BRG-001",
-  "status": "candidate",
+  "status": "verifying",
   "bridge_transfer": {
     "protocol": "across_v3",
     "origin_chain_id": 8453,
@@ -43,13 +43,17 @@
         "requirement_id": "REQ-BRIDGE-SOURCE",
         "description": "The Base V3FundsDeposited candidate must preserve chain, SpokePool, transaction, deposit ID, recipient, assets, and raw amounts.",
         "mandatory": true,
-        "evidence_refs": ["EV-BRIDGE-SOURCE-EVENT"]
+        "evidence_refs": [
+          "EV-BRIDGE-SOURCE-EVENT"
+        ]
       },
       {
         "requirement_id": "REQ-BRIDGE-DESTINATION",
         "description": "The Ethereum FilledV3Relay candidate must preserve the matching origin chain, deposit ID, recipient, destination token, and output amount.",
         "mandatory": true,
-        "evidence_refs": ["EV-BRIDGE-DESTINATION-EVENT"]
+        "evidence_refs": [
+          "EV-BRIDGE-DESTINATION-EVENT"
+        ]
       },
       {
         "requirement_id": "REQ-BRIDGE-DOMAIN",

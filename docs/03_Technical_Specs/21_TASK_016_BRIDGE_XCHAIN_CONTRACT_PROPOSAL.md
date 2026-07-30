@@ -1,7 +1,7 @@
 # TASK-016 Bridge/XChain(SVC-BRG-001) Analysis 계약 제안 (docs-only)
 > Created: 2026-07-30 20:45
-> Last Updated: 2026-07-31 01:10
-> Status: Docs Contract Approved · Candidate Package Created · Live Replay Executed · Cross-Provider Match Verified
+> Last Updated: 2026-07-31 03:20
+> Status: Docs Contract Approved · Fixture Promoted to Verifying · Analyzer Contract·구현 대기
 
 ## 0. 이 문서의 위치
 
@@ -260,15 +260,17 @@ doc 20 §1.6을 따른다. 매핑: 입력 경계 `invalid_input`, 지원 안 되
    `topics`/`data`를 처음부터 다시 디코딩해 canonical hash를 계산했다
    ([62 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) §10).
    candidate-capture 모듈과 코드를 공유하지 않는다.
-6. `candidate → verifying → confirmed` 승격 검토(사용자 Gate).
+6. 완료 — `FX-SVC-BRG-001`을 `candidate → verifying`으로 승격했다
+   ([63 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)).
+   `verifying → confirmed`는 7의 analyzer 구현 이후 별도 판정한다.
 7. Context Receipt PASS·구현 승인 후 analyzer 구현.
 8. (별도) `MIXED-XCHAIN-001` 조합 Gate — DEX+Bridge+CEX leg 결합.
 
-**Blocker.** 4의 양단 캡처·live 조회는 confirmed fixture와 source/Rules·
-Terms 확정이 필요하며 live/archive source Gate로 유예된다
-([Promotion Readiness](../05_QA_Validation/54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md) §2).
-따라서 `SVC-BRG-001`·`MIXED-XCHAIN-001`은 현재 `unsupported`이며 이 문서로
-coverage를 바꾸지 않는다(Benchmark 12·4·14 무변동).
+**Blocker(해소됨).** 4의 양단 캡처·live 조회는 이미 완료됐다(§10 4번).
+남은 것은 7의 analyzer 구현·Context Receipt PASS이며 이는 사용자 구현
+승인이 필요한 별도 Gate다. `SVC-BRG-001`·`MIXED-XCHAIN-001`은 현재
+analyzer가 없어 `unsupported`이며 이 문서로 coverage를 바꾸지 않는다
+(Benchmark 12·4·14 무변동).
 
 ## 11. Related Documents
 

@@ -4,7 +4,7 @@
   "fixture_version": "0.1",
   "fixture_id": "FX-SVC-BRG-001",
   "problem_id": "SVC-BRG-001",
-  "status": "candidate",
+  "status": "verifying",
   "chain": {
     "name": "base",
     "chain_id": 8453
@@ -18,7 +18,9 @@
   "source_subject": {
     "chain_id": 8453,
     "address": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
-    "roles": ["sender"]
+    "roles": [
+      "sender"
+    ]
   },
   "source_transaction": {
     "hash": "0x95714346d20bfaa328b75e4e6cf980d9620c4c4331af935032f848a118f05a1b",

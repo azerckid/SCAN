@@ -1,6 +1,6 @@
 # FX-SVC-BRG-001 — Across V3 Base→Ethereum 후보
 
-> Status: candidate · raw provider replay·negative oracle·independent Verifier complete
+> Status: 검증 중(verifying) · raw provider replay·negative oracle·independent Verifier complete
 
 ## 범위
 
@@ -30,7 +30,9 @@ signature·log-receipt-transaction-block exact binding까지 처음부터 다시
 검증하고 canonical hash
 `d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`를
 계산했다(candidate-capture 모듈과 코드 비공유, `evidence.json`에 pin).
-candidate→verifying 별도 판정만 남아 아직 `verifying` 상태가 아니다.
+[승격 검토](../../63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)를 통과해
+`검증 중(verifying)`으로 승격했다. `확정(confirmed)`은 analyzer 구현·독립
+Verification Receipt 등 잔여 Gate를 닫은 뒤 별도 판정한다.
 
 ## 파일
 
@@ -48,7 +50,10 @@ candidate→verifying 별도 판정만 남아 아직 `verifying` 상태가 아�
    ([manifest](../../oracles/task-016-bridge-negative-oracles-v0.1.json)).
 2. ~~독립 Verifier의 raw-first 재계산~~ — 완료
    ([62 §10](../../62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).
-3. candidate → verifying 별도 판정
+3. ~~candidate → verifying 별도 판정~~ — 완료
+   ([63 승격 검토](../../63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)).
+4. Analysis I/O 대안 결정·Context Receipt PASS·`bridge_transfer` analyzer
+   구현·독립 Verification Receipt → `confirmed` 승격은 별도 판정.
 
 endpoint·credential·Explorer 본문은 이 package에 저장하지 않는다.
 QuickNode의 bounded 호출은 429, PublicNode의 exact-block log는 403이었고
@@ -58,5 +63,7 @@ public RPC와 Ethereum managed/supporting explorer-backed RPC로 완료했다.
 ## Related Documents
 
 - [Bridge 후보 보고서](../../61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md)
+- [Bridge Raw Replay 보고서](../../62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)
+- [Bridge 승격 검토](../../63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)
 - [Bridge 계약](../../../03_Technical_Specs/21_TASK_016_BRIDGE_XCHAIN_CONTRACT_PROPOSAL.md)
 - [Reference Fixtures](../../01_REFERENCE_FIXTURES.md)
