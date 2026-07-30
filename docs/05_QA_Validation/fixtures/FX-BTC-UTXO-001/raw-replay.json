@@ -40,17 +40,17 @@
       {
         "provider_id": "publicnode.bitcoin",
         "role": "primary",
-        "retrieved_at": "2026-07-31T01:00:00+09:00",
-        "artifact_file": "artifacts/publicnode-primary.json",
-        "artifact_sha256": "44bb9556c0773063c2250c9cdff855d1b3aa982c7d3dd3ede4384f59c6fdabec",
+    "retrieved_at": "2026-07-31T06:24:00+09:00",
+        "artifact_file": "artifacts/publicnode-root-raw.json",
+    "artifact_sha256": "757cbc01f955185761fad056b239e427a9a7b8595ee37308a5c338b2f100fe13",
         "decoded_match": true
       },
       {
         "provider_id": "mempool.space",
         "role": "verify",
         "retrieved_at": "2026-07-31T01:00:01+09:00",
-        "artifact_file": "artifacts/mempool-verify.json",
-        "artifact_sha256": "08f42db51b88efa4bde6ff9541288a02db715d90d3e47c49ecbea74d0151f816",
+        "artifact_file": "artifacts/mempool-root-raw.json",
+        "artifact_sha256": "a646813ef9c8dcd3b362957b6b1cdaa85b212930b2b1e035a930994646884534",
         "decoded_match": true
       },
       {
@@ -83,16 +83,24 @@
       ],
       "providers": [
         {
-          "provider_id": "mempool.space",
+          "provider_id": "publicnode.bitcoin",
           "role": "primary",
+      "retrieved_at": "2026-07-31T06:25:00+09:00",
+          "artifact_file": "artifacts/publicnode-hop1-raw.json",
+      "artifact_sha256": "59d353ad36038abee2c976a5c6083b48bfd428aeb1fdd914e245791af97a757e",
+          "decoded_match": true
+        },
+        {
+          "provider_id": "mempool.space",
+          "role": "verify",
           "retrieved_at": "2026-07-31T01:01:00+09:00",
-          "artifact_file": "artifacts/mempool-hop1.json",
-          "artifact_sha256": "8017b3791d1b66f9606a31c0e435fe30f2630fb71ad002f36e4776d7450ec1f5",
+          "artifact_file": "artifacts/mempool-hop1-raw.json",
+          "artifact_sha256": "36b7bfc3f761d57407bd9112555e68f3ab2683a1f94449c19755ba1855b52b29",
           "decoded_match": true
         },
         {
           "provider_id": "blockstream.info",
-          "role": "verify",
+          "role": "supporting",
           "retrieved_at": "2026-07-31T01:01:01+09:00",
           "artifact_file": "artifacts/blockstream-hop1.json",
           "artifact_sha256": "8017b3791d1b66f9606a31c0e435fe30f2630fb71ad002f36e4776d7450ec1f5",

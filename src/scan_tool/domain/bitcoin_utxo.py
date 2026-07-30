@@ -47,6 +47,59 @@ class BitcoinProviderObservation(ContractModel):
     decoded_match: Literal[True]
 
 
+REQUIRED_PROVIDER_BY_ROLE: dict[str, str] = {
+    "primary": "publicnode.bitcoin",
+    "verify": "mempool.space",
+}
+OPTIONAL_SUPPORTING_PROVIDER = "blockstream.info"
+
+
+def _validate_provider_observations(
+    providers: list[BitcoinProviderObservation],
+    *,
+    context: str,
+) -> None:
+    if len({item.provider_id for item in providers}) != len(providers):
+        raise PydanticCustomError("invalid_input", f"{context} provider IDs must be distinct")
+    role_counts = {
+        role: sum(item.role == role for item in providers)
+        for role in ("primary", "verify", "supporting")
+    }
+    if role_counts["primary"] != 1 or role_counts["verify"] != 1:
+        raise PydanticCustomError(
+            "invalid_input",
+            f"{context} requires exactly one primary and one verify provider",
+        )
+    if role_counts["supporting"] > 1:
+        raise PydanticCustomError(
+            "invalid_input",
+            f"{context} allows at most one supporting provider",
+        )
+    primary = next(item for item in providers if item.role == "primary")
+    verify = next(item for item in providers if item.role == "verify")
+    if primary.provider_id != REQUIRED_PROVIDER_BY_ROLE["primary"]:
+        raise PydanticCustomError(
+            "invalid_input",
+            f"{context} primary provider must be {REQUIRED_PROVIDER_BY_ROLE['primary']}",
+        )
+    if verify.provider_id != REQUIRED_PROVIDER_BY_ROLE["verify"]:
+        raise PydanticCustomError(
+            "invalid_input",
+            f"{context} verify provider must be {REQUIRED_PROVIDER_BY_ROLE['verify']}",
+        )
+    supporting = next((item for item in providers if item.role == "supporting"), None)
+    if supporting is not None and supporting.provider_id != OPTIONAL_SUPPORTING_PROVIDER:
+        raise PydanticCustomError(
+            "invalid_input",
+            f"{context} supporting provider must be {OPTIONAL_SUPPORTING_PROVIDER}",
+        )
+    if primary.artifact_sha256 == verify.artifact_sha256:
+        raise PydanticCustomError(
+            "reconciliation_failed",
+            f"{context} primary and verify artifact SHA-256 must differ",
+        )
+
+
 class BitcoinTransactionReplay(ContractModel):
     transaction_id: BitcoinTxId
     network: Literal["bitcoin_mainnet"]
@@ -69,12 +122,7 @@ class BitcoinTransactionReplay(ContractModel):
         output_sum = sum(item.value_sat for item in self.outputs)
         if input_sum - output_sum != self.fee_sat:
             raise PydanticCustomError("reconciliation_failed", "input-output fee equation differs")
-        roles = {item.role for item in self.providers}
-        if not {"primary", "verify"} <= roles:
-            raise PydanticCustomError(
-                "source_unavailable",
-                "primary and verify Bitcoin observations are required",
-            )
+        _validate_provider_observations(self.providers, context="root")
         return self
 
 
@@ -92,10 +140,7 @@ class BitcoinSpendHop(ContractModel):
 
     @model_validator(mode="after")
     def provider_roles_are_distinct(self) -> "BitcoinSpendHop":
-        if len({item.provider_id for item in self.providers}) != len(self.providers):
-            raise PydanticCustomError("invalid_input", "hop provider IDs must be distinct")
-        if {item.role for item in self.providers} != {"primary", "verify"}:
-            raise PydanticCustomError("invalid_input", "hop requires primary and verify")
+        _validate_provider_observations(self.providers, context="hop")
         return self
 
 
@@ -109,14 +154,6 @@ class BitcoinUtxoReplay(ContractModel):
 
     @model_validator(mode="after")
     def replay_bindings_are_exact(self) -> "BitcoinUtxoReplay":
-        providers = self.transaction.providers
-        if len({item.provider_id for item in providers}) != len(providers):
-            raise PydanticCustomError("invalid_input", "provider IDs must be distinct")
-        required = [item for item in providers if item.role in {"primary", "verify"}]
-        if {item.role for item in required} != {"primary", "verify"} or len(required) != 2:
-            raise PydanticCustomError(
-                "invalid_input", "exactly one primary and verify are required"
-            )
         previous_transaction_id = self.transaction.transaction_id
         previous_outputs = self.transaction.outputs
         for expected_depth, hop in enumerate(self.spend_path, start=1):

@@ -11,15 +11,19 @@
 
 ## Gate
 
-- fee/outpoint/path를 stored provider artifact-first 방식으로 독립 Verifier가
+- fee/outpoint/path를 actual raw provider artifact-first 방식으로 독립 Verifier가
   두 번 재계산하고 normalized replay·expected를 별도로 대조한다.
 - negative oracle 7종은 fee conflict, prevout 누락, duplicate outpoint,
   change/CoinJoin 과대 주장과 positive control을 고정한다.
 - product analyzer와 독립 Verifier는 서로 import하지 않는다.
-- provider stored artifact SHA와 source exact set을 검사하고, mempool.space와
-  Blockstream projection의 root·hop decoded equality를 직접 검증한다.
-- PublicNode projection의 txid·vin outpoint·vout·block hash/time을 REST
-  projection과 독립 대조한다.
+- provider raw artifact SHA와 source exact set을 검사하고, root와 각
+  hop의 PublicNode primary·mempool.space verify SHA가 서로 다름을 강제한다.
+- PublicNode와 mempool.space 실제 response body를 직접 decode한다.
+  PublicNode hop의 txid·vin outpoint·vout value/address를 재계산하고 root
+  output value에 결합해 fee를 독립 산출한 뒤 mempool 결과와 비교한다.
+  block height는 mempool 원문을 replay 원천으로 유지한다.
+- Blockstream의 same-wire Esplora copy는 mempool과 fact agreement를
+  보조할 수 있지만 `supporting_only`이며 독립성 gate로 계산하지 않는다.
 - request start_vout 존재와 `1..n` depth 연속성, 각 hop의 직전 created
   outpoint/value 연결을 replay validator와 artifact-derived Verifier 양쪽에서
   강제한다.
@@ -29,6 +33,10 @@
 
 공개 read-only endpoint만 사용했다. endpoint credential, wallet, signing,
 send/broadcast는 없다. fixture에는 논리 provider ID와 content hash만 남긴다.
+
+실제 호출 host·method·retrieved_at·response body hash는
+[Provider Provenance Receipt](./68_TASK_017_PROVIDER_PROVENANCE_RECEIPT.md)에
+고정했다.
 
 ## 저장 호환성
 
@@ -40,11 +48,11 @@ v1 DB는 `CHECK(chain_id IN (0, 1))`을 사용한다. 이전에 생성된
 
 ## 최종 검증
 
-- pytest: 598 passed
+- pytest: 603 passed
 - fixture Schema: 21 packages
 - Analysis I/O compatibility: 62 probes
-- traceability: 1951 links
-- security: 245 runtime/evidence files
+- traceability: 1973 links
+- security: 246 runtime/evidence files
 - Benchmark: 14 automated / 6 assisted / 10 unsupported, automated 14/14 PASS
 
 ## 잔여

@@ -1694,21 +1694,29 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - BTC-UTXO 승격 조건
 - Related UI Docs:
   - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - UTXO graph UX 후보
+  - [Bitcoin UTXO UI](../02_UI_Screens/11_TASK_017_BITCOIN_UTXO_UI.md) - satoshi/heuristic 화면 계약
 - Related HTML Preview:
   - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - graph 검토 후보
+  - [Bitcoin UTXO Preview](../02_UI_Screens/previews/10_task_017_bitcoin_utxo_preview.html) - complete/partial/failed 정적 화면
 - Related Technical Docs:
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-BTC 계약
+  - [Bitcoin UTXO I/O Contract](../03_Technical_Specs/21_TASK_017_BITCOIN_UTXO_IO_CONTRACT.md) - primary/verify independence·fee equation
   - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) - Bitcoin source
   - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - parser 재사용 Gate
 - Related QA Docs:
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-BTC-001/002
+  - [Bitcoin Implementation Report](../05_QA_Validation/67_TASK_017_BITCOIN_IMPLEMENTATION_REPORT.md) - analyzer·Verifier Gate
+  - [Provider Provenance Receipt](../05_QA_Validation/68_TASK_017_PROVIDER_PROVENANCE_RECEIPT.md) - hop independence remediation
 - Implementation Preconditions:
   - [x] 공개 BTC source·fixture·반례를 확보한다.
   - [x] chain-specific request/result와 공통 evidence 호환을 승인한다.
   - [x] Workbench 상태 계약을 확인한다.
   - [x] prevout 최소 필드·artifact mutation·UTXO path 상태를 승인한다.
   - [x] UTXO graph UI 필요성을 검토한다.
-  - [x] 사용자 일괄 구현 승인을 기록한다.
+  - [x] 사용자 TASK-017 일괄 구현 승인을 기록한다. 2026-07-31
+    “17을 병렬 처리를 브랜치를 따로 만들어서 진행 … 작업이 마무리 되면
+    일괄 승인 하고 검증·커밋·Draft PR 생성까지 완료” 요청에 한정하며,
+    TASK-016 CEX·Mixer·Lending 또는 TASK-018/019 승인은 포함하지 않는다.
 - Component & Library Plan:
   - shadcn/ui: N/A - Python engine 우선.
   - Custom components: BTC parser projection, UTXO ledger, heuristic classifier.
@@ -1723,17 +1731,38 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [x] source·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PASS - public source·UI/contract·사용자 일괄 승인 확인
-  - Required References Read: 위 Related 문서 전체
-  - Constraints: satoshi exact, heuristic 비단정
-  - Conflicts: resolved for UTXO; CoinJoin methodology provenance remains
+  - Status: PASS — public source·UI/contract·사용자 TASK-017 일괄 승인·
+    raw hop independence remediation 확인
+  - Required References Read:
+    - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md)
+    - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md)
+    - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md)
+    - [Bitcoin UTXO UI](../02_UI_Screens/11_TASK_017_BITCOIN_UTXO_UI.md)
+    - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html)
+    - [Bitcoin UTXO Preview](../02_UI_Screens/previews/10_task_017_bitcoin_utxo_preview.html)
+    - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md)
+    - [Bitcoin UTXO I/O Contract](../03_Technical_Specs/21_TASK_017_BITCOIN_UTXO_IO_CONTRACT.md)
+    - [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md)
+    - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md)
+    - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md)
+    - [Bitcoin Implementation Report](../05_QA_Validation/67_TASK_017_BITCOIN_IMPLEMENTATION_REPORT.md)
+    - [Provider Provenance Receipt](../05_QA_Validation/68_TASK_017_PROVIDER_PROVENANCE_RECEIPT.md)
+  - Constraints: satoshi exact, heuristic 비단정, primary≠verify artifact hash, PublicNode=primary·mempool=verify
+  - Conflicts: hop Esplora byte-identical pair demoted to supporting-only; CoinJoin methodology provenance remains
 - Change Receipt:
   - bitcoin_utxo Analysis I/O·offline analyzer·CLI/Benchmark wiring 구현
+  - hop independence remediation: PublicNode hop primary capture + role binding
 - Verification Receipt:
-  - independent stored-artifact-first verifier·negative oracle·legacy SQLite v1
-    비자동변형/명시 거부 회귀·full regression Gate
-  - `scripts/verify.py`: 598 tests, fixture 21, Schema 62 probes,
-    traceability 1951 links, security 245 files PASS
+  - Status: PASS
+  - Commands and Results:
+    - `scripts/verify_task_017_bitcoin.py` twice — PASS — fact hash `c43a2776…f3c1`
+    - focused Bitcoin unit+CLI pytest — PASS
+    - `scripts/verify.py` — PASS — 603 tests, fixture 21, Schema 62 probes,
+      traceability 1973 links, security 246 files
+  - Unrun Checks: live Bitcoin RPC/contest mapping remains out of offline scope
+  - Detailed Evidence:
+    - [67 Implementation Report](../05_QA_Validation/67_TASK_017_BITCOIN_IMPLEMENTATION_REPORT.md)
+    - [68 Provider Provenance Receipt](../05_QA_Validation/68_TASK_017_PROVIDER_PROVENANCE_RECEIPT.md)
 
 ### [ ] TASK-018: 범죄·복합 사건 Reconciliation
 

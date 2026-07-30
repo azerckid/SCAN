@@ -140,7 +140,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-015 negative oracles | [`49_TASK_015_NEGATIVE_ORACLE_REPORT.md`](docs/05_QA_Validation/49_TASK_015_NEGATIVE_ORACLE_REPORT.md) | 30 offline claim, history, ENS, and actor-relation counterexamples |
 | TASK-015 non-quarantined promotion | [`56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md) | SANCTIONS·ENS·RELATION-HUB confirmed; related problems remain assisted |
 | TASK-016 Bridge final promotion | [`65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md) | Bridge confirmed fixture and Benchmark 13/13 evidence |
-| Contest stabilization runbook | [`66_CONTEST_STABILIZATION_RUNBOOK.md`](docs/05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md) | Contest feature freeze, CLI paths, and recovery checklist |
+| Contest stabilization runbook | [`66_CONTEST_STABILIZATION_RUNBOOK.md`](docs/05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md) | Historical 13/13 baseline, TASK-017 explicit thaw, CLI paths, and recovery checklist |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -158,13 +158,13 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-598 passed
+603 passed
 PASS 21 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 62 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 1951 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 245 runtime/evidence files
+PASS repository traceability: 1973 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 246 runtime/evidence files
 PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)
 PASS TASK-013 independent Verifier: 3 fixtures (confirmed), 7 requirements, 13 evidence values, 2 deterministic runs

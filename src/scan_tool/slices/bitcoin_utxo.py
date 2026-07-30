@@ -115,9 +115,10 @@ def _artifact_error(
         }
         primary = _publicnode_projection(root_artifacts["publicnode.bitcoin"])
         verify = _rest_transaction_projection(root_artifacts["mempool.space"])
-        supporting = _rest_transaction_projection(root_artifacts["blockstream.info"])
-        if verify != supporting:
-            raise ValueError("root provider projections differ")
+        if "blockstream.info" in root_artifacts:
+            supporting = _rest_transaction_projection(root_artifacts["blockstream.info"])
+            if verify != supporting:
+                raise ValueError("root supporting projection differs from verify")
         if verify != _replay_transaction_projection(replay):
             raise ValueError("root replay differs from provider artifacts")
         if primary != _publicnode_replay_projection(replay):
@@ -128,21 +129,30 @@ def _artifact_error(
             hop_artifacts = {
                 item.provider_id: _read_provider_artifact(root, item) for item in hop.providers
             }
-            mempool = _rest_hop_projection(
+            primary_hop = _publicnode_hop_projection(
+                hop_artifacts["publicnode.bitcoin"],
+                replay,
+                hop.spent_transaction_id,
+                hop.spent_vout,
+            )
+            verify_hop = _rest_hop_projection(
                 hop_artifacts["mempool.space"],
                 hop.spent_transaction_id,
                 hop.spent_vout,
             )
-            blockstream = _rest_hop_projection(
-                hop_artifacts["blockstream.info"],
-                hop.spent_transaction_id,
-                hop.spent_vout,
-            )
-            if mempool != blockstream:
-                raise ValueError("spend provider projections differ")
-            if mempool != _replay_hop_projection(hop):
+            if _publicnode_hop_comparable(primary_hop) != _rest_hop_public_projection(verify_hop):
+                raise ValueError("PublicNode spend projection differs from verify")
+            if "blockstream.info" in hop_artifacts:
+                supporting_hop = _rest_hop_projection(
+                    hop_artifacts["blockstream.info"],
+                    hop.spent_transaction_id,
+                    hop.spent_vout,
+                )
+                if verify_hop != supporting_hop:
+                    raise ValueError("spend supporting projection differs from verify")
+            if verify_hop != _replay_hop_projection(hop):
                 raise ValueError("spend replay differs from provider artifacts")
-            derived_hops.append(mempool)
+            derived_hops.append(verify_hop)
         _validate_artifact_path(verify, derived_hops)
     except (KeyError, TypeError, ValueError, json.JSONDecodeError):
         return (
@@ -262,9 +272,107 @@ def _publicnode_projection(body: dict[str, object]) -> dict[str, object]:
             {
                 "vout": int(item["n"]),
                 "value_sat": int(Decimal(str(item["value"])) * Decimal(100_000_000)),
-                "address": str(item["address"]),
+                "address": str(_object(item["scriptPubKey"])["address"]),
             }
             for item in outputs
+        ],
+    }
+
+
+def _publicnode_hop_projection(
+    body: dict[str, object],
+    replay: BitcoinUtxoReplay,
+    spent_transaction_id: str,
+    spent_vout: int,
+) -> dict[str, object]:
+    result = _object(body["result"])
+    inputs = [_object(item) for item in _list(result["vin"])]
+    outputs = [_object(item) for item in _list(result["vout"])]
+    matches = [
+        (index, item)
+        for index, item in enumerate(inputs)
+        if str(item["txid"]) == spent_transaction_id and int(item["vout"]) == spent_vout
+    ]
+    if len(matches) != 1:
+        raise ValueError("PublicNode spent outpoint is not uniquely present")
+    spending_vin, _ = matches[0]
+    root_output = next(
+        (
+            item
+            for item in replay.transaction.outputs
+            if replay.transaction.transaction_id == spent_transaction_id and item.vout == spent_vout
+        ),
+        None,
+    )
+    if root_output is None:
+        raise ValueError("PublicNode spent value source is missing")
+    created_outputs = [
+        {
+            "vout": int(item["n"]),
+            "value_sat": int(Decimal(str(item["value"])) * Decimal(100_000_000)),
+            "script_type": _publicnode_script_type(_object(item["scriptPubKey"])["type"]),
+            "address": str(_object(item["scriptPubKey"])["address"]),
+        }
+        for item in outputs
+    ]
+    return {
+        "spent_transaction_id": spent_transaction_id,
+        "spent_vout": spent_vout,
+        "spent_value_sat": root_output.value_sat,
+        "spending_transaction_id": str(result["txid"]),
+        "spending_vin": spending_vin,
+        "block_hash": str(result["blockhash"]),
+        "block_time": int(result["blocktime"]),
+        "fee_sat": root_output.value_sat - sum(int(item["value_sat"]) for item in created_outputs),
+        "created_outputs": created_outputs,
+    }
+
+
+def _publicnode_script_type(value: object) -> str:
+    mapping = {
+        "witness_v0_keyhash": "v0_p2wpkh",
+        "witness_v0_scripthash": "v0_p2wsh",
+        "witness_v1_taproot": "v1_p2tr",
+        "pubkeyhash": "p2pkh",
+        "scripthash": "p2sh",
+    }
+    script_type = str(value)
+    if script_type not in mapping:
+        raise ValueError("unsupported PublicNode script type")
+    return mapping[script_type]
+
+
+def _publicnode_hop_comparable(projection: dict[str, object]) -> dict[str, object]:
+    return {
+        key: projection[key]
+        for key in (
+            "spent_transaction_id",
+            "spent_vout",
+            "spent_value_sat",
+            "spending_transaction_id",
+            "spending_vin",
+            "fee_sat",
+            "created_outputs",
+        )
+    }
+
+
+def _rest_hop_public_projection(projection: dict[str, object]) -> dict[str, object]:
+    return {
+        "spent_transaction_id": projection["spent_transaction_id"],
+        "spent_vout": projection["spent_vout"],
+        "spent_value_sat": projection["spent_value_sat"],
+        "spending_transaction_id": projection["spending_transaction_id"],
+        "spending_vin": projection["spending_vin"],
+        "fee_sat": projection["fee_sat"],
+        "created_outputs": [
+            {
+                "vout": item["vout"],
+                "value_sat": item["value_sat"],
+                "script_type": item["script_type"],
+                "address": item["address"],
+            }
+            for item in (_object(value) for value in _list(projection["created_outputs"]))
         ],
     }
 
@@ -386,7 +494,9 @@ def _evidence(replay: BitcoinUtxoReplay) -> list[dict[str, object]]:
                     "evidence_type": "context",
                     "source_id": ("DS-BTC-NODE" if item.role == "primary" else "DS-BTC-API"),
                     "source_record_ref": f"SRC-BTC-HOP-{hop_index}-{provider_index}",
-                    "method": "GET /api/tx/:txid",
+                    "method": (
+                        "getrawtransaction" if item.role == "primary" else "GET /api/tx/:txid"
+                    ),
                     "retrieved_at": item.retrieved_at,
                     "locator": {"block_number": hop.block_height},
                     "decoded": {
@@ -434,7 +544,7 @@ def _sources(replay: BitcoinUtxoReplay) -> list[dict[str, object]]:
                     "source_id": ("DS-BTC-NODE" if item.role == "primary" else "DS-BTC-API"),
                     "provider_id": item.provider_id,
                     "role": "scoring" if item.role == "primary" else "supporting",
-                    "required": True,
+                    "required": item.role in {"primary", "verify"},
                     "capability": "bitcoin_spend_path",
                     "endpoint_host": hosts[item.provider_id],
                     "retrieved_at": item.retrieved_at,

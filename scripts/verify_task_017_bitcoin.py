@@ -27,6 +27,33 @@ def _load_artifact(package: Path, provider: dict[str, object]) -> dict[str, obje
     return value
 
 
+def _validate_providers(
+    providers: list[dict[str, object]],
+    *,
+    context: str,
+) -> dict[str, dict[str, object]]:
+    provider_ids = [str(item["provider_id"]) for item in providers]
+    if len(provider_ids) != len(set(provider_ids)):
+        raise ValueError(f"{context} provider IDs must be distinct")
+    by_role: dict[str, dict[str, object]] = {}
+    for item in providers:
+        role = str(item["role"])
+        if role in by_role:
+            raise ValueError(f"{context} provider roles must be unique")
+        by_role[role] = item
+    if set(by_role) not in ({"primary", "verify"}, {"primary", "verify", "supporting"}):
+        raise ValueError(f"{context} requires primary, verify, and optional supporting")
+    if by_role["primary"]["provider_id"] != "publicnode.bitcoin":
+        raise ValueError(f"{context} primary provider must be publicnode.bitcoin")
+    if by_role["verify"]["provider_id"] != "mempool.space":
+        raise ValueError(f"{context} verify provider must be mempool.space")
+    if "supporting" in by_role and by_role["supporting"]["provider_id"] != "blockstream.info":
+        raise ValueError(f"{context} supporting provider must be blockstream.info")
+    if by_role["primary"]["artifact_sha256"] == by_role["verify"]["artifact_sha256"]:
+        raise ValueError(f"{context} primary and verify artifact SHA-256 must differ")
+    return by_role
+
+
 def _rest_transaction(body: dict[str, object]) -> dict[str, object]:
     status = body["status"]
     inputs = body["vin"]
@@ -88,7 +115,7 @@ def _publicnode_transaction(body: dict[str, object]) -> dict[str, object]:
             {
                 "vout": item["n"],
                 "value_sat": int(Decimal(str(item["value"])) * Decimal(100_000_000)),
-                "address": item["address"],
+                "address": item["scriptPubKey"]["address"],
             }
             for item in result["vout"]
         ],
@@ -161,6 +188,105 @@ def _rest_hop(
     }
 
 
+def _publicnode_hop(
+    body: dict[str, object],
+    root: dict[str, object],
+    spent_transaction_id: str,
+    spent_vout: int,
+) -> dict[str, object]:
+    result = body["result"]
+    if not isinstance(result, dict):
+        raise ValueError("invalid PublicNode spend transaction")
+    inputs = result["vin"]
+    outputs = result["vout"]
+    if not isinstance(inputs, list) or not isinstance(outputs, list):
+        raise ValueError("invalid PublicNode spend transaction")
+    matches = [
+        (index, item)
+        for index, item in enumerate(inputs)
+        if item["txid"] == spent_transaction_id and item["vout"] == spent_vout
+    ]
+    if len(matches) != 1:
+        raise ValueError("PublicNode spent outpoint is not unique")
+    spending_vin, _ = matches[0]
+    root_outputs = [
+        item
+        for item in root["outputs"]
+        if root["transaction_id"] == spent_transaction_id and item["vout"] == spent_vout
+    ]
+    if len(root_outputs) != 1:
+        raise ValueError("PublicNode spent value source is missing")
+    created_outputs = [
+        {
+            "vout": item["n"],
+            "value_sat": int(Decimal(str(item["value"])) * Decimal(100_000_000)),
+            "script_type": _publicnode_script_type(item["scriptPubKey"]["type"]),
+            "address": item["scriptPubKey"]["address"],
+        }
+        for item in outputs
+    ]
+    spent_value_sat = root_outputs[0]["value_sat"]
+    return {
+        "spent_transaction_id": spent_transaction_id,
+        "spent_vout": spent_vout,
+        "spent_value_sat": spent_value_sat,
+        "spending_transaction_id": result["txid"],
+        "spending_vin": spending_vin,
+        "block_hash": result["blockhash"],
+        "block_time": result["blocktime"],
+        "fee_sat": spent_value_sat - sum(item["value_sat"] for item in created_outputs),
+        "created_outputs": created_outputs,
+    }
+
+
+def _publicnode_script_type(value: object) -> str:
+    mapping = {
+        "witness_v0_keyhash": "v0_p2wpkh",
+        "witness_v0_scripthash": "v0_p2wsh",
+        "witness_v1_taproot": "v1_p2tr",
+        "pubkeyhash": "p2pkh",
+        "scripthash": "p2sh",
+    }
+    if value not in mapping:
+        raise ValueError("unsupported PublicNode script type")
+    return mapping[value]
+
+
+def _publicnode_hop_comparable(hop: dict[str, object]) -> dict[str, object]:
+    return {
+        key: hop[key]
+        for key in (
+            "spent_transaction_id",
+            "spent_vout",
+            "spent_value_sat",
+            "spending_transaction_id",
+            "spending_vin",
+            "fee_sat",
+            "created_outputs",
+        )
+    }
+
+
+def _rest_hop_public_projection(hop: dict[str, object]) -> dict[str, object]:
+    return {
+        "spent_transaction_id": hop["spent_transaction_id"],
+        "spent_vout": hop["spent_vout"],
+        "spent_value_sat": hop["spent_value_sat"],
+        "spending_transaction_id": hop["spending_transaction_id"],
+        "spending_vin": hop["spending_vin"],
+        "fee_sat": hop["fee_sat"],
+        "created_outputs": [
+            {
+                "vout": item["vout"],
+                "value_sat": item["value_sat"],
+                "script_type": item["script_type"],
+                "address": item["address"],
+            }
+            for item in hop["created_outputs"]
+        ],
+    }
+
+
 def _validate_path(
     root: dict[str, object],
     hops: list[dict[str, object]],
@@ -184,13 +310,15 @@ def verify(package: Path = PACKAGE) -> str:
     request = json.loads((package / "analysis-request.json").read_text(encoding="utf-8"))
     expected = json.loads((package / "expected.json").read_text(encoding="utf-8"))
     tx = replay["transaction"]
+    root_providers = _validate_providers(tx["providers"], context="root")
     root_artifacts = {
         item["provider_id"]: _load_artifact(package, item) for item in tx["providers"]
     }
     root = _rest_transaction(root_artifacts["mempool.space"])
-    supporting = _rest_transaction(root_artifacts["blockstream.info"])
-    if root != supporting:
-        raise ValueError("root provider projections differ")
+    if "supporting" in root_providers:
+        supporting = _rest_transaction(root_artifacts["blockstream.info"])
+        if root != supporting:
+            raise ValueError("root supporting projection differs from verify")
     if _publicnode_transaction(root_artifacts["publicnode.bitcoin"]) != _public_projection(root):
         raise ValueError("PublicNode projection differs")
     replay_root = {key: tx[key] for key in root}
@@ -199,26 +327,39 @@ def verify(package: Path = PACKAGE) -> str:
 
     derived_hops: list[dict[str, object]] = []
     for hop_index, hop in enumerate(replay["spend_path"]):
+        hop_providers = _validate_providers(
+            hop["providers"],
+            context=f"hop {hop_index + 1}",
+        )
         hop_artifacts = {
             item["provider_id"]: _load_artifact(package, item) for item in hop["providers"]
         }
-        mempool = _rest_hop(
+        primary_hop = _publicnode_hop(
+            hop_artifacts["publicnode.bitcoin"],
+            root,
+            hop["spent_transaction_id"],
+            hop["spent_vout"],
+        )
+        verify_hop = _rest_hop(
             hop_artifacts["mempool.space"],
             hop["spent_transaction_id"],
             hop["spent_vout"],
         )
-        blockstream = _rest_hop(
-            hop_artifacts["blockstream.info"],
-            hop["spent_transaction_id"],
-            hop["spent_vout"],
-        )
-        if mempool != blockstream:
-            raise ValueError("spend provider projections differ")
-        mempool["depth"] = hop_index + 1
-        replay_hop = {key: hop[key] for key in mempool}
-        if replay_hop != mempool:
+        if _publicnode_hop_comparable(primary_hop) != _rest_hop_public_projection(verify_hop):
+            raise ValueError("PublicNode spend projection differs from verify")
+        if "supporting" in hop_providers:
+            supporting_hop = _rest_hop(
+                hop_artifacts["blockstream.info"],
+                hop["spent_transaction_id"],
+                hop["spent_vout"],
+            )
+            if verify_hop != supporting_hop:
+                raise ValueError("spend supporting projection differs from verify")
+        verify_hop["depth"] = hop_index + 1
+        replay_hop = {key: hop[key] for key in verify_hop}
+        if replay_hop != verify_hop:
             raise ValueError("spend replay differs from artifacts")
-        derived_hops.append(mempool)
+        derived_hops.append(verify_hop)
     _validate_path(root, derived_hops)
 
     inputs = root["inputs"]
