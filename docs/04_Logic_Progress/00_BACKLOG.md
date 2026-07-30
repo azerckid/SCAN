@@ -1566,6 +1566,16 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     Analysis I/O 대안 결정·Context Receipt PASS·`bridge_transfer` analyzer
     구현·독립 Verification Receipt 잔여 Gate 후 별도 판정한다. Benchmark
     자동화 수(12·4·14)는 무변동.
+    리뷰 P1 반영 - 최상위 status만 승격되고 evidence.json·raw-replay.json·
+    provider-replay.json의 내부 lifecycle 잔여 목록·input.json 문구·fixture
+    README 제목이 완료된 candidate-to-verifying Gate를 계속 가리키던 문제를
+    정정. 5곳 모두 confirmed 트랙 잔여 항목으로 교체.
+  - Analysis I/O 대안 확정 - 사용자가 대안 B(전용 `AnalysisType.BRIDGE_TRANSFER`,
+    query `link_bridge_transfer`)를 정식 승인했다. `result.value`
+    구조(`source_leg`·`destination_leg`·`resolved_scoped_subjects[]`·
+    `matching_key`·`status`)를 doc 21 §5에 고정했다. 5개 fixture JSON의
+    잔여 목록에서 "Analysis I/O alternative decision" 항목을 제거했다.
+    Schema·코드 반영은 Context Receipt PASS·구현 승인 이후.
 - Verification Receipt:
   - N/A - 구현 미시작(fixture Gate만 진행). 위 remediation·negative oracle·
     독립 Verifier는 `uv run pytest tests/unit/test_task_016_bridge_replay.py`
