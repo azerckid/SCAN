@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-BRG-001",
+  "problem_id": "SVC-BRG-001",
+  "status": "candidate",
+  "chain": {
+    "name": "base",
+    "chain_id": 8453
+  },
+  "destination_chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "protocol": "across_v3",
+  "mode": "discovery",
+  "source_subject": {
+    "chain_id": 8453,
+    "address": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
+    "roles": ["sender"]
+  },
+  "source_transaction": {
+    "hash": "0x95714346d20bfaa328b75e4e6cf980d9620c4c4331af935032f848a118f05a1b",
+    "block_number": 21912139,
+    "spoke_pool": "0x09aea4b2242abc8bb4bb78d537a67a245a7bec64"
+  },
+  "destination_transaction_candidate": {
+    "hash": "0x816ebca944c8cf40309c8c2ec4bd0f6e25f78d782cf7732f93ca771e55b8f8a0",
+    "block_number": 21105182,
+    "spoke_pool": "0x5c7bcd6e7de5423a257d81b442095a1a6ced35c5"
+  },
+  "scope_kind": "selected_transactions_and_exact_block_windows",
+  "selection_notes": "Across official chain/event rules and public explorer pages identify one Base-to-Ethereum candidate. Recipient remains a result field. Two-role raw RPC replay and cross-provider decoded-fact matching are complete; negative oracle, independent verifier, and candidate-to-verifying promotion are not."
+}

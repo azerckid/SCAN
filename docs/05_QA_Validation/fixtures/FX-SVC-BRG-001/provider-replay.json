@@ -1,0 +1,96 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-SVC-BRG-001",
+  "status": "candidate",
+  "captured_at": "2026-07-30T15:39:46Z",
+  "providers": [
+    {
+      "provider_id": "PROVIDER-BASE-PRIMARY",
+      "chain_id": 8453,
+      "status": "complete",
+      "network_calls": 4,
+      "source_class": "managed_rpc",
+      "retrieved_at": "2026-07-30T15:39:34Z",
+      "raw_sha256": {
+        "transaction": "40c0d700dd8c9483f6ccaa554ef4a2509873b670e4784f7c67fed8a6e0e9442b",
+        "receipt": "9c45186b9fcd051b0660b5cc0e012173ec4120c6c1392e63769f15d1d195ae9e",
+        "block": "370cc0339568ef51b2321341111fc0b6a51b3e07eaa7ffdc2c8d0f3bdca1e649",
+        "bridge_logs": "48a7bf594aae155aa9a780e8b0025141961ed16c5d7e500e1c696754d84b593b"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-ETHEREUM-PRIMARY",
+      "chain_id": 1,
+      "status": "complete",
+      "network_calls": 4,
+      "source_class": "supporting_explorer_rpc",
+      "retrieved_at": "2026-07-30T15:39:35Z",
+      "raw_sha256": {
+        "transaction": "7f03a1386bbf8e9caf23be3da9fa8b39c462858c4156e2e55313d1e03a1c9cdc",
+        "receipt": "352807ef4a019e0036c68c07e0f3c7e1f24c7c849d451b9b37c014ad2919c604",
+        "block": "38fd27e46f418311442bc7aa894460fe4bb8ea33b02f98f6a1ecff532bcde454",
+        "bridge_logs": "536ec190dc6b1249d5c144178893d020c27d7bb095a1dffe9e89ef31a24bf6c7"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-BASE-VERIFY",
+      "chain_id": 8453,
+      "status": "complete",
+      "network_calls": 4,
+      "source_class": "official_public_rpc",
+      "retrieved_at": "2026-07-30T15:39:46Z",
+      "raw_sha256": {
+        "transaction": "607720106ca696fc63983e21dde440efe6d75f89a694949b5babad614d6857fb",
+        "receipt": "b7094e5d7b1caaa121d2c627c1663a0d5a0c7ceba3073643bc15b584b7fce660",
+        "block": "f4fd5467c5c83089894ba960059fe15d00f3e52af52a86d26103d0265b5528f5",
+        "bridge_logs": "14d9ddc1c4a831999c2fb150a56023b117234a736cccd9472e1d28be3d0c5bd9"
+      }
+    },
+    {
+      "provider_id": "PROVIDER-ETHEREUM-VERIFY",
+      "chain_id": 1,
+      "status": "complete",
+      "network_calls": 4,
+      "source_class": "managed_rpc",
+      "retrieved_at": "2026-07-30T15:39:46Z",
+      "raw_sha256": {
+        "transaction": "a0c3952f4069a78aade61e538a79a7623a517150b4e32b35e567a3a3ce9bbbe9",
+        "receipt": "6c3bbceecb2e4bebd59424d5299c9115e684a771d430a699717793d355aefcc1",
+        "block": "ed69873dbc026b3e83e7dca16ab1586bb359c32fbc33eb576be5194cde5a63d0",
+        "bridge_logs": "a1de285501a1e707649b6d0e80894a695386df7399a6ab987d431e040ae7400f"
+      }
+    }
+  ],
+  "decoded_match": true,
+  "same_role_chain_pair_match": true,
+  "cross_provider_decoded_match": true,
+  "cross_provider_verification": {
+    "method": "assert_matching_provider_facts",
+    "code_ref": "src/scan_tool/application/task_016_bridge_replay.py",
+    "re_verified_at": "2026-07-31T00:12:00Z",
+    "result": "match",
+    "note": "Independent --role both re-run reproduced identical primary/verify bridge_pair_facts. PROVIDER-ETHEREUM-PRIMARY's raw response bytes differed from the pinned raw_sha256 above (different RPC provider JSON formatting for the same immutable on-chain data); decoded_summary values were identical, so pinned raw_sha256 values are left unchanged pending the independent Verifier Gate."
+  },
+  "failed_attempts": [
+    {
+      "chain_id": 1,
+      "source_class": "managed_rpc",
+      "failure_kind": "rate_limited",
+      "successful_capabilities": 0,
+      "inferred_success": false
+    },
+    {
+      "chain_id": 1,
+      "source_class": "public_rpc",
+      "failure_kind": "permanent",
+      "failed_capability": "eth_getLogs",
+      "http_status": 403,
+      "inferred_success": false
+    }
+  ],
+  "remaining_gate": [
+    "negative oracle",
+    "independent verifier",
+    "candidate-to-verifying review"
+  ]
+}
