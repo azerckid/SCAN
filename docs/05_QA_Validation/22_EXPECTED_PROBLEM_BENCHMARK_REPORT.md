@@ -136,7 +136,7 @@ coverage를 가장 크게 늘리는 순서는
 
 | 기준 | 판정 | 증거·경계 |
 |:---|:---:|:---|
-| Functionality | Partial | automated 14개 exact/evidence/requirement/determinism 통과, 16개 비자동 |
+| Functionality | Partial | automated 15개 exact/evidence/requirement/determinism 통과, 15개 비자동 |
 | Potential Impact | Partial | 공백이 큰 PATH·LABEL·OSINT 우선순위를 수치화, 실대회 효과 미측정 |
 | Novelty | Pass / Offline | 답 문자열이 아니라 answer→evidence→fixture requirement를 함께 채점 |
 | UX | Pass / CLI | 한 명령으로 coverage와 자동 사례 결과를 표시 |

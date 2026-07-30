@@ -66,8 +66,8 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 
 ## 5. Feature Freeze 규칙
 
-- Freeze 대상: TASK-017 Bitcoin, TASK-016 Mixer/Lending, TASK-018/019,
-  MIXED-XCHAIN 조합, live Rules adapter
+- Freeze 대상: TASK-016 Mixer/Lending, TASK-018/019, MIXED-XCHAIN 조합,
+  live Rules adapter. TASK-017 Bitcoin은 아래 사용자 승인 예외로 thaw했다.
 - **CEX (2026-07-31 remediation):** TASK-016 CEX(`SVC-CEX-001`)는 Merkle VERIFY
   9-call complete replay와 code-computed cross-provider match로 `confirmed`·
   Benchmark automated를 복구했다. `MIXED-XCHAIN-001`은 COMPOSITION 미구현으로
