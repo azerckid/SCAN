@@ -152,12 +152,12 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-561 passed
+564 passed
 PASS 19 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
 PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 52 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 1871 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository traceability: 1872 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
 PASS repository security scan: 223 runtime/evidence files
 PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)

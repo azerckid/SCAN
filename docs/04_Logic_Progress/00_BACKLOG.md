@@ -1550,15 +1550,23 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     ([62 §11](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).
     tamper 회귀 테스트 5건 추가(topic0·tx hash·block hash·artifact sha256
     불일치·canonical hash drift).
+    재리뷰 P1 1건·수치 P2 반영 - receipt log 대조가 address·topic0·tx hash·
+    log index만 확인해 `eth_getLogs` blockHash 변조를 놓치던 문제를 정정.
+    선택된 log의 `blockHash==tx/block hash`·`removed==false`를 추가로
+    확인하고, receipt 매칭 log와 선택된 log 사이 `address`·`blockHash`·
+    `transactionHash`·전체 `topics`·`data`·`blockNumber`·`removed`가 모두
+    일치하는지 확인하도록 확장했다([62 §12](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).
+    tamper 회귀 테스트 3건 추가. doc 62·Backlog의 stale traceability
+    수치(1870)를 1871로 정정.
 - Verification Receipt:
   - N/A - 구현 미시작(fixture Gate만 진행). 위 remediation·negative oracle·
     독립 Verifier는 `uv run pytest tests/unit/test_task_016_bridge_replay.py`
     10 PASS, `test_task_016_bridge_negative_oracles.py` 1 PASS,
-    `test_task_016_bridge_independent_verifier.py` 8 PASS,
+    `test_task_016_bridge_independent_verifier.py` 11 PASS,
     `PASS 8 TASK-016 Bridge negative oracles twice`,
     `PASS TASK-016 Bridge independent Verifier: 1 fixtures, 3 requirements,
-    2 deterministic runs`, 전체 `scripts/verify.py` 561 passed·
-    traceability 1870·security 223으로 확인했다.
+    2 deterministic runs`, 전체 `scripts/verify.py` 564 passed·
+    traceability 1872·security 223으로 확인했다.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 

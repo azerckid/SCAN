@@ -259,22 +259,41 @@ def _decode_chain_event(
         raise ValueError("bridge event transaction mismatch")
     if str(log.get("blockNumber", "")).lower() != expected_block:
         raise ValueError("bridge event block mismatch")
+    if str(log.get("blockHash", "")).lower() != tx_block_hash:
+        raise ValueError("bridge event block hash mismatch")
+    if log.get("removed") is not False:
+        raise ValueError("bridge event log was removed")
     topics = log.get("topics")
     if not isinstance(topics, list) or not topics or str(topics[0]).lower() != expected_topic0:
         raise ValueError("bridge event topic0 mismatch")
 
     receipt_logs = receipt_result.get("logs")
-    if not isinstance(receipt_logs, list) or not any(
-        isinstance(item, dict)
-        and str(item.get("address", "")).lower() == expected_spoke_pool
-        and isinstance(item.get("topics"), list)
-        and item.get("topics")
-        and str(item["topics"][0]).lower() == expected_topic0
-        and str(item.get("transactionHash", "")).lower() == expected_tx
-        and item.get("logIndex") == log.get("logIndex")
-        for item in receipt_logs
-    ):
+    if not isinstance(receipt_logs, list):
+        raise ValueError("bridge receipt logs are malformed")
+    matching = next(
+        (
+            item
+            for item in receipt_logs
+            if isinstance(item, dict) and item.get("logIndex") == log.get("logIndex")
+        ),
+        None,
+    )
+    if matching is None:
         raise ValueError("bridge event is not present in the receipt")
+    for field in ("address", "blockHash", "transactionHash"):
+        if str(matching.get(field, "")).lower() != str(log.get(field, "")).lower():
+            raise ValueError(f"bridge receipt log {field} differs from the selected event")
+    matching_topics = matching.get("topics")
+    if not isinstance(matching_topics, list) or [str(item).lower() for item in matching_topics] != [
+        str(item).lower() for item in topics
+    ]:
+        raise ValueError("bridge receipt log topics differ from the selected event")
+    if str(matching.get("data", "")).lower() != str(log.get("data", "")).lower():
+        raise ValueError("bridge receipt log data differs from the selected event")
+    if str(matching.get("blockNumber", "")).lower() != str(log.get("blockNumber", "")).lower():
+        raise ValueError("bridge receipt log block number differs from the selected event")
+    if matching.get("removed") is not False:
+        raise ValueError("bridge receipt log was removed")
 
     return decode(log)
 
