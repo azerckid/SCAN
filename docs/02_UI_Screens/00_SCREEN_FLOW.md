@@ -1,7 +1,7 @@
 # SCAN 2026 CLI 화면 흐름
 > Created: 2026-07-26 15:31
-> Last Updated: 2026-07-30 02:52
-> Status: Approved 1.9 · TASK-014 Complete · TASK-015 Preview User Review Passed
+> Last Updated: 2026-07-31 04:10
+> Status: Approved 1.9 · TASK-014 Complete · TASK-015 Preview User Review Passed · TASK-016 Bridge Context PASS
 
 ## 1. 문서 목적
 
@@ -431,8 +431,10 @@ docs-only 검토 트랙이다.
   `results: []`로 표시한다.
 - [Bridge/XChain Preview](./previews/10_task_016_bridge_xchain_preview.html)는
   synthetic 3상태와 late-arrival partial 변형이며 외부 호출·mutation이 없다.
-  사용자 UI-First Gate는 2026-07-30 22:35 통과했고, fixture 캡처·구현은
-  승인되지 않았다.
+  사용자 UI-First Gate는 2026-07-30 22:35 통과했다. fixture는 양단 replay·
+  negative oracle·독립 Verifier를 거쳐 `verifying`이며, 2026-07-31 Context
+  Receipt PASS와 offline/artifact analyzer 구현 승인을 기록했다. 웹 Workbench
+  구현과 fixture `confirmed` 승격은 별도 Gate다.
 
 ## 17. Related Documents
 
