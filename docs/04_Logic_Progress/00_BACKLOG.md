@@ -1276,6 +1276,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [TASK-015 Negative Oracle 보고서](../05_QA_Validation/49_TASK_015_NEGATIVE_ORACLE_REPORT.md) - 30개 offline 반례·결정성
   - [TASK-015 Source Readiness 보고서](../05_QA_Validation/50_TASK_015_SOURCE_READINESS_REPORT.md) - ENS 두 공급자·OFAC SLS·Actor 잔여
   - [TASK-015 Independent Verifier 보고서](../05_QA_Validation/51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md) - 4 verifying·common-funder candidate
+  - [TASK-015 Provenance Hardening Receipt](../05_QA_Validation/52_TASK_015_PROVENANCE_HARDENING_RECEIPT.md) - community config·ENS snapshot raw hash 재유도
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001
 - Implementation Preconditions:
   - [ ] 공식 대회 Rules와 채택 source snapshot의 Terms·privacy·최소 필드를 확정한다
@@ -1345,6 +1346,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Independent Verifier Gate: LABEL·SANCTIONS·ENS·RELATION-HUB 4개,
     8 requirements를 raw/source-first로 두 번 결정적으로 검증해
     `verifying`으로 승격했다. common-funder는 `candidate`, Benchmark는 11이다.
+  - Provenance hardening: pinned community `config.js` 원문과 ENS snapshot을
+    content-addressed artifact로 재검증하고 LABEL fact hash를 갱신했다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 

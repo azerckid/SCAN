@@ -1,5 +1,6 @@
 import copy
 import json
+import shutil
 from pathlib import Path
 
 import pytest
@@ -46,6 +47,34 @@ def test_sls_context_cannot_rewrite_history(tmp_path: Path) -> None:
     snapshot["interpretation"]["historical_removal_changed"] = True
     (package / "sls-snapshot.json").write_text(json.dumps(snapshot))
     with pytest.raises(ValueError, match="rewrites historical facts"):
+        verify_fixture(tmp_path, fixture_id)
+
+
+def test_community_config_content_hash_drift_is_rejected(tmp_path: Path) -> None:
+    fixture_id = "FX-OSINT-LABEL-CONFLICT-001"
+    shutil.copytree(FIXTURE_ROOT / fixture_id, tmp_path / fixture_id)
+    config = (
+        tmp_path
+        / fixture_id
+        / "artifacts/sha256"
+        / "84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32.js"
+    )
+    config.write_text(config.read_text() + "\n// drift\n")
+    with pytest.raises(ValueError, match="content-addressed artifact hash differs"):
+        verify_fixture(tmp_path, fixture_id)
+
+
+def test_ens_snapshot_content_hash_drift_is_rejected(tmp_path: Path) -> None:
+    fixture_id = "FX-OSINT-LABEL-CONFLICT-001"
+    shutil.copytree(FIXTURE_ROOT / fixture_id, tmp_path / fixture_id)
+    snapshot = (
+        tmp_path
+        / fixture_id
+        / "artifacts/sha256"
+        / "762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b.json"
+    )
+    snapshot.write_text(snapshot.read_text() + "\n")
+    with pytest.raises(ValueError, match="content-addressed artifact hash differs"):
         verify_fixture(tmp_path, fixture_id)
 
 

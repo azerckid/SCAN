@@ -3,6 +3,7 @@
 import csv
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -78,6 +79,14 @@ def _label(package: Path) -> dict[str, Any]:
         "15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475.csv"
     )
     _require_file_hash(csv_path)
+    ens_snapshot_path = artifact_root / (
+        "762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b.json"
+    )
+    config_path = artifact_root / (
+        "84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32.js"
+    )
+    _require_file_hash(ens_snapshot_path)
+    _require_file_hash(config_path)
     rows = list(csv.reader(csv_path.read_text(encoding="utf-8").splitlines()))
     if len(rows) != 1 or len(rows[0]) != 6:
         raise ValueError("label selected-row artifact shape differs")
@@ -87,9 +96,28 @@ def _label(package: Path) -> dict[str, Any]:
     ens = _matching_complete_providers(load_json(package / "provider-replay.json"))
     decoded = ens[0]["decoded"]
     evidence = _evidence_map(load_json(package / "evidence.json"))
-    config = evidence["EV-INTEL-LABEL-CONFIG"]
-    if config.get("license") != "MIT" or not config.get("commit"):
+    config_evidence = evidence["EV-INTEL-LABEL-CONFIG"]
+    fixture_input = load_json(package / "input.json")
+    config_input = next(
+        item for item in fixture_input["source_locators"] if item["source_id"] == "DS-OSINT-WEB"
+    )
+    if (
+        config_evidence.get("license") != "MIT"
+        or config_evidence.get("config_sha256") != config_path.stem
+        or config_input.get("commit") != config_evidence.get("commit")
+    ):
         raise ValueError("community config provenance differs")
+    config_text = config_path.read_text(encoding="utf-8")
+    team4 = re.search(
+        r"team4:\s*\{\s*address:\s*'([^']+)',\s*beneficiary:\s*'([^']+)',"
+        r"\s*cliff:\s*(\d+),\s*duration:\s*(\d+),",
+        config_text,
+    )
+    if team4 is None:
+        raise ValueError("community config team4 entry is missing")
+    config_name, _, cliff, duration = team4.groups()
+    if (cliff, duration) != ("12", "36"):
+        raise ValueError("community config team4 vesting terms differ")
     if decoded["address"] != address.lower():
         raise ValueError("label dataset and ENS addresses differ")
     return {
@@ -105,10 +133,8 @@ def _label(package: Path) -> dict[str, Any]:
             "block_number": 25_640_270,
         },
         "community_config": {
-            "name": "team4.vesting.contract.tornadocash.eth",
+            "name": config_name,
             "role": "team4_vesting_contract",
-            "commit": config["commit"],
-            "config_sha256": config["config_sha256"],
         },
         "conflict": {
             "auto_merge": False,
@@ -263,7 +289,6 @@ def _expected_projection(
 ) -> dict[str, Any]:
     if fixture_id == "FX-OSINT-LABEL-CONFLICT-001":
         dataset, config, ens = expected["assertions"]
-        config_evidence = _evidence_map(evidence)["EV-INTEL-LABEL-CONFIG"]
         return {
             "subject_address": expected["subject_address"],
             "dataset": {
@@ -279,8 +304,6 @@ def _expected_projection(
             "community_config": {
                 "name": config["name"],
                 "role": config["role"],
-                "commit": config_evidence["commit"],
-                "config_sha256": config_evidence["config_sha256"],
             },
             "conflict": {
                 "auto_merge": expected["conflict"]["auto_merge"],

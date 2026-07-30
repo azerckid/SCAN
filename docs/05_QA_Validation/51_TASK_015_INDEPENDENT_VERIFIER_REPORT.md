@@ -22,7 +22,7 @@ source readiness가 확보된 LABEL·SANCTIONS·ENS·RELATION-HUB 네 fixture를
 
 | Fixture | Requirements | calculated fact SHA-256 |
 |:---|---:|:---|
-| `FX-OSINT-LABEL-CONFLICT-001` | 2 | `cd81fff476c9c1a66cde29501cb618313f8f3dcc2e91280f8cda13792803d116` |
+| `FX-OSINT-LABEL-CONFLICT-001` | 2 | `4ae17221fe5e0642c588723bd89db1ee6f9e39d19f2d6c1dce85dd2e2990d399` |
 | `FX-OSINT-SANCTIONS-HISTORY-001` | 2 | `cc7b10781b557de2facd31d86040e08c3d1fa678f16ce52c807ae4e2389999e3` |
 | `FX-OSINT-ENS-CONFLICT-001` | 2 | `4fd1ad43018cb0934809a9d8f04b2f52008f66524c4d96d285b9737e0e017f4d` |
 | `FX-ACTOR-RELATION-HUB-001` | 2 | `135391fba32ff966bb6dd038c781f7daa121bea161b74f353465e069ceefe51f` |
@@ -42,8 +42,8 @@ source readiness가 확보된 LABEL·SANCTIONS·ENS·RELATION-HUB 네 fixture를
 - OFAC action HTML 전체는 repository에 복제하지 않는다. Verifier는 고정된
   official action hash·주소 match record와 current SLS snapshot 경계를
   재대조하며 HTML 원문을 재파싱했다고 주장하지 않는다.
-- community config도 pinned commit·SHA·license provenance를 검증하며,
-  외부 repository 전체를 복제하거나 최신 main을 대신 사용하지 않는다.
+- community config는 pinned commit의 `config.js` 원문을 content-addressed
+  artifact로 보존하고 bytes SHA-256과 `team4` raw entry를 재유도한다.
 - Blockscout와 Alchemy는 별도 provider replay지만, 두 번째 상용 raw-RPC
   공급자를 확보했다는 뜻은 아니다.
 - common-funder의 bounded prehistory와 service exclusion은 미완료다.
@@ -63,10 +63,10 @@ source readiness가 확보된 LABEL·SANCTIONS·ENS·RELATION-HUB 네 fixture를
 
 ## 7. 검증
 
-- TASK-015 verifier unit: 5 tests PASS
+- TASK-015 verifier unit: 7 tests PASS
 - independent verifier: 4 verifying fixtures · 8 requirements · 2 deterministic runs
 - fixture Schema 0.1: 18 packages PASS
-- repository Gate: 487 tests · traceability 1,615 links · security 191 files PASS
+- repository Gate: 489 tests · traceability 1,619 links · security 192 files PASS
 - live network: 0
 
 ## 8. Related Documents
@@ -75,3 +75,4 @@ source readiness가 확보된 LABEL·SANCTIONS·ENS·RELATION-HUB 네 fixture를
 - [TASK-015 Negative Oracle 보고서](./49_TASK_015_NEGATIVE_ORACLE_REPORT.md)
 - [TASK-015 Fixture·Contract Gate](./45_TASK_015_FIXTURE_CONTRACT_GATE.md)
 - [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md)
+- [Provenance Hardening Receipt](./52_TASK_015_PROVENANCE_HARDENING_RECEIPT.md)
