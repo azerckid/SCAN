@@ -142,8 +142,8 @@ destination chain만 필수로 둔다. destination recipient는 양단 evidence�
   허용 오차가 입증된 경우에만 0보다 크게 설정한다. 근거가 없으면 tolerance
   match는 candidate만 가능하다.
 - 지연: `arrival_window_start/end`를 block 또는 UTC timestamp로 고정한다.
-  창 밖 도착은 결정적 key가 같아도 conflict/late evidence로 보존하고 자동
-  complete하지 않는다.
+  창 밖 도착은 결정적 key가 같아도 `partial`로 판정하고 late-arrival
+  conflict/evidence를 보존하며, 자동 `complete`로 승격하지 않는다.
 
 위 계산 뒤 expected와 observed가 다르거나 asset mapping이 모순되면
 `reconciliation_failed`다.
@@ -188,14 +188,15 @@ evidence-backed assertion으로, recipient 소유·본인성·불법성은
 
 1. 유사 금액의 **다른** 브리지 전송을 도착 leg로 오매칭(결정적 키 불일치) → 거부.
 2. 결정적 키 없이 금액·시간만으로 도착을 confirmed로 승격 → candidate 강제.
-3. 공식 fee·asset mapping 없이 임의 tolerance로 금액 차이를 매칭 → 거부.
+3. 공식 fee·asset mapping 없이 임의 tolerance를 근거로 destination candidate를
+   결정적 매칭으로 승격 → 거부(candidate 유지).
 4. 도착 evidence 미확보를 complete로 처리 → partial 강제.
 5. request source subject 또는 destination chain에 없는 주소·체인으로 합성 →
    `reconciliation_failed`.
 6. 같은 nonce/key_value이지만 다른 bridge contract·emitter·source chain인
    전송을 같은 결정적 키로 연결 → 거부(domain separation 필수).
-7. 공식 fee/asset mapping 없이 임의 tolerance·잘못된 decimals·symbol 일치만으로
-   amount를 정합 → 거부(candidate 강제 또는 `reconciliation_failed`).
+7. 결정적 key가 있더라도 공식 fee/asset mapping 없이 임의 tolerance·잘못된
+   decimals·symbol 일치만으로 amount 정합을 통과 → `reconciliation_failed`.
 
 ## 7. 오류 계약 — 기존 `ErrorCode` 재사용(신규 코드 없음)
 
