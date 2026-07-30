@@ -29,4 +29,5 @@ Etherscan label은 사용하지 않는다.
 
 - [Selected dataset row](./artifacts/sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475.csv)
 - [ENS fixed-block replay](./artifacts/sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b.json)
+- [Pinned community config](./artifacts/sha256/84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32.js)
 - [Source-resolution report](../../47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md)

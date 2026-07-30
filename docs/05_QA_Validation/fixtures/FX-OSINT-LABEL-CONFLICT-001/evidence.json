@@ -33,6 +33,7 @@
       "source_id": "DS-OSINT-WEB",
       "commit": "4dea68f71633dab37e3cb4c8b4d8dca3479891c6",
       "config_sha256": "84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32",
+      "artifact_uri": "artifact://sha256/84efb04363b2b6ff7d2dca3fc5a17358629203325ac5aa3c57d6ccde28d6fb32",
       "license": "MIT"
     }
   ],
@@ -85,7 +86,7 @@
   "verification_provenance": {
     "negative_oracle_report": "../../49_TASK_015_NEGATIVE_ORACLE_REPORT.md",
     "independent_verifier_report": "../../51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md",
-    "calculated_fact_sha256": "cd81fff476c9c1a66cde29501cb618313f8f3dcc2e91280f8cda13792803d116"
+    "calculated_fact_sha256": "4ae17221fe5e0642c588723bd89db1ee6f9e39d19f2d6c1dce85dd2e2990d399"
   },
   "uncertainty": {
     "candidate_only": false,
