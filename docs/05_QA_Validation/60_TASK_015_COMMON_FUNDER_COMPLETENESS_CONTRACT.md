@@ -62,7 +62,9 @@ analyzer는 이미 completeness 미증명을 `partial`로 보존하고, 독립 V
 
 1. 시작 경계가 **검증된 first-seen block**이다. subject의 first-seen 이전
    inbound가 존재하지 않음을 replay가 입증한다(고정 lookback은 이 조건을
-   충족하지 못한다).
+   충족하지 못한다). 실제 archive 캡처 시 first-seen의 시작점은 **chain
+   genesis** 또는 **검증 가능한 주소 생성 시점**(EOA는 genesis 기준 연속
+   스캔, 컨트랙트는 생성 TX block)으로 명시한다.
 2. first-seen부터 seed 입금까지 연속 inbound 스캔이 gap 없이 완료됐다
    (`continuous_gap_scanned: true`).
 3. 그 구간에서 seed 이전에 subject를 funding한 **비-seed inbound value 이동이
@@ -167,7 +169,9 @@ confirmed `FX-FLOW-REMERGE-001` replay(선택 TX scope)에는 존재하지 않�
    addressed artifact로 고정한다.
 2. **계약·Schema 갱신.** `intel_context` I/O 계약(doc 18)과 `find_common_funder`
    result·replay Schema를 완결성 필드까지 확장하고, family/cross-family probe를
-   갱신한다. 새 public `ErrorCode`는 도입하지 않는다.
+   갱신한다. `common_funder_assessment`에 `failed`·`not_applicable` 같은 새
+   enum 값을 도입한다면 이 Schema migration 대상에 포함한다. 새 public
+   `ErrorCode`는 도입하지 않는다.
 3. **analyzer hardcoded false 제거.** analyzer가 완결성을 replay evidence에서
    raw-first로 유도하도록 바꾸되, 미증명 시 `partial`을 유지하는 경로는
    보존한다(§6 partial/failed).
