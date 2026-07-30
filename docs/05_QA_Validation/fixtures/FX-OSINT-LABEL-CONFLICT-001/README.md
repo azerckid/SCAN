@@ -1,6 +1,6 @@
 # Fixture: FX-OSINT-LABEL-CONFLICT-001
 > Created: 2026-07-30 03:37
-> Last Updated: 2026-07-30
+> Last Updated: 2026-07-30 19:40
 > Status: Confirmed 0.1 · Replacement Migrated · OpenRAIL Artifact Removed
 
 ## 1. 목적
@@ -28,7 +28,7 @@ Etherscan label은 사용하지 않는다.
 - [x] OpenRAIL scoring·provenance dependency 제거
 - [x] official projection·MIT config·ENS artifact에서 Verifier와 analyzer hash 재계산
 - [x] 재배포 허가 미확인 OpenRAIL CSV artifact 삭제(참조 0건)
-- [x] 최종 승격 검토·`confirmed` 승격([Promotion Receipt](../../58_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md))
+- [x] 최종 승격 검토·`confirmed` 승격([Promotion Receipt](../../59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md))
 
 ## 4. Artifacts
 

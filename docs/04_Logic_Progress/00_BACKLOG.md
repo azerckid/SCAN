@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-30 16:28
+> Last Updated: 2026-07-30 19:40
 > Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 자동화 별도 판정) · TASK-016~019 Proposed
 
 ## 1. 문서 목적
@@ -1271,7 +1271,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     제거한다.
   - [x] LABEL replacement fixture를 별도 Promotion Receipt에서 최종 판정하고
     재배포 허가 미확인 OpenRAIL CSV artifact를 삭제한 뒤 `confirmed`로
-    승격한다([58 Promotion Receipt](../05_QA_Validation/58_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md)).
+    승격한다([58 Promotion Receipt](../05_QA_Validation/59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md)).
   - [ ] OSINT-LBL-001 Benchmark automated 11→12 승격 여부를 별도로 판정한다
     (executable benchmark case 등록 필요).
   - [x] sanctions·ENS·relation-hub의 fixture별 문서 Hard Gate를 닫고 별도
@@ -1318,7 +1318,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     피드백을 기록한다(2026-07-30 02:52).
   - [x] `intel_context` Analysis I/O 대안과 source artifact 입력을 승인한다.
   - [x] 공개 source snapshot·negative oracle·독립 Verifier·analyzer를 통과한다
-    (비격리 3개 confirmed, LABEL replacement verifying,
+    (LABEL·SANCTIONS·ENS·RELATION-HUB 4개 confirmed,
     common-funder completeness는 별도 대기).
   - [ ] live mode와 live source adapter 구현 승인을 별도로 기록한다.
 - Component & Library Plan:
@@ -1377,9 +1377,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Change Receipt:
   - Offline oracle·Source Readiness·독립 Verifier·Provenance hardening·
     `intel_context` I/O 계약 확정안·**제품 analyzer 구현·독립 검증**까지
-    완료했다(아래 항목별 기록). SANCTIONS·ENS·RELATION-HUB는 별도
-    Promotion Gate에서 `confirmed`, LABEL은 replacement migration 후 `verifying`,
-    common-funder는 `candidate`다. live source adapter는 별도 Gate다.
+    완료했다(아래 항목별 기록). LABEL·SANCTIONS·ENS·RELATION-HUB는 별도
+    Promotion Gate에서 모두 `confirmed`(LABEL은 replacement migration + 재배포
+    허가 미확인 OpenRAIL CSV 삭제 후 [59 Promotion Receipt](../05_QA_Validation/59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md)로 승격),
+    common-funder는 `candidate`다. live source adapter·Benchmark 자동화는 별도 Gate다.
   - intel_context analyzer 구현: `src/scan_tool/domain/{intel_context,analysis_request,
     analysis_result,_types}.py`, `src/scan_tool/slices/intel_context.py`,
     `src/scan_tool/application/cli_runtime.py`, schema 3종·
