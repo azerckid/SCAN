@@ -1,6 +1,6 @@
 # TASK-015 Live Source·Terms·Fixture 승격 Readiness
 > Created: 2026-07-30 14:19
-> Last Updated: 2026-07-30 15:37
+> Last Updated: 2026-07-30 15:48
 > Status: Applied · 3 Non-Quarantined Confirmed · LABEL Blocked · Common-funder Candidate
 
 ## 1. 목적과 현재 판정
@@ -57,7 +57,7 @@ Source permission을 통과했다고 fact가 정확해지는 것은 아니며, f
 
 | Fixture | 현재 | 허용 승격 입력 | 닫힌 Gate | 남은 Hard Gate | 판정 |
 |:---|:---:|:---|:---|:---|:---|
-| `FX-OSINT-LABEL-CONFLICT-001` | verifying | quarantine된 `provided_artifact` | 30 oracle 일부·Verifier·analyzer·artifact hash·license absence proof | publisher exact terms 확보 또는 source 교체 | BLOCKED |
+| `FX-OSINT-LABEL-CONFLICT-001` | verifying | quarantine된 기존 artifact; 선택된 replacement는 migration 전 | source 후보 비교·replacement route 선정·기존 30 oracle·Verifier·analyzer·license absence proof | 새 subject의 fixed-block ENS·artifact·oracle·Verifier·analyzer hash 재검증과 OpenRAIL scoring dependency 제거 | MIGRATION PENDING |
 | `FX-OSINT-SANCTIONS-HISTORY-001` | confirmed | `provided_artifact`; Rules 허용 시 official locator 재확인 | action timeline·subject-bound SLS context·Verifier·analyzer·미재배포 | 없음(현재 상태·범죄성은 `not_assessed`) | PROMOTED |
 | `FX-OSINT-ENS-CONFLICT-001` | confirmed | `provided_artifact`; live는 optional | fixed-block 두 source decoded match·Verifier·analyzer·소유권 분리 | 없음(고정 block 밖은 미확정) | PROMOTED |
 | `FX-ACTOR-RELATION-HUB-001` | confirmed | confirmed local fixture | DEX/AUTH hash·hub exclusion·Verifier·analyzer·귀속 분리 | 없음(ownership/coordination `not_assessed`) | PROMOTED |

@@ -1,6 +1,6 @@
 # TASK-015 LABEL Source Replacement Review
 > Created: 2026-07-30 15:37
-> Last Updated: 2026-07-30 15:37
+> Last Updated: 2026-07-30 15:48
 > Status: Proposed · Replacement Route Selected · Fixture Migration Not Executed
 
 ## 1. 목적과 판정
@@ -70,12 +70,18 @@ content-addressed provenance를 참조한다.
 | Repository | `tornadocash-community/torn-token` |
 | Commit | `4dea68f71633dab37e3cb4c8b4d8dca3479891c6` |
 | License | MIT |
-| Config fact | rate table의 `eth-01.tornadocash.eth`; ETH `0.1` instance address |
+| Config fact | mining rate table의 `eth-01.tornadocash.eth`; ETH instance table의 `0.1` address |
 | Address | `0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc` |
 
 현재 pinned `config.js` artifact는 이미 content hash와 MIT provenance를
 검증했다. replacement migration에서는 subject-scoped projection과
 Verifier fact만 새 주소에 맞춰 재계산한다.
+
+`miningV2.rates[].value: "10"`은 mining rate 필드이며 ETH denomination이
+아니다. denomination과 address 결합은
+`instances.netId1.eth.instanceAddress["0.1"]`에서 읽는다. migration
+Verifier는 두 필드를 혼합하지 않고, ENS name의 address binding을 별도로
+검증해야 한다.
 
 ### 3.3 Fixed-block ENS
 
