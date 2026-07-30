@@ -277,7 +277,13 @@ def bridge_transfer_family_probes(
 ) -> list[Probe]:
     """Keep bridge_transfer dispatch isolated from every other 0.2 family."""
     bridge_request = load_json(BRIDGE_TRANSFER_EXAMPLE)
-    bridge_result = changed(evm_result, "analysis_type", value="bridge_transfer")
+    bridge_result = changed(
+        changed(evm_result, "analysis_type", value="bridge_transfer"),
+        "results",
+        0,
+        "fixture_requirement_ids",
+        value=["REQ-BRIDGE-SOURCE", "REQ-BRIDGE-DESTINATION", "REQ-BRIDGE-DOMAIN"],
+    )
     return [
         Probe("bridge_transfer request", "request", bridge_request, True),
         Probe("bridge_transfer result", "result", bridge_result, True),

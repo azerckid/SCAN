@@ -1,7 +1,7 @@
 # TASK-016 Bridge Fixture 승격 검토 보고서
 > Created: 2026-07-31 03:20
-> Last Updated: 2026-07-31 04:40
-> Status: Promoted to 검증 중 (Verifying) · Analysis I/O 대안 B 확정 · Context Receipt PASS · Analyzer 구현·독립 검증 완료
+> Last Updated: 2026-07-31 04:25
+> Status: Promoted to 검증 중 (Verifying) · Analysis I/O 대안 B 확정 · Context Receipt PASS · Analyzer Verification Receipt PASS · confirmed 별도
 
 ## 1. 목적
 
@@ -65,14 +65,17 @@
    `task_016_bridge_independent_verifier.py`를 import하지 않는 독립 코드
    경로에서 canonical hash `d6609bb4...`가 독립 Verifier hash와 일치함을
    확인했다(`scripts/verify_task_016_bridge_analyzer_independent_verification.py`).
-4. 독립 Verification Receipt 문서화(analyzer 전용) → `verifying → confirmed`
-   승격을 별도 판정
-5. Benchmark automated 승격 여부를 별도 판정
+4. ~~독립 Verification Receipt 문서화(analyzer 전용)~~ — 완료
+   ([64 Receipt](./64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)).
+   공개 Schema `BRIDGE` 패턴·probe 보강도 함께 반영했다.
+5. `verifying → confirmed` 승격을 별도 판정
+6. Benchmark automated 승격 여부를 별도 판정
 
 ## 6. Related Documents
 
 - [Bridge 후보 선정 보고서](./61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) - 승격 이전 candidate 근거
 - [Bridge Raw Replay 보고서](./62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) - 16 call·negative oracle 8개·독립 Verifier·P1 remediation 전체 기록
+- [Bridge Analyzer Verification Receipt](./64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md) - analyzer 독립 검증 PASS
 - [Bridge/XChain 계약 제안](../03_Technical_Specs/21_TASK_016_BRIDGE_XCHAIN_CONTRACT_PROPOSAL.md) - 정답·evidence·오라클 계약
 - [Bridge/XChain UI](../02_UI_Screens/11_TASK_016_BRIDGE_XCHAIN_UI.md) - 사용자 승인된 Preview
 - [Reference Fixtures](./01_REFERENCE_FIXTURES.md) - fixture 상태 목록

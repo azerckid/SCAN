@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-31 04:10
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 12·4·14) · TASK-016 Bridge Context PASS·구현 승인 · TASK-017~019 Proposed
+> Last Updated: 2026-07-31 04:25
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 12·4·14) · TASK-016 Bridge Analyzer Verification PASS · TASK-017~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1454,8 +1454,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
-- Status: In Progress — Bridge(`SVC-BRG-001`) offline analyzer 구현 완료.
-  독립 Verification Receipt·`verifying → confirmed` 검토 대기.
+- Status: In Progress — Bridge(`SVC-BRG-001`) offline analyzer 독립
+  Verification Receipt PASS. Fixture는 `verifying` 유지 · `confirmed`·Benchmark
+  승격 별도 판정 대기.
 - Work Type: code
 - Priority: Phase 2 · P2
 - Depends On: TASK-014, TASK-015
@@ -1491,6 +1492,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [Bridge/XChain 공개 Fixture 후보 보고서](../05_QA_Validation/61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) - Across V3 Base→Ethereum 후보·raw replay 완료
   - [Bridge Raw Replay 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) - 16 read-only calls·SHA·decoded match·negative oracle 8개
   - [Bridge Fixture 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md) - `candidate → verifying` 판정·잔여 Gate
+  - [Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md) - analyzer↔verifier hash·Schema P1 sync·PASS
 - Implementation Preconditions:
   - [x] Bridge official ABI/address·두 provider replay·독립 Verifier를 확보하고
     `verifying → analyzer → confirmed review` 예외 경로를 승인했다.
@@ -1541,8 +1543,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) ·
       [Bridge 후보 보고서](../05_QA_Validation/61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) ·
       [Bridge Raw Replay](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) ·
-      [Bridge 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md) —
-      verifying lifecycle·8 negative oracle·canonical hash를 확인했다.
+      [Bridge 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md) ·
+      [Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md) —
+      verifying lifecycle·8 negative oracle·canonical hash·analyzer 독립 검증
+      PASS를 확인했다.
   - Constraints:
     - `AnalysisType.BRIDGE_TRANSFER` + `link_bridge_transfer` 전용 dispatch
       guard로 기존 analyzer·일반 Workbench 동작과 격리한다.
@@ -1642,10 +1646,28 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     경로 전용임을 명시했다. CLI 성공·byte-only 거부 회귀 테스트 2건 추가
     (`tests/integration/test_task_016_bridge_cli.py`).
 - Verification Receipt:
-  - Pending - Implementation basic checks는 focused 6 tests(CLI 2건 포함)·
-    전체 570 tests, Schema 57 probes, Bridge pinned hash·2회 결정성, 기존
-    Bridge Verifier, Benchmark 무변동으로 통과했다. 독립 Verification
-    Receipt 문서화 후 `verifying → confirmed`를 별도 판정한다.
+  - Status: PASS — Bridge offline analyzer 독립 검증 완료. Fixture는
+    `verifying` 유지, Benchmark 12·4·14 무변동.
+  - Commands and Results:
+    - `scripts/verify_task_016_bridge_analyzer_independent_verification.py` —
+      PASS — hash `d6609bb4…00ac`, 2 deterministic runs, AST isolation
+    - `scripts/verify_task_016_bridge_independent_verifier.py` — PASS —
+      same hash
+    - focused bridge analyzer/CLI pytest — PASS — 6
+    - `scripts/verify.py` — PASS — 570 tests, 1925 links, 226 security
+    - `scripts/check_analysis_schema.py` — PASS — 57 probes; bridge result
+      probe now exercises `REQ-BRIDGE-*`
+    - public `analysis-result.schema.json` — PASS after adding `BRIDGE` to
+      `FixtureRequirementId` pattern (P1 found during independent review)
+  - Unrun Checks:
+    - N/A — planned independent checks ran; live Rules/network remain out
+      of approved offline scope
+  - Detailed Evidence:
+    - [64 Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)
+    - [PR #108](https://github.com/azerckid/SCAN/pull/108) — analyzer
+      implementation and Evidence Worker boundary
+  - Residual: `verifying → confirmed` review and Benchmark automated
+    promotion remain separate Gates.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 

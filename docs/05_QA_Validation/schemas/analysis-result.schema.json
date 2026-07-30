@@ -228,7 +228,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL)-[A-Z0-9-]+$"
+            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE)-[A-Z0-9-]+$"
           },
           "uniqueItems": true
         },
