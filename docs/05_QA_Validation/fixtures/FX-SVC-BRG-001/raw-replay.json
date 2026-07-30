@@ -125,7 +125,6 @@
     "message": "0x"
   },
   "remaining_gate": [
-    "negative oracle",
     "independent verifier",
     "candidate-to-verifying review"
   ]

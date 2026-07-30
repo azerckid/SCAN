@@ -252,8 +252,10 @@ doc 20 §1.6을 따른다. 매핑: 입력 경계 `invalid_input`, 지원 안 되
    공개 후보를 선정한다(docs-only, package 없음).
 4. 완료 — 양단 두 source role의 16개 read-only raw replay·SHA·decoded
    match와, `assert_matching_provider_facts`로 두 role의 canonical facts가
-   실제로 동일함을 코드로 재확인했다([62 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) §7).
-   negative oracle 2회 결정성은 남아 있다.
+   실제로 동일함을 코드로 재확인했다([62 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md) §8).
+   §6의 negative oracle 7개 범주를 8개 synthetic case·2회 결정성으로
+   [manifest](../05_QA_Validation/oracles/task-016-bridge-negative-oracles-v0.1.json)에
+   고정했다.
 5. 독립 Verifier raw-first 재계산·canonical hash 대조.
 6. `candidate → verifying → confirmed` 승격 검토(사용자 Gate).
 7. Context Receipt PASS·구현 승인 후 analyzer 구현.

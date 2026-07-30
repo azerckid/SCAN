@@ -1,0 +1,159 @@
+{
+  "schema_version": "0.1",
+  "status": "verified",
+  "execution_mode": "synthetic_offline",
+  "cases": [
+    {
+      "oracle_id": "OR-BRIDGE-SCOPE-SYNTHESIS",
+      "fixture_id": "FX-SVC-BRG-001",
+      "facts": {
+        "scope_bound": false,
+        "keys_collide_across_domains": false,
+        "domain_separated": true,
+        "correct_pair_selected": true,
+        "deterministic_key_present": true,
+        "destination_evidence_available": true,
+        "official_asset_mapping_present": true,
+        "official_fee_mapping_present": true,
+        "amount_matches_via_official_formula": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "scope_synthesis_rejected"
+      }
+    },
+    {
+      "oracle_id": "OR-BRIDGE-DOMAIN-COLLISION",
+      "fixture_id": "FX-SVC-BRG-001",
+      "facts": {
+        "scope_bound": true,
+        "keys_collide_across_domains": true,
+        "domain_separated": false,
+        "correct_pair_selected": true,
+        "deterministic_key_present": true,
+        "destination_evidence_available": true,
+        "official_asset_mapping_present": true,
+        "official_fee_mapping_present": true,
+        "amount_matches_via_official_formula": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "domain_separation_violation"
+      }
+    },
+    {
+      "oracle_id": "OR-BRIDGE-WRONG-DEPOSIT-MATCH",
+      "fixture_id": "FX-SVC-BRG-001",
+      "facts": {
+        "scope_bound": true,
+        "keys_collide_across_domains": false,
+        "domain_separated": true,
+        "correct_pair_selected": false,
+        "deterministic_key_present": true,
+        "destination_evidence_available": true,
+        "official_asset_mapping_present": true,
+        "official_fee_mapping_present": true,
+        "amount_matches_via_official_formula": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "wrong_deposit_pair_matched"
+      }
+    },
+    {
+      "oracle_id": "OR-BRIDGE-HEURISTIC-NOT-PROMOTED",
+      "fixture_id": "FX-SVC-BRG-001",
+      "facts": {
+        "scope_bound": true,
+        "keys_collide_across_domains": false,
+        "domain_separated": true,
+        "correct_pair_selected": true,
+        "deterministic_key_present": false,
+        "destination_evidence_available": true,
+        "official_asset_mapping_present": true,
+        "official_fee_mapping_present": true,
+        "amount_matches_via_official_formula": true
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "heuristic_candidate_only"
+      }
+    },
+    {
+      "oracle_id": "OR-BRIDGE-DESTINATION-EVIDENCE-MISSING",
+      "fixture_id": "FX-SVC-BRG-001",
+      "facts": {
+        "scope_bound": true,
+        "keys_collide_across_domains": false,
+        "domain_separated": true,
+        "correct_pair_selected": true,
+        "deterministic_key_present": true,
+        "destination_evidence_available": false,
+        "official_asset_mapping_present": true,
+        "official_fee_mapping_present": true,
+        "amount_matches_via_official_formula": true
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "destination_evidence_missing"
+      }
+    },
+    {
+      "oracle_id": "OR-BRIDGE-TOLERANCE-WITHOUT-MAPPING",
+      "fixture_id": "FX-SVC-BRG-001",
+      "facts": {
+        "scope_bound": true,
+        "keys_collide_across_domains": false,
+        "domain_separated": true,
+        "correct_pair_selected": true,
+        "deterministic_key_present": true,
+        "destination_evidence_available": true,
+        "official_asset_mapping_present": false,
+        "official_fee_mapping_present": true,
+        "amount_matches_via_official_formula": true
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "amount_mapping_unverified"
+      }
+    },
+    {
+      "oracle_id": "OR-BRIDGE-AMOUNT-FORMULA-MISMATCH",
+      "fixture_id": "FX-SVC-BRG-001",
+      "facts": {
+        "scope_bound": true,
+        "keys_collide_across_domains": false,
+        "domain_separated": true,
+        "correct_pair_selected": true,
+        "deterministic_key_present": true,
+        "destination_evidence_available": true,
+        "official_asset_mapping_present": true,
+        "official_fee_mapping_present": true,
+        "amount_matches_via_official_formula": false
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "amount_reconciliation_failed"
+      }
+    },
+    {
+      "oracle_id": "OR-BRIDGE-COMPLETE-MATCH",
+      "fixture_id": "FX-SVC-BRG-001",
+      "facts": {
+        "scope_bound": true,
+        "keys_collide_across_domains": false,
+        "domain_separated": true,
+        "correct_pair_selected": true,
+        "deterministic_key_present": true,
+        "destination_evidence_available": true,
+        "official_asset_mapping_present": true,
+        "official_fee_mapping_present": true,
+        "amount_matches_via_official_formula": true
+      },
+      "expected": {
+        "outcome": "complete",
+        "classification": "bridge_transfer_matched"
+      }
+    }
+  ]
+}

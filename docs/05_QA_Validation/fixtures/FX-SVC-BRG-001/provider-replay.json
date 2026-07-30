@@ -88,8 +88,13 @@
       "inferred_success": false
     }
   ],
+  "negative_oracle": {
+    "manifest": "docs/05_QA_Validation/oracles/task-016-bridge-negative-oracles-v0.1.json",
+    "cases": 8,
+    "deterministic_runs": 2,
+    "status": "verified"
+  },
   "remaining_gate": [
-    "negative oracle",
     "independent verifier",
     "candidate-to-verifying review"
   ]

@@ -1,6 +1,6 @@
 # FX-SVC-BRG-001 — Across V3 Base→Ethereum 후보
 
-> Status: candidate · raw provider replay complete
+> Status: candidate · raw provider replay·negative oracle complete
 
 ## 범위
 
@@ -21,8 +21,10 @@ Across V3의 공개 Base→Ethereum 전송 한 건을 `SVC-BRG-001`의 fixture
 primary·verify 두 role의 canonical facts(deposit ID·자산·금액·deadline·
 exclusive relayer·message)가 실제로 동일함을 코드로 재확인했다. `exclusive_relayer`
 비교와 zero-output-token → 공식 Base WETH↔Ethereum WETH 매핑 검증도
-`bridge_pair_facts`에 포함됐다. negative oracle·독립 Verifier가 남아 있으므로
-아직 `verifying` 상태가 아니다.
+`bridge_pair_facts`에 포함됐다. doc 21 §6의 7개 negative oracle 범주(오매칭·
+domain 충돌·tolerance 남용·evidence 누락·scope 합성·heuristic 승격·amount
+공식 불일치)를 8개 synthetic case로 고정해 2회 결정성으로 통과했다. 독립
+Verifier가 남아 있으므로 아직 `verifying` 상태가 아니다.
 
 ## 파일
 
@@ -34,7 +36,8 @@ exclusive relayer·message)가 실제로 동일함을 코드로 재확인했다.
 
 ## 다음 Gate
 
-1. negative oracle과 2회 결정성 Gate
+1. ~~negative oracle과 2회 결정성 Gate~~ — 완료
+   ([manifest](../../oracles/task-016-bridge-negative-oracles-v0.1.json)).
 2. 독립 Verifier의 raw-first 재계산
 3. candidate → verifying 별도 판정
 
