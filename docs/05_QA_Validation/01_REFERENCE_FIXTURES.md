@@ -1,13 +1,13 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 16:28
-> Status: Approved 1.9 · 16 Confirmed · TASK-015 LABEL Verifying 1 / Candidate 1
+> Last Updated: 2026-07-30 19:40
+> Status: Approved 2.0 · 17 Confirmed · TASK-015 LABEL Confirmed · Candidate 1
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
-있는 reference fixture를 관리한다. 현재 등록한 20개 중 16개는 `확정`,
-1개는 `검증 중`, 1개는 `후보`이며 기존 Deferred 2개는 문서 후보만 있다.
+있는 reference fixture를 관리한다. 현재 등록한 20개 중 17개는 `확정`,
+0개는 `검증 중`, 1개는 `후보`이며 기존 Deferred 2개는 문서 후보만 있다.
 18개는 Schema package가 있다. TASK-013 세 공개 사례는 remediation
 재검토와 [최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
 통과해 `확정`으로 관리한다.
@@ -23,8 +23,9 @@ claim boundary·negative oracle·독립 Verifier·제품 analyzer를 통과해
 분류한다. common-funder는 completeness 미증명으로 `후보`·`partial`을
 유지한다. LABEL은 OpenRAIL selected row를 scoring·provenance dependency에서
 제거하고 official OFAC historical action + MIT config + fixed-block ENS
-subject로 migration했다. 새 canonical hash를 Verifier·analyzer가 재현했지만
-별도 Promotion Review 전이므로 `검증 중`을 유지한다.
+subject로 migration했다. 새 canonical hash를 Verifier·analyzer가 재현했고,
+[LABEL 확정 승격 Receipt](./59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md)에서
+재배포 허가 미확인 OpenRAIL CSV artifact를 삭제한 뒤 `확정`으로 승격했다.
 
 입력 문서:
 
@@ -112,7 +113,7 @@ subject로 migration했다. 새 canonical hash를 Verifier·analyzer가 재현�
 | [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 확정 0.2 | archive replay·반례·consumer pass | EVM-STATE, decimals |
 | [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 확정 0.2 | filtered logs·ordering·consumer pass | EVM-LOG, first ordering |
 | [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | EVM-TOKEN-002 | 1 | 확정 0.2 | primary trace·cross-check·consumer pass | EVM-TRACE, native sum |
-| [FX-OSINT-LABEL-CONFLICT-001](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) | OSINT-LBL-001 | 2 | 검증 중 0.1 | official history·MIT config·ENS two-provider·Verifier/analyzer PASS | LABEL, source conflict |
+| [FX-OSINT-LABEL-CONFLICT-001](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) | OSINT-LBL-001 | 2 | 확정 0.1 | official history·MIT config·ENS two-provider·Verifier/analyzer PASS·OpenRAIL artifact 삭제 | LABEL, source conflict |
 | [FX-OSINT-SANCTIONS-HISTORY-001](./fixtures/FX-OSINT-SANCTIONS-HISTORY-001/README.md) | OSINT-SAN-001 | 2 | 확정 0.1 | official timeline·subject-bound SLS context·Verifier/analyzer | SANCTIONS, timeline |
 | [FX-OSINT-ENS-CONFLICT-001](./fixtures/FX-OSINT-ENS-CONFLICT-001/README.md) | OSINT-ENS-001 | 2 | 확정 0.1 | fixed-block two-provider replay·Verifier/analyzer | ENS, forward/reverse |
 | [FX-ACTOR-COMMON-FUNDER-001](./fixtures/FX-ACTOR-COMMON-FUNDER-001/README.md) | ACTOR-REL-001 | 1 | 후보 0.1 | confirmed FLOW hash, prehistory·service exclusion 대기 | ACTOR, common funder |
@@ -529,7 +530,12 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
 19. LABEL 대체 source 조사에서 repository license와 upstream data provenance를
     분리했다. Etherscan 파생·원천 불명 list는 채택하지 않고 confirmed OFAC
     historical action + MIT config + fixed-block ENS subject 교체안을 선택했다.
-    migration·재검증 전까지 LABEL은 `verifying`·quarantined다.
+    이 시점(migration 직후)에는 LABEL이 `verifying`·quarantined였다.
+20. LABEL 확정 승격 검토([59 Promotion Receipt](./59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md))에서
+    라이선스·artifact hash·2-provider ENS·negative oracle·독립 Verifier·
+    analyzer hash 여섯 기준을 최종 대조하고, 재배포 허가 미확인 OpenRAIL CSV
+    artifact를 삭제(active scoring/provenance 참조 0건)한 뒤 LABEL을
+    `confirmed`로 승격했다. 이로써 OSINT/ACTOR 계열은 확정 4·후보 1이다.
 
 ## 10. Related Documents
 

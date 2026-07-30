@@ -2,7 +2,7 @@
   "schema_version": "0.1",
   "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
   "captured_at": "2026-07-30T07:05:38Z",
-  "status": "verifying",
+  "status": "confirmed",
   "scope_kind": "fixed_block_ens_resolution",
   "request_scope": {
     "chain_id": 1,
