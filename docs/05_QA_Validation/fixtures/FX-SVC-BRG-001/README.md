@@ -54,8 +54,10 @@ Verification Receipt 등 잔여 Gate를 닫은 뒤 별도 판정한다.
    ([63 승격 검토](../../63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)).
 4. ~~Analysis I/O 대안 결정~~ — 완료. 대안 B(전용 leaf
    `bridge_transfer`) 확정([Bridge 계약 §5](../../../03_Technical_Specs/21_TASK_016_BRIDGE_XCHAIN_CONTRACT_PROPOSAL.md)).
-5. Context Receipt PASS·구현 승인 후 `bridge_transfer` analyzer 구현·독립
-   Verification Receipt → `confirmed` 승격은 별도 판정.
+5. ~~Context Receipt PASS·구현 승인~~ — 완료(2026-07-31, offline/artifact
+   범위로 제한). Backlog TASK-016 Context Receipt 참고.
+6. `bridge_transfer` analyzer 구현·독립 Verification Receipt →
+   `confirmed` 승격·Benchmark 승격은 별도 판정.
 
 endpoint·credential·Explorer 본문은 이 package에 저장하지 않는다.
 QuickNode의 bounded 호출은 429, PublicNode의 exact-block log는 403이었고

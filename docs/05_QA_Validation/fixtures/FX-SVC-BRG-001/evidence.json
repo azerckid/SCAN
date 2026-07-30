@@ -96,7 +96,6 @@
   "uncertainty": {
     "candidate_only": false,
     "remaining": [
-      "Context Receipt PASS",
       "bridge_transfer analyzer implementation",
       "analyzer independent Verification Receipt",
       "verifying-to-confirmed review"
