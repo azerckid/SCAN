@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 16:28
+> Last Updated: 2026-07-30 22:51
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -232,9 +232,9 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
 | 이용약관 주의 | 각 서비스 ToS | 동일 | 재배포·지연 데이터 제한 |
 | 대회 규정 | 미확인 | 미확인 | 미확인 |
 | 상태 | 후보 | 검증 중 | 후보 |
-| 마지막 확인 | 2026-07-24 15:49 | 2026-07-25 15:13 | 2026-07-24 15:49 |
+| 마지막 확인 | 2026-07-30 22:51 | 2026-07-25 15:13 | 2026-07-24 15:49 |
 | 관련 fixture | SVC-BRG-001 | SVC-DEX-001 (`FX-SVC-DEX-001`), EVM-AUTH-001 (`FX-EVM-AUTH-001`) | FLOW-MULTI-001 |
-| 비고 |  | DEX Universal Router: 거래 이전 공식 커밋 `d2575ff...f9f`의 `mainnet.json` `UniversalRouter` 주소·파일 해시·GPL-3.0 라이선스 고정. Factory: V2 Deployments. Pool: Pair Addresses 가이드 + 거래 시점 `eth_call getPair` 기록. AUTH `SwapRouter02`: 공식 `sdk-core` 커밋 `baff6d3c...d28a`의 `SWAP_ROUTER_02_ADDRESSES(1)`과 MIT 라이선스 고정 |  |
+| 비고 | Across 공식 Chains & Contracts·V3 event/matching 문서와 BaseScan/Etherscan supporting 화면으로 Base→Ethereum 공개 전송 후보를 선정. Explorer는 scoring source가 아니며 두 RPC raw replay 전 package·승격 없음. 상세: [TASK-016 Bridge 후보 보고서](../05_QA_Validation/61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) | DEX Universal Router: 거래 이전 공식 커밋 `d2575ff...f9f`의 `mainnet.json` `UniversalRouter` 주소·파일 해시·GPL-3.0 라이선스 고정. Factory: V2 Deployments. Pool: Pair Addresses 가이드 + 거래 시점 `eth_call getPair` 기록. AUTH `SwapRouter02`: 공식 `sdk-core` 커밋 `baff6d3c...d28a`의 `SWAP_ROUTER_02_ADDRESSES(1)`과 MIT 라이선스 고정 |  |
 
 ## 6. fixture별 최소 소스 요구
 
