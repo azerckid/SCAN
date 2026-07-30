@@ -112,7 +112,7 @@ subject로 migration했다. 새 canonical hash를 Verifier·analyzer가 재현�
 | [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 확정 0.2 | archive replay·반례·consumer pass | EVM-STATE, decimals |
 | [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 확정 0.2 | filtered logs·ordering·consumer pass | EVM-LOG, first ordering |
 | [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | EVM-TOKEN-002 | 1 | 확정 0.2 | primary trace·cross-check·consumer pass | EVM-TRACE, native sum |
-| [FX-OSINT-LABEL-CONFLICT-001](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) | OSINT-LBL-001 | 2 | 검증 중 0.1 | official history·MIT config·ENS two-provider·Verifier/analyzer PASS | LABEL, source conflict |
+| [FX-OSINT-LABEL-CONFLICT-001](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) | OSINT-LBL-001 | 2 | 확정 0.1 | official history·MIT config·ENS two-provider·Verifier/analyzer PASS·OpenRAIL artifact 삭제 | LABEL, source conflict |
 | [FX-OSINT-SANCTIONS-HISTORY-001](./fixtures/FX-OSINT-SANCTIONS-HISTORY-001/README.md) | OSINT-SAN-001 | 2 | 확정 0.1 | official timeline·subject-bound SLS context·Verifier/analyzer | SANCTIONS, timeline |
 | [FX-OSINT-ENS-CONFLICT-001](./fixtures/FX-OSINT-ENS-CONFLICT-001/README.md) | OSINT-ENS-001 | 2 | 확정 0.1 | fixed-block two-provider replay·Verifier/analyzer | ENS, forward/reverse |
 | [FX-ACTOR-COMMON-FUNDER-001](./fixtures/FX-ACTOR-COMMON-FUNDER-001/README.md) | ACTOR-REL-001 | 1 | 후보 0.1 | confirmed FLOW hash, prehistory·service exclusion 대기 | ACTOR, common funder |

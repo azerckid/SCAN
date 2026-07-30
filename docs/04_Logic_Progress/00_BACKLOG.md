@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-30 16:28
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(3 Confirmed · LABEL Replacement Verifying · Common-funder Candidate) · TASK-016~019 Proposed
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 자동화 별도 판정) · TASK-016~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1231,7 +1231,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 - Status: In Progress — 계약 승인·Context Receipt PASS·구현 승인(2026-07-30).
   `intel_context` analyzer 5 query 구현·독립 검증 완료. SANCTIONS·ENS·
-  RELATION-HUB confirmed, LABEL replacement verifying, common-funder candidate.
+  LABEL·SANCTIONS·ENS·RELATION-HUB confirmed, common-funder candidate.
   Benchmark 11 automated / 4 assisted / 15 unsupported. live adapter·나머지
   fixture 승격은 별도 Gate.
 - Work Type: code
@@ -1269,7 +1269,11 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] replacement subject의 fixed-block ENS replay·artifact·negative oracle·
     독립 Verifier·analyzer hash를 재검증하고 OpenRAIL scoring dependency를
     제거한다.
-  - [ ] LABEL replacement fixture를 별도 Promotion Receipt에서 최종 판정한다.
+  - [x] LABEL replacement fixture를 별도 Promotion Receipt에서 최종 판정하고
+    재배포 허가 미확인 OpenRAIL CSV artifact를 삭제한 뒤 `confirmed`로
+    승격한다([58 Promotion Receipt](../05_QA_Validation/58_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md)).
+  - [ ] OSINT-LBL-001 Benchmark automated 11→12 승격 여부를 별도로 판정한다
+    (executable benchmark case 등록 필요).
   - [x] sanctions·ENS·relation-hub의 fixture별 문서 Hard Gate를 닫고 별도
     [Promotion Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)에서
     bounded scope `confirmed`로 판정한다.

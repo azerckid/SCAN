@@ -68,6 +68,11 @@
       "DS-ENS"
     ],
     "scoring_dependency_removed": true,
-    "historical_artifact_deleted": false
+    "historical_artifact_deleted": true,
+    "artifact_deletion": {
+      "deleted_at": "2026-07-30",
+      "removed_path": "artifacts/sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475.csv",
+      "reason": "redistribution permission unconfirmed (LICENSE 404, promotion_allowed:false); unreferenced by scoring/provenance. SHA-256 history retained in this receipt."
+    }
   }
 }

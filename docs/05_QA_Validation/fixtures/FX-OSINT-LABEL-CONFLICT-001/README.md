@@ -1,7 +1,7 @@
 # Fixture: FX-OSINT-LABEL-CONFLICT-001
 > Created: 2026-07-30 03:37
-> Last Updated: 2026-07-30 18:51
-> Status: Verifying 0.1 · Replacement Migrated · Final Promotion Pending
+> Last Updated: 2026-07-30
+> Status: Confirmed 0.1 · Replacement Migrated · OpenRAIL Artifact Removed
 
 ## 1. 목적
 
@@ -27,7 +27,8 @@ Etherscan label은 사용하지 않는다.
 - [x] 제품 analyzer·독립 canonical hash 대조
 - [x] OpenRAIL scoring·provenance dependency 제거
 - [x] official projection·MIT config·ENS artifact에서 Verifier와 analyzer hash 재계산
-- [ ] 최종 승격
+- [x] 재배포 허가 미확인 OpenRAIL CSV artifact 삭제(참조 0건)
+- [x] 최종 승격 검토·`confirmed` 승격([Promotion Receipt](../../58_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md))
 
 ## 4. Artifacts
 
@@ -42,8 +43,10 @@ Etherscan label은 사용하지 않는다.
 
 ## 5. Superseded Historical Artifacts
 
-아래 파일은 migration 이전 기록 보존용이며 active regression·scoring·
+아래 항목은 migration 이전 기록 보존용이며 active regression·scoring·
 provenance에서 참조하지 않는다.
 
-- [OpenRAIL selected row](./artifacts/sha256/15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475.csv)
-- [Previous fixed-block ENS replay](./artifacts/sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b.json) — former subject `0xc3877028655ebe90b9447dd33de391c955ead267`, name `team4.vesting.contract.tornadocash.eth`
+- OpenRAIL selected row — **파일 제거됨**(재배포 허가 미확인, `promotion_allowed: false`).
+  SHA-256 `15bbfb684a2c6048e2062753ae38a3543d3a09e9ff2de7e4ab08188015481475`
+  이력만 [license-resolution.json](./license-resolution.json)·[Resolution Receipt](../../55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md)에 보존.
+- [Previous fixed-block ENS replay](./artifacts/sha256/762291a131b34ed2af52f2baf681b4ed23b3452a6cdb43755c4bb525b9e56f5b.json) — former subject `0xc3877028655ebe90b9447dd33de391c955ead267`, name `team4.vesting.contract.tornadocash.eth`(온체인 데이터, 이력 보존)
