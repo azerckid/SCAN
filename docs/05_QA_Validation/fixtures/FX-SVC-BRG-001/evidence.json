@@ -1,0 +1,103 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-BRG-001",
+  "status": "candidate",
+  "captured_at": "2026-07-30T15:39:46Z",
+  "event_evidence": [
+    {
+      "evidence_id": "EV-BRIDGE-SOURCE-EVENT",
+      "evidence_type": "across_v3_funds_deposited_candidate",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "chain_id": 8453,
+      "transaction_hash": "0x95714346d20bfaa328b75e4e6cf980d9620c4c4331af935032f848a118f05a1b",
+      "block_number": 21912139,
+      "spoke_pool": "0x09aea4b2242abc8bb4bb78d537a67a245a7bec64",
+      "deposit_id": 2395968,
+      "raw_provider_replay": true
+    },
+    {
+      "evidence_id": "EV-BRIDGE-DESTINATION-EVENT",
+      "evidence_type": "across_v3_relay_filled_candidate",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "chain_id": 1,
+      "transaction_hash": "0x816ebca944c8cf40309c8c2ec4bd0f6e25f78d782cf7732f93ca771e55b8f8a0",
+      "block_number": 21105182,
+      "spoke_pool": "0x5c7bcd6e7de5423a257d81b442095a1a6ced35c5",
+      "deposit_id": 2395968,
+      "raw_provider_replay": true
+    }
+  ],
+  "call_evidence": [],
+  "state_evidence": [],
+  "context_evidence": [
+    {
+      "evidence_id": "EV-BRIDGE-OFFICIAL-CONTRACTS",
+      "evidence_type": "official_contract_registry",
+      "source_id": "DS-BRIDGE-META",
+      "locator": "https://docs.across.to/chains-and-contracts",
+      "scope": "Base and Ethereum chain IDs and SpokePool addresses"
+    },
+    {
+      "evidence_id": "EV-BRIDGE-MATCHING-RULE",
+      "evidence_type": "official_protocol_rule",
+      "source_id": "DS-BRIDGE-META",
+      "locator": "https://docs.across.to/guides/migration/v2-to-v3",
+      "scope": "V3FundsDeposited/FilledV3Relay common-parameter matching and equivalent output token"
+    }
+  ],
+  "source_requirements": [
+    {
+      "source_id": "DS-BRIDGE-META",
+      "role": "supporting",
+      "required": true,
+      "purpose": "Official chain, contract, event, and matching rules"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Bounded Base and Ethereum transaction, receipt, block, and exact-block SpokePool log replay"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "role": "supporting",
+      "required": true,
+      "purpose": "Public candidate discovery only; not final scoring truth"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-BRIDGE-META",
+      "provider": "Across official documentation",
+      "retrieved_at": "2026-07-30T13:51:00Z"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "Managed, official public, and supporting explorer-backed read-only RPC roles",
+      "retrieved_at": "2026-07-30T15:39:46Z"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "provider": "BaseScan and Etherscan public transaction pages",
+      "retrieved_at": "2026-07-30T13:51:00Z"
+    }
+  ],
+  "consistency_checks": {
+    "official_contract_addresses_match_candidate": true,
+    "explorer_pair_observed": true,
+    "integer_fee_equation_matches": true,
+    "two_provider_decoded_match": true,
+    "raw_sha256_recorded_per_capability": true,
+    "independent_verifier_pass": false
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": [
+      "negative oracle",
+      "independent verifier"
+    ]
+  },
+  "provenance_notes": "Across official documentation defines protocol rules. BaseScan and Etherscan were used only to select the public candidate. Sixteen bounded read-only RPC observations now pin per-capability SHA-256 values; endpoints, credentials, and raw explorer bodies are not stored."
+}

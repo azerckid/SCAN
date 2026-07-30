@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-30 22:51
+> Last Updated: 2026-07-30 23:30
 > Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · 4 Confirmed / Common-funder Candidate · Benchmark 12 Automated / 4 Assisted / 14 Unsupported
 
 ## 1. 목적
@@ -228,6 +228,11 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   (package·raw replay·Benchmark 승격 없음).
 - [ ] Bridge 후보를 두 RPC raw replay·SHA·negative oracle·독립 Verifier로
   검증해 `candidate → verifying` 승격 여부를 별도 판정한다.
+- [x] Phase A offline 준비로 Bridge bounded runner·candidate package·Schema
+  검증·primary/verify dry-run network 0건을 완료한다
+  ([62 준비 보고서](../05_QA_Validation/62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)).
+- [x] Base primary/verify endpoint 준비 후 두 chain×두 role live replay 16건·
+  capability별 SHA·decoded match를 pin하고 Phase A를 완료한다.
 - [ ] `TASK-016` bridge/CEX/mixer/lending 중 confirmed fixture가 있는 adapter만 선택한다.
 - [ ] 양단 체인·message·amount 또는 서비스 휴리스틱 증거 계약을 승인한다.
 - [ ] EVM과 Bitcoin 결과가 같은 공통 evidence 봉투를 유지하는지 검증한다.

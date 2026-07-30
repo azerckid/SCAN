@@ -1,7 +1,7 @@
 # TASK-016 Bridge/XChain(SVC-BRG-001) Analysis 계약 제안 (docs-only)
 > Created: 2026-07-30 20:45
-> Last Updated: 2026-07-30 22:51
-> Status: Docs Contract Approved · Candidate Selected · 코드·fixture 캡처 미착수
+> Last Updated: 2026-07-30 23:30
+> Status: Docs Contract Approved · Candidate Package Created · Live Replay Not Executed
 
 ## 0. 이 문서의 위치
 
@@ -250,8 +250,8 @@ doc 20 §1.6을 따른다. 매핑: 입력 경계 `invalid_input`, 지원 안 되
 2. UI Preview 작성·사용자 승인.
 3. 완료 — 공식 문서 기준 브리지·chain·event schema와 `FX-SVC-BRG-001`
    공개 후보를 선정한다(docs-only, package 없음).
-4. 미완료 — 양단 provider raw replay·SHA로 후보 값을 pin하고 매칭 키
-   검증·negative oracle 2회 결정성을 통과한다.
+4. 진행 중 — 양단 두 source role의 16개 read-only raw replay·SHA와
+   decoded match를 완료했다. negative oracle 2회 결정성은 남아 있다.
 5. 독립 Verifier raw-first 재계산·canonical hash 대조.
 6. `candidate → verifying → confirmed` 승격 검토(사용자 Gate).
 7. Context Receipt PASS·구현 승인 후 analyzer 구현.

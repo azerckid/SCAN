@@ -1,0 +1,65 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-BRG-001",
+  "status": "candidate",
+  "bridge_transfer": {
+    "protocol": "across_v3",
+    "origin_chain_id": 8453,
+    "destination_chain_id": 1,
+    "deposit_id": 2395968,
+    "source_spoke_pool": "0x09aea4b2242abc8bb4bb78d537a67a245a7bec64",
+    "destination_spoke_pool": "0x5c7bcd6e7de5423a257d81b442095a1a6ced35c5",
+    "depositor": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
+    "recipient": "0xdd8591007149631190f1013ac1067305f191cd0a",
+    "source_asset": "0x4200000000000000000000000000000000000006",
+    "destination_asset": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "source_raw": "330000000000000000",
+    "protocol_fee_raw_candidate": "867713010029593",
+    "expected_destination_raw": "329132286989970407",
+    "observed_destination_raw": "329132286989970407",
+    "message": "0x",
+    "attribution": {
+      "recipient_ownership": "not_assessed",
+      "criminality": "not_assessed"
+    }
+  },
+  "partial_conditions": [
+    "One chain-side transaction, receipt, block, or exact-block SpokePool log is unavailable",
+    "The destination event is observed but the composite Across domain cannot be reconstructed"
+  ],
+  "failed_conditions": [
+    "The same deposit ID from another origin chain or SpokePool is paired",
+    "A common event parameter or integer amount differs between chain sides",
+    "Explorer interpretation is promoted without raw provider replay"
+  ],
+  "tolerance": {
+    "max_abs_delta_raw": "0"
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-BRIDGE-SOURCE",
+        "description": "The Base V3FundsDeposited candidate must preserve chain, SpokePool, transaction, deposit ID, recipient, assets, and raw amounts.",
+        "mandatory": true,
+        "evidence_refs": ["EV-BRIDGE-SOURCE-EVENT"]
+      },
+      {
+        "requirement_id": "REQ-BRIDGE-DESTINATION",
+        "description": "The Ethereum FilledV3Relay candidate must preserve the matching origin chain, deposit ID, recipient, destination token, and output amount.",
+        "mandatory": true,
+        "evidence_refs": ["EV-BRIDGE-DESTINATION-EVENT"]
+      },
+      {
+        "requirement_id": "REQ-BRIDGE-DOMAIN",
+        "description": "Matching must use the official Across V3 event rules and chain-separated composite domain, never deposit ID or amount-time alone.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-BRIDGE-OFFICIAL-CONTRACTS",
+          "EV-BRIDGE-MATCHING-RULE"
+        ]
+      }
+    ]
+  }
+}

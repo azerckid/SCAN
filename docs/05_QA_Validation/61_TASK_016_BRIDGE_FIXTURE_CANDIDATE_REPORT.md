@@ -1,7 +1,7 @@
 # TASK-016 Bridge/XChain 공개 Fixture 후보 선정 보고서
 > Created: 2026-07-30 22:51
-> Last Updated: 2026-07-30 22:51
-> Status: Candidate Selected · Raw Replay Not Executed · Fixture Package Not Created
+> Last Updated: 2026-07-30 23:30
+> Status: Historical Candidate Selection · Offline Replay Preparation Follow-up
 
 ## 1. 목적
 
@@ -137,14 +137,18 @@ count도 fixture 실행 수치로 기록하지 않는다.
 | 공식 chain/contract/event 규칙 확인 | PASS / docs |
 | 공개 양단 TX·recipient·amount 후보 확인 | PASS / explorer supporting |
 | composite domain 후보와 정수 fee 계산 | PASS / candidate |
-| 두 RPC raw replay·SHA | NOT EXECUTED |
+| 두 RPC raw replay·SHA | PASS / 16 read-only calls · decoded match |
 | negative oracle·독립 Verifier | NOT EXECUTED |
-| fixture package·Schema | NOT CREATED |
+| fixture package·Schema | PASS / candidate |
 | Context Receipt·구현 승인 | PENDING |
 | Benchmark | `12 / 4 / 14` 유지 |
 
 **판정: `FX-SVC-BRG-001` 공개 후보 선정 완료, fixture 승격·구현은 계속
 차단한다.**
+
+후속 Phase A에서 candidate package와 bounded runner를 만들고 Base·Ethereum
+각 두 source role의 live replay·SHA·decoded match를 완료했다. 현재 상태는
+[Raw Replay 준비 보고서](./62_TASK_016_BRIDGE_RAW_REPLAY_REPORT.md)를 따른다.
 
 ## 8. Related Documents
 
