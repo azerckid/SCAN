@@ -1,0 +1,66 @@
+{
+  "fixture_id": "FX-OSINT-LABEL-CONFLICT-001",
+  "status": "blocked",
+  "retrieved_at": "2026-07-30T14:38:00+09:00",
+  "source": {
+    "repository": "Humanbased-AI/Crypto-Address-Annotation-10K",
+    "commit": "865b4b7ca276ffa50255f5fa751227b3c666dbf1",
+    "last_modified": "2025-12-08T04:10:22Z"
+  },
+  "repository_tree": [
+    {
+      "path": ".gitattributes",
+      "oid": "1ef325f1b111266a6b26e0196871bd78baa8c2f3",
+      "size": 2461
+    },
+    {
+      "path": "Crypto-Address-Annotation-10K.csv",
+      "oid": "2c15e5d9304990833b1bfd5b68b797ac6cbc8e66",
+      "size": 865124
+    },
+    {
+      "path": "README.md",
+      "oid": "483226bdf0479cfa093bbf62cab055b0ee9b4cc3",
+      "size": 4101
+    }
+  ],
+  "readme": {
+    "sha256": "426c2409b607ca540627f2ef10f65c268026287117f7fa0d7b6c5966f919f0fe",
+    "license_metadata": "openrail",
+    "human_readable_license_claim": "OpenRAIL",
+    "exact_license_url": null,
+    "exact_license_version": null,
+    "notice_file": null
+  },
+  "license_file_checks": [
+    {
+      "path": "LICENSE",
+      "http_status": 404
+    },
+    {
+      "path": "LICENSE.md",
+      "http_status": 404
+    },
+    {
+      "path": "LICENSE.txt",
+      "http_status": 404
+    }
+  ],
+  "registry": {
+    "url": "https://huggingface.co/docs/hub/repositories-licenses",
+    "identifier": "openrail",
+    "description": "OpenRAIL license family"
+  },
+  "decision": {
+    "exact_license_text_pinned": false,
+    "redistribution_permission_confirmed": false,
+    "selected_row_status": "promotion_and_export_quarantined",
+    "existing_offline_regression_allowed": true,
+    "allowed_scope": "dataset-card-stated research/testing only",
+    "promotion_allowed": false,
+    "next_actions": [
+      "obtain publisher-provided exact license terms",
+      "or replace the dataset assertion with an exactly licensed source"
+    ]
+  }
+}

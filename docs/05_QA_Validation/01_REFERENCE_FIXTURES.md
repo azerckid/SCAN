@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 14:27
+> Last Updated: 2026-07-30 14:38
 > Status: Approved 1.8 · 13 Confirmed · TASK-015 Verifying 4 / Candidate 1
 
 ## 1. 문서 목적
@@ -22,6 +22,8 @@ negative oracle 30개·두 번 결정성, 독립 Verifier와 제품 analyzer has
 대조를 통과한 `검증 중`이다. common-funder는 completeness 미증명으로
 `후보`·`partial`을 유지한다. source permission과 fixture별 Promotion
 Hard Gate를 닫기 전에는 `확정` 또는 자동화 coverage로 승격하지 않는다.
+LABEL selected row는 exact OpenRAIL text가 pinned repository에 없어
+quarantine됐으며 publisher 확인 또는 source 교체 전 승격할 수 없다.
 
 입력 문서:
 

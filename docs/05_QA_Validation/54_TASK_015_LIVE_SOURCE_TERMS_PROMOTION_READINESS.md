@@ -1,7 +1,7 @@
 # TASK-015 Live Source·Terms·Fixture 승격 Readiness
 > Created: 2026-07-30 14:19
-> Last Updated: 2026-07-30 14:19
-> Status: Draft · Terms Decision Prepared · Live Not Executed · Promotion Not Approved
+> Last Updated: 2026-07-30 14:38
+> Status: Draft · OpenRAIL Resolution Blocked · Live Not Executed · Promotion Not Approved
 
 ## 1. 목적과 현재 판정
 
@@ -19,9 +19,10 @@ fixture를 `확정`으로 승격하지 않는다.
   다시 확인한다.
 - OFAC fixture는 공식 action locator·whole-file hash·bounded match를 유지한다.
   현재 SLS 전체 CSV는 repository에 재배포하지 않는다.
-- label fixture의 선택 CSV 행은 공개 dataset card가 OpenRAIL·연구/테스트
-  용도를 명시하지만, 정확한 license text와 재배포 의무가 package에 고정되지
-  않았다. **license text를 pin하기 전 최종 승격은 보류한다.**
+- label fixture의 pinned repository에는 `LICENSE*` 파일이 없고 README가
+  OpenRAIL family 식별자만 제공한다. exact license text·version·notice·
+  재배포 의무를 특정할 수 없어 selected row를 quarantine하고 최종 승격을
+  보류한다([Resolution Receipt](./55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md)).
 - common-funder는 bounded prehistory와 service exclusion이 없으므로
   `candidate`·`partial`만 허용한다.
 
@@ -45,7 +46,7 @@ Source permission을 통과했다고 fact가 정확해지는 것은 아니며, f
 
 | Source | 공식 근거 | 확인 사실 | SCAN 결정 |
 |:---|:---|:---|:---|
-| Codatta 10K sample | [Dataset card](https://huggingface.co/datasets/Humanbased-AI/Crypto-Address-Annotation-10K) | license 표시는 `openrail`; 공개 sample은 research·testing 용도, full commercial use는 별도 문의로 안내 | 현재 선택 행은 research/testing fixture에만 사용. exact license text·notice·재배포 의무 pin 전 `확정` 금지 |
+| Codatta 10K sample | [Pinned card](https://huggingface.co/datasets/Humanbased-AI/Crypto-Address-Annotation-10K/blob/865b4b7ca276ffa50255f5fa751227b3c666dbf1/README.md) | `openrail` metadata와 OpenRAIL family만 표시; `LICENSE*` 파일·version·notice 없음 | selected row quarantine. publisher exact terms 확보 또는 명확한 license source 교체 전 `확정`·export 금지 |
 | Tornado community config | [torn-token repository](https://github.com/tornadocash-community/torn-token) | repository와 README가 MIT를 표시 | pinned commit·config hash·MIT notice를 provenance로 보존. label은 source assertion이며 범죄 사실이 아님 |
 | OFAC action·SLS | [Sanctions List Service](https://ofac.treasury.gov/sanctions-list-service) · [2022 action](https://ofac.treasury.gov/recent-actions/20220808) · [2025 removal](https://ofac.treasury.gov/recent-actions/20250321) | SLS는 최신 sanctions data의 다운로드와 archive를 제공 | action URL·hash·bounded address match를 scoring/context로 사용. 현재 full SLS CSV는 locator/hash/metadata-only, repository 재배포 안 함 |
 | ENS Protocol | [Reverse resolution](https://docs.ens.domains/web/reverse/) · [ENS Terms](https://ens.domains/legal/terms-of-use) · [ensjs MIT](https://github.com/ensdomains/ensjs) | Interface IP와 공개 Ethereum Protocol을 구분하며 ensjs는 MIT | 웹 Interface 내용을 복제하지 않음. 고정 block onchain raw와 content-addressed artifact만 scoring에 사용 |
@@ -56,7 +57,7 @@ Source permission을 통과했다고 fact가 정확해지는 것은 아니며, f
 
 | Fixture | 현재 | 허용 승격 입력 | 닫힌 Gate | 남은 Hard Gate | 판정 |
 |:---|:---:|:---|:---|:---|:---|
-| `FX-OSINT-LABEL-CONFLICT-001` | verifying | `provided_artifact` | 30 oracle 일부·Verifier·analyzer·artifact hash | OpenRAIL exact license text·notice·selected-row 재배포 조건 pin | HOLD |
+| `FX-OSINT-LABEL-CONFLICT-001` | verifying | quarantine된 `provided_artifact` | 30 oracle 일부·Verifier·analyzer·artifact hash·license absence proof | publisher exact terms 확보 또는 source 교체 | BLOCKED |
 | `FX-OSINT-SANCTIONS-HISTORY-001` | verifying | `provided_artifact`; Rules 허용 시 official locator 재확인 | action timeline·SLS context·Verifier·analyzer | full CSV 미재배포 확인, `retrieved_at`/as-of 의미 최종 고정 | READY AFTER DOC CHECK |
 | `FX-OSINT-ENS-CONFLICT-001` | verifying | `provided_artifact`; live는 optional | fixed-block 두 source decoded match·Verifier·analyzer | fixed block fact와 현재 소유권을 동일시하지 않는 승격 문구 확인 | READY AFTER DOC CHECK |
 | `FX-ACTOR-RELATION-HUB-001` | verifying | confirmed local fixture | DEX/AUTH hash·hub exclusion·Verifier·analyzer | regression 재실행, ownership/coordination `not_assessed` 확인 | READY FOR PROMOTION REVIEW |
@@ -84,7 +85,7 @@ fixture만 사용하고 live adapter 호출은 0건이어야 한다. Explorer는
 
 ## 6. Promotion 실행 순서
 
-1. label exact OpenRAIL license text와 notice/redistribution 조건을 pin한다.
+1. label publisher exact terms를 확보하거나 exact license가 있는 source로 교체한다.
 2. sanctions·ENS·relation-hub의 남은 문서 체크를 닫는다.
 3. 네 verifying fixture에서 analyzer·Verifier·negative oracle을 두 번 재실행한다.
 4. expected/evidence/provider replay의 canonical hash가 불변인지 확인한다.
@@ -132,3 +133,4 @@ fixture만 사용하고 live adapter 호출은 0건이어야 한다. Explorer는
 - **Technical_Specs**: [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) · [intel_context I/O 계약](../03_Technical_Specs/18_TASK_015_INTEL_CONTEXT_IO_CONTRACT.md)
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) · [Coverage Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md)
 - **QA_Validation**: [Source Readiness](./50_TASK_015_SOURCE_READINESS_REPORT.md) · [Independent Verifier](./51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md) · [Provenance Hardening](./52_TASK_015_PROVENANCE_HARDENING_RECEIPT.md) · [Analyzer Verification](./53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md) · [Reference Fixtures](./01_REFERENCE_FIXTURES.md)
+- **QA_Validation**: [OpenRAIL License Resolution](./55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md) - exact text 부재·quarantine·대체 조건
