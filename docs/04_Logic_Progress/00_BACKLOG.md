@@ -1320,8 +1320,13 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     - [45 Fixture·Contract Gate](../05_QA_Validation/45_TASK_015_FIXTURE_CONTRACT_GATE.md) · [46 Source 후보](../05_QA_Validation/46_TASK_015_PUBLIC_SOURCE_CANDIDATE_REPORT.md) · [47 Raw Snapshot 기준선](../05_QA_Validation/47_TASK_015_SOURCE_RESOLUTION_RAW_SNAPSHOT_REPORT.md) · [48 Candidate Package](../05_QA_Validation/48_TASK_015_CANDIDATE_FIXTURE_PACKAGE_REPORT.md)
     - [49 Negative Oracle](../05_QA_Validation/49_TASK_015_NEGATIVE_ORACLE_REPORT.md)(30×2) · [50 Source Readiness](../05_QA_Validation/50_TASK_015_SOURCE_READINESS_REPORT.md) · [51 Independent Verifier](../05_QA_Validation/51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md)(4×2) · [52 Provenance Hardening](../05_QA_Validation/52_TASK_015_PROVENANCE_HARDENING_RECEIPT.md)
     - [Analysis I/O Schema](../03_Technical_Specs/05_ANALYSIS_IO_SCHEMA.md) · [데이터 소스 등록부](../03_Technical_Specs/01_DATA_SOURCE_REGISTRY.md) · [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md)(OSINT-LBL/SAN/ENS·ACTOR-REL) · [Rules Register](../01_Concept_Design/03_SCAN_2026_RULES_REGISTER.md)
-    - 5개 fixture(`FX-OSINT-{LABEL,SANCTIONS-HISTORY,ENS}-CONFLICT/001`·`FX-ACTOR-{RELATION-HUB,COMMON-FUNDER}-001`)의 input·expected·evidence·provider-replay/snapshot/artifacts
-  - Verification: `scripts/verify.py` 전체 PASS — 489 tests, fixture 18, schema 48 probes, traceability 1631 links, TASK-015 negative oracle 30×2·독립 Verifier 4×2 PASS(docs-only, 코드 변경 없음).
+    - 5개 fixture의 input·expected·evidence·provider-replay/snapshot/artifacts:
+      [FX-OSINT-LABEL-CONFLICT-001](../05_QA_Validation/fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) ·
+      [FX-OSINT-SANCTIONS-HISTORY-001](../05_QA_Validation/fixtures/FX-OSINT-SANCTIONS-HISTORY-001/README.md) ·
+      [FX-OSINT-ENS-CONFLICT-001](../05_QA_Validation/fixtures/FX-OSINT-ENS-CONFLICT-001/README.md) ·
+      [FX-ACTOR-RELATION-HUB-001](../05_QA_Validation/fixtures/FX-ACTOR-RELATION-HUB-001/README.md) ·
+      [FX-ACTOR-COMMON-FUNDER-001](../05_QA_Validation/fixtures/FX-ACTOR-COMMON-FUNDER-001/README.md)(candidate)
+  - Verification: `scripts/verify.py` 전체 PASS — 489 tests, fixture 18, schema 48 probes, traceability 1648 links, TASK-015 negative oracle 30×2·독립 Verifier 4×2 PASS(docs-only, 코드 변경 없음).
   - Constraints:
     - privacy 최소 수집·Terms/Rules Gate·`offline_mode`면 live adapter 0회
     - source assertion / onchain observation / heuristic_candidate 분리, **AI 가설은 `confirmed_fact`로 승격 금지**, ownership·criminality·coordination는 `not_assessed`
@@ -1335,8 +1340,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     - (열림) `FX-ACTOR-COMMON-FUNDER-001`의 bounded prehistory·service exclusion 미완료 → `candidate`·`partial`만, confirmed 승격은 후속
     - (게이트) `intel_context` 대안 B 정식 승인·Context Receipt `PASS`·analyzer 구현 승인은 사용자 명시 행위로 미실행
 - Change Receipt:
-  - Offline oracle Gate만 구현했다. 제품 `intel_context` analyzer·live
-    source adapter·fixture 승격은 미착수다.
+  - Offline oracle·Source Readiness·독립 Verifier·Provenance hardening Gate와
+    `intel_context` I/O 계약 확정안까지 완료했다(아래 항목별 기록). 제품
+    `intel_context` analyzer·live source adapter·fixture `확정` 승격은
+    미착수이며, 4개 fixture는 `verifying`·common-funder는 `candidate`다.
 - Verification Receipt:
   - Docs-only Gate: 468 tests PASS, fixture 13, schema 48 probes,
     traceability 1543 links, security 162 files.
