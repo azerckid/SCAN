@@ -161,6 +161,12 @@ def _label(
             "source_reconciliation",
         )
     _require_artifact_binding(inputs.source_artifact_refs, replay)
+    if len(replay.sources) > inputs.max_sources:
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Reviewed replay uses more sources than the requested max_sources budget.",
+            "source_reconciliation",
+        )
     # A category label and a first-party role are different assertion classes and
     # are never silently auto-merged into one identity.
     auto_merge = not (replay.dataset.categories and replay.community_config.role)
@@ -222,6 +228,7 @@ def _sanctions(
     inputs = request.inputs
     assert isinstance(inputs, SanctionsExposureInputs)
     _require_subject(request, replay.subject_address)
+    _require_source_ref(inputs.current_list_snapshot_ref, replay, "current_list_snapshot_ref")
     # Every requested official action must be present in the replay: a dropped
     # designation/removal must not still read as complete.
     if len(replay.official_actions) != len(inputs.official_action_refs):
@@ -308,6 +315,13 @@ def _identity(
             "Replay observation block differs from the requested observation_block.",
             "source_reconciliation",
         )
+    if replay.reverse.address != replay.forward.address:
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "ENS forward and reverse resolved addresses differ.",
+            "source_reconciliation",
+        )
+    _require_source_ref(inputs.provider_replay_ref, replay, "provider_replay_ref")
     value = {
         "block_number": replay.block_number,
         "forward": {
@@ -371,6 +385,15 @@ def _common_funder(
         raise _DecodeFailure(
             "reconciliation_failed",
             "Replay source_fixture_ref differs from the requested source_fixture_ref.",
+            "source_reconciliation",
+        )
+    if (replay.block_range.from_block, replay.block_range.to_block) != (
+        inputs.block_range.from_block,
+        inputs.block_range.to_block,
+    ):
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Replay block_range differs from the requested block_range.",
             "source_reconciliation",
         )
     # Confirmed on-chain direct seed outputs (confirmed_fact).
@@ -451,19 +474,24 @@ def _actor_relations(
             "Replay hub differs from the requested hub_address.",
             "source_reconciliation",
         )
-    requested_subjects = set(inputs.subject_addresses)
-    requested_fixtures = set(inputs.source_fixture_refs)
+    requested_weights = set(inputs.component_weights)
+    if {item.subject_address for item in replay.relations} != set(inputs.subject_addresses):
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Replay relation subjects do not match the requested subject_addresses exactly.",
+            "source_reconciliation",
+        )
+    if {item.source_fixture_id for item in replay.relations} != set(inputs.source_fixture_refs):
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            "Replay relation source fixtures do not match the requested source_fixture_refs exactly.",
+            "source_reconciliation",
+        )
     for item in replay.relations:
-        if item.subject_address not in requested_subjects:
+        if item.relation not in requested_weights:
             raise _DecodeFailure(
                 "reconciliation_failed",
-                "A replay relation subject is outside the requested subject_addresses.",
-                "source_reconciliation",
-            )
-        if item.source_fixture_id not in requested_fixtures:
-            raise _DecodeFailure(
-                "reconciliation_failed",
-                "A replay relation source fixture is outside the requested source_fixture_refs.",
+                "A replay relation type is outside the requested component_weights.",
                 "source_reconciliation",
             )
     value = {
@@ -520,6 +548,15 @@ def _require_artifact_binding(
         raise _DecodeFailure(
             "reconciliation_failed",
             "A replay source artifact is not present in the requested source_artifact_refs.",
+            "source_reconciliation",
+        )
+
+
+def _require_source_ref(requested_ref: str, replay: IntelSourceReplayDocument, what: str) -> None:
+    if requested_ref not in {record.artifact_ref for record in replay.sources}:
+        raise _DecodeFailure(
+            "reconciliation_failed",
+            f"Requested {what} does not match any reviewed replay source artifact.",
             "source_reconciliation",
         )
 

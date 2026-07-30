@@ -42,5 +42,9 @@
       "content_sha256": "16ff54e8a12245d3d23a6c8954604db6c1ce371558a47645c8f58307be526ab5"
     }
   ],
-  "source_fixture_ref": "FX-FLOW-REMERGE-001"
+  "source_fixture_ref": "FX-FLOW-REMERGE-001",
+  "block_range": {
+    "from": 16905356,
+    "to": 16920507
+  }
 }

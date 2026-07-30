@@ -154,6 +154,90 @@ def test_provenance_source_outside_allowlist_is_rejected() -> None:
     assert result.root.errors[0].code == "rule_restricted"
 
 
+def test_ens_reverse_address_must_match_forward() -> None:
+    fixture_id = "FX-OSINT-ENS-CONFLICT-001"
+    replay = _replay(fixture_id)
+    replay["reverse"]["address"] = "0x00000000000000000000000000000000000000ff"
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_ens_provider_replay_ref_must_bind_to_replay_source() -> None:
+    fixture_id = "FX-OSINT-ENS-CONFLICT-001"
+    document = _request_document(fixture_id)
+    cast(dict[str, object], document["inputs"])["provider_replay_ref"] = (
+        "artifact://sha256/" + "0" * 64
+    )
+    request = validate_analysis_request(document).root
+    assert isinstance(request, IntelContextAnalysisRequest)
+    result = analyze_intel_context_replay(request, json.dumps(_replay(fixture_id)).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_actor_missing_relation_breaks_exact_subject_set() -> None:
+    fixture_id = "FX-ACTOR-RELATION-HUB-001"
+    replay = _replay(fixture_id)
+    replay["relations"] = replay["relations"][:1]
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_actor_relation_weight_outside_request_is_rejected() -> None:
+    fixture_id = "FX-ACTOR-RELATION-HUB-001"
+    replay = _replay(fixture_id)
+    replay["relations"][0]["relation"] = "unrelated_weight"
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_label_max_sources_budget_is_enforced() -> None:
+    fixture_id = "FX-OSINT-LABEL-CONFLICT-001"
+    document = _request_document(fixture_id)
+    cast(dict[str, object], document["inputs"])["max_sources"] = 1
+    request = validate_analysis_request(document).root
+    assert isinstance(request, IntelContextAnalysisRequest)
+    result = analyze_intel_context_replay(request, json.dumps(_replay(fixture_id)).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_sanctions_snapshot_ref_must_bind_to_replay_source() -> None:
+    fixture_id = "FX-OSINT-SANCTIONS-HISTORY-001"
+    document = _request_document(fixture_id)
+    cast(dict[str, object], document["inputs"])["current_list_snapshot_ref"] = (
+        "artifact://sha256/" + "0" * 64
+    )
+    request = validate_analysis_request(document).root
+    assert isinstance(request, IntelContextAnalysisRequest)
+    result = analyze_intel_context_replay(request, json.dumps(_replay(fixture_id)).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_common_funder_block_range_must_match_request() -> None:
+    fixture_id = "FX-ACTOR-COMMON-FUNDER-001"
+    document = _request_document(fixture_id)
+    cast(dict[str, object], document["inputs"])["block_range"] = {"from": 1, "to": 2}
+    request = validate_analysis_request(document).root
+    assert isinstance(request, IntelContextAnalysisRequest)
+    result = analyze_intel_context_replay(request, json.dumps(_replay(fixture_id)).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "reconciliation_failed"
+
+
+def test_artifact_ref_and_content_sha_mismatch_is_rejected() -> None:
+    fixture_id = "FX-OSINT-ENS-CONFLICT-001"
+    replay = _replay(fixture_id)
+    replay["sources"][0]["content_sha256"] = "0" * 64
+    result = analyze_intel_context_replay(_request(fixture_id), json.dumps(replay).encode())
+    assert result.root.status == "failed"
+    assert result.root.errors[0].code == "decode_failed"
+
+
 def test_binding_failures_are_not_retryable() -> None:
     fixture_id = "FX-OSINT-SANCTIONS-HISTORY-001"
     replay = _replay(fixture_id)

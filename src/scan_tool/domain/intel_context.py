@@ -35,6 +35,26 @@ class IntelSourceRecord(ContractModel):
     artifact_ref: ArtifactRef
     content_sha256: Sha256Hex
 
+    @model_validator(mode="after")
+    def artifact_ref_matches_content_hash(self) -> "IntelSourceRecord":
+        if self.artifact_ref.removeprefix("artifact://sha256/") != self.content_sha256:
+            raise PydanticCustomError(
+                "reconciliation_failed",
+                "content-addressed artifact_ref must equal its content_sha256",
+            )
+        return self
+
+
+class BundleBlockRange(ContractModel):
+    from_block: int = Field(alias="from", ge=0)
+    to_block: int = Field(alias="to", ge=0)
+
+    @model_validator(mode="after")
+    def range_is_ordered(self) -> "BundleBlockRange":
+        if self.to_block < self.from_block:
+            raise PydanticCustomError("reconciliation_failed", "block range from exceeds to")
+        return self
+
 
 class IntelReplayBase(ContractModel):
     schema_version: Literal["0.1"]
@@ -135,6 +155,7 @@ class CommonFunderSourceReplay(IntelReplayBase):
     query_kind: Literal["find_common_funder"]
     seed_address: Address
     source_fixture_ref: FixtureId
+    block_range: BundleBlockRange
     relations: list[CommonFunderRelation] = Field(min_length=1)
     # Completeness is a claimed input flag only; the analyzer does not treat it
     # as proof and keeps common-funder partial until a real completeness

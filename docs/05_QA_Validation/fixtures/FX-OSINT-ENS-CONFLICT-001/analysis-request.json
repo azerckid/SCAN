@@ -15,7 +15,7 @@
       "nick.eth"
     ],
     "observation_block": 25640270,
-    "provider_replay_ref": "provider-replay.json"
+    "provider_replay_ref": "artifact://sha256/a1ed2bfc3bb65b0717afeb979fc92b68658f2ee9391f458a67ad2c5ef246ce2c"
   },
   "source_policy": {
     "rule_status": "allowed",

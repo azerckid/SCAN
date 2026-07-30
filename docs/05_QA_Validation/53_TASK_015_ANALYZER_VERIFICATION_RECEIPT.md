@@ -100,6 +100,26 @@ replay 7종이 잘못 complete)이 발견돼 같은 브랜치에서 수정하고
 sanctions action 누락·label observation block·common-funder subject 축소+boolean·
 allowlist 임의 교체·binding 오류 non-retryable).
 
+## 5.2 재재검토 결합 경계 8건 추가
+
+첫 정정이 "대표 변조"만 막고 query별 **전체 scope**는 결합하지 못한 점이
+재검토에서 확인돼(변형 8종이 여전히 complete), 각 query의 남은 scope 필드를
+모두 request↔replay로 결합했다.
+
+| # | 결합 추가 | 정정 후 |
+|:---:|:---|:---|
+| 1 | ENS `reverse.address` | forward.address와 일치 강제, 불일치 `reconciliation_failed` |
+| 2 | ENS `provider_replay_ref` | replay source artifact_ref와 대조 |
+| 3 | Actor subject 집합 | subset → **정확 일치**(relation 제거·추가 모두 거부) |
+| 4 | Actor `component_weights` | 각 relation type이 요청 weight 안인지 대조 |
+| 5 | Label `max_sources` | replay source 수가 budget 초과면 거부 |
+| 6 | Sanctions `current_list_snapshot_ref` | replay SLS source artifact_ref와 대조 |
+| 7 | Common-funder `block_range` | request block_range와 정확 일치(번들에 block_range 추가) |
+| 8 | artifact URI ↔ content SHA | `IntelSourceRecord`가 `artifact://sha256/<h>`의 h == `content_sha256` 강제(불일치 `decode_failed`) |
+
+8종을 모두 회귀 테스트로 고정했다(unit 34). 네 verifying fixture의
+`results[].value`·canonical hash는 여전히 불변이다.
+
 ## 6. 상태 경계와 다음 Gate
 
 - Fixture: 4개 `검증 중` / common-funder `candidate` 유지(확정 승격 없음).
