@@ -24,36 +24,49 @@ docs-only로 제안한다. 코드·Schema·fixture 데이터·Analysis I/O를 �
 포함된 자금 경로를 복원한다. 단서: 시드 TX 또는 주소, 시간 창, (선택)
 프로토콜 이름.
 
-**Subject scope와 참여자 역할 매핑(순자산 계산 대상 고정).** 같은 로그라도
-누구의 순자산을 계산하느냐에 따라 정답이 달라지므로, 순자산 ledger의 대상을
-request 필드로 고정한다.
+**Subject scope와 참여자 역할(순자산 계산 대상 고정).** 같은 로그라도 누구의
+순자산을 계산하느냐에 따라 정답이 달라지므로 대상 주소를 request로 고정한다.
+다만 한 주소가 한 사건에서 flashloan `receiver`이면서 동시에 `liquidator`나
+`borrower`일 수 있으므로, **역할로 leg를 필터링하지 않는다.** 역할을 단일
+값으로 축소하면 다른 역할의 자산 이동이 빠져 순자산이 틀린다.
 
 - request `subject_address`(필수): 순자산 변화를 계산할 단일 주소.
-- request `subject_role`(필수): `borrower` | `liquidator` | `receiver` 중
-  하나. subject가 계산에 참여하는 자격을 명시한다.
-- 이벤트별 참여자 역할을 아래로 고정하고, subject가 그 역할로 등장하는 leg만
-  ledger에 합산한다(그 외 참여자의 이동은 evidence로 보존하되 subject
-  ledger에는 넣지 않는다).
+- request `subject_roles[]`(필수, 중복 없음): subject가 이 사건에서 맡는
+  역할 집합(`borrower`·`liquidator`·`receiver`·`supplier` 등). **표시·검증·
+  request↔replay binding 용도**이며 ledger 포함 여부를 좌우하지 않는다.
 
-| 이벤트 계열 | 참여자 필드(후보) | subject가 될 수 있는 역할 |
+**Ledger 포함 규칙(실제 value 이동 기준).** 순자산 ledger는 scoped TX들에서
+`subject_address`가 **실제 sender 또는 receiver인 §4 정합 통과 leg를 전부**
+포함한다(역할과 무관). 어느 역할의 leg도 누락하지 않으며, subject가 아닌
+참여자의 이동만 ledger에서 제외한다.
+
+**역할 집합 binding.** replay에서 subject가 실제로 맡은 것으로 관찰된 역할
+집합은 request `subject_roles[]`와 **정확히 일치(exact set)**해야 한다. 관찰된
+역할이 요청 집합에 없거나 요청 역할이 관찰되지 않으면 `reconciliation_failed`.
+역할은 이렇게 binding·검증에만 쓰고 leg 선택에는 쓰지 않는다.
+
+이벤트별 참여자 필드는 evidence 주석·역할 관찰용으로 아래를 참고한다(leg
+필터가 아니다). 정확한 필드명은 §2의 pin된 ABI로 캡처 Gate에서 확정한다.
+
+| 이벤트 계열 | 참여자 필드(후보) | 관찰 가능한 역할 |
 |:---|:---|:---|
 | Borrow | `onBehalfOf`(차입 귀속)·`user`·`caller` | `borrower`(=`onBehalfOf`) |
 | Repay | `user`(부채 주체)·`repayer` | `borrower`(=`user`) |
-| LiquidationCall | `user`(피청산자)·`liquidator`·`collateralAsset`·`debtAsset` | `borrower`(=`user`) 또는 `liquidator` |
+| LiquidationCall | `user`(피청산자)·`liquidator`·`collateralAsset`·`debtAsset` | `borrower`(=`user`)·`liquidator` |
 | FlashLoan | `receiver`(=target)·`initiator` | `receiver` |
-| Deposit/Supply·Withdraw | `user`·`onBehalfOf`·`to` | `borrower`/`receiver` |
+| Deposit/Supply·Withdraw | `user`·`onBehalfOf`·`to` | `supplier`·`receiver` |
 
-`onBehalfOf`와 `caller`가 다른 경우 부채·담보 귀속은 `onBehalfOf`를 기준으로
-한다. 정확한 필드명은 §2의 pin된 ABI로 캡처 Gate에서 확정한다.
+`onBehalfOf`와 `caller`가 다른 경우 부채·담보 **역할 귀속**은 `onBehalfOf`를
+기준으로 관찰한다(ledger 금액은 여전히 실제 value 이동으로 계산).
 
 **정답 형식(결정적 사실만).**
 
 1. **이벤트 요약** — 시간·TX 순서로 정렬한 borrow·repay·liquidation·
    collateral(공급/인출)·flashloan 이벤트의 디코딩 요약(프로토콜, 자산,
    raw amount, 참여 주소·역할, block/txIndex/logIndex).
-2. **순자산 변화** — 위에서 고정한 `subject_address`·`subject_role` 기준
-   자산별 raw 유입−유출 ledger. §4의 protocol event ↔ value-transfer 정합을
-   통과한 leg만 포함하며, 정합 실패 시 partial.
+2. **순자산 변화** — `subject_address`가 실제 sender/receiver인 §4 정합 통과
+   leg 전부를 자산별 raw 유입−유출로 합산한 ledger(역할로 필터하지 않음).
+   정합 실패 leg가 있으면 partial.
 3. **후속 유출 경로** — 청산/차입 이익이 이어지는 bounded outflow(기존 PATH
    계약 재사용, 라벨·귀속 없이 주소·금액·경로만). **PATH 시작 주소는 2번
    순자산 ledger에서 subject가 자산을 실제 수령한 leg의 수령 주소**(청산의
@@ -181,8 +194,10 @@ Analysis I/O `0.1`에 유형을 바로 추가하지 않고 착수 시 `0.2` 확�
 4. protocol event amount와 실제 ERC-20/native 이동이 불일치하는데 그대로
    ledger에 합산 → 거부(정합 실패 leg는 partial).
 5. liquidation을 attack으로 라벨 → 거부(`not_assessed` 유지).
-6. request `subject_address`/`subject_role`에 없는 주소·역할의 leg로 ledger
-   합성 → `reconciliation_failed`.
+6. request `subject_address`가 실제 sender/receiver가 아닌 leg로 ledger 합성,
+   또는 관찰된 역할 집합 ≠ request `subject_roles[]` → `reconciliation_failed`.
+7. 복수 역할 주소(예: `receiver`이자 `liquidator`)를 단일 역할로 축소해 다른
+   역할의 정합 leg를 ledger에서 누락 → 거부(모든 실제 value leg 포함 강제).
 
 ## 7. 오류 계약 — 기존 `ErrorCode` enum 재사용(신규 코드 없음)
 
