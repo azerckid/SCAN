@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCAN TASK-016 Bridge/XChain Preview</title>
+  <style>
+    :root{color-scheme:dark;--page:#05090f;--panel:#0d151f;--raised:#142130;--border:#2b3c51;
+      --fg:#e3ebf4;--muted:#8392a6;--accent:#70b5ff;--ok:#58d7a0;--warn:#f3c85c;
+      --bad:#ff7788;--cyan:#66d7e8;--violet:#bd9cff;--mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      --sans:Inter,Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--fg);font-family:var(--sans);
+      background:radial-gradient(circle at 12% 0,rgba(30,112,201,.23),transparent 34rem),var(--page)}
+    button,code{font-family:var(--mono)}button{cursor:pointer}button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .page{width:min(1540px,calc(100% - 28px));margin:auto;padding:28px 0 48px}
+    header{display:flex;justify-content:space-between;align-items:end;gap:20px}.eyebrow{color:var(--accent);font:700 11px var(--mono);letter-spacing:.13em}
+    h1{margin:7px 0 0;font-size:clamp(28px,4vw,45px);letter-spacing:-.04em}.lede{max-width:900px;color:#aab7c7;line-height:1.65}
+    .gate,.notice,.panel{border:1px solid var(--border);background:var(--panel);border-radius:10px}.gate{min-width:270px;padding:13px 15px;font:11px/1.65 var(--mono)}
+    .gate b{color:var(--warn)}.notice{margin-top:18px;padding:12px 14px;color:#ebdca7;background:#211b0e;font:11px/1.6 var(--mono)}
+    .chiprow{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.chip{padding:8px 12px;border:1px solid #4c7fbd;border-radius:8px;background:#14273f;color:#f5f8fc;font:700 11px var(--mono)}
+    .chip span{color:var(--muted);font-weight:400}.workspace{display:grid;grid-template-columns:340px minmax(0,1fr) 330px;gap:11px;margin-top:11px}
+    .panel{overflow:hidden}.head{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);font:700 10px var(--mono);letter-spacing:.08em}
+    .body{padding:14px}.copy{color:#a9b5c5;font-size:12px;line-height:1.55}.fields{display:grid;gap:7px;margin-top:11px}
+    .field{display:grid;grid-template-columns:118px 1fr;gap:8px;padding:8px 9px;border:1px solid #202f40;border-radius:6px;background:#080e16;font:10px/1.45 var(--mono)}
+    .field span:first-child{color:var(--muted)}.states{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:13px}
+    .state{padding:8px 3px;border:1px solid var(--border);border-radius:6px;background:var(--raised);color:#aeb9c9;font-size:10px}
+    .state[data-state=complete][aria-pressed=true]{color:var(--ok);border-color:var(--ok)}
+    .state[data-state=partial][aria-pressed=true]{color:var(--warn);border-color:var(--warn)}
+    .state[data-state=failed][aria-pressed=true]{color:var(--bad);border-color:var(--bad)}
+    .result{background:#080d14;min-height:720px}.term{padding:17px 18px;font-family:var(--mono)}
+    .status{display:flex;gap:8px;align-items:center}.badge{padding:3px 8px;border:1px solid currentColor;border-radius:4px;font-size:10px;font-weight:800}
+    .complete{color:var(--ok)}.partial{color:var(--warn)}.failed{color:var(--bad)}.section{margin-top:15px;color:#74859d;font:700 10px var(--mono);letter-spacing:.12em}
+    .leg,.match,.calc,.path,.error,.next{margin-top:7px;padding:9px 10px;border:1px solid #203044;border-radius:6px;background:#0b131d;font:10px/1.6 var(--mono);overflow-wrap:anywhere}
+    .leg.source{border-left:3px solid var(--violet)}.leg.destination{border-left:3px solid var(--cyan)}
+    .match{border-left:3px solid var(--ok)}.match.candidate{border-left-color:var(--warn);color:#efd996}
+    .calc{border-left:3px solid var(--accent)}.path{border-left:3px solid var(--ok);color:#d9f4e7}
+    .error{border-left:3px solid var(--bad);color:#f1a8b0}.next{border-left:3px solid var(--accent);color:#d9e8fb}
+    .mini{display:inline-block;margin:0 4px 3px 0;padding:2px 5px;border:1px solid #42566f;border-radius:3px;color:#aebbd0;font-size:9px}
+    .source-list{display:grid;gap:8px}.source-card{padding:9px;border:1px solid #203044;border-radius:6px;background:#09111a;font:10px/1.5 var(--mono)}
+    .source-card b{display:block;color:#dce8f4}.source-card span{display:block;margin-top:5px;color:#8d9caf}.truth{margin-top:11px;padding:9px;border:1px solid #5b4a30;border-radius:6px;color:#e9d39c;background:#18140d;font:10px/1.55 var(--mono)}
+    footer{display:flex;justify-content:space-between;margin-top:15px;color:#718096;font:10px var(--mono)}
+    @media(max-width:1120px){.workspace{grid-template-columns:320px 1fr}.sources{grid-column:1/-1}.source-list{grid-template-columns:repeat(4,1fr)}}
+    @media(max-width:820px){header,.workspace{display:grid;grid-template-columns:1fr}.sources{grid-column:auto}.source-list{grid-template-columns:1fr}.gate{min-width:0}}
+    @media(max-width:520px){.field{grid-template-columns:1fr}footer{display:grid;gap:5px}}
+  </style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div>
+      <div class="eyebrow">TASK-016 · BRIDGE / CROSS-CHAIN LINKAGE</div>
+      <h1>Bridge Transfer Preview</h1>
+      <p class="lede">출발 체인의 lock/burn과 도착 체인의 mint/unlock을 bridge domain으로 분리된 결정적 키와 raw 정수 산술로 연결합니다. recipient는 입력에 누출하지 않고 양단 evidence에서 발견합니다.</p>
+    </div>
+    <div class="gate">UI-FIRST GATE<br><b>사용자 확인 완료</b><br>FX-SVC-BRG-001 PROPOSED<br>RUNTIME NOT IMPLEMENTED</div>
+  </header>
+  <div class="notice">Docs-only synthetic Preview입니다. 브리지·체인·주소·TX·topic0은 실제 사례가 아니며 외부 RPC·탐색기·DB 호출이 없습니다. recipient 소유·본인성·불법성은 not_assessed입니다.</div>
+  <div class="chiprow">
+    <div class="chip">link_bridge_transfer <span>query candidate</span></div>
+    <div class="chip">bridge_transfer <span>전용 leaf · 대안 B</span></div>
+    <div class="chip">domain + raw math <span>deterministic gate</span></div>
+  </div>
+  <div class="workspace">
+    <section class="panel">
+      <div class="head"><span>REQUEST · DISCOVERY MODE</span><span>recipient unknown</span></div>
+      <div class="body">
+        <p class="copy">source subject와 destination chain만 고정합니다. expected_recipient는 검증 mode에서만 사용하며 이 Preview에서는 입력하지 않습니다.</p>
+        <div class="fields" id="fields"></div>
+        <div class="states" role="group" aria-label="결과 상태">
+          <button class="state" data-state="complete" aria-pressed="true" tabindex="0">complete</button>
+          <button class="state" data-state="partial" aria-pressed="false" tabindex="-1">partial</button>
+          <button class="state" data-state="failed" aria-pressed="false" tabindex="-1">failed</button>
+        </div>
+        <div class="truth">AI PLANNER: 브리지·route 가설만 제안<br>PYTHON: 양단 event·key·raw amount 정합<br>VERIFIER: 양단 artifact에서 독립 재계산</div>
+        <div class="truth">RULES: LIVE OFF · ARTIFACT ONLY<br>RECIPIENT IDENTITY / CRIMINALITY: not_assessed</div>
+      </div>
+    </section>
+    <section class="panel result">
+      <div class="head"><span>BRIDGE LINK RESULT</span><span>synthetic_contract_preview</span></div>
+      <div class="term" id="result"></div>
+    </section>
+    <section class="panel sources">
+      <div class="head"><span>EVIDENCE INSPECTOR</span><span>NO LIVE CALLS</span></div>
+      <div class="body source-list" id="sources"></div>
+    </section>
+  </div>
+  <footer><span>SCAN 2026 · TASK-016 Bridge Preview 0.2</span><span>NO EXTERNAL CALLS · NO MUTATION · NO OWNERSHIP CLAIM</span></footer>
+</main>
+<script>
+  const fields=[
+    ["source subject","chain-X · 0xA1…09 · role sender"],
+    ["destination chain","chain-Y (candidate, not pinned)"],
+    ["source tx","0xSRC…001 (synthetic)"],
+    ["source window","block X100 → X100"],
+    ["expected recipient","NOT PROVIDED · discovery mode"],
+    ["network mode","artifact_only"]
+  ];
+  const sources=[
+    ["EV-BRG-SOURCE · source_event","lock/deposit · contract candidate · raw amount","source chain · tx · message key"],
+    ["EV-BRG-DEST · destination_event","mint/release · recipient from evidence","destination chain · tx · key"],
+    ["EV-BRG-XFER · transfer_evidence","event ↔ actual value movement","asset refs · addresses · raw amount"],
+    ["EV-BRG-MAP · mapping_evidence","official asset mapping + fee rule candidate","decimals · fee · arrival window"]
+  ];
+  const esc=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  let state="complete";
+  function resultHtml(){
+    const title=state==="complete"?"bridge_link_complete":state==="partial"?"destination_evidence_incomplete":"amount_reconciliation_failed";
+    let html=`<div class="status"><span class="badge ${state}">${state.toUpperCase()}</span><span class="${state}">${title}</span></div>`;
+    if(state==="failed"){
+      html+=`<div class="section">SOURCE LEG</div><div class="leg source">chain-X · lock · source_raw 1000000000 · key nonce 42 · source contract 0xBR…01</div>`;
+      html+=`<div class="section">DESTINATION LEG</div><div class="leg destination">chain-Y · mint · observed_destination_raw 998999999 · recipient 0xD2…77</div>`;
+      html+=`<div class="section">STRUCTURED CONFLICT</div><div class="error">results=[] · code=reconciliation_failed · stage=amount_reconciliation<br>expected_destination_raw 999000000 ≠ observed_destination_raw 998999999 · max_abs_delta_raw 0</div>`;
+      html+=`<div class="next">NEXT: decimals·official fee rule·asset mapping 또는 destination evidence를 교정합니다. 결정적 key가 있어도 금액 모순을 complete로 덮지 않습니다.</div>`;
+    }else{
+      html+=`<div class="section">SOURCE LEG</div><div class="leg source">chain-X · 0xA1…09 → bridge 0xBR…01 · lock · source_raw 1000000000 · asset SRC-USDC</div>`;
+      if(state==="complete"){
+        html+=`<div class="section">DESTINATION LEG · RESOLVED SUBJECT</div><div class="leg destination">chain-Y · bridge 0xBR…02 → 0xD2…77 · mint · observed_destination_raw 999000000 · asset DST-USDC</div>`;
+        html+=`<div class="section">DOMAIN-SEPARATED MATCHING</div><div class="match">DETERMINISTIC · protocol BRIDGE-CANDIDATE · chain-X → chain-Y · source contract 0xBR…01 · nonce 42 · emitter 0xEM…11</div>`;
+        html+=`<div class="section">INTEGER FEE · ASSET · ARRIVAL</div><div class="calc">source_raw 1000000000 − protocol_fee_raw 1000000 = expected_destination_raw 999000000<br>decimals 6 → 6 · asset_mapping_ref MAP-CANDIDATE · max_abs_delta_raw 0<br>arrival window Y500–Y520 · observed Y508 · PASS</div>`;
+        html+=`<div class="section">DESTINATION PATH SEED</div><div class="path">seed = chain-Y · 0xD2…77 · derived from reconciled destination leg</div>`;
+        html+=`<div class="next">NEXT: 독립 Verifier가 source/destination key domain과 정수 fee·asset 식을 양단 raw artifact에서 재계산합니다.</div>`;
+      }else{
+        html+=`<div class="section">DESTINATION CANDIDATE</div><div class="leg destination">chain-Y · recipient UNKNOWN · destination event evidence missing</div>`;
+        html+=`<div class="section">MATCHING EVIDENCE</div><div class="match candidate">CANDIDATE ONLY · similar asset/amount/time · deterministic key unavailable · no promotion</div>`;
+        html+=`<div class="section">PARTIAL CONDITIONS</div><div class="calc">source leg confirmed · destination leg unresolved · resolved_scoped_subjects contains source only<br>PATH seed disabled · recipient placeholder forbidden</div>`;
+        html+=`<div class="section">LATE-ARRIVAL VARIANT</div><div class="match candidate">DETERMINISTIC KEY MATCH · arrival window Y500–Y520 · observed Y530 OUTSIDE<br>status remains PARTIAL · late-arrival conflict/evidence preserved · COMPLETE FORBIDDEN · PATH seed disabled</div>`;
+        html+=`<div class="next">NEXT: destination event/message artifact를 확보해 domain-separated key와 arrival window를 검증합니다.</div>`;
+      }
+    }
+    html+=`<div class="truth">ASSERTION: 공식 근거가 있는 bridge contract 식별만 허용<br>HEURISTIC: amount/time candidate는 확정 금지<br>NOT ASSESSED: recipient 소유·본인성·의도·불법성</div>`;
+    return html;
+  }
+  function render(){
+    document.querySelector("#fields").innerHTML=fields.map(([k,v])=>`<div class="field"><span>${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
+    document.querySelector("#sources").innerHTML=sources.map(([a,b,c])=>`<div class="source-card"><b>${esc(a)}</b><span>${esc(b)}</span><span>${esc(c)}</span></div>`).join("");
+    document.querySelector("#result").innerHTML=resultHtml();
+  }
+  function chooseState(value){
+    state=value;
+    document.querySelectorAll(".state").forEach(button=>{const on=button.dataset.state===value;button.setAttribute("aria-pressed",String(on));button.tabIndex=on?0:-1;});
+    render();
+  }
+  const buttons=[...document.querySelectorAll(".state")];
+  buttons.forEach((button,index)=>{
+    button.addEventListener("click",()=>chooseState(button.dataset.state));
+    button.addEventListener("keydown",event=>{
+      let next=null;
+      if(event.key==="ArrowRight")next=(index+1)%buttons.length;
+      if(event.key==="ArrowLeft")next=(index-1+buttons.length)%buttons.length;
+      if(event.key==="Home")next=0;
+      if(event.key==="End")next=buttons.length-1;
+      if(next!==null){event.preventDefault();buttons[next].focus();buttons[next].click();}
+    });
+  });
+  render();
+</script>
+</body>
+</html>

@@ -415,6 +415,25 @@ heuristic으로 분리하는 docs-only 검토 트랙이다.
 - 공개 fixture·`intel_context` Schema·analyzer 구현은 승인 전까지 시작하지
   않는다.
 
+## 16.7 TASK-016 Bridge/XChain Draft
+
+[TASK-016 Bridge/XChain UI](./11_TASK_016_BRIDGE_XCHAIN_UI.md)는 source leg와
+destination leg를 domain-separated matching key와 raw 정수 산술로 연결하는
+docs-only 검토 트랙이다.
+
+- discovery request에는 source subject·destination chain만 두고 recipient는
+  result의 `resolved_scoped_subjects[]`에서 발견한다.
+- complete는 결정적 key·event↔transfer·공식 asset mapping·fee 식·arrival
+  window를 모두 통과해야 한다.
+- partial은 destination evidence/key 부족 또는 late arrival을 보존하고
+  recipient placeholder·PATH seed를 만들지 않는다.
+- failed는 확보 근거의 amount/asset/message 모순을 구조화 오류와
+  `results: []`로 표시한다.
+- [Bridge/XChain Preview](./previews/10_task_016_bridge_xchain_preview.html)는
+  synthetic 3상태와 late-arrival partial 변형이며 외부 호출·mutation이 없다.
+  사용자 UI-First Gate는 2026-07-30 22:35 통과했고, fixture 캡처·구현은
+  승인되지 않았다.
+
 ## 17. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위
@@ -433,6 +452,8 @@ heuristic으로 분리하는 docs-only 검토 트랙이다.
 - **UI_Screens**: [TASK-014 PATH Preview](./previews/07_task_014_path_preview.html) - query 3개·상태 3개 docs-only 검토 화면
 - **UI_Screens**: [TASK-015 Intelligence UI](./09_TASK_015_INTELLIGENCE_UI.md) - source assertion·conflict·actor relation 화면 계약
 - **UI_Screens**: [TASK-015 Intelligence Preview](./previews/08_task_015_intelligence_preview.html) - query 5개·상태 3개 docs-only 검토 화면
+- **UI_Screens**: [TASK-016 Bridge/XChain UI](./11_TASK_016_BRIDGE_XCHAIN_UI.md) - recipient discovery·domain matching·정수 정합 화면 계약
+- **UI_Screens**: [TASK-016 Bridge/XChain Preview](./previews/10_task_016_bridge_xchain_preview.html) - complete·partial·failed docs-only 검토 화면
 - **Technical_Specs**: [WP-INPUT-GATE CLI·Operations 연결 계약](../03_Technical_Specs/13_WP_INPUT_CLI_OPERATIONS_CONTRACT.md) - 명령·핸드오프·보안·QA 계약
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·Queue·독립 검증·수동 제출 계약
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - CLI·log·보안 경계
