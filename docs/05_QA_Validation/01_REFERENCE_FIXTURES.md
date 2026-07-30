@@ -107,11 +107,11 @@ negative oracle 30개·두 번 결정성까지 완료한 `후보`다. 독립 Ver
 | [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 확정 0.2 | archive replay·반례·consumer pass | EVM-STATE, decimals |
 | [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 확정 0.2 | filtered logs·ordering·consumer pass | EVM-LOG, first ordering |
 | [FX-EVM-TOKEN-002](./fixtures/FX-EVM-TOKEN-002/README.md) | EVM-TOKEN-002 | 1 | 확정 0.2 | primary trace·cross-check·consumer pass | EVM-TRACE, native sum |
-| [FX-OSINT-LABEL-CONFLICT-001](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) | OSINT-LBL-001 | 2 | 후보 0.1 | selected row·config·ENS snapshot, oracle·Verifier 대기 | LABEL, source conflict |
-| [FX-OSINT-SANCTIONS-HISTORY-001](./fixtures/FX-OSINT-SANCTIONS-HISTORY-001/README.md) | OSINT-SAN-001 | 2 | 후보 0.1 | official action hashes, SLS·oracle·Verifier 대기 | SANCTIONS, timeline |
-| [FX-OSINT-ENS-CONFLICT-001](./fixtures/FX-OSINT-ENS-CONFLICT-001/README.md) | OSINT-ENS-001 | 2 | 후보 0.1 | fixed-block replay, 제2 provider·oracle·Verifier 대기 | ENS, forward/reverse |
+| [FX-OSINT-LABEL-CONFLICT-001](./fixtures/FX-OSINT-LABEL-CONFLICT-001/README.md) | OSINT-LBL-001 | 2 | 검증 중 0.1 | selected row·config·ENS two-provider·Verifier PASS | LABEL, source conflict |
+| [FX-OSINT-SANCTIONS-HISTORY-001](./fixtures/FX-OSINT-SANCTIONS-HISTORY-001/README.md) | OSINT-SAN-001 | 2 | 검증 중 0.1 | official action·current SLS context·Verifier PASS | SANCTIONS, timeline |
+| [FX-OSINT-ENS-CONFLICT-001](./fixtures/FX-OSINT-ENS-CONFLICT-001/README.md) | OSINT-ENS-001 | 2 | 검증 중 0.1 | fixed-block two-provider replay·Verifier PASS | ENS, forward/reverse |
 | [FX-ACTOR-COMMON-FUNDER-001](./fixtures/FX-ACTOR-COMMON-FUNDER-001/README.md) | ACTOR-REL-001 | 1 | 후보 0.1 | confirmed FLOW hash, prehistory·service exclusion 대기 | ACTOR, common funder |
-| [FX-ACTOR-RELATION-HUB-001](./fixtures/FX-ACTOR-RELATION-HUB-001/README.md) | ACTOR-REL-002 | 1 | 후보 0.1 | confirmed DEX/AUTH hash, false-positive oracle 대기 | ACTOR, public hub |
+| [FX-ACTOR-RELATION-HUB-001](./fixtures/FX-ACTOR-RELATION-HUB-001/README.md) | ACTOR-REL-002 | 1 | 검증 중 0.1 | confirmed DEX/AUTH hash·hub exclusion·Verifier PASS | ACTOR, public hub |
 
 ## 6. Fixture 상세
 

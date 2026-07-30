@@ -4,7 +4,7 @@
   "fixture_version": "0.1",
   "fixture_id": "FX-ACTOR-RELATION-HUB-001",
   "problem_id": "ACTOR-REL-002",
-  "status": "candidate",
+  "status": "verifying",
   "chain": {
     "name": "ethereum",
     "chain_id": 1

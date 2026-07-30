@@ -1,7 +1,7 @@
 # Fixture: FX-OSINT-ENS-CONFLICT-001
 > Created: 2026-07-30 03:37
 > Last Updated: 2026-07-30 04:23
-> Status: Candidate 0.1 · Negative Oracle Passed · Verifier pending
+> Status: Verifying 0.1 · Negative Oracle / Independent Verifier Passed
 
 ## 1. 목적
 
@@ -20,8 +20,9 @@
 - [x] Alchemy·Blockscout fixed-block forward/reverse decoded 값 일치
 - [x] QuickNode 429·Chainstack 403 실패를 성공으로 추론하지 않고 보존
 - [x] forward/reverse mismatch·latest substitution negative oracle — 6개·2회 결정성
-- [ ] 독립 Verifier·두 번 결정성
-- [ ] `verifying` 승격 검토
+- [x] 독립 Verifier·두 번 결정성
+- [x] `verifying` 승격
+- [ ] 제품 analyzer·최종 승격
 
 ## 4. Artifacts
 

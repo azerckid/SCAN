@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
 > Last Updated: 2026-07-30 03:47
-> Status: TASK-012~014 Complete · TASK-015 Candidate Packages 5 · Benchmark 11/11
+> Status: TASK-012~014 Complete · TASK-015 Verifying 4 / Candidate 1 · Benchmark 11/11
 
 ## 1. 목적
 
@@ -173,7 +173,9 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   오프라인에서 두 번 결정적으로 실행한다.
 - [x] ENS 두 fixture를 Alchemy·Blockscout fixed block에서 재현하고 OFAC
   current SLS snapshot metadata를 고정한다.
-- [ ] official과 heuristic의 상충 사례를 독립 Verifier로 재계산한다.
+- [x] LABEL·SANCTIONS·ENS·RELATION-HUB 4개를 독립 Verifier로 재계산하고
+  `verifying`으로 승격한다.
+- [ ] common-funder bounded prehistory·service exclusion을 닫는다.
 - [ ] AI가 만든 label 가설이 evidence 없는 confirmed fact가 되지 않게 한다.
 - [ ] Context Receipt PASS와 별도 구현 승인을 기록한다.
 
