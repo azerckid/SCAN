@@ -1,14 +1,14 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 14:19
+> Last Updated: 2026-07-30 14:27
 > Status: Approved 1.8 · 13 Confirmed · TASK-015 Verifying 4 / Candidate 1
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
 있는 reference fixture를 관리한다. 현재 등록한 20개 중 13개는 `확정`,
-7개는 후속 Gate가 남은 `후보`다. 18개는 Schema package가 있고, 기존
-Deferred 2개는 문서 후보만 있다. TASK-013 세 공개 사례는 remediation
+4개는 `검증 중`, 1개는 `후보`이며 기존 Deferred 2개는 문서 후보만 있다.
+18개는 Schema package가 있다. TASK-013 세 공개 사례는 remediation
 재검토와 [최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
 통과해 `확정`으로 관리한다.
 
@@ -513,9 +513,12 @@ P0·V1은 DEX·AUTH·FREEZE confirmed fixture 3개로 검증 범위가 충족된
     Blockscout internal-tx 교차검증으로 단일 trace Gate를 닫아 세 package를
     `confirmed`로 승격했다. Benchmark는 FLOW-EVM-001/002를 포함해 11/11이며
     가격·귀속이 남은 FLOW-MULTI-001은 assisted다.
-16. TASK-015 다섯 candidate package의 source assertion·timeline·ENS·actor
-    relation 반례 30개를 두 번 결정적으로 실행했다. 이는 독립 Verifier나
-    fixture 승격이 아니며 다섯 package는 계속 `candidate`다.
+16. TASK-015 Negative Oracle Gate 당시 다섯 candidate package의 source
+    assertion·timeline·ENS·actor relation 반례 30개를 두 번 결정적으로
+    실행했다. 이 단계만으로는 독립 Verifier나 fixture 승격을 주장하지 않았다.
+17. 이후 독립 Verifier·provenance hardening·제품 analyzer hash 대조를 통과한
+    LABEL·SANCTIONS·ENS·RELATION-HUB 4개를 `verifying`으로 승격했다.
+    common-funder는 completeness 미증명으로 `candidate`·`partial`을 유지한다.
 
 ## 10. Related Documents
 
