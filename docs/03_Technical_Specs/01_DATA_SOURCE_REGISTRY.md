@@ -1,6 +1,6 @@
 # SCAN 2026 데이터 소스 등록부
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 03:27
+> Last Updated: 2026-07-30 14:19
 > Status: Draft · TASK-009 Offline Integration Passed · Rules Unclear
 
 ## 1. 문서 목적
@@ -391,6 +391,22 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
   confirmed local replay의 SHA-256 기준선을 기록했다.
 - snapshot 기준선은 fixture package가 아니다. selected artifact·negative
   oracle·독립 Verifier 전에는 `verifying`으로 승격하지 않는다.
+
+### 9.2 TASK-015 analyzer 이후 source·승격 경계
+
+- `intel_context` analyzer와 독립 hash 대조는 통과했지만 source permission과
+  fact correctness를 같은 Gate로 취급하지 않는다.
+- Codatta 선택 행은 dataset card의 OpenRAIL·research/testing 범위만 확인됐다.
+  exact license text·notice·재배포 의무를 pin하기 전 label fixture는
+  `verifying`을 유지한다.
+- OFAC action은 공식 locator·whole-file hash·bounded match를 사용하고, 현재
+  SLS 전체 CSV는 repository에 재배포하지 않는다.
+- ENS는 웹 Interface 내용을 복제하지 않고 fixed-block onchain artifact를
+  사용한다. 새 RPC/Explorer 호출은 승격 필수 조건이 아니며 Rules 허용 시에만
+  read-only로 실행한다.
+- relation-hub는 confirmed DEX/AUTH local fixture만으로 승격 검토할 수 있다.
+  common-funder는 bounded prehistory·service exclusion 전까지 candidate다.
+- 상세 판정은 [TASK-015 Live Source·Terms·Promotion Readiness](../05_QA_Validation/54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md)를 따른다.
 
 ## 10. Related Documents
 
