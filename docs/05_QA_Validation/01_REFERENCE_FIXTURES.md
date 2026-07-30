@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-30 19:40
+> Last Updated: 2026-07-30 22:51
 > Status: Approved 2.0 · 17 Confirmed · TASK-015 LABEL Confirmed · Candidate 1
 
 ## 1. 문서 목적
@@ -210,18 +210,18 @@ adjacent state만 완전성을 주장한다.
 |:---|:---|
 | 연결 문제 ID | SVC-BRG-001 |
 | 상태 | 후보 |
-| DOC-M3 결정 | Deferred — P2 XCHAIN·BRIDGE 승격 전 재검토 |
+| DOC-M3 결정 | Across V3 공개 후보 선정 완료 · fixture package와 두 RPC raw replay 대기 |
 | 데이터 형태 | 공개 온체인 |
-| 체인 | 출발 TBD, 도착 TBD |
-| 주소·TX | 출발 TX=TBD, 도착 TX=TBD, 브리지=TBD |
-| 기준 정답 | 출발·도착 TX 쌍, 도착 주소, 매칭 키 |
-| 허용 오차 | 브리지 수수료로 인한 금액 차이를 fixture에 명시. raw 기준 허용 범위 TBD |
-| 확정 사실 | 양단 이벤트/전송 |
-| 휴리스틱 | 유사 금액 후보 중 최종 선택 근거 |
+| 체인 | 후보: Base `8453` → Ethereum `1` |
+| 주소·TX | Across V3. 출발 `0x957143...05a1b`, 도착 `0x816ebc...8f8a0`; 전체 값은 [후보 보고서](./61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) |
+| 기준 정답 | 도착 `0xdd8591...1cd0a`, deposit ID `2395968`, source `330000000000000000`, destination `329132286989970407` |
+| 허용 오차 | 후보 `max_abs_delta_raw=0`; event amount 차이 `867713010029593`을 fee candidate로 재계산 |
+| 확정 사실 | 공식 Across chain/contract/event 규칙. 양단 TX 값은 raw replay 전 candidate |
+| 휴리스틱 | 금액·10초 시간차만으로 연결 금지; composite domain·공통 event parameter 필요 |
 | 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-BRIDGE-META` |
-| 재현 절차 | 1) 출발 이벤트 2) destination 힌트 3) 도착 매칭 4) 교차검증 |
-| 저작권·출처 | 브리지 탐색기/문서 URL=TBD |
-| 마지막 확인 | 2026-07-24 15:49 |
+| 재현 절차 | 1) 양단 TX/receipt/block 2) exact-block event logs 3) Across composite domain 4) amount/asset/transfer 정합 5) 두 provider SHA |
+| 저작권·출처 | Across 공식 문서 URL·BaseScan/Etherscan supporting URL만 기록. 페이지/API 응답 미복제 |
+| 마지막 확인 | 2026-07-30 22:51 (docs-only 후보 선정, package 없음) |
 
 ---
 

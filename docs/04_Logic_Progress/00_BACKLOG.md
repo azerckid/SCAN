@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-30 20:20
+> Last Updated: 2026-07-30 22:51
 > Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 12·4·14) · TASK-016~019 Proposed
 
 ## 1. 문서 목적
@@ -1484,6 +1484,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [오픈소스 조사](../03_Technical_Specs/06_OPEN_SOURCE_FORENSICS_REVIEW.md) - adapter 재사용 Gate
 - Related QA Docs:
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-SERVICE-001
+  - [Bridge/XChain 공개 Fixture 후보 보고서](../05_QA_Validation/61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md) - Across V3 Base→Ethereum docs-only 후보·raw replay 잔여
 - Implementation Preconditions:
   - [ ] adapter별 confirmed fixture·official ABI/address를 확보한다.
   - [ ] PATH·INTEL 결과 계약이 안정됐다.
@@ -1510,7 +1511,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Constraints: confirmed adapter only, multi-chain bounded scope
   - Conflicts: source/Rules unresolved
 - Change Receipt:
-  - N/A - 구현 미시작
+  - docs-only - Lending/Bridge 계약·UI Gate와 Across Bridge 공개 후보를
+    선정했다. fixture package·raw replay·Schema·analyzer·Benchmark는 변경하지
+    않았고 구현은 미시작이다.
 - Verification Receipt:
   - N/A - 구현 미시작
 

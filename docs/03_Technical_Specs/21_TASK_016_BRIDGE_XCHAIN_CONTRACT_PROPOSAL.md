@@ -1,7 +1,7 @@
 # TASK-016 Bridge/XChain(SVC-BRG-001) Analysis 계약 제안 (docs-only)
 > Created: 2026-07-30 20:45
-> Last Updated: 2026-07-30 21:30
-> Status: docs-only Proposal · 사용자 승인 전 · 코드·fixture 캡처 미착수
+> Last Updated: 2026-07-30 22:51
+> Status: Docs Contract Approved · Candidate Selected · 코드·fixture 캡처 미착수
 
 ## 0. 이 문서의 위치
 
@@ -87,6 +87,26 @@ candidate로만 둔다(§4·§6).
 - 라벨 없이 사실·근거로 채점 가능할 것.
 
 실제 사례·주소·TX·체인 ID 확정과 raw 캡처는 캡처 Gate로 유예한다.
+
+### 3.1 공개 후보 선정(캡처 전)
+
+docs-only 후보 조사에서 Across V3 Base→Ethereum 전송 한 건을
+`FX-SVC-BRG-001`의 공개 후보로 선정했다.
+
+- Base `8453` SpokePool `0x09aea4b2242abc8bb4bb78d537a67a245a7bec64`
+  source TX `0x95714346d20bfaa328b75e4e6cf980d9620c4c4331af935032f848a118f05a1b`
+- Ethereum `1` SpokePool `0x5c7bcd6e7de5423a257d81b442095a1a6ced35c5`
+  destination TX `0x816ebca944c8cf40309c8c2ec4bd0f6e25f78d782cf7732f93ca771e55b8f8a0`
+- Across V3 domain: origin `8453`, destination `1`, deposit ID `2395968`;
+  source `330000000000000000`, destination `329132286989970407`,
+  difference `867713010029593` wei
+
+공식 Across 문서는 chain ID·SpokePool·event/matching 규칙을, 공개
+BaseScan/Etherscan 화면은 양단 TX 후보를 뒷받침한다. 이 값은 아직 Explorer
+supporting 확인뿐이다. 두 RPC raw replay·SHA·negative oracle·Verifier 전에는
+package를 만들거나 `verifying`으로 올리지 않는다. 상세 경계는
+[후보 선정 보고서](../05_QA_Validation/61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md)를
+따른다.
 
 ## 4. 양단 evidence 분리와 매칭 키 (공통 §1.1·§1.2·§1.5 적용)
 
@@ -228,14 +248,16 @@ doc 20 §1.6을 따른다. 매핑: 입력 경계 `invalid_input`, 지원 안 되
 
 1. (이 문서) Bridge 계약 제안 사용자 검토·승인.
 2. UI Preview 작성·사용자 승인.
-3. 브리지 컨트랙트·체인 ID·메시지 스키마 pin과 `FX-SVC-BRG-001` 공개 사례 확정.
-4. 양단 provider raw replay 캡처·매칭 키 검증·negative oracle 2회 결정성.
+3. 완료 — 공식 문서 기준 브리지·chain·event schema와 `FX-SVC-BRG-001`
+   공개 후보를 선정한다(docs-only, package 없음).
+4. 미완료 — 양단 provider raw replay·SHA로 후보 값을 pin하고 매칭 키
+   검증·negative oracle 2회 결정성을 통과한다.
 5. 독립 Verifier raw-first 재계산·canonical hash 대조.
 6. `candidate → verifying → confirmed` 승격 검토(사용자 Gate).
 7. Context Receipt PASS·구현 승인 후 analyzer 구현.
 8. (별도) `MIXED-XCHAIN-001` 조합 Gate — DEX+Bridge+CEX leg 결합.
 
-**Blocker.** 3·4의 양단 캡처·live 조회는 confirmed fixture와 source/Rules·
+**Blocker.** 4의 양단 캡처·live 조회는 confirmed fixture와 source/Rules·
 Terms 확정이 필요하며 live/archive source Gate로 유예된다
 ([Promotion Readiness](../05_QA_Validation/54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md) §2).
 따라서 `SVC-BRG-001`·`MIXED-XCHAIN-001`은 현재 `unsupported`이며 이 문서로

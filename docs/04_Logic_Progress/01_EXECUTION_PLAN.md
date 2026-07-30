@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-30 20:20
+> Last Updated: 2026-07-30 22:51
 > Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · 4 Confirmed / Common-funder Candidate · Benchmark 12 Automated / 4 Assisted / 14 Unsupported
 
 ## 1. 목적
@@ -222,6 +222,12 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   recipient discovery·domain matching·정수 fee/asset·complete/partial/failed를
   확인하고 late-arrival partial 변형을 보강해 사용자 UI-First Gate 승인을
   받았다(2026-07-30 22:35, fixture·구현 승인은 포함하지 않음).
+- [x] Across V3 Base→Ethereum 공개 전송을 `FX-SVC-BRG-001`의 docs-only
+  [후보](../05_QA_Validation/61_TASK_016_BRIDGE_FIXTURE_CANDIDATE_REPORT.md)로
+  선정하고 공식 chain/contract/event 규칙·양단 explorer 값을 기록한다
+  (package·raw replay·Benchmark 승격 없음).
+- [ ] Bridge 후보를 두 RPC raw replay·SHA·negative oracle·독립 Verifier로
+  검증해 `candidate → verifying` 승격 여부를 별도 판정한다.
 - [ ] `TASK-016` bridge/CEX/mixer/lending 중 confirmed fixture가 있는 adapter만 선택한다.
 - [ ] 양단 체인·message·amount 또는 서비스 휴리스틱 증거 계약을 승인한다.
 - [ ] EVM과 Bitcoin 결과가 같은 공통 evidence 봉투를 유지하는지 검증한다.
