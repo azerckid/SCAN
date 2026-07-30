@@ -19,6 +19,7 @@ from scan_tool.domain.analysis_request import (
     EvmSpecialAnalysisRequest,
     FlowPathAnalysisRequest,
     FreezeAnalysisRequest,
+    IntelContextAnalysisRequest,
 )
 from scan_tool.domain.analysis_result import AnalysisResult, AnalysisStatus
 from scan_tool.slices.auth import analyze_auth_replay
@@ -27,6 +28,7 @@ from scan_tool.slices.evm_core import analyze_evm_core_replay
 from scan_tool.slices.evm_special import analyze_evm_special_replay
 from scan_tool.slices.flow_path import analyze_flow_path_replay
 from scan_tool.slices.freeze import analyze_freeze_replay
+from scan_tool.slices.intel_context import analyze_intel_context_replay
 
 APPROVED_EXPECTED_PROBLEM_IDS = frozenset(
     {
@@ -74,6 +76,7 @@ APPROVED_AUTOMATED_PROBLEM_IDS = frozenset(
         "EVM-TOKEN-002",
         "FLOW-EVM-001",
         "FLOW-EVM-002",
+        "OSINT-LBL-001",
         "SVC-DEX-001",
     }
 )
@@ -274,4 +277,6 @@ def _analyze(request: AnalysisRequest, replay: bytes) -> AnalysisResult:
         return analyze_evm_special_replay(document, replay)
     if isinstance(document, FlowPathAnalysisRequest):
         return analyze_flow_path_replay(document, replay)
+    if isinstance(document, IntelContextAnalysisRequest):
+        return analyze_intel_context_replay(document, replay)
     raise ValueError("unsupported benchmark analysis type")

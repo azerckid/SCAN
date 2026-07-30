@@ -42,15 +42,15 @@ SQLite Board input, and an atomic human-confirmed local submission record.
 adds Analysis I/O 0.2 `evm_core` object·historical balance·first Transfer·native
 inflow queries while retaining the three 0.1 verticals. `TASK-013` adds
 subject-scoped ERC-721/1155 and EIP-1967 event/state analysis. `TASK-014` adds
-bounded path, remerge, and multi-origin graph/ledger analysis. Eleven cases are now
-directly automated, 4 are assisted, and 15 remain unsupported. The eleven automated
+bounded path, remerge, and multi-origin graph/ledger analysis. Twelve cases are now
+directly automated, 4 are assisted, and 14 remain unsupported. The twelve automated
 cases pass exact answer, evidence, fixture-requirement, and deterministic replay
-checks. This is 11/11 accuracy within
-the automated scope, not 30/30 problem coverage.
+checks. This is 12/12 accuracy within the automated scope, not 30/30 problem
+coverage.
 Phase 2 is documented as `TASK-012` through `TASK-019`: generic EVM, NFT/proxy,
 PATH, intelligence, service/xchain, Bitcoin, case reconciliation, and a final
 coverage gate. TASK-012 through TASK-014 are complete; TASK-015 is in progress with
-three non-quarantined confirmed fixtures, while TASK-016 through TASK-019 remain
+four confirmed fixtures, while TASK-016 through TASK-019 remain
 proposed. TASK-013 has three confirmed public NFT·Proxy packages with two-provider
 raw SHA replay, explicit selected-scope integrity checks, and 16 offline negative
 oracles, an independent raw-first Verifier, approved UI·Context, product analyzer,
@@ -58,10 +58,10 @@ remediation regression tests, and four subject-scoped deterministic runs.
 TASK-014 has three confirmed FLOW packages with two-provider selected-scope replay,
 18 deterministic counterexamples, an independent raw-first Verifier, a bounded
 product analyzer, and an independent Blockscout internal-edge cross-check.
-TASK-015 has confirmed bounded SANCTIONS history, fixed-block ENS, and public-hub
-false-positive fixtures. Their related expected problems remain assisted because
-one-hop sanctions expansion, domain/SNS checks, and positive multi-heuristic
-clustering are not complete. The LABEL fixture remains quarantined and the
+TASK-015 has confirmed bounded LABEL conflict, SANCTIONS history, fixed-block ENS,
+and public-hub false-positive fixtures. `OSINT-LBL-001` is automated; the
+SANCTIONS·ENS·public-hub problems remain assisted because one-hop expansion,
+domain/SNS checks, and positive multi-heuristic clustering are not complete. The
 common-funder fixture remains candidate.
 Live AI and CTFd network submission remain unimplemented.
 `WP-INPUT-IMPL-02` connects explicit external replay and provided JSON/JSONL/CSV
@@ -114,7 +114,7 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | OPS-IMPL-06 evidence | [`19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md`](docs/05_QA_Validation/19_OPS_IMPL_06_CANDIDATE_VERIFIER_REPORT.md) | canonical candidate, fresh independent replay, conflict preservation, and promotion-gate evidence |
 | OPS-IMPL-07 evidence | [`20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md`](docs/05_QA_Validation/20_OPS_IMPL_07_OPERATIONS_SNAPSHOT_REPORT.md) | SQLite read-back, strict snapshot, local terminal/JSON view, and Preview-state mapping evidence |
 | OPS-IMPL-08 evidence | [`21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md`](docs/05_QA_Validation/21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) | same-problem leaf concurrency, manual submission record, six Operations QA, and final security evidence |
-| TASK-011~014 benchmark | [`22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md`](docs/05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | 30-problem coverage classification, eleven exact offline executions, and prioritized capability gaps |
+| TASK-011~015 benchmark | [`22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md`](docs/05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) | 30-problem coverage classification, twelve exact offline executions, and prioritized capability gaps |
 | TASK-012 evidence | [`24_TASK_012_FIXTURE_CANDIDATE_REPORT.md`](docs/05_QA_Validation/24_TASK_012_FIXTURE_CANDIDATE_REPORT.md) | four EVM Core queries, confirmed fixtures, Analysis I/O 0.2, CLI integration, and benchmark promotion |
 | Phase 2 QA | [`23_EXPECTED_PROBLEM_EXPANSION_QA.md`](docs/05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) | fixture-first promotion, negative cases, package QA, and integration gates |
 | WP-INPUT wiring | [`31_WP_INPUT_CLI_OPERATIONS_REPORT.md`](docs/05_QA_Validation/31_WP_INPUT_CLI_OPERATIONS_REPORT.md) | CLI mode selection, raw artifact envelope, Operations handoff, and secret-boundary evidence |
@@ -208,10 +208,11 @@ A supported request without `--evidence` stops explicitly with
 baseline and expected-problem Benchmark 0.1 are closed.
 `TASK-012` is complete with four confirmed fixtures and a PASS Context Receipt.
 `TASK-013` is complete with three confirmed fixtures and Benchmark 9/9.
-`TASK-014` is complete with three confirmed fixtures and Benchmark 11/11.
-`TASK-015` is in progress: three bounded fixtures are confirmed, LABEL is
-quarantined, and common-funder remains candidate. `TASK-016` through `TASK-019`
-remain proposals requiring their own fixture, Context Receipt, and implementation approval.
+`TASK-014` is complete with three confirmed fixtures; Benchmark is 12/12 automated (LABEL added via TASK-015).
+`TASK-015` is in progress: four bounded fixtures are confirmed, `OSINT-LBL-001`
+is automated, and common-funder remains candidate. `TASK-016` through `TASK-019`
+remain proposals requiring their own fixture, Context Receipt, and implementation
+approval.
 `TASK-010` offline Operations V1 is complete through human-confirmed local
 submission recording. No live provider configuration exists; live transport still
 requires authoritative Rules and `rule_status: allowed`. The CLI never calls CTFd,

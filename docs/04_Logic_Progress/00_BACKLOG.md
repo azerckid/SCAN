@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-30 19:40
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 자동화 별도 판정) · TASK-016~019 Proposed
+> Last Updated: 2026-07-30 20:20
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate · Benchmark 12·4·14) · TASK-016~019 Proposed
 
 ## 1. 문서 목적
 
@@ -1230,10 +1230,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 ### [ ] TASK-015: Label·OSINT·Actor Intelligence 엔진
 
 - Status: In Progress — 계약 승인·Context Receipt PASS·구현 승인(2026-07-30).
-  `intel_context` analyzer 5 query 구현·독립 검증 완료. SANCTIONS·ENS·
-  LABEL·SANCTIONS·ENS·RELATION-HUB confirmed, common-funder candidate.
-  Benchmark 11 automated / 4 assisted / 15 unsupported. live adapter·나머지
-  fixture 승격은 별도 Gate.
+  `intel_context` analyzer 5 query 구현·독립 검증 완료. LABEL·SANCTIONS·
+  ENS·RELATION-HUB confirmed, common-funder candidate.
+  Benchmark 12 automated / 4 assisted / 14 unsupported(OSINT-LBL-001 automated
+  승격). live adapter·common-funder 승격은 별도 Gate.
 - Work Type: code
 - Priority: Phase 2 · P1
 - Depends On: TASK-012
@@ -1272,8 +1272,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] LABEL replacement fixture를 별도 Promotion Receipt에서 최종 판정하고
     재배포 허가 미확인 OpenRAIL CSV artifact를 삭제한 뒤 `confirmed`로
     승격한다([59 Promotion Receipt](../05_QA_Validation/59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md)).
-  - [ ] OSINT-LBL-001 Benchmark automated 11→12 승격 여부를 별도로 판정한다
-    (executable benchmark case 등록 필요).
+  - [x] OSINT-LBL-001을 executable benchmark case(request·source-replay·
+    expected·requirement)로 등록하고 exact/evidence/requirement/2회 결정성을
+    통과한 뒤 `APPROVED_AUTOMATED_PROBLEM_IDS`에 추가해 Benchmark automated
+    11→12(assisted 4·unsupported 14)로 승격한다.
   - [x] sanctions·ENS·relation-hub의 fixture별 문서 Hard Gate를 닫고 별도
     [Promotion Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)에서
     bounded scope `confirmed`로 판정한다.
@@ -1440,6 +1442,15 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     security 207 files PASS. fixture는 별도 Promotion Review 전까지
     `verifying`, Benchmark는 11 / 4 / 15를 유지한다
     ([58 Migration Receipt](../05_QA_Validation/58_TASK_015_LABEL_FIXTURE_MIGRATION_RECEIPT.md)).
+  - LABEL Confirmed Promotion Gate: 여섯 기준 대조 후 재배포 허가 미확인
+    OpenRAIL CSV artifact를 삭제하고 LABEL fixture를 `confirmed`로 승격했다
+    ([59 Promotion Receipt](../05_QA_Validation/59_TASK_015_LABEL_CONFIRMED_PROMOTION_RECEIPT.md)).
+  - OSINT-LBL-001 Benchmark 자동화 Gate: confirmed LABEL fixture를 executable
+    benchmark case로 등록(`_analyze`에 intel_context dispatch 추가, manifest·
+    `APPROVED_AUTOMATED_PROBLEM_IDS`·통합 테스트 카운트 갱신)하고 exact answer·
+    evidence·requirement·2회 결정성을 통과해 automated 11→12(12/12 pass),
+    assisted 4·unsupported 14로 승격했다. 전체 542 tests PASS. 관련 SANCTIONS·
+    ENS·RELATION-HUB는 문제 전체가 아니므로 `assisted`를 유지한다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
