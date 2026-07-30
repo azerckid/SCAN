@@ -31,8 +31,10 @@ signature·log-receipt-transaction-block exact binding까지 처음부터 다시
 `d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`를
 계산했다(candidate-capture 모듈과 코드 비공유, `evidence.json`에 pin).
 [승격 검토](../../63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)를 통과해
-`검증 중(verifying)`으로 승격했다. `확정(confirmed)`은 analyzer 구현·독립
-Verification Receipt 등 잔여 Gate를 닫은 뒤 별도 판정한다.
+`검증 중(verifying)`으로 승격했다. Context Receipt PASS·구현 승인 후
+`bridge_transfer` analyzer를 구현했고, 그 canonical hash도 독립 Verifier
+hash와 일치한다. `확정(confirmed)`은 독립 Verification Receipt 문서화 후
+별도 판정한다.
 
 ## 파일
 
@@ -56,8 +58,10 @@ Verification Receipt 등 잔여 Gate를 닫은 뒤 별도 판정한다.
    `bridge_transfer`) 확정([Bridge 계약 §5](../../../03_Technical_Specs/21_TASK_016_BRIDGE_XCHAIN_CONTRACT_PROPOSAL.md)).
 5. ~~Context Receipt PASS·구현 승인~~ — 완료(2026-07-31, offline/artifact
    범위로 제한). Backlog TASK-016 Context Receipt 참고.
-6. `bridge_transfer` analyzer 구현·독립 Verification Receipt →
-   `confirmed` 승격·Benchmark 승격은 별도 판정.
+6. ~~`bridge_transfer` analyzer 구현~~ — 완료. canonical hash가 독립
+   Verifier hash `d6609bb4...`와 일치(`analyzer_hash_matches_independent_verifier`).
+7. 독립 Verification Receipt 문서화 → `confirmed` 승격·Benchmark 승격은
+   별도 판정.
 
 endpoint·credential·Explorer 본문은 이 package에 저장하지 않는다.
 QuickNode의 bounded 호출은 429, PublicNode의 exact-block log는 403이었고

@@ -292,6 +292,21 @@ class IntelContextFailedAnalysisResult(FailedAnalysisResult):
     analysis_type: Literal[AnalysisType.INTEL_CONTEXT]
 
 
+class BridgeTransferCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.BRIDGE_TRANSFER]
+
+
+class BridgeTransferPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.BRIDGE_TRANSFER]
+
+
+class BridgeTransferFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.BRIDGE_TRANSFER]
+
+
 ResultVariant = (
     LegacyCompleteAnalysisResult
     | LegacyPartialAnalysisResult
@@ -308,6 +323,9 @@ ResultVariant = (
     | IntelContextCompleteAnalysisResult
     | IntelContextPartialAnalysisResult
     | IntelContextFailedAnalysisResult
+    | BridgeTransferCompleteAnalysisResult
+    | BridgeTransferPartialAnalysisResult
+    | BridgeTransferFailedAnalysisResult
 )
 
 

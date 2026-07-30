@@ -45,7 +45,8 @@
         "check_sanctions_exposure",
         "resolve_identity_clues",
         "find_common_funder",
-        "score_actor_relations"
+        "score_actor_relations",
+        "link_bridge_transfer"
       ]
     },
     "chain_id": {
@@ -269,6 +270,31 @@
     {
       "if": {
         "properties": {
+          "analysis_type": {
+            "const": "bridge_transfer"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "query_kind"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "0.2"
+          },
+          "query_kind": {
+            "const": "link_bridge_transfer"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
           "query_kind": {
             "const": "object_summary"
           }
@@ -379,6 +405,25 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "query_kind": {
+            "const": "link_bridge_transfer"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/linkBridgeTransferInputs"
+          }
+        }
+      }
     }
   ],
   "additionalProperties": false,
@@ -395,7 +440,8 @@
         "evm_core",
         "evm_special",
         "flow_path",
-        "intel_context"
+        "intel_context",
+        "bridge_transfer"
       ]
     },
     "address": {
@@ -800,6 +846,35 @@
         },
         "include_beacon": {
           "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "linkBridgeTransferInputs": {
+      "type": "object",
+      "required": [
+        "source_subject",
+        "destination_chain_id",
+        "origin_chain_id"
+      ],
+      "properties": {
+        "source_subject": {
+          "$ref": "#/$defs/address"
+        },
+        "destination_chain_id": {
+          "type": "integer"
+        },
+        "origin_chain_id": {
+          "type": "integer"
+        },
+        "expected_recipient": {
+          "$ref": "#/$defs/address"
+        },
+        "source_transaction_hash": {
+          "$ref": "#/$defs/transactionHash"
+        },
+        "destination_transaction_hash": {
+          "$ref": "#/$defs/transactionHash"
         }
       },
       "additionalProperties": false

@@ -7,6 +7,7 @@ from threading import Lock
 
 from scan_tool.application.cli_runtime import (
     AUTH_REPLAY_STAGE,
+    BRIDGE_TRANSFER_REPLAY_STAGE,
     DEX_REPLAY_STAGE,
     FREEZE_REPLAY_STAGE,
     CliRuntime,
@@ -135,6 +136,7 @@ class InProcessEvidenceWorker:
             AnalysisType.DEX_SWAP: DEX_REPLAY_STAGE,
             AnalysisType.AUTH_CONSUMPTION: AUTH_REPLAY_STAGE,
             AnalysisType.ADDRESS_FREEZE: FREEZE_REPLAY_STAGE,
+            AnalysisType.BRIDGE_TRANSFER: BRIDGE_TRANSFER_REPLAY_STAGE,
         }
         checkpoint = runtime.storage.latest_checkpoint(
             request.root.analysis_id,

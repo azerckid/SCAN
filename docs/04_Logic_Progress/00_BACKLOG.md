@@ -1454,8 +1454,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
-- Status: ToDo — Bridge(`SVC-BRG-001`) Context Receipt PASS·offline analyzer
-  구현 승인(2026-07-31). 제품 코드 미착수.
+- Status: In Progress — Bridge(`SVC-BRG-001`) offline analyzer 구현 완료.
+  독립 Verification Receipt·`verifying → confirmed` 검토 대기.
 - Work Type: code
 - Priority: Phase 2 · P2
 - Depends On: TASK-014, TASK-015
@@ -1465,6 +1465,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     Verification Receipt 후 `confirmed`를 별도 판정하는 예외 경로를 승인한다.
     다른 adapter는 confirmed fixture 확보 전 구현하지 않는다.
   - [x] Bridge 양단 chain/message/asset/amount 계약을 확정한다.
+  - [x] `bridge_transfer` offline analyzer와 전용 request/result dispatch를 구현한다.
   - [ ] adapter별 exact·partial·conflict를 검증한다.
   - [ ] Benchmark를 실제 완료 문제만 승격한다.
 - Related Concept Docs:
@@ -1621,19 +1622,22 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     정정. 5곳 모두 confirmed 트랙 잔여 항목으로 교체.
   - Analysis I/O 대안 확정 - 사용자가 대안 B(전용 `AnalysisType.BRIDGE_TRANSFER`,
     query `link_bridge_transfer`)를 정식 승인했다. `result.value`
-    구조(`source_leg`·`destination_leg`·`resolved_scoped_subjects[]`·
-    `matching_key`·`status`)를 doc 21 §5에 고정했다. 5개 fixture JSON의
+    구조는 양단 필드를 이미 인코딩한 flat bridge fact object로 doc 21 §5에
+    고정했다. 5개 fixture JSON의
     잔여 목록에서 "Analysis I/O alternative decision" 항목을 제거했다.
     Schema·코드 반영은 Context Receipt PASS·구현 승인 이후.
+  - Analyzer 구현 - `domain/{analysis_request,analysis_result,bridge_transfer}.py`,
+    `slices/bridge_transfer.py`, CLI runtime·Evidence Worker stage map, Analysis
+    I/O·Operations Schema, fixture request, schema probes, 독립 hash 대조 script,
+    unit test를 추가했다. 완전 결과의 flat `value`가 pinned SHA-256
+    `d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`와
+    일치하며 offline/source/fixture/input guard로 기존 leaf와 격리했다.
+    Fixture `verifying`과 Benchmark 12·4·14는 변경하지 않았다.
 - Verification Receipt:
-  - N/A - 구현 미시작(fixture Gate만 진행). 위 remediation·negative oracle·
-    독립 Verifier는 `uv run pytest tests/unit/test_task_016_bridge_replay.py`
-    10 PASS, `test_task_016_bridge_negative_oracles.py` 1 PASS,
-    `test_task_016_bridge_independent_verifier.py` 11 PASS,
-    `PASS 8 TASK-016 Bridge negative oracles twice`,
-    `PASS TASK-016 Bridge independent Verifier: 1 fixtures, 3 requirements,
-    2 deterministic runs`, 전체 `scripts/verify.py` 564 passed·
-    traceability 1872·security 223으로 확인했다.
+  - Pending - Implementation basic checks는 focused 4 tests·전체 568 tests,
+    Schema 57 probes, Bridge pinned hash·2회 결정성, 기존 Bridge Verifier,
+    Benchmark 무변동으로 통과했다. 독립 Verification Agent Receipt 후
+    `verifying → confirmed`를 별도 판정한다.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 

@@ -31,6 +31,9 @@ INTEL_CONTEXT_EXAMPLE = (
     REPOSITORY_ROOT
     / "docs/05_QA_Validation/fixtures/FX-OSINT-LABEL-CONFLICT-001/analysis-request.json"
 )
+BRIDGE_TRANSFER_EXAMPLE = (
+    REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-SVC-BRG-001/analysis-request.json"
+)
 SCHEMA_FILES = {
     "request": "analysis-request.schema.json",
     "result": "analysis-result.schema.json",
@@ -263,6 +266,37 @@ def intel_context_family_probes(evm_request: dict[str, object]) -> list[Probe]:
             "intel_context request with flow_path query_kind",
             "request",
             changed(intel_request, "query_kind", value="trace_path"),
+            False,
+        ),
+    ]
+
+
+def bridge_transfer_family_probes(
+    evm_request: dict[str, object],
+    evm_result: dict[str, object],
+) -> list[Probe]:
+    """Keep bridge_transfer dispatch isolated from every other 0.2 family."""
+    bridge_request = load_json(BRIDGE_TRANSFER_EXAMPLE)
+    bridge_result = changed(evm_result, "analysis_type", value="bridge_transfer")
+    return [
+        Probe("bridge_transfer request", "request", bridge_request, True),
+        Probe("bridge_transfer result", "result", bridge_result, True),
+        Probe(
+            "evm core request with bridge_transfer query_kind",
+            "request",
+            changed(evm_request, "query_kind", value="link_bridge_transfer"),
+            False,
+        ),
+        Probe(
+            "bridge_transfer request with flow_path query_kind",
+            "request",
+            changed(bridge_request, "query_kind", value="trace_path"),
+            False,
+        ),
+        Probe(
+            "bridge_transfer request legacy schema version",
+            "request",
+            changed(bridge_request, "schema_version", value="0.1"),
             False,
         ),
     ]
@@ -501,6 +535,7 @@ def build_probes() -> list[Probe]:
         *evm_special_family_probes(evm_request),
         *flow_path_family_probes(evm_request),
         *intel_context_family_probes(evm_request),
+        *bridge_transfer_family_probes(evm_request, evm_result),
         *result_status_probes(dex_result, auth_result, freeze_result, error, evm_result),
         *result_component_probes(dex_result),
         *error_probes(error),

@@ -91,12 +91,12 @@
     "two_provider_decoded_match": true,
     "raw_sha256_recorded_per_capability": true,
     "negative_oracle_pass": true,
-    "independent_verifier_pass": true
+    "independent_verifier_pass": true,
+    "analyzer_hash_matches_independent_verifier": true
   },
   "uncertainty": {
     "candidate_only": false,
     "remaining": [
-      "bridge_transfer analyzer implementation",
       "analyzer independent Verification Receipt",
       "verifying-to-confirmed review"
     ]

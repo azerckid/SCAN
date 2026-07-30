@@ -33,5 +33,5 @@
     "spoke_pool": "0x5c7bcd6e7de5423a257d81b442095a1a6ced35c5"
   },
   "scope_kind": "selected_transactions_and_exact_block_windows",
-  "selection_notes": "Across official chain/event rules and public explorer pages identified one Base-to-Ethereum transfer. Recipient remains a result field. Two-role raw RPC replay, cross-provider decoded-fact matching, negative oracle, independent verifier, candidate-to-verifying promotion, the Analysis I/O alternative decision (dedicated bridge_transfer leaf), and Context Receipt PASS with offline/artifact analyzer implementation approval are all complete. The bridge_transfer analyzer implementation, its independent Verification Receipt, and verifying-to-confirmed review remain."
+  "selection_notes": "Across official chain/event rules and public explorer pages identified one Base-to-Ethereum transfer. Recipient remains a result field. Two-role raw RPC replay, cross-provider decoded-fact matching, negative oracle, independent verifier, candidate-to-verifying promotion, the Analysis I/O alternative decision (dedicated bridge_transfer leaf), Context Receipt PASS with offline/artifact analyzer implementation approval, and the bridge_transfer analyzer implementation (independent verification hash-matched) are all complete. Its independent Verification Receipt document and verifying-to-confirmed review remain."
 }

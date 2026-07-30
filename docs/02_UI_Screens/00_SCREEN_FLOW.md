@@ -433,8 +433,9 @@ docs-only 검토 트랙이다.
   synthetic 3상태와 late-arrival partial 변형이며 외부 호출·mutation이 없다.
   사용자 UI-First Gate는 2026-07-30 22:35 통과했다. fixture는 양단 replay·
   negative oracle·독립 Verifier를 거쳐 `verifying`이며, 2026-07-31 Context
-  Receipt PASS와 offline/artifact analyzer 구현 승인을 기록했다. 웹 Workbench
-  구현과 fixture `confirmed` 승격은 별도 Gate다.
+  Receipt PASS·구현 승인을 기록했고 `bridge_transfer` offline analyzer
+  구현·독립 hash 대조까지 완료했다(CLI 전용, 웹 Workbench 미포함). fixture
+  `confirmed` 승격은 별도 Gate다.
 
 ## 17. Related Documents
 

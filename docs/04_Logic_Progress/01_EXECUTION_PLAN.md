@@ -243,8 +243,8 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   미확정 동안 offline/artifact replay로 범위를 제한한다(2026-07-31).
 - [ ] EVM과 Bitcoin 결과가 같은 공통 evidence 봉투를 유지하는지 검증한다.
 - [x] Bridge 양단 transaction·message·asset·amount 정합 계약을 승인한다.
-- [ ] `bridge_transfer` analyzer를 전용 type/query guard로 구현하고 독립
-  Verifier canonical hash와 대조한다.
+- [x] `bridge_transfer` analyzer를 전용 type/query guard로 구현하고 독립
+  Verifier canonical hash `d6609bb4...`와 대조한다(2026-07-31).
 - [ ] analyzer Verification Receipt 후 `verifying → confirmed`와 Benchmark
   승격을 각각 별도 판정한다(`MIXED-XCHAIN-001` 제외).
 

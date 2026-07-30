@@ -107,7 +107,7 @@
         "auth_consumption",
         "address_freeze",
         "evm_core",
-        "evm_special", "flow_path", "intel_context"
+        "evm_special", "flow_path", "intel_context", "bridge_transfer"
       ],
       "title": "AnalysisType",
       "type": "string"
