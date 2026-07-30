@@ -1633,11 +1633,19 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     `d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac`와
     일치하며 offline/source/fixture/input guard로 기존 leaf와 격리했다.
     Fixture `verifying`과 Benchmark 12·4·14는 변경하지 않았다.
+    리뷰 P1 반영 - `replay_body`만 전달되는 Evidence Worker 경로에서
+    `package_dir`가 `self.root`로 잘못 대체돼 artifacts를 찾지 못하고
+    조용히 `partial`로 저하되던 문제를 정정했다. `replay_path`가 없으면
+    `AnalysisUnavailable`을 즉시 발생시키도록 `cli_runtime.py` dispatch를
+    바꾸고, `adapters/evidence.py`의 stage map에서 `BRIDGE_TRANSFER`를
+    제거해(FLOW/INTEL과 동일하게 Evidence Worker 미지원) CLI `--evidence`
+    경로 전용임을 명시했다. CLI 성공·byte-only 거부 회귀 테스트 2건 추가
+    (`tests/integration/test_task_016_bridge_cli.py`).
 - Verification Receipt:
-  - Pending - Implementation basic checks는 focused 4 tests·전체 568 tests,
-    Schema 57 probes, Bridge pinned hash·2회 결정성, 기존 Bridge Verifier,
-    Benchmark 무변동으로 통과했다. 독립 Verification Agent Receipt 후
-    `verifying → confirmed`를 별도 판정한다.
+  - Pending - Implementation basic checks는 focused 6 tests(CLI 2건 포함)·
+    전체 570 tests, Schema 57 probes, Bridge pinned hash·2회 결정성, 기존
+    Bridge Verifier, Benchmark 무변동으로 통과했다. 독립 Verification
+    Receipt 문서화 후 `verifying → confirmed`를 별도 판정한다.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 

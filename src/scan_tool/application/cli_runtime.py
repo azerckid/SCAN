@@ -253,7 +253,14 @@ class CliRuntime:
                 checkpoint_id=checkpoint_id,
             )
         if isinstance(document, BridgeTransferAnalysisRequest):
-            package_dir = replay_path.parent if replay_path is not None else self.root
+            if replay_path is None:
+                raise AnalysisUnavailable(
+                    "Bridge Transfer analysis requires --evidence RAW_REPLAY.json with a "
+                    "file path on every invocation because the replay references sibling "
+                    "content-addressed artifacts. It does not support Evidence Worker "
+                    "byte-only replay or checkpoint-only resume."
+                )
+            package_dir = replay_path.parent
             replay_body, checkpoint_id, resumed = self._load_replay(
                 document.analysis_id,
                 replay_path,
