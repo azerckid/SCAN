@@ -31,6 +31,7 @@ class AnalysisType(StrEnum):
     EVM_SPECIAL = "evm_special"
     FLOW_PATH = "flow_path"
     INTEL_CONTEXT = "intel_context"
+    BRIDGE_TRANSFER = "bridge_transfer"
 
 
 class EvmQueryKind(StrEnum):
@@ -332,6 +333,19 @@ IntelContextInputs = (
 )
 
 
+class BridgeTransferQueryKind(StrEnum):
+    LINK_BRIDGE_TRANSFER = "link_bridge_transfer"
+
+
+class LinkBridgeTransferInputs(ContractModel):
+    source_subject: Address
+    destination_chain_id: StrictInt
+    origin_chain_id: StrictInt
+    expected_recipient: Address | MISSING = MISSING
+    source_transaction_hash: TransactionHash | MISSING = MISSING
+    destination_transaction_hash: TransactionHash | MISSING = MISSING
+
+
 class AnalysisRequestBase(ContractModel):
     schema_uri: Annotated[
         str,
@@ -508,6 +522,13 @@ class IntelContextAnalysisRequest(AnalysisRequestBase):
         return self
 
 
+class BridgeTransferAnalysisRequest(AnalysisRequestBase):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.BRIDGE_TRANSFER]
+    query_kind: Literal[BridgeTransferQueryKind.LINK_BRIDGE_TRANSFER]
+    inputs: LinkBridgeTransferInputs
+
+
 RequestVariant = Annotated[
     DexAnalysisRequest
     | AuthAnalysisRequest
@@ -515,7 +536,8 @@ RequestVariant = Annotated[
     | EvmCoreAnalysisRequest
     | EvmSpecialAnalysisRequest
     | FlowPathAnalysisRequest
-    | IntelContextAnalysisRequest,
+    | IntelContextAnalysisRequest
+    | BridgeTransferAnalysisRequest,
     Field(discriminator="analysis_type"),
 ]
 

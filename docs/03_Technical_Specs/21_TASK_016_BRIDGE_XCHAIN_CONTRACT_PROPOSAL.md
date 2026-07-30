@@ -1,15 +1,15 @@
 # TASK-016 Bridge/XChain(SVC-BRG-001) Analysis 계약 제안 (docs-only)
 > Created: 2026-07-30 20:45
 > Last Updated: 2026-07-31 04:10
-> Status: Docs Contract Approved · Fixture Verifying · Alternative B Confirmed · Context Receipt PASS · Offline Analyzer 구현 승인
+> Status: Docs Contract Approved · Fixture Verifying · Offline Analyzer Implemented · Verification Receipt Pending
 
 ## 0. 이 문서의 위치
 
 이 문서는 TASK-016 Wave 5의 두 번째 adapter인 **Bridge/XChain(`SVC-BRG-001`)**을
 docs-only로 제안한다. [WP-SERVICE 공통 계약 요소(doc 20)](./20_TASK_016_SERVICE_COMMON_CONTRACT.md)의
 불변식을 양단(cross-chain) 상황에 적용하고, Lending에서 일반화한 부분과
-Bridge 고유 축을 구분한다. 코드·Schema·fixture·Analysis I/O를 변경하지 않으며
-Context Receipt PASS·구현 승인을 자가 판정하지 않는다.
+Bridge 고유 축을 구분한다. 승인된 대안 B에 따라 offline analyzer와
+Analysis I/O Schema가 구현됐으며 fixture·Benchmark 승격은 별도 Gate로 유지한다.
 
 `MIXED-XCHAIN-001`(스왑→브리지→거래소)은 DEX(기존)+Bridge(이 문서)+CEX(미구현)
 합성이므로, Bridge leg 확정 후 별도 **조합 Gate**로 둔다. 이 문서 범위는
@@ -181,18 +181,17 @@ destination chain만 필수로 둔다. destination recipient는 양단 evidence�
   1종과 query `link_bridge_transfer`를 추가한다. Lending의 `defi_lending`
   전용 leaf 선례와 동일한 방향이다. 공통 result/evidence/source/run 봉투는
   유지하고 `inputs`·`result_type/value`만 확장한다.
-  - `inputs`: §1의 `source_subject`·`destination_chain`·선택
-    `expected_recipient`를 분리한다.
-  - `result.value`: `source_leg`(출발 이벤트·자산·raw amount),
-    `destination_leg`(도착 이벤트·자산·raw amount),
-    `resolved_scoped_subjects[]`(doc 20 §1.1), `matching_key`(domain·
-    key_type·key_value — §4 composite domain), `status`
-    (`complete`|`partial`|`failed`)를 담는다.
-  - 정확한 필드명·타입은 Pydantic 모델·Schema 반영 시 이 구조를 기준으로
-    확정한다(이 문서는 구조만 고정, 코드·Schema는 별도 구현 승인 후 적용).
+  - `inputs`: §1의 `source_subject`·`origin_chain_id`·
+    `destination_chain_id`와 선택 `expected_recipient`·양단 TX hash를 분리한다.
+  - complete `result.value`: Verifier와 같은 flat fact object를 사용한다.
+    `protocol`, 양단 chain ID·SpokePool, `deposit_id`, `depositor`, `recipient`,
+    양단 asset, `source_raw`, protocol fee candidate, expected/observed
+    destination raw, `message`, `attribution`을 담는다. 필드 자체가 양단 leg와
+    matching 사실을 인코딩하므로 별도 nested leg를 중복하지 않는다.
+  - complete/partial/failed 상태는 공통 result 봉투의 `status`로 표현한다.
 
-이 결정 이후 남은 Gate는 Context Receipt `PASS`·사용자 구현 승인, 그
-다음에만 `bridge_transfer` analyzer 구현이다(§10 참고).
+Context Receipt PASS·사용자 구현 승인·offline analyzer 구현은 완료됐다.
+남은 Gate는 독립 Verification Receipt와 별도 fixture 승격 검토다(§10 참고).
 
 ## 6. complete · partial · failed · negative oracle 계약
 
@@ -277,15 +276,14 @@ doc 20 §1.6을 따른다. 매핑: 입력 경계 `invalid_input`, 지원 안 되
    확정했다(§5).
 8. 완료 — Context Receipt PASS·offline/artifact analyzer 구현 승인을
    기록했다(2026-07-31). live Rules 미확정 범위와 다른 adapter는 제외한다.
-9. `bridge_transfer` analyzer 구현·독립 Verification Receipt 후
-   `verifying → confirmed`를 별도 판정한다.
+9. 진행 중 — `bridge_transfer` analyzer 구현은 완료됐다. 독립 Verification
+   Receipt 후 `verifying → confirmed`를 별도 판정한다.
 10. (별도) `MIXED-XCHAIN-001` 조합 Gate — DEX+Bridge+CEX leg 결합.
 
 **Blocker(해소됨).** 4의 양단 캡처·live 조회는 이미 완료됐다(§10 4번).
-Context Receipt·구현 승인도 완료됐으며 남은 것은 9의 analyzer 구현·독립
-Verification Receipt다. `SVC-BRG-001`·`MIXED-XCHAIN-001`은 현재
-analyzer가 없어 `unsupported`이며 이 문서로 coverage를 바꾸지 않는다
-(Benchmark 12·4·14 무변동).
+Context Receipt·구현 승인·offline analyzer 구현은 완료됐으며 남은 것은 9의
+독립 Verification Receipt다. fixture는 계속 `verifying`이고 Benchmark
+12·4·14 및 `MIXED-XCHAIN-001` 분류는 변경하지 않는다.
 
 ## 11. Related Documents
 

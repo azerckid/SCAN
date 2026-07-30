@@ -1,7 +1,7 @@
 # TASK-016 Bridge Fixture 승격 검토 보고서
 > Created: 2026-07-31 03:20
-> Last Updated: 2026-07-31 04:20
-> Status: Promoted to 검증 중 (Verifying) · Analysis I/O 대안 B 확정 · Context Receipt PASS · Analyzer 구현 대기
+> Last Updated: 2026-07-31 04:40
+> Status: Promoted to 검증 중 (Verifying) · Analysis I/O 대안 B 확정 · Context Receipt PASS · Analyzer 구현·독립 검증 완료
 
 ## 1. 목적
 
@@ -51,10 +51,9 @@
 이 승격은 다음을 바꾸지 않는다.
 
 - Benchmark 자동화 수(계속 12 automated·4 assisted·14 unsupported)
-- Analysis I/O 공개 Schema·코드(대안 B는 확정됐으나 Pydantic 모델·Schema
-  반영은 별도 구현 승인 후)
-- TASK-016 Backlog `Status: ToDo`(제품 코드 미착수), `MIXED-XCHAIN-001` 조합
-  Gate(별도, DEX+Bridge+CEX leg 결합)
+- `MIXED-XCHAIN-001` 조합 Gate(별도, DEX+Bridge+CEX leg 결합)
+- fixture `verifying` 상태 자체(analyzer 구현은 §5에서 완료됐지만 `confirmed`
+  승격은 별도 판정)
 
 ## 5. 다음 Gate
 
@@ -62,9 +61,13 @@
    전용 leaf) 확정(doc 21 §5, PR #105).
 2. ~~Context Receipt `PASS`·사용자 구현 승인 기록~~ — 완료(2026-07-31, PR #106,
    offline/artifact 범위로 제한).
-3. `bridge_transfer` analyzer 구현과 독립 Verification Receipt(analyzer
-   canonical hash ↔ 독립 Verifier hash 대조)
-4. Benchmark automated 승격 여부를 별도 판정
+3. ~~`bridge_transfer` analyzer 구현~~ — 완료. `task_016_bridge_replay.py`/
+   `task_016_bridge_independent_verifier.py`를 import하지 않는 독립 코드
+   경로에서 canonical hash `d6609bb4...`가 독립 Verifier hash와 일치함을
+   확인했다(`scripts/verify_task_016_bridge_analyzer_independent_verification.py`).
+4. 독립 Verification Receipt 문서화(analyzer 전용) → `verifying → confirmed`
+   승격을 별도 판정
+5. Benchmark automated 승격 여부를 별도 판정
 
 ## 6. Related Documents
 

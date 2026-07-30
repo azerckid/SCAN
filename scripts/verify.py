@@ -94,6 +94,10 @@ COMMANDS = (
         sys.executable,
         "scripts/verify_task_016_bridge_independent_verifier.py",
     ),
+    (
+        sys.executable,
+        "scripts/verify_task_016_bridge_analyzer_independent_verification.py",
+    ),
 )
 
 

@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-SVC-BRG-001",
+  "analysis_type": "bridge_transfer",
+  "query_kind": "link_bridge_transfer",
+  "chain_id": 1,
+  "fixture_id": "FX-SVC-BRG-001",
+  "requested_at": "2026-07-30T15:39:46Z",
+  "inputs": {
+    "source_subject": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
+    "destination_chain_id": 1,
+    "origin_chain_id": 8453,
+    "source_transaction_hash": "0x95714346d20bfaa328b75e4e6cf980d9620c4c4331af935032f848a118f05a1b",
+    "destination_transaction_hash": "0x816ebca944c8cf40309c8c2ec4bd0f6e25f78d782cf7732f93ca771e55b8f8a0"
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": [
+      "DS-EVM-RPC-ARCHIVE",
+      "DS-BRIDGE-META"
+    ],
+    "source_order": [
+      "DS-EVM-RPC-ARCHIVE",
+      "DS-BRIDGE-META"
+    ],
+    "allow_fallback": false,
+    "offline_mode": true
+  }
+}

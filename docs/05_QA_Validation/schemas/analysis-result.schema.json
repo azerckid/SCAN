@@ -78,7 +78,7 @@
   "allOf": [
     {
       "if": {
-        "properties": {"analysis_type": {"enum": ["evm_core", "evm_special", "flow_path", "intel_context"]}},
+        "properties": {"analysis_type": {"enum": ["evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer"]}},
         "required": ["analysis_type"]
       },
       "then": {"properties": {"schema_version": {"const": "0.2"}}},
@@ -161,7 +161,7 @@
       "pattern": "^AN-[A-Z0-9][A-Z0-9-]{2,63}$"
     },
     "analysisType": {
-      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core", "evm_special", "flow_path", "intel_context"]
+      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer"]
     },
     "resultId": {
       "type": "string",

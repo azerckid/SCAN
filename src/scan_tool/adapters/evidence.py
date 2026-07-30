@@ -131,6 +131,10 @@ class InProcessEvidenceWorker:
         *,
         expected_sha256: str,
     ) -> str:
+        # Bridge Transfer is intentionally absent: its replay references sibling
+        # content-addressed artifacts and only runs through a CLI --evidence
+        # file path (see CliRuntime.execute_analysis), never through this
+        # byte-only Evidence Worker adapter.
         stages = {
             AnalysisType.DEX_SWAP: DEX_REPLAY_STAGE,
             AnalysisType.AUTH_CONSUMPTION: AUTH_REPLAY_STAGE,
