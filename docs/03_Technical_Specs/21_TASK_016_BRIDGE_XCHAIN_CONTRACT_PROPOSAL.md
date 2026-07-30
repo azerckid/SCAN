@@ -1,7 +1,7 @@
 # TASK-016 Bridge/XChain(SVC-BRG-001) Analysis 계약 제안 (docs-only)
 > Created: 2026-07-30 20:45
-> Last Updated: 2026-07-31 03:20
-> Status: Docs Contract Approved · Fixture Promoted to Verifying · Analyzer Contract·구현 대기
+> Last Updated: 2026-07-31 03:40
+> Status: Docs Contract Approved · Fixture Verifying · Alternative B(`bridge_transfer`) Confirmed · Context Receipt·구현 승인 대기
 
 ## 0. 이 문서의 위치
 
@@ -171,18 +171,27 @@ destination chain만 필수로 둔다. destination recipient는 양단 evidence�
 **PATH seed(doc 20 §1.5).** 결정적으로 매칭된 도착 recipient leg를 seed로
 유도한다. 결정적 매칭이 없으면 PATH를 만들지 않거나 candidate로만 둔다.
 
-## 5. Analysis I/O 영향 — 대안 제시(승인 대상)
+## 5. Analysis I/O 영향 — 대안 확정 (사용자 승인 완료)
 
-- **대안 A(합성 재사용).** 신규 leaf 없이 양단을 각각 evm_core/flow_path로
+- **대안 A(합성 재사용, 기각).** 신규 leaf 없이 양단을 각각 evm_core/flow_path로
   조회 후 사람이 매칭. 장점: Schema 무변경. 단점: 양단 매칭·근거를 담을 전용
   result가 없어 자동 채점 불가 → `assisted`.
-- **대안 B(전용 leaf type, 권장).** 전용 `AnalysisType`(예: `bridge_transfer`)
-  1종과 query(예: `link_bridge_transfer`)를 추가하고 result에 출발 leg·도착
-  leg·resolved subjects·composite 매칭 키·수수료/자산 정합 근거·상태를 담는다.
-  inputs는 §1의 source subject·destination chain·선택 expected recipient를
-  분리한다. 공통 봉투 유지, `inputs`·`result_type/value`만 확장. 명칭·필드는
-  승인 후 최종 IO 계약에서 확정한다. Lending의 `defi_lending` 전용 leaf
-  선례와 동일한 방향이다.
+- **대안 B(전용 leaf type) — 확정.** 전용 `AnalysisType.BRIDGE_TRANSFER`
+  1종과 query `link_bridge_transfer`를 추가한다. Lending의 `defi_lending`
+  전용 leaf 선례와 동일한 방향이다. 공통 result/evidence/source/run 봉투는
+  유지하고 `inputs`·`result_type/value`만 확장한다.
+  - `inputs`: §1의 `source_subject`·`destination_chain`·선택
+    `expected_recipient`를 분리한다.
+  - `result.value`: `source_leg`(출발 이벤트·자산·raw amount),
+    `destination_leg`(도착 이벤트·자산·raw amount),
+    `resolved_scoped_subjects[]`(doc 20 §1.1), `matching_key`(domain·
+    key_type·key_value — §4 composite domain), `status`
+    (`complete`|`partial`|`failed`)를 담는다.
+  - 정확한 필드명·타입은 Pydantic 모델·Schema 반영 시 이 구조를 기준으로
+    확정한다(이 문서는 구조만 고정, 코드·Schema는 별도 구현 승인 후 적용).
+
+이 결정 이후 남은 Gate는 Context Receipt `PASS`·사용자 구현 승인, 그
+다음에만 `bridge_transfer` analyzer 구현이다(§10 참고).
 
 ## 6. complete · partial · failed · negative oracle 계약
 
@@ -262,12 +271,14 @@ doc 20 §1.6을 따른다. 매핑: 입력 경계 `invalid_input`, 지원 안 되
    candidate-capture 모듈과 코드를 공유하지 않는다.
 6. 완료 — `FX-SVC-BRG-001`을 `candidate → verifying`으로 승격했다
    ([63 승격 검토](../05_QA_Validation/63_TASK_016_BRIDGE_FIXTURE_PROMOTION_REVIEW.md)).
-   `verifying → confirmed`는 7의 analyzer 구현 이후 별도 판정한다.
-7. Context Receipt PASS·구현 승인 후 analyzer 구현.
-8. (별도) `MIXED-XCHAIN-001` 조합 Gate — DEX+Bridge+CEX leg 결합.
+   `verifying → confirmed`는 8의 analyzer 구현 이후 별도 판정한다.
+7. 완료 — Analysis I/O 대안 B(`bridge_transfer` 전용 leaf)를 정식
+   확정했다(§5).
+8. Context Receipt PASS·구현 승인 후 analyzer 구현.
+9. (별도) `MIXED-XCHAIN-001` 조합 Gate — DEX+Bridge+CEX leg 결합.
 
 **Blocker(해소됨).** 4의 양단 캡처·live 조회는 이미 완료됐다(§10 4번).
-남은 것은 7의 analyzer 구현·Context Receipt PASS이며 이는 사용자 구현
+남은 것은 8의 analyzer 구현·Context Receipt PASS이며 이는 사용자 구현
 승인이 필요한 별도 Gate다. `SVC-BRG-001`·`MIXED-XCHAIN-001`은 현재
 analyzer가 없어 `unsupported`이며 이 문서로 coverage를 바꾸지 않는다
 (Benchmark 12·4·14 무변동).

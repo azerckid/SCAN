@@ -1,7 +1,7 @@
 # TASK-016 Bridge Fixture 승격 검토 보고서
 > Created: 2026-07-31 03:20
-> Last Updated: 2026-07-31 03:20
-> Status: Promoted to 검증 중 (Verifying) · Analyzer 계약·구현 대기
+> Last Updated: 2026-07-31 04:00
+> Status: Promoted to 검증 중 (Verifying) · Analysis I/O 대안 B 확정 · Analyzer 구현 대기
 
 ## 1. 목적
 
@@ -51,13 +51,15 @@
 이 승격은 다음을 바꾸지 않는다.
 
 - Benchmark 자동화 수(계속 12 automated·4 assisted·14 unsupported)
-- Analysis I/O 공개 계약(`bridge_transfer` 대안 미확정)
+- Analysis I/O 공개 Schema·코드(대안 B는 확정됐으나 Pydantic 모델·Schema
+  반영은 별도 구현 승인 후)
 - TASK-016 Backlog `Status: ToDo`, `Context Receipt: PENDING`
 - `MIXED-XCHAIN-001` 조합 Gate(별도, DEX+Bridge+CEX leg 결합)
 
 ## 5. 다음 Gate
 
-1. Analysis I/O 대안 A/B 정식 결정(doc 21 §5, 대안 B `bridge_transfer` 권장)
+1. ~~Analysis I/O 대안 A/B 정식 결정~~ — 완료. 대안 B(`bridge_transfer`
+   전용 leaf) 확정(doc 21 §5, PR #105).
 2. Context Receipt `PASS`·사용자 구현 승인 기록
 3. `bridge_transfer` analyzer 구현과 독립 Verification Receipt(analyzer
    canonical hash ↔ 독립 Verifier hash 대조)
