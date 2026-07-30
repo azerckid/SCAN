@@ -1,6 +1,6 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
-> Last Updated: 2026-07-30 15:01
+> Last Updated: 2026-07-30 15:37
 > Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(비격리 3 Confirmed · LABEL Quarantined · Common-funder Candidate) · TASK-016~019 Proposed
 
 ## 1. 문서 목적
@@ -1263,8 +1263,12 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     승격 조건과 common-funder 차단 조건을 docs-only Readiness로 분리한다.
   - [x] label pinned repository의 license resolution을 실행하고 exact text·
     version·notice 부재를 evidence로 고정해 selected row를 quarantine한다.
-  - [ ] dataset publisher exact terms를 확보하거나 exact license가 있는
-    replacement source를 선정·재검증한다.
+  - [x] OpenRAIL publisher 확인 경로와 대체 후보를 비교하고, official OFAC
+    historical action + MIT config + fixed-block ENS를 사용하는 subject 교체
+    경로를 docs-only로 선정한다.
+  - [ ] replacement subject의 fixed-block ENS replay·artifact·negative oracle·
+    독립 Verifier·analyzer hash를 재검증하고 OpenRAIL scoring dependency를
+    제거한다.
   - [x] sanctions·ENS·relation-hub의 fixture별 문서 Hard Gate를 닫고 별도
     [Promotion Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)에서
     bounded scope `confirmed`로 판정한다.
@@ -1295,6 +1299,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [TASK-015 Live Source·Terms·Promotion Readiness](../05_QA_Validation/54_TASK_015_LIVE_SOURCE_TERMS_PROMOTION_READINESS.md) - source permission·live optional·fixture별 Hard Gate
   - [TASK-015 OpenRAIL License Resolution Receipt](../05_QA_Validation/55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md) - exact text 부재·selected row quarantine
   - [TASK-015 비격리 Fixture 최종 승격 Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md) - SANCTIONS·ENS·RELATION-HUB confirmed·Benchmark assisted
+  - [TASK-015 LABEL Source Replacement Review](../05_QA_Validation/57_TASK_015_LABEL_SOURCE_REPLACEMENT_REVIEW.md) - upstream provenance 비교·official/MIT/onchain 대체 경로·migration Gate
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-INTEL-001
 - Implementation Preconditions:
   - [ ] 공식 대회 Rules와 채택 source snapshot의 Terms·privacy·최소 필드를 확정한다

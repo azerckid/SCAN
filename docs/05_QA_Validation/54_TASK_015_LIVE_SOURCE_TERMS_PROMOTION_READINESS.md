@@ -1,6 +1,6 @@
 # TASK-015 Live Source·Terms·Fixture 승격 Readiness
 > Created: 2026-07-30 14:19
-> Last Updated: 2026-07-30 15:24
+> Last Updated: 2026-07-30 15:48
 > Status: Applied · 3 Non-Quarantined Confirmed · LABEL Blocked · Common-funder Candidate
 
 ## 1. 목적과 현재 판정
@@ -57,7 +57,7 @@ Source permission을 통과했다고 fact가 정확해지는 것은 아니며, f
 
 | Fixture | 현재 | 허용 승격 입력 | 닫힌 Gate | 남은 Hard Gate | 판정 |
 |:---|:---:|:---|:---|:---|:---|
-| `FX-OSINT-LABEL-CONFLICT-001` | verifying | quarantine된 `provided_artifact` | 30 oracle 일부·Verifier·analyzer·artifact hash·license absence proof | publisher exact terms 확보 또는 source 교체 | BLOCKED |
+| `FX-OSINT-LABEL-CONFLICT-001` | verifying | quarantine된 기존 artifact; 선택된 replacement는 migration 전 | source 후보 비교·replacement route 선정·기존 30 oracle·Verifier·analyzer·license absence proof | 새 subject의 fixed-block ENS·artifact·oracle·Verifier·analyzer hash 재검증과 OpenRAIL scoring dependency 제거 | MIGRATION PENDING |
 | `FX-OSINT-SANCTIONS-HISTORY-001` | confirmed | `provided_artifact`; Rules 허용 시 official locator 재확인 | action timeline·subject-bound SLS context·Verifier·analyzer·미재배포 | 없음(현재 상태·범죄성은 `not_assessed`) | PROMOTED |
 | `FX-OSINT-ENS-CONFLICT-001` | confirmed | `provided_artifact`; live는 optional | fixed-block 두 source decoded match·Verifier·analyzer·소유권 분리 | 없음(고정 block 밖은 미확정) | PROMOTED |
 | `FX-ACTOR-RELATION-HUB-001` | confirmed | confirmed local fixture | DEX/AUTH hash·hub exclusion·Verifier·analyzer·귀속 분리 | 없음(ownership/coordination `not_assessed`) | PROMOTED |
@@ -93,8 +93,11 @@ fixture만 사용하고 live adapter 호출은 0건이어야 한다. Explorer는
 3. [x] expected/evidence/provider replay의 canonical hash 불변을 확인한다.
 4. [x] 세 fixture를 별도 판단해 `confirmed`로 승격하고 Receipt를 쓴다.
 5. [x] 세 문제의 미완성 범위를 숨기지 않고 Benchmark `assisted`로 반영한다.
-6. [ ] label publisher exact terms를 확보하거나 exact license source로 교체한다.
-7. [ ] common-funder는 bounded evidence 이후 다시 검토한다.
+6. [x] label publisher 확인 경로와 대체 후보를 비교해 official OFAC
+   historical action + MIT config + fixed-block ENS 교체안을 선정한다.
+7. [ ] 새 subject의 replay·oracle·Verifier·analyzer hash를 재검증하고
+   OpenRAIL scoring dependency를 제거한다.
+8. [ ] common-funder는 bounded evidence 이후 다시 검토한다.
 
 ## 7. 실패·중단 조건
 
@@ -139,3 +142,4 @@ fixture만 사용하고 live adapter 호출은 0건이어야 한다. Explorer는
 - **Logic_Progress**: [Backlog TASK-015](../04_Logic_Progress/00_BACKLOG.md) · [Coverage Execution Plan](../04_Logic_Progress/01_EXECUTION_PLAN.md)
 - **QA_Validation**: [Source Readiness](./50_TASK_015_SOURCE_READINESS_REPORT.md) · [Independent Verifier](./51_TASK_015_INDEPENDENT_VERIFIER_REPORT.md) · [Provenance Hardening](./52_TASK_015_PROVENANCE_HARDENING_RECEIPT.md) · [Analyzer Verification](./53_TASK_015_ANALYZER_VERIFICATION_RECEIPT.md) · [Reference Fixtures](./01_REFERENCE_FIXTURES.md)
 - **QA_Validation**: [OpenRAIL License Resolution](./55_TASK_015_OPENRAIL_LICENSE_RESOLUTION_RECEIPT.md) - exact text 부재·quarantine·대체 조건
+- **QA_Validation**: [LABEL Source Replacement Review](./57_TASK_015_LABEL_SOURCE_REPLACEMENT_REVIEW.md) - upstream provenance 비교·선택 subject·migration Gate

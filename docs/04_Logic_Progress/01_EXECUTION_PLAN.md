@@ -1,6 +1,6 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-30 14:46
+> Last Updated: 2026-07-30 15:37
 > Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · 3 Confirmed / LABEL Verifying / Common-funder Candidate · Benchmark 11 Automated / 4 Assisted
 
 ## 1. 목적
@@ -183,11 +183,14 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [ ] common-funder bounded prehistory·service exclusion을 닫는다.
 - [x] label pinned repository에 exact OpenRAIL text·version·notice가 없음을
   고정하고 selected row를 quarantine한다.
-- [ ] publisher exact terms를 확보하거나 exact license source로 교체한다.
+- [x] publisher 확인 경로와 대체 source를 비교해 official OFAC historical
+  action + MIT config + fixed-block ENS subject 교체안을 선정한다.
+- [ ] LABEL fixture를 새 subject로 migration하고 replay·oracle·Verifier·
+  analyzer hash를 재검증해 OpenRAIL scoring dependency를 제거한다.
 - [x] non-quarantined SANCTIONS·ENS·RELATION-HUB 3개를 별도
   [Promotion Receipt](../05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md)로
   confirmed 판정하고, 미완성 문제 범위는 Benchmark `assisted`로 반영한다.
-- [ ] LABEL은 exact terms 확보 또는 source 교체·재검증 후 별도 Promotion
+- [ ] LABEL은 source 교체·재검증 후 별도 Promotion
   Review에 다시 진입한다.
 
 ### [ ] Wave 5 — 서비스·Cross-chain
