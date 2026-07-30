@@ -1,6 +1,6 @@
 # FX-SVC-CEX-001 — GARANTEX native ETH cluster
 
-> Status: confirmed · raw provider replay·negative oracle·independent Verifier·analyzer complete
+> Status: confirmed · PRIMARY+VERIFY complete · cross-provider match computed · Benchmark automated
 
 ## Scope
 
@@ -19,9 +19,24 @@ hot wallet candidate on Ethereum mainnet within a bounded observation window.
 Hot wallet ownership and criminality remain `not_assessed`. Etherscan community
 tags are not used as scoring sources.
 
+## Provider roles
+
+| Role | Endpoint | Coverage |
+|:---|:---|:---|
+| PRIMARY | `https://ethereum-rpc.publicnode.com` | transfers 0–2 (9 capabilities) |
+| VERIFY | `https://eth.merkle.io` | transfers 0–2 (9 capabilities) |
+
+Transfer labels are not independent providers. The analyzer and independent
+verifier require exactly two distinct `PRIMARY`/`VERIFY` endpoints, decode both
+copies, and compare immutable facts before `cluster_judgment=confirmed`.
+
+Failed VERIFY candidates summarized in `artifacts/capture-meta.json`: incomplete
+1RPC replay and Cloudflare historical-block failures were not included as pins.
+
 ## Gates complete
 
 - two-provider raw replay and content SHA-256 pins
+- code-computed cross-provider immutable fact match for transfers 0–2
 - negative oracle 8 synthetic cases (2× deterministic)
 - independent raw-first Verifier canonical hash match
 - product analyzer hash match and CLI `--evidence` integration
@@ -32,10 +47,11 @@ tags are not used as scoring sources.
 - `input.json`: discovery-mode request scope
 - `expected.json`: verified cluster facts and scoring requirements
 - `evidence.json`: outbound, common destination, label, and pattern evidence
-- `raw-replay.json`: three native transfer artifact references
-- `provider-replay.json`: per-transfer capability SHA-256 pins
+- `raw-replay.json`: PRIMARY and VERIFY observations for all transfers
+- `provider-replay.json`: PRIMARY/VERIFY role pins and computed cross-provider comparison
 - `artifacts/sha256/<hash>.json`: raw JSON-RPC responses
 - `artifacts/ofac-garantex-provenance.json`: gov label assertion provenance
+- `artifacts/capture-meta.json`: endpoint/role capture ledger
 
 ## Canonical hash
 

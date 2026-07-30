@@ -1,7 +1,7 @@
 # Contest Stabilization Runbook · Feature Freeze
 
 > Created: 2026-07-31 04:55
-> Last Updated: 2026-07-31 05:40
+> Last Updated: 2026-07-31 05:50
 > Status: Active · Bridge+CEX Confirmed · Benchmark 14/14 · Feature Freeze until contest start
 
 ## 1. 목적
@@ -9,8 +9,8 @@
 대회(2026-08-02 09:00 KST) 직전 프로그램의 **사용 가능한 안정 범위**와
 실행·복구 절차를 고정한다. 신규 adapter(BTC·Mixer·Lending·TASK-018)
 구현은 freeze한다. TASK-016 CEX는 2026-07-31 batch approval로 thaw한 뒤
-confirmed fixture·analyzer·Benchmark automated Gate를 완료했다. 대회 중 실제
-출제가 확인된 경우에만 최소 범위로 재개한다.
+PRIMARY/VERIFY dual-provider replay·analyzer·Benchmark automated Gate를
+완료했다. 대회 중 실제 출제가 확인된 경우에만 최소 범위로 재개한다.
 
 ## 2. 확정 Coverage
 
@@ -48,10 +48,10 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 
 | 점검 | 결과 |
 |:---|:---|
-| `scripts/verify.py` | PASS — 570 tests, 1951 links, security 226, schema 62 probes |
+| `scripts/verify.py` | PASS — 584 tests, 2016 links, security 259, schema 62 probes |
 | Benchmark CLI | PASS — 14/14 automated · ASSISTED 4 · UNSUPPORTED 12 |
 | Bridge hash / oracle / verifier gates | PASS — hash `d6609bb4…00ac` |
-| CEX hash / oracle / verifier gates | PASS — hash `20fc2777…83bf` |
+| CEX hash / oracle / verifier gates | PASS — hash `20fc2777…83bf`; VERIFY `https://eth.merkle.io` |
 | Bridge CLI `--evidence` (fresh cwd) | PASS — `COMPLETE AN-FX-SVC-BRG-001` |
 | Bridge byte-only path | PASS — rejects with `requires --evidence` |
 | Existing DEX/AUTH/PATH/LABEL regression | covered by full verify.py |
@@ -60,10 +60,10 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 
 - Freeze 대상: TASK-017 Bitcoin, TASK-016 Mixer/Lending, TASK-018/019,
   MIXED-XCHAIN 조합, live Rules adapter
-- **CEX (2026-07-31):** TASK-016 CEX(`SVC-CEX-001`)는 batch approval thaw
-  후 confirmed fixture·analyzer·Benchmark automated Gate를 완료했다.
-  `MIXED-XCHAIN-001`은 COMPOSITION 미구현으로 unsupported 유지.
-  BTC·Mixer·Lending·TASK-018은 freeze 유지.
+- **CEX (2026-07-31 remediation):** TASK-016 CEX(`SVC-CEX-001`)는 Merkle VERIFY
+  9-call complete replay와 code-computed cross-provider match로 `confirmed`·
+  Benchmark automated를 복구했다. `MIXED-XCHAIN-001`은 COMPOSITION 미구현으로
+  unsupported 유지. BTC·Mixer·Lending·TASK-018은 freeze 유지.
 - 허용: 문서 정합, 치명적 회귀 버그 수정, 대회 중 실제 출제 대응의
   최소 hotfix(별도 승인)
 - 금지: Benchmark unsupported를 숨기거나 fixture를 가짜 confirmed로 올리기

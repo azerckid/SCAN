@@ -122,29 +122,51 @@ def recalculate_raw_facts(
     transfers = raw.get("transfers")
     if not isinstance(observations, list) or not isinstance(transfers, list):
         raise ValueError("raw_observations and transfers must be arrays")
-    if len(observations) != len(transfers) or len(transfers) != len(TRANSFERS):
+    if len(transfers) != len(TRANSFERS):
         raise ValueError("transfer replay shape differs from the pinned fixture")
 
     providers = {
         _text(item, "provider_id"): item for item in _object_array(provider_replay, "providers")
     }
+    _verify_provider_diversity(providers)
 
-    decoded_transfers: list[dict[str, Any]] = []
-    for index, (expected_transfer, observation) in enumerate(
-        zip(TRANSFERS, observations, strict=True)
-    ):
+    decoded_by_role: dict[str, dict[int, dict[str, Any]]] = {"PRIMARY": {}, "VERIFY": {}}
+    seen_role_indices: set[tuple[str, int]] = set()
+    for observation in observations:
         if not isinstance(observation, dict):
             raise ValueError("raw observation must be an object")
-        if int(observation.get("transfer_index", -1)) != index:
+        transfer_index = int(observation.get("transfer_index", -1))
+        if transfer_index not in range(len(TRANSFERS)):
             raise ValueError("raw observation transfer index mismatch")
-        decoded_transfers.append(
-            _decode_native_transfer(
-                package,
-                observation,
-                providers,
-                expected_transfer,
-            )
+        role = _text(observation, "provider_role")
+        if role not in decoded_by_role:
+            raise ValueError("raw observation provider role is invalid")
+        if (role, transfer_index) in seen_role_indices:
+            raise ValueError("provider role is duplicated for a transfer")
+        seen_role_indices.add((role, transfer_index))
+        provider_id = _text(observation, "provider_id")
+        provider = providers.get(provider_id)
+        if provider is None or _text(provider, "role") != role:
+            raise ValueError("raw observation provider role differs from its pin")
+        decoded_by_role[role][transfer_index] = _decode_native_transfer(
+            package,
+            observation,
+            provider,
+            TRANSFERS[transfer_index],
         )
+
+    required_indices = set(range(len(TRANSFERS)))
+    for role in ("PRIMARY", "VERIFY"):
+        if set(decoded_by_role[role]) != required_indices:
+            raise ValueError(f"{role} observations do not cover every transfer")
+
+    decoded_transfers = []
+    for transfer_index in sorted(required_indices):
+        primary = decoded_by_role["PRIMARY"][transfer_index]
+        verify = decoded_by_role["VERIFY"][transfer_index]
+        if primary != verify:
+            raise ValueError(f"cross-provider immutable facts differ for transfer {transfer_index}")
+        decoded_transfers.append(primary)
 
     label_assertions = _load_label_assertions(package, set(DEPOSIT_CANDIDATES))
     total_raw = sum(int(item["raw_amount"]) for item in decoded_transfers)
@@ -194,14 +216,14 @@ def recalculate_raw_facts(
 def _decode_native_transfer(
     package: Path,
     observation: dict[str, Any],
-    providers: dict[str, dict[str, Any]],
+    provider: dict[str, Any],
     expected_transfer: dict[str, Any],
 ) -> dict[str, Any]:
-    provider_id = _text(observation, "provider_id")
-    provider = providers.get(provider_id)
-    if provider is None:
-        raise ValueError(f"provider {provider_id} is not present in provider-replay.json")
-    pinned_sha256 = _mapping(provider, "raw_sha256")
+    transfer_index = int(observation.get("transfer_index", -1))
+    pinned_by_transfer = _mapping(provider, "raw_sha256")
+    pinned_sha256 = pinned_by_transfer.get(str(transfer_index))
+    if not isinstance(pinned_sha256, dict):
+        raise ValueError("provider SHA pins do not cover the observation transfer")
     artifacts = _mapping(observation, "artifacts")
 
     transaction = _load_pinned_artifact(package, artifacts, pinned_sha256, "transaction")
@@ -260,6 +282,17 @@ def _decode_native_transfer(
         "transaction_hash": expected_transfer["transaction_hash"],
         "transaction_index": int(transaction_index, 16),
     }
+
+
+def _verify_provider_diversity(providers: dict[str, dict[str, Any]]) -> None:
+    if len(providers) != 2:
+        raise ValueError("exactly two independent RPC providers are required")
+    roles = {_text(provider, "role") for provider in providers.values()}
+    if roles != {"PRIMARY", "VERIFY"}:
+        raise ValueError("PRIMARY and VERIFY provider roles are required")
+    endpoints = [_text(provider, "endpoint").rstrip("/").lower() for provider in providers.values()]
+    if len(set(endpoints)) != 2:
+        raise ValueError("PRIMARY and VERIFY providers must use distinct endpoints")
 
 
 def _load_label_assertions(

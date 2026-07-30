@@ -1,101 +1,138 @@
 {
-  "rpc": "https://ethereum-rpc.publicnode.com",
+  "status": "complete",
+  "primary_rpc": "https://ethereum-rpc.publicnode.com",
+  "verify_rpc": "https://eth.merkle.io",
+  "captured_at": "2026-07-30T21:18:19Z",
+  "included_artifact_calls": 18,
+  "verify_session_notes": [
+    "VERIFY endpoint selected: https://eth.merkle.io after bounded probe evidence that Merkle returned historical TX and block 0x115f3f0.",
+    "Prior VERIFY attempt via https://1rpc.io/eth captured only transfer 0 before HTTP 504; those artifacts were discarded after Merkle completed all nine capabilities.",
+    "Cloudflare eth returned TX+receipt for all three transfers but failed all historical eth_getBlockByNumber calls, so it was not used as VERIFY.",
+    "Merkle rate-limited mid-capture (HTTP 429, Retry-After 435); remaining block/receipt capabilities were completed after cooldown."
+  ],
   "capabilities": {
-    "tx:0x4448b91c3473144d93c90d83c3499ed047fceb4b81349f2a4b0f5e162e8ee2ea": {
+    "PRIMARY:tx:0x4448b91c3473144d93c90d83c3499ed047fceb4b81349f2a4b0f5e162e8ee2ea": {
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
       "method": "eth_getTransactionByHash",
-      "sha256": "a8ebb52faf82ed5034ca8737d247598599f5db32b2c5d39cb63c49045c044347",
-      "result_keys": [
-        "blockHash",
-        "blockNumber",
-        "blockTimestamp",
-        "from",
-        "gas",
-        "gasPrice",
-        "hash",
-        "input",
-        "nonce",
-        "to",
-        "transactionIndex",
-        "value",
-        "type",
-        "chainId",
-        "v",
-        "r",
-        "s"
-      ]
+      "sha256": "a8ebb52faf82ed5034ca8737d247598599f5db32b2c5d39cb63c49045c044347"
     },
-    "receipt:0x4448b91c3473144d93c90d83c3499ed047fceb4b81349f2a4b0f5e162e8ee2ea": {
+    "PRIMARY:receipt:0x4448b91c3473144d93c90d83c3499ed047fceb4b81349f2a4b0f5e162e8ee2ea": {
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
       "method": "eth_getTransactionReceipt",
       "sha256": "3e99c46b0d90351891c47e6e35eb0acd1e446bfa066e02e8350e38284b97d6e8"
     },
-    "block:0x115f3ed": {
+    "PRIMARY:block:0x115f3ed": {
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
       "method": "eth_getBlockByNumber",
       "sha256": "b0f4d76f21f75795ce0a8a332551078a5a84479f51c45a2f14e0c3d4e4b0d753",
       "blockNumber": 18215917
     },
-    "tx:0x60afb23f8e0bcd2374e3c489df92f6725394b0cd1674ce3d99e614193c67306e": {
+    "PRIMARY:tx:0x60afb23f8e0bcd2374e3c489df92f6725394b0cd1674ce3d99e614193c67306e": {
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
       "method": "eth_getTransactionByHash",
-      "sha256": "373bafa371bf74a64745f91a2f1d0588d5d7d0ee8fd4ffdf011ffa551b543dfb",
-      "result_keys": [
-        "blockHash",
-        "blockNumber",
-        "blockTimestamp",
-        "from",
-        "gas",
-        "gasPrice",
-        "hash",
-        "input",
-        "nonce",
-        "to",
-        "transactionIndex",
-        "value",
-        "type",
-        "chainId",
-        "v",
-        "r",
-        "s"
-      ]
+      "sha256": "373bafa371bf74a64745f91a2f1d0588d5d7d0ee8fd4ffdf011ffa551b543dfb"
     },
-    "receipt:0x60afb23f8e0bcd2374e3c489df92f6725394b0cd1674ce3d99e614193c67306e": {
+    "PRIMARY:receipt:0x60afb23f8e0bcd2374e3c489df92f6725394b0cd1674ce3d99e614193c67306e": {
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
       "method": "eth_getTransactionReceipt",
       "sha256": "bac92e7d58814d94da4695960115ff6dc264b7dbcd58a06f3635e9a5bc711562"
     },
-    "block:0x115f3f0": {
+    "PRIMARY:block:0x115f3f0": {
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
       "method": "eth_getBlockByNumber",
       "sha256": "22f69fda891f4c126a1c5572ee0a9cc9b76a5d4871964e3e2487a340de1efae4",
       "blockNumber": 18215920
     },
-    "tx:0xeeee1c9b6df17404ac03575b4cba55535c765ed1870c343e189b6098faaa4d5a": {
+    "PRIMARY:tx:0xeeee1c9b6df17404ac03575b4cba55535c765ed1870c343e189b6098faaa4d5a": {
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
       "method": "eth_getTransactionByHash",
-      "sha256": "73b8545c2e1deb1526102fd6155c53372c874019f7416341f713a26d14c22548",
-      "result_keys": [
-        "blockHash",
-        "blockNumber",
-        "blockTimestamp",
-        "from",
-        "gas",
-        "gasPrice",
-        "hash",
-        "input",
-        "nonce",
-        "to",
-        "transactionIndex",
-        "value",
-        "type",
-        "chainId",
-        "v",
-        "r",
-        "s"
-      ]
+      "sha256": "73b8545c2e1deb1526102fd6155c53372c874019f7416341f713a26d14c22548"
     },
-    "receipt:0xeeee1c9b6df17404ac03575b4cba55535c765ed1870c343e189b6098faaa4d5a": {
+    "PRIMARY:receipt:0xeeee1c9b6df17404ac03575b4cba55535c765ed1870c343e189b6098faaa4d5a": {
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
       "method": "eth_getTransactionReceipt",
       "sha256": "9319547af44e979a245e80a7db44f854c7853803b441e907317d2420d9202c97"
     },
-    "block:0x115f3f5": {
+    "PRIMARY:block:0x115f3f5": {
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
       "method": "eth_getBlockByNumber",
       "sha256": "1bf88349d55512d865752258db411726444a7dea277870c58f32396cf3e50d6a",
       "blockNumber": 18215925
+    },
+    "VERIFY:tx:0x4448b91c3473144d93c90d83c3499ed047fceb4b81349f2a4b0f5e162e8ee2ea": {
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionByHash",
+      "sha256": "15e6a29d286198f1864cfe20f72a682db8320c096e710f18175cb12dbfc4ecad",
+      "captured_at": "2026-07-30T20:57:45Z"
+    },
+    "VERIFY:receipt:0x4448b91c3473144d93c90d83c3499ed047fceb4b81349f2a4b0f5e162e8ee2ea": {
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionReceipt",
+      "sha256": "c3e2d51e09ba659d70debd09506c1fece2647657a9d2e31286e2ea698861ebe3",
+      "captured_at": "2026-07-30T20:57:45Z"
+    },
+    "VERIFY:block:0x115f3ed": {
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getBlockByNumber",
+      "sha256": "fed6791624034414d2c083f02830bb0d4ee785cc4dfdf146c1eb22f93c0438b2",
+      "blockNumber": 18215917,
+      "captured_at": "2026-07-30T20:57:45Z"
+    },
+    "VERIFY:tx:0x60afb23f8e0bcd2374e3c489df92f6725394b0cd1674ce3d99e614193c67306e": {
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionByHash",
+      "sha256": "7cc5db17f706af9387acd8997970754b41ace3925d1f4508718289e97982e785",
+      "captured_at": "2026-07-30T20:57:45Z"
+    },
+    "VERIFY:receipt:0x60afb23f8e0bcd2374e3c489df92f6725394b0cd1674ce3d99e614193c67306e": {
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionReceipt",
+      "sha256": "b6b2c15119a0014959069be1b8f3cfb67e86aa880db47539fd6bc66e401ed343",
+      "captured_at": "2026-07-30T20:57:45Z"
+    },
+    "VERIFY:block:0x115f3f0": {
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getBlockByNumber",
+      "sha256": "1943f920fe35363f0689ac6af362eeb41cb900be2feb2d4e0c1f4138645ab06c",
+      "blockNumber": 18215920,
+      "captured_at": "2026-07-30T21:18:19Z"
+    },
+    "VERIFY:tx:0xeeee1c9b6df17404ac03575b4cba55535c765ed1870c343e189b6098faaa4d5a": {
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionByHash",
+      "sha256": "a422fca68dafbeb7e7767e2d841fc0a0ed69110cac9f36709158bb69100abff5",
+      "captured_at": "2026-07-30T20:57:45Z"
+    },
+    "VERIFY:receipt:0xeeee1c9b6df17404ac03575b4cba55535c765ed1870c343e189b6098faaa4d5a": {
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionReceipt",
+      "sha256": "94f182b5d64ddfde7e4b309b12ee4cba0d3eea19a6feb067c4af8a255d831250",
+      "captured_at": "2026-07-30T21:18:19Z"
+    },
+    "VERIFY:block:0x115f3f5": {
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getBlockByNumber",
+      "sha256": "91f99aa66b8d72e9316081f78e0b3bb49bd5c5c6ea3d154a349e0987d0f68aea",
+      "blockNumber": 18215925,
+      "captured_at": "2026-07-30T21:18:19Z"
     }
   }
 }

@@ -1,6 +1,6 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
-> Last Updated: 2026-07-31 05:40
+> Last Updated: 2026-07-31 06:20
 > Status: Approved 2.0 · 19 Confirmed · 0 Verifying · 1 Candidate · 1 Deferred
 
 ## 1. 문서 목적
@@ -31,7 +31,7 @@ TASK-016 Bridge(`FX-SVC-BRG-001`)는 양단 replay·negative oracle·독립
 Verifier·analyzer hash·Verification Receipt를 통과한 뒤
 [최종 승격 Receipt](./65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)에서
 `확정`과 Benchmark automated로 등록했다. CEX(`FX-SVC-CEX-001`)는 OFAC
-GARANTEX label assertion·세 deposit→공통 hot wallet·negative oracle·독립
+GARANTEX label assertion·PRIMARY/VERIFY native sweep replay·negative oracle·독립
 Verifier·analyzer hash를 통과한 뒤
 [CEX 최종 승격 Receipt](./68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)에서
 `확정`과 Benchmark automated로 등록했다. Mixer·Lending과
@@ -112,7 +112,7 @@ Verifier·analyzer hash를 통과한 뒤
 | [FX-FLOW-REMERGE-001](./fixtures/FX-FLOW-REMERGE-001/README.md) | FLOW-EVM-002 | 1 | 확정 0.1 | 두 RPC·18 oracle·Verifier·analyzer | PATH, RECON, exclusion |
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
 | [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) | SVC-BRG-001 | 1 | 확정 0.1 | Across confirmed·양단 replay·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | XCHAIN, BRIDGE, RECON |
-| [FX-SVC-CEX-001](./fixtures/FX-SVC-CEX-001/README.md) | SVC-CEX-001 | 1 | 확정 0.1 | GARANTEX OFAC confirmed·native sweep replay·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | CEX-CLUSTER, LABEL, HEUR |
+| [FX-SVC-CEX-001](./fixtures/FX-SVC-CEX-001/README.md) | SVC-CEX-001 | 1 | 확정 0.1 | GARANTEX OFAC confirmed·PRIMARY publicnode·VERIFY merkle·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | CEX-CLUSTER, LABEL, HEUR |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | V1 기준선 | AUTH-DECODE, allowance 연결 |
 | [FX-EVM-NFT-721-001](./fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·analyzer remediation | ERC-721 event·tokenId |
 | [FX-EVM-NFT-1155-001](./fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·subject 분리 | ERC-1155 Single·Batch |
@@ -243,19 +243,19 @@ adjacent state만 완전성을 주장한다.
 |:---|:---|
 | 연결 문제 ID | SVC-CEX-001 |
 | 상태 | 확정 ([CEX 최종 승격 Receipt](./68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)) |
-| DOC-M3 결정 | GARANTEX OFAC SDN confirmed package·native sweep replay·negative oracle 8개·독립 raw-first Verifier·analyzer hash·Benchmark automated |
+| DOC-M3 결정 | GARANTEX OFAC SDN confirmed package·PRIMARY publicnode + VERIFY merkle native sweep replay·negative oracle 8개·독립 raw-first Verifier·analyzer hash·Benchmark automated |
 | 패키지 | [FX-SVC-CEX-001](./fixtures/FX-SVC-CEX-001/README.md) |
 | 데이터 형태 | 공개 온체인 + gov registry assertion |
 | 체인 | Ethereum (`chain_id` 1) |
 | 주소·TX | deposit D 3주소 → hot wallet candidate `0xdbaef73d...b973`; outbound blocks 18215917/20/25; TX는 [후보 보고서](./67_TASK_016_CEX_FIXTURE_CANDIDATE_REPORT.md) |
 | 기준 정답 | `cluster_judgment=confirmed`, common destination `0xdbaef73d20b0ca4abc72e8daf97af36626e3b973`, OFAC GARANTEX label assertion |
 | 허용 오차 | native amount exact match; label은 assertion truth 아님 |
-| 확정 사실 | 세 deposit의 native ETH outbound→공통 destination, blocks 18215917–18215925. 독립 Verifier·analyzer canonical hash `20fc2777...83bf`. Verification Receipt PASS. confirmed·Benchmark automated |
-| 휴리스틱 | hot wallet ownership·criminality `not_assessed`; 단일 공통 상대만으로 confirmed 금지 |
+| 확정 사실 | 세 deposit출처 native ETH outbound→공통 destination, blocks 18215917–18215925. PRIMARY/VERIFY immutable fact match. 독립 Verifier·analyzer canonical hash `20fc2777...83bf`. confirmed·Benchmark automated |
+| 휴리스틱 | hot wallet ownership·criminality `not_assessed`; 단일 공통 상대만으로 confirmed 금지; same-endpoint dual labels 금지 |
 | 필요 데이터 소스 | `DS-EVM-RPC-ARCHIVE`, `DS-SANCTIONS-PUBLIC` |
-| 재현 절차 | 1) 세 outbound TX/receipt 2) common destination fact 3) OFAC SDN assertion provenance 4) negative oracle 5) 독립 Verifier hash |
+| 재현 절차 | 1) PRIMARY 세 outbound TX/receipt/block 2) VERIFY 동일 capability를 merkle에서 전 transfer 3) immutable fact equality 4) OFAC SDN assertion 5) negative oracle |
 | 저작권·출처 | US Treasury OFAC SDN public domain URL·Etherscan supporting URL만 기록. SDN excerpt는 content-addressed artifact로 pin |
-| 마지막 확인 | 2026-07-31 05:40 (confirmed 승격·Benchmark 14/14) |
+| 마지막 확인 | 2026-07-31 06:20 (confirmed 승격·Benchmark 14/14) |
 
 ---
 

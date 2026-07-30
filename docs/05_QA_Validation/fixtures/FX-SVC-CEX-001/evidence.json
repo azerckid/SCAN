@@ -4,7 +4,7 @@
   "fixture_version": "0.1",
   "fixture_id": "FX-SVC-CEX-001",
   "status": "confirmed",
-  "captured_at": "2026-07-31T08:00:00Z",
+  "captured_at": "2026-07-30T21:18:19Z",
   "event_evidence": [
     {
       "evidence_id": "EV-CEX-OUT-1",
@@ -96,8 +96,8 @@
     },
     {
       "source_id": "DS-EVM-RPC-ARCHIVE",
-      "provider": "Official public read-only Ethereum RPC",
-      "retrieved_at": "2026-07-31T08:00:00Z"
+      "provider": "Official public read-only Ethereum RPC (publicnode PRIMARY + merkle VERIFY)",
+      "retrieved_at": "2026-07-30T21:18:19Z"
     },
     {
       "source_id": "DS-EXPLORER-EVM",
@@ -112,7 +112,8 @@
     "raw_sha256_recorded_per_capability": true,
     "negative_oracle_pass": true,
     "independent_verifier_pass": true,
-    "analyzer_hash_matches_independent_verifier": true
+    "analyzer_hash_matches_independent_verifier": true,
+    "cross_provider_decoded_match": true
   },
   "uncertainty": {
     "candidate_only": false,
@@ -122,5 +123,5 @@
     "independent_verifier_module": "src/scan_tool/application/task_016_cex_independent_verifier.py",
     "calculated_fact_sha256": "20fc2777b75968e905af493f97bb56a5b24ccefad755f3a12ebc62662be283bf"
   },
-  "provenance_notes": "OFAC SDN public XML defines gov label assertions. Etherscan was used only to select the public candidate. Nine bounded read-only RPC observations pin per-capability SHA-256 values; endpoints, credentials, and raw explorer bodies are not stored."
+  "provenance_notes": "OFAC SDN public XML defines gov label assertions. Etherscan was used only to select the public candidate. PRIMARY https://ethereum-rpc.publicnode.com supplies nine pinned capabilities. VERIFY https://eth.merkle.io supplies nine independent capabilities. Immutable decoded facts match for transfers 0-2 (code-computed). Prior incomplete 1RPC VERIFY artifacts were discarded. Same-endpoint dual labels are rejected."
 }

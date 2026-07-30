@@ -1,6 +1,6 @@
 # TASK-016 CEX Cluster 공개 Fixture 후보 선정 보고서
 > Created: 2026-07-31 05:14
-> Last Updated: 2026-07-31 05:40
+> Last Updated: 2026-07-31 06:20
 > Status: Selected · FX-SVC-CEX-001 confirmed
 
 ## 1. 목적
@@ -15,8 +15,8 @@
 - 거래소 소유·본인성·불법성 판정
 - Etherscan community tag를 label truth 또는 scoring source로 사용
 
-후속 Gate에서 fixture package·raw replay·negative oracle·독립 Verifier·
-제품 analyzer·Benchmark automated 승격은
+후속 Gate에서 fixture package·PRIMARY/VERIFY raw replay·negative oracle·독립
+Verifier·제품 analyzer·Benchmark automated 승격은
 [68 Final Promotion Receipt](./68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)에서
 판정했다.
 
@@ -69,8 +69,10 @@ ownership·criminality는 `not_assessed`다.
 
 ### 3.4 재현·Rules
 
-- 두 독립 RPC provider에서 outbound TX·receipt·Transfer log replay가
-  일치할 것(후속 Gate).
+- 두 독립 RPC provider(`PRIMARY`/`VERIFY`, distinct endpoints)에서 outbound
+  TX·receipt·block replay가 일치할 것. transfer index별 label은 provider가
+  아니다. `cross_provider_decoded_match` boolean 선언만으로 confirmed를
+  허용하지 않으며, 각 transfer의 immutable decoded facts를 비교해야 한다.
 - Explorer Terms·대회 Rules 확정 전 자동 수집·재배포·live adapter 채택을
   주장하지 않는다.
 
@@ -101,13 +103,14 @@ ownership·criminality는 `not_assessed`다.
 
 1. ~~위 기준으로 1~3건 공개 후보를 좁히고 first-party/gov label 출처를 pin한다.~~ **완료**
 2. ~~`deposit_candidates[]`·window·common destination TX 목록을 docs-only로 고정한다.~~ **완료**
-3. ~~두 RPC raw replay·SHA·negative oracle 10개·독립 Verifier Gate를 수행한다.~~ **완료**
+3. ~~두 RPC raw replay·SHA·negative oracle 10개·독립 Verifier Gate를 수행한다.~~ **완료** — PRIMARY publicnode 9건·VERIFY merkle 9건·negative oracle 8개·기계적 dual-provider guards.
 4. ~~`candidate → verifying → confirmed`와 Benchmark automated 승격을 별도 판정한다.~~ **완료** — [68 Receipt](./68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)
 
 ## 7. Blocker
 
 - ~~구체 공개 사례·주소·TX 미확정(TBD).~~ **해소**
 - ~~first-party/gov 라벨 출처 pin 미완.~~ **해소** — OFAC SDN public domain
+- ~~VERIFY second-provider replay incomplete~~ **해소** — `https://eth.merkle.io` 9건 완료·immutable fact match. 1RPC incomplete·Cloudflare historical-block 실패는 capture-meta에만 요약.
 - live Rules·Explorer Terms 미확정 — live adapter blocker로 유지
 - Etherscan tag를 label source로 쓸 수 없음 — 정책 유지
 

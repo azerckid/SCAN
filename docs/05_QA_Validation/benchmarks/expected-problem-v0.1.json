@@ -698,7 +698,7 @@
       "problem_id": "SVC-CEX-001",
       "difficulty": "high",
       "coverage": "automated",
-      "reason": "A confirmed OFAC-labeled Garantex deposit cluster fixture, strict cex_cluster analyzer, evidence export, negative oracle, and independent verifier hash match are implemented.",
+      "reason": "A confirmed OFAC-labeled Garantex deposit cluster fixture with complete PRIMARY/VERIFY RPC replay, strict cex_cluster analyzer, evidence export, negative oracle, and independent verifier hash match are implemented.",
       "reusable_capabilities": [
         "CEX-CLUSTER",
         "LABEL",

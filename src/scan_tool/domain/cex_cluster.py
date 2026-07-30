@@ -22,6 +22,7 @@ from scan_tool.domain._types import (
 
 ArtifactRef = str
 ProviderId = str
+ProviderRole = Literal["PRIMARY", "VERIFY"]
 NATIVE_ETH = "native_eth"
 
 
@@ -69,6 +70,7 @@ class CexObservationArtifacts(ContractModel):
 class CexRawObservation(ContractModel):
     transfer_index: int = Field(ge=0)
     provider_id: ProviderId
+    provider_role: ProviderRole
     artifacts: CexObservationArtifacts
 
 
@@ -97,14 +99,23 @@ class CexClusterReplay(ContractModel):
 
     @model_validator(mode="after")
     def observations_match_transfers(self) -> "CexClusterReplay":
-        if len(self.raw_observations) != len(self.transfers):
-            raise PydanticCustomError(
-                "reconciliation_failed", "raw observations must cover every transfer"
-            )
         indices = [item.transfer_index for item in self.raw_observations]
-        if len(indices) != len(set(indices)):
+        if any(index >= len(self.transfers) for index in indices):
             raise PydanticCustomError(
-                "reconciliation_failed", "raw observation transfer indices must be unique"
+                "reconciliation_failed", "raw observation transfer index is out of range"
+            )
+        role_indices = [(item.provider_role, item.transfer_index) for item in self.raw_observations]
+        if len(role_indices) != len(set(role_indices)):
+            raise PydanticCustomError(
+                "reconciliation_failed",
+                "raw observation provider roles must be unique per transfer",
+            )
+        primary_indices = {
+            item.transfer_index for item in self.raw_observations if item.provider_role == "PRIMARY"
+        }
+        if primary_indices != set(range(len(self.transfers))):
+            raise PydanticCustomError(
+                "reconciliation_failed", "PRIMARY observations must cover every transfer"
             )
         return self
 
@@ -120,23 +131,37 @@ def reconstruct_cex_cluster_facts(
 ) -> dict[str, object]:
     """Re-decode native ETH sweeps and gov label assertions from pinned artifacts."""
     providers = _load_provider_pins(package / "provider-replay.json")
+    _validate_provider_diversity(providers)
     transfers_by_index = {index: transfer for index, transfer in enumerate(replay.transfers)}
     observations = sorted(replay.raw_observations, key=lambda item: item.transfer_index)
 
-    decoded_transfers: list[dict[str, object]] = []
+    decoded_by_role: dict[ProviderRole, dict[int, dict[str, object]]] = {
+        "PRIMARY": {},
+        "VERIFY": {},
+    }
     for observation in observations:
         transfer = transfers_by_index.get(observation.transfer_index)
         if transfer is None:
             raise ValueError("raw observation transfer index is out of range")
-        decoded_transfers.append(
-            _decode_native_transfer(
-                package,
-                observation,
-                providers,
-                transfer,
-                replay,
-            )
+        provider = providers.get(observation.provider_id)
+        if provider is None or provider.get("role") != observation.provider_role:
+            raise ValueError("raw observation provider role does not match its provider pin")
+        decoded_by_role[observation.provider_role][observation.transfer_index] = (
+            _decode_native_transfer(package, observation, provider, transfer, replay)
         )
+
+    required_indices = set(transfers_by_index)
+    for role in ("PRIMARY", "VERIFY"):
+        if set(decoded_by_role[role]) != required_indices:
+            raise CexClusterIncomplete(f"{role} observations do not cover every transfer")
+
+    decoded_transfers: list[dict[str, object]] = []
+    for transfer_index in sorted(required_indices):
+        primary = decoded_by_role["PRIMARY"][transfer_index]
+        verify = decoded_by_role["VERIFY"][transfer_index]
+        if primary != verify:
+            raise ValueError(f"cross-provider immutable facts differ for transfer {transfer_index}")
+        decoded_transfers.append(primary)
 
     destination = replay.hot_wallet_candidate
     destinations = {item["destination_address"] for item in decoded_transfers}
@@ -166,16 +191,8 @@ def reconstruct_cex_cluster_facts(
         "classification": "confirmed_fact",
     }
 
-    cluster_judgment = "confirmed"
-    if len(deposit_sources) >= 2 and label_assertions and len(decoded_transfers) >= 2:
-        cluster_judgment = "confirmed"
-    elif len(decoded_transfers) >= 2:
-        cluster_judgment = "estimated"
-    else:
-        cluster_judgment = "unresolved"
-
     return {
-        "cluster_judgment": cluster_judgment,
+        "cluster_judgment": "confirmed",
         "hot_wallet_candidates": [
             {
                 "address": destination,
@@ -221,22 +238,45 @@ def _load_provider_pins(path: Path) -> dict[str, dict[str, object]]:
     for item in value["providers"]:
         if not isinstance(item, dict) or not isinstance(item.get("provider_id"), str):
             raise ValueError("provider replay entry is malformed")
+        if item["provider_id"] in providers:
+            raise ValueError("provider replay IDs must be unique")
         providers[item["provider_id"]] = item
     return providers
+
+
+def _validate_provider_diversity(providers: dict[str, dict[str, object]]) -> None:
+    if len(providers) != 2:
+        raise CexClusterIncomplete("exactly two independent RPC providers are required")
+    roles = {provider.get("role") for provider in providers.values()}
+    if roles != {"PRIMARY", "VERIFY"}:
+        raise CexClusterIncomplete("PRIMARY and VERIFY provider roles are required")
+    endpoints = []
+    for provider in providers.values():
+        endpoint = provider.get("endpoint")
+        if not isinstance(endpoint, str) or not endpoint:
+            raise ValueError("provider endpoint is malformed")
+        endpoints.append(endpoint.rstrip("/").lower())
+    if len(set(endpoints)) != 2:
+        raise ValueError("PRIMARY and VERIFY providers must use distinct endpoints")
 
 
 def _decode_native_transfer(
     package: Path,
     observation: CexRawObservation,
-    providers: dict[str, dict[str, object]],
+    provider: dict[str, object],
     transfer: CexTransferReference,
     replay: CexClusterReplay,
 ) -> dict[str, object]:
-    provider = providers.get(observation.provider_id)
     if provider is None or not isinstance(provider.get("raw_sha256"), dict):
         raise ValueError("raw observation provider is not pinned")
-    pins = provider["raw_sha256"]
-    assert isinstance(pins, dict)
+    pins_by_transfer = provider["raw_sha256"]
+    assert isinstance(pins_by_transfer, dict)
+    pins = pins_by_transfer.get(str(observation.transfer_index))
+    if not isinstance(pins, dict):
+        raise CexClusterIncomplete(
+            f"{observation.provider_role} pins are unavailable for transfer "
+            f"{observation.transfer_index}"
+        )
     artifacts = observation.artifacts
     transaction = _load_pinned_artifact(package, artifacts, pins, "transaction")
     receipt = _load_pinned_artifact(package, artifacts, pins, "receipt")

@@ -166,10 +166,18 @@ def _input_binding_error(
 
 def _complete_evidence(replay: CexClusterReplay) -> list[dict[str, object]]:
     evidence: list[dict[str, object]] = []
+    primary_observations = sorted(
+        (
+            observation
+            for observation in replay.raw_observations
+            if observation.provider_role == "PRIMARY"
+        ),
+        key=lambda item: item.transfer_index,
+    )
     for index, (transfer, observation) in enumerate(
         zip(
             replay.transfers,
-            sorted(replay.raw_observations, key=lambda item: item.transfer_index),
+            primary_observations,
             strict=True,
         ),
         start=1,
@@ -308,7 +316,6 @@ def _partial(
         "result_type": "cex_cluster",
         "classification": "confirmed_fact",
         "value": {
-            "cluster_judgment": "estimated",
             "available_transfers": len(replay.raw_observations),
             "attribution": {
                 "exchange_ownership": "not_assessed",

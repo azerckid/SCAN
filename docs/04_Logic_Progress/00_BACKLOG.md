@@ -1581,6 +1581,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
       CEX·Mixer·Lending 등 다른 adapter에는 적용하지 않는다.
     - (경계 고지) source/Rules 미확정은 live adapter blocker로 유지하되,
       content-addressed artifact 기반 offline analyzer를 막지 않는다.
+    - (해소) CEX `FX-SVC-CEX-001`는 Merkle VERIFY 9-call complete replay와
+      code-computed immutable fact match로 confirmed·Benchmark automated를
+      복구했다. transfer label을 독립 provider로 취급하던 이전 주장은 폐기.
     - (경계 고지) Lending은 docs-only 선례이며 runtime 재사용 대상은 기존
       `flow_path`·`intel_context` leaf dispatch와 공통 evidence 봉투다.
 - Change Receipt:
@@ -1676,9 +1679,9 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     - `scripts/verify_task_016_cex_independent_verifier.py` — PASS —
       same hash
     - focused bridge analyzer/CLI pytest — PASS — 6
-    - focused CEX unit+CLI pytest — PASS — 8
+    - focused CEX unit+CLI pytest — PASS
     - Benchmark integration/CLI — PASS — 14/14 automated
-    - `scripts/verify.py` — PASS — recorded with contest stabilization runbook
+    - `scripts/verify.py` — PASS — 584 tests, 2016 links, security 259
     - `scripts/check_analysis_schema.py` — PASS — 62 probes; bridge·CEX
       result probes exercise `REQ-BRIDGE-*`·`REQ-CEX-*`
     - public `analysis-result.schema.json` — PASS after adding `BRIDGE`·`CEX`
