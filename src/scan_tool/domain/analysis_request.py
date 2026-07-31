@@ -33,6 +33,7 @@ class AnalysisType(StrEnum):
     INTEL_CONTEXT = "intel_context"
     BRIDGE_TRANSFER = "bridge_transfer"
     CEX_CLUSTER = "cex_cluster"
+    DEFI_LENDING = "defi_lending"
 
 
 class EvmQueryKind(StrEnum):
@@ -342,6 +343,10 @@ class CexClusterQueryKind(StrEnum):
     EVALUATE_CEX_CLUSTER = "evaluate_cex_cluster"
 
 
+class DefiLendingQueryKind(StrEnum):
+    RECONSTRUCT_LENDING_FLOW = "reconstruct_lending_flow"
+
+
 class ObservationWindowInputs(ContractModel):
     start_block: BlockNumber
     end_block: BlockNumber
@@ -351,6 +356,14 @@ class ObservationWindowInputs(ContractModel):
         if self.end_block < self.start_block:
             raise PydanticCustomError("invalid_input", "observation window end must follow start")
         return self
+
+
+class ReconstructLendingFlowInputs(ContractModel):
+    subject_address: Address
+    subject_roles: NonEmptyUniqueList[Literal["liquidator", "borrower", "receiver", "supplier"]]
+    observation_window: ObservationWindowInputs
+    seed_transaction_hash: TransactionHash
+    protocol: Literal["aave_v3"]
 
 
 class EvaluateCexClusterInputs(ContractModel):
@@ -558,6 +571,13 @@ class CexClusterAnalysisRequest(AnalysisRequestBase):
     inputs: EvaluateCexClusterInputs
 
 
+class DefiLendingAnalysisRequest(AnalysisRequestBase):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.DEFI_LENDING]
+    query_kind: Literal[DefiLendingQueryKind.RECONSTRUCT_LENDING_FLOW]
+    inputs: ReconstructLendingFlowInputs
+
+
 RequestVariant = Annotated[
     DexAnalysisRequest
     | AuthAnalysisRequest
@@ -567,7 +587,8 @@ RequestVariant = Annotated[
     | FlowPathAnalysisRequest
     | IntelContextAnalysisRequest
     | BridgeTransferAnalysisRequest
-    | CexClusterAnalysisRequest,
+    | CexClusterAnalysisRequest
+    | DefiLendingAnalysisRequest,
     Field(discriminator="analysis_type"),
 ]
 

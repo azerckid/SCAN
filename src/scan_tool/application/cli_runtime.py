@@ -21,6 +21,7 @@ from scan_tool.domain.analysis_request import (
     AuthAnalysisRequest,
     BridgeTransferAnalysisRequest,
     CexClusterAnalysisRequest,
+    DefiLendingAnalysisRequest,
     DexAnalysisRequest,
     EvmCoreAnalysisRequest,
     EvmSpecialAnalysisRequest,
@@ -32,6 +33,7 @@ from scan_tool.domain.analysis_result import AnalysisResult
 from scan_tool.domain.auth import AuthReplay
 from scan_tool.domain.bridge_transfer import BridgeTransferReplay
 from scan_tool.domain.cex_cluster import CexClusterReplay
+from scan_tool.domain.defi_lending import DefiLendingReplay
 from scan_tool.domain.dex import DexReplay
 from scan_tool.domain.evm_core import EvmCoreReplay
 from scan_tool.domain.evm_special import EvmSpecialReplay
@@ -41,6 +43,7 @@ from scan_tool.domain.intel_context import IntelSourceReplay
 from scan_tool.slices.auth import analyze_auth_replay
 from scan_tool.slices.bridge_transfer import analyze_bridge_transfer_replay
 from scan_tool.slices.cex_cluster import analyze_cex_cluster_replay
+from scan_tool.slices.defi_lending import analyze_defi_lending_replay
 from scan_tool.slices.dex import analyze_dex_replay
 from scan_tool.slices.evm_core import analyze_evm_core_replay
 from scan_tool.slices.evm_special import analyze_evm_special_replay
@@ -57,6 +60,7 @@ FLOW_PATH_REPLAY_STAGE = "flow_path_replay_loaded"
 INTEL_CONTEXT_REPLAY_STAGE = "intel_context_replay_loaded"
 BRIDGE_TRANSFER_REPLAY_STAGE = "bridge_transfer_replay_loaded"
 CEX_CLUSTER_REPLAY_STAGE = "cex_cluster_replay_loaded"
+DEFI_LENDING_REPLAY_STAGE = "defi_lending_replay_loaded"
 
 
 class AnalysisUnavailable(RuntimeError):
@@ -306,6 +310,32 @@ class CliRuntime:
                 resumed=resumed,
                 checkpoint_id=checkpoint_id,
             )
+
+        if isinstance(document, DefiLendingAnalysisRequest):
+            if replay_path is None:
+                raise AnalysisUnavailable(
+                    "DeFi Lending analysis requires --evidence RAW_REPLAY.json with a "
+                    "file path on every invocation because the replay references sibling "
+                    "content-addressed artifacts. It does not support Evidence Worker "
+                    "byte-only replay or checkpoint-only resume."
+                )
+            package_dir = replay_path.parent
+            replay_body, checkpoint_id, resumed = self._load_replay(
+                document.analysis_id,
+                replay_path,
+                replay_body,
+                expected_replay_sha256,
+                stage=DEFI_LENDING_REPLAY_STAGE,
+                replay_model=DefiLendingReplay,
+                analysis_label="DeFi Lending",
+            )
+            return analyze_defi_lending_replay(
+                document,
+                replay_body,
+                package_dir=package_dir,
+                resumed=resumed,
+                checkpoint_id=checkpoint_id,
+            )
         raise AnalysisUnavailable("The selected vertical analyzer is not implemented.")
 
     def _load_replay(
@@ -326,6 +356,7 @@ class CliRuntime:
             | type[IntelSourceReplay]
             | type[BridgeTransferReplay]
             | type[CexClusterReplay]
+            | type[DefiLendingReplay]
         ),
         analysis_label: str,
     ) -> tuple[bytes, str | None, bool]:

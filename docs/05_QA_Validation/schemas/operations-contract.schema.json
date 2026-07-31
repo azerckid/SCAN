@@ -107,7 +107,12 @@
         "auth_consumption",
         "address_freeze",
         "evm_core",
-        "evm_special", "flow_path", "intel_context", "bridge_transfer", "cex_cluster"
+        "evm_special",
+        "flow_path",
+        "intel_context",
+        "bridge_transfer",
+        "cex_cluster",
+        "defi_lending"
       ],
       "title": "AnalysisType",
       "type": "string"

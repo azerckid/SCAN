@@ -47,7 +47,8 @@
         "find_common_funder",
         "score_actor_relations",
         "link_bridge_transfer",
-        "evaluate_cex_cluster"
+        "evaluate_cex_cluster",
+        "reconstruct_lending_flow"
       ]
     },
     "chain_id": {
@@ -321,6 +322,31 @@
     {
       "if": {
         "properties": {
+          "analysis_type": {
+            "const": "defi_lending"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "query_kind"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "0.2"
+          },
+          "query_kind": {
+            "const": "reconstruct_lending_flow"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
           "query_kind": {
             "const": "object_summary"
           }
@@ -469,6 +495,25 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "query_kind": {
+            "const": "reconstruct_lending_flow"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/reconstructLendingFlowInputs"
+          }
+        }
+      }
     }
   ],
   "additionalProperties": false,
@@ -487,7 +532,8 @@
         "flow_path",
         "intel_context",
         "bridge_transfer",
-        "cex_cluster"
+        "cex_cluster",
+        "defi_lending"
       ]
     },
     "address": {
@@ -1005,6 +1051,45 @@
         },
         "offline_mode": {
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "reconstructLendingFlowInputs": {
+      "type": "object",
+      "required": [
+        "subject_address",
+        "subject_roles",
+        "observation_window",
+        "seed_transaction_hash",
+        "protocol"
+      ],
+      "properties": {
+        "subject_address": {
+          "$ref": "#/$defs/address"
+        },
+        "subject_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "liquidator",
+              "borrower",
+              "receiver",
+              "supplier"
+            ]
+          }
+        },
+        "observation_window": {
+          "$ref": "#/$defs/observationWindowInputs"
+        },
+        "seed_transaction_hash": {
+          "$ref": "#/$defs/transactionHash"
+        },
+        "protocol": {
+          "const": "aave_v3"
         }
       },
       "additionalProperties": false

@@ -322,6 +322,21 @@ class CexClusterFailedAnalysisResult(FailedAnalysisResult):
     analysis_type: Literal[AnalysisType.CEX_CLUSTER]
 
 
+class DefiLendingCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.DEFI_LENDING]
+
+
+class DefiLendingPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.DEFI_LENDING]
+
+
+class DefiLendingFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.DEFI_LENDING]
+
+
 ResultVariant = (
     LegacyCompleteAnalysisResult
     | LegacyPartialAnalysisResult
@@ -344,6 +359,9 @@ ResultVariant = (
     | CexClusterCompleteAnalysisResult
     | CexClusterPartialAnalysisResult
     | CexClusterFailedAnalysisResult
+    | DefiLendingCompleteAnalysisResult
+    | DefiLendingPartialAnalysisResult
+    | DefiLendingFailedAnalysisResult
 )
 
 

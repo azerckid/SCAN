@@ -1,0 +1,107 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-LEND-001",
+  "status": "confirmed",
+  "captured_at": "2026-07-30T22:17:07Z",
+  "event_evidence": [
+    {
+      "evidence_id": "EV-LEND-LIQUIDATION-EVENT",
+      "evidence_type": "aave_v3_liquidation_call",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "chain_id": 1,
+      "transaction_hash": "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37",
+      "block_number": 21036015,
+      "log_index": 16,
+      "pool": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+      "user": "0xcdb238d68d8da74487711bc1f8f13f3d00667d1a",
+      "liquidator": "0x1b05437f4a5f6b21692e83af3eb5607683e6dead",
+      "collateral_asset": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "debt_asset": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "raw_provider_replay": true
+    },
+    {
+      "evidence_id": "EV-LEND-DEBT-TRANSFER",
+      "evidence_type": "erc20_transfer_match",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "chain_id": 1,
+      "transaction_hash": "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37",
+      "log_index": 15,
+      "raw_provider_replay": true
+    },
+    {
+      "evidence_id": "EV-LEND-COLLATERAL-TRANSFER",
+      "evidence_type": "erc20_transfer_match",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "chain_id": 1,
+      "transaction_hash": "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37",
+      "log_index": 10,
+      "raw_provider_replay": true
+    },
+    {
+      "evidence_id": "EV-LEND-SUBSEQUENT-OUTFLOW",
+      "evidence_type": "bounded_collateral_outflow",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "chain_id": 1,
+      "transaction_hash": "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37",
+      "log_index": 19,
+      "raw_provider_replay": true
+    }
+  ],
+  "call_evidence": [],
+  "state_evidence": [],
+  "context_evidence": [
+    {
+      "evidence_id": "EV-LEND-OFFICIAL-POOL",
+      "evidence_type": "official_contract_pin",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "locator": "https://etherscan.io/address/0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+      "scope": "Aave V3 Pool proxy pin for LiquidationCall topic0 decoding"
+    }
+  ],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "role": "scoring",
+      "required": true,
+      "purpose": "PRIMARY/VERIFY raw transaction, receipt, and block replay for LiquidationCall reconstruction"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "Official public read-only Ethereum RPC (publicnode PRIMARY + thirdweb VERIFY)",
+      "retrieved_at": "2026-07-30T22:17:07Z"
+    }
+  ],
+  "consistency_checks": {
+    "liquidation_event_decoded": true,
+    "transfer_legs_matched": true,
+    "observation_window_respected": true,
+    "raw_sha256_recorded_per_capability": true,
+    "negative_oracle_pass": true,
+    "independent_verifier_pass": true,
+    "analyzer_hash_matches_independent_verifier": true,
+    "cross_provider_decoded_match": true,
+    "primary_verify_artifact_bytes_distinct": true
+  },
+  "uncertainty": {
+    "candidate_only": false,
+    "remaining": [
+      "Attack versus normal liquidation remains not_assessed",
+      "Surrounding flashloan/swap transfers involving the liquidator are excluded from the confirmed lending ledger unless matched to protocol event amounts"
+    ]
+  },
+  "verification_provenance": {
+    "independent_verifier_module": "src/scan_tool/application/task_016_lending_independent_verifier.py",
+    "calculated_fact_sha256": "6c51b2ebfaef49ca8639053ffb2c1be446eb2ba7fbc39cf963780c26ed240f3c",
+    "independent_verifier_pass": true,
+    "canonical_sha256": "6c51b2ebfaef49ca8639053ffb2c1be446eb2ba7fbc39cf963780c26ed240f3c",
+    "dual_provider_immutable_fact_match": true,
+    "primary_endpoint": "https://ethereum.publicnode.com",
+    "verify_endpoint": "https://ethereum.rpc.thirdweb.com",
+    "rejected_identical_primary_verify": true
+  },
+  "provenance_notes": "Aave V3 Pool LiquidationCall decoded from dual-provider raw receipts. PRIMARY https://ethereum.publicnode.com and VERIFY https://ethereum.rpc.thirdweb.com supply distinct artifact bytes with matching immutable decoded facts. Merkle returned HTTP 429; 1rpc identical PRIMARY transaction bytes were rejected."
+}

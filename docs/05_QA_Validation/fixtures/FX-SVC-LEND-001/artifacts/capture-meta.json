@@ -1,0 +1,81 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-SVC-LEND-001",
+  "captured_at": "2026-07-30T22:17:07Z",
+  "capabilities": [
+    {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum.publicnode.com",
+      "capability": "transaction",
+      "method": "eth_getTransactionByHash",
+      "params": [
+        "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37"
+      ],
+      "response_sha256": "6b7ec7aeaa67e61d1e22c03c52751298346423b77e1a60f1b6adbcce674cbc1b",
+      "captured_at": "2026-07-30T22:17:07Z"
+    },
+    {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum.publicnode.com",
+      "capability": "receipt",
+      "method": "eth_getTransactionReceipt",
+      "params": [
+        "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37"
+      ],
+      "response_sha256": "5b8c66e6043fd185227340291552525a5db8de85c132a928816170ecf5591598",
+      "captured_at": "2026-07-30T22:17:07Z"
+    },
+    {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum.publicnode.com",
+      "capability": "block",
+      "method": "eth_getBlockByNumber",
+      "params": [
+        "0x140fbef",
+        false
+      ],
+      "response_sha256": "0f17bad5c5886e0e5a3a036e69406d20a5f1028291f8269e881564f9288b3ebf",
+      "captured_at": "2026-07-30T22:17:07Z"
+    },
+    {
+      "provider_id": "PROVIDER-ETHEREUM-THIRDWEB",
+      "provider_role": "VERIFY",
+      "endpoint": "https://ethereum.rpc.thirdweb.com",
+      "capability": "transaction",
+      "method": "eth_getTransactionByHash",
+      "params": [
+        "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37"
+      ],
+      "response_sha256": "9fd62d8c66094d7261eccfc7a52c8f38a518e1866d6c6d077315bf45377bfe38",
+      "captured_at": "2026-07-30T22:17:07Z"
+    },
+    {
+      "provider_id": "PROVIDER-ETHEREUM-THIRDWEB",
+      "provider_role": "VERIFY",
+      "endpoint": "https://ethereum.rpc.thirdweb.com",
+      "capability": "receipt",
+      "method": "eth_getTransactionReceipt",
+      "params": [
+        "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37"
+      ],
+      "response_sha256": "493b01d0f2daa938cea66bfd8751bace55b84a52266321e42995a11d47badc23",
+      "captured_at": "2026-07-30T22:17:07Z"
+    },
+    {
+      "provider_id": "PROVIDER-ETHEREUM-THIRDWEB",
+      "provider_role": "VERIFY",
+      "endpoint": "https://ethereum.rpc.thirdweb.com",
+      "capability": "block",
+      "method": "eth_getBlockByNumber",
+      "params": [
+        "0x140fbef",
+        false
+      ],
+      "response_sha256": "9dfb1298a0c3354036dedfbec4645b847ac621f062ba5d81473c12b9a7f60fc3",
+      "captured_at": "2026-07-30T22:17:07Z"
+    }
+  ]
+}

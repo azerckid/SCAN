@@ -1,7 +1,7 @@
 # 예상문제 Offline Benchmark 0.1 검증 보고서
 > Created: 2026-07-29 01:16
 > Last Updated: 2026-07-31 05:40
-> Status: Passed · 14 Automated / 4 Assisted / 12 Unsupported
+> Status: Passed · 15 Automated / 4 Assisted / 11 Unsupported
 
 ## 1. 목적과 판정 경계
 
@@ -17,7 +17,7 @@
 | `assisted` | 현재 deterministic primitive를 재사용할 수 있지만 전용 request·analyzer·reference fixture가 없어 사람이 정합 |
 | `unsupported` | 문제의 핵심 기능 자체가 없어 현재 프로그램으로 답을 도출할 수 없음 |
 
-따라서 `14/14 pass`는 automated 열네 문제의 정확도이며 30문항 전체 정확도가
+따라서 `15/15 pass`는 automated 열다섯 문제의 정확도이며 30문항 전체 정확도가
 아니다. Assisted와 Unsupported 문제를 성공으로 계산하지 않는다.
 
 ## 2. 실행 방법과 채점
@@ -46,7 +46,7 @@ integration test가 `socket.socket`을 실패하도록 바꾼 상태에서 동�
 ## 3. 실행 결과
 
 ```text
-EXPECTED PROBLEMS 30 · AUTOMATED 14 · ASSISTED 4 · UNSUPPORTED 12
+EXPECTED PROBLEMS 30 · AUTOMATED 15 · ASSISTED 4 · UNSUPPORTED 11
 PASS BASIC-EVM-001 · FX-BASIC-EVM-001
 PASS BASIC-EVM-002 · FX-BASIC-EVM-002
 PASS EVM-AUTH-001 · FX-EVM-AUTH-001
@@ -61,17 +61,17 @@ PASS SVC-DEX-001 · FX-SVC-DEX-001
 PASS SVC-BRG-001 · FX-SVC-BRG-001
 PASS SVC-CEX-001 · FX-SVC-CEX-001
 PASS OSINT-LBL-001 · FX-OSINT-LABEL-CONFLICT-001
-BENCHMARK 14/14 automated cases passed · network_mode offline
+BENCHMARK 15/15 automated cases passed · network_mode offline
 ```
 
 | 항목 | 결과 |
 |:---|---:|
 | 전체 예상문제 | 30 |
-| 완전자동 | 14 |
+| 완전자동 | 15 |
 | 도구보조 | 4 |
 | 미지원 | 12 |
-| 자동 실행 | 14 |
-| 자동 통과 | 14 |
+| 자동 실행 | 15 |
+| 자동 통과 | 15 |
 | 자동 범위 정확도 | 100% |
 | 30문항 직접 자동화율 | 46.7% |
 
@@ -98,7 +98,7 @@ BENCHMARK 14/14 automated cases passed · network_mode offline
 | SVC-BRG-001 | Automated | Across V3 bridge_transfer·confirmed fixture | live Rules adapter·ownership |
 | SVC-CEX-001 | Automated | cex_cluster·OFAC label assertion·confirmed fixture | ownership·criminality `not_assessed` |
 | SVC-MIX-001 | Unsupported | provenance·export | MIXER·PATH·HEUR |
-| SVC-LEND-001 | Unsupported | EVM-LOG·RECON | DEFI-LEND·EVM-TRACE |
+| SVC-LEND-001 | Automated | DEFI-LEND·EVM-LOG·RECON·PATH |  |
 | ACTOR-REL-001 | Unsupported | provenance | ACTOR-REL·HEUR |
 | ACTOR-REL-002 | Assisted | public-hub relation·false-positive exclusion | positive multi-heuristic candidate·CLUSTER |
 | CRIME-PHISH-001 | Unsupported | AUTH·provenance | PATH·LABEL·OSINT |
@@ -135,7 +135,7 @@ coverage를 가장 크게 늘리는 순서는
 
 | 기준 | 판정 | 증거·경계 |
 |:---|:---:|:---|
-| Functionality | Partial | automated 14개 exact/evidence/requirement/determinism 통과, 16개 비자동 |
+| Functionality | Partial | automated 15개 exact/evidence/requirement/determinism 통과, 15개 비자동 |
 | Potential Impact | Partial | 공백이 큰 PATH·LABEL·OSINT 우선순위를 수치화, 실대회 효과 미측정 |
 | Novelty | Pass / Offline | 답 문자열이 아니라 answer→evidence→fixture requirement를 함께 채점 |
 | UX | Pass / CLI | 한 명령으로 coverage와 자동 사례 결과를 표시 |
@@ -174,6 +174,7 @@ coverage를 가장 크게 늘리는 순서는
 - **QA_Validation**: [TASK-015 비격리 Fixture 승격 Receipt](./56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md) - 세 confirmed fixture를 assisted로만 반영한 근거
 - **QA_Validation**: [TASK-016 Bridge 최종 승격 Receipt](./65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md) - Bridge confirmed·13/13 근거
 - **QA_Validation**: [TASK-016 CEX 최종 승격 Receipt](./68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md) - CEX confirmed·14/14 근거
+- **QA_Validation**: [TASK-016 Lending 최종 승격 Receipt](./70_TASK_016_LENDING_FINAL_PROMOTION_RECEIPT.md) - Lending confirmed·15/15 근거
 - **QA_Validation**: [Contest Stabilization Runbook](./66_CONTEST_STABILIZATION_RUNBOOK.md) - 대회용 freeze·실행 절차
 - **QA_Validation**: [TASK-009 통합 보고서](./13_TASK_009_INTEGRATION_REPORT.md) - 기존 vertical 회귀와 보안 Gate
 - **QA_Validation**: [OPS-IMPL-08 보고서](./21_OPS_IMPL_08_FINAL_INTEGRATION_REPORT.md) - 병렬 운영과 수동 제출 기준선

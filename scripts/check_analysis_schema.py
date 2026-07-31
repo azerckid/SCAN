@@ -37,6 +37,9 @@ BRIDGE_TRANSFER_EXAMPLE = (
 CEX_CLUSTER_EXAMPLE = (
     REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-SVC-CEX-001/analysis-request.json"
 )
+DEFI_LENDING_EXAMPLE = (
+    REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-SVC-LEND-001/analysis-request.json"
+)
 SCHEMA_FILES = {
     "request": "analysis-request.schema.json",
     "result": "analysis-result.schema.json",
@@ -348,6 +351,43 @@ def cex_cluster_family_probes(
     ]
 
 
+def defi_lending_family_probes(
+    evm_request: dict[str, object],
+    evm_result: dict[str, object],
+) -> list[Probe]:
+    """Keep defi_lending dispatch isolated from every other 0.2 family."""
+    lend_request = load_json(DEFI_LENDING_EXAMPLE)
+    lend_result = changed(
+        changed(evm_result, "analysis_type", value="defi_lending"),
+        "results",
+        0,
+        "fixture_requirement_ids",
+        value=["REQ-LEND-EVENT", "REQ-LEND-LEDGER", "REQ-LEND-OUTFLOW"],
+    )
+    return [
+        Probe("defi_lending request", "request", lend_request, True),
+        Probe("defi_lending result", "result", lend_result, True),
+        Probe(
+            "evm core request with defi_lending query_kind",
+            "request",
+            changed(evm_request, "query_kind", value="reconstruct_lending_flow"),
+            False,
+        ),
+        Probe(
+            "defi_lending request with flow_path query_kind",
+            "request",
+            changed(lend_request, "query_kind", value="trace_path"),
+            False,
+        ),
+        Probe(
+            "defi_lending request legacy schema version",
+            "request",
+            changed(lend_request, "schema_version", value="0.1"),
+            False,
+        ),
+    ]
+
+
 def request_input_probes(
     dex_request: dict[str, object],
     auth_request: dict[str, object],
@@ -583,6 +623,7 @@ def build_probes() -> list[Probe]:
         *intel_context_family_probes(evm_request),
         *bridge_transfer_family_probes(evm_request, evm_result),
         *cex_cluster_family_probes(evm_request, evm_result),
+        *defi_lending_family_probes(evm_request, evm_result),
         *result_status_probes(dex_result, auth_result, freeze_result, error, evm_result),
         *result_component_probes(dex_result),
         *error_probes(error),

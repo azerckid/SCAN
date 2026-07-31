@@ -110,6 +110,18 @@ COMMANDS = (
         sys.executable,
         "scripts/verify_task_016_cex_analyzer_independent_verification.py",
     ),
+    (
+        sys.executable,
+        "scripts/verify_task_016_lending_negative_oracles.py",
+    ),
+    (
+        sys.executable,
+        "scripts/verify_task_016_lending_independent_verifier.py",
+    ),
+    (
+        sys.executable,
+        "scripts/verify_task_016_lending_analyzer_independent_verification.py",
+    ),
 )
 
 
