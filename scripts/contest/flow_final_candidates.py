@@ -463,7 +463,18 @@ def run_analysis(
     # the path transactions: if the independent set shows further related
     # outflow (or a residual mismatch) for a candidate that discovery called
     # terminal, that contradicts the terminus claim and must exclude it.
-    independent_residuals = aggregate_residuals(independent_edges)
+    # Scope this the same way discovery is scoped (doc 76 §4.1): only edges
+    # bound to the seed flow count as "related" -- an unrelated external
+    # inflow/outflow elsewhere in the independent file must not affect a
+    # candidate it never actually touches.
+    related_independent, _independent_budget_meta = discover_related_edges(
+        independent_edges,
+        seed=config.seed,
+        max_hops=config.max_hops,
+        max_nodes=config.max_nodes,
+        max_edges=config.max_edges,
+    )
+    independent_residuals = aggregate_residuals(related_independent)
 
     candidates: list[dict[str, Any]] = []
     for item in draft:

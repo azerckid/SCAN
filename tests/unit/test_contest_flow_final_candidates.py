@@ -185,8 +185,9 @@ def test_independent_data_showing_further_outflow_rejects_candidate() -> None:
 
 
 def test_independent_residual_mismatch_rejects_candidate() -> None:
-    """P1: independent set shows extra inflow to D, so its own residual no
-    longer matches S even though related_out is still zero there."""
+    """P1: independent set shows *seed-connected* extra inflow to D (via a
+    second branch SEED->E->D), so its own residual no longer matches S even
+    though related_out is still zero there."""
     discovery = [
         _edge("0x" + "11" * 32, SEED, B, S),
         _edge("0x" + "22" * 32, B, D, S),
@@ -194,12 +195,30 @@ def test_independent_residual_mismatch_rejects_candidate() -> None:
     independent = [
         _edge("0x" + "11" * 32, SEED, B, S),
         _edge("0x" + "22" * 32, B, D, S),
-        _edge("0x" + "99" * 32, E, D, 5),  # unrelated extra inflow to D
+        _edge("0x" + "77" * 32, SEED, E, 5),  # second seed-connected branch
+        _edge("0x" + "99" * 32, E, D, 5),  # ...that also feeds into D
     ]
     report = _run(_config(), discovery=discovery, independent=independent)
     assert report["candidates"] == []
     reasons = {item["address"]: item["reason"] for item in report["excluded"]}
     assert reasons[D] == "independent_residual_mismatch"
+
+
+def test_independent_unrelated_external_inflow_does_not_falsely_reject() -> None:
+    """Doc 76 boundary: an inflow to D with NO path from seed in the
+    independent graph must be ignored, not treated as a residual mismatch."""
+    discovery = [
+        _edge("0x" + "11" * 32, SEED, B, S),
+        _edge("0x" + "22" * 32, B, D, S),
+    ]
+    independent = [
+        _edge("0x" + "11" * 32, SEED, B, S),
+        _edge("0x" + "22" * 32, B, D, S),
+        _edge("0x" + "99" * 32, E, D, 5),  # E has no path from SEED here
+    ]
+    report = _run(_config(), discovery=discovery, independent=independent)
+    assert len(report["candidates"]) == 1
+    assert report["candidates"][0]["address"] == D
 
 
 def test_scope_complete_is_always_false() -> None:
