@@ -63,12 +63,13 @@ PROVIDER_ID: dict[BridgeChain, str] = {
     "base": "PROVIDER-BASE-PRIMARY",
     "ethereum": "PROVIDER-ETHEREUM-PRIMARY",
 }
-METHODS = (
+OFFLINE_REUSE_METHODS = (
     "eth_getTransactionByHash",
     "eth_getTransactionReceipt",
     "eth_getBlockByNumber",
     "eth_getLogs",
 )
+LIVE_CAPTURE_METHODS = ("eth_chainId", *OFFLINE_REUSE_METHODS)
 
 
 class EndpointSecretError(ValueError):
@@ -171,14 +172,14 @@ def rpc_call(
     return payload
 
 
-def verify_chain_id(rpc_url: str, *, chain: BridgeChain, role: str) -> None:
-    """Call eth_chainId and fail loudly if it does not match the declared chain.
+def verify_chain_id(result: object, *, chain: BridgeChain, role: str) -> None:
+    """Validate an already-fetched eth_chainId result against the declared chain.
 
     Prevents a swapped/misconfigured endpoint from silently producing a
-    confidently-wrong result under the wrong chain_id.
+    confidently-wrong result under the wrong chain_id. Takes the RPC result
+    (not a URL) so the fetch and the artifact pinning stay in one place
+    (``capture_chain_leg``) and this stays trivially unit-testable offline.
     """
-    payload = rpc_call(rpc_url, "eth_chainId", [], request_id=0, role=role)
-    result = payload.get("result")
     if not isinstance(result, str) or not result.startswith("0x"):
         raise RuntimeError(f"{role}: eth_chainId returned a malformed result")
     observed = int(result, 16)
@@ -228,7 +229,8 @@ def capture_chain_leg(
     rpc_url: str,
     spoke_pool: str | None = None,
 ) -> dict[str, Any]:
-    """Fetch four RPC capabilities for one chain and pin them as artifacts."""
+    """Fetch five RPC capabilities for one chain (chain-id check + four
+    capture capabilities) and pin them as artifacts."""
     tx_hash = _lower(transaction_hash)
     pool = _lower(spoke_pool or OFFICIAL_SPOKE_POOL[chain])
     topic0 = TOPIC0[chain]
@@ -236,8 +238,12 @@ def capture_chain_leg(
 
     # P1: confirm the endpoint actually serves the declared chain before
     # trusting anything it returns (a swapped/misconfigured URL must fail
-    # loudly, not produce a confidently-wrong result).
-    verify_chain_id(rpc_url, chain=chain, role=role)
+    # loudly, not produce a confidently-wrong result). The response itself is
+    # pinned as an artifact below so the check is independently reviewable,
+    # not just a code assertion.
+    chain_id_payload = rpc_call(rpc_url, "eth_chainId", [], request_id=0, role=role)
+    verify_chain_id(chain_id_payload.get("result"), chain=chain, role=role)
+    chain_id_digest = store_json_rpc_artifact(package, chain_id_payload)
 
     tx_payload = rpc_call(rpc_url, "eth_getTransactionByHash", [tx_hash], request_id=1, role=role)
     tx_result = tx_payload.get("result")
@@ -291,6 +297,12 @@ def capture_chain_leg(
         "result": [selected],
     }
 
+    # NOTE: `digests` maps 1:1 to the strict, extra="forbid" schema the real
+    # analyzer validates raw_observations[chain].artifacts against
+    # (BridgeObservationArtifacts: transaction/receipt/block/bridge_logs
+    # only). The chain-id artifact must NOT go in here or replay validation
+    # breaks; it is carried separately as `chain_id_sha256` and only merged
+    # into provider-replay.json's permissive `raw_sha256` provenance below.
     digests = {
         "transaction": store_json_rpc_artifact(package, tx_payload),
         "receipt": store_json_rpc_artifact(package, receipt_payload),
@@ -305,8 +317,10 @@ def capture_chain_leg(
         "spoke_pool": pool,
         "provider_id": PROVIDER_ID[chain],
         "raw_sha256": digests,
+        "chain_id_sha256": chain_id_digest,
         "retrieved_at": _utc_now(),
-        "network_calls": 4,
+        "network_calls": len(LIVE_CAPTURE_METHODS),
+        "methods": list(LIVE_CAPTURE_METHODS),
     }
 
 
@@ -343,7 +357,11 @@ def pin_leg_from_existing_artifacts(
         "provider_id": provider_id,
         "raw_sha256": digests,
         "retrieved_at": _utc_now(),
-        "network_calls": 4,
+        # No live RPC call happens on this offline-reuse path; the count and
+        # methods reflect the original source fixture's capture, not a new
+        # eth_chainId verification.
+        "network_calls": len(OFFLINE_REUSE_METHODS),
+        "methods": list(OFFLINE_REUSE_METHODS),
     }
 
 
@@ -363,7 +381,15 @@ def build_provider_replay(
                 "network_calls": leg["network_calls"],
                 "source_class": "contest_single_source_rpc",
                 "retrieved_at": leg["retrieved_at"],
-                "raw_sha256": leg["raw_sha256"],
+                # provider-replay.json's raw_sha256 is a permissive dict (not
+                # the strict analyzer-facing artifacts schema), so the
+                # eth_chainId artifact is safe to include here for
+                # provenance even though it must stay out of raw-replay.json.
+                "raw_sha256": (
+                    {**leg["raw_sha256"], "chain_id": leg["chain_id_sha256"]}
+                    if leg.get("chain_id_sha256")
+                    else dict(leg["raw_sha256"])
+                ),
             }
             for leg in legs
         ],
@@ -412,7 +438,7 @@ def build_raw_replay(
             }
             for chain in ("base", "ethereum")
         },
-        "methods_per_chain": list(METHODS),
+        "methods_per_chain": list(dict.fromkeys(m for leg in legs for m in leg["methods"])),
         "raw_observations": [
             {
                 "chain": chain,

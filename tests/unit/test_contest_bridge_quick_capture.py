@@ -48,7 +48,13 @@ def test_resolve_rpc_endpoint_rejects_userinfo(monkeypatch: pytest.MonkeyPatch) 
         bridge_quick_capture.resolve_rpc_endpoint("SCAN_CONTEST_BASE_RPC_URL", role="base")
 
 
-def test_rpc_call_error_never_leaks_the_endpoint_secret() -> None:
+def test_rpc_call_error_never_leaks_the_endpoint_secret(monkeypatch: pytest.MonkeyPatch) -> None:
+    import urllib.error
+
+    def fake_urlopen(request, timeout=60):  # noqa: ARG001
+        raise urllib.error.URLError("connection refused")
+
+    monkeypatch.setattr(bridge_quick_capture.urllib.request, "urlopen", fake_urlopen)
     secret_url = "https://mainnet.infura.io/v3/SUPER_SECRET_KEY_ABCDEF123456"
     with pytest.raises(RuntimeError) as excinfo:
         bridge_quick_capture.rpc_call(secret_url, "eth_chainId", [], role="base RPC")
@@ -56,23 +62,53 @@ def test_rpc_call_error_never_leaks_the_endpoint_secret() -> None:
     assert secret_url not in str(excinfo.value)
 
 
-def test_verify_chain_id_rejects_mismatched_chain(monkeypatch: pytest.MonkeyPatch) -> None:
-    def fake_rpc_call(
-        url: str, method: str, params: list, *, request_id: int = 1, role: str = "rpc"
-    ):
-        assert method == "eth_chainId"
-        return {"jsonrpc": "2.0", "id": request_id, "result": "0x1"}
-
-    monkeypatch.setattr(bridge_quick_capture, "rpc_call", fake_rpc_call)
+def test_verify_chain_id_rejects_mismatched_chain() -> None:
     with pytest.raises(RuntimeError, match="endpoints may be swapped"):
-        bridge_quick_capture.verify_chain_id("https://fake", chain="base", role="base RPC")
+        bridge_quick_capture.verify_chain_id("0x1", chain="base", role="base RPC")
 
 
-def test_verify_chain_id_accepts_matching_chain(monkeypatch: pytest.MonkeyPatch) -> None:
-    def fake_rpc_call(
-        url: str, method: str, params: list, *, request_id: int = 1, role: str = "rpc"
-    ):
-        return {"jsonrpc": "2.0", "id": request_id, "result": "0x2105"}  # 8453
+def test_verify_chain_id_accepts_matching_chain() -> None:
+    bridge_quick_capture.verify_chain_id("0x2105", chain="base", role="base RPC")  # 8453
+
+
+def test_capture_chain_leg_pins_chain_id_and_counts_five_calls(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    responses = {
+        "eth_chainId": {"result": "0x2105"},
+        "eth_getTransactionByHash": {"result": {"blockNumber": "0x1"}},
+        "eth_getTransactionReceipt": {"result": {"status": "0x1"}},
+        "eth_getBlockByNumber": {"result": {"number": "0x1"}},
+        "eth_getLogs": {
+            "result": [
+                {
+                    "address": "0xaa",
+                    "topics": ["0xtopic0"],
+                    "transactionHash": "0xdead",
+                    "removed": False,
+                }
+            ]
+        },
+    }
+
+    def fake_rpc_call(url, method, params, *, request_id=1, role="rpc"):  # noqa: ARG001
+        return {"jsonrpc": "2.0", "id": request_id, **responses[method]}
 
     monkeypatch.setattr(bridge_quick_capture, "rpc_call", fake_rpc_call)
-    bridge_quick_capture.verify_chain_id("https://fake", chain="base", role="base RPC")
+    monkeypatch.setattr(
+        bridge_quick_capture, "TOPIC0", {**bridge_quick_capture.TOPIC0, "base": "0xtopic0"}
+    )
+
+    leg = bridge_quick_capture.capture_chain_leg(
+        tmp_path, chain="base", transaction_hash="0xdead", rpc_url="https://fake", spoke_pool="0xaa"
+    )
+    assert leg["network_calls"] == 5
+    assert leg["methods"] == [
+        "eth_chainId",
+        "eth_getTransactionByHash",
+        "eth_getTransactionReceipt",
+        "eth_getBlockByNumber",
+        "eth_getLogs",
+    ]
+    assert "chain_id_sha256" in leg
+    assert "chain_id" not in leg["raw_sha256"]  # must stay out of the strict artifacts schema
