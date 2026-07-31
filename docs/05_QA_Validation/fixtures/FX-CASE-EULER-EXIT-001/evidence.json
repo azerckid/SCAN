@@ -1,0 +1,102 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-CASE-EULER-EXIT-001",
+  "status": "confirmed",
+  "captured_at": "2026-07-31T11:00:00Z",
+  "event_evidence": [],
+  "call_evidence": [],
+  "state_evidence": [],
+  "context_evidence": [
+    {
+      "evidence_id": "EV-CASE-EXPECTED-0",
+      "evidence_type": "confirmed_fixture_composition",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "fixture_id": "FX-FLOW-PATH-001",
+      "expected_sha256": "b761531a1364ddc28e5c6bb6a1d0b3b1432ee053fa2591210570a6113a099504",
+      "evidence_sha256": "05f9cab3d8aad9ee66238339f3c2aa2626d3060a19634b377df48cb79149ec85"
+    },
+    {
+      "evidence_id": "EV-CASE-EVIDENCE-0",
+      "evidence_type": "confirmed_fixture_evidence_pin",
+      "source_id": "DS-EXPLORER-EVM",
+      "fixture_id": "FX-FLOW-PATH-001",
+      "evidence_sha256": "05f9cab3d8aad9ee66238339f3c2aa2626d3060a19634b377df48cb79149ec85"
+    },
+    {
+      "evidence_id": "EV-CASE-EXPECTED-1",
+      "evidence_type": "confirmed_fixture_composition",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "fixture_id": "FX-FLOW-REMERGE-001",
+      "expected_sha256": "627c47ffb39dcb8c5179883a8c84c1ac92fca14ef08cf23dd5cfbfd804437cad",
+      "evidence_sha256": "b5b193f0511a2d7dac327a33a1dd214ba41bb4aa0e9bb7e8f341c1ea7d5ffe88"
+    },
+    {
+      "evidence_id": "EV-CASE-EVIDENCE-1",
+      "evidence_type": "confirmed_fixture_evidence_pin",
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "fixture_id": "FX-FLOW-REMERGE-001",
+      "evidence_sha256": "b5b193f0511a2d7dac327a33a1dd214ba41bb4aa0e9bb7e8f341c1ea7d5ffe88"
+    },
+    {
+      "evidence_id": "EV-CASE-CONTEXT",
+      "evidence_type": "public_incident_timeline",
+      "source_id": "DS-OSINT-WEB",
+      "url": "https://www.euler.finance/blog/war-peace-behind-the-scenes-of-eulers-240m-exploit-recovery",
+      "address_attribution_scored": false,
+      "criminal_intent_scored": false
+    }
+  ],
+  "source_requirements": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Confirmed selected-transaction PATH and REMERGE facts"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "role": "supporting",
+      "required": true,
+      "purpose": "Confirmed internal-transfer cross-check evidence"
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "role": "context",
+      "required": false,
+      "purpose": "Official incident chronology only"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-EVM-RPC-PUBLIC",
+      "provider": "confirmed FLOW fixture bundle",
+      "retrieved_at": "2026-07-31T11:00:00Z"
+    },
+    {
+      "source_id": "DS-EXPLORER-EVM",
+      "provider": "confirmed FLOW internal-edge cross-check",
+      "retrieved_at": "2026-07-31T11:00:00Z"
+    },
+    {
+      "source_id": "DS-OSINT-WEB",
+      "provider": "Euler Finance",
+      "retrieved_at": "2026-07-31T11:00:00Z"
+    }
+  ],
+  "consistency_checks": {
+    "source_fixture_hashes_match": true,
+    "source_fixtures_confirmed": true,
+    "timeline_ordered": true,
+    "unrelated_inflow_excluded": true,
+    "continuous_scope_scanned": false,
+    "attribution_assessed": false,
+    "independent_verifier_pass": true
+  },
+  "uncertainty": {
+    "candidate_only": false,
+    "remaining": "Open-ended seed discovery, continuous fund coverage, exploit causation, ownership, and intent remain outside the fixture."
+  },
+  "provenance_notes": "This composition reuses confirmed on-chain facts. The official Euler article is external context only and is not copied into a distributable data artifact."
+}

@@ -36,7 +36,10 @@
       "$ref": "#/$defs/analysisType"
     },
     "chain_id": {
-      "const": 1
+      "enum": [
+        0,
+        1
+      ]
     },
     "status": {
       "enum": [
@@ -93,8 +96,10 @@
               "flow_path",
               "intel_context",
               "bridge_transfer",
+              "bitcoin_utxo",
               "cex_cluster",
-              "defi_lending"
+              "defi_lending",
+              "case_reconciliation"
             ]
           }
         },
@@ -113,6 +118,32 @@
         "properties": {
           "schema_version": {
             "const": "0.1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "analysis_type": {
+            "const": "bitcoin_utxo"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "chain_id": {
+            "const": 0
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "chain_id": {
+            "const": 1
           }
         }
       }
@@ -209,8 +240,10 @@
         "flow_path",
         "intel_context",
         "bridge_transfer",
+        "bitcoin_utxo",
         "cex_cluster",
-        "defi_lending"
+        "defi_lending",
+        "case_reconciliation"
       ]
     },
     "resultId": {
@@ -278,7 +311,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|CEX|LEND)-[A-Z0-9-]+$"
+            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|BTC|CEX|LEND|CASE)-[A-Z0-9-]+$"
           },
           "uniqueItems": true
         },

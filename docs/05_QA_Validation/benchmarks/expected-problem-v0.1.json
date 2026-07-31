@@ -979,16 +979,18 @@
     {
       "problem_id": "CRIME-EXP-001",
       "difficulty": "high",
-      "coverage": "unsupported",
-      "reason": "Attack-trace interpretation, protocol exploit decoding, and post-exploit path analysis are absent.",
+      "coverage": "assisted",
+      "reason": "The confirmed Euler composition deterministically reconstructs a selected post-incident exit path and excludes an unrelated inflow, but attack-trace interpretation, exploit causation, ownership, and full continuous-fund coverage remain outside the analyzer.",
       "reusable_capabilities": [
         "EVM-LOG",
-        "BASE-PROVENANCE"
+        "BASE-PROVENANCE",
+        "PATH",
+        "CASE-RECON"
       ],
       "blocking_gaps": [
         "EVM-TRACE",
         "EXPLOIT-DECODE",
-        "PATH"
+        "SEED-DISCOVERY"
       ]
     },
     {
@@ -1009,40 +1011,82 @@
     {
       "problem_id": "BTC-UTXO-001",
       "difficulty": "medium",
-      "coverage": "unsupported",
-      "reason": "The current Analysis I/O supports Ethereum chain 1 only and has no UTXO collector.",
+      "coverage": "automated",
+      "reason": "The confirmed Bitcoin fixture reconstructs exact prevouts, fee, a bounded one-hop spend path, and frontier outpoints with an independent verifier.",
       "reusable_capabilities": [
         "BASE-CACHE",
-        "BASE-PROVENANCE"
-      ],
-      "blocking_gaps": [
+        "BASE-PROVENANCE",
         "BTC-UTXO"
-      ]
+      ],
+      "blocking_gaps": [],
+      "fixture": {
+        "fixture_id": "FX-BTC-UTXO-001",
+        "request_path": "docs/05_QA_Validation/fixtures/FX-BTC-UTXO-001/analysis-request.json",
+        "replay_path": "docs/05_QA_Validation/fixtures/FX-BTC-UTXO-001/raw-replay.json",
+        "expected_results": [
+          {
+            "result_type": "bitcoin_utxo_summary",
+            "value": {
+              "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+              "network": "bitcoin_mainnet",
+              "block_height": 800000,
+              "block_hash": "00000000000000000002a7c4c1e48d76c5a37902165a270156b7a8d72728a054",
+              "input_count": 1,
+              "output_count": 2,
+              "input_sum_sat": 604308,
+              "output_sum_sat": 435183,
+              "fee_sat": 169125,
+              "spent_outpoints": [
+                {"transaction_id": "a992dbddbeb7382e3defc6914f970ea769ef813e69a923afa336976f2cbf0465", "vout": 1, "value_sat": 604308}
+              ],
+              "created_utxos": [
+                {"transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5", "vout": 0, "value_sat": 143332, "script_type": "v1_p2tr", "address": "bc1p94scc8mn65fnlhyh64zml064kn9692e2n4q7gkttrhmt365ajdyq0m2mzh"},
+                {"transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5", "vout": 1, "value_sat": 291851, "script_type": "v0_p2wpkh", "address": "bc1qvndmep839uexn899qy865cvddgj4txm0nkjua9"}
+              ],
+              "start_outpoint": {"transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5", "vout": 0},
+              "max_hops": 1,
+              "spend_path": [
+                {
+                  "depth": 1,
+                  "spent_outpoint": {"transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5", "vout": 0, "value_sat": 143332},
+                  "spending_transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f",
+                  "spending_vin": 0,
+                  "created_outpoints": [
+                    {"transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f", "vout": 0, "value_sat": 142098}
+                  ]
+                }
+              ],
+              "frontier_outpoints": [
+                {"transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f", "vout": 0, "value_sat": 142098}
+              ]
+            }
+          }
+        ],
+        "required_fixture_requirements": ["REQ-BTC-PREVOUT", "REQ-BTC-FEE"]
+      }
     },
     {
       "problem_id": "BTC-UTXO-002",
       "difficulty": "high",
-      "coverage": "unsupported",
-      "reason": "UTXO traversal, common-input ownership, change detection, and counterexamples are absent.",
+      "coverage": "assisted",
+      "reason": "The analyzer produces bounded change candidates and counterexamples, but ownership remains heuristic and requires human review.",
       "reusable_capabilities": [
         "BASE-PROVENANCE"
       ],
       "blocking_gaps": [
-        "BTC-UTXO",
         "HEUR"
       ]
     },
     {
       "problem_id": "BTC-CJ-001",
       "difficulty": "high",
-      "coverage": "unsupported",
-      "reason": "CoinJoin detection, candidate tracking, and explicit untraceable boundaries are absent.",
+      "coverage": "assisted",
+      "reason": "A separate multi-input/equal-output candidate is recorded, but CoinJoin identity and post-mix linkage remain heuristic.",
       "reusable_capabilities": [
         "BASE-PROVENANCE",
         "BASE-EXPORT"
       ],
       "blocking_gaps": [
-        "BTC-UTXO",
         "COINJOIN",
         "HEUR"
       ]

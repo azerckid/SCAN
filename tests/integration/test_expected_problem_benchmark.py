@@ -31,15 +31,16 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
 
     assert {item.problem_id for item in manifest.cases} == APPROVED_EXPECTED_PROBLEM_IDS
     assert counts == {
-        CoverageLevel.AUTOMATED: 15,
-        CoverageLevel.ASSISTED: 4,
-        CoverageLevel.UNSUPPORTED: 11,
+        CoverageLevel.AUTOMATED: 16,
+        CoverageLevel.ASSISTED: 7,
+        CoverageLevel.UNSUPPORTED: 7,
     }
     assert {
         item.problem_id for item in manifest.cases if item.coverage is CoverageLevel.AUTOMATED
     } == {
         "BASIC-EVM-001",
         "BASIC-EVM-002",
+        "BTC-UTXO-001",
         "EVM-AUTH-001",
         "EVM-FREEZE-001",
         "EVM-NFT-001",
@@ -58,6 +59,9 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
         item.problem_id for item in manifest.cases if item.coverage is CoverageLevel.ASSISTED
     } == {
         "ACTOR-REL-002",
+        "BTC-CJ-001",
+        "BTC-UTXO-002",
+        "CRIME-EXP-001",
         "FLOW-MULTI-001",
         "OSINT-ENS-001",
         "OSINT-SAN-001",
@@ -67,7 +71,7 @@ def test_manifest_covers_all_30_expected_problems_without_overstating_support() 
 def test_confirmed_expected_problems_match_answers_evidence_and_requirements() -> None:
     report = _runner().run(_runner().load_manifest(MANIFEST))
 
-    assert report.executed == report.passed == 15
+    assert report.executed == report.passed == 16
     assert report.failed == 0
     assert report.automated_pass_rate == 1
     assert all(item.answer_exact for item in report.cases)
@@ -83,6 +87,9 @@ def test_confirmed_expected_problems_match_answers_evidence_and_requirements() -
     lend = next(item for item in report.cases if item.problem_id == "SVC-LEND-001")
     assert lend.fixture_id == "FX-SVC-LEND-001"
     assert lend.passed is True
+    btc = next(item for item in report.cases if item.problem_id == "BTC-UTXO-001")
+    assert btc.fixture_id == "FX-BTC-UTXO-001"
+    assert btc.passed is True
 
 
 def test_incorrect_answer_oracle_fails_the_automated_case() -> None:
@@ -143,5 +150,5 @@ def test_benchmark_cli_runs_offline_and_reports_coverage(
     )
 
     assert result.exit_code == 0
-    assert "AUTOMATED 15 · ASSISTED 4 · UNSUPPORTED 11" in result.stdout
-    assert "BENCHMARK 15/15 automated cases passed · network_mode offline" in result.stdout
+    assert "AUTOMATED 16 · ASSISTED 7 · UNSUPPORTED 7" in result.stdout
+    assert "BENCHMARK 16/16 automated cases passed · network_mode offline" in result.stdout

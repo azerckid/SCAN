@@ -48,7 +48,11 @@ from scan_tool.domain import (
     validate_analysis_result,
     validate_operations_document,
 )
-from scan_tool.domain.analysis_request import AnalysisRequest, RuleStatus
+from scan_tool.domain.analysis_request import (
+    AnalysisRequest,
+    BitcoinUtxoAnalysisRequest,
+    RuleStatus,
+)
 from scan_tool.domain.input_source import (
     ArtifactFormat,
     ChainScope,
@@ -168,6 +172,11 @@ def analyze(
             artifact=artifact,
             artifact_format=artifact_format,
             evidence=evidence,
+            expected_chain_scope=(
+                ChainScope.BITCOIN
+                if isinstance(document, BitcoinUtxoAnalysisRequest)
+                else ChainScope.EVM
+            ),
         )
     if prepared_input is not None:
         _progress(
@@ -482,9 +491,10 @@ def _prepare_analysis_input(
     artifact: Path | None,
     artifact_format: ArtifactFormat | None,
     evidence: Path | None,
+    expected_chain_scope: ChainScope = ChainScope.EVM,
 ) -> PreparedInputEvidence | None:
     selected_mode = input_mode or InputMode.EXTERNAL_RPC
-    if chain_scope is not ChainScope.EVM:
+    if chain_scope is not expected_chain_scope:
         _fail_input(
             InputFailureKind.CHAIN_SCOPE_MISMATCH.value,
             "input chain scope does not match the analyzer",

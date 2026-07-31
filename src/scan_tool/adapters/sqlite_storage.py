@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS artifacts (
 CREATE TABLE IF NOT EXISTS analysis_runs (
     analysis_id TEXT PRIMARY KEY,
     analysis_type TEXT NOT NULL,
-    chain_id INTEGER NOT NULL CHECK(chain_id = 1),
+    chain_id INTEGER NOT NULL CHECK(chain_id IN (0, 1)),
     fixture_id TEXT,
     status TEXT NOT NULL CHECK(
         status IN ('queued', 'running', 'complete', 'partial', 'failed',
@@ -264,6 +264,20 @@ class SQLiteStorage:
                 self._connection.executescript(DDL)
                 self._connection.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
 
+    def _assert_chain_id_supported(self, chain_id: int) -> None:
+        if chain_id != 0:
+            return
+        row = self._connection.execute(
+            "SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'analysis_runs'"
+        ).fetchone()
+        table_sql = "" if row is None else str(row["sql"])
+        normalized_sql = " ".join(table_sql.lower().split())
+        if "check(chain_id = 1)" in normalized_sql:
+            raise ValueError(
+                "legacy SQLite v1 permits only chain_id=1; use a new database or "
+                "an explicitly approved backup-and-migration flow for Bitcoin"
+            )
+
     def integrity_check(self) -> str:
         return str(self._connection.execute("PRAGMA integrity_check").fetchone()[0])
 
@@ -398,8 +412,9 @@ class SQLiteStorage:
         tool_version: str,
         now: datetime | None = None,
     ) -> None:
-        self.record_artifact(request_artifact)
         run = request.root
+        self._assert_chain_id_supported(run.chain_id)
+        self.record_artifact(request_artifact)
         timestamp = now or datetime.now(UTC)
         self._guard.check_text(canonical_json(request.to_contract_dict()))
         policy_document = run.source_policy.model_dump(mode="json")

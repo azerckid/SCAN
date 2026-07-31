@@ -101,22 +101,6 @@
       "title": "AdapterKind",
       "type": "string"
     },
-    "AnalysisType": {
-      "enum": [
-        "dex_swap",
-        "auth_consumption",
-        "address_freeze",
-        "evm_core",
-        "evm_special",
-        "flow_path",
-        "intel_context",
-        "bridge_transfer",
-        "cex_cluster",
-        "defi_lending"
-      ],
-      "title": "AnalysisType",
-      "type": "string"
-    },
     "CandidateRecord": {
       "additionalProperties": false,
       "properties": {
@@ -443,7 +427,20 @@
       "additionalProperties": false,
       "properties": {
         "analysis_type": {
-          "$ref": "#/$defs/AnalysisType"
+          "enum": [
+            "dex_swap",
+            "auth_consumption",
+            "address_freeze",
+            "evm_core",
+            "evm_special",
+            "flow_path",
+            "intel_context",
+            "bridge_transfer",
+            "bitcoin_utxo",
+            "cex_cluster"
+          ],
+          "title": "Analysis Type",
+          "type": "string"
         },
         "depends_on": {
           "$ref": "#/$defs/scan_tool__domain___types__UniqueList_Annotated_str__StringConstraints____2"

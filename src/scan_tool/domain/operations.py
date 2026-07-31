@@ -28,6 +28,19 @@ from scan_tool.domain.analysis_request import AnalysisType
 
 OPERATIONS_SCHEMA_VERSION = "0.1"
 
+OperationsLeafAnalysisType = Literal[
+    AnalysisType.DEX_SWAP,
+    AnalysisType.AUTH_CONSUMPTION,
+    AnalysisType.ADDRESS_FREEZE,
+    AnalysisType.EVM_CORE,
+    AnalysisType.EVM_SPECIAL,
+    AnalysisType.FLOW_PATH,
+    AnalysisType.INTEL_CONTEXT,
+    AnalysisType.BRIDGE_TRANSFER,
+    AnalysisType.BITCOIN_UTXO,
+    AnalysisType.CEX_CLUSTER,
+]
+
 CompetitionId = Annotated[
     str,
     StringConstraints(pattern=r"^COMP-[A-Z0-9][A-Z0-9-]{2,63}$"),
@@ -369,7 +382,7 @@ class LeafJobSpec(ContractModel):
     leaf_job_id: JobId
     role: JobRole
     purpose: NonEmptyString
-    analysis_type: AnalysisType
+    analysis_type: OperationsLeafAnalysisType
     inputs_projection: SafeJsonObject
     depends_on: UniqueList[JobId]
     required_capabilities: UniqueList[SnakeName]

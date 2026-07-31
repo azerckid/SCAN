@@ -34,11 +34,17 @@ INTEL_CONTEXT_EXAMPLE = (
 BRIDGE_TRANSFER_EXAMPLE = (
     REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-SVC-BRG-001/analysis-request.json"
 )
+BITCOIN_UTXO_EXAMPLE = (
+    REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-BTC-UTXO-001/analysis-request.json"
+)
 CEX_CLUSTER_EXAMPLE = (
     REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-SVC-CEX-001/analysis-request.json"
 )
 DEFI_LENDING_EXAMPLE = (
     REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-SVC-LEND-001/analysis-request.json"
+)
+CASE_RECONCILIATION_EXAMPLE = (
+    REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-CASE-EULER-EXIT-001/analysis-request.json"
 )
 SCHEMA_FILES = {
     "request": "analysis-request.schema.json",
@@ -225,6 +231,38 @@ def evm_special_family_probes(evm_request: dict[str, object]) -> list[Probe]:
     ]
 
 
+def case_reconciliation_family_probes(evm_request: dict[str, object]) -> list[Probe]:
+    """Keep case_reconciliation isolated from existing Analysis I/O families."""
+    case_request = load_json(CASE_RECONCILIATION_EXAMPLE)
+    return [
+        Probe("case_reconciliation request", "request", case_request, True),
+        Probe(
+            "evm core request with case query_kind",
+            "request",
+            changed(evm_request, "query_kind", value="reconstruct_incident"),
+            False,
+        ),
+        Probe(
+            "case request with evm query_kind",
+            "request",
+            changed(case_request, "query_kind", value="object_summary"),
+            False,
+        ),
+        Probe(
+            "case request legacy schema version",
+            "request",
+            changed(case_request, "schema_version", value="0.1"),
+            False,
+        ),
+        Probe(
+            "case request bitcoin chain",
+            "request",
+            changed(case_request, "chain_id", value=0),
+            False,
+        ),
+    ]
+
+
 def flow_path_family_probes(evm_request: dict[str, object]) -> list[Probe]:
     """Ensure analysis_type and query_kind cannot cross into the flow_path family."""
     flow_request = load_json(FLOW_PATH_EXAMPLE)
@@ -309,6 +347,46 @@ def bridge_transfer_family_probes(
             "bridge_transfer request legacy schema version",
             "request",
             changed(bridge_request, "schema_version", value="0.1"),
+            False,
+        ),
+    ]
+
+
+def bitcoin_utxo_family_probes(
+    evm_request: dict[str, object],
+    evm_result: dict[str, object],
+) -> list[Probe]:
+    bitcoin_request = load_json(BITCOIN_UTXO_EXAMPLE)
+    bitcoin_result = changed(
+        changed(
+            changed(evm_result, "analysis_type", value="bitcoin_utxo"),
+            "chain_id",
+            value=0,
+        ),
+        "results",
+        0,
+        "fixture_requirement_ids",
+        value=["REQ-BTC-PREVOUT", "REQ-BTC-FEE"],
+    )
+    return [
+        Probe("bitcoin_utxo request", "request", bitcoin_request, True),
+        Probe("bitcoin_utxo result", "result", bitcoin_result, True),
+        Probe(
+            "bitcoin request with EVM chain",
+            "request",
+            changed(bitcoin_request, "chain_id", value=1),
+            False,
+        ),
+        Probe(
+            "EVM request with Bitcoin chain",
+            "request",
+            changed(evm_request, "chain_id", value=0),
+            False,
+        ),
+        Probe(
+            "bitcoin request with EVM query",
+            "request",
+            changed(bitcoin_request, "query_kind", value="object_summary"),
             False,
         ),
     ]
@@ -622,8 +700,10 @@ def build_probes() -> list[Probe]:
         *flow_path_family_probes(evm_request),
         *intel_context_family_probes(evm_request),
         *bridge_transfer_family_probes(evm_request, evm_result),
+        *bitcoin_utxo_family_probes(evm_request, evm_result),
         *cex_cluster_family_probes(evm_request, evm_result),
         *defi_lending_family_probes(evm_request, evm_result),
+        *case_reconciliation_family_probes(evm_request),
         *result_status_probes(dex_result, auth_result, freeze_result, error, evm_result),
         *result_component_probes(dex_result),
         *error_probes(error),

@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-BTC-CJ-001",
+  "status": "candidate",
+  "coinjoin_assessment": {
+    "classification": "heuristic_candidate",
+    "ownership": "not_assessed",
+    "criminality": "not_assessed",
+    "single_exit": "not_assessed"
+  },
+  "tolerance": {"max_abs_delta_raw": "0"},
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-BTC-HEURISTIC",
+        "description": "Equal-output facts may create a candidate but cannot prove CoinJoin or ownership.",
+        "mandatory": true,
+        "evidence_refs": ["EV-BTC-CJ-PATTERN"]
+      }
+    ]
+  }
+}

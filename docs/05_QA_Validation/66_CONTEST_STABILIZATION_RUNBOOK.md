@@ -1,18 +1,18 @@
 # Contest Stabilization Runbook · Feature Freeze
 
 > Created: 2026-07-31 04:55
-> Last Updated: 2026-07-31 07:31
-> Status: Active · Bridge+CEX+Lending Confirmed · Benchmark 15/15 · Mixer/MIXED still frozen
+> Last Updated: 2026-07-31 21:30
+> Status: Active · Bridge+CEX+Lending Confirmed · TASK-017 and bounded TASK-018 thawed · Benchmark 16/16 · Mixer/MIXED still frozen
 
 ## 1. 목적
 
 대회(2026-08-02 09:00 KST) 직전 프로그램의 **사용 가능한 안정 범위**와
-실행·복구 절차를 고정한다. TASK-016 Lending은 2026-07-31 batch approval로
-thaw해 Bridge/CEX ladder로 confirmed·Benchmark automated까지 완료했다.
-Mixer·MIXED-XCHAIN·BTC·TASK-018은 freeze를 유지한다. 대회 중 실제 출제가
-확인된 경우에만 최소 범위로 재개한다.
+실행·복구 절차를 고정한다. TASK-016 Bridge·CEX·Lending은 confirmed·Benchmark
+automated까지 완료했다. TASK-017 exact Bitcoin UTXO와 TASK-018 bounded Euler
+exit는 사용자 승인으로 thaw되어 각각 automated·assisted다. Mixer·MIXED-XCHAIN·
+TASK-019 freeze는 유지하며, 대회 중 실제 출제가 확인된 경우에만 최소 범위로 재개한다.
 
-## 2. 확정 Coverage
+## 2. 역사적 확정 Coverage · 04:55 기준
 
 | 수준 | 수 | 문제 |
 |:---|---:|:---|
@@ -20,7 +20,12 @@ Mixer·MIXED-XCHAIN·BTC·TASK-018은 freeze를 유지한다. 대회 중 실제 
 | Assisted | 4 | FLOW-MULTI, ENS, SANCTIONS, ACTOR-REL-002 |
 | Unsupported | 11 | BTC×3, MIX, CRIME×4, MIXED-XCHAIN, MIXED-CASE, ACTOR-REL-001 등 |
 
-Fixture registry: **20 Confirmed · 0 Verifying · 1 Candidate · 1 Deferred**.
+Fixture registry: **22 Confirmed · 0 Verifying · 2 Candidate · 1 Deferred**.
+
+Lending·Bitcoin·bounded TASK-018 병합 후 결합 Benchmark는 **16 automated /
+7 assisted / 7 unsupported**다. 최신 검증 수치는
+[TASK-017 구현 보고서](./67_TASK_017_BITCOIN_IMPLEMENTATION_REPORT.md)와
+Lending final promotion receipt를 함께 따른다.
 
 ## 3. 설치·실행
 
@@ -48,7 +53,7 @@ uv run --project /path/to/SCAN scan analyze \
 `BRIDGE_TRANSFER`는 Evidence Worker stage map에 없다(FLOW/INTEL과 동일).
 byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 
-## 4. 실전 점검 결과 (2026-07-31)
+## 4. 역사적 실전 점검 결과 (2026-07-31 04:55)
 
 | 점검 | 결과 |
 |:---|:---|
@@ -63,12 +68,19 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 
 ## 5. Feature Freeze 규칙
 
-- Freeze 대상: TASK-017 Bitcoin, TASK-016 Mixer, TASK-018/019,
-  MIXED-XCHAIN 조합, live Rules adapter
-- **CEX (2026-07-31):** confirmed·Benchmark automated 유지.
+- Freeze 대상: TASK-016 Mixer, TASK-018의 미구현 4개 case family,
+  TASK-019, MIXED-XCHAIN 조합, live Rules adapter.
+- **CEX (2026-07-31 remediation):** TASK-016 CEX(`SVC-CEX-001`)는 Merkle VERIFY
+  9-call complete replay와 code-computed cross-provider match로 `confirmed`·
+  Benchmark automated를 복구했다. `MIXED-XCHAIN-001`은 COMPOSITION 미구현으로
+  unsupported 유지.
 - **Lending (2026-07-31 batch approval thaw):** TASK-016 Lending(`SVC-LEND-001`)
   은 publicnode PRIMARY + thirdweb VERIFY dual-provider replay·analyzer·
-  Benchmark automated까지 완료. Mixer·MIXED-XCHAIN·BTC·TASK-018은 freeze 유지.
+  Benchmark automated까지 완료.
+- **TASK-017 Bitcoin 예외:** 2026-07-31 사용자 전용 일괄 승인으로 thaw.
+  exact bounded UTXO는 automated, change/CoinJoin은 assisted.
+- **TASK-018:** 2026-07-31 사용자 일괄 승인으로 bounded Euler composition만
+  thaw(assisted). Mixer·TASK-019 승인을 뜻하지 않는다.
 - 허용: 문서 정합, 치명적 회귀 버그 수정, 대회 중 실제 출제 대응의
   최소 hotfix(별도 승인)
 - 금지: Benchmark unsupported를 숨기거나 fixture를 가짜 confirmed로 올리기

@@ -100,6 +100,10 @@ COMMANDS = (
     ),
     (
         sys.executable,
+        "scripts/verify_task_017_bitcoin.py",
+    ),
+    (
+        sys.executable,
         "scripts/verify_task_016_cex_negative_oracles.py",
     ),
     (
@@ -121,6 +125,18 @@ COMMANDS = (
     (
         sys.executable,
         "scripts/verify_task_016_lending_analyzer_independent_verification.py",
+    ),
+    (
+        sys.executable,
+        "scripts/verify_task_018_case_negative_oracles.py",
+    ),
+    (
+        sys.executable,
+        "scripts/verify_task_018_case_independent_verifier.py",
+    ),
+    (
+        sys.executable,
+        "scripts/verify_task_018_case_analyzer.py",
     ),
 )
 

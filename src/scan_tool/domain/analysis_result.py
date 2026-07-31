@@ -179,7 +179,7 @@ class AnalysisResultBase(ContractModel):
     schema_version: Literal["0.1", "0.2"]
     analysis_id: AnalysisId
     analysis_type: AnalysisType
-    chain_id: Literal[1]
+    chain_id: int
     results: list[ResultItem]
     evidence: list[Evidence]
     sources: list[SourceRecord]
@@ -218,93 +218,129 @@ LegacyAnalysisType = Literal[
 
 
 class LegacyCompleteAnalysisResult(CompleteAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.1"]
     analysis_type: LegacyAnalysisType
 
 
 class LegacyPartialAnalysisResult(PartialAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.1"]
     analysis_type: LegacyAnalysisType
 
 
 class LegacyFailedAnalysisResult(FailedAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.1"]
     analysis_type: LegacyAnalysisType
 
 
 class EvmCompleteAnalysisResult(CompleteAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.EVM_CORE]
 
 
 class EvmPartialAnalysisResult(PartialAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.EVM_CORE]
 
 
 class EvmFailedAnalysisResult(FailedAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.EVM_CORE]
 
 
 class EvmSpecialCompleteAnalysisResult(CompleteAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.EVM_SPECIAL]
 
 
 class EvmSpecialPartialAnalysisResult(PartialAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.EVM_SPECIAL]
 
 
 class EvmSpecialFailedAnalysisResult(FailedAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.EVM_SPECIAL]
 
 
 class FlowPathCompleteAnalysisResult(CompleteAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.FLOW_PATH]
 
 
 class FlowPathPartialAnalysisResult(PartialAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.FLOW_PATH]
 
 
 class FlowPathFailedAnalysisResult(FailedAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.FLOW_PATH]
 
 
 class IntelContextCompleteAnalysisResult(CompleteAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.INTEL_CONTEXT]
 
 
 class IntelContextPartialAnalysisResult(PartialAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.INTEL_CONTEXT]
 
 
 class IntelContextFailedAnalysisResult(FailedAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.INTEL_CONTEXT]
 
 
 class BridgeTransferCompleteAnalysisResult(CompleteAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.BRIDGE_TRANSFER]
 
 
 class BridgeTransferPartialAnalysisResult(PartialAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.BRIDGE_TRANSFER]
 
 
 class BridgeTransferFailedAnalysisResult(FailedAnalysisResult):
+    chain_id: Literal[1]
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.BRIDGE_TRANSFER]
+
+
+class BitcoinUtxoCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.BITCOIN_UTXO]
+    chain_id: Literal[0]
+
+
+class BitcoinUtxoPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.BITCOIN_UTXO]
+    chain_id: Literal[0]
+
+
+class BitcoinUtxoFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.BITCOIN_UTXO]
+    chain_id: Literal[0]
 
 
 class CexClusterCompleteAnalysisResult(CompleteAnalysisResult):
@@ -337,6 +373,24 @@ class DefiLendingFailedAnalysisResult(FailedAnalysisResult):
     analysis_type: Literal[AnalysisType.DEFI_LENDING]
 
 
+class CaseReconciliationCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
+    chain_id: Literal[1]
+
+
+class CaseReconciliationPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
+    chain_id: Literal[1]
+
+
+class CaseReconciliationFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
+    chain_id: Literal[1]
+
+
 ResultVariant = (
     LegacyCompleteAnalysisResult
     | LegacyPartialAnalysisResult
@@ -356,12 +410,18 @@ ResultVariant = (
     | BridgeTransferCompleteAnalysisResult
     | BridgeTransferPartialAnalysisResult
     | BridgeTransferFailedAnalysisResult
+    | BitcoinUtxoCompleteAnalysisResult
+    | BitcoinUtxoPartialAnalysisResult
+    | BitcoinUtxoFailedAnalysisResult
     | CexClusterCompleteAnalysisResult
     | CexClusterPartialAnalysisResult
     | CexClusterFailedAnalysisResult
     | DefiLendingCompleteAnalysisResult
     | DefiLendingPartialAnalysisResult
     | DefiLendingFailedAnalysisResult
+    | CaseReconciliationCompleteAnalysisResult
+    | CaseReconciliationPartialAnalysisResult
+    | CaseReconciliationFailedAnalysisResult
 )
 
 

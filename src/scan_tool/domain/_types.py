@@ -126,6 +126,7 @@ WarningId = Annotated[
 ]
 Address = Annotated[str, StringConstraints(pattern=r"^0x[a-f0-9]{40}$")]
 TransactionHash = Annotated[str, StringConstraints(pattern=r"^0x[a-f0-9]{64}$")]
+BitcoinTxId = Annotated[str, StringConstraints(pattern=r"^[a-f0-9]{64}$")]
 Sha256 = Annotated[str, StringConstraints(pattern=r"^[a-f0-9]{64}$")]
 ProviderId = Annotated[
     str,
@@ -142,7 +143,7 @@ ToolRequirementId = Annotated[
 FixtureRequirementId = Annotated[
     str,
     StringConstraints(
-        pattern=r"^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|CEX|LEND)-[A-Z0-9-]+$"
+        pattern=r"^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|BTC|CEX|LEND|CASE)-[A-Z0-9-]+$"
     ),
 ]
 BlockNumber = Annotated[StrictInt, Field(ge=0)]

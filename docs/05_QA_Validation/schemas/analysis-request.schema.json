@@ -47,12 +47,18 @@
         "find_common_funder",
         "score_actor_relations",
         "link_bridge_transfer",
+        "summarize_transaction",
+        "assess_heuristics",
         "evaluate_cex_cluster",
-        "reconstruct_lending_flow"
+        "reconstruct_lending_flow",
+        "reconstruct_incident"
       ]
     },
     "chain_id": {
-      "const": 1
+      "enum": [
+        0,
+        1
+      ]
     },
     "fixture_id": {
       "type": "string",
@@ -70,6 +76,44 @@
     }
   },
   "allOf": [
+    {
+      "if": {
+        "properties": {
+          "analysis_type": {
+            "const": "bitcoin_utxo"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "schema_version": {
+            "const": "0.2"
+          },
+          "chain_id": {
+            "const": 0
+          },
+          "query_kind": {
+            "enum": [
+              "summarize_transaction",
+              "assess_heuristics"
+            ]
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
+      },
+      "else": {
+        "properties": {
+          "chain_id": {
+            "const": 1
+          }
+        }
+      }
+    },
     {
       "if": {
         "properties": {
@@ -347,6 +391,31 @@
     {
       "if": {
         "properties": {
+          "analysis_type": {
+            "const": "case_reconciliation"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "query_kind"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "0.2"
+          },
+          "query_kind": {
+            "const": "reconstruct_incident"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
           "query_kind": {
             "const": "object_summary"
           }
@@ -481,6 +550,44 @@
       "if": {
         "properties": {
           "query_kind": {
+            "const": "summarize_transaction"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/bitcoinTransactionInputs"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "query_kind": {
+            "const": "assess_heuristics"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/bitcoinHeuristicInputs"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "query_kind": {
             "const": "evaluate_cex_cluster"
           }
         },
@@ -514,6 +621,25 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "query_kind": {
+            "const": "reconstruct_incident"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/reconstructIncidentInputs"
+          }
+        }
+      }
     }
   ],
   "additionalProperties": false,
@@ -532,8 +658,10 @@
         "flow_path",
         "intel_context",
         "bridge_transfer",
+        "bitcoin_utxo",
         "cex_cluster",
-        "defi_lending"
+        "defi_lending",
+        "case_reconciliation"
       ]
     },
     "address": {
@@ -543,6 +671,10 @@
     "transactionHash": {
       "type": "string",
       "pattern": "^0x[a-f0-9]{64}$"
+    },
+    "bitcoinTxId": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     },
     "sourceId": {
       "type": "string",
@@ -971,6 +1103,66 @@
       },
       "additionalProperties": false
     },
+    "bitcoinTransactionInputs": {
+      "type": "object",
+      "required": [
+        "transaction_id",
+        "network",
+        "start_vout",
+        "max_hops"
+      ],
+      "properties": {
+        "transaction_id": {
+          "$ref": "#/$defs/bitcoinTxId"
+        },
+        "network": {
+          "const": "bitcoin_mainnet"
+        },
+        "start_vout": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_hops": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "bitcoinHeuristicInputs": {
+      "type": "object",
+      "required": [
+        "transaction_id",
+        "network",
+        "start_vout",
+        "max_hops",
+        "assess_change",
+        "assess_coinjoin"
+      ],
+      "properties": {
+        "transaction_id": {
+          "$ref": "#/$defs/bitcoinTxId"
+        },
+        "network": {
+          "const": "bitcoin_mainnet"
+        },
+        "start_vout": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_hops": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        },
+        "assess_change": {
+          "type": "boolean"
+        },
+        "assess_coinjoin": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "observationWindowInputs": {
       "type": "object",
       "required": [
@@ -1009,6 +1201,43 @@
         },
         "expected_hot_wallet": {
           "$ref": "#/$defs/address"
+        }
+      },
+      "additionalProperties": false
+    },
+    "reconstructIncidentInputs": {
+      "type": "object",
+      "required": [
+        "case_category",
+        "seed_transaction_hash",
+        "source_fixture_refs",
+        "max_timeline_entries"
+      ],
+      "properties": {
+        "case_category": {
+          "enum": [
+            "phishing",
+            "address_poisoning",
+            "exploit",
+            "rug_pull",
+            "mixed"
+          ]
+        },
+        "seed_transaction_hash": {
+          "$ref": "#/$defs/transactionHash"
+        },
+        "source_fixture_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^FX-[A-Z0-9-]+$"
+          }
+        },
+        "max_timeline_entries": {
+          "type": "integer",
+          "exclusiveMinimum": 0
         }
       },
       "additionalProperties": false
