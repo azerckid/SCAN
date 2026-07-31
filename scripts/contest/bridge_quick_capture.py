@@ -43,8 +43,10 @@ from scan_tool.slices.bridge_transfer import analyze_bridge_transfer_replay  # n
 BridgeChain = Literal["base", "ethereum"]
 
 DEFAULT_RPC_URL_ENV: dict[BridgeChain, str] = {
-    "base": "SCAN_CONTEST_BASE_RPC_URL",
-    "ethereum": "SCAN_CONTEST_ETHEREUM_RPC_URL",
+    # Reuse the project's existing provider/Bridge replay env var convention
+    # (.env.local already provides these) instead of inventing new names.
+    "base": "SCAN_BASE_PRIMARY_RPC_URL",
+    "ethereum": "SCAN_EVM_PRIMARY_RPC_URL",
 }
 
 PINNED_FX_BRG_001_FACT_HASH = "d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac"
