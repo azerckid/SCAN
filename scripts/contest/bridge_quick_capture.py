@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import sys
 import tempfile
@@ -24,11 +25,13 @@ import urllib.request
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
+from urllib.parse import parse_qsl, urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
+from scan_tool.application.security import SensitiveDataGuard  # noqa: E402
 from scan_tool.domain import validate_analysis_request  # noqa: E402
 from scan_tool.domain.analysis_request import BridgeTransferAnalysisRequest  # noqa: E402
 from scan_tool.domain.bridge_transfer import (  # noqa: E402
@@ -38,6 +41,11 @@ from scan_tool.domain.bridge_transfer import (  # noqa: E402
 from scan_tool.slices.bridge_transfer import analyze_bridge_transfer_replay  # noqa: E402
 
 BridgeChain = Literal["base", "ethereum"]
+
+DEFAULT_RPC_URL_ENV: dict[BridgeChain, str] = {
+    "base": "SCAN_CONTEST_BASE_RPC_URL",
+    "ethereum": "SCAN_CONTEST_ETHEREUM_RPC_URL",
+}
 
 PINNED_FX_BRG_001_FACT_HASH = "d6609bb4f05ef0e75d82604a5e10e4ba16eab078494ef9ea375c0f97361800ac"
 FX_BRG_001 = ROOT / "docs/05_QA_Validation/fixtures/FX-SVC-BRG-001"
@@ -61,6 +69,49 @@ METHODS = (
     "eth_getBlockByNumber",
     "eth_getLogs",
 )
+
+
+class EndpointSecretError(ValueError):
+    """Raised when an RPC endpoint fails the offline safety checks."""
+
+
+def _endpoint_secret_candidates(endpoint: str) -> tuple[str, ...]:
+    """Extract query-param values and long path segments that may be API keys."""
+    parts = urlsplit(endpoint)
+    candidates = [value for _, value in parse_qsl(parts.query) if value]
+    candidates.extend(segment for segment in parts.path.split("/") if len(segment) >= 16)
+    return tuple(candidates)
+
+
+def resolve_rpc_endpoint(env_name: str, *, role: str) -> str:
+    """Read an RPC URL from an environment variable only, never a CLI argument.
+
+    Mirrors ``provider_smoke.require_execution_allowed``: HTTPS-only, no URL
+    userinfo. The raw URL is never returned in an exception message.
+    """
+    endpoint = os.environ.get(env_name)
+    if not endpoint:
+        raise EndpointSecretError(f"{role} RPC endpoint requires env var {env_name}")
+    parts = urlsplit(endpoint)
+    if parts.scheme != "https" or not parts.netloc:
+        raise EndpointSecretError(f"{env_name} must be an absolute HTTPS URL")
+    if parts.username is not None or parts.password is not None:
+        raise EndpointSecretError(f"{env_name} must not contain URL userinfo")
+    return endpoint
+
+
+def _redact(message: str, endpoint: str) -> str:
+    """Strip an endpoint URL (and any embedded secret substrings) from a message."""
+    redacted = message.replace(endpoint, "[redacted-endpoint]")
+    for candidate in _endpoint_secret_candidates(endpoint):
+        redacted = redacted.replace(candidate, "[redacted]")
+    return redacted
+
+
+def _guard_output(payload: dict[str, Any], *, secrets: tuple[str, ...]) -> None:
+    """Refuse to print output containing an RPC secret or a local filesystem path."""
+    guard = SensitiveDataGuard(forbidden_values=secrets)
+    guard.check_text(json.dumps(payload, ensure_ascii=True))
 
 
 def _utc_now() -> str:
@@ -93,7 +144,9 @@ def store_json_rpc_artifact(package: Path, payload: dict[str, Any]) -> str:
     return _write_bytes(package / "artifacts" / "sha256" / "placeholder.json", raw)
 
 
-def rpc_call(url: str, method: str, params: list[Any], *, request_id: int = 1) -> dict[str, Any]:
+def rpc_call(
+    url: str, method: str, params: list[Any], *, request_id: int = 1, role: str = "rpc"
+) -> dict[str, Any]:
     body = json.dumps(
         {"jsonrpc": "2.0", "id": request_id, "method": method, "params": params},
         separators=(",", ":"),
@@ -108,12 +161,33 @@ def rpc_call(url: str, method: str, params: list[Any], *, request_id: int = 1) -
         with urllib.request.urlopen(request, timeout=60) as response:
             payload = json.loads(response.read().decode())
     except urllib.error.URLError as error:
-        raise RuntimeError(f"RPC {method} failed against {url}: {error}") from error
+        # Never interpolate the raw endpoint into an exception message: it may
+        # embed an API key and this message can reach terminals/logs/chat.
+        raise RuntimeError(_redact(f"RPC {method} failed against {role}: {error}", url)) from error
     if not isinstance(payload, dict):
         raise RuntimeError(f"RPC {method} returned a non-object payload")
     if payload.get("error") is not None:
-        raise RuntimeError(f"RPC {method} error: {payload['error']}")
+        raise RuntimeError(_redact(f"RPC {method} error: {payload['error']}", url))
     return payload
+
+
+def verify_chain_id(rpc_url: str, *, chain: BridgeChain, role: str) -> None:
+    """Call eth_chainId and fail loudly if it does not match the declared chain.
+
+    Prevents a swapped/misconfigured endpoint from silently producing a
+    confidently-wrong result under the wrong chain_id.
+    """
+    payload = rpc_call(rpc_url, "eth_chainId", [], request_id=0, role=role)
+    result = payload.get("result")
+    if not isinstance(result, str) or not result.startswith("0x"):
+        raise RuntimeError(f"{role}: eth_chainId returned a malformed result")
+    observed = int(result, 16)
+    expected = CHAIN_ID[chain]
+    if observed != expected:
+        raise RuntimeError(
+            f"{role}: eth_chainId={observed} does not match declared chain "
+            f"{chain} (expected {expected}) -- endpoints may be swapped"
+        )
 
 
 def _select_bridge_log(
@@ -158,8 +232,14 @@ def capture_chain_leg(
     tx_hash = _lower(transaction_hash)
     pool = _lower(spoke_pool or OFFICIAL_SPOKE_POOL[chain])
     topic0 = TOPIC0[chain]
+    role = f"{chain} RPC"
 
-    tx_payload = rpc_call(rpc_url, "eth_getTransactionByHash", [tx_hash], request_id=1)
+    # P1: confirm the endpoint actually serves the declared chain before
+    # trusting anything it returns (a swapped/misconfigured URL must fail
+    # loudly, not produce a confidently-wrong result).
+    verify_chain_id(rpc_url, chain=chain, role=role)
+
+    tx_payload = rpc_call(rpc_url, "eth_getTransactionByHash", [tx_hash], request_id=1, role=role)
     tx_result = tx_payload.get("result")
     if not isinstance(tx_result, dict):
         raise RuntimeError(f"{chain}: transaction not found: {tx_hash}")
@@ -167,14 +247,18 @@ def capture_chain_leg(
     if not block_tag.startswith("0x"):
         raise RuntimeError(f"{chain}: transaction has no blockNumber")
 
-    receipt_payload = rpc_call(rpc_url, "eth_getTransactionReceipt", [tx_hash], request_id=2)
+    receipt_payload = rpc_call(
+        rpc_url, "eth_getTransactionReceipt", [tx_hash], request_id=2, role=role
+    )
     receipt_result = receipt_payload.get("result")
     if not isinstance(receipt_result, dict):
         raise RuntimeError(f"{chain}: receipt not found: {tx_hash}")
     if receipt_result.get("status") != "0x1":
         raise RuntimeError(f"{chain}: transaction was not successful")
 
-    block_payload = rpc_call(rpc_url, "eth_getBlockByNumber", [block_tag, False], request_id=3)
+    block_payload = rpc_call(
+        rpc_url, "eth_getBlockByNumber", [block_tag, False], request_id=3, role=role
+    )
 
     # Prefer getLogs; if the node returns multiple same-topic events in the
     # block, narrow to this transaction so the analyzer's len==1 rule holds.
@@ -190,6 +274,7 @@ def capture_chain_leg(
             }
         ],
         request_id=4,
+        role=role,
     )
     logs_result = logs_payload.get("result")
     if not isinstance(logs_result, list):
@@ -447,7 +532,8 @@ def run_analyzer(package: Path) -> dict[str, Any]:
         "canonical_fact_sha256": fact_hash,
         "facts": facts,
         "analyzer_result": contract,
-        "package_dir": str(package),
+        # P2: a logical tag, never the absolute local filesystem path.
+        "package_id": package.name,
     }
 
 
@@ -524,7 +610,6 @@ def self_check() -> dict[str, Any]:
             "expected_fact_sha256": PINNED_FX_BRG_001_FACT_HASH,
             "matched_pinned_hash": report.get("canonical_fact_sha256")
             == PINNED_FX_BRG_001_FACT_HASH,
-            "package_dir": str(out),
         }
         if report["self_check"]["matched_pinned_hash"] is not True:
             raise RuntimeError(
@@ -542,6 +627,16 @@ def self_check() -> dict[str, Any]:
 def capture_and_analyze(args: argparse.Namespace) -> dict[str, Any]:
     if args.origin_chain_id != 8453 or args.destination_chain_id != 1:
         raise SystemExit("this helper only supports Across V3 Base(8453) -> Ethereum(1)")
+
+    # P1: RPC URLs are never accepted as CLI arguments (shell history, `ps`,
+    # and this process's own argv are all untrusted for secrets). Only the
+    # *name* of an environment variable holding the URL is accepted.
+    base_rpc_url = resolve_rpc_endpoint(args.base_rpc_url_env, role="base")
+    ethereum_rpc_url = resolve_rpc_endpoint(args.ethereum_rpc_url_env, role="ethereum")
+    secrets = _endpoint_secret_candidates(base_rpc_url) + _endpoint_secret_candidates(
+        ethereum_rpc_url
+    )
+
     package = Path(args.output_dir).resolve()
     if package.exists() and any(package.iterdir()):
         raise SystemExit(f"output dir is not empty: {package}")
@@ -551,14 +646,14 @@ def capture_and_analyze(args: argparse.Namespace) -> dict[str, Any]:
         package,
         chain="base",
         transaction_hash=args.source_tx,
-        rpc_url=args.base_rpc_url,
+        rpc_url=base_rpc_url,
         spoke_pool=args.base_spoke_pool,
     )
     eth_leg = capture_chain_leg(
         package,
         chain="ethereum",
         transaction_hash=args.destination_tx,
-        rpc_url=args.ethereum_rpc_url,
+        rpc_url=ethereum_rpc_url,
         spoke_pool=args.ethereum_spoke_pool,
     )
 
@@ -569,7 +664,12 @@ def capture_and_analyze(args: argparse.Namespace) -> dict[str, Any]:
         legs=[base_leg, eth_leg],
         source_subject=source_subject,
     )
-    return run_analyzer(package)
+    report = run_analyzer(package)
+    # P1/defense-in-depth: refuse to emit output containing either endpoint's
+    # secret substrings or a local filesystem path, even if some code path
+    # upstream forgot to redact.
+    _guard_output(report, secrets=secrets)
+    return report
 
 
 def _depositor_from_source_log(package: Path, base_leg: dict[str, Any]) -> str:
@@ -612,8 +712,23 @@ def build_parser() -> argparse.ArgumentParser:
     )
     capture.add_argument("--source-tx", required=True)
     capture.add_argument("--destination-tx", required=True)
-    capture.add_argument("--base-rpc-url", required=True)
-    capture.add_argument("--ethereum-rpc-url", required=True)
+    capture.add_argument(
+        "--base-rpc-url-env",
+        default=DEFAULT_RPC_URL_ENV["base"],
+        help=(
+            "Name of the environment variable holding the Base RPC URL "
+            f"(default: {DEFAULT_RPC_URL_ENV['base']}). The URL itself must "
+            "never be passed as a CLI argument."
+        ),
+    )
+    capture.add_argument(
+        "--ethereum-rpc-url-env",
+        default=DEFAULT_RPC_URL_ENV["ethereum"],
+        help=(
+            "Name of the environment variable holding the Ethereum RPC URL "
+            f"(default: {DEFAULT_RPC_URL_ENV['ethereum']})."
+        ),
+    )
     capture.add_argument("--output-dir", required=True)
     capture.add_argument("--fixture-id", default="FX-CONTEST-BRG-LIVE")
     capture.add_argument("--source-subject", default=None)
