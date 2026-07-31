@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-31 06:30
-> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · TASK-016 Bridge+CEX Confirmed·Automated · TASK-017 UTXO Automated · TASK-018 Euler Exit Assisted · Benchmark 15 Automated / 7 Assisted / 8 Unsupported
+> Last Updated: 2026-07-31 21:30
+> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · TASK-016 Bridge+CEX+Lending Confirmed·Automated · TASK-017 UTXO Automated · TASK-018 Euler Exit Assisted · Benchmark 16 Automated / 7 Assisted / 7 Unsupported
 
 ## 1. 목적
 
@@ -263,7 +263,8 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   Verifier·analyzer·Benchmark automated(13→14)를 완료했다
   ([68 Receipt](../05_QA_Validation/68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)).
   `MIXED-XCHAIN-001`은 unsupported 유지.
-- [ ] Mixer·Lending adapter는 confirmed fixture 확보 전 구현하지 않는다.
+- [x] Lending(`SVC-LEND-001`) confirmed fixture·analyzer·Benchmark automated 완료 (2026-07-31 batch approval).
+- [ ] Mixer adapter는 confirmed fixture 확보 전 구현하지 않는다. `MIXED-XCHAIN-001`은 COMPOSITION Gate로 유지.
 
 ### [ ] Wave 6 — 출제가 확인된 비EVM
 

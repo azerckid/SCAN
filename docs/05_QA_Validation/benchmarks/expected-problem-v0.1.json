@@ -831,16 +831,95 @@
     {
       "problem_id": "SVC-LEND-001",
       "difficulty": "high",
-      "coverage": "unsupported",
-      "reason": "Flash-loan, lending, liquidation, and protocol accounting decoders are absent.",
+      "coverage": "automated",
+      "reason": "A confirmed Aave V3 LiquidationCall fixture with complete PRIMARY/VERIFY RPC replay, strict defi_lending analyzer, evidence export, negative oracle, and independent verifier hash match are implemented.",
       "reusable_capabilities": [
-        "EVM-LOG",
-        "RECON"
-      ],
-      "blocking_gaps": [
         "DEFI-LEND",
-        "EVM-TRACE"
-      ]
+        "EVM-LOG",
+        "RECON",
+        "PATH",
+        "BASE-PROVENANCE",
+        "BASE-EXPORT"
+      ],
+      "blocking_gaps": [],
+      "fixture": {
+        "fixture_id": "FX-SVC-LEND-001",
+        "request_path": "docs/05_QA_Validation/fixtures/FX-SVC-LEND-001/analysis-request.json",
+        "replay_path": "docs/05_QA_Validation/fixtures/FX-SVC-LEND-001/raw-replay.json",
+        "expected_results": [
+          {
+            "result_type": "defi_lending",
+            "value": {
+              "protocol": "aave_v3",
+              "pool": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+              "chain_id": 1,
+              "subject_address": "0x1b05437f4a5f6b21692e83af3eb5607683e6dead",
+              "subject_roles": [
+                "liquidator"
+              ],
+              "events": [
+                {
+                  "event_name": "LiquidationCall",
+                  "protocol": "aave_v3",
+                  "pool": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+                  "collateral_asset": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+                  "debt_asset": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+                  "user": "0xcdb238d68d8da74487711bc1f8f13f3d00667d1a",
+                  "liquidator": "0x1b05437f4a5f6b21692e83af3eb5607683e6dead",
+                  "debt_to_cover_raw": "364477506",
+                  "liquidated_collateral_amount_raw": "87377757596420188410",
+                  "receive_a_token": false,
+                  "block_number": 21036015,
+                  "transaction_hash": "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37",
+                  "transaction_index": 1,
+                  "log_index": 16,
+                  "topic0": "0xe413a321e8681d831f4dbccbca790d2952b56f977908e45be37335533e005286"
+                }
+              ],
+              "net_asset_ledger": [
+                {
+                  "asset_address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+                  "raw_amount": "364477506",
+                  "direction": "out",
+                  "counterparty": "0x5ee5bf7ae06d1be5997a1a72006fe6c607ec6de8",
+                  "leg_kind": "liquidation_debt",
+                  "matched_transfer_log_index": 15,
+                  "classification": "confirmed_fact"
+                },
+                {
+                  "asset_address": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+                  "raw_amount": "87377757596420188410",
+                  "direction": "in",
+                  "counterparty": "0x0b925ed163218f6662a35e0f0371ac234f9e9371",
+                  "leg_kind": "liquidation_collateral",
+                  "matched_transfer_log_index": 10,
+                  "classification": "confirmed_fact"
+                }
+              ],
+              "subsequent_outflow": {
+                "status": "bounded",
+                "seed_address": "0x1b05437f4a5f6b21692e83af3eb5607683e6dead",
+                "terminal_address": "0x51c72848c68a965f66fa7a88855f9f7784502a7f",
+                "asset_address": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+                "raw_amount": "87377757596420177920",
+                "transaction_hash": "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37",
+                "log_index": 19,
+                "classification": "confirmed_fact"
+              },
+              "attribution": {
+                "attack_vs_normal": "not_assessed",
+                "service_attribution": "not_assessed",
+                "criminality": "not_assessed"
+              }
+            }
+          }
+        ],
+        "required_fixture_requirements": [
+          "REQ-LEND-EVENT",
+          "REQ-LEND-LEDGER",
+          "REQ-LEND-OUTFLOW"
+        ]
+      }
     },
     {
       "problem_id": "ACTOR-REL-001",

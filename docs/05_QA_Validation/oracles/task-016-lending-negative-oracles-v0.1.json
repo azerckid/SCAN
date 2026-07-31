@@ -1,0 +1,175 @@
+{
+  "schema_version": "0.1",
+  "status": "verified",
+  "execution_mode": "synthetic_offline",
+  "cases": [
+    {
+      "oracle_id": "OR-LEND-WRONG-PROTOCOL",
+      "fixture_id": "FX-SVC-LEND-001",
+      "facts": {
+        "wrong_protocol_attribution": true,
+        "window_violation": false,
+        "attack_label_assessed": false,
+        "subject_role_mismatch": false,
+        "multirole_leg_dropped": false,
+        "amount_transfer_mismatch": false,
+        "partial_allowed_for_mismatch": false,
+        "trace_required_missing": false,
+        "event_decoded": true,
+        "transfer_legs_matched": true,
+        "outflow_bounded": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "wrong_protocol_rejected"
+      }
+    },
+    {
+      "oracle_id": "OR-LEND-WINDOW-OUT-OF-SCOPE",
+      "fixture_id": "FX-SVC-LEND-001",
+      "facts": {
+        "wrong_protocol_attribution": false,
+        "window_violation": true,
+        "attack_label_assessed": false,
+        "subject_role_mismatch": false,
+        "multirole_leg_dropped": false,
+        "amount_transfer_mismatch": false,
+        "partial_allowed_for_mismatch": false,
+        "trace_required_missing": false,
+        "event_decoded": true,
+        "transfer_legs_matched": true,
+        "outflow_bounded": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "observation_window_violation"
+      }
+    },
+    {
+      "oracle_id": "OR-LEND-TRACE-REQUIRED-PARTIAL",
+      "fixture_id": "FX-SVC-LEND-001",
+      "facts": {
+        "wrong_protocol_attribution": false,
+        "window_violation": false,
+        "attack_label_assessed": false,
+        "subject_role_mismatch": false,
+        "multirole_leg_dropped": false,
+        "amount_transfer_mismatch": false,
+        "partial_allowed_for_mismatch": false,
+        "trace_required_missing": true,
+        "event_decoded": true,
+        "transfer_legs_matched": false,
+        "outflow_bounded": false
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "trace_unavailable"
+      }
+    },
+    {
+      "oracle_id": "OR-LEND-AMOUNT-MISMATCH",
+      "fixture_id": "FX-SVC-LEND-001",
+      "facts": {
+        "wrong_protocol_attribution": false,
+        "window_violation": false,
+        "attack_label_assessed": false,
+        "subject_role_mismatch": false,
+        "multirole_leg_dropped": false,
+        "amount_transfer_mismatch": true,
+        "partial_allowed_for_mismatch": false,
+        "trace_required_missing": false,
+        "event_decoded": true,
+        "transfer_legs_matched": false,
+        "outflow_bounded": false
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "amount_reconciliation_failed"
+      }
+    },
+    {
+      "oracle_id": "OR-LEND-ATTACK-LABEL-REJECTED",
+      "fixture_id": "FX-SVC-LEND-001",
+      "facts": {
+        "wrong_protocol_attribution": false,
+        "window_violation": false,
+        "attack_label_assessed": true,
+        "subject_role_mismatch": false,
+        "multirole_leg_dropped": false,
+        "amount_transfer_mismatch": false,
+        "partial_allowed_for_mismatch": false,
+        "trace_required_missing": false,
+        "event_decoded": true,
+        "transfer_legs_matched": true,
+        "outflow_bounded": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "attack_label_rejected"
+      }
+    },
+    {
+      "oracle_id": "OR-LEND-SUBJECT-ROLE-MISMATCH",
+      "fixture_id": "FX-SVC-LEND-001",
+      "facts": {
+        "wrong_protocol_attribution": false,
+        "window_violation": false,
+        "attack_label_assessed": false,
+        "subject_role_mismatch": true,
+        "multirole_leg_dropped": false,
+        "amount_transfer_mismatch": false,
+        "partial_allowed_for_mismatch": false,
+        "trace_required_missing": false,
+        "event_decoded": true,
+        "transfer_legs_matched": true,
+        "outflow_bounded": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "reconciliation_failed"
+      }
+    },
+    {
+      "oracle_id": "OR-LEND-MULTIROLE-LEG-DROP",
+      "fixture_id": "FX-SVC-LEND-001",
+      "facts": {
+        "wrong_protocol_attribution": false,
+        "window_violation": false,
+        "attack_label_assessed": false,
+        "subject_role_mismatch": false,
+        "multirole_leg_dropped": true,
+        "amount_transfer_mismatch": false,
+        "partial_allowed_for_mismatch": false,
+        "trace_required_missing": false,
+        "event_decoded": true,
+        "transfer_legs_matched": true,
+        "outflow_bounded": true
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "multirole_leg_drop_rejected"
+      }
+    },
+    {
+      "oracle_id": "OR-LEND-COMPLETE-MATCH",
+      "fixture_id": "FX-SVC-LEND-001",
+      "facts": {
+        "wrong_protocol_attribution": false,
+        "window_violation": false,
+        "attack_label_assessed": false,
+        "subject_role_mismatch": false,
+        "multirole_leg_dropped": false,
+        "amount_transfer_mismatch": false,
+        "partial_allowed_for_mismatch": false,
+        "trace_required_missing": false,
+        "event_decoded": true,
+        "transfer_legs_matched": true,
+        "outflow_bounded": true
+      },
+      "expected": {
+        "outcome": "complete",
+        "classification": "lending_flow_confirmed"
+      }
+    }
+  ]
+}
