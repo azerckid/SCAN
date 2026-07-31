@@ -42,8 +42,8 @@ SQLite Board input, and an atomic human-confirmed local submission record.
 adds Analysis I/O 0.2 `evm_core` object·historical balance·first Transfer·native
 inflow queries while retaining the three 0.1 verticals. `TASK-013` adds
 subject-scoped ERC-721/1155 and EIP-1967 event/state analysis. `TASK-014` adds
-bounded path, remerge, and multi-origin graph/ledger analysis. Fourteen cases are now
-directly automated, 6 are assisted, and 9 remain unsupported. The fifteen automated
+bounded path, remerge, and multi-origin graph/ledger analysis. Fifteen cases are now
+directly automated, 7 are assisted, and 8 remain unsupported. The fifteen automated
 cases pass exact answer, evidence, fixture-requirement, and deterministic replay
 checks. This is 15/15 accuracy within the automated scope, not 30/30 problem
 coverage.
@@ -52,7 +52,8 @@ PATH, intelligence, service/xchain, Bitcoin, case reconciliation, and a final
 coverage gate. TASK-012 through TASK-014 are complete; TASK-015 is in progress with
 four confirmed fixtures; TASK-016 Bridge and CEX are confirmed and automated, while
 Mixer·Lending remain under contest feature freeze. TASK-017 now automates exact
-bounded UTXO traversal while change/CoinJoin remain assisted; TASK-018~019 are proposed.
+bounded UTXO traversal while change/CoinJoin remain assisted. TASK-018 implements
+bounded Euler exit reconciliation as assisted; four case families and TASK-019 remain.
 TASK-013 has three confirmed public NFT·Proxy packages with two-provider
 raw SHA replay, explicit selected-scope integrity checks, and 16 offline negative
 oracles, an independent raw-first Verifier, approved UI·Context, product analyzer,
@@ -160,13 +161,13 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-617 passed
-PASS 22 fixture packages validated against schema 0.1
+631 passed
+PASS 23 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
-PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 67 probes
+PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 72 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 2038 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 279 runtime/evidence files
+PASS repository traceability: 2052 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 287 runtime/evidence files
 PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)
 PASS TASK-013 independent Verifier: 3 fixtures (confirmed), 7 requirements, 13 evidence values, 2 deterministic runs
@@ -223,8 +224,10 @@ baseline and expected-problem Benchmark 0.1 are closed.
 `TASK-015` is in progress: four bounded fixtures are confirmed, `OSINT-LBL-001`
 is automated, and common-funder remains candidate. `TASK-016` Bridge is confirmed
 and automated; CEX is also confirmed and automated. `TASK-017` automates exact bounded
-Bitcoin UTXO traversal while change/CoinJoin remain assisted; Mixer·Lending and
-`TASK-018` through `TASK-019` remain under contest feature freeze until actual problem
+Bitcoin UTXO traversal while change/CoinJoin remain assisted. `TASK-018` has an
+explicitly approved bounded Euler exit reconciler and one confirmed derived fixture;
+phishing, poisoning, rug-pull, and open-ended mixed cases remain unsupported.
+Mixer·Lending and `TASK-019` remain under contest feature freeze until actual problem
 demand appears.
 `TASK-010` offline Operations V1 is complete through human-confirmed local
 submission recording. No live provider configuration exists; live transport still

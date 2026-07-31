@@ -437,6 +437,19 @@ docs-only 검토 트랙이다.
   구현·독립 hash 대조까지 완료했다(CLI 전용, 웹 Workbench 미포함). fixture
   `confirmed` 승격은 별도 Gate다.
 
+## 16.8 TASK-018 Case Reconciliation
+
+[TASK-018 Case UI](./13_TASK_018_CASE_RECONCILIATION_UI.md)는 confirmed
+vertical fixture를 사건 timeline으로 조합하되 기술 사실·외부 맥락·귀속·
+의도를 분리한다.
+
+- [Case Preview](./previews/12_task_018_case_reconciliation_preview.html)는
+  five-category selector와 partial·failed·unsupported 경계를 표시한다.
+- Euler fixture는 selected exit path만 증명하므로 화면 상태는 `PARTIAL`이다.
+- unrelated inflow exclusion·unresolved residual·`not_assessed`를 숨기지 않는다.
+- AI Planner는 방법을 제안하지만 Python replay·독립 Verifier 없는 주장은
+  confirmed fact나 submission-ready로 표시하지 않는다.
+
 ## 17. Related Documents
 
 - **Concept_Design**: [분석 도구 기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P0·V1 범위
@@ -457,6 +470,8 @@ docs-only 검토 트랙이다.
 - **UI_Screens**: [TASK-015 Intelligence Preview](./previews/08_task_015_intelligence_preview.html) - query 5개·상태 3개 docs-only 검토 화면
 - **UI_Screens**: [TASK-016 Bridge/XChain UI](./11_TASK_016_BRIDGE_XCHAIN_UI.md) - recipient discovery·domain matching·정수 정합 화면 계약
 - **UI_Screens**: [TASK-016 Bridge/XChain Preview](./previews/10_task_016_bridge_xchain_preview.html) - complete·partial·failed docs-only 검토 화면
+- **UI_Screens**: [TASK-018 Case UI](./13_TASK_018_CASE_RECONCILIATION_UI.md) - timeline·scope·attribution 화면 계약
+- **UI_Screens**: [TASK-018 Case Preview](./previews/12_task_018_case_reconciliation_preview.html) - partial·failed·unsupported 정적 검토 화면
 - **Technical_Specs**: [WP-INPUT-GATE CLI·Operations 연결 계약](../03_Technical_Specs/13_WP_INPUT_CLI_OPERATIONS_CONTRACT.md) - 명령·핸드오프·보안·QA 계약
 - **Technical_Specs**: [Agentic Parallel Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 역할·Queue·독립 검증·수동 제출 계약
 - **Technical_Specs**: [Python 개발 원칙](../03_Technical_Specs/00_DEVELOPMENT_PRINCIPLES.md) - CLI·log·보안 경계
@@ -465,6 +480,7 @@ docs-only 검토 트랙이다.
 - **Technical_Specs**: [TASK-012 Analysis Contract Proposal](../03_Technical_Specs/11_TASK_012_ANALYSIS_CONTRACT_PROPOSAL.md) - EVM Core 0.2 Draft
 - **Technical_Specs**: [TASK-014 PATH Contract Proposal](../03_Technical_Specs/15_TASK_014_PATH_CONTRACT_PROPOSAL.md) - graph·reconciliation·partial/failed 계약
 - **Technical_Specs**: [TASK-015 Intelligence Contract Proposal](../03_Technical_Specs/17_TASK_015_INTELLIGENCE_CONTRACT_PROPOSAL.md) - source·claim·conflict·relation 계약
+- **Technical_Specs**: [TASK-018 Case Contract](../03_Technical_Specs/23_TASK_018_CASE_RECONCILIATION_CONTRACT.md) - case_reconciliation 0.2·evidence composition
 - **Logic_Progress**: [P0·V1 구현 Backlog](../04_Logic_Progress/00_BACKLOG.md) - CLI·vertical slice 구현 순서
 - **QA_Validation**: [P0·V1 QA 시나리오](../05_QA_Validation/01_TEST_SCENARIOS.md) - 명령·상태·종료 코드 검증
 - **QA_Validation**: [분석 I/O 예제](../05_QA_Validation/examples/analysis/README.md) - preview 기준값

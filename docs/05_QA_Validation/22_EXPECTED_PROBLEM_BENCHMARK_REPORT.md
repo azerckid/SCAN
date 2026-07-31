@@ -1,7 +1,7 @@
 # 예상문제 Offline Benchmark 0.1 검증 보고서
 > Created: 2026-07-29 01:16
 > Last Updated: 2026-07-31 05:40
-> Status: Passed · 15 Automated / 6 Assisted / 9 Unsupported
+> Status: Passed · 15 Automated / 7 Assisted / 8 Unsupported
 
 ## 1. 목적과 판정 경계
 
@@ -46,7 +46,7 @@ integration test가 `socket.socket`을 실패하도록 바꾼 상태에서 동�
 ## 3. 실행 결과
 
 ```text
-EXPECTED PROBLEMS 30 · AUTOMATED 15 · ASSISTED 6 · UNSUPPORTED 9
+EXPECTED PROBLEMS 30 · AUTOMATED 15 · ASSISTED 7 · UNSUPPORTED 8
 PASS BASIC-EVM-001 · FX-BASIC-EVM-001
 PASS BASIC-EVM-002 · FX-BASIC-EVM-002
 PASS EVM-AUTH-001 · FX-EVM-AUTH-001
@@ -69,8 +69,8 @@ BENCHMARK 15/15 automated cases passed · network_mode offline
 |:---|---:|
 | 전체 예상문제 | 30 |
 | 완전자동 | 15 |
-| 도구보조 | 6 |
-| 미지원 | 9 |
+| 도구보조 | 7 |
+| 미지원 | 8 |
 | 자동 실행 | 15 |
 | 자동 통과 | 15 |
 | 자동 범위 정확도 | 100% |
@@ -104,7 +104,7 @@ BENCHMARK 15/15 automated cases passed · network_mode offline
 | ACTOR-REL-002 | Assisted | public-hub relation·false-positive exclusion | positive multi-heuristic candidate·CLUSTER |
 | CRIME-PHISH-001 | Unsupported | AUTH·provenance | PATH·LABEL·OSINT |
 | CRIME-POISON-001 | Unsupported | provenance | POISON·HEUR |
-| CRIME-EXP-001 | Unsupported | EVM-LOG·provenance | EVM-TRACE·EXPLOIT-DECODE·PATH |
+| CRIME-EXP-001 | Assisted | case_reconciliation·confirmed FLOW composition | EVM-TRACE·EXPLOIT-DECODE·SEED-DISCOVERY |
 | CRIME-RUG-001 | Unsupported | EVM-LOG·provenance | LP-RUG·PATH·LABEL |
 | BTC-UTXO-001 | **Pass / Automated** | confirmed exact-satoshi fixture | BTC-UTXO |
 | BTC-UTXO-002 | Assisted | change candidate·반례 | BTC-UTXO·HEUR |
@@ -154,9 +154,10 @@ coverage를 가장 크게 늘리는 순서는
 - fixture oracle은 reviewed 공개 사례에 고정되어 새로운 실전 입력의 일반화
   성능을 측정하지 않는다.
 - `FLOW-MULTI-001`은 raw contribution·합계만, OSINT-SAN/ENS와
-  ACTOR-REL-002는 bounded intelligence fact만 도구보조다. 전체 정답 필드가
-  없어 네 문제를 Assisted로 유지하며 핵심 분석기가 없는 12개는
-  Unsupported다.
+  ACTOR-REL-002는 bounded intelligence fact만 도구보조다. Bitcoin
+  change/CoinJoin과 `CRIME-EXP-001`도 각각 휴리스틱 또는 bounded
+  post-incident exit만 제공한다. 전체 정답 필드가 없는 7개는 Assisted,
+  reviewed 실행 근거가 없는 8개는 Unsupported다.
 - Challenge Pack 10개에는 confirmed reference fixture가 없어 이번 0.1에서
   실행하지 않는다.
 - 실행 시간은 단일 로컬 관찰값이며 성능 benchmark로 사용하지 않는다.
