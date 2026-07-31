@@ -21,6 +21,13 @@ sys.modules[SPEC.name] = bridge_quick_capture
 SPEC.loader.exec_module(bridge_quick_capture)
 
 
+def test_default_rpc_env_names_match_existing_bridge_replay_contract() -> None:
+    assert bridge_quick_capture.DEFAULT_RPC_URL_ENV == {
+        "base": "SCAN_BASE_PRIMARY_RPC_URL",
+        "ethereum": "SCAN_EVM_PRIMARY_RPC_URL",
+    }
+
+
 def test_self_check_matches_pinned_fact_hash() -> None:
     report = bridge_quick_capture.self_check()
     assert report["self_check"]["matched_pinned_hash"] is True

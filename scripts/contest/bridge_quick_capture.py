@@ -43,7 +43,7 @@ from scan_tool.slices.bridge_transfer import analyze_bridge_transfer_replay  # n
 BridgeChain = Literal["base", "ethereum"]
 
 DEFAULT_RPC_URL_ENV: dict[BridgeChain, str] = {
-    # Reuse the project's existing provider_smoke.py env var convention
+    # Reuse the project's existing provider/Bridge replay env var convention
     # (.env.local already provides these) instead of inventing new names.
     "base": "SCAN_BASE_PRIMARY_RPC_URL",
     "ethereum": "SCAN_EVM_PRIMARY_RPC_URL",
