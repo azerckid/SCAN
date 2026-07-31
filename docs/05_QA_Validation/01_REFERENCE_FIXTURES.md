@@ -1,14 +1,14 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
 > Last Updated: 2026-07-31 06:20
-> Status: Approved 2.0 · 19 Confirmed · 0 Verifying · 1 Candidate · 1 Deferred
+> Status: Approved 2.0 · 21 Confirmed · 0 Verifying · 2 Candidate · 1 Deferred
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
-있는 reference fixture를 관리한다. 현재 등록한 20개 중 19개는 `확정`,
-0개는 `검증 중`, 1개는 `후보`이며 Deferred 1개는 문서 후보만 있다.
-20개는 Schema package가 있다. TASK-013 세 공개 사례는 remediation
+있는 reference fixture를 관리한다. 현재 23개 Schema package 중 21개는
+`확정`, 0개는 `검증 중`, 2개는 `후보`이며 Deferred 1개는 문서 후보만 있다.
+TASK-013 세 공개 사례는 remediation
 재검토와 [최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
 통과해 `확정`으로 관리한다.
 
@@ -113,6 +113,9 @@ Verifier·analyzer hash를 통과한 뒤
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
 | [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) | SVC-BRG-001 | 1 | 확정 0.1 | Across confirmed·양단 replay·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | XCHAIN, BRIDGE, RECON |
 | [FX-SVC-CEX-001](./fixtures/FX-SVC-CEX-001/README.md) | SVC-CEX-001 | 1 | 확정 0.1 | GARANTEX OFAC confirmed·PRIMARY publicnode·VERIFY merkle·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | CEX-CLUSTER, LABEL, HEUR |
+| [FX-CASE-EULER-EXIT-001](./fixtures/FX-CASE-EULER-EXIT-001/README.md) | CRIME-EXP-001 | 1 | 확정 0.1 | confirmed FLOW 2개 SHA composition·11 oracle·독립 Verifier·analyzer hash·Benchmark assisted | CASE-RECON, PATH, exclusion |
+| [FX-BTC-UTXO-001](./fixtures/FX-BTC-UTXO-001/README.md) | BTC-UTXO-001 | 1 | 확정 0.1 | PublicNode Bitcoin RPC + mempool Esplora 독립 raw replay·Verifier·Benchmark automated | BTC-UTXO, prevout, fee |
+| [FX-BTC-CJ-001](./fixtures/FX-BTC-CJ-001/README.md) | BTC-CJ-001 | 1 | 후보 0.1 | heuristic candidate·비단정 경계 | BTC-UTXO, COINJOIN, HEUR |
 | FX-EVM-AUTH-001 | EVM-AUTH-001 | 2 | 확정 | V1 기준선 | AUTH-DECODE, allowance 연결 |
 | [FX-EVM-NFT-721-001](./fixtures/FX-EVM-NFT-721-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·analyzer remediation | ERC-721 event·tokenId |
 | [FX-EVM-NFT-1155-001](./fixtures/FX-EVM-NFT-1155-001/README.md) | EVM-NFT-001 | 2 | 확정 0.1 | 두 RPC·16 oracle·독립 Verifier·subject 분리 | ERC-1155 Single·Batch |
@@ -256,6 +259,27 @@ adjacent state만 완전성을 주장한다.
 | 재현 절차 | 1) PRIMARY 세 outbound TX/receipt/block 2) VERIFY 동일 capability를 merkle에서 전 transfer 3) immutable fact equality 4) OFAC SDN assertion 5) negative oracle |
 | 저작권·출처 | US Treasury OFAC SDN public domain URL·Etherscan supporting URL만 기록. SDN excerpt는 content-addressed artifact로 pin |
 | 마지막 확인 | 2026-07-31 06:20 (confirmed 승격·Benchmark 14/14) |
+
+---
+
+### FX-CASE-EULER-EXIT-001
+
+| 필드 | 내용 |
+|:---|:---|
+| 연결 문제 ID | CRIME-EXP-001 (bounded assisted subset) |
+| 상태 | 확정 |
+| DOC-M3 결정 | confirmed FLOW fixture composition·11 oracle·독립 Verifier·analyzer hash |
+| 패키지 | [FX-CASE-EULER-EXIT-001](./fixtures/FX-CASE-EULER-EXIT-001/README.md) |
+| 데이터 형태 | confirmed on-chain fixture composition + URL-only official chronology |
+| 체인 | Ethereum (`chain_id` 1) |
+| 기준 정답 | selected three-hop post-incident timeline, four-branch remerge, unrelated inflow exclusion, attribution `not_assessed` |
+| 허용 오차 | raw integer 0; fixture SHA-256 exact |
+| 확정 사실 | selected PATH/REMERGE facts only; canonical hash `412ea743...8535` |
+| 휴리스틱 | exploit causation·ownership·victim identity·criminal intent를 사실로 승격하지 않음 |
+| 필요 데이터 소스 | `DS-EVM-RPC-PUBLIC`, `DS-EXPLORER-EVM`, `DS-OSINT-WEB` |
+| 재현 절차 | 1) source fixture SHA 2) timeline order 3) exclusion 4) independent Verifier 5) analyzer hash |
+| 저작권·출처 | Euler 공식 글은 URL/chronology context만 사용하고 본문을 저장·재배포하지 않음 |
+| 마지막 확인 | 2026-07-31 11:00 |
 
 ---
 

@@ -2,7 +2,7 @@
 
 > Created: 2026-07-31 04:55
 > Last Updated: 2026-07-31 06:30
-> Status: Active · Bridge+CEX Confirmed · TASK-017 explicitly thawed in Draft PR #112 · combined Benchmark 15/15
+> Status: Active · Bridge+CEX Confirmed · TASK-017 and bounded TASK-018 explicitly thawed · combined Benchmark 15/15
 
 ## 1. 목적
 
@@ -22,7 +22,7 @@ Mixer·Lending·TASK-018/019 freeze는 유지하며, 대회 중 실제 출제가
 | Assisted | 4 | FLOW-MULTI, ENS, SANCTIONS, ACTOR-REL-002 |
 | Unsupported | 12 | BTC×3, MIX, LEND, CRIME×4, MIXED-XCHAIN, MIXED-CASE, ACTOR-REL-001 등 |
 
-Fixture registry: **19 Confirmed · 0 Verifying · 1 Candidate · 1 Deferred**.
+Fixture registry: **21 Confirmed · 0 Verifying · 2 Candidate · 1 Deferred**.
 
 위 수치는 CEX 병합 후 main 기준선이다. 현재 TASK-017 Draft PR #112는 exact
 Bitcoin UTXO 1문항을 추가해 결합 Benchmark **15 automated**
@@ -66,7 +66,8 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 
 ## 5. Feature Freeze 규칙
 
-- Freeze 대상: TASK-016 Mixer/Lending, TASK-018/019, MIXED-XCHAIN 조합,
+- Freeze 대상: TASK-016 Mixer/Lending, TASK-018의 미구현 4개 case family,
+  TASK-019, MIXED-XCHAIN 조합,
   live Rules adapter. TASK-017 Bitcoin은 아래 사용자 승인 예외로 thaw했다.
 - **CEX (2026-07-31 remediation):** TASK-016 CEX(`SVC-CEX-001`)는 Merkle VERIFY
   9-call complete replay와 code-computed cross-provider match로 `confirmed`·
@@ -74,7 +75,8 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
   unsupported 유지.
 - **TASK-017 Bitcoin 예외:** 2026-07-31 사용자 전용 일괄 승인으로
   `codex/task-017-bitcoin`에서 thaw했다. 범위는 구현·검증·커밋·Draft PR
-  #112이며 Mixer·Lending·TASK-018/019 승인을 뜻하지 않는다.
+  #112다. TASK-018은 2026-07-31 사용자 일괄 승인으로 bounded Euler
+  composition만 별도 thaw했으며 Mixer·Lending·TASK-019 승인을 뜻하지 않는다.
 - 허용: 문서 정합, 치명적 회귀 버그 수정, 대회 중 실제 출제 대응의
   최소 hotfix(별도 승인)
 - 금지: Benchmark unsupported를 숨기거나 fixture를 가짜 confirmed로 올리기

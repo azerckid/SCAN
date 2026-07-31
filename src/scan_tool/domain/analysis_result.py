@@ -358,6 +358,24 @@ class CexClusterFailedAnalysisResult(FailedAnalysisResult):
     analysis_type: Literal[AnalysisType.CEX_CLUSTER]
 
 
+class CaseReconciliationCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
+    chain_id: Literal[1]
+
+
+class CaseReconciliationPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
+    chain_id: Literal[1]
+
+
+class CaseReconciliationFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
+    chain_id: Literal[1]
+
+
 ResultVariant = (
     LegacyCompleteAnalysisResult
     | LegacyPartialAnalysisResult
@@ -383,6 +401,9 @@ ResultVariant = (
     | CexClusterCompleteAnalysisResult
     | CexClusterPartialAnalysisResult
     | CexClusterFailedAnalysisResult
+    | CaseReconciliationCompleteAnalysisResult
+    | CaseReconciliationPartialAnalysisResult
+    | CaseReconciliationFailedAnalysisResult
 )
 
 

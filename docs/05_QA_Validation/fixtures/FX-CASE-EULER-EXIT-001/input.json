@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-CASE-EULER-EXIT-001",
+  "problem_id": "CRIME-EXP-001",
+  "status": "confirmed",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "source_fixture_refs": [
+    "FX-FLOW-PATH-001",
+    "FX-FLOW-REMERGE-001"
+  ],
+  "case_category": "exploit",
+  "scope": "selected_post_incident_exit",
+  "selection_notes": "This derived fixture composes two confirmed raw-first FLOW fixtures. It does not claim open-ended seed discovery, exploit causation, ownership, victim status, or criminal intent."
+}

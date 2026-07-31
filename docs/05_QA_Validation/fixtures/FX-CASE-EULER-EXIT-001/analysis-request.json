@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-CASE-EULER-EXIT-001",
+  "analysis_type": "case_reconciliation",
+  "query_kind": "reconstruct_incident",
+  "chain_id": 1,
+  "fixture_id": "FX-CASE-EULER-EXIT-001",
+  "requested_at": "2026-07-31T11:00:00Z",
+  "inputs": {
+    "case_category": "exploit",
+    "seed_transaction_hash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+    "source_fixture_refs": [
+      "FX-FLOW-PATH-001",
+      "FX-FLOW-REMERGE-001"
+    ],
+    "max_timeline_entries": 8
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": [
+      "DS-EVM-RPC-PUBLIC",
+      "DS-EXPLORER-EVM",
+      "DS-OSINT-WEB"
+    ],
+    "source_order": [
+      "DS-EVM-RPC-PUBLIC",
+      "DS-EXPLORER-EVM",
+      "DS-OSINT-WEB"
+    ],
+    "allow_fallback": false,
+    "offline_mode": true
+  }
+}

@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-31 05:40
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate) · TASK-016 Bridge+CEX Confirmed·Automated · TASK-017 In Progress(UTXO automated · change/CoinJoin assisted · Benchmark 15·6·9) · TASK-018~019 Proposed
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate) · TASK-016 Bridge+CEX Confirmed·Automated · TASK-017 In Progress(UTXO automated · change/CoinJoin assisted) · TASK-018 In Progress(Euler exit assisted) · TASK-019 Proposed · Benchmark 15·7·8
 
 ## 1. 문서 목적
 
@@ -1789,35 +1789,39 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-018: 범죄·복합 사건 Reconciliation
 
-- Status: ToDo
+- Status: In Progress — Euler selected-exit composition implemented; 4 target families remain
 - Work Type: code
 - Priority: Phase 2 · P2
 - Depends On: TASK-014, TASK-015, 필요 시 TASK-016
 - Target Problems: `CRIME-PHISH/POISON/EXP/RUG-001`, `MIXED-CASE-001`
 - Atomic Tasks:
-  - [ ] 사건별 공개 사례·reference answer·반례를 확정한다.
-  - [ ] seed discovery·timeline·unrelated fund exclusion 계약을 설계한다.
-  - [ ] 기존 엔진 결과를 evidence ref로 조합한다.
-  - [ ] 기술 사실·외부 귀속·범죄 의도를 분리 검증한다.
+  - [ ] 사건별 공개 사례·reference answer·반례를 확정한다. (Euler bounded exit 1개 완료)
+  - [x] seed discovery·timeline·unrelated fund exclusion 계약을 설계한다.
+  - [x] 기존 엔진 결과를 evidence ref로 조합한다.
+  - [x] 기술 사실·외부 귀속·범죄 의도를 분리 검증한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 범죄·복합 5문항
 - Related UI Docs:
   - [Investigation Workbench](../02_UI_Screens/03_WEB_INVESTIGATION_WORKBENCH.md) - 사건 graph·timeline·inspector
   - [Operations Board](../02_UI_Screens/04_COMPETITION_OPERATIONS_BOARD.md) - 복수 leaf·독립 검증
+  - [TASK-018 Case UI](../02_UI_Screens/13_TASK_018_CASE_RECONCILIATION_UI.md) - timeline·scope·attribution 경계
 - Related HTML Preview:
   - [Workbench Preview](../02_UI_Screens/previews/02_investigation_workbench_preview.html) - 사건 검토 화면
+  - [TASK-018 Preview](../02_UI_Screens/previews/12_task_018_case_reconciliation_preview.html) - partial·failed·unsupported
 - Related Technical Docs:
   - [Coverage 확장 Brief](../03_Technical_Specs/09_EXPECTED_PROBLEM_EXPANSION_BRIEF.md) - WP-CASE 계약
   - [Agentic Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - Planner·worker·Verifier 경계
+  - [TASK-018 I/O Contract](../03_Technical_Specs/23_TASK_018_CASE_RECONCILIATION_CONTRACT.md) - case_reconciliation 0.2
 - Related QA Docs:
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-CASE-001
+  - [TASK-018 Report](../05_QA_Validation/69_TASK_018_CASE_RECONCILIATION_REPORT.md) - fixture·oracle·Verifier·analyzer
 - Implementation Preconditions:
-  - [ ] 사건별 fixture·정답·attribution scope를 확정한다.
-  - [ ] PATH·INTEL과 필요한 전문 adapter가 검증됐다.
-  - [ ] Workbench 진입·전환·이탈과 loading·empty·conflict·failed를 확인한다.
-  - [ ] case 최소 필드·bundle mutation·timeline 상태 관리를 승인한다.
-  - [ ] Workbench 사용자 동선·상태·충돌 표시를 확인한다.
-  - [ ] 사용자 구현 승인을 기록한다.
+  - [ ] 사건별 fixture·정답·attribution scope를 확정한다. (Euler composition 완료)
+  - [x] PATH·INTEL과 필요한 전문 adapter가 검증됐다.
+  - [x] Workbench 진입·전환·이탈과 loading·empty·conflict·failed를 확인한다.
+  - [x] case 최소 필드·bundle mutation·timeline 상태 관리를 승인한다.
+  - [x] Workbench 사용자 동선·상태·충돌 표시를 확인한다.
+  - [x] 사용자 TASK-018 일괄 구현 승인을 기록한다. 2026-07-31
 - Component & Library Plan:
   - shadcn/ui: N/A - Python case reconciler 우선.
   - Custom components: seed resolver, timeline, case evidence bundle.
@@ -1826,20 +1830,26 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Libraries intentionally not added: 범용 case-management framework - 범위 밖.
   - shadcn preset: N/A - 웹 runtime 별도 승인.
 - Acceptance Criteria:
-  - [ ] 사건 결과가 실제 evidence ref와 timeline에 연결된다.
-  - [ ] 관련 없는 자금·충돌·미확정 귀속을 보존한다.
-  - [ ] 범죄 의도는 증거 범위 밖이면 not_assessed다.
+  - [x] 사건 결과가 실제 evidence ref와 timeline에 연결된다.
+  - [x] 관련 없는 자금·충돌·미확정 귀속을 보존한다.
+  - [x] 범죄 의도는 증거 범위 밖이면 not_assessed다.
 - Document Sync Check:
-  - [ ] Workbench·Operations·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
+  - [x] Workbench·Operations·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - 선행 엔진·fixture·UI·사용자 승인 전 착수 금지
+  - Status: PASS — 선행 PATH fixture·UI/contract·사용자 TASK-018 일괄 승인 확인
   - Required References Read: 위 Related 문서 전체
-  - Constraints: attribution/intent 비단정, evidence-only composition
-  - Conflicts: None known
+  - Constraints: attribution/intent 비단정, evidence-only composition, category enum≠evidence
+  - Conflicts: full exploit decode·phishing·poison·rug·mixed fixture remains unresolved
 - Change Receipt:
-  - N/A - 구현 미시작
+  - `case_reconciliation` Analysis I/O 0.2·offline analyzer·CLI·fixture·Preview 구현
+  - `CRIME-EXP-001`만 selected-exit 지원으로 assisted 승격; 자동화 15 유지
 - Verification Receipt:
-  - N/A - 구현 미시작
+  - Status: PASS
+  - 11 negative oracles twice · stdlib independent Verifier twice
+  - product↔Verifier fact hash `412ea743…8535`
+  - `scripts/verify.py` — PASS — 631 tests, fixture 23, Schema 72 probes,
+    traceability 2052 links, security 287 files
+  - detailed evidence: [69 Report](../05_QA_Validation/69_TASK_018_CASE_RECONCILIATION_REPORT.md)
 
 ### [ ] TASK-019: Coverage Expansion 통합 Gate
 
