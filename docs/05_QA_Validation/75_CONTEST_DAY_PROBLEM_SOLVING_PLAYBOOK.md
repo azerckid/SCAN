@@ -66,6 +66,9 @@ LLM은 분류·경로·해석을 돕되, on-chain 확정 사실을 발명하지 
 - 자산 불일치(asset mismatch) edge를 같은 흐름으로 묶지 않기
 - 재병합: 무관한 external inflow를 흐름에 포함 금지, 잔여(residual) 음수 금지
 - 다피해자 집계: 가격 데이터 없이 피해액 환산 금지 (assisted 경계)
+- 시드+금액 → 최종 후보: 순방향 수집 → 금액 근접 필터 → 역추적 검증.
+  경로·금액 정합 후보는 전부 용의선
+  ([76 Method](./76_FLOW_FINAL_ACCOUNT_CANDIDATE_METHOD.md))
 
 ### 3.8 SVC-DEX (DEX 스왑)
 - 멀티홉 스왑의 순자산 변화를 전후 잔액이 아니라 이벤트로 재구성
@@ -135,6 +138,7 @@ LLM은 분류·경로·해석을 돕되, on-chain 확정 사실을 발명하지 
 
 ## 5. Related Documents
 
+- [FLOW Final Account Candidate Method](./76_FLOW_FINAL_ACCOUNT_CANDIDATE_METHOD.md)
 - [Contest Stabilization Runbook](./66_CONTEST_STABILIZATION_RUNBOOK.md)
 - [Reference Fixtures](./01_REFERENCE_FIXTURES.md)
 - [Expected Problem Benchmark Report](./22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md)
