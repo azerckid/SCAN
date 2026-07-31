@@ -1,13 +1,15 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
 > Last Updated: 2026-07-31 06:20
-> Status: Approved 2.0 · 22 Confirmed · 0 Verifying · 2 Candidate · 1 Deferred
+> Status: Approved 2.0 · 23 Confirmed · 0 Verifying · 2 Candidate · 0 Deferred
 
 ## 1. 문서 목적
 
 이 문서는 예상문제 은행 Draft 2의 대표 문제에 대해, 도구 정확성을 검증할 수
-있는 reference fixture를 관리한다. 현재 23개 Schema package 중 21개는
-`확정`, 0개는 `검증 중`, 2개는 `후보`이며 Deferred 1개는 문서 후보만 있다.
+있는 reference fixture를 관리한다. 현재 25개 Schema package 중 23개는
+`확정`, 0개는 `검증 중`, 2개는 `후보`이다. 이전에 문서 후보만 있던 Deferred
+1개(`FX-UNCERTAIN-001`)는 `SVC-MIX-001`·`BTC-CJ-001`이 각각 자체 fixture로
+분리되며 해소됐다.
 TASK-013 세 공개 사례는 remediation
 재검토와 [최종 승격 Receipt](./38_TASK_013_FINAL_PROMOTION_RECEIPT.md)를
 통과해 `확정`으로 관리한다.
@@ -34,8 +36,11 @@ Verifier·analyzer hash·Verification Receipt를 통과한 뒤
 GARANTEX label assertion·PRIMARY/VERIFY native sweep replay·negative oracle·독립
 Verifier·analyzer hash를 통과한 뒤
 [CEX 최종 승격 Receipt](./68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)에서
-`확정`과 Benchmark automated로 등록했다. Mixer·Lending과
-`MIXED-XCHAIN-001`은 별도 Gate로 남는다.
+`확정`과 Benchmark automated로 등록했다. Mixer(`FX-SVC-MIX-001`)와
+Lending(`FX-SVC-LEND-001`)도 같은 PRIMARY/VERIFY dual-provider·negative
+oracle·독립 Verifier·analyzer hash Gate를 통과해 `확정`과 Benchmark
+automated로 등록했다. `MIXED-XCHAIN-001`만 실제 연결 fixture가 없어 별도
+Gate로 남는다.
 
 입력 문서:
 
@@ -113,6 +118,7 @@ Verifier·analyzer hash를 통과한 뒤
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
 | [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) | SVC-BRG-001 | 1 | 확정 0.1 | Across confirmed·양단 replay·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | XCHAIN, BRIDGE, RECON |
 | [FX-SVC-CEX-001](./fixtures/FX-SVC-CEX-001/README.md) | SVC-CEX-001 | 1 | 확정 0.1 | GARANTEX OFAC confirmed·PRIMARY publicnode·VERIFY merkle·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | CEX-CLUSTER, LABEL, HEUR |
+| [FX-SVC-MIX-001](./fixtures/FX-SVC-MIX-001/README.md) | SVC-MIX-001 | 1 | 확정 0.1 | Tornado Cash 0.1 ETH OFAC confirmed·PRIMARY publicnode·VERIFY merkle·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | MIXER, LABEL, HEUR |
 | [FX-SVC-LEND-001](./fixtures/FX-SVC-LEND-001/README.md) | SVC-LEND-001 | 1 | 확정 0.1 | Aave V3 LiquidationCall confirmed·PRIMARY publicnode·VERIFY thirdweb·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | DEFI-LEND, EVM-LOG, RECON |
 | [FX-CASE-EULER-EXIT-001](./fixtures/FX-CASE-EULER-EXIT-001/README.md) | CRIME-EXP-001 | 1 | 확정 0.1 | confirmed FLOW 2개 SHA composition·11 oracle·독립 Verifier·analyzer hash·Benchmark assisted | CASE-RECON, PATH, exclusion |
 | [FX-BTC-UTXO-001](./fixtures/FX-BTC-UTXO-001/README.md) | BTC-UTXO-001 | 1 | 확정 0.1 | PublicNode Bitcoin RPC + mempool Esplora 독립 raw replay·Verifier·Benchmark automated | BTC-UTXO, prevout, fee |
@@ -123,7 +129,7 @@ Verifier·analyzer hash를 통과한 뒤
 | [FX-EVM-PROXY-001](./fixtures/FX-EVM-PROXY-001/README.md) | EVM-PROXY-001 | 2 | 확정 0.1 | 두 archive RPC·16 oracle·독립 Verifier·state 정합 | EIP-1967 slot·event |
 | FX-EVM-FREEZE-001 | EVM-FREEZE-001 | 2 | 확정 | V1 기준선 | FREEZE, state/logs |
 | [FX-FLOW-MULTI-001](./fixtures/FX-FLOW-MULTI-001/README.md) | FLOW-MULTI-001 | 2 | 확정 0.1 | 두 RPC·18 oracle·Verifier·analyzer | RECON, dedup, 다주소 raw 집계 |
-| FX-UNCERTAIN-001 | SVC-MIX-001 또는 BTC-CJ-001 | 2 | 후보 | Deferred | MIXER 또는 HEUR(CoinJoin), 불확실성 태그 |
+| ~~FX-UNCERTAIN-001~~ | ~~SVC-MIX-001 또는 BTC-CJ-001~~ | 2 | 해소 | 두 분기 모두 자체 fixture로 분리됨 — `SVC-MIX-001`은 [FX-SVC-MIX-001](./fixtures/FX-SVC-MIX-001/README.md)(확정), `BTC-CJ-001`은 [FX-BTC-CJ-001](./fixtures/FX-BTC-CJ-001/README.md)(후보)으로 각각 승격 | 해소됨 |
 | [FX-BASIC-EVM-001](./fixtures/FX-BASIC-EVM-001/README.md) | BASIC-EVM-001 | 1 | 확정 0.2 | provider replay·반례·consumer pass | EVM-TX, block, code |
 | [FX-BASIC-EVM-002](./fixtures/FX-BASIC-EVM-002/README.md) | BASIC-EVM-002 | 1 | 확정 0.2 | archive replay·반례·consumer pass | EVM-STATE, decimals |
 | [FX-EVM-TOKEN-001](./fixtures/FX-EVM-TOKEN-001/README.md) | EVM-TOKEN-001 | 1 | 확정 0.2 | filtered logs·ordering·consumer pass | EVM-LOG, first ordering |
@@ -263,6 +269,22 @@ adjacent state만 완전성을 주장한다.
 
 ---
 
+### FX-SVC-MIX-001
+
+| 항목 | 값 |
+|:---|:---|
+| 패키지 | [FX-SVC-MIX-001](./fixtures/FX-SVC-MIX-001/README.md) |
+| 문제 | SVC-MIX-001 |
+| 상태 | 확정(confirmed) 0.1 |
+| Pool | Tornado Cash 0.1 ETH (OFAC SDN) `0x12d66f87…6b8fc` |
+| Deposit TX | `0xc716eec2…e33f483` · block `25304911` |
+| Subject | depositor `0xe1fe63b0…13893` |
+| PRIMARY/VERIFY | `ethereum-rpc.publicnode.com` / `eth.merkle.io` |
+| Canonical hash | `4c8c4eb8041642ea514e4c7357d474bb4038b9f6eeea55a816aa2dae41484939` |
+| 경계 | deposit↔withdraw linkage는 `candidate`/heuristic만; hot wallet ownership·criminality `not_assessed` |
+| 마지막 확인 | 2026-07-31 (confirmed 승격·Benchmark automated) |
+
+---
 
 ### FX-SVC-LEND-001
 

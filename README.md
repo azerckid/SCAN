@@ -70,8 +70,9 @@ SANCTIONS·ENS·public-hub problems remain assisted because one-hop expansion,
 domain/SNS checks, and positive multi-heuristic clustering are not complete. The
 common-funder fixture remains candidate. TASK-016 has a confirmed Across V3
 Base→Ethereum fixture and automated `SVC-BRG-001`, a confirmed GARANTEX OFAC
-CEX cluster fixture and automated `SVC-CEX-001`, plus a confirmed Tornado Cash
-mixer flow fixture and automated `SVC-MIX-001`; `MIXED-XCHAIN-001` stays
+CEX cluster fixture and automated `SVC-CEX-001`, a confirmed Tornado Cash
+mixer flow fixture and automated `SVC-MIX-001`, plus a confirmed Aave V3
+LiquidationCall fixture and automated `SVC-LEND-001`; `MIXED-XCHAIN-001` stays
 unsupported until composition exists.
 Live AI and CTFd network submission remain unimplemented.
 `WP-INPUT-IMPL-02` connects explicit external replay and provided JSON/JSONL/CSV
