@@ -107,6 +107,7 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 
 ## 7. Related Documents
 
+- [Contest Day Problem-Solving Playbook](./75_CONTEST_DAY_PROBLEM_SOLVING_PLAYBOOK.md)
 - [TASK-016 Contest Scope Closure](./73_TASK_016_CONTEST_SCOPE_CLOSURE_RECEIPT.md)
 - [TASK-019 Final Integration Report](./74_TASK_019_FINAL_INTEGRATION_REPORT.md)
 - [Bridge Final Promotion Receipt](./65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)
