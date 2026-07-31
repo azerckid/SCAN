@@ -9,6 +9,10 @@ Implements docs/05_QA_Validation/76_FLOW_FINAL_ACCOUNT_CANDIDATE_METHOD.md:
    edge set collected by a *different* method: the same real transaction
    must match exactly (tx_hash/from/to/value/asset/locator); only the
    *files* (whole-set canonical content) must not be identical copies.
+3b. Independently RE-CHECK the candidate conclusion itself: the second
+    edge set's own related_out for the candidate must also be zero and its
+    residual must also be within tolerance -- a candidate discovery calls
+    terminal but the independent set shows further outflow for is rejected.
 4. Always emit verification_level=heuristic_candidates (|C|==1 included)
 5. scope_complete is always false: this MVP has no way to verify that an
    input edge file represents a complete capture of real chain data.
@@ -455,6 +459,12 @@ def run_analysis(
     # forbidden -- see the per-candidate loop below.
     whole_set_is_a_copy = discovery_canonical_sha256 == independent_canonical_sha256
 
+    # Independent data must corroborate the *candidate conclusion*, not just
+    # the path transactions: if the independent set shows further related
+    # outflow (or a residual mismatch) for a candidate that discovery called
+    # terminal, that contradicts the terminus claim and must exclude it.
+    independent_residuals = aggregate_residuals(independent_edges)
+
     candidates: list[dict[str, Any]] = []
     for item in draft:
         address = item["address"]
@@ -486,12 +496,38 @@ def run_analysis(
                 }
             )
             continue
+
+        ind = independent_residuals.get(address)
+        if ind is None:
+            excluded.append({"address": address, "reason": "independent_data_missing_for_address"})
+            continue
+        if ind["related_out_raw"] != 0:
+            excluded.append(
+                {
+                    "address": address,
+                    "reason": "independent_data_shows_further_outflow",
+                    "independent_related_out_raw": str(ind["related_out_raw"]),
+                }
+            )
+            continue
+        if abs(ind["residual_raw"] - config.amount_raw) > config.tolerance_raw:
+            excluded.append(
+                {
+                    "address": address,
+                    "reason": "independent_residual_mismatch",
+                    "independent_residual_raw": str(ind["residual_raw"]),
+                }
+            )
+            continue
+
         candidates.append(
             {
                 **item,
-                "independent_verification": "provider_confirmed_same_tx",
+                "independent_verification": "second_input_confirmed_same_tx",
                 "path_tx_hashes": [edge.tx_hash for edge in discovery_path],
                 "forward_hops": len(discovery_path),
+                "independent_related_out_raw": str(ind["related_out_raw"]),
+                "independent_residual_raw": str(ind["residual_raw"]),
             }
         )
 
@@ -539,13 +575,15 @@ def run_analysis(
                 "confirmed, and scope_complete is always false in this MVP."
             ),
             "independent_verification_caveat": (
-                "This MVP does not pin raw RPC artifacts the way confirmed "
-                "Bridge/CEX/Mixer/Lending fixtures do. 'provider_confirmed_same_tx' "
-                "means a second, differently-collected edge set reports exactly "
-                "the same transaction facts for every hop on the candidate's "
-                "path -- not a cryptographic proof of on-chain fact. Re-verify "
-                "through the full scan analyze pipeline before treating any "
-                "candidate with confidence."
+                "This MVP does not pin raw RPC artifacts or verify provider "
+                "identity the way confirmed Bridge/CEX/Mixer/Lending fixtures "
+                "do -- it only checks that a second INPUT FILE, declared to use "
+                "a different collection_method, reports exactly the same "
+                "transaction facts for every hop on the candidate's path AND "
+                "does not itself show further outflow from the candidate. "
+                "'second_input_confirmed_same_tx' is not a claim about real "
+                "provider/raw provenance. Re-verify through the full scan "
+                "analyze pipeline before treating any candidate with confidence."
             ),
         },
     }

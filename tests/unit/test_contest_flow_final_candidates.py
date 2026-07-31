@@ -21,6 +21,7 @@ SEED = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 B = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 C = "0xcccccccccccccccccccccccccccccccccccccccc"
 D = "0xdddddddddddddddddddddddddddddddddddddddd"
+E = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"  # unrelated address, no seed link
 S = 1_000_000_000_000_000_000  # 1 ETH in wei
 
 
@@ -131,18 +132,20 @@ def test_same_tx_confirmed_by_independent_set_is_accepted() -> None:
         _edge("0x" + "11" * 32, SEED, B, S),
         _edge("0x" + "22" * 32, B, D, S),
     ]
-    # independent set has one extra unrelated edge (so whole-set content
-    # differs) but reports the *same* facts for the same two transactions.
+    # independent set has one extra edge from an UNRELATED address (so
+    # whole-set content differs) but must not touch D itself, or it would
+    # (correctly) contradict D's terminus status -- see the dedicated test
+    # below for that case.
     independent = [
         _edge("0x" + "11" * 32, SEED, B, S),
         _edge("0x" + "22" * 32, B, D, S),
-        _edge("0x" + "99" * 32, D, SEED, 1),
+        _edge("0x" + "99" * 32, E, SEED, 1),
     ]
     report = _run(_config(), discovery=discovery, independent=independent)
     assert len(report["candidates"]) == 1
     cand = report["candidates"][0]
     assert cand["address"] == D
-    assert cand["independent_verification"] == "provider_confirmed_same_tx"
+    assert cand["independent_verification"] == "second_input_confirmed_same_tx"
     assert cand["path_tx_hashes"] == ["0x" + "11" * 32, "0x" + "22" * 32]
 
 
@@ -163,9 +166,45 @@ def test_different_tx_with_matching_topology_does_not_confirm() -> None:
     assert reasons[D] == "independent_confirmation_missing_for_tx"
 
 
+def test_independent_data_showing_further_outflow_rejects_candidate() -> None:
+    """P1: discovery calls D terminal, but the independent set shows D
+    itself sent funds onward -- that contradicts the terminus claim."""
+    discovery = [
+        _edge("0x" + "11" * 32, SEED, B, S),
+        _edge("0x" + "22" * 32, B, D, S),
+    ]
+    independent = [
+        _edge("0x" + "11" * 32, SEED, B, S),
+        _edge("0x" + "22" * 32, B, D, S),
+        _edge("0x" + "99" * 32, D, E, 1),  # D itself has related outflow here
+    ]
+    report = _run(_config(), discovery=discovery, independent=independent)
+    assert report["candidates"] == []
+    reasons = {item["address"]: item["reason"] for item in report["excluded"]}
+    assert reasons[D] == "independent_data_shows_further_outflow"
+
+
+def test_independent_residual_mismatch_rejects_candidate() -> None:
+    """P1: independent set shows extra inflow to D, so its own residual no
+    longer matches S even though related_out is still zero there."""
+    discovery = [
+        _edge("0x" + "11" * 32, SEED, B, S),
+        _edge("0x" + "22" * 32, B, D, S),
+    ]
+    independent = [
+        _edge("0x" + "11" * 32, SEED, B, S),
+        _edge("0x" + "22" * 32, B, D, S),
+        _edge("0x" + "99" * 32, E, D, 5),  # unrelated extra inflow to D
+    ]
+    report = _run(_config(), discovery=discovery, independent=independent)
+    assert report["candidates"] == []
+    reasons = {item["address"]: item["reason"] for item in report["excluded"]}
+    assert reasons[D] == "independent_residual_mismatch"
+
+
 def test_scope_complete_is_always_false() -> None:
     discovery = [_edge("0x" + "11" * 32, SEED, D, S)]
-    independent = [_edge("0x" + "11" * 32, SEED, D, S), _edge("0x" + "99" * 32, D, SEED, 1)]
+    independent = [_edge("0x" + "11" * 32, SEED, D, S), _edge("0x" + "99" * 32, E, SEED, 1)]
     report = _run(_config(), discovery=discovery, independent=independent)
     assert report["scope_complete"] is False
 
@@ -314,7 +353,7 @@ def test_cli_smoke_a_to_d(tmp_path: Path) -> None:
             },
             {
                 "tx_hash": "0x" + "44" * 32,
-                "from": D,
+                "from": E,
                 "to": SEED,
                 "value_raw": "1",
                 "asset": "native",
