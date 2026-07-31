@@ -66,8 +66,9 @@ LLM은 분류·경로·해석을 돕되, on-chain 확정 사실을 발명하지 
 - 자산 불일치(asset mismatch) edge를 같은 흐름으로 묶지 않기
 - 재병합: 무관한 external inflow를 흐름에 포함 금지, 잔여(residual) 음수 금지
 - 다피해자 집계: 가격 데이터 없이 피해액 환산 금지 (assisted 경계)
-- 시드+금액 → 최종 후보: 순방향 수집 → 금액 근접 필터 → 역추적 검증.
-  경로·금액 정합 후보는 전부 용의선
+- 시드+금액 → 최종 후보: 순방향 수집 → **잔류액**(관련 유입−관련 유출)
+  근접 + 종착 조건 → **독립** raw/edge 검증. gross 유입≈S로 중간 주소
+  포함 금지. 후보는 전부 용의선이며 `|C|==1`이어도 heuristic 유지
   ([76 Method](./76_FLOW_FINAL_ACCOUNT_CANDIDATE_METHOD.md))
 
 ### 3.8 SVC-DEX (DEX 스왑)
