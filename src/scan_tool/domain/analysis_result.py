@@ -373,6 +373,21 @@ class MixerFlowFailedAnalysisResult(FailedAnalysisResult):
     analysis_type: Literal[AnalysisType.MIXER_FLOW]
 
 
+class DefiLendingCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.DEFI_LENDING]
+
+
+class DefiLendingPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.DEFI_LENDING]
+
+
+class DefiLendingFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.DEFI_LENDING]
+
+
 class CaseReconciliationCompleteAnalysisResult(CompleteAnalysisResult):
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
@@ -419,6 +434,9 @@ ResultVariant = (
     | MixerFlowCompleteAnalysisResult
     | MixerFlowPartialAnalysisResult
     | MixerFlowFailedAnalysisResult
+    | DefiLendingCompleteAnalysisResult
+    | DefiLendingPartialAnalysisResult
+    | DefiLendingFailedAnalysisResult
     | CaseReconciliationCompleteAnalysisResult
     | CaseReconciliationPartialAnalysisResult
     | CaseReconciliationFailedAnalysisResult

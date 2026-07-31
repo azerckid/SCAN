@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-SVC-LEND-001",
+  "analysis_type": "defi_lending",
+  "query_kind": "reconstruct_lending_flow",
+  "chain_id": 1,
+  "fixture_id": "FX-SVC-LEND-001",
+  "requested_at": "2026-07-30T22:17:07Z",
+  "inputs": {
+    "subject_address": "0x1b05437f4a5f6b21692e83af3eb5607683e6dead",
+    "subject_roles": [
+      "liquidator"
+    ],
+    "observation_window": {
+      "start_block": 21036000,
+      "end_block": 21036030
+    },
+    "seed_transaction_hash": "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37",
+    "protocol": "aave_v3"
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": [
+      "DS-EVM-RPC-ARCHIVE"
+    ],
+    "source_order": [
+      "DS-EVM-RPC-ARCHIVE"
+    ],
+    "allow_fallback": false,
+    "offline_mode": true
+  }
+}

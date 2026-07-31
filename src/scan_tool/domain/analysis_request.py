@@ -37,6 +37,7 @@ class AnalysisType(StrEnum):
     BITCOIN_UTXO = "bitcoin_utxo"
     CEX_CLUSTER = "cex_cluster"
     MIXER_FLOW = "mixer_flow"
+    DEFI_LENDING = "defi_lending"
     CASE_RECONCILIATION = "case_reconciliation"
 
 
@@ -351,6 +352,10 @@ class MixerFlowQueryKind(StrEnum):
     EVALUATE_MIXER_CANDIDATES = "evaluate_mixer_candidates"
 
 
+class DefiLendingQueryKind(StrEnum):
+    RECONSTRUCT_LENDING_FLOW = "reconstruct_lending_flow"
+
+
 class CaseQueryKind(StrEnum):
     RECONSTRUCT_INCIDENT = "reconstruct_incident"
 
@@ -379,6 +384,14 @@ class ObservationWindowInputs(ContractModel):
         if self.end_block < self.start_block:
             raise PydanticCustomError("invalid_input", "observation window end must follow start")
         return self
+
+
+class ReconstructLendingFlowInputs(ContractModel):
+    subject_address: Address
+    subject_roles: NonEmptyUniqueList[Literal["liquidator", "borrower", "receiver", "supplier"]]
+    observation_window: ObservationWindowInputs
+    seed_transaction_hash: TransactionHash
+    protocol: Literal["aave_v3"]
 
 
 class EvaluateCexClusterInputs(ContractModel):
@@ -645,6 +658,13 @@ class MixerFlowAnalysisRequest(AnalysisRequestBase):
     inputs: EvaluateMixerFlowInputs
 
 
+class DefiLendingAnalysisRequest(AnalysisRequestBase):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.DEFI_LENDING]
+    query_kind: Literal[DefiLendingQueryKind.RECONSTRUCT_LENDING_FLOW]
+    inputs: ReconstructLendingFlowInputs
+
+
 class CaseReconciliationAnalysisRequest(AnalysisRequestBase):
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
@@ -666,6 +686,7 @@ RequestVariant = Annotated[
     | BitcoinUtxoAnalysisRequest
     | CexClusterAnalysisRequest
     | MixerFlowAnalysisRequest
+    | DefiLendingAnalysisRequest
     | CaseReconciliationAnalysisRequest,
     Field(discriminator="analysis_type"),
 ]

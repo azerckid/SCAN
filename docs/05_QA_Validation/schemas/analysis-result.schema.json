@@ -24,7 +24,10 @@
       "pattern": "analysis-result\\.schema\\.json$"
     },
     "schema_version": {
-      "enum": ["0.1", "0.2"]
+      "enum": [
+        "0.1",
+        "0.2"
+      ]
     },
     "analysis_id": {
       "$ref": "#/$defs/analysisId"
@@ -32,9 +35,18 @@
     "analysis_type": {
       "$ref": "#/$defs/analysisType"
     },
-    "chain_id": {"enum": [0, 1]},
+    "chain_id": {
+      "enum": [
+        0,
+        1
+      ]
+    },
     "status": {
-      "enum": ["complete", "partial", "failed"]
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ]
     },
     "results": {
       "type": "array",
@@ -76,19 +88,66 @@
   "allOf": [
     {
       "if": {
-        "properties": {"analysis_type": {"enum": ["evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer", "bitcoin_utxo", "cex_cluster", "mixer_flow", "case_reconciliation"]}},
-        "required": ["analysis_type"]
+        "properties": {
+          "analysis_type": {
+            "enum": [
+              "evm_core",
+              "evm_special",
+              "flow_path",
+              "intel_context",
+              "bridge_transfer",
+              "bitcoin_utxo",
+              "cex_cluster",
+              "mixer_flow",
+              "defi_lending",
+              "case_reconciliation"
+            ]
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
       },
-      "then": {"properties": {"schema_version": {"const": "0.2"}}},
-      "else": {"properties": {"schema_version": {"const": "0.1"}}}
+      "then": {
+        "properties": {
+          "schema_version": {
+            "const": "0.2"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "schema_version": {
+            "const": "0.1"
+          }
+        }
+      }
     },
     {
       "if": {
-        "properties": {"analysis_type": {"const": "bitcoin_utxo"}},
-        "required": ["analysis_type"]
+        "properties": {
+          "analysis_type": {
+            "const": "bitcoin_utxo"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
       },
-      "then": {"properties": {"chain_id": {"const": 0}}},
-      "else": {"properties": {"chain_id": {"const": 1}}}
+      "then": {
+        "properties": {
+          "chain_id": {
+            "const": 0
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "chain_id": {
+            "const": 1
+          }
+        }
+      }
     },
     {
       "if": {
@@ -97,7 +156,9 @@
             "const": "complete"
           }
         },
-        "required": ["status"]
+        "required": [
+          "status"
+        ]
       },
       "then": {
         "properties": {
@@ -123,7 +184,9 @@
             "const": "partial"
           }
         },
-        "required": ["status"]
+        "required": [
+          "status"
+        ]
       },
       "then": {
         "properties": {
@@ -149,7 +212,9 @@
             "const": "failed"
           }
         },
-        "required": ["status"]
+        "required": [
+          "status"
+        ]
       },
       "then": {
         "properties": {
@@ -167,7 +232,21 @@
       "pattern": "^AN-[A-Z0-9][A-Z0-9-]{2,63}$"
     },
     "analysisType": {
-      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer", "bitcoin_utxo", "cex_cluster", "mixer_flow", "case_reconciliation"]
+      "enum": [
+        "dex_swap",
+        "auth_consumption",
+        "address_freeze",
+        "evm_core",
+        "evm_special",
+        "flow_path",
+        "intel_context",
+        "bridge_transfer",
+        "bitcoin_utxo",
+        "cex_cluster",
+        "mixer_flow",
+        "defi_lending",
+        "case_reconciliation"
+      ]
     },
     "resultId": {
       "type": "string",
@@ -234,7 +313,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|BTC|CEX|MIX|CASE)-[A-Z0-9-]+$"
+            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|BTC|CEX|MIX|LEND|CASE)-[A-Z0-9-]+$"
           },
           "uniqueItems": true
         },
@@ -251,7 +330,9 @@
     },
     "artifact": {
       "type": "object",
-      "required": ["artifact_uri"],
+      "required": [
+        "artifact_uri"
+      ],
       "properties": {
         "artifact_uri": {
           "type": "string",
@@ -290,7 +371,12 @@
           "$ref": "#/$defs/evidenceId"
         },
         "evidence_type": {
-          "enum": ["event", "call", "state", "context"]
+          "enum": [
+            "event",
+            "call",
+            "state",
+            "context"
+          ]
         },
         "source_id": {
           "$ref": "#/$defs/sourceId"
@@ -373,7 +459,11 @@
           "pattern": "^[a-z0-9][a-z0-9._-]{1,63}$"
         },
         "role": {
-          "enum": ["scoring", "context", "supporting"]
+          "enum": [
+            "scoring",
+            "context",
+            "supporting"
+          ]
         },
         "required": {
           "type": "boolean"
@@ -398,7 +488,11 @@
     },
     "warning": {
       "type": "object",
-      "required": ["warning_id", "code", "message"],
+      "required": [
+        "warning_id",
+        "code",
+        "message"
+      ],
       "properties": {
         "warning_id": {
           "type": "string",
@@ -448,7 +542,11 @@
           "minLength": 1
         },
         "execution_mode": {
-          "enum": ["live", "offline_replay", "fixture_example"]
+          "enum": [
+            "live",
+            "offline_replay",
+            "fixture_example"
+          ]
         },
         "started_at": {
           "type": "string",
@@ -486,7 +584,9 @@
     },
     "exportFile": {
       "type": "object",
-      "required": ["artifact_uri"],
+      "required": [
+        "artifact_uri"
+      ],
       "properties": {
         "artifact_uri": {
           "type": "string",
@@ -501,7 +601,10 @@
     },
     "exports": {
       "type": "object",
-      "required": ["json", "markdown"],
+      "required": [
+        "json",
+        "markdown"
+      ],
       "properties": {
         "json": {
           "$ref": "#/$defs/exportFile"

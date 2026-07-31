@@ -240,6 +240,7 @@ def _validate_approved_contract_adoption() -> None:
         "bitcoin_utxo",
         "cex_cluster",
         "mixer_flow",
+        "defi_lending",
         "case_reconciliation",
     }
     if approved_types != expected or runtime_types != expected:

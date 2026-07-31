@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-LEND-001",
+  "problem_id": "SVC-LEND-001",
+  "status": "confirmed",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "mode": "discovery",
+  "subject_address": "0x1b05437f4a5f6b21692e83af3eb5607683e6dead",
+  "subject_roles": [
+    "liquidator"
+  ],
+  "seed_transaction_hash": "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37",
+  "observation_window": {
+    "start_block": 21036000,
+    "end_block": 21036030
+  },
+  "protocol": "aave_v3",
+  "pool": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+  "selection_notes": "Aave V3 Ethereum LiquidationCall with event-only Transfer-matched debt and collateral legs; dual-provider distinct artifact bytes."
+}

@@ -51,10 +51,16 @@
         "assess_heuristics",
         "evaluate_cex_cluster",
         "evaluate_mixer_candidates",
+        "reconstruct_lending_flow",
         "reconstruct_incident"
       ]
     },
-    "chain_id": {"enum": [0, 1]},
+    "chain_id": {
+      "enum": [
+        0,
+        1
+      ]
+    },
     "fixture_id": {
       "type": "string",
       "pattern": "^FX-[A-Z0-9-]+$"
@@ -73,18 +79,41 @@
   "allOf": [
     {
       "if": {
-        "properties": {"analysis_type": {"const": "bitcoin_utxo"}},
-        "required": ["analysis_type"]
+        "properties": {
+          "analysis_type": {
+            "const": "bitcoin_utxo"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
       },
       "then": {
         "properties": {
-          "schema_version": {"const": "0.2"},
-          "chain_id": {"const": 0},
-          "query_kind": {"enum": ["summarize_transaction", "assess_heuristics"]}
+          "schema_version": {
+            "const": "0.2"
+          },
+          "chain_id": {
+            "const": 0
+          },
+          "query_kind": {
+            "enum": [
+              "summarize_transaction",
+              "assess_heuristics"
+            ]
+          }
         },
-        "required": ["query_kind"]
+        "required": [
+          "query_kind"
+        ]
       },
-      "else": {"properties": {"chain_id": {"const": 1}}}
+      "else": {
+        "properties": {
+          "chain_id": {
+            "const": 1
+          }
+        }
+      }
     },
     {
       "if": {
@@ -364,6 +393,31 @@
       "if": {
         "properties": {
           "analysis_type": {
+            "const": "defi_lending"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "query_kind"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "0.2"
+          },
+          "query_kind": {
+            "const": "reconstruct_lending_flow"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "analysis_type": {
             "const": "case_reconciliation"
           }
         },
@@ -520,17 +574,41 @@
     },
     {
       "if": {
-        "properties": {"query_kind": {"const": "summarize_transaction"}},
-        "required": ["query_kind"]
+        "properties": {
+          "query_kind": {
+            "const": "summarize_transaction"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
       },
-      "then": {"properties": {"inputs": {"$ref": "#/$defs/bitcoinTransactionInputs"}}}
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/bitcoinTransactionInputs"
+          }
+        }
+      }
     },
     {
       "if": {
-        "properties": {"query_kind": {"const": "assess_heuristics"}},
-        "required": ["query_kind"]
+        "properties": {
+          "query_kind": {
+            "const": "assess_heuristics"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
       },
-      "then": {"properties": {"inputs": {"$ref": "#/$defs/bitcoinHeuristicInputs"}}}
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/bitcoinHeuristicInputs"
+          }
+        }
+      }
     },
     {
       "if": {
@@ -574,6 +652,25 @@
       "if": {
         "properties": {
           "query_kind": {
+            "const": "reconstruct_lending_flow"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/reconstructLendingFlowInputs"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "query_kind": {
             "const": "reconstruct_incident"
           }
         },
@@ -609,6 +706,7 @@
         "bitcoin_utxo",
         "cex_cluster",
         "mixer_flow",
+        "defi_lending",
         "case_reconciliation"
       ]
     },
@@ -1053,25 +1151,61 @@
     },
     "bitcoinTransactionInputs": {
       "type": "object",
-      "required": ["transaction_id", "network", "start_vout", "max_hops"],
+      "required": [
+        "transaction_id",
+        "network",
+        "start_vout",
+        "max_hops"
+      ],
       "properties": {
-        "transaction_id": {"$ref": "#/$defs/bitcoinTxId"},
-        "network": {"const": "bitcoin_mainnet"},
-        "start_vout": {"type": "integer", "minimum": 0},
-        "max_hops": {"type": "integer", "exclusiveMinimum": 0}
+        "transaction_id": {
+          "$ref": "#/$defs/bitcoinTxId"
+        },
+        "network": {
+          "const": "bitcoin_mainnet"
+        },
+        "start_vout": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_hops": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        }
       },
       "additionalProperties": false
     },
     "bitcoinHeuristicInputs": {
       "type": "object",
-      "required": ["transaction_id", "network", "start_vout", "max_hops", "assess_change", "assess_coinjoin"],
+      "required": [
+        "transaction_id",
+        "network",
+        "start_vout",
+        "max_hops",
+        "assess_change",
+        "assess_coinjoin"
+      ],
       "properties": {
-        "transaction_id": {"$ref": "#/$defs/bitcoinTxId"},
-        "network": {"const": "bitcoin_mainnet"},
-        "start_vout": {"type": "integer", "minimum": 0},
-        "max_hops": {"type": "integer", "exclusiveMinimum": 0},
-        "assess_change": {"type": "boolean"},
-        "assess_coinjoin": {"type": "boolean"}
+        "transaction_id": {
+          "$ref": "#/$defs/bitcoinTxId"
+        },
+        "network": {
+          "const": "bitcoin_mainnet"
+        },
+        "start_vout": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_hops": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        },
+        "assess_change": {
+          "type": "boolean"
+        },
+        "assess_coinjoin": {
+          "type": "boolean"
+        }
       },
       "additionalProperties": false
     },
@@ -1147,7 +1281,13 @@
       ],
       "properties": {
         "case_category": {
-          "enum": ["phishing", "address_poisoning", "exploit", "rug_pull", "mixed"]
+          "enum": [
+            "phishing",
+            "address_poisoning",
+            "exploit",
+            "rug_pull",
+            "mixed"
+          ]
         },
         "seed_transaction_hash": {
           "$ref": "#/$defs/transactionHash"
@@ -1206,6 +1346,45 @@
         },
         "offline_mode": {
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "reconstructLendingFlowInputs": {
+      "type": "object",
+      "required": [
+        "subject_address",
+        "subject_roles",
+        "observation_window",
+        "seed_transaction_hash",
+        "protocol"
+      ],
+      "properties": {
+        "subject_address": {
+          "$ref": "#/$defs/address"
+        },
+        "subject_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "liquidator",
+              "borrower",
+              "receiver",
+              "supplier"
+            ]
+          }
+        },
+        "observation_window": {
+          "$ref": "#/$defs/observationWindowInputs"
+        },
+        "seed_transaction_hash": {
+          "$ref": "#/$defs/transactionHash"
+        },
+        "protocol": {
+          "const": "aave_v3"
         }
       },
       "additionalProperties": false

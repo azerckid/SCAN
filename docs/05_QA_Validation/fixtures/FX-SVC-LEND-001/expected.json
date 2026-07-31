@@ -1,0 +1,115 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-LEND-001",
+  "status": "confirmed",
+  "defi_lending": {
+    "protocol": "aave_v3",
+    "pool": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+    "chain_id": 1,
+    "subject_address": "0x1b05437f4a5f6b21692e83af3eb5607683e6dead",
+    "subject_roles": [
+      "liquidator"
+    ],
+    "events": [
+      {
+        "event_name": "LiquidationCall",
+        "protocol": "aave_v3",
+        "pool": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+        "collateral_asset": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+        "debt_asset": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+        "user": "0xcdb238d68d8da74487711bc1f8f13f3d00667d1a",
+        "liquidator": "0x1b05437f4a5f6b21692e83af3eb5607683e6dead",
+        "debt_to_cover_raw": "364477506",
+        "liquidated_collateral_amount_raw": "87377757596420188410",
+        "receive_a_token": false,
+        "block_number": 21036015,
+        "transaction_hash": "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37",
+        "transaction_index": 1,
+        "log_index": 16,
+        "topic0": "0xe413a321e8681d831f4dbccbca790d2952b56f977908e45be37335533e005286"
+      }
+    ],
+    "net_asset_ledger": [
+      {
+        "asset_address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+        "raw_amount": "364477506",
+        "direction": "out",
+        "counterparty": "0x5ee5bf7ae06d1be5997a1a72006fe6c607ec6de8",
+        "leg_kind": "liquidation_debt",
+        "matched_transfer_log_index": 15,
+        "classification": "confirmed_fact"
+      },
+      {
+        "asset_address": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+        "raw_amount": "87377757596420188410",
+        "direction": "in",
+        "counterparty": "0x0b925ed163218f6662a35e0f0371ac234f9e9371",
+        "leg_kind": "liquidation_collateral",
+        "matched_transfer_log_index": 10,
+        "classification": "confirmed_fact"
+      }
+    ],
+    "subsequent_outflow": {
+      "status": "bounded",
+      "seed_address": "0x1b05437f4a5f6b21692e83af3eb5607683e6dead",
+      "terminal_address": "0x51c72848c68a965f66fa7a88855f9f7784502a7f",
+      "asset_address": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "raw_amount": "87377757596420177920",
+      "transaction_hash": "0x207745c3f3cbcdc4f31a5a9d89810278e2e6cef385cb1bbf0b2c4b4ccdac4a37",
+      "log_index": 19,
+      "classification": "confirmed_fact"
+    },
+    "attribution": {
+      "attack_vs_normal": "not_assessed",
+      "service_attribution": "not_assessed",
+      "criminality": "not_assessed"
+    }
+  },
+  "partial_conditions": [
+    "A required protocol event amount lacks a matching ERC-20 Transfer in the same transaction",
+    "Native or internal-call value legs are required but call_evidence is absent",
+    "Subsequent outflow cannot be closed inside the bounded observation window"
+  ],
+  "failed_conditions": [
+    "A non-Aave protocol event is attributed as Aave V3 LiquidationCall",
+    "Events outside the observation window are included in the reconstructed path",
+    "Liquidation is labeled as an attack instead of not_assessed",
+    "subject_roles do not exactly match observed roles",
+    "Ledger includes legs where subject_address is neither sender nor receiver",
+    "Multi-role subject legs are dropped by collapsing to a single role"
+  ],
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-LEND-EVENT",
+        "description": "Decode the Aave V3 LiquidationCall with pinned pool, topic0, assets, amounts, and participant addresses.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-LEND-LIQUIDATION-EVENT"
+        ]
+      },
+      {
+        "requirement_id": "REQ-LEND-LEDGER",
+        "description": "Build the subject net-asset ledger only from protocol-event amounts matched to ERC-20 Transfer legs.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-LEND-DEBT-TRANSFER",
+          "EV-LEND-COLLATERAL-TRANSFER"
+        ]
+      },
+      {
+        "requirement_id": "REQ-LEND-OUTFLOW",
+        "description": "Record the bounded subsequent collateral outflow from the liquidator seed address.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-LEND-SUBSEQUENT-OUTFLOW"
+        ]
+      }
+    ]
+  },
+  "tolerance": {
+    "max_abs_delta_raw": "0"
+  }
+}

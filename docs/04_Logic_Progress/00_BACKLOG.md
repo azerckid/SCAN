@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-31 05:40
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate) · TASK-016 Bridge+CEX+Mixer Confirmed·Automated · Lending freeze · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted · TASK-019 Proposed · Benchmark 16·7·7
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate) · TASK-016 Bridge+CEX+Mixer+Lending Confirmed·Automated · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted · TASK-019 Proposed · Benchmark 17·7·6
 
 ## 1. 문서 목적
 
@@ -1454,9 +1454,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
-- Status: In Progress — Bridge(`SVC-BRG-001`)·CEX(`SVC-CEX-001`)·Mixer(`SVC-MIX-001`) fixture
-  confirmed · Benchmark automated (16·7·7). Mixer thawed. Lending·`MIXED-XCHAIN-001`은
-  이 브랜치에서 freeze/unsupported(Lending은 Draft PR #113 별도).
+- Status: In Progress — Bridge(`SVC-BRG-001`)·CEX(`SVC-CEX-001`)·Mixer(`SVC-MIX-001`)·
+  Lending(`SVC-LEND-001`) fixture confirmed · Benchmark automated (17·7·6).
+  `MIXED-XCHAIN-001`은 unsupported 잔여.
+
 - Work Type: code
 - Priority: Phase 2 · P2
 - Depends On: TASK-014, TASK-015
@@ -1469,7 +1470,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] `bridge_transfer` offline analyzer와 전용 request/result dispatch를 구현한다.
   - [x] Bridge exact·partial·conflict와 Benchmark automated를 검증한다.
   - [x] CEX exact·partial·conflict와 Benchmark automated를 검증한다.
-  - [x] Mixer·Lending adapter별 exact·partial·conflict를 검증한다. (Mixer 완료; Lending 잔여)
+  - [x] Mixer adapter exact·partial·conflict와 Benchmark automated를 검증한다.
+  - [x] Lending adapter exact·partial·conflict와 Benchmark automated를 검증한다.
   - [ ] 남은 서비스 문제의 Benchmark를 실제 완료 범위만 승격한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 서비스·크로스체인 5문항
@@ -1501,6 +1503,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [Bridge Final Promotion Receipt](../05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 13/13
   - [CEX Fixture 후보 보고서](../05_QA_Validation/67_TASK_016_CEX_FIXTURE_CANDIDATE_REPORT.md) - GARANTEX OFAC SDN 후보·선정
   - [CEX Final Promotion Receipt](../05_QA_Validation/68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 14/14
+  - [Lending Fixture 후보 보고서](../05_QA_Validation/69_TASK_016_LENDING_FIXTURE_CANDIDATE_REPORT.md) - Aave V3 LiquidationCall 후보·선정
+  - [Lending Final Promotion Receipt](../05_QA_Validation/70_TASK_016_LENDING_FINAL_PROMOTION_RECEIPT.md) - confirmed·Benchmark 15/15
   - [Contest Stabilization Runbook](../05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md) - 대회용 freeze·실행 절차
 - Implementation Preconditions:
   - [x] Bridge official ABI/address·두 provider replay·독립 Verifier를 확보하고
@@ -1525,10 +1529,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - Document Sync Check:
   - [ ] source·ABI·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
-  - Status: PASS — Bridge(`SVC-BRG-001`) 계약·UI·fixture replay·negative
-    oracle·독립 Verifier·Analysis I/O 대안 B를 정독하고, 사용자가
-    2026-07-31 Context Receipt PASS 기록과 offline analyzer 구현을 승인했다.
-    이 PASS는 다른 TASK-016 adapter를 승인하지 않는다.
+  - Status: PASS — Bridge·CEX 완료 근거와 Lending 계약·UI·fixture·oracle·
+    독립 Verifier·Analysis I/O 대안 B를 정독했다. 사용자는 2026-07-31
+    TASK-016 잔여 Lending→Mixer→MIXED-XCHAIN 단계별 구현을 일괄 승인했다.
+    이 PASS의 현재 구현 범위는 Lending으로 격리한다.
   - Required References Read:
     - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) ·
       [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) —
@@ -1565,6 +1569,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
       [CEX Final Promotion Receipt](../05_QA_Validation/68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md) —
       OFAC GARANTEX label assertion·세 deposit→공통 hot wallet·negative oracle·
       독립 Verifier·analyzer hash·confirmed·Benchmark 14/14를 확인했다.
+    - [Lending Fixture 후보 보고서](../05_QA_Validation/69_TASK_016_LENDING_FIXTURE_CANDIDATE_REPORT.md) ·
+      [Lending Final Promotion Receipt](../05_QA_Validation/70_TASK_016_LENDING_FINAL_PROMOTION_RECEIPT.md) —
+      Aave V3 LiquidationCall·두 독립 RPC·8 negative oracle·독립 Verifier·
+      analyzer hash·confirmed·Benchmark 15/15를 확인했다.
   - Constraints:
     - `AnalysisType.BRIDGE_TRANSFER` + `link_bridge_transfer` 전용 dispatch
       guard로 기존 analyzer·일반 Workbench 동작과 격리한다.
@@ -1667,8 +1675,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     경로 전용임을 명시했다. CLI 성공·byte-only 거부 회귀 테스트 2건 추가
     (`tests/integration/test_task_016_bridge_cli.py`).
 - Verification Receipt:
-  - Status: PASS — Bridge·CEX offline analyzer 독립 검증·fixture confirmed·
-    Benchmark automated 완료. Mixer·Lending·MIXED-XCHAIN은 잔여.
+  - Status: PASS — Bridge·CEX·Lending offline analyzer 독립 검증·fixture confirmed·
+    Benchmark automated 완료. Mixer·MIXED-XCHAIN은 잔여.
   - Commands and Results:
     - `scripts/verify_task_016_bridge_analyzer_independent_verification.py` —
       PASS — hash `d6609bb4…00ac`, 2 deterministic runs, AST isolation
@@ -1678,12 +1686,19 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
       PASS — hash `20fc2777…83bf`, 2 deterministic runs, AST isolation
     - `scripts/verify_task_016_cex_independent_verifier.py` — PASS —
       same hash
-    - focused bridge analyzer/CLI pytest — PASS — 6
-    - focused CEX unit+CLI pytest — PASS
-    - Benchmark integration/CLI — PASS — 14/14 automated
-    - `scripts/verify.py` — PASS — 584 tests, 2016 links, security 259
-    - `scripts/check_analysis_schema.py` — PASS — 62 probes; bridge·CEX
-      result probes exercise `REQ-BRIDGE-*`·`REQ-CEX-*`
+    - `scripts/verify_task_016_lending_analyzer_independent_verification.py` —
+      PASS — hash `6c51b2eb…f3c`, 2 deterministic runs, AST isolation
+    - `scripts/verify_task_016_lending_independent_verifier.py` — PASS —
+      same hash, exact 6-capability capture provenance
+    - focused Lending unit+CLI pytest — PASS — 21
+    - focused Bridge+CEX regression pytest — PASS — 31
+    - Benchmark integration/CLI — PASS — 15/15 automated
+    - `scripts/verify.py` — PASS — 605 tests, fixture 21 packages,
+      schema 67 probes, traceability 2037 links, security 277 files
+    - `scripts/check_analysis_schema.py` — PASS — 67 probes; bridge·CEX·
+      Lending result probes exercise `REQ-BRIDGE-*`·`REQ-CEX-*`·`REQ-LEND-*`
+    - `scripts/check_task_012_analysis_contract_proposal.py` — PASS —
+      12 cases, 14 probes, additive `defi_lending` approved type included
     - public `analysis-result.schema.json` — PASS after adding `BRIDGE`·`CEX`
       to `FixtureRequirementId` pattern
   - Unrun Checks:
@@ -1693,12 +1708,15 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     - [64 Bridge Analyzer Verification Receipt](../05_QA_Validation/64_TASK_016_BRIDGE_ANALYZER_VERIFICATION_RECEIPT.md)
     - [65 Bridge Final Promotion Receipt](../05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md)
     - [68 CEX Final Promotion Receipt](../05_QA_Validation/68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)
+    - [69 Lending Fixture Candidate Report](../05_QA_Validation/69_TASK_016_LENDING_FIXTURE_CANDIDATE_REPORT.md)
+    - [70 Lending Final Promotion Receipt](../05_QA_Validation/70_TASK_016_LENDING_FINAL_PROMOTION_RECEIPT.md)
     - [66 Contest Stabilization Runbook](../05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md)
     - [PR #108](https://github.com/azerckid/SCAN/pull/108) — analyzer
       implementation and Evidence Worker boundary
     - [PR #109](https://github.com/azerckid/SCAN/pull/109) — Verification Receipt
-  - Residual: Mixer·Lending adapters and `MIXED-XCHAIN-001` remain separate
-    Gates under feature freeze until contest start.
+  - Residual: Mixer adapter and `MIXED-XCHAIN-001` remain separate Gates.
+    Lending 공개 RPC 두 endpoint의 동일 upstream·공모 가능성은 provenance
+    metadata와 dual replay로 제거할 수 없는 신뢰 경계다.
 
 ### [ ] TASK-017: Bitcoin UTXO·CoinJoin 엔진
 

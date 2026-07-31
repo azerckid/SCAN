@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
-> Last Updated: 2026-07-31 06:30
-> Status: Active · TASK-001~014 Done · TASK-015 In Progress · TASK-016 Bridge+CEX+Mixer Confirmed·Automated · Lending freeze · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted · TASK-019 Proposed · Benchmark 16·7·7
+> Last Updated: 2026-07-31 22:40
+> Status: Active · TASK-001~014 Done · TASK-015 In Progress · TASK-016 Bridge+CEX+Mixer+Lending Confirmed·Automated · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted · TASK-019 Proposed · Benchmark 17·7·6
 
 ## 1. 목적
 
@@ -263,7 +263,10 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   Verifier·analyzer·Benchmark automated(13→14)를 완료했다
   ([68 Receipt](../05_QA_Validation/68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)).
   `MIXED-XCHAIN-001`은 unsupported 유지.
-- [x] Mixer adapter(`SVC-MIX-001`)는 confirmed fixture·Benchmark automated(16/16)·ASSISTED 7·UNSUPPORTED 7로 승격했다. Lending은 confirmed fixture 확보 전 구현하지 않는다(Draft PR #113 별도). `MIXED-XCHAIN-001`은 unsupported.
+- [x] Mixer adapter(`SVC-MIX-001`)는 confirmed fixture·Benchmark automated로 승격했다.
+- [x] Lending(`SVC-LEND-001`) confirmed fixture·analyzer·Benchmark automated 완료 (2026-07-31 batch approval / PR #113).
+- Combined Benchmark: 17 automated / 7 assisted / 6 unsupported. `MIXED-XCHAIN-001`은 COMPOSITION Gate로 unsupported 유지.
+
 
 ### [ ] Wave 6 — 출제가 확인된 비EVM
 

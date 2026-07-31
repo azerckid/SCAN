@@ -1,7 +1,7 @@
 # SCAN 2026 Reference Fixtures
 > Created: 2026-07-24 15:49
 > Last Updated: 2026-07-31 06:20
-> Status: Approved 2.0 · 21 Confirmed · 0 Verifying · 2 Candidate · 1 Deferred
+> Status: Approved 2.0 · 22 Confirmed · 0 Verifying · 2 Candidate · 1 Deferred
 
 ## 1. 문서 목적
 
@@ -113,6 +113,7 @@ Verifier·analyzer hash를 통과한 뒤
 | FX-SVC-DEX-001 | SVC-DEX-001 | 1 | 확정 | V1 기준선 | EVM-LOG, DECODE, RECON |
 | [FX-SVC-BRG-001](./fixtures/FX-SVC-BRG-001/README.md) | SVC-BRG-001 | 1 | 확정 0.1 | Across confirmed·양단 replay·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | XCHAIN, BRIDGE, RECON |
 | [FX-SVC-CEX-001](./fixtures/FX-SVC-CEX-001/README.md) | SVC-CEX-001 | 1 | 확정 0.1 | GARANTEX OFAC confirmed·PRIMARY publicnode·VERIFY merkle·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | CEX-CLUSTER, LABEL, HEUR |
+| [FX-SVC-LEND-001](./fixtures/FX-SVC-LEND-001/README.md) | SVC-LEND-001 | 1 | 확정 0.1 | Aave V3 LiquidationCall confirmed·PRIMARY publicnode·VERIFY thirdweb·negative oracle·독립 Verifier·analyzer hash·Benchmark automated | DEFI-LEND, EVM-LOG, RECON |
 | [FX-CASE-EULER-EXIT-001](./fixtures/FX-CASE-EULER-EXIT-001/README.md) | CRIME-EXP-001 | 1 | 확정 0.1 | confirmed FLOW 2개 SHA composition·11 oracle·독립 Verifier·analyzer hash·Benchmark assisted | CASE-RECON, PATH, exclusion |
 | [FX-BTC-UTXO-001](./fixtures/FX-BTC-UTXO-001/README.md) | BTC-UTXO-001 | 1 | 확정 0.1 | PublicNode Bitcoin RPC + mempool Esplora 독립 raw replay·Verifier·Benchmark automated | BTC-UTXO, prevout, fee |
 | [FX-BTC-CJ-001](./fixtures/FX-BTC-CJ-001/README.md) | BTC-CJ-001 | 1 | 후보 0.1 | heuristic candidate·비단정 경계 | BTC-UTXO, COINJOIN, HEUR |
@@ -261,6 +262,21 @@ adjacent state만 완전성을 주장한다.
 | 마지막 확인 | 2026-07-31 06:20 (confirmed 승격·Benchmark 14/14) |
 
 ---
+
+
+### FX-SVC-LEND-001
+
+| 항목 | 값 |
+|:---|:---|
+| 패키지 | [FX-SVC-LEND-001](./fixtures/FX-SVC-LEND-001/README.md) |
+| 문제 | SVC-LEND-001 |
+| 상태 | 확정(confirmed) 0.1 |
+| Protocol | Aave V3 Pool `0x87870bca…b4fa4e2` |
+| Seed TX | `0x207745c3…4a37` · block `21036015` |
+| Subject | liquidator `0x1b05437f…dead` |
+| Canonical hash | `6c51b2ebfaef49ca8639053ffb2c1be446eb2ba7fbc39cf963780c26ed240f3c` |
+| 마지막 확인 | 2026-07-31 07:31 (confirmed 승격·Benchmark 16/16) |
+
 
 ### FX-CASE-EULER-EXIT-001
 
