@@ -23,16 +23,11 @@ C = "0xcccccccccccccccccccccccccccccccccccccccc"
 D = "0xdddddddddddddddddddddddddddddddddddddddd"
 S = 1_000_000_000_000_000_000  # 1 ETH in wei
 
-COMPLETE_MANIFEST = mod.ScopeManifest(
-    pagination_complete=True, continuous_scan=True, from_block=1, to_block=2
-)
-DEFAULT_MANIFEST = mod.ScopeManifest(
-    pagination_complete=False, continuous_scan=False, from_block=None, to_block=None
-)
 
-
-def _edge(tx: str, frm: str, to: str, value: int) -> mod.Edge:
-    return mod.Edge(tx_hash=tx, from_addr=frm, to_addr=to, value_raw=value, asset="native")
+def _edge(tx: str, frm: str, to: str, value: int, **kwargs: object) -> mod.Edge:
+    return mod.Edge(
+        tx_hash=tx, from_addr=frm, to_addr=to, value_raw=value, asset="native", **kwargs
+    )
 
 
 def _chain_edges() -> list[mod.Edge]:
@@ -63,15 +58,11 @@ def _config(**overrides: object) -> mod.RunConfig:
     return mod.RunConfig(**base)  # type: ignore[arg-type]
 
 
-def _run(config: mod.RunConfig, *, discovery, independent, manifest=COMPLETE_MANIFEST, **hashes):
+def _run(config: mod.RunConfig, *, discovery, independent, **hashes):
     hashes.setdefault("discovery_file_sha256", "d" * 64)
     hashes.setdefault("independent_file_sha256", "i" * 64)
     return mod.run_analysis(
-        config,
-        discovery_edges=discovery,
-        independent_edges=independent,
-        scope_manifest=manifest,
-        **hashes,
+        config, discovery_edges=discovery, independent_edges=independent, **hashes
     )
 
 
@@ -113,7 +104,7 @@ def test_gross_inflow_near_s_alone_is_not_enough() -> None:
 def test_identical_content_rejects_candidates_even_with_different_formatting(
     tmp_path: Path,
 ) -> None:
-    """P1: file bytes differ (reformatted) but logical edges are identical."""
+    """Whole edge-set duplication (even reformatted) is not independent."""
     edges = [
         {"tx_hash": "0x" + "11" * 32, "from": SEED, "to": D, "value_raw": str(S), "asset": "native"}
     ]
@@ -133,27 +124,31 @@ def test_identical_content_rejects_candidates_even_with_different_formatting(
     )
 
 
-def test_independent_path_reuses_discovery_tx_is_rejected() -> None:
-    """P1: independent path must not cite discovery's own TX hashes as proof,
-    even when the two edge sets are not byte/content identical overall."""
+def test_same_tx_confirmed_by_independent_set_is_accepted() -> None:
+    """P1 fix: the SAME real transaction, re-seen via a different collection
+    method, must CONFIRM the candidate -- not be rejected as 'reused'."""
     discovery = [
         _edge("0x" + "11" * 32, SEED, B, S),
         _edge("0x" + "22" * 32, B, D, S),
     ]
-    # independent set adds one extra irrelevant edge so canonical content differs,
-    # but the seed->D path still resolves through the *same* discovery TX (0x11/0x22).
+    # independent set has one extra unrelated edge (so whole-set content
+    # differs) but reports the *same* facts for the same two transactions.
     independent = [
         _edge("0x" + "11" * 32, SEED, B, S),
         _edge("0x" + "22" * 32, B, D, S),
         _edge("0x" + "99" * 32, D, SEED, 1),
     ]
     report = _run(_config(), discovery=discovery, independent=independent)
-    assert report["candidates"] == []
-    reasons = {item["address"]: item["reason"] for item in report["excluded"]}
-    assert reasons[D] == "independent_path_reuses_discovery_tx"
+    assert len(report["candidates"]) == 1
+    cand = report["candidates"][0]
+    assert cand["address"] == D
+    assert cand["independent_verification"] == "provider_confirmed_same_tx"
+    assert cand["path_tx_hashes"] == ["0x" + "11" * 32, "0x" + "22" * 32]
 
 
-def test_independent_edge_set_verifies_path(tmp_path: Path) -> None:
+def test_different_tx_with_matching_topology_does_not_confirm() -> None:
+    """An unrelated TX that merely connects the same addresses/amounts must
+    NOT count as confirmation of the discovery path."""
     discovery = [
         _edge("0x" + "11" * 32, SEED, B, S),
         _edge("0x" + "22" * 32, B, D, S),
@@ -163,34 +158,16 @@ def test_independent_edge_set_verifies_path(tmp_path: Path) -> None:
         _edge("0x" + "bb" * 32, B, D, S),
     ]
     report = _run(_config(), discovery=discovery, independent=independent)
-    assert len(report["candidates"]) == 1
-    cand = report["candidates"][0]
-    assert cand["address"] == D
-    assert cand["independent_verification"] == "independent_edge_set"
-    assert cand["path_tx_hashes"] == ["0x" + "aa" * 32, "0x" + "bb" * 32]
-    assert report["verification_level"] == "heuristic_candidates"
-    assert report["honesty"]["single_candidate_is_not_confirmed"] is True
-    assert "independent_verification_caveat" in report["honesty"]
+    assert report["candidates"] == []
+    reasons = {item["address"]: item["reason"] for item in report["excluded"]}
+    assert reasons[D] == "independent_confirmation_missing_for_tx"
 
 
-def test_scope_complete_defaults_false_without_manifest() -> None:
+def test_scope_complete_is_always_false() -> None:
     discovery = [_edge("0x" + "11" * 32, SEED, D, S)]
-    independent = [_edge("0x" + "aa" * 32, SEED, D, S)]
-    report = _run(
-        _config(), discovery=discovery, independent=independent, manifest=DEFAULT_MANIFEST
-    )
+    independent = [_edge("0x" + "11" * 32, SEED, D, S), _edge("0x" + "99" * 32, D, SEED, 1)]
+    report = _run(_config(), discovery=discovery, independent=independent)
     assert report["scope_complete"] is False
-    assert report["scope_manifest"]["pagination_complete"] is False
-    assert report["scope_manifest"]["continuous_scan"] is False
-
-
-def test_scope_complete_true_requires_full_manifest_and_unexhausted_budget() -> None:
-    discovery = [_edge("0x" + "11" * 32, SEED, D, S)]
-    independent = [_edge("0x" + "aa" * 32, SEED, D, S)]
-    report = _run(
-        _config(), discovery=discovery, independent=independent, manifest=COMPLETE_MANIFEST
-    )
-    assert report["scope_complete"] is True
 
 
 def test_same_collection_method_for_both_sets_is_rejected() -> None:
@@ -237,12 +214,38 @@ def test_load_edges_rejects_conflicting_duplicate_tx_hash(tmp_path: Path) -> Non
         "conflict.json",
         [
             {"tx_hash": "0x" + "11" * 32, "from": SEED, "to": B, "value_raw": str(S)},
-            # Same tx_hash, different `to` -- impossible for a real TX.
+            # Same tx_hash, no locator, different `to` -- impossible for one movement.
             {"tx_hash": "0x" + "11" * 32, "from": SEED, "to": D, "value_raw": str(S)},
         ],
     )
     with pytest.raises(ValueError, match="conflicting"):
         mod.load_edges(path, asset_scope="native")
+
+
+def test_load_edges_allows_same_tx_hash_with_distinct_log_index(tmp_path: Path) -> None:
+    """One transaction can emit multiple Transfer events."""
+    path = _write(
+        tmp_path,
+        "multi_transfer.json",
+        [
+            {
+                "tx_hash": "0x" + "11" * 32,
+                "from": SEED,
+                "to": B,
+                "value_raw": str(S),
+                "log_index": 0,
+            },
+            {
+                "tx_hash": "0x" + "11" * 32,
+                "from": SEED,
+                "to": D,
+                "value_raw": str(S),
+                "log_index": 1,
+            },
+        ],
+    )
+    edges = mod.load_edges(path, asset_scope="native")
+    assert len(edges) == 2
 
 
 def test_load_edges_dedups_exact_duplicate_rows(tmp_path: Path) -> None:
@@ -284,27 +287,36 @@ def test_cli_smoke_a_to_d(tmp_path: Path) -> None:
             },
         ]
     }
+    # A different collection method re-confirming the *same* transactions,
+    # plus one unrelated edge so the whole file is not a byte-for-byte copy.
     independent = {
         "edges": [
             {
-                "tx_hash": "0x" + "44" * 32,
+                "tx_hash": "0x" + "11" * 32,
                 "from": SEED,
                 "to": B,
                 "value_raw": str(S),
                 "asset": "native",
             },
             {
-                "tx_hash": "0x" + "55" * 32,
+                "tx_hash": "0x" + "22" * 32,
                 "from": B,
                 "to": C,
                 "value_raw": str(S),
                 "asset": "native",
             },
             {
-                "tx_hash": "0x" + "66" * 32,
+                "tx_hash": "0x" + "33" * 32,
                 "from": C,
                 "to": D,
                 "value_raw": str(S),
+                "asset": "native",
+            },
+            {
+                "tx_hash": "0x" + "44" * 32,
+                "from": D,
+                "to": SEED,
+                "value_raw": "1",
                 "asset": "native",
             },
         ]
@@ -335,8 +347,6 @@ def test_cli_smoke_a_to_d(tmp_path: Path) -> None:
             str(d_path),
             "--independent-edges",
             str(i_path),
-            "--pagination-complete",
-            "--continuous-scan",
         ]
     )
     assert code == 0

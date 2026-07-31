@@ -5,19 +5,23 @@ Implements docs/05_QA_Validation/76_FLOW_FINAL_ACCOUNT_CANDIDATE_METHOD.md:
 
 1. Discover seed-reachable edges from a discovery edge set
 2. Score candidates by residual (related_in - related_out) ≈ S + terminus
-3. Independently verify seed→candidate connectivity on a *separate* edge set,
-   collected by a *different* method and not reusing discovery's own TXs
+3. Independently CONFIRM each discovery-path transaction on a *separate*
+   edge set collected by a *different* method: the same real transaction
+   must match exactly (tx_hash/from/to/value/asset/locator); only the
+   *files* (whole-set canonical content) must not be identical copies.
 4. Always emit verification_level=heuristic_candidates (|C|==1 included)
-5. scope_complete requires an explicit scope manifest, not just BFS budget
+5. scope_complete is always false: this MVP has no way to verify that an
+   input edge file represents a complete capture of real chain data.
 
 Does not modify production flow_path analyzers or Benchmark fixtures.
 
 Honesty caveat: this MVP does not pin raw RPC artifacts the way the
-confirmed Bridge/CEX/Mixer/Lending adapters do. "Independent" here means
-canonically-distinct edge data collected by a declared different method and
-not overlapping the discovery TX set -- it is not a cryptographic proof of
-on-chain fact and every candidate should still be re-verified through the
-full `scan analyze` pipeline before being treated with any confidence.
+confirmed Bridge/CEX/Mixer/Lending adapters do. "Independent confirmation"
+here means a second, differently-collected edge set contains an exactly
+matching fact for every transaction on the discovery path -- it is not a
+cryptographic proof of on-chain fact and every candidate should still be
+re-verified through the full `scan analyze` pipeline before being treated
+with any confidence.
 """
 
 from __future__ import annotations
@@ -56,14 +60,10 @@ class Edge:
     to_addr: str
     value_raw: int
     asset: str
-
-
-@dataclass(frozen=True)
-class ScopeManifest:
-    pagination_complete: bool
-    continuous_scan: bool
-    from_block: int | None
-    to_block: int | None
+    # A single tx_hash can carry multiple Transfer events / internal calls;
+    # these disambiguate which specific movement this Edge represents.
+    log_index: int | None = None
+    trace_address: str | None = None
 
 
 @dataclass(frozen=True)
@@ -80,6 +80,8 @@ class RunConfig:
     max_hops: int
     max_nodes: int
     max_edges: int
+    scope_from_block: int | None = None
+    scope_to_block: int | None = None
 
 
 def _lower(value: object) -> str:
@@ -99,13 +101,20 @@ def _parse_int(value: object, *, field: str) -> int:
     raise ValueError(f"{field} must be an int or numeric string")
 
 
+def _edge_locator_key(edge: Edge) -> tuple[str, int | None, str | None]:
+    """Identity key that disambiguates multiple movements in one tx_hash."""
+    return (edge.tx_hash, edge.log_index, edge.trace_address)
+
+
 def load_edges(path: Path, *, asset_scope: str) -> list[Edge]:
     """Load a JSON edge list. Accepts {"edges": [...]} or a bare list.
 
-    Rejects malformed hex and, within this single file, any tx_hash that
-    appears twice with different from/to/value/asset (a real on-chain TX
-    cannot have two different fact sets; that indicates corrupted or
-    tampered input).
+    Rejects malformed hex and, within this single file, any (tx_hash,
+    log_index, trace_address) that appears twice with different
+    from/to/value/asset (that specific real movement cannot have two
+    different fact sets; it indicates corrupted or tampered input). A bare
+    tx_hash *is* allowed to repeat across distinct log_index/trace_address
+    rows -- a single transaction can emit multiple transfers.
     """
     payload = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(payload, dict):
@@ -118,7 +127,7 @@ def load_edges(path: Path, *, asset_scope: str) -> list[Edge]:
         raise ValueError(f"{path}: edge file must be object or array")
 
     edges: list[Edge] = []
-    seen_by_hash: dict[str, tuple[str, str, int, str]] = {}
+    seen: dict[tuple[str, int | None, str | None], tuple[str, str, int, str]] = {}
     for index, item in enumerate(raw_edges):
         if not isinstance(item, dict):
             raise ValueError(f"{path}: edges[{index}] must be an object")
@@ -140,26 +149,32 @@ def load_edges(path: Path, *, asset_scope: str) -> list[Edge]:
         )
         if value_raw < 0:
             raise ValueError(f"{path}: edges[{index}] value_raw must be >= 0")
+        raw_log_index = item.get("log_index")
+        log_index = None if raw_log_index is None else _parse_int(raw_log_index, field="log_index")
+        raw_trace = item.get("trace_address")
+        trace_address = None if raw_trace is None else str(raw_trace)
 
+        edge = Edge(
+            tx_hash=tx_hash,
+            from_addr=from_addr,
+            to_addr=to_addr,
+            value_raw=value_raw,
+            asset=asset,
+            log_index=log_index,
+            trace_address=trace_address,
+        )
+        key = _edge_locator_key(edge)
         fingerprint = (from_addr, to_addr, value_raw, asset)
-        previous = seen_by_hash.get(tx_hash)
+        previous = seen.get(key)
         if previous is not None and previous != fingerprint:
             raise ValueError(
-                f"{path}: tx_hash {tx_hash} appears twice with conflicting "
+                f"{path}: {key} appears twice with conflicting "
                 "from/to/value/asset -- corrupted or tampered input"
             )
-        seen_by_hash[tx_hash] = fingerprint
+        seen[key] = fingerprint
         if previous is not None:
             continue  # exact duplicate row; keep the first occurrence only
-        edges.append(
-            Edge(
-                tx_hash=tx_hash,
-                from_addr=from_addr,
-                to_addr=to_addr,
-                value_raw=value_raw,
-                asset=asset,
-            )
-        )
+        edges.append(edge)
     return edges
 
 
@@ -171,10 +186,19 @@ def canonical_edges_sha256(edges: list[Edge]) -> str:
     """Content hash over parsed+sorted edges, immune to file formatting.
 
     File-byte hashes can differ for logically identical data (whitespace,
-    key order). This hash is what the independence check actually relies on.
+    key order). This hash is what the whole-set duplication check relies on.
     """
     rows = sorted(
-        (edge.tx_hash, edge.from_addr, edge.to_addr, edge.value_raw, edge.asset) for edge in edges
+        (
+            edge.tx_hash,
+            edge.from_addr,
+            edge.to_addr,
+            edge.value_raw,
+            edge.asset,
+            edge.log_index,
+            edge.trace_address,
+        )
+        for edge in edges
     )
     encoded = json.dumps(rows, separators=(",", ":")).encode()
     return hashlib.sha256(encoded).hexdigest()
@@ -195,7 +219,7 @@ def discover_related_edges(
         outbound[edge.from_addr].append(edge)
 
     related: list[Edge] = []
-    seen_edge_keys: set[tuple[str, str, str, int]] = set()
+    seen_edge_keys: set[tuple[str, int | None, str | None]] = set()
     visited_nodes = {seed}
     # queue items: (node, hops_from_seed)
     queue: deque[tuple[str, int]] = deque([(seed, 0)])
@@ -208,7 +232,7 @@ def discover_related_edges(
                 budget_exhausted = True
             continue
         for edge in outbound.get(node, []):
-            key = (edge.tx_hash, edge.from_addr, edge.to_addr, edge.value_raw)
+            key = _edge_locator_key(edge)
             if key in seen_edge_keys:
                 continue
             if len(related) >= max_edges:
@@ -254,23 +278,22 @@ def aggregate_residuals(related: list[Edge]) -> dict[str, dict[str, int]]:
     return result
 
 
-def path_exists(
+def find_path_edges(
     edges: list[Edge],
     *,
     seed: str,
     target: str,
     max_hops: int,
-) -> tuple[bool, list[str]]:
-    """Return whether seed can reach target on edges; include one tx path."""
+) -> list[Edge] | None:
+    """Return the Edge sequence from seed to target on `edges`, or None."""
     seed = _lower(seed)
     target = _lower(target)
     if seed == target:
-        return False, []
+        return None
     outbound: dict[str, list[Edge]] = defaultdict(list)
     for edge in edges:
         outbound[edge.from_addr].append(edge)
 
-    # BFS storing predecessor edge
     prev: dict[str, Edge | None] = {seed: None}
     queue: deque[tuple[str, int]] = deque([(seed, 0)])
     while queue:
@@ -286,17 +309,42 @@ def path_exists(
             queue.append((edge.to_addr, hops + 1))
 
     if target not in prev:
-        return False, []
-    path_txs: list[str] = []
+        return None
+    path: list[Edge] = []
     cursor = target
     while cursor != seed:
         edge = prev[cursor]
         if edge is None:
-            return False, []
-        path_txs.append(edge.tx_hash)
+            return None
+        path.append(edge)
         cursor = edge.from_addr
-    path_txs.reverse()
-    return True, path_txs
+    path.reverse()
+    return path
+
+
+def _edge_facts_match(a: Edge, b: Edge) -> bool:
+    """Same real transaction, confirmed by a second source.
+
+    Core facts (tx_hash/from/to/value/asset) must match exactly. Locator
+    fields (log_index/trace_address) only have to agree when *both* sources
+    recorded one -- different collection methods commonly use different
+    locator schemes for the same underlying movement.
+    """
+    if (a.tx_hash, a.from_addr, a.to_addr, a.value_raw, a.asset) != (
+        b.tx_hash,
+        b.from_addr,
+        b.to_addr,
+        b.value_raw,
+        b.asset,
+    ):
+        return False
+    if a.log_index is not None and b.log_index is not None and a.log_index != b.log_index:
+        return False
+    return not (
+        a.trace_address is not None
+        and b.trace_address is not None
+        and a.trace_address != b.trace_address
+    )
 
 
 def select_candidates(
@@ -370,7 +418,6 @@ def run_analysis(
     independent_edges: list[Edge],
     discovery_file_sha256: str,
     independent_file_sha256: str,
-    scope_manifest: ScopeManifest,
 ) -> dict[str, Any]:
     if config.tolerance_raw > config.tolerance_cap_raw:
         raise ValueError("tolerance_raw exceeds tolerance_cap_raw")
@@ -393,7 +440,6 @@ def run_analysis(
         max_nodes=config.max_nodes,
         max_edges=config.max_edges,
     )
-    discovery_tx_hashes = {edge.tx_hash for edge in related}
     residuals = aggregate_residuals(related)
     draft, excluded = select_candidates(
         residuals,
@@ -404,12 +450,15 @@ def run_analysis(
 
     discovery_canonical_sha256 = canonical_edges_sha256(discovery_edges)
     independent_canonical_sha256 = canonical_edges_sha256(independent_edges)
-    identical_content = discovery_canonical_sha256 == independent_canonical_sha256
+    # Only a wholesale copy of the entire edge set is rejected here. Matching
+    # the SAME transaction on the candidate's own path is required, not
+    # forbidden -- see the per-candidate loop below.
+    whole_set_is_a_copy = discovery_canonical_sha256 == independent_canonical_sha256
 
     candidates: list[dict[str, Any]] = []
     for item in draft:
         address = item["address"]
-        if identical_content:
+        if whole_set_is_a_copy:
             excluded.append(
                 {
                     "address": address,
@@ -417,39 +466,35 @@ def run_analysis(
                 }
             )
             continue
-        ok, path_txs = path_exists(
-            independent_edges,
-            seed=config.seed,
-            target=address,
-            max_hops=config.max_hops,
+        discovery_path = find_path_edges(
+            related, seed=config.seed, target=address, max_hops=config.max_hops
         )
-        if not ok:
-            excluded.append({"address": address, "reason": "independent_path_not_found"})
+        if discovery_path is None:
+            excluded.append({"address": address, "reason": "discovery_path_not_found"})
             continue
-        reused = discovery_tx_hashes.intersection(path_txs)
-        if reused:
+        unconfirmed = [
+            edge.tx_hash
+            for edge in discovery_path
+            if not any(_edge_facts_match(edge, other) for other in independent_edges)
+        ]
+        if unconfirmed:
             excluded.append(
                 {
                     "address": address,
-                    "reason": "independent_path_reuses_discovery_tx",
-                    "reused_tx_hashes": sorted(reused),
+                    "reason": "independent_confirmation_missing_for_tx",
+                    "unconfirmed_tx_hashes": unconfirmed,
                 }
             )
             continue
         candidates.append(
             {
                 **item,
-                "independent_verification": "independent_edge_set",
-                "path_tx_hashes": path_txs,
-                "forward_hops": len(path_txs),
+                "independent_verification": "provider_confirmed_same_tx",
+                "path_tx_hashes": [edge.tx_hash for edge in discovery_path],
+                "forward_hops": len(discovery_path),
             }
         )
 
-    scope_complete = (
-        scope_manifest.pagination_complete
-        and scope_manifest.continuous_scan
-        and not budget_meta["budget_exhausted"]
-    )
     report: dict[str, Any] = {
         "verification_level": "heuristic_candidates",
         "seed": _lower(config.seed),
@@ -461,14 +506,19 @@ def run_analysis(
         "tolerance_rationale": config.tolerance_rationale,
         "collection_method": config.collection_method,
         "independent_collection_method": config.independent_collection_method,
-        "scope_complete": scope_complete,
-        "scope_manifest": {
-            "pagination_complete": scope_manifest.pagination_complete,
-            "continuous_scan": scope_manifest.continuous_scan,
-            "from_block": scope_manifest.from_block,
-            "to_block": scope_manifest.to_block,
+        # Always false: this MVP cannot verify that an input edge file is a
+        # complete capture of real chain data (no pagination/continuous-scan
+        # binding to actual results exists yet). Declared block range is
+        # informational only.
+        "scope_complete": False,
+        "scope_complete_note": (
+            "This MVP does not verify input completeness against real chain "
+            "data; scope_complete is always false regardless of BFS budget."
+        ),
+        "declared_block_range": {
+            "from_block": config.scope_from_block,
+            "to_block": config.scope_to_block,
         },
-        "pagination_truncated": not scope_manifest.pagination_complete,
         "budget_exhausted": budget_meta["budget_exhausted"],
         "budget": budget_meta,
         "discovery_edges_sha256": discovery_file_sha256,
@@ -486,18 +536,16 @@ def run_analysis(
             "single_candidate_is_not_confirmed": True,
             "note": (
                 "Candidates are heuristic only. |C|==1 does not promote to "
-                "confirmed without continuous scope completeness proven elsewhere. "
-                "scope_complete requires an explicit pagination/continuous-scan "
-                "manifest, not just an unexhausted BFS budget."
+                "confirmed, and scope_complete is always false in this MVP."
             ),
             "independent_verification_caveat": (
                 "This MVP does not pin raw RPC artifacts the way confirmed "
-                "Bridge/CEX/Mixer/Lending fixtures do. Independence here means "
-                "canonically-distinct edge data from a declared different "
-                "collection method that does not reuse discovery's own TX "
-                "hashes -- not a cryptographic proof of on-chain fact. "
-                "Re-verify through the full scan analyze pipeline before "
-                "treating any candidate with confidence."
+                "Bridge/CEX/Mixer/Lending fixtures do. 'provider_confirmed_same_tx' "
+                "means a second, differently-collected edge set reports exactly "
+                "the same transaction facts for every hop on the candidate's "
+                "path -- not a cryptographic proof of on-chain fact. Re-verify "
+                "through the full scan analyze pipeline before treating any "
+                "candidate with confidence."
             ),
         },
     }
@@ -510,7 +558,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Offline FLOW final-account candidate helper "
-            "(residual + terminus + independent edge verification)."
+            "(residual + terminus + independent same-tx confirmation)."
         )
     )
     parser.add_argument("--seed", required=True)
@@ -532,25 +580,17 @@ def build_parser() -> argparse.ArgumentParser:
         "--independent-edges",
         type=Path,
         required=True,
-        help="Separate edge set for seed→candidate path verification",
+        help="Separate edge set that must confirm the same discovery-path TXs",
     )
     parser.add_argument("--max-hops", type=int, default=8)
     parser.add_argument("--max-nodes", type=int, default=64)
     parser.add_argument("--max-edges", type=int, default=128)
     parser.add_argument(
-        "--pagination-complete",
-        action=argparse.BooleanOptionalAction,
-        default=False,
-        help="Discovery collection saw every page/result in its declared range.",
+        "--scope-from-block", type=int, default=None, help="Informational only; not verified."
     )
     parser.add_argument(
-        "--continuous-scan",
-        action=argparse.BooleanOptionalAction,
-        default=False,
-        help="Discovery collection covered the declared range with no gaps.",
+        "--scope-to-block", type=int, default=None, help="Informational only; not verified."
     )
-    parser.add_argument("--scope-from-block", type=int, default=None)
-    parser.add_argument("--scope-to-block", type=int, default=None)
     return parser
 
 
@@ -569,12 +609,8 @@ def main(argv: list[str] | None = None) -> int:
         max_hops=args.max_hops,
         max_nodes=args.max_nodes,
         max_edges=args.max_edges,
-    )
-    scope_manifest = ScopeManifest(
-        pagination_complete=args.pagination_complete,
-        continuous_scan=args.continuous_scan,
-        from_block=args.scope_from_block,
-        to_block=args.scope_to_block,
+        scope_from_block=args.scope_from_block,
+        scope_to_block=args.scope_to_block,
     )
     discovery_path = args.discovery_edges.resolve()
     independent_path = args.independent_edges.resolve()
@@ -586,7 +622,6 @@ def main(argv: list[str] | None = None) -> int:
         independent_edges=independent_edges,
         discovery_file_sha256=file_sha256(discovery_path),
         independent_file_sha256=file_sha256(independent_path),
-        scope_manifest=scope_manifest,
     )
     print(json.dumps(report, indent=2, ensure_ascii=True))
     if report.get("verification_level") != "heuristic_candidates":
