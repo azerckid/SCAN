@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-31 05:40
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate) · TASK-016 Bridge+CEX+Lending Confirmed·Automated · TASK-017 In Progress(UTXO automated · change/CoinJoin assisted) · TASK-018 In Progress(Euler exit assisted) · TASK-019 Proposed · Mixer/MIXED pending · Benchmark 16·7·7
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate) · TASK-016 Bridge+CEX+Mixer+Lending Confirmed·Automated · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted · TASK-019 Proposed · Benchmark 17·7·6
 
 ## 1. 문서 목적
 
@@ -1454,9 +1454,10 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 
 ### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
-- Status: In Progress — Bridge(`SVC-BRG-001`)·CEX(`SVC-CEX-001`)·Lending(`SVC-LEND-001`)
-  fixture confirmed · Benchmark automated (15·4·11). Mixer·`MIXED-XCHAIN-001`은
-  잔여.
+- Status: In Progress — Bridge(`SVC-BRG-001`)·CEX(`SVC-CEX-001`)·Mixer(`SVC-MIX-001`)·
+  Lending(`SVC-LEND-001`) fixture confirmed · Benchmark automated (17·7·6).
+  `MIXED-XCHAIN-001`은 unsupported 잔여.
+
 - Work Type: code
 - Priority: Phase 2 · P2
 - Depends On: TASK-014, TASK-015
@@ -1469,8 +1470,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] `bridge_transfer` offline analyzer와 전용 request/result dispatch를 구현한다.
   - [x] Bridge exact·partial·conflict와 Benchmark automated를 검증한다.
   - [x] CEX exact·partial·conflict와 Benchmark automated를 검증한다.
+  - [x] Mixer adapter exact·partial·conflict와 Benchmark automated를 검증한다.
   - [x] Lending adapter exact·partial·conflict와 Benchmark automated를 검증한다.
-  - [ ] Mixer adapter별 exact·partial·conflict를 검증한다.
   - [ ] 남은 서비스 문제의 Benchmark를 실제 완료 범위만 승격한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 서비스·크로스체인 5문항
@@ -1797,7 +1798,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Commands and Results:
     - `scripts/verify_task_017_bitcoin.py` twice — PASS — fact hash `c43a2776…f3c1`
     - focused Bitcoin unit+CLI pytest — PASS
-    - `scripts/verify.py` — PASS — 617 tests, fixture 22, Schema 67 probes,
+    - `scripts/verify.py` — PASS — 653 tests, fixture 24, Schema 77 probes,
       traceability 2038 links, security 279 files
   - Unrun Checks: live Bitcoin RPC/contest mapping remains out of offline scope
   - Detailed Evidence:
@@ -1864,7 +1865,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Status: PASS
   - 11 negative oracles twice · stdlib independent Verifier twice
   - product↔Verifier fact hash `412ea743…8535`
-  - `scripts/verify.py` — PASS — 631 tests, fixture 23, Schema 72 probes,
+  - `scripts/verify.py` — PASS — 653 tests, fixture 24, Schema 77 probes,
     traceability 2052 links, security 287 files
   - detailed evidence: [69 Report](../05_QA_Validation/69_TASK_018_CASE_RECONCILIATION_REPORT.md)
 

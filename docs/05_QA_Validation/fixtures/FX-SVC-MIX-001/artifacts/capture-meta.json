@@ -1,0 +1,244 @@
+{
+  "status": "complete",
+  "primary_rpc": "https://ethereum-rpc.publicnode.com",
+  "verify_rpc": "https://eth.merkle.io",
+  "captured_at": "2026-07-31T04:47:24Z",
+  "included_artifact_calls": 18,
+  "verify_session_notes": [
+    "PRIMARY=publicnode; VERIFY=merkle.",
+    "Package narrowed to deposit + first two post-deposit withdraw events to preserve distinct PRIMARY/VERIFY artifact bytes.",
+    "Third withdraw omitted because a distinct VERIFY receipt artifact was unavailable after provider rate-limits.",
+    "Deposit/withdraw pool events are confirmed facts; deposit\u2194withdraw linkage remains heuristic/candidate.",
+    "OFAC label asserts pool designation only; ownership/criminality not_assessed."
+  ],
+  "capabilities": {
+    "PRIMARY:tx:0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483": {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
+      "method": "eth_getTransactionByHash",
+      "params": [
+        "0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483"
+      ],
+      "sha256": "6d4556a26faf403f738d09371afe621ea72398d213de0a7c7bef0e012b45b28c",
+      "response_sha": "6d4556a26faf403f738d09371afe621ea72398d213de0a7c7bef0e012b45b28c",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "PRIMARY:receipt:0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483": {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
+      "method": "eth_getTransactionReceipt",
+      "params": [
+        "0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483"
+      ],
+      "sha256": "c05e285c5fab70fe628353d47d48923c0808f460fd20bd3b8163b97ce0fb25aa",
+      "response_sha": "c05e285c5fab70fe628353d47d48923c0808f460fd20bd3b8163b97ce0fb25aa",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "PRIMARY:block:0x1821f4f": {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
+      "method": "eth_getBlockByNumber",
+      "params": [
+        "0x1821f4f",
+        false
+      ],
+      "sha256": "b43e9457e19acc4686b6c3eab5f9388c53d8152b48d26976268a730ddc7fe519",
+      "response_sha": "b43e9457e19acc4686b6c3eab5f9388c53d8152b48d26976268a730ddc7fe519",
+      "captured_at": "2026-07-31T04:47:24Z",
+      "blockNumber": 25304911
+    },
+    "VERIFY:tx:0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483": {
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionByHash",
+      "params": [
+        "0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483"
+      ],
+      "sha256": "ba5f1cc0b46f5e9e9a32722a825bc7a0a7ee17cb09b25dfb7abe297b0dcb20e5",
+      "response_sha": "ba5f1cc0b46f5e9e9a32722a825bc7a0a7ee17cb09b25dfb7abe297b0dcb20e5",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "VERIFY:receipt:0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483": {
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionReceipt",
+      "params": [
+        "0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483"
+      ],
+      "sha256": "7b2476733131b4a04d9a942c520d151644b3ff35c18b4243da474664e756f812",
+      "response_sha": "7b2476733131b4a04d9a942c520d151644b3ff35c18b4243da474664e756f812",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "VERIFY:block:0x1821f4f": {
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getBlockByNumber",
+      "params": [
+        "0x1821f4f",
+        false
+      ],
+      "sha256": "7220784c8129cb187b51214f3046e5ed1e05298a4c6196af5e55730eb30a3d44",
+      "response_sha": "7220784c8129cb187b51214f3046e5ed1e05298a4c6196af5e55730eb30a3d44",
+      "captured_at": "2026-07-31T04:47:24Z",
+      "blockNumber": 25304911
+    },
+    "PRIMARY:tx:0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984": {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
+      "method": "eth_getTransactionByHash",
+      "params": [
+        "0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984"
+      ],
+      "sha256": "06b7a41f8f9d5a3b719fb01a3298136ee6f66c17f74b4deaf44eac1154d8175a",
+      "response_sha": "06b7a41f8f9d5a3b719fb01a3298136ee6f66c17f74b4deaf44eac1154d8175a",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "PRIMARY:receipt:0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984": {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
+      "method": "eth_getTransactionReceipt",
+      "params": [
+        "0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984"
+      ],
+      "sha256": "00593586517777240226a13d32e1c6e83d29c364dd29346a8f60347f97ee07bd",
+      "response_sha": "00593586517777240226a13d32e1c6e83d29c364dd29346a8f60347f97ee07bd",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "PRIMARY:block:0x1822334": {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
+      "method": "eth_getBlockByNumber",
+      "params": [
+        "0x1822334",
+        false
+      ],
+      "sha256": "e58aaa17c369214fe5f81b47c78777dd6d8b4b60d6bee9e06f628756630dd0ee",
+      "response_sha": "e58aaa17c369214fe5f81b47c78777dd6d8b4b60d6bee9e06f628756630dd0ee",
+      "captured_at": "2026-07-31T04:47:24Z",
+      "blockNumber": 25305908
+    },
+    "VERIFY:tx:0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984": {
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionByHash",
+      "params": [
+        "0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984"
+      ],
+      "sha256": "b53b8f14959df6e752f7d41b677ec707047368b9160b517e5257a8814c4ee1e1",
+      "response_sha": "b53b8f14959df6e752f7d41b677ec707047368b9160b517e5257a8814c4ee1e1",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "VERIFY:receipt:0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984": {
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionReceipt",
+      "params": [
+        "0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984"
+      ],
+      "sha256": "2978f3c742d738134d9a02ec9545a863d632852032a28dfe97de8bb1d25cd0de",
+      "response_sha": "2978f3c742d738134d9a02ec9545a863d632852032a28dfe97de8bb1d25cd0de",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "VERIFY:block:0x1822334": {
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getBlockByNumber",
+      "params": [
+        "0x1822334",
+        false
+      ],
+      "sha256": "12e0776b388ef83c59a2b5186a39d789ba9aea37e30a4d505d4767dd4d9f4f8e",
+      "response_sha": "12e0776b388ef83c59a2b5186a39d789ba9aea37e30a4d505d4767dd4d9f4f8e",
+      "captured_at": "2026-07-31T04:47:24Z",
+      "blockNumber": 25305908
+    },
+    "PRIMARY:tx:0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d": {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
+      "method": "eth_getTransactionByHash",
+      "params": [
+        "0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d"
+      ],
+      "sha256": "2ec95572adb4e585b2f7acb0d2e9057af4fa8be974654e9243703b58c6416362",
+      "response_sha": "2ec95572adb4e585b2f7acb0d2e9057af4fa8be974654e9243703b58c6416362",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "PRIMARY:receipt:0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d": {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
+      "method": "eth_getTransactionReceipt",
+      "params": [
+        "0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d"
+      ],
+      "sha256": "d417c24ea44e58105f7b5a5e0d8eee8ed9afa69e924e0b18855205918fee56b6",
+      "response_sha": "d417c24ea44e58105f7b5a5e0d8eee8ed9afa69e924e0b18855205918fee56b6",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "PRIMARY:block:0x182233a": {
+      "provider_id": "PROVIDER-ETHEREUM-PUBLICNODE",
+      "provider_role": "PRIMARY",
+      "endpoint": "https://ethereum-rpc.publicnode.com",
+      "method": "eth_getBlockByNumber",
+      "params": [
+        "0x182233a",
+        false
+      ],
+      "sha256": "67a1110984b083bf47e80c29b2cec43509e552f963c3ace733714d887ddddce4",
+      "response_sha": "67a1110984b083bf47e80c29b2cec43509e552f963c3ace733714d887ddddce4",
+      "captured_at": "2026-07-31T04:47:24Z",
+      "blockNumber": 25305914
+    },
+    "VERIFY:tx:0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d": {
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionByHash",
+      "params": [
+        "0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d"
+      ],
+      "sha256": "2050eaf1f0e0de53c51e03bd7f29bd3b42794820299c309aa2026faf6d3fff68",
+      "response_sha": "2050eaf1f0e0de53c51e03bd7f29bd3b42794820299c309aa2026faf6d3fff68",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "VERIFY:receipt:0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d": {
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getTransactionReceipt",
+      "params": [
+        "0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d"
+      ],
+      "sha256": "a46034e09a72f5331fe00ed9fb2ca9233205f856337b932cb7862270f2687fa1",
+      "response_sha": "a46034e09a72f5331fe00ed9fb2ca9233205f856337b932cb7862270f2687fa1",
+      "captured_at": "2026-07-31T04:47:24Z"
+    },
+    "VERIFY:block:0x182233a": {
+      "provider_id": "PROVIDER-ETHEREUM-MERKLE",
+      "provider_role": "VERIFY",
+      "endpoint": "https://eth.merkle.io",
+      "method": "eth_getBlockByNumber",
+      "params": [
+        "0x182233a",
+        false
+      ],
+      "sha256": "2db9f1772186efca602ebb447929e8f6122f29459174644c2310f996a60f9706",
+      "response_sha": "2db9f1772186efca602ebb447929e8f6122f29459174644c2310f996a60f9706",
+      "captured_at": "2026-07-31T04:47:24Z",
+      "blockNumber": 25305914
+    }
+  }
+}

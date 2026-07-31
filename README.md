@@ -42,18 +42,19 @@ SQLite Board input, and an atomic human-confirmed local submission record.
 adds Analysis I/O 0.2 `evm_core` object·historical balance·first Transfer·native
 inflow queries while retaining the three 0.1 verticals. `TASK-013` adds
 subject-scoped ERC-721/1155 and EIP-1967 event/state analysis. `TASK-014` adds
-bounded path, remerge, and multi-origin graph/ledger analysis. Sixteen cases are now
-directly automated, 7 are assisted, and 7 remain unsupported. The sixteen automated
+bounded path, remerge, and multi-origin graph/ledger analysis. Seventeen cases are now
+directly automated, 7 are assisted, and 6 remain unsupported. The seventeen automated
 cases pass exact answer, evidence, fixture-requirement, and deterministic replay
-checks. This is 16/16 accuracy within the automated scope, not 30/30 problem
+checks. This is 17/17 accuracy within the automated scope, not 30/30 problem
 coverage.
 Phase 2 is documented as `TASK-012` through `TASK-019`: generic EVM, NFT/proxy,
 PATH, intelligence, service/xchain, Bitcoin, case reconciliation, and a final
 coverage gate. TASK-012 through TASK-014 are complete; TASK-015 is in progress with
-four confirmed fixtures; TASK-016 Bridge, CEX, and Lending are confirmed and automated.
-TASK-017 automates exact bounded UTXO traversal while change/CoinJoin remain assisted.
-TASK-018 implements bounded Euler exit reconciliation as assisted; Mixer and four
-remaining case families plus TASK-019 stay under contest feature freeze.
+four confirmed fixtures; TASK-016 Bridge, CEX, Mixer, and Lending are confirmed and
+automated. TASK-017 now automates exact bounded UTXO traversal while change/CoinJoin
+remain assisted. TASK-018 implements bounded Euler exit reconciliation as assisted;
+four case families and TASK-019 remain.
+
 TASK-013 has three confirmed public NFT·Proxy packages with two-provider
 raw SHA replay, explicit selected-scope integrity checks, and 16 offline negative
 oracles, an independent raw-first Verifier, approved UI·Context, product analyzer,
@@ -66,8 +67,9 @@ and public-hub false-positive fixtures. `OSINT-LBL-001` is automated; the
 SANCTIONS·ENS·public-hub problems remain assisted because one-hop expansion,
 domain/SNS checks, and positive multi-heuristic clustering are not complete. The
 common-funder fixture remains candidate. TASK-016 has a confirmed Across V3
-Base→Ethereum fixture and automated `SVC-BRG-001`, plus a confirmed GARANTEX OFAC
-CEX cluster fixture and automated `SVC-CEX-001`; `MIXED-XCHAIN-001` stays
+Base→Ethereum fixture and automated `SVC-BRG-001`, a confirmed GARANTEX OFAC
+CEX cluster fixture and automated `SVC-CEX-001`, plus a confirmed Tornado Cash
+mixer flow fixture and automated `SVC-MIX-001`; `MIXED-XCHAIN-001` stays
 unsupported until composition exists.
 Live AI and CTFd network submission remain unimplemented.
 `WP-INPUT-IMPL-02` connects explicit external replay and provided JSON/JSONL/CSV
@@ -143,8 +145,9 @@ event, call, state, or official context evidence. CTFd submission remains manual
 | TASK-015 non-quarantined promotion | [`56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/56_TASK_015_NON_QUARANTINED_PROMOTION_RECEIPT.md) | SANCTIONS·ENS·RELATION-HUB confirmed; related problems remain assisted |
 | TASK-016 Bridge final promotion | [`65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/65_TASK_016_BRIDGE_FINAL_PROMOTION_RECEIPT.md) | Bridge confirmed fixture and Benchmark 13/13 evidence |
 | TASK-016 CEX final promotion | [`68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md) | CEX confirmed fixture and Benchmark 14/14 evidence |
+| TASK-016 Mixer final promotion | [`72_TASK_016_MIXER_FINAL_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/72_TASK_016_MIXER_FINAL_PROMOTION_RECEIPT.md) | Mixer confirmed fixture and Benchmark 17/17 evidence |
 | TASK-016 Lending final promotion | [`70_TASK_016_LENDING_FINAL_PROMOTION_RECEIPT.md`](docs/05_QA_Validation/70_TASK_016_LENDING_FINAL_PROMOTION_RECEIPT.md) | Lending confirmed fixture and Benchmark automated evidence |
-| Contest stabilization runbook | [`66_CONTEST_STABILIZATION_RUNBOOK.md`](docs/05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md) | Contest feature freeze, CEX·Lending·TASK-017/018 thaw, CLI paths, and recovery checklist |
+| Contest stabilization runbook | [`66_CONTEST_STABILIZATION_RUNBOOK.md`](docs/05_QA_Validation/66_CONTEST_STABILIZATION_RUNBOOK.md) | Bridge·CEX·Mixer·Lending·TASK-017/018 thaw, CLI paths, and recovery checklist |
 | Completion | [`04_DOCUMENT_COMPLETION_REPORT.md`](docs/05_QA_Validation/04_DOCUMENT_COMPLETION_REPORT.md) | document validation evidence and remaining boundaries |
 
 ## Validation
@@ -162,13 +165,13 @@ repository traceability and security scans.
 Expected final outputs include:
 
 ```text
-652 passed
-PASS 24 fixture packages validated against schema 0.1
+674 passed
+PASS 25 fixture packages validated against schema 0.1
 PASS 3 analysis request/result pairs validated against schema 0.1 with reference integrity
-PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 77 probes
+PASS 3 generated schemas are semantically compatible with Analysis I/O 0.2 (0.1 compatible) across 82 probes
 PASS operations contract 0.1 generated Schema and runtime agree across 17 probes
-PASS repository traceability: 2073 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
-PASS repository security scan: 305 runtime/evidence files
+PASS repository traceability: 2086 links, 19 TASK IDs, 36 QA IDs, 3 fixture/example mappings
+PASS repository security scan: 357 runtime/evidence files
 PASS TASK-013 replay Gate: 3 fixtures (confirmed), 2 providers, 16 capabilities, exact scoped raw values
 PASS 16 TASK-013 negative oracles twice (offline deterministic)
 PASS TASK-013 independent Verifier: 3 fixtures (confirmed), 7 requirements, 13 evidence values, 2 deterministic runs
@@ -221,15 +224,16 @@ A supported request without `--evidence` stops explicitly with
 baseline and expected-problem Benchmark 0.1 are closed.
 `TASK-012` is complete with four confirmed fixtures and a PASS Context Receipt.
 `TASK-013` is complete with three confirmed fixtures and Benchmark 9/9.
-`TASK-014` is complete with three confirmed fixtures; Benchmark is 16/16 automated
-(LABEL via TASK-015, Bridge·CEX·Lending via TASK-016, exact Bitcoin UTXO via TASK-017).
+`TASK-014` is complete with three confirmed fixtures; Benchmark is 17/17 automated (LABEL via TASK-015, Bridge·CEX·Mixer·Lending via TASK-016, exact Bitcoin UTXO via TASK-017).
 `TASK-015` is in progress: four bounded fixtures are confirmed, `OSINT-LBL-001`
-is automated, and common-funder remains candidate. `TASK-016` Bridge, CEX, and Lending
-are confirmed and automated. `TASK-017` automates exact bounded Bitcoin UTXO traversal
-while change/CoinJoin remain assisted. `TASK-018` has an explicitly approved bounded
-Euler exit reconciler and one confirmed derived fixture; phishing, poisoning, rug-pull,
-and open-ended mixed cases remain unsupported. Mixer and `TASK-019` remain under
-contest feature freeze until actual problem demand appears.
+is automated, and common-funder remains candidate. `TASK-016` Bridge, CEX, Mixer, and Lending are confirmed
+and automated. `TASK-017` automates exact bounded
+Bitcoin UTXO traversal while change/CoinJoin remain assisted. `TASK-018` has an
+explicitly approved bounded Euler exit reconciler and one confirmed derived fixture;
+phishing, poisoning, rug-pull, and open-ended mixed cases remain unsupported.
+`TASK-019` remains under contest feature freeze until actual problem
+demand appears.
+
 `TASK-010` offline Operations V1 is complete through human-confirmed local
 submission recording. No live provider configuration exists; live transport still
 requires authoritative Rules and `rule_status: allowed`. The CLI never calls CTFd,

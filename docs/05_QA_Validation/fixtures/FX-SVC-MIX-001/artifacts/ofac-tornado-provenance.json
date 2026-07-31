@@ -1,0 +1,12 @@
+{
+  "entity": "Tornado Cash",
+  "claim": "OFAC SDN designated mixer pool (Ethereum 0.1 ETH instance)",
+  "source_id": "DS-SANCTIONS-PUBLIC",
+  "source_url": "https://home.treasury.gov/news/press-releases/jy0916",
+  "lookup_key": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+  "listed_eth_addresses": [
+    "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc"
+  ],
+  "classification": "evidence_backed_assertion",
+  "note": "Label asserts pool designation only; ownership and criminality remain not_assessed."
+}

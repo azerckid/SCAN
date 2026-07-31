@@ -239,6 +239,7 @@ def _validate_approved_contract_adoption() -> None:
         "bridge_transfer",
         "bitcoin_utxo",
         "cex_cluster",
+        "mixer_flow",
         "defi_lending",
         "case_reconciliation",
     }

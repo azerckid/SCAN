@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCAN TASK-016 Mixer Flow Preview</title>
+  <style>
+    :root{color-scheme:light;--page:#f4f6f8;--panel:#ffffff;--raised:#eef2f6;--border:#c5cdd8;
+      --fg:#1a2332;--muted:#5c6b7f;--accent:#2563a8;--ok:#1a7f4e;--warn:#9a6b00;--bad:#b42318;
+      --fact:#e8f0fa;--assert:#fef6e4;--heur:#f5f0e8;--na:#eceff3;
+      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      --sans:Inter,Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--fg);font-family:var(--sans);background:var(--page)}
+    button,code{font-family:var(--mono)}button{cursor:pointer}
+    .page{width:min(1540px,calc(100% - 28px));margin:auto;padding:28px 0 48px}
+    header{display:flex;justify-content:space-between;align-items:end;gap:20px;border-bottom:2px solid var(--border);padding-bottom:18px}
+    .eyebrow{color:var(--accent);font:700 11px var(--mono);letter-spacing:.13em}
+    h1{margin:7px 0 0;font-size:clamp(26px,4vw,40px);letter-spacing:-.03em;color:#0f1724}
+    .lede{max-width:920px;color:var(--muted);line-height:1.65;font-size:14px}
+    .gate{min-width:280px;padding:13px 15px;border:1px solid var(--border);background:var(--raised);border-radius:6px;font:11px/1.65 var(--mono)}
+    .gate b{color:var(--ok)}.notice{margin-top:18px;padding:12px 14px;color:#5c4a12;background:#fef9e7;border:1px solid #e8d48a;border-radius:6px;font:11px/1.6 var(--mono)}
+    .chiprow{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+    .chip{padding:7px 12px;border:1px solid #9eb4cc;border-radius:5px;background:#e8eef5;color:#1e3a5f;font:700 11px var(--mono)}
+    .workspace{display:grid;grid-template-columns:340px minmax(0,1fr) 330px;gap:11px;margin-top:11px}
+    .panel{border:1px solid var(--border);background:var(--panel);border-radius:6px;overflow:hidden}
+    .head{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--raised);font:700 10px var(--mono);letter-spacing:.08em;color:#334155}
+    .body{padding:14px}.fields{display:grid;gap:7px;margin-top:11px}
+    .field{display:grid;grid-template-columns:130px 1fr;gap:8px;padding:8px 9px;border:1px solid #dde3ea;border-radius:5px;background:#fafbfc;font:10px/1.45 var(--mono)}
+    .states{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:13px}
+    .state{padding:8px 3px;border:1px solid var(--border);border-radius:5px;background:var(--raised);color:#64748b;font-size:10px;font-weight:600}
+    .state[data-state=complete][aria-pressed=true]{color:var(--ok);border-color:var(--ok);background:#edf7f1}
+    .state[data-state=partial][aria-pressed=true]{color:var(--warn);border-color:var(--warn);background:#fef9ee}
+    .state[data-state=failed][aria-pressed=true]{color:var(--bad);border-color:var(--bad);background:#fef2f1}
+    .term{padding:17px 18px;font-family:var(--mono)}
+    .badge{padding:3px 8px;border:1px solid currentColor;border-radius:4px;font-size:10px;font-weight:800}
+    .complete{color:var(--ok)}.partial{color:var(--warn)}.failed{color:var(--bad)}
+    .section{margin-top:15px;color:#64748b;font:700 10px var(--mono);letter-spacing:.12em}
+    .block{margin-top:7px;padding:9px 10px;border:1px solid #dde3ea;border-radius:5px;background:#fff;font:10px/1.6 var(--mono);overflow-wrap:anywhere}
+    .block.fact{border-left:3px solid var(--accent);background:var(--fact)}
+    .block.assert{border-left:3px solid var(--warn);background:var(--assert)}
+    .block.heur{border-left:3px solid #94a3b8;background:var(--heur)}
+    .block.exclude{border-left:3px solid #64748b;background:var(--na)}
+    .source-card{padding:9px;border:1px solid #dde3ea;border-radius:5px;background:#fafbfc;font:10px/1.5 var(--mono);margin-bottom:8px}
+    .mini{display:inline-block;margin:0 4px 3px 0;padding:2px 5px;border:1px solid #cbd5e1;border-radius:3px;color:#475569;font-size:9px;background:#f8fafc}
+  </style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div>
+      <div class="eyebrow">TASK-016 · MIXER FLOW EVALUATION</div>
+      <h1>Mixer Flow Preview</h1>
+      <p class="lede">subject의 pool deposit fact와 matching-denomination withdraw candidate set을 교차검증합니다. deposit↔withdraw ownership은 on-chain 증명 불가이며 candidate strength tag만 허용합니다.</p>
+    </div>
+    <div class="gate">FIXTURE GATE<br><b>FX-SVC-MIX-001 CONFIRMED</b><br>hash 4c8c4eb8…4939</div>
+  </header>
+  <div class="notice">Static docs-only preview. ownership / criminality: not_assessed. Single-exit confirmed promotion forbidden.</div>
+  <div class="chiprow">
+    <div class="chip">evaluate_mixer_candidates</div>
+    <div class="chip">mixer_flow leaf</div>
+    <div class="chip">linkage_strength=candidate</div>
+  </div>
+  <div class="workspace">
+    <section class="panel">
+      <div class="head"><span>REQUEST</span><span>FX-SVC-MIX-001 pins</span></div>
+      <div class="body">
+        <div class="fields" id="mix-fields"></div>
+        <div class="states" id="mix-states" role="group">
+          <button class="state" data-state="complete" aria-pressed="true">complete</button>
+          <button class="state" data-state="partial" aria-pressed="false">partial</button>
+          <button class="state" data-state="failed" aria-pressed="false">failed</button>
+        </div>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="head"><span>RESULT</span><span>candidate tags</span></div>
+      <div class="term" id="mix-result"></div>
+    </section>
+    <section class="panel">
+      <div class="head"><span>EVIDENCE</span><span>NO LIVE CALLS</span></div>
+      <div class="body" id="mix-sources"></div>
+    </section>
+  </div>
+</main>
+<script>
+  const fields=[
+    ["subject_address","0xe1fe63b019ddac3a448f97a3c0c21df9c3613893"],
+    ["pool_address","0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc"],
+    ["observation_window","25304911 → 25305914"],
+    ["network mode","artifact_only"]
+  ];
+  const sources=[
+    ["EV-MIX-DEPOSIT","0.1 ETH deposit · leaf 56342","confirmed_fact"],
+    ["EV-MIX-WITHDRAW-EVENTS","2 pool withdraw logs","confirmed_fact"],
+    ["EV-MIX-CANDIDATES","linkage_strength=candidate","heuristic_candidate"],
+    ["EV-MIX-LABEL","Tornado Cash · Treasury press release","evidence_backed_assertion"]
+  ];
+  let state="complete";
+  function render(){
+    document.getElementById("mix-fields").innerHTML=fields.map(([k,v])=>`<div class="field"><span>${k}</span><span>${v}</span></div>`).join("");
+    document.getElementById("mix-sources").innerHTML=sources.map(([a,b,c])=>`<div class="source-card"><b>${a}</b><span>${b}</span><span>${c}</span></div>`).join("");
+    const r=document.getElementById("mix-result");
+    if(state==="complete"){
+      r.innerHTML=`<div><span class="badge complete">COMPLETE</span> mixer_flow_confirmed</div>
+        <div class="section">DEPOSIT FACT</div><div class="block fact">0xc716…f483 · block 25304911 · 0.1 ETH · leaf 56342</div>
+        <div class="section">WITHDRAW CANDIDATES</div><div class="block heur"><span class="mini">candidate</span> 2 matching-denomination exits · recipient 0x3a6d…5b4<br>ownership link NOT on-chain proven</div>
+        <div class="section">POOL LABEL</div><div class="block assert">Tornado Cash · OFAC press release jy0916 · ASSERTION ONLY</div>
+        <div class="section">ATTRIBUTION</div><div class="block exclude">ownership: not_assessed · criminality: not_assessed</div>`;
+    }else if(state==="partial"){
+      r.innerHTML=`<div><span class="badge partial">PARTIAL</span> evidence_incomplete</div>
+        <div class="block heur">deposit fact present · VERIFY withdraw leg missing · label artifact unavailable</div>`;
+    }else{
+      r.innerHTML=`<div><span class="badge failed">FAILED</span> single_exit_ownership_rejected</div>
+        <div class="block exclude">single matching withdraw promoted to confirmed ownership — forbidden</div>`;
+    }
+  }
+  document.querySelectorAll(".state").forEach(btn=>btn.addEventListener("click",()=>{
+    state=btn.dataset.state;
+    document.querySelectorAll(".state").forEach(b=>b.setAttribute("aria-pressed",String(b===btn)));
+    render();
+  }));
+  render();
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 # 예상문제 Offline Benchmark 0.1 검증 보고서
 > Created: 2026-07-29 01:16
-> Last Updated: 2026-07-31 05:40
-> Status: Passed · 16 Automated / 7 Assisted / 7 Unsupported
+> Last Updated: 2026-07-31 22:40
+> Status: Passed · 17 Automated / 7 Assisted / 6 Unsupported
 
 ## 1. 목적과 판정 경계
 
@@ -17,7 +17,7 @@
 | `assisted` | 현재 deterministic primitive를 재사용할 수 있지만 전용 request·analyzer·reference fixture가 없어 사람이 정합 |
 | `unsupported` | 문제의 핵심 기능 자체가 없어 현재 프로그램으로 답을 도출할 수 없음 |
 
-따라서 `16/16 pass`는 automated 열여섯 문제의 정확도이며 30문항 전체 정확도가
+따라서 `17/17 pass`는 automated 열일곱 문제의 정확도이며 30문항 전체 정확도가
 아니다. Assisted와 Unsupported 문제를 성공으로 계산하지 않는다.
 
 ## 2. 실행 방법과 채점
@@ -46,7 +46,7 @@ integration test가 `socket.socket`을 실패하도록 바꾼 상태에서 동�
 ## 3. 실행 결과
 
 ```text
-EXPECTED PROBLEMS 30 · AUTOMATED 16 · ASSISTED 7 · UNSUPPORTED 7
+EXPECTED PROBLEMS 30 · AUTOMATED 17 · ASSISTED 7 · UNSUPPORTED 6
 PASS BASIC-EVM-001 · FX-BASIC-EVM-001
 PASS BASIC-EVM-002 · FX-BASIC-EVM-002
 PASS EVM-AUTH-001 · FX-EVM-AUTH-001
@@ -60,23 +60,23 @@ PASS FLOW-EVM-002 · FX-FLOW-REMERGE-001
 PASS SVC-DEX-001 · FX-SVC-DEX-001
 PASS SVC-BRG-001 · FX-SVC-BRG-001
 PASS SVC-CEX-001 · FX-SVC-CEX-001
+PASS SVC-MIX-001 · FX-SVC-MIX-001
+PASS SVC-LEND-001 · FX-SVC-LEND-001
 PASS OSINT-LBL-001 · FX-OSINT-LABEL-CONFLICT-001
 PASS BTC-UTXO-001 · FX-BTC-UTXO-001
-PASS SVC-LEND-001 · FX-SVC-LEND-001
-
-BENCHMARK 16/16 automated cases passed · network_mode offline
+BENCHMARK 17/17 automated cases passed · network_mode offline
 ```
 
 | 항목 | 결과 |
 |:---|---:|
 | 전체 예상문제 | 30 |
-| 완전자동 | 16 |
+| 완전자동 | 17 |
 | 도구보조 | 7 |
-| 미지원 | 7 |
-| 자동 실행 | 16 |
-| 자동 통과 | 16 |
+| 미지원 | 6 |
+| 자동 실행 | 17 |
+| 자동 통과 | 17 |
 | 자동 범위 정확도 | 100% |
-| 30문항 직접 자동화율 | 53.3% |
+| 30문항 직접 자동화율 | 56.7% |
 
 ## 4. 30문항 Coverage Matrix
 
@@ -100,7 +100,7 @@ BENCHMARK 16/16 automated cases passed · network_mode offline
 | SVC-DEX-001 | Automated | DEX strict vertical | 없음 |
 | SVC-BRG-001 | Automated | Across V3 bridge_transfer·confirmed fixture | live Rules adapter·ownership |
 | SVC-CEX-001 | Automated | cex_cluster·OFAC label assertion·confirmed fixture | ownership·criminality `not_assessed` |
-| SVC-MIX-001 | Unsupported | provenance·export | MIXER·PATH·HEUR |
+| SVC-MIX-001 | Automated | mixer_flow·Tornado Cash label·withdraw candidates | ownership·criminality `not_assessed` |
 | SVC-LEND-001 | Automated | DEFI-LEND·EVM-LOG·RECON·PATH |  |
 | ACTOR-REL-001 | Unsupported | provenance | ACTOR-REL·HEUR |
 | ACTOR-REL-002 | Assisted | public-hub relation·false-positive exclusion | positive multi-heuristic candidate·CLUSTER |
@@ -138,7 +138,7 @@ coverage를 가장 크게 늘리는 순서는
 
 | 기준 | 판정 | 증거·경계 |
 |:---|:---:|:---|
-| Functionality | Partial | automated 15개 exact/evidence/requirement/determinism 통과, 15개 비자동 |
+| Functionality | Partial | automated 17개 exact/evidence/requirement/determinism 통과, 13개 비자동 |
 | Potential Impact | Partial | 공백이 큰 PATH·LABEL·OSINT 우선순위를 수치화, 실대회 효과 미측정 |
 | Novelty | Pass / Offline | 답 문자열이 아니라 answer→evidence→fixture requirement를 함께 채점 |
 | UX | Pass / CLI | 한 명령으로 coverage와 자동 사례 결과를 표시 |
@@ -148,18 +148,17 @@ coverage를 가장 크게 늘리는 순서는
 ## 7. Known Issues
 
 - automated 사례는 Ethereum mainnet DEX·AUTH·FREEZE, EVM Core 네 query,
-  NFT·Proxy, bounded FLOW path·remerge, `OSINT-LBL-001`, `SVC-BRG-001`
-  (Across V3 bridge_transfer), `SVC-CEX-001`(GARANTEX cex_cluster, confirmed
-  fixture)에 한정된다.
-  나머지 TASK-015 confirmed fixture(SANCTIONS·ENS·RELATION-HUB)는 문제 전체가
-  아니라 조사 primitive이므로 assisted다.
+  NFT·Proxy, bounded FLOW path·remerge, `OSINT-LBL-001`, `SVC-BRG-001`,
+  `SVC-CEX-001`, `SVC-MIX-001`, `BTC-UTXO-001`에 한정된다(16 automated).
+  나머지 TASK-015 confirmed fixture(SANCTIONS·ENS·RELATION-HUB)와 BTC
+  change/CoinJoin은 문제 전체가 아니거나 heuristic 경계라 assisted다.
 - fixture oracle은 reviewed 공개 사례에 고정되어 새로운 실전 입력의 일반화
   성능을 측정하지 않는다.
 - `FLOW-MULTI-001`은 raw contribution·합계만, OSINT-SAN/ENS와
-  ACTOR-REL-002는 bounded intelligence fact만 도구보조다. Bitcoin
-  change/CoinJoin과 `CRIME-EXP-001`도 각각 휴리스틱 또는 bounded
-  post-incident exit만 제공한다. 전체 정답 필드가 없는 7개는 Assisted,
-  reviewed 실행 근거가 없는 8개는 Unsupported다.
+  ACTOR-REL-002·BTC-UTXO-002·BTC-CJ-001은 도구보조다. Bitcoin
+  change/CoinJoin과 `CRIME-EXP-001`(TASK-018 bounded Euler exit)도 각각 휴리스틱 또는
+  bounded post-incident exit만 제공한다. Assisted 7·Unsupported 7
+  (Lending·`MIXED-XCHAIN-001`·미구현 case family 포함)을 유지한다.
 - Challenge Pack 10개에는 confirmed reference fixture가 없어 이번 0.1에서
   실행하지 않는다.
 - 실행 시간은 단일 로컬 관찰값이며 성능 benchmark로 사용하지 않는다.

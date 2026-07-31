@@ -30,6 +30,7 @@ from scan_tool.domain.analysis_request import (
     FlowPathAnalysisRequest,
     FreezeAnalysisRequest,
     IntelContextAnalysisRequest,
+    MixerFlowAnalysisRequest,
 )
 from scan_tool.domain.analysis_result import AnalysisResult
 from scan_tool.domain.auth import AuthReplay
@@ -44,6 +45,7 @@ from scan_tool.domain.evm_special import EvmSpecialReplay
 from scan_tool.domain.flow_path import FlowPathReplay
 from scan_tool.domain.freeze import FreezeReplay
 from scan_tool.domain.intel_context import IntelSourceReplay
+from scan_tool.domain.mixer_flow import MixerFlowReplay
 from scan_tool.slices.auth import analyze_auth_replay
 from scan_tool.slices.bitcoin_utxo import analyze_bitcoin_utxo_replay
 from scan_tool.slices.bridge_transfer import analyze_bridge_transfer_replay
@@ -56,6 +58,7 @@ from scan_tool.slices.evm_special import analyze_evm_special_replay
 from scan_tool.slices.flow_path import analyze_flow_path_replay
 from scan_tool.slices.freeze import analyze_freeze_replay
 from scan_tool.slices.intel_context import analyze_intel_context_replay
+from scan_tool.slices.mixer_flow import analyze_mixer_flow_replay
 
 DEX_REPLAY_STAGE = "dex_replay_loaded"
 AUTH_REPLAY_STAGE = "auth_replay_loaded"
@@ -67,6 +70,7 @@ INTEL_CONTEXT_REPLAY_STAGE = "intel_context_replay_loaded"
 BRIDGE_TRANSFER_REPLAY_STAGE = "bridge_transfer_replay_loaded"
 BITCOIN_UTXO_REPLAY_STAGE = "bitcoin_utxo_replay_loaded"
 CEX_CLUSTER_REPLAY_STAGE = "cex_cluster_replay_loaded"
+MIXER_FLOW_REPLAY_STAGE = "mixer_flow_replay_loaded"
 DEFI_LENDING_REPLAY_STAGE = "defi_lending_replay_loaded"
 CASE_RECONCILIATION_REPLAY_STAGE = "case_reconciliation_replay_loaded"
 
@@ -341,6 +345,31 @@ class CliRuntime:
                 resumed=resumed,
                 checkpoint_id=checkpoint_id,
             )
+        if isinstance(document, MixerFlowAnalysisRequest):
+            if replay_path is None:
+                raise AnalysisUnavailable(
+                    "Mixer Flow analysis requires --evidence RAW_REPLAY.json with a "
+                    "file path on every invocation because the replay references sibling "
+                    "content-addressed artifacts. It does not support Evidence Worker "
+                    "byte-only replay or checkpoint-only resume."
+                )
+            package_dir = replay_path.parent
+            replay_body, checkpoint_id, resumed = self._load_replay(
+                document.analysis_id,
+                replay_path,
+                replay_body,
+                expected_replay_sha256,
+                stage=MIXER_FLOW_REPLAY_STAGE,
+                replay_model=MixerFlowReplay,
+                analysis_label="Mixer Flow",
+            )
+            return analyze_mixer_flow_replay(
+                document,
+                replay_body,
+                package_dir=package_dir,
+                resumed=resumed,
+                checkpoint_id=checkpoint_id,
+            )
 
         if isinstance(document, DefiLendingAnalysisRequest):
             if replay_path is None:
@@ -412,6 +441,7 @@ class CliRuntime:
             | type[BridgeTransferReplay]
             | type[BitcoinUtxoReplay]
             | type[CexClusterReplay]
+            | type[MixerFlowReplay]
             | type[DefiLendingReplay]
             | type[CaseReconciliationReplay]
         ),

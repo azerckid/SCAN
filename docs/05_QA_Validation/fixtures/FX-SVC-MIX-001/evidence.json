@@ -1,0 +1,95 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-MIX-001",
+  "status": "confirmed",
+  "captured_at": "2026-07-31T04:47:24Z",
+  "event_evidence": [
+    {
+      "evidence_id": "EV-MIX-DEPOSIT",
+      "evidence_type": "mixer_deposit_event",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "chain_id": 1,
+      "transaction_hash": "0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483",
+      "block_number": 25304911,
+      "subject_address": "0xe1fe63b019ddac3a448f97a3c0c21df9c3613893",
+      "pool_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+      "raw_provider_replay": true
+    },
+    {
+      "evidence_id": "EV-MIX-WITHDRAW-EVENTS",
+      "evidence_type": "mixer_withdraw_events",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "chain_id": 1,
+      "withdraw_event_count": 2,
+      "raw_provider_replay": true
+    }
+  ],
+  "call_evidence": [],
+  "state_evidence": [],
+  "context_evidence": [
+    {
+      "evidence_id": "EV-MIX-CANDIDATES",
+      "evidence_type": "withdraw_candidate_set",
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "locator": "fixture://FX-SVC-MIX-001/raw-replay.json",
+      "scope": "Two matching-denomination withdraw candidates; linkage_strength=candidate"
+    },
+    {
+      "evidence_id": "EV-MIX-LABEL",
+      "evidence_type": "gov_registry_label_assertion",
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "locator": "https://home.treasury.gov/news/press-releases/jy0916",
+      "entity": "Tornado Cash",
+      "scope": "OFAC-listed Tornado Cash pool contract"
+    }
+  ],
+  "source_requirements": [
+    {
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "role": "supporting",
+      "required": true,
+      "purpose": "Gov registry label assertion provenance for mixer pool"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Bounded Ethereum transaction, receipt, and block replay for mixer events"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-SANCTIONS-PUBLIC",
+      "provider": "US Treasury OFAC press release public domain",
+      "retrieved_at": "2026-07-31T04:47:24Z"
+    },
+    {
+      "source_id": "DS-EVM-RPC-ARCHIVE",
+      "provider": "Official public read-only Ethereum RPC (publicnode PRIMARY + merkle VERIFY)",
+      "retrieved_at": "2026-07-31T04:47:24Z"
+    }
+  ],
+  "consistency_checks": {
+    "deposit_fact_matches_replay": true,
+    "gov_label_assertion_covers_pool": true,
+    "observation_window_respected": true,
+    "raw_sha256_recorded_per_capability": true,
+    "negative_oracle_pass": true,
+    "independent_verifier_pass": true,
+    "analyzer_hash_matches_independent_verifier": true,
+    "cross_provider_decoded_match": true
+  },
+  "uncertainty": {
+    "candidate_only": true,
+    "remaining": [
+      "deposit_withdraw_ownership_link_not_provable_onchain"
+    ]
+  },
+  "verification_provenance": {
+    "independent_verifier_module": "src/scan_tool/application/task_016_mixer_independent_verifier.py",
+    "calculated_fact_sha256": "4c8c4eb8041642ea514e4c7357d474bb4038b9f6eeea55a816aa2dae41484939"
+  },
+  "provenance_notes": "Treasury press release defines gov label assertion for the Tornado Cash pool. PRIMARY https://ethereum-rpc.publicnode.com and VERIFY https://eth.merkle.io supply distinct artifact hashes for events 0-2. Withdraw linkage remains heuristic candidate only; ownership and criminality stay not_assessed."
+}

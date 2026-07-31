@@ -36,6 +36,7 @@ class AnalysisType(StrEnum):
     BRIDGE_TRANSFER = "bridge_transfer"
     BITCOIN_UTXO = "bitcoin_utxo"
     CEX_CLUSTER = "cex_cluster"
+    MIXER_FLOW = "mixer_flow"
     DEFI_LENDING = "defi_lending"
     CASE_RECONCILIATION = "case_reconciliation"
 
@@ -347,6 +348,10 @@ class CexClusterQueryKind(StrEnum):
     EVALUATE_CEX_CLUSTER = "evaluate_cex_cluster"
 
 
+class MixerFlowQueryKind(StrEnum):
+    EVALUATE_MIXER_CANDIDATES = "evaluate_mixer_candidates"
+
+
 class DefiLendingQueryKind(StrEnum):
     RECONSTRUCT_LENDING_FLOW = "reconstruct_lending_flow"
 
@@ -393,6 +398,12 @@ class EvaluateCexClusterInputs(ContractModel):
     deposit_candidates: NonEmptyUniqueList[Address]
     observation_window: ObservationWindowInputs
     expected_hot_wallet: Address | MISSING = MISSING
+
+
+class EvaluateMixerFlowInputs(ContractModel):
+    subject_address: Address
+    pool_address: Address
+    observation_window: ObservationWindowInputs
 
 
 class LinkBridgeTransferInputs(ContractModel):
@@ -640,6 +651,13 @@ class CexClusterAnalysisRequest(AnalysisRequestBase):
     inputs: EvaluateCexClusterInputs
 
 
+class MixerFlowAnalysisRequest(AnalysisRequestBase):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.MIXER_FLOW]
+    query_kind: Literal[MixerFlowQueryKind.EVALUATE_MIXER_CANDIDATES]
+    inputs: EvaluateMixerFlowInputs
+
+
 class DefiLendingAnalysisRequest(AnalysisRequestBase):
     schema_version: Literal["0.2"]
     analysis_type: Literal[AnalysisType.DEFI_LENDING]
@@ -667,6 +685,7 @@ RequestVariant = Annotated[
     | BridgeTransferAnalysisRequest
     | BitcoinUtxoAnalysisRequest
     | CexClusterAnalysisRequest
+    | MixerFlowAnalysisRequest
     | DefiLendingAnalysisRequest
     | CaseReconciliationAnalysisRequest,
     Field(discriminator="analysis_type"),

@@ -1,16 +1,16 @@
 # Contest Stabilization Runbook · Feature Freeze
 
 > Created: 2026-07-31 04:55
-> Last Updated: 2026-07-31 21:30
-> Status: Active · Bridge+CEX+Lending Confirmed · TASK-017 and bounded TASK-018 thawed · Benchmark 16/16 · Mixer/MIXED still frozen
+> Last Updated: 2026-07-31 22:40
+> Status: Active · Bridge+CEX+Mixer+Lending Confirmed · TASK-017 thawed · TASK-018 Euler assisted · combined Benchmark 17/17
 
 ## 1. 목적
 
 대회(2026-08-02 09:00 KST) 직전 프로그램의 **사용 가능한 안정 범위**와
-실행·복구 절차를 고정한다. TASK-016 Bridge·CEX·Lending은 confirmed·Benchmark
-automated까지 완료했다. TASK-017 exact Bitcoin UTXO와 TASK-018 bounded Euler
-exit는 사용자 승인으로 thaw되어 각각 automated·assisted다. Mixer·MIXED-XCHAIN·
-TASK-019 freeze는 유지하며, 대회 중 실제 출제가 확인된 경우에만 최소 범위로 재개한다.
+실행·복구 절차를 고정한다. TASK-016 Bridge·CEX·Mixer·Lending과 TASK-017 Bitcoin UTXO,
+bounded TASK-018 Euler exit는 사용자 승인으로 thaw 완료다.
+TASK-018의 미구현 case family·TASK-019·MIXED-XCHAIN 조합·live Rules adapter는
+freeze를 유지하며, 대회 중 실제 출제가 확인된 경우에만 최소 범위로 재개한다.
 
 ## 2. 역사적 확정 Coverage · 04:55 기준
 
@@ -22,8 +22,8 @@ TASK-019 freeze는 유지하며, 대회 중 실제 출제가 확인된 경우에
 
 Fixture registry: **22 Confirmed · 0 Verifying · 2 Candidate · 1 Deferred**.
 
-Lending·Bitcoin·bounded TASK-018 병합 후 결합 Benchmark는 **16 automated /
-7 assisted / 7 unsupported**다. 최신 검증 수치는
+Lending·Mixer·Bitcoin·bounded TASK-018 병합 후 결합 Benchmark는 **17 automated /
+7 assisted / 6 unsupported**다. 최신 검증 수치는
 [TASK-017 구현 보고서](./67_TASK_017_BITCOIN_IMPLEMENTATION_REPORT.md)와
 Lending final promotion receipt를 함께 따른다.
 
@@ -57,19 +57,26 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 
 | 점검 | 결과 |
 |:---|:---|
-| `scripts/verify.py` | PASS — see Lending Final Promotion Receipt |
-| Benchmark CLI | PASS — 15/15 automated · ASSISTED 4 · UNSUPPORTED 11 |
+| `scripts/verify.py` | PASS — 674 tests, 2086 links, security 357, schema 82 probes |
+| Benchmark CLI | PASS — 17/17 automated · ASSISTED 7 · UNSUPPORTED 6 |
 | Bridge hash / oracle / verifier gates | PASS — hash `d6609bb4…00ac` |
 | CEX hash / oracle / verifier gates | PASS — hash `20fc2777…83bf`; VERIFY `https://eth.merkle.io` |
 | Lending hash / oracle / verifier gates | PASS — hash `6c51b2eb…0f3c`; VERIFY `https://ethereum.rpc.thirdweb.com` |
+| Mixer hash / oracle / verifier gates | PASS — hash `4c8c4eb8…4939` |
 | Bridge CLI `--evidence` (fresh cwd) | PASS — `COMPLETE AN-FX-SVC-BRG-001` |
 | Bridge byte-only path | PASS — rejects with `requires --evidence` |
 | Existing DEX/AUTH/PATH/LABEL regression | covered by full verify.py |
 
 ## 5. Feature Freeze 규칙
 
-- Freeze 대상: TASK-016 Mixer, TASK-018의 미구현 4개 case family,
+- Freeze 대상: TASK-018의 미구현 4개 case family,
   TASK-019, MIXED-XCHAIN 조합, live Rules adapter.
+- **Mixer (2026-07-31 batch):** TASK-016 Mixer(`SVC-MIX-001`)는 publicnode PRIMARY +
+  merkle VERIFY complete replay와 code-computed cross-provider match로 `confirmed`·
+  Benchmark automated. Canonical hash
+  `4c8c4eb8041642ea514e4c7357d474bb4038b9f6eeea55a816aa2dae41484939`.
+  `MIXED-XCHAIN-001`은 COMPOSITION 미구현으로 unsupported 유지.
+
 - **CEX (2026-07-31 remediation):** TASK-016 CEX(`SVC-CEX-001`)는 Merkle VERIFY
   9-call complete replay와 code-computed cross-provider match로 `confirmed`·
   Benchmark automated를 복구했다. `MIXED-XCHAIN-001`은 COMPOSITION 미구현으로

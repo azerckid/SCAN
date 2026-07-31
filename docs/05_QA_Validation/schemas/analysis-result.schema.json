@@ -98,6 +98,7 @@
               "bridge_transfer",
               "bitcoin_utxo",
               "cex_cluster",
+              "mixer_flow",
               "defi_lending",
               "case_reconciliation"
             ]
@@ -242,6 +243,7 @@
         "bridge_transfer",
         "bitcoin_utxo",
         "cex_cluster",
+        "mixer_flow",
         "defi_lending",
         "case_reconciliation"
       ]
@@ -311,7 +313,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|BTC|CEX|LEND|CASE)-[A-Z0-9-]+$"
+            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|BTC|CEX|MIX|LEND|CASE)-[A-Z0-9-]+$"
           },
           "uniqueItems": true
         },
