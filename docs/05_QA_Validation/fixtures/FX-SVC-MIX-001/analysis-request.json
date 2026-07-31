@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/analysis-request.schema.json",
+  "schema_version": "0.2",
+  "analysis_id": "AN-FX-SVC-MIX-001",
+  "analysis_type": "mixer_flow",
+  "query_kind": "evaluate_mixer_candidates",
+  "chain_id": 1,
+  "fixture_id": "FX-SVC-MIX-001",
+  "requested_at": "2026-07-31T08:00:00Z",
+  "inputs": {
+    "subject_address": "0xe1fe63b019ddac3a448f97a3c0c21df9c3613893",
+    "pool_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+    "observation_window": {
+      "start_block": 25304911,
+      "end_block": 25305914
+    }
+  },
+  "source_policy": {
+    "rule_status": "allowed",
+    "allowed_source_ids": [
+      "DS-EVM-RPC-ARCHIVE",
+      "DS-SANCTIONS-PUBLIC"
+    ],
+    "source_order": [
+      "DS-EVM-RPC-ARCHIVE",
+      "DS-SANCTIONS-PUBLIC"
+    ],
+    "allow_fallback": false,
+    "offline_mode": true
+  }
+}

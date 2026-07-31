@@ -239,6 +239,7 @@ def _validate_approved_contract_adoption() -> None:
         "bridge_transfer",
         "bitcoin_utxo",
         "cex_cluster",
+        "mixer_flow",
     }
     if approved_types != expected or runtime_types != expected:
         raise ValueError("Analysis I/O 0.2 does not expose the approved analysis types")

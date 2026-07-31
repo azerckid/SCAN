@@ -358,6 +358,21 @@ class CexClusterFailedAnalysisResult(FailedAnalysisResult):
     analysis_type: Literal[AnalysisType.CEX_CLUSTER]
 
 
+class MixerFlowCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.MIXER_FLOW]
+
+
+class MixerFlowPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.MIXER_FLOW]
+
+
+class MixerFlowFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.MIXER_FLOW]
+
+
 ResultVariant = (
     LegacyCompleteAnalysisResult
     | LegacyPartialAnalysisResult
@@ -383,6 +398,9 @@ ResultVariant = (
     | CexClusterCompleteAnalysisResult
     | CexClusterPartialAnalysisResult
     | CexClusterFailedAnalysisResult
+    | MixerFlowCompleteAnalysisResult
+    | MixerFlowPartialAnalysisResult
+    | MixerFlowFailedAnalysisResult
 )
 
 

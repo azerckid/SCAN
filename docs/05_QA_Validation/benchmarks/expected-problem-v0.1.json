@@ -816,17 +816,128 @@
     {
       "problem_id": "SVC-MIX-001",
       "difficulty": "high",
-      "coverage": "unsupported",
-      "reason": "Mixer candidate-set analysis and uncertainty scoring are not implemented.",
+      "coverage": "automated",
+      "reason": "A confirmed OFAC-labeled Tornado Cash 0.1 ETH pool fixture with complete PRIMARY/VERIFY RPC replay, strict mixer_flow analyzer, evidence export, negative oracle, and independent verifier hash match are implemented.",
       "reusable_capabilities": [
+        "MIXER",
+        "LABEL",
+        "HEUR",
+        "RECON",
         "BASE-PROVENANCE",
         "BASE-EXPORT"
       ],
-      "blocking_gaps": [
-        "MIXER",
-        "PATH",
-        "HEUR"
-      ]
+      "blocking_gaps": [],
+      "fixture": {
+        "fixture_id": "FX-SVC-MIX-001",
+        "request_path": "docs/05_QA_Validation/fixtures/FX-SVC-MIX-001/analysis-request.json",
+        "replay_path": "docs/05_QA_Validation/fixtures/FX-SVC-MIX-001/raw-replay.json",
+        "expected_results": [
+          {
+            "result_type": "mixer_flow",
+            "value": {
+              "pool_flow_judgment": "confirmed",
+              "deposit_fact": {
+                "subject_address": "0xe1fe63b019ddac3a448f97a3c0c21df9c3613893",
+                "pool_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+                "router_address": "0xd90e2f925da726b50c4ed8d0fb90ad053324f31b",
+                "transaction_hash": "0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483",
+                "block_number": 25304911,
+                "raw_amount": "100000000000000000",
+                "asset": "native_eth",
+                "leaf_index": 56342,
+                "transaction_index": 48,
+                "classification": "confirmed_fact"
+              },
+              "withdraw_event_facts": [
+                {
+                  "recipient_address": "0x3a6dd0c31d0868c8329b648061fd63f1c95535b4",
+                  "pool_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+                  "transaction_hash": "0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984",
+                  "block_number": 25305908,
+                  "raw_amount": "100000000000000000",
+                  "fee_raw_amount": "2147163212600000",
+                  "relayer_address": "0x4750bcfcc340aa4b31be7e71fa072716d28c29c5",
+                  "nullifier_hash": "0x26ea6d6c1795ddd31660ec9a8c068aa25bd0afdf8403e0e07601c52a3be9f055",
+                  "asset": "native_eth",
+                  "transaction_index": 49,
+                  "classification": "confirmed_fact"
+                },
+                {
+                  "recipient_address": "0x3a6dd0c31d0868c8329b648061fd63f1c95535b4",
+                  "pool_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+                  "transaction_hash": "0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d",
+                  "block_number": 25305914,
+                  "raw_amount": "100000000000000000",
+                  "fee_raw_amount": "2146984842100000",
+                  "relayer_address": "0x4750bcfcc340aa4b31be7e71fa072716d28c29c5",
+                  "nullifier_hash": "0x2c349e843391d2501343c69e00a0ca316153d262bcf90ce857ec079baea02af5",
+                  "asset": "native_eth",
+                  "transaction_index": 0,
+                  "classification": "confirmed_fact"
+                }
+              ],
+              "withdraw_candidates": [
+                {
+                  "recipient_address": "0x3a6dd0c31d0868c8329b648061fd63f1c95535b4",
+                  "transaction_hash": "0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984",
+                  "block_number": 25305908,
+                  "raw_amount": "100000000000000000",
+                  "fee_raw_amount": "2147163212600000",
+                  "relayer_address": "0x4750bcfcc340aa4b31be7e71fa072716d28c29c5",
+                  "linkage_strength": "candidate",
+                  "classification": "heuristic_candidate",
+                  "reason": "Amount/time-window pool withdraw is a candidate only; deposit\u2194withdraw ownership is not on-chain proven."
+                },
+                {
+                  "recipient_address": "0x3a6dd0c31d0868c8329b648061fd63f1c95535b4",
+                  "transaction_hash": "0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d",
+                  "block_number": 25305914,
+                  "raw_amount": "100000000000000000",
+                  "fee_raw_amount": "2146984842100000",
+                  "relayer_address": "0x4750bcfcc340aa4b31be7e71fa072716d28c29c5",
+                  "linkage_strength": "candidate",
+                  "classification": "heuristic_candidate",
+                  "reason": "Amount/time-window pool withdraw is a candidate only; deposit\u2194withdraw ownership is not on-chain proven."
+                }
+              ],
+              "unresolvable_reasons": [
+                "deposit_withdraw_ownership_link_not_provable_onchain",
+                "single_exit_must_not_be_promoted_to_confirmed_ownership"
+              ],
+              "label_assertions": [
+                {
+                  "address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+                  "claim": "Tornado Cash",
+                  "entity": "Tornado Cash",
+                  "source_id": "DS-SANCTIONS-PUBLIC",
+                  "source_url": "https://home.treasury.gov/news/press-releases/jy0916",
+                  "lookup_key": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+                  "classification": "evidence_backed_assertion"
+                }
+              ],
+              "false_positive_exclusions": [
+                {
+                  "exclusion_kind": "single_exit_ownership",
+                  "reason": "A single matching-denomination withdraw cannot confirm ownership of the deposit note."
+                },
+                {
+                  "exclusion_kind": "mixer_criminality",
+                  "reason": "OFAC pool label is an assertion about the contract, not a criminality judgment of counterparties."
+                }
+              ],
+              "attribution": {
+                "ownership": "not_assessed",
+                "criminality": "not_assessed"
+              }
+            }
+          }
+        ],
+        "required_fixture_requirements": [
+          "REQ-MIX-DEPOSIT",
+          "REQ-MIX-WITHDRAW-CANDIDATES",
+          "REQ-MIX-LABEL"
+        ]
+      }
     },
     {
       "problem_id": "SVC-LEND-001",
@@ -956,32 +1067,66 @@
               "output_sum_sat": 435183,
               "fee_sat": 169125,
               "spent_outpoints": [
-                {"transaction_id": "a992dbddbeb7382e3defc6914f970ea769ef813e69a923afa336976f2cbf0465", "vout": 1, "value_sat": 604308}
+                {
+                  "transaction_id": "a992dbddbeb7382e3defc6914f970ea769ef813e69a923afa336976f2cbf0465",
+                  "vout": 1,
+                  "value_sat": 604308
+                }
               ],
               "created_utxos": [
-                {"transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5", "vout": 0, "value_sat": 143332, "script_type": "v1_p2tr", "address": "bc1p94scc8mn65fnlhyh64zml064kn9692e2n4q7gkttrhmt365ajdyq0m2mzh"},
-                {"transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5", "vout": 1, "value_sat": 291851, "script_type": "v0_p2wpkh", "address": "bc1qvndmep839uexn899qy865cvddgj4txm0nkjua9"}
+                {
+                  "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+                  "vout": 0,
+                  "value_sat": 143332,
+                  "script_type": "v1_p2tr",
+                  "address": "bc1p94scc8mn65fnlhyh64zml064kn9692e2n4q7gkttrhmt365ajdyq0m2mzh"
+                },
+                {
+                  "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+                  "vout": 1,
+                  "value_sat": 291851,
+                  "script_type": "v0_p2wpkh",
+                  "address": "bc1qvndmep839uexn899qy865cvddgj4txm0nkjua9"
+                }
               ],
-              "start_outpoint": {"transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5", "vout": 0},
+              "start_outpoint": {
+                "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+                "vout": 0
+              },
               "max_hops": 1,
               "spend_path": [
                 {
                   "depth": 1,
-                  "spent_outpoint": {"transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5", "vout": 0, "value_sat": 143332},
+                  "spent_outpoint": {
+                    "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+                    "vout": 0,
+                    "value_sat": 143332
+                  },
                   "spending_transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f",
                   "spending_vin": 0,
                   "created_outpoints": [
-                    {"transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f", "vout": 0, "value_sat": 142098}
+                    {
+                      "transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f",
+                      "vout": 0,
+                      "value_sat": 142098
+                    }
                   ]
                 }
               ],
               "frontier_outpoints": [
-                {"transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f", "vout": 0, "value_sat": 142098}
+                {
+                  "transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f",
+                  "vout": 0,
+                  "value_sat": 142098
+                }
               ]
             }
           }
         ],
-        "required_fixture_requirements": ["REQ-BTC-PREVOUT", "REQ-BTC-FEE"]
+        "required_fixture_requirements": [
+          "REQ-BTC-PREVOUT",
+          "REQ-BTC-FEE"
+        ]
       }
     },
     {

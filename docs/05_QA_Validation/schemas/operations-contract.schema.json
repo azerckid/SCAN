@@ -112,7 +112,8 @@
         "intel_context",
         "bridge_transfer",
         "bitcoin_utxo",
-        "cex_cluster"
+        "cex_cluster",
+        "mixer_flow"
       ],
       "title": "AnalysisType",
       "type": "string"

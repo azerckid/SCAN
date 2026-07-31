@@ -1,0 +1,149 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-MIX-001",
+  "status": "confirmed",
+  "mixer_flow": {
+    "pool_flow_judgment": "confirmed",
+    "deposit_fact": {
+      "subject_address": "0xe1fe63b019ddac3a448f97a3c0c21df9c3613893",
+      "pool_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+      "router_address": "0xd90e2f925da726b50c4ed8d0fb90ad053324f31b",
+      "transaction_hash": "0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483",
+      "block_number": 25304911,
+      "raw_amount": "100000000000000000",
+      "asset": "native_eth",
+      "leaf_index": 56342,
+      "transaction_index": 48,
+      "classification": "confirmed_fact"
+    },
+    "withdraw_event_facts": [
+      {
+        "recipient_address": "0x3a6dd0c31d0868c8329b648061fd63f1c95535b4",
+        "pool_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+        "transaction_hash": "0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984",
+        "block_number": 25305908,
+        "raw_amount": "100000000000000000",
+        "fee_raw_amount": "2147163212600000",
+        "relayer_address": "0x4750bcfcc340aa4b31be7e71fa072716d28c29c5",
+        "nullifier_hash": "0x26ea6d6c1795ddd31660ec9a8c068aa25bd0afdf8403e0e07601c52a3be9f055",
+        "asset": "native_eth",
+        "transaction_index": 49,
+        "classification": "confirmed_fact"
+      },
+      {
+        "recipient_address": "0x3a6dd0c31d0868c8329b648061fd63f1c95535b4",
+        "pool_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+        "transaction_hash": "0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d",
+        "block_number": 25305914,
+        "raw_amount": "100000000000000000",
+        "fee_raw_amount": "2146984842100000",
+        "relayer_address": "0x4750bcfcc340aa4b31be7e71fa072716d28c29c5",
+        "nullifier_hash": "0x2c349e843391d2501343c69e00a0ca316153d262bcf90ce857ec079baea02af5",
+        "asset": "native_eth",
+        "transaction_index": 0,
+        "classification": "confirmed_fact"
+      }
+    ],
+    "withdraw_candidates": [
+      {
+        "recipient_address": "0x3a6dd0c31d0868c8329b648061fd63f1c95535b4",
+        "transaction_hash": "0x2258d635180427608598a4ab208c440a4599db8923fd3678937285afcc2ef984",
+        "block_number": 25305908,
+        "raw_amount": "100000000000000000",
+        "fee_raw_amount": "2147163212600000",
+        "relayer_address": "0x4750bcfcc340aa4b31be7e71fa072716d28c29c5",
+        "linkage_strength": "candidate",
+        "classification": "heuristic_candidate",
+        "reason": "Amount/time-window pool withdraw is a candidate only; deposit\u2194withdraw ownership is not on-chain proven."
+      },
+      {
+        "recipient_address": "0x3a6dd0c31d0868c8329b648061fd63f1c95535b4",
+        "transaction_hash": "0x8232b56f4c4f4af74a5e25d150ac21a9c150601d5891dbb12891df6fa6669a5d",
+        "block_number": 25305914,
+        "raw_amount": "100000000000000000",
+        "fee_raw_amount": "2146984842100000",
+        "relayer_address": "0x4750bcfcc340aa4b31be7e71fa072716d28c29c5",
+        "linkage_strength": "candidate",
+        "classification": "heuristic_candidate",
+        "reason": "Amount/time-window pool withdraw is a candidate only; deposit\u2194withdraw ownership is not on-chain proven."
+      }
+    ],
+    "unresolvable_reasons": [
+      "deposit_withdraw_ownership_link_not_provable_onchain",
+      "single_exit_must_not_be_promoted_to_confirmed_ownership"
+    ],
+    "label_assertions": [
+      {
+        "address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+        "claim": "Tornado Cash",
+        "entity": "Tornado Cash",
+        "source_id": "DS-SANCTIONS-PUBLIC",
+        "source_url": "https://home.treasury.gov/news/press-releases/jy0916",
+        "lookup_key": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+        "classification": "evidence_backed_assertion"
+      }
+    ],
+    "false_positive_exclusions": [
+      {
+        "exclusion_kind": "single_exit_ownership",
+        "reason": "A single matching-denomination withdraw cannot confirm ownership of the deposit note."
+      },
+      {
+        "exclusion_kind": "mixer_criminality",
+        "reason": "OFAC pool label is an assertion about the contract, not a criminality judgment of counterparties."
+      }
+    ],
+    "attribution": {
+      "ownership": "not_assessed",
+      "criminality": "not_assessed"
+    }
+  },
+  "required_fixture_requirements": [
+    "REQ-MIX-DEPOSIT",
+    "REQ-MIX-WITHDRAW-CANDIDATES",
+    "REQ-MIX-LABEL"
+  ],
+  "partial_conditions": [
+    "Deposit fact is present but gov label assertions are unavailable",
+    "Withdraw candidate set remains heuristic without VERIFY coverage"
+  ],
+  "failed_conditions": [
+    "Single matching withdraw promotes deposit ownership to confirmed",
+    "Heuristic candidate linkage is promoted to confirmed fact",
+    "Attribution ownership or criminality is assessed"
+  ],
+  "tolerance": {
+    "max_abs_delta_raw": "0"
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-MIX-DEPOSIT",
+        "description": "The subject deposit into the pinned mixer pool must decode as a confirmed fact inside the observation window.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-MIX-DEPOSIT"
+        ]
+      },
+      {
+        "requirement_id": "REQ-MIX-WITHDRAW-CANDIDATES",
+        "description": "Matching-denomination withdraw events must remain heuristic candidates without confirmed ownership linkage.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-MIX-WITHDRAW-EVENTS",
+          "EV-MIX-CANDIDATES"
+        ]
+      },
+      {
+        "requirement_id": "REQ-MIX-LABEL",
+        "description": "Gov registry label assertions must cover the mixer pool contract used in the confirmed judgment.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-MIX-LABEL"
+        ]
+      }
+    ]
+  }
+}

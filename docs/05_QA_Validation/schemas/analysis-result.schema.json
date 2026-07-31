@@ -76,7 +76,7 @@
   "allOf": [
     {
       "if": {
-        "properties": {"analysis_type": {"enum": ["evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer", "bitcoin_utxo", "cex_cluster"]}},
+        "properties": {"analysis_type": {"enum": ["evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer", "bitcoin_utxo", "cex_cluster", "mixer_flow"]}},
         "required": ["analysis_type"]
       },
       "then": {"properties": {"schema_version": {"const": "0.2"}}},
@@ -167,7 +167,7 @@
       "pattern": "^AN-[A-Z0-9][A-Z0-9-]{2,63}$"
     },
     "analysisType": {
-      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer", "bitcoin_utxo", "cex_cluster"]
+      "enum": ["dex_swap", "auth_consumption", "address_freeze", "evm_core", "evm_special", "flow_path", "intel_context", "bridge_transfer", "bitcoin_utxo", "cex_cluster", "mixer_flow"]
     },
     "resultId": {
       "type": "string",
@@ -234,7 +234,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|BTC|CEX)-[A-Z0-9-]+$"
+            "pattern": "^REQ-(DEX|AUTH|FREEZE|BASIC|TOKEN|NFT721|NFT1155|PROXY|FLOW|INTEL|BRIDGE|BTC|CEX|MIX)-[A-Z0-9-]+$"
           },
           "uniqueItems": true
         },

@@ -2,7 +2,7 @@
 
 > Created: 2026-07-31 04:55
 > Last Updated: 2026-07-31 06:30
-> Status: Active · Bridge+CEX Confirmed · TASK-017 explicitly thawed in Draft PR #112 · combined Benchmark 15/15
+> Status: Active · Bridge+CEX+Mixer Confirmed · TASK-017 thawed (main) · combined Benchmark 16/16 · Lending freeze
 
 ## 1. 목적
 
@@ -11,7 +11,7 @@
 구현은 freeze한다. TASK-016 CEX는 2026-07-31 batch approval로 thaw한 뒤
 PRIMARY/VERIFY dual-provider replay·analyzer·Benchmark automated Gate를
 완료했다. 이후 사용자가 TASK-017을 별도 브랜치에서 일괄 승인해 thaw했다.
-Mixer·Lending·TASK-018/019 freeze는 유지하며, 대회 중 실제 출제가 확인된
+Lending·TASK-018/019 freeze는 유지하며, Mixer는 thaw 완료다. 대회 중 실제 출제가 확인된
 경우에만 최소 범위로 재개한다.
 
 ## 2. 역사적 확정 Coverage · 04:55 기준
@@ -57,7 +57,7 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 | 점검 | 결과 |
 |:---|:---|
 | `scripts/verify.py` | PASS — 584 tests, 2016 links, security 259, schema 62 probes |
-| Benchmark CLI | PASS — 14/14 automated · ASSISTED 4 · UNSUPPORTED 12 |
+| Benchmark CLI | PASS — 16/16 automated · ASSISTED 6 · UNSUPPORTED 8 |
 | Bridge hash / oracle / verifier gates | PASS — hash `d6609bb4…00ac` |
 | CEX hash / oracle / verifier gates | PASS — hash `20fc2777…83bf`; VERIFY `https://eth.merkle.io` |
 | Bridge CLI `--evidence` (fresh cwd) | PASS — `COMPLETE AN-FX-SVC-BRG-001` |
@@ -66,8 +66,12 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 
 ## 5. Feature Freeze 규칙
 
-- Freeze 대상: TASK-016 Mixer/Lending, TASK-018/019, MIXED-XCHAIN 조합,
-  live Rules adapter. TASK-017 Bitcoin은 아래 사용자 승인 예외로 thaw했다.
+- Freeze 대상: TASK-016 Lending, TASK-018/019, MIXED-XCHAIN 조합,
+  live Rules adapter. TASK-017 Bitcoin·TASK-016 Mixer는 아래 사용자 승인 예외로 thaw했다.
+- **Mixer (2026-07-31 batch):** TASK-016 Mixer(`SVC-MIX-001`)는 publicnode PRIMARY +
+  merkle VERIFY complete replay와 code-computed cross-provider match로 `confirmed`·
+  Benchmark automated(16/16)·ASSISTED 6·UNSUPPORTED 8을 복구했다. `MIXED-XCHAIN-001`은 COMPOSITION 미구현으로
+  unsupported 유지. Lending은 freeze 유지(Draft PR #113 별도).
 - **CEX (2026-07-31 remediation):** TASK-016 CEX(`SVC-CEX-001`)는 Merkle VERIFY
   9-call complete replay와 code-computed cross-provider match로 `confirmed`·
   Benchmark automated를 복구했다. `MIXED-XCHAIN-001`은 COMPOSITION 미구현으로

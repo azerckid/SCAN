@@ -49,7 +49,8 @@
         "link_bridge_transfer",
         "summarize_transaction",
         "assess_heuristics",
-        "evaluate_cex_cluster"
+        "evaluate_cex_cluster",
+        "evaluate_mixer_candidates"
       ]
     },
     "chain_id": {"enum": [0, 1]},
@@ -336,6 +337,31 @@
     {
       "if": {
         "properties": {
+          "analysis_type": {
+            "const": "mixer_flow"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "query_kind"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "0.2"
+          },
+          "query_kind": {
+            "const": "evaluate_mixer_candidates"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
           "query_kind": {
             "const": "object_summary"
           }
@@ -498,6 +524,25 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "query_kind": {
+            "const": "evaluate_mixer_candidates"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/evaluateMixerFlowInputs"
+          }
+        }
+      }
     }
   ],
   "additionalProperties": false,
@@ -517,7 +562,8 @@
         "intel_context",
         "bridge_transfer",
         "bitcoin_utxo",
-        "cex_cluster"
+        "cex_cluster",
+        "mixer_flow"
       ]
     },
     "address": {
@@ -1021,6 +1067,26 @@
         },
         "expected_hot_wallet": {
           "$ref": "#/$defs/address"
+        }
+      },
+      "additionalProperties": false
+    },
+    "evaluateMixerFlowInputs": {
+      "type": "object",
+      "required": [
+        "subject_address",
+        "pool_address",
+        "observation_window"
+      ],
+      "properties": {
+        "subject_address": {
+          "$ref": "#/$defs/address"
+        },
+        "pool_address": {
+          "$ref": "#/$defs/address"
+        },
+        "observation_window": {
+          "$ref": "#/$defs/observationWindowInputs"
         }
       },
       "additionalProperties": false

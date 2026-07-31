@@ -1,0 +1,191 @@
+{
+  "schema_version": "0.1",
+  "status": "verified",
+  "execution_mode": "synthetic_offline",
+  "cases": [
+    {
+      "oracle_id": "OR-MIX-SCOPE-SYNTHESIS",
+      "fixture_id": "FX-SVC-MIX-001",
+      "facts": {
+        "scope_bound": false,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "single_exit_promoted": false,
+        "heuristic_promoted_to_fact": false,
+        "label_source_present": true,
+        "deposit_present": true,
+        "withdraw_present": true,
+        "pool_labeled": true,
+        "label_covers_pool": true,
+        "candidates_heuristic_only": true,
+        "evidence_omitted": false
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "scope_synthesis_rejected"
+      }
+    },
+    {
+      "oracle_id": "OR-MIX-UNLABELED-POOL",
+      "fixture_id": "FX-SVC-MIX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "single_exit_promoted": false,
+        "heuristic_promoted_to_fact": false,
+        "label_source_present": true,
+        "deposit_present": true,
+        "withdraw_present": true,
+        "pool_labeled": false,
+        "label_covers_pool": false,
+        "candidates_heuristic_only": true,
+        "evidence_omitted": false
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "unlabeled_pool"
+      }
+    },
+    {
+      "oracle_id": "OR-MIX-HEURISTIC-TO-FACT",
+      "fixture_id": "FX-SVC-MIX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "single_exit_promoted": false,
+        "heuristic_promoted_to_fact": true,
+        "label_source_present": true,
+        "deposit_present": true,
+        "withdraw_present": true,
+        "pool_labeled": true,
+        "label_covers_pool": true,
+        "candidates_heuristic_only": false,
+        "evidence_omitted": false
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "heuristic_promotion_rejected"
+      }
+    },
+    {
+      "oracle_id": "OR-MIX-WINDOW-ABUSE",
+      "fixture_id": "FX-SVC-MIX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": true,
+        "single_exit_promoted": false,
+        "heuristic_promoted_to_fact": false,
+        "label_source_present": true,
+        "deposit_present": true,
+        "withdraw_present": true,
+        "pool_labeled": true,
+        "label_covers_pool": true,
+        "candidates_heuristic_only": true,
+        "evidence_omitted": false
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "observation_window_violation"
+      }
+    },
+    {
+      "oracle_id": "OR-MIX-CRIMINALITY-ASSESSED",
+      "fixture_id": "FX-SVC-MIX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": true,
+        "window_violation": false,
+        "single_exit_promoted": false,
+        "heuristic_promoted_to_fact": false,
+        "label_source_present": true,
+        "deposit_present": true,
+        "withdraw_present": true,
+        "pool_labeled": true,
+        "label_covers_pool": true,
+        "candidates_heuristic_only": true,
+        "evidence_omitted": false
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "attribution_assessed_rejected"
+      }
+    },
+    {
+      "oracle_id": "OR-MIX-EVIDENCE-OMISSION",
+      "fixture_id": "FX-SVC-MIX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "single_exit_promoted": false,
+        "heuristic_promoted_to_fact": false,
+        "label_source_present": true,
+        "deposit_present": true,
+        "withdraw_present": true,
+        "pool_labeled": true,
+        "label_covers_pool": true,
+        "candidates_heuristic_only": true,
+        "evidence_omitted": true
+      },
+      "expected": {
+        "outcome": "partial",
+        "classification": "evidence_incomplete"
+      }
+    },
+    {
+      "oracle_id": "OR-MIX-SINGLE-EXIT-PROMOTION",
+      "fixture_id": "FX-SVC-MIX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "single_exit_promoted": true,
+        "heuristic_promoted_to_fact": false,
+        "label_source_present": true,
+        "deposit_present": true,
+        "withdraw_present": true,
+        "pool_labeled": true,
+        "label_covers_pool": true,
+        "candidates_heuristic_only": false,
+        "evidence_omitted": false
+      },
+      "expected": {
+        "outcome": "failed",
+        "classification": "single_exit_ownership_rejected"
+      }
+    },
+    {
+      "oracle_id": "OR-MIX-COMPLETE-MATCH",
+      "fixture_id": "FX-SVC-MIX-001",
+      "facts": {
+        "scope_bound": true,
+        "explorer_tag_as_truth": false,
+        "attribution_assessed": false,
+        "window_violation": false,
+        "single_exit_promoted": false,
+        "heuristic_promoted_to_fact": false,
+        "label_source_present": true,
+        "deposit_present": true,
+        "withdraw_present": true,
+        "pool_labeled": true,
+        "label_covers_pool": true,
+        "candidates_heuristic_only": true,
+        "evidence_omitted": false
+      },
+      "expected": {
+        "outcome": "complete",
+        "classification": "mixer_flow_confirmed"
+      }
+    }
+  ]
+}

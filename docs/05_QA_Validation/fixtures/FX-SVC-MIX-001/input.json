@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schemas/fixture-input.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-SVC-MIX-001",
+  "problem_id": "SVC-MIX-001",
+  "status": "confirmed",
+  "chain": {
+    "name": "ethereum",
+    "chain_id": 1
+  },
+  "subject_address": "0xe1fe63b019ddac3a448f97a3c0c21df9c3613893",
+  "pool_address": "0x12d66f87a04a9e220743712ce6d9bb1b5616b8fc",
+  "observation_window": {
+    "start_block": 25304911,
+    "end_block": 25305914
+  },
+  "deposit_transaction_hash": "0xc716eec2c710b22840d0cd877a61a83e9aacf628c79843a9505d53fa2e33f483",
+  "scope_kind": "subject_pool_and_bounded_block_window",
+  "selection_notes": "OFAC Tornado Cash 0.1 ETH pool deposit with two matching-denomination withdraw candidates in-window. PRIMARY is https://ethereum-rpc.publicnode.com. VERIFY is https://eth.merkle.io with distinct artifact hashes per event. Deposit-withdraw ownership remains heuristic candidate only."
+}

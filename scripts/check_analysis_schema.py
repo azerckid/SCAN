@@ -40,6 +40,9 @@ BITCOIN_UTXO_EXAMPLE = (
 CEX_CLUSTER_EXAMPLE = (
     REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-SVC-CEX-001/analysis-request.json"
 )
+MIXER_FLOW_EXAMPLE = (
+    REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-SVC-MIX-001/analysis-request.json"
+)
 SCHEMA_FILES = {
     "request": "analysis-request.schema.json",
     "result": "analysis-result.schema.json",
@@ -391,6 +394,43 @@ def cex_cluster_family_probes(
     ]
 
 
+def mixer_flow_family_probes(
+    evm_request: dict[str, object],
+    evm_result: dict[str, object],
+) -> list[Probe]:
+    """Keep mixer_flow dispatch isolated from every other 0.2 family."""
+    mixer_request = load_json(MIXER_FLOW_EXAMPLE)
+    mixer_result = changed(
+        changed(evm_result, "analysis_type", value="mixer_flow"),
+        "results",
+        0,
+        "fixture_requirement_ids",
+        value=["REQ-MIX-DEPOSIT", "REQ-MIX-WITHDRAW-CANDIDATES", "REQ-MIX-LABEL"],
+    )
+    return [
+        Probe("mixer_flow request", "request", mixer_request, True),
+        Probe("mixer_flow result", "result", mixer_result, True),
+        Probe(
+            "evm core request with mixer_flow query_kind",
+            "request",
+            changed(evm_request, "query_kind", value="evaluate_mixer_candidates"),
+            False,
+        ),
+        Probe(
+            "mixer_flow request with flow_path query_kind",
+            "request",
+            changed(mixer_request, "query_kind", value="trace_path"),
+            False,
+        ),
+        Probe(
+            "mixer_flow request legacy schema version",
+            "request",
+            changed(mixer_request, "schema_version", value="0.1"),
+            False,
+        ),
+    ]
+
+
 def request_input_probes(
     dex_request: dict[str, object],
     auth_request: dict[str, object],
@@ -627,6 +667,7 @@ def build_probes() -> list[Probe]:
         *bridge_transfer_family_probes(evm_request, evm_result),
         *bitcoin_utxo_family_probes(evm_request, evm_result),
         *cex_cluster_family_probes(evm_request, evm_result),
+        *mixer_flow_family_probes(evm_request, evm_result),
         *result_status_probes(dex_result, auth_result, freeze_result, error, evm_result),
         *result_component_probes(dex_result),
         *error_probes(error),
