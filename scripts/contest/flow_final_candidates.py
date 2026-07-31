@@ -5,10 +5,19 @@ Implements docs/05_QA_Validation/76_FLOW_FINAL_ACCOUNT_CANDIDATE_METHOD.md:
 
 1. Discover seed-reachable edges from a discovery edge set
 2. Score candidates by residual (related_in - related_out) ≈ S + terminus
-3. Independently verify seed→candidate connectivity on a *separate* edge set
+3. Independently verify seed→candidate connectivity on a *separate* edge set,
+   collected by a *different* method and not reusing discovery's own TXs
 4. Always emit verification_level=heuristic_candidates (|C|==1 included)
+5. scope_complete requires an explicit scope manifest, not just BFS budget
 
 Does not modify production flow_path analyzers or Benchmark fixtures.
+
+Honesty caveat: this MVP does not pin raw RPC artifacts the way the
+confirmed Bridge/CEX/Mixer/Lending adapters do. "Independent" here means
+canonically-distinct edge data collected by a declared different method and
+not overlapping the discovery TX set -- it is not a cryptographic proof of
+on-chain fact and every candidate should still be re-verified through the
+full `scan analyze` pipeline before being treated with any confidence.
 """
 
 from __future__ import annotations
@@ -16,6 +25,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 from collections import defaultdict, deque
 from dataclasses import dataclass
@@ -35,6 +45,9 @@ COLLECTION_METHODS: tuple[str, ...] = (
     "block_window_scan",
 )
 
+_TX_HASH_RE = re.compile(r"^0x[0-9a-f]{64}$")
+_ADDRESS_RE = re.compile(r"^0x[0-9a-f]{40}$")
+
 
 @dataclass(frozen=True)
 class Edge:
@@ -43,6 +56,14 @@ class Edge:
     to_addr: str
     value_raw: int
     asset: str
+
+
+@dataclass(frozen=True)
+class ScopeManifest:
+    pagination_complete: bool
+    continuous_scan: bool
+    from_block: int | None
+    to_block: int | None
 
 
 @dataclass(frozen=True)
@@ -55,6 +76,7 @@ class RunConfig:
     tolerance_cap_raw: int
     tolerance_rationale: str
     collection_method: CollectionMethod
+    independent_collection_method: CollectionMethod
     max_hops: int
     max_nodes: int
     max_edges: int
@@ -78,7 +100,13 @@ def _parse_int(value: object, *, field: str) -> int:
 
 
 def load_edges(path: Path, *, asset_scope: str) -> list[Edge]:
-    """Load a JSON edge list. Accepts {\"edges\": [...]} or a bare list."""
+    """Load a JSON edge list. Accepts {"edges": [...]} or a bare list.
+
+    Rejects malformed hex and, within this single file, any tx_hash that
+    appears twice with different from/to/value/asset (a real on-chain TX
+    cannot have two different fact sets; that indicates corrupted or
+    tampered input).
+    """
     payload = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(payload, dict):
         raw_edges = payload.get("edges")
@@ -90,6 +118,7 @@ def load_edges(path: Path, *, asset_scope: str) -> list[Edge]:
         raise ValueError(f"{path}: edge file must be object or array")
 
     edges: list[Edge] = []
+    seen_by_hash: dict[str, tuple[str, str, int, str]] = {}
     for index, item in enumerate(raw_edges):
         if not isinstance(item, dict):
             raise ValueError(f"{path}: edges[{index}] must be an object")
@@ -99,18 +128,29 @@ def load_edges(path: Path, *, asset_scope: str) -> list[Edge]:
         tx_hash = _lower(item.get("tx_hash") or item.get("hash") or "")
         from_addr = _lower(item.get("from") or item.get("from_addr") or "")
         to_addr = _lower(item.get("to") or item.get("to_addr") or "")
-        if not tx_hash.startswith("0x") or len(tx_hash) != 66:
-            raise ValueError(f"{path}: edges[{index}] tx_hash is invalid")
-        if not from_addr.startswith("0x") or len(from_addr) != 42:
-            raise ValueError(f"{path}: edges[{index}] from is invalid")
-        if not to_addr.startswith("0x") or len(to_addr) != 42:
-            raise ValueError(f"{path}: edges[{index}] to is invalid")
+        if not _TX_HASH_RE.fullmatch(tx_hash):
+            raise ValueError(f"{path}: edges[{index}] tx_hash is not 32 valid hex bytes")
+        if not _ADDRESS_RE.fullmatch(from_addr):
+            raise ValueError(f"{path}: edges[{index}] from is not 20 valid hex bytes")
+        if not _ADDRESS_RE.fullmatch(to_addr):
+            raise ValueError(f"{path}: edges[{index}] to is not 20 valid hex bytes")
         value_raw = _parse_int(
             item.get("value_raw", item.get("value")),
             field=f"{path}:edges[{index}].value",
         )
         if value_raw < 0:
             raise ValueError(f"{path}: edges[{index}] value_raw must be >= 0")
+
+        fingerprint = (from_addr, to_addr, value_raw, asset)
+        previous = seen_by_hash.get(tx_hash)
+        if previous is not None and previous != fingerprint:
+            raise ValueError(
+                f"{path}: tx_hash {tx_hash} appears twice with conflicting "
+                "from/to/value/asset -- corrupted or tampered input"
+            )
+        seen_by_hash[tx_hash] = fingerprint
+        if previous is not None:
+            continue  # exact duplicate row; keep the first occurrence only
         edges.append(
             Edge(
                 tx_hash=tx_hash,
@@ -125,6 +165,19 @@ def load_edges(path: Path, *, asset_scope: str) -> list[Edge]:
 
 def file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def canonical_edges_sha256(edges: list[Edge]) -> str:
+    """Content hash over parsed+sorted edges, immune to file formatting.
+
+    File-byte hashes can differ for logically identical data (whitespace,
+    key order). This hash is what the independence check actually relies on.
+    """
+    rows = sorted(
+        (edge.tx_hash, edge.from_addr, edge.to_addr, edge.value_raw, edge.asset) for edge in edges
+    )
+    encoded = json.dumps(rows, separators=(",", ":")).encode()
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def discover_related_edges(
@@ -315,8 +368,9 @@ def run_analysis(
     *,
     discovery_edges: list[Edge],
     independent_edges: list[Edge],
-    discovery_sha256: str,
-    independent_sha256: str,
+    discovery_file_sha256: str,
+    independent_file_sha256: str,
+    scope_manifest: ScopeManifest,
 ) -> dict[str, Any]:
     if config.tolerance_raw > config.tolerance_cap_raw:
         raise ValueError("tolerance_raw exceeds tolerance_cap_raw")
@@ -324,6 +378,13 @@ def run_analysis(
         raise ValueError("tolerance values must be >= 0")
     if config.amount_raw < 0:
         raise ValueError("amount_raw must be >= 0")
+    if config.max_hops <= 0 or config.max_nodes <= 0 or config.max_edges <= 0:
+        raise ValueError("max_hops/max_nodes/max_edges must be > 0")
+    if config.independent_collection_method == config.collection_method:
+        raise ValueError(
+            "independent_collection_method must differ from collection_method "
+            "(re-running the same collection pipeline is not independent verification)"
+        )
 
     related, budget_meta = discover_related_edges(
         discovery_edges,
@@ -332,6 +393,7 @@ def run_analysis(
         max_nodes=config.max_nodes,
         max_edges=config.max_edges,
     )
+    discovery_tx_hashes = {edge.tx_hash for edge in related}
     residuals = aggregate_residuals(related)
     draft, excluded = select_candidates(
         residuals,
@@ -340,15 +402,18 @@ def run_analysis(
         tolerance_raw=config.tolerance_raw,
     )
 
-    identical_graphs = discovery_sha256 == independent_sha256
+    discovery_canonical_sha256 = canonical_edges_sha256(discovery_edges)
+    independent_canonical_sha256 = canonical_edges_sha256(independent_edges)
+    identical_content = discovery_canonical_sha256 == independent_canonical_sha256
+
     candidates: list[dict[str, Any]] = []
     for item in draft:
         address = item["address"]
-        if identical_graphs:
+        if identical_content:
             excluded.append(
                 {
                     "address": address,
-                    "reason": "independent_edges_identical_to_discovery",
+                    "reason": "independent_edges_identical_content_to_discovery",
                 }
             )
             continue
@@ -359,10 +424,15 @@ def run_analysis(
             max_hops=config.max_hops,
         )
         if not ok:
+            excluded.append({"address": address, "reason": "independent_path_not_found"})
+            continue
+        reused = discovery_tx_hashes.intersection(path_txs)
+        if reused:
             excluded.append(
                 {
                     "address": address,
-                    "reason": "independent_path_not_found",
+                    "reason": "independent_path_reuses_discovery_tx",
+                    "reused_tx_hashes": sorted(reused),
                 }
             )
             continue
@@ -375,7 +445,11 @@ def run_analysis(
             }
         )
 
-    scope_complete = not budget_meta["budget_exhausted"]
+    scope_complete = (
+        scope_manifest.pagination_complete
+        and scope_manifest.continuous_scan
+        and not budget_meta["budget_exhausted"]
+    )
     report: dict[str, Any] = {
         "verification_level": "heuristic_candidates",
         "seed": _lower(config.seed),
@@ -386,12 +460,21 @@ def run_analysis(
         "tolerance_cap_raw": str(config.tolerance_cap_raw),
         "tolerance_rationale": config.tolerance_rationale,
         "collection_method": config.collection_method,
+        "independent_collection_method": config.independent_collection_method,
         "scope_complete": scope_complete,
-        "pagination_truncated": False,
+        "scope_manifest": {
+            "pagination_complete": scope_manifest.pagination_complete,
+            "continuous_scan": scope_manifest.continuous_scan,
+            "from_block": scope_manifest.from_block,
+            "to_block": scope_manifest.to_block,
+        },
+        "pagination_truncated": not scope_manifest.pagination_complete,
         "budget_exhausted": budget_meta["budget_exhausted"],
         "budget": budget_meta,
-        "discovery_edges_sha256": discovery_sha256,
-        "independent_edges_sha256": independent_sha256,
+        "discovery_edges_sha256": discovery_file_sha256,
+        "independent_edges_sha256": independent_file_sha256,
+        "discovery_edges_canonical_sha256": discovery_canonical_sha256,
+        "independent_edges_canonical_sha256": independent_canonical_sha256,
         "candidates": candidates,
         "excluded": excluded,
         "attribution": {
@@ -403,7 +486,18 @@ def run_analysis(
             "single_candidate_is_not_confirmed": True,
             "note": (
                 "Candidates are heuristic only. |C|==1 does not promote to "
-                "confirmed without continuous scope completeness proven elsewhere."
+                "confirmed without continuous scope completeness proven elsewhere. "
+                "scope_complete requires an explicit pagination/continuous-scan "
+                "manifest, not just an unexhausted BFS budget."
+            ),
+            "independent_verification_caveat": (
+                "This MVP does not pin raw RPC artifacts the way confirmed "
+                "Bridge/CEX/Mixer/Lending fixtures do. Independence here means "
+                "canonically-distinct edge data from a declared different "
+                "collection method that does not reuse discovery's own TX "
+                "hashes -- not a cryptographic proof of on-chain fact. "
+                "Re-verify through the full scan analyze pipeline before "
+                "treating any candidate with confidence."
             ),
         },
     }
@@ -426,10 +520,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--tolerance-raw", required=True)
     parser.add_argument("--tolerance-cap-raw", required=True)
     parser.add_argument("--tolerance-rationale", required=True)
+    parser.add_argument("--collection-method", required=True, choices=COLLECTION_METHODS)
     parser.add_argument(
-        "--collection-method",
+        "--independent-collection-method",
         required=True,
         choices=COLLECTION_METHODS,
+        help="Must differ from --collection-method.",
     )
     parser.add_argument("--discovery-edges", type=Path, required=True)
     parser.add_argument(
@@ -441,6 +537,20 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max-hops", type=int, default=8)
     parser.add_argument("--max-nodes", type=int, default=64)
     parser.add_argument("--max-edges", type=int, default=128)
+    parser.add_argument(
+        "--pagination-complete",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Discovery collection saw every page/result in its declared range.",
+    )
+    parser.add_argument(
+        "--continuous-scan",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Discovery collection covered the declared range with no gaps.",
+    )
+    parser.add_argument("--scope-from-block", type=int, default=None)
+    parser.add_argument("--scope-to-block", type=int, default=None)
     return parser
 
 
@@ -455,9 +565,16 @@ def main(argv: list[str] | None = None) -> int:
         tolerance_cap_raw=_parse_int(args.tolerance_cap_raw, field="tolerance_cap_raw"),
         tolerance_rationale=args.tolerance_rationale,
         collection_method=args.collection_method,
+        independent_collection_method=args.independent_collection_method,
         max_hops=args.max_hops,
         max_nodes=args.max_nodes,
         max_edges=args.max_edges,
+    )
+    scope_manifest = ScopeManifest(
+        pagination_complete=args.pagination_complete,
+        continuous_scan=args.continuous_scan,
+        from_block=args.scope_from_block,
+        to_block=args.scope_to_block,
     )
     discovery_path = args.discovery_edges.resolve()
     independent_path = args.independent_edges.resolve()
@@ -467,8 +584,9 @@ def main(argv: list[str] | None = None) -> int:
         config,
         discovery_edges=discovery_edges,
         independent_edges=independent_edges,
-        discovery_sha256=file_sha256(discovery_path),
-        independent_sha256=file_sha256(independent_path),
+        discovery_file_sha256=file_sha256(discovery_path),
+        independent_file_sha256=file_sha256(independent_path),
+        scope_manifest=scope_manifest,
     )
     print(json.dumps(report, indent=2, ensure_ascii=True))
     if report.get("verification_level") != "heuristic_candidates":
