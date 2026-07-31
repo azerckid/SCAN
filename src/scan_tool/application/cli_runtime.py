@@ -19,6 +19,7 @@ from scan_tool.domain import (
 from scan_tool.domain.analysis_request import (
     AnalysisRequest,
     AuthAnalysisRequest,
+    BitcoinUtxoAnalysisRequest,
     BridgeTransferAnalysisRequest,
     CexClusterAnalysisRequest,
     DexAnalysisRequest,
@@ -30,6 +31,7 @@ from scan_tool.domain.analysis_request import (
 )
 from scan_tool.domain.analysis_result import AnalysisResult
 from scan_tool.domain.auth import AuthReplay
+from scan_tool.domain.bitcoin_utxo import BitcoinUtxoReplay
 from scan_tool.domain.bridge_transfer import BridgeTransferReplay
 from scan_tool.domain.cex_cluster import CexClusterReplay
 from scan_tool.domain.dex import DexReplay
@@ -39,6 +41,7 @@ from scan_tool.domain.flow_path import FlowPathReplay
 from scan_tool.domain.freeze import FreezeReplay
 from scan_tool.domain.intel_context import IntelSourceReplay
 from scan_tool.slices.auth import analyze_auth_replay
+from scan_tool.slices.bitcoin_utxo import analyze_bitcoin_utxo_replay
 from scan_tool.slices.bridge_transfer import analyze_bridge_transfer_replay
 from scan_tool.slices.cex_cluster import analyze_cex_cluster_replay
 from scan_tool.slices.dex import analyze_dex_replay
@@ -56,6 +59,7 @@ EVM_SPECIAL_REPLAY_STAGE = "evm_special_replay_loaded"
 FLOW_PATH_REPLAY_STAGE = "flow_path_replay_loaded"
 INTEL_CONTEXT_REPLAY_STAGE = "intel_context_replay_loaded"
 BRIDGE_TRANSFER_REPLAY_STAGE = "bridge_transfer_replay_loaded"
+BITCOIN_UTXO_REPLAY_STAGE = "bitcoin_utxo_replay_loaded"
 CEX_CLUSTER_REPLAY_STAGE = "cex_cluster_replay_loaded"
 
 
@@ -281,6 +285,29 @@ class CliRuntime:
                 resumed=resumed,
                 checkpoint_id=checkpoint_id,
             )
+        if isinstance(document, BitcoinUtxoAnalysisRequest):
+            if replay_path is None:
+                raise AnalysisUnavailable(
+                    "Bitcoin UTXO analysis requires --evidence RAW_REPLAY.json so sibling "
+                    "content-addressed provider artifacts can be verified."
+                )
+            package_dir = replay_path.parent
+            replay_body, checkpoint_id, resumed = self._load_replay(
+                document.analysis_id,
+                replay_path,
+                replay_body,
+                expected_replay_sha256,
+                stage=BITCOIN_UTXO_REPLAY_STAGE,
+                replay_model=BitcoinUtxoReplay,
+                analysis_label="Bitcoin UTXO",
+            )
+            return analyze_bitcoin_utxo_replay(
+                document,
+                replay_body,
+                package_dir=package_dir,
+                resumed=resumed,
+                checkpoint_id=checkpoint_id,
+            )
         if isinstance(document, CexClusterAnalysisRequest):
             if replay_path is None:
                 raise AnalysisUnavailable(
@@ -325,6 +352,7 @@ class CliRuntime:
             | type[FlowPathReplay]
             | type[IntelSourceReplay]
             | type[BridgeTransferReplay]
+            | type[BitcoinUtxoReplay]
             | type[CexClusterReplay]
         ),
         analysis_label: str,

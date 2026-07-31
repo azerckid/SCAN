@@ -77,8 +77,8 @@ erDiagram
 | 필드 | 필수 | 의미 |
 |:---|:---:|:---|
 | `analysis_id` | 예 | PK, 공개 `AN-...` ID |
-| `analysis_type` | 예 | `dex_swap`, `auth_consumption`, `address_freeze` |
-| `chain_id` | 예 | V1은 `1` |
+| `analysis_type` | 예 | 등록된 Analysis I/O type (`bitcoin_utxo` 포함) |
+| `chain_id` | 예 | EVM mainnet `1`, Bitcoin mainnet `0` |
 | `fixture_id` | 아니요 | 회귀 실행의 `FX-...` |
 | `status` | 예 | queued/running/complete/partial/failed/interrupted/restricted |
 | `schema_version` | 예 | Analysis I/O schema version |
@@ -94,6 +94,10 @@ erDiagram
 - `complete`, `partial`, `failed`, `interrupted`, `restricted`만 종료 상태다.
 - `finished_at`은 종료 상태에서만 필수다.
 - 요청 JSON의 `analysis_id`, `analysis_type`, `chain_id`와 행 값이 일치한다.
+- TASK-017 이후 새 SQLite v1 DB는 `chain_id IN (0, 1)`을 사용한다.
+  이전 `chain_id = 1` DB는 자동 변형하지 않으며 Bitcoin 저장을 명확히
+  거부한다. 기존 사용자 DB의 Bitcoin 지원은 별도 승인된 backup·migration
+  Gate에서만 연다.
 
 ### 5.2 `run_source_policies`
 

@@ -166,9 +166,10 @@ Explorer가 모두 외부 서비스로 제한될 수 있으므로 공식 Rules�
 | 대체 소스 | 다른 BTC API, 로컬 노드 | 다른 노드, BTC API |
 | 이용약관 주의 | API ToS | 해당 시 호스팅 약관 |
 | 대회 규정 | 미확인 | 미확인 |
-| 상태 | 후보 | 후보 |
-| 마지막 확인 | 2026-07-24 15:49 | 2026-07-24 15:49 |
-| 관련 fixture | BTC-CJ-001 | BTC-UTXO-001 추가 세트 |
+| 상태 | reviewed replay · live 미채택 | reviewed replay · live 미채택 |
+| 마지막 확인 | 2026-07-31 01:01 | 2026-07-31 01:00 |
+| 관련 fixture | `FX-BTC-UTXO-001`, `FX-BTC-CJ-001` candidate | `FX-BTC-UTXO-001` |
+| 비고 | mempool.space·Blockstream의 root/spend REST projection을 SHA-256으로 고정 | PublicNode Bitcoin JSON-RPC root를 고정; contest RPC mapping은 미승인 |
 
 ### 5.4 주소 라벨·제재 목록
 

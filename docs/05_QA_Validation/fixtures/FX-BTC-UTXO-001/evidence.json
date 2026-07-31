@@ -1,0 +1,78 @@
+{
+  "$schema": "../../schemas/fixture-evidence.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-BTC-UTXO-001",
+  "status": "confirmed",
+  "captured_at": "2026-07-31T06:25:00+09:00",
+  "event_evidence": [],
+  "call_evidence": [],
+  "state_evidence": [],
+  "context_evidence": [
+    {
+      "evidence_id": "EV-BTC-PRIMARY",
+      "evidence_type": "bitcoin_rpc_transaction",
+      "source_id": "DS-BTC-NODE",
+      "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+      "raw_provider_replay": true
+    },
+    {
+      "evidence_id": "EV-BTC-VERIFY",
+      "evidence_type": "bitcoin_rest_transaction",
+      "source_id": "DS-BTC-API",
+      "transaction_id": "d41f5de48325e79070ccd3a23005f7a3b405f3ce1faa4df09f6d71770497e9d5",
+      "raw_provider_replay": true
+    },
+    {
+      "evidence_id": "EV-BTC-HOP-PRIMARY",
+      "evidence_type": "bitcoin_rpc_transaction",
+      "source_id": "DS-BTC-NODE",
+      "transaction_id": "a75779b6562c6bd549f25dc3001b5edd3d24e53235e29fe3047bccaeb25d7a6f",
+      "raw_provider_replay": true
+    }
+  ],
+  "source_requirements": [
+    {
+      "source_id": "DS-BTC-NODE",
+      "role": "scoring",
+      "required": true,
+      "purpose": "Bitcoin Core transaction and block facts"
+    },
+    {
+      "source_id": "DS-BTC-API",
+      "role": "supporting",
+      "required": true,
+      "purpose": "Prevout, fee, and spend-path cross-check"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "DS-BTC-NODE",
+      "provider": "PublicNode Bitcoin JSON-RPC",
+      "retrieved_at": "2026-07-31T06:25:00+09:00"
+    },
+    {
+      "source_id": "DS-BTC-API",
+      "provider": "mempool.space raw REST and Blockstream supporting-only projection",
+      "retrieved_at": "2026-07-31T01:01:01+09:00"
+    }
+  ],
+  "consistency_checks": {
+    "fee_equation_matches": true,
+    "root_independent_provider_match": true,
+    "root_primary_verify_hashes_differ": true,
+    "hop_primary_verify_hashes_differ": true,
+    "hop_publicnode_verify_fact_match": true,
+    "hop_supporting_verify_fact_match": true,
+    "stored_artifact_hashes_match": true,
+    "negative_oracle_pass": true,
+    "independent_verifier_pass": true
+  },
+  "uncertainty": {
+    "candidate_only": false,
+    "remaining": [],
+    "change_or_ownership_confirmed": false,
+    "coinjoin_confirmed": false
+  },
+  "provenance_notes": "Exact UTXO facts are confirmed by independently captured PublicNode primary and mempool.space verify artifacts whose SHA-256 hashes differ at root and hop. The Blockstream supporting hop artifact shares the same Esplora projection bytes as mempool.space and is supporting_only, not independent verification. Change, ownership, criminality, and CoinJoin remain heuristic or not_assessed."
+}

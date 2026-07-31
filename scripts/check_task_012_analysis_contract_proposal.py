@@ -237,6 +237,7 @@ def _validate_approved_contract_adoption() -> None:
         "flow_path",
         "intel_context",
         "bridge_transfer",
+        "bitcoin_utxo",
         "cex_cluster",
     }
     if approved_types != expected or runtime_types != expected:

@@ -47,12 +47,12 @@
         "find_common_funder",
         "score_actor_relations",
         "link_bridge_transfer",
+        "summarize_transaction",
+        "assess_heuristics",
         "evaluate_cex_cluster"
       ]
     },
-    "chain_id": {
-      "const": 1
-    },
+    "chain_id": {"enum": [0, 1]},
     "fixture_id": {
       "type": "string",
       "pattern": "^FX-[A-Z0-9-]+$"
@@ -69,6 +69,21 @@
     }
   },
   "allOf": [
+    {
+      "if": {
+        "properties": {"analysis_type": {"const": "bitcoin_utxo"}},
+        "required": ["analysis_type"]
+      },
+      "then": {
+        "properties": {
+          "schema_version": {"const": "0.2"},
+          "chain_id": {"const": 0},
+          "query_kind": {"enum": ["summarize_transaction", "assess_heuristics"]}
+        },
+        "required": ["query_kind"]
+      },
+      "else": {"properties": {"chain_id": {"const": 1}}}
+    },
     {
       "if": {
         "properties": {
@@ -453,6 +468,20 @@
     },
     {
       "if": {
+        "properties": {"query_kind": {"const": "summarize_transaction"}},
+        "required": ["query_kind"]
+      },
+      "then": {"properties": {"inputs": {"$ref": "#/$defs/bitcoinTransactionInputs"}}}
+    },
+    {
+      "if": {
+        "properties": {"query_kind": {"const": "assess_heuristics"}},
+        "required": ["query_kind"]
+      },
+      "then": {"properties": {"inputs": {"$ref": "#/$defs/bitcoinHeuristicInputs"}}}
+    },
+    {
+      "if": {
         "properties": {
           "query_kind": {
             "const": "evaluate_cex_cluster"
@@ -487,6 +516,7 @@
         "flow_path",
         "intel_context",
         "bridge_transfer",
+        "bitcoin_utxo",
         "cex_cluster"
       ]
     },
@@ -497,6 +527,10 @@
     "transactionHash": {
       "type": "string",
       "pattern": "^0x[a-f0-9]{64}$"
+    },
+    "bitcoinTxId": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     },
     "sourceId": {
       "type": "string",
@@ -922,6 +956,30 @@
         "destination_transaction_hash": {
           "$ref": "#/$defs/transactionHash"
         }
+      },
+      "additionalProperties": false
+    },
+    "bitcoinTransactionInputs": {
+      "type": "object",
+      "required": ["transaction_id", "network", "start_vout", "max_hops"],
+      "properties": {
+        "transaction_id": {"$ref": "#/$defs/bitcoinTxId"},
+        "network": {"const": "bitcoin_mainnet"},
+        "start_vout": {"type": "integer", "minimum": 0},
+        "max_hops": {"type": "integer", "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "bitcoinHeuristicInputs": {
+      "type": "object",
+      "required": ["transaction_id", "network", "start_vout", "max_hops", "assess_change", "assess_coinjoin"],
+      "properties": {
+        "transaction_id": {"$ref": "#/$defs/bitcoinTxId"},
+        "network": {"const": "bitcoin_mainnet"},
+        "start_vout": {"type": "integer", "minimum": 0},
+        "max_hops": {"type": "integer", "exclusiveMinimum": 0},
+        "assess_change": {"type": "boolean"},
+        "assess_coinjoin": {"type": "boolean"}
       },
       "additionalProperties": false
     },

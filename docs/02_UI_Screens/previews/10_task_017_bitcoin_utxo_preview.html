@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<title>TASK-017 Bitcoin UTXO Preview</title>
+<style>
+body{font:15px system-ui;background:#101318;color:#e8edf5;margin:0;padding:24px}
+main{max-width:900px;margin:auto}.card{border:1px solid #344052;border-radius:12px;padding:16px;margin:12px 0}
+.fact{color:#63d3ff}.heur{color:#f5c45e}.muted{color:#9ba8b8}button{margin-right:8px;padding:8px}
+</style>
+<main>
+<h1>Bitcoin UTXO · Offline Preview</h1>
+<p class="muted">synthetic UI shell · external calls 0</p>
+<div role="group" aria-label="state">
+<button aria-pressed="true" data-state="complete">Complete</button>
+<button aria-pressed="false" data-state="partial">Partial</button>
+<button aria-pressed="false" data-state="failed">Failed</button>
+</div>
+<section class="card" id="content"></section>
+</main>
+<script>
+const views={
+complete:`<h2 class="fact">COMPLETE · exact satoshi</h2><p>604308 − 435183 = 169125 sat fee</p><p>depth 1: d41f…:0 → a757… → frontier a757…:0</p><hr><h3 class="heur">HEURISTIC ONLY</h3><p>vout 1 address reuse → change candidate</p><p>ownership · criminality · CoinJoin: not_assessed</p>`,
+partial:`<h2>PARTIAL</h2><p>next spend evidence missing · confirmed prefix retained</p><p class="heur">candidate is not promoted</p>`,
+failed:`<h2>FAILED</h2><p>reconciliation_failed · fee or outpoint binding conflict</p><p>results: []</p>`};
+const content=document.querySelector("#content");
+function show(state){content.innerHTML=views[state];document.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.state===state)))}
+document.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.state)));
+show("complete");
+</script>
+</html>

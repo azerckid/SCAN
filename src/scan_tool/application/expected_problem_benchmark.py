@@ -14,6 +14,7 @@ from scan_tool.domain._types import ContractModel
 from scan_tool.domain.analysis_request import (
     AnalysisRequest,
     AuthAnalysisRequest,
+    BitcoinUtxoAnalysisRequest,
     BridgeTransferAnalysisRequest,
     CexClusterAnalysisRequest,
     DexAnalysisRequest,
@@ -25,6 +26,7 @@ from scan_tool.domain.analysis_request import (
 )
 from scan_tool.domain.analysis_result import AnalysisResult, AnalysisStatus
 from scan_tool.slices.auth import analyze_auth_replay
+from scan_tool.slices.bitcoin_utxo import analyze_bitcoin_utxo_replay
 from scan_tool.slices.bridge_transfer import analyze_bridge_transfer_replay
 from scan_tool.slices.cex_cluster import analyze_cex_cluster_replay
 from scan_tool.slices.dex import analyze_dex_replay
@@ -40,8 +42,8 @@ APPROVED_EXPECTED_PROBLEM_IDS = frozenset(
         "ACTOR-REL-002",
         "BASIC-EVM-001",
         "BASIC-EVM-002",
-        "BTC-CJ-001",
         "BTC-UTXO-001",
+        "BTC-CJ-001",
         "BTC-UTXO-002",
         "CRIME-EXP-001",
         "CRIME-PHISH-001",
@@ -72,6 +74,7 @@ APPROVED_AUTOMATED_PROBLEM_IDS = frozenset(
     {
         "BASIC-EVM-001",
         "BASIC-EVM-002",
+        "BTC-UTXO-001",
         "EVM-AUTH-001",
         "EVM-FREEZE-001",
         "EVM-NFT-001",
@@ -294,6 +297,8 @@ def _analyze(
         return analyze_intel_context_replay(document, replay)
     if isinstance(document, BridgeTransferAnalysisRequest):
         return analyze_bridge_transfer_replay(document, replay, package_dir=package_dir)
+    if isinstance(document, BitcoinUtxoAnalysisRequest):
+        return analyze_bitcoin_utxo_replay(document, replay, package_dir=package_dir)
     if isinstance(document, CexClusterAnalysisRequest):
         return analyze_cex_cluster_replay(document, replay, package_dir=package_dir)
     raise ValueError("unsupported benchmark analysis type")
