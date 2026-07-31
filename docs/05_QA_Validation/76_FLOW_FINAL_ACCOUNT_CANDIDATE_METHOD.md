@@ -2,7 +2,7 @@
 
 > Created: 2026-08-01
 > Updated: 2026-08-01 (PR #119 review: residual filter · independent reverse check)
-> Status: Method draft · Implementation not started
+> Status: Method draft · Offline MVP implemented (`scripts/contest/flow_final_candidates.py`)
 > Related: [Contest Day Playbook](./75_CONTEST_DAY_PROBLEM_SOLVING_PLAYBOOK.md),
 > [Expected Problem Bank](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) (`FLOW-EVM-001`)
 
@@ -282,7 +282,7 @@ SCAN Benchmark `confirmed`와 동일시하지 않는다.
 - [ ] collection_method와 scope_complete/pagination/budget 필드가 있다
 - [ ] tolerance 근거·상한이 기록된다
 - [ ] production flow_path를 수정하지 않는다
-- [ ] 착수 시 별도 승인 후 `scripts/contest/`에만 추가한다
+- [x] 착수 시 별도 승인 후 `scripts/contest/`에만 추가한다 (offline MVP)
 
 ## 8. Related Documents
 
