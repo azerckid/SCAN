@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-31 05:40
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate) · TASK-016 Bridge+CEX+Mixer+Lending Confirmed·Automated · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted · TASK-019 Proposed · Benchmark 17·7·6
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate) · TASK-016 Contest Scope Done(Bridge+CEX+Mixer+Lending Automated · MIXED-XCHAIN Deferred) · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted/freeze · TASK-019 Done(Offline Integration) · Benchmark 17·7·6
 
 ## 1. 문서 목적
 
@@ -1452,11 +1452,13 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     assisted 4·unsupported 14로 승격했다. 전체 542 tests PASS. 관련 SANCTIONS·
     ENS·RELATION-HUB는 문제 전체가 아니므로 `assisted`를 유지한다.
 
-### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
+### [x] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
-- Status: In Progress — Bridge(`SVC-BRG-001`)·CEX(`SVC-CEX-001`)·Mixer(`SVC-MIX-001`)·
-  Lending(`SVC-LEND-001`) fixture confirmed · Benchmark automated (17·7·6).
-  `MIXED-XCHAIN-001`은 unsupported 잔여.
+- Status: Done — Contest scope complete. Bridge(`SVC-BRG-001`)·CEX(`SVC-CEX-001`)·
+  Mixer(`SVC-MIX-001`)·Lending(`SVC-LEND-001`) fixture confirmed · Benchmark
+  automated (17·7·6). `MIXED-XCHAIN-001`은 실제 연결 fixture가 없어
+  unsupported/deferred이며 완료 범위에 포함하지 않는다
+  ([73 Closure Receipt](../05_QA_Validation/73_TASK_016_CONTEST_SCOPE_CLOSURE_RECEIPT.md)).
 
 - Work Type: code
 - Priority: Phase 2 · P2
@@ -1472,7 +1474,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] CEX exact·partial·conflict와 Benchmark automated를 검증한다.
   - [x] Mixer adapter exact·partial·conflict와 Benchmark automated를 검증한다.
   - [x] Lending adapter exact·partial·conflict와 Benchmark automated를 검증한다.
-  - [ ] 남은 서비스 문제의 Benchmark를 실제 완료 범위만 승격한다.
+  - [x] 실제 완료된 네 service vertical만 Benchmark에 승격하고,
+    `MIXED-XCHAIN-001`은 연결 fixture가 생길 때까지 deferred로 보존한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 서비스·크로스체인 5문항
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P2/P3 승격 조건
@@ -1523,11 +1526,11 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Libraries intentionally not added: 범용 multi-chain SDK - 범위 폭발 방지.
   - shadcn preset: N/A - 웹 runtime 미구현.
 - Acceptance Criteria:
-  - [ ] 선택 adapter의 결정적 사실과 heuristic이 분리된다.
-  - [ ] 양단·금액·시간 누락은 partial/conflict로 보존된다.
-  - [ ] 서비스 귀속·불법성을 자동 단정하지 않는다.
+  - [x] 선택 adapter의 결정적 사실과 heuristic이 분리된다.
+  - [x] 양단·금액·시간 누락은 partial/conflict로 보존된다.
+  - [x] 서비스 귀속·불법성을 자동 단정하지 않는다.
 - Document Sync Check:
-  - [ ] source·ABI·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
+  - [x] source·ABI·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
   - Status: PASS — Bridge·CEX 완료 근거와 Lending 계약·UI·fixture·oracle·
     독립 Verifier·Analysis I/O 대안 B를 정독했다. 사용자는 2026-07-31
@@ -1869,19 +1872,20 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     traceability 2052 links, security 287 files
   - detailed evidence: [69 Report](../05_QA_Validation/69_TASK_018_CASE_RECONCILIATION_REPORT.md)
 
-### [ ] TASK-019: Coverage Expansion 통합 Gate
+### [x] TASK-019: Coverage Expansion 통합 Gate
 
-- Status: ToDo
+- Status: Done — 현재 승인 package의 offline contest integration Gate 완료
+  ([74 Final Integration Report](../05_QA_Validation/74_TASK_019_FINAL_INTEGRATION_REPORT.md)).
 - Work Type: code
 - Priority: Phase 2 · Final Gate
 - Depends On: TASK-012~018 중 실제 승인·완료된 package
 - Target Problems: 예상문제 30개 전체
 - Atomic Tasks:
-  - [ ] 새 confirmed fixture와 automated manifest mapping을 검증한다.
-  - [ ] 전체 automated 사례를 두 번 replay하고 exact/evidence/determinism을 채점한다.
-  - [ ] assisted·unsupported 잔여와 기능 공백을 다시 계산한다.
-  - [ ] bounded Operations Queue에서 복수 문제 격리·Verifier를 검증한다.
-  - [ ] regression·security·traceability·Rules Gate를 실행한다.
+  - [x] 새 confirmed fixture와 automated manifest mapping을 검증한다.
+  - [x] 전체 automated 사례를 두 번 replay하고 exact/evidence/determinism을 채점한다.
+  - [x] assisted·unsupported 잔여와 기능 공백을 다시 계산한다.
+  - [x] bounded Operations Queue에서 복수 문제 격리·Verifier를 검증한다.
+  - [x] regression·security·traceability·Rules Gate를 실행한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 전체 coverage 기준
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - 구현 결과 재점수화
@@ -1895,14 +1899,15 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [Agentic Solve Flow](../03_Technical_Specs/07_AGENTIC_PARALLEL_SOLVE_FLOW.md) - 병렬·Verifier Gate
 - Related QA Docs:
   - [Coverage 확장 QA](../05_QA_Validation/23_EXPECTED_PROBLEM_EXPANSION_QA.md) - QA-EXP-REG/SEC
-  - [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 최초 3/6/21, 현재 9/0/21 기준선
+  - [Offline Benchmark](../05_QA_Validation/22_EXPECTED_PROBLEM_BENCHMARK_REPORT.md) - 최초 3/6/21, 현재 17/7/6 기준선
+  - [Final Integration Report](../05_QA_Validation/74_TASK_019_FINAL_INTEGRATION_REPORT.md) - 17/7/6·Queue·Verifier·전체 Gate
 - Implementation Preconditions:
-  - [ ] 완료 package의 Verification Receipt를 모두 확인한다.
-  - [ ] Benchmark·Operations Preview와 사용자 동선을 확인한다.
-  - [ ] Operations 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
-  - [ ] snapshot 최소 필드·submission mutation·Queue 상태 관리를 재확인한다.
-  - [ ] 새 Schema·fixture·source·Rules 상태를 동결한다.
-  - [ ] 통합 Gate 실행 승인을 기록한다.
+  - [x] 완료 package의 Verification Receipt를 모두 확인한다.
+  - [x] Benchmark·Operations Preview와 사용자 동선을 확인한다.
+  - [x] Operations 진입·전환·이탈과 loading·empty·partial·failed를 확인한다.
+  - [x] snapshot 최소 필드·submission mutation·Queue 상태 관리를 재확인한다.
+  - [x] 새 Schema·fixture·source·Rules 상태를 동결한다.
+  - [x] 통합 Gate 실행 승인을 기록한다(2026-07-31 사용자 “권장 순서대로 진행” 승인).
 - Component & Library Plan:
   - shadcn/ui: N/A - offline integration Gate.
   - Custom components: Benchmark manifest/report 확장.
@@ -1911,21 +1916,25 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Libraries intentionally not added: benchmark/CI framework - 기존 pytest/script 재사용.
   - shadcn preset: N/A - 새 UI 없음.
 - Acceptance Criteria:
-  - [ ] 전체 automated 사례가 exact·evidence·determinism을 통과한다.
-  - [ ] 남은 assisted·unsupported를 성공으로 계산하지 않는다.
-  - [ ] 문제 간 workspace·result·artifact가 격리된다.
-  - [ ] 독립 검증 없는 후보와 conflict 후보는 submission-ready가 아니다.
+  - [x] 전체 automated 사례가 exact·evidence·determinism을 통과한다.
+  - [x] 남은 assisted·unsupported를 성공으로 계산하지 않는다.
+  - [x] 문제 간 workspace·result·artifact가 격리된다.
+  - [x] 독립 검증 없는 후보와 conflict 후보는 submission-ready가 아니다.
 - Document Sync Check:
-  - [ ] 문제은행·우선순위·Roadmap·README·QA·Benchmark를 동기화한다.
+  - [x] 문제은행·우선순위·Roadmap·README·QA·Benchmark를 동기화한다.
 - Context Receipt:
-  - Status: PENDING - 선행 package·사용자 통합 승인 전 착수 금지
+  - Status: PASS — 선행 package·사용자 통합 승인·contest freeze 경계 확인
   - Required References Read: 위 Related 문서 전체
   - Constraints: no automatic submission, no coverage overstatement
   - Conflicts: official live Rules unresolved
 - Change Receipt:
-  - N/A - 구현 미시작
+  - `verify_task_019_expansion_gate.py`를 추가하고 `scripts/verify.py`에 연결했다.
+  - TASK-016 contest closure·TASK-018 freeze·Benchmark 17/7/6을 동기화했다.
 - Verification Receipt:
-  - N/A - 구현 미시작
+  - Status: PASS — 17/17 Benchmark twice · Operations 집중 13 tests PASS
+  - Full Gate: 674 tests · fixture 25 · Schema 82 · Operations 17 ·
+    traceability 2094 · security 357
+  - [74 Final Integration Report](../05_QA_Validation/74_TASK_019_FINAL_INTEGRATION_REPORT.md)
 
 ## 5. In Progress
 
@@ -1967,7 +1976,7 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
 - [x] TASK-009 통합 회귀·보안·문서 동기화 Gate를 별도로 승인
 - [x] TASK-012~019 Coverage 확장 계획 문서 작성을 승인
 - [x] TASK-012 fixture·Context Receipt·구현을 별도로 승인
-- [ ] TASK-013~019 각 code task의 fixture·Context Receipt·구현을 별도로 승인
+- [x] TASK-019 현재 완료 package의 offline 통합 Gate를 별도로 승인(2026-07-31)
 - [x] QA 시나리오와 Acceptance Criteria 정합 확인
 - [x] P0·V1 관련 오픈소스 후보의 `OSS-*` 결정과 fixture 검증 계획 확인
 - [ ] 공식 규정 확인 전 live source 범위 재확인

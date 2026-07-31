@@ -50,10 +50,12 @@ coverage.
 Phase 2 is documented as `TASK-012` through `TASK-019`: generic EVM, NFT/proxy,
 PATH, intelligence, service/xchain, Bitcoin, case reconciliation, and a final
 coverage gate. TASK-012 through TASK-014 are complete; TASK-015 is in progress with
-four confirmed fixtures; TASK-016 Bridge, CEX, Mixer, and Lending are confirmed and
-automated. TASK-017 now automates exact bounded UTXO traversal while change/CoinJoin
+four confirmed fixtures; TASK-016 is complete for the contest scope with Bridge,
+CEX, Mixer, and Lending confirmed and automated; MIXED-XCHAIN is explicitly deferred.
+TASK-017 now automates exact bounded UTXO traversal while change/CoinJoin
 remain assisted. TASK-018 implements bounded Euler exit reconciliation as assisted;
-four case families and TASK-019 remain.
+four case families remain frozen. TASK-019 has passed the final offline integration
+Gate for the actual 17 automated, 7 assisted, and 6 unsupported scope.
 
 TASK-013 has three confirmed public NFT·Proxy packages with two-provider
 raw SHA replay, explicit selected-scope integrity checks, and 16 offline negative
@@ -227,12 +229,14 @@ baseline and expected-problem Benchmark 0.1 are closed.
 `TASK-014` is complete with three confirmed fixtures; Benchmark is 17/17 automated (LABEL via TASK-015, Bridge·CEX·Mixer·Lending via TASK-016, exact Bitcoin UTXO via TASK-017).
 `TASK-015` is in progress: four bounded fixtures are confirmed, `OSINT-LBL-001`
 is automated, and common-funder remains candidate. `TASK-016` Bridge, CEX, Mixer, and Lending are confirmed
-and automated. `TASK-017` automates exact bounded
+and automated; its contest scope is complete while `MIXED-XCHAIN-001` remains
+unsupported and deferred. `TASK-017` automates exact bounded
 Bitcoin UTXO traversal while change/CoinJoin remain assisted. `TASK-018` has an
 explicitly approved bounded Euler exit reconciler and one confirmed derived fixture;
 phishing, poisoning, rug-pull, and open-ended mixed cases remain unsupported.
-`TASK-019` remains under contest feature freeze until actual problem
-demand appears.
+`TASK-019` is complete for the offline contest integration scope: all 17 automated
+cases pass twice, assisted and unsupported cases remain excluded from the success
+count, and the Operations Queue/Verifier/submission gates remain intact.
 
 `TASK-010` offline Operations V1 is complete through human-confirmed local
 submission recording. No live provider configuration exists; live transport still

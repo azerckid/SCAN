@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
 > Last Updated: 2026-07-31 22:40
-> Status: Active · TASK-001~014 Done · TASK-015 In Progress · TASK-016 Bridge+CEX+Mixer+Lending Confirmed·Automated · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted · TASK-019 Proposed · Benchmark 17·7·6
+> Status: Active · TASK-001~014 Done · TASK-015 In Progress · TASK-016 Contest Scope Done · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted/freeze · TASK-019 Done(Offline Integration) · Benchmark 17·7·6
 
 ## 1. 목적
 
@@ -266,6 +266,10 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] Mixer adapter(`SVC-MIX-001`)는 confirmed fixture·Benchmark automated로 승격했다.
 - [x] Lending(`SVC-LEND-001`) confirmed fixture·analyzer·Benchmark automated 완료 (2026-07-31 batch approval / PR #113).
 - Combined Benchmark: 17 automated / 7 assisted / 6 unsupported. `MIXED-XCHAIN-001`은 COMPOSITION Gate로 unsupported 유지.
+- [x] TASK-016 대회 범위를 Bridge·CEX·Mixer·Lending confirmed/automated로 닫고,
+  실제 DEX→Bridge→CEX 연결 fixture가 없는 `MIXED-XCHAIN-001`은 대회 후
+  fixture-first 작업으로 deferred한다
+  ([73 Closure Receipt](../05_QA_Validation/73_TASK_016_CONTEST_SCOPE_CLOSURE_RECEIPT.md)).
 
 
 ### [ ] Wave 6 — 출제가 확인된 비EVM
@@ -274,7 +278,7 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [ ] chain별 instruction/message·account/state 계약과 fixture를 승인한다.
 - [ ] EVM analyzer로 잘못 일반화하지 않고 전용 decoder를 별도 승인한다.
 
-### [ ] Wave 7 — 범죄·복합 사건
+### [ ] Wave 7 — 범죄·복합 사건 · Contest Freeze
 
 - [ ] `TASK-018` phishing/poison/exploit/rug/mixed case reference answer를 확정한다.
   Euler selected-exit composition 1개만 confirmed; 나머지는 미지원.
@@ -282,13 +286,14 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 - [x] seed discovery·관련 없는 자금 제외·사건 timeline 규칙을 승인한다.
 - [x] 기존 엔진 결과를 복사하지 않고 evidence ref+SHA pin으로 조합한다.
 
-### [ ] Wave 8 — 통합
+### [x] Wave 8 — 통합 · Done (Offline Contest Scope)
 
-- [ ] `TASK-019` 모든 새 automated 사례를 Benchmark manifest에 승격한다.
-- [ ] assisted·unsupported 잔여를 숨기지 않고 새 집계를 기록한다.
-- [ ] 복수 문제를 bounded Queue에서 병렬 실행한다.
-- [ ] 독립 Verifier 없는 후보가 submission-ready가 아닌지 재확인한다.
-- [ ] 전체 regression·security·traceability·offline Gate를 통과한다.
+- [x] `TASK-019` 모든 실제 완료 automated 사례의 manifest mapping을 검증한다.
+- [x] assisted 7·unsupported 6 잔여를 숨기지 않고 기록한다.
+- [x] 복수 문제를 bounded Queue에서 병렬 실행한다.
+- [x] 독립 Verifier 없는 후보가 submission-ready가 아닌지 재확인한다.
+- [x] 전체 regression·security·traceability·offline Gate를 통과한다
+  ([74 Final Integration Report](../05_QA_Validation/74_TASK_019_FINAL_INTEGRATION_REPORT.md)).
 
 ## 5. Stop/Go 규칙
 

@@ -150,6 +150,10 @@ COMMANDS = (
         sys.executable,
         "scripts/verify_task_018_case_analyzer.py",
     ),
+    (
+        sys.executable,
+        "scripts/verify_task_019_expansion_gate.py",
+    ),
 )
 
 
