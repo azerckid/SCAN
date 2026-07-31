@@ -1,7 +1,7 @@
 # SCAN 2026 P0·V1·Coverage 확장 및 대회 운영 Backlog
 > Created: 2026-07-26 16:46
 > Last Updated: 2026-07-31 05:40
-> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate) · TASK-016 Bridge+CEX+Mixer+Lending Confirmed·Automated · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted · TASK-019 Proposed · Benchmark 17·7·6
+> Status: TASK-001~014 Done · WP-INPUT Done · TASK-015 In Progress(4 Confirmed · Common-funder Candidate) · TASK-016 Contest Scope Done(Bridge+CEX+Mixer+Lending Automated · MIXED-XCHAIN Deferred) · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted/freeze · TASK-019 In Progress · Benchmark 17·7·6
 
 ## 1. 문서 목적
 
@@ -1452,11 +1452,13 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
     assisted 4·unsupported 14로 승격했다. 전체 542 tests PASS. 관련 SANCTIONS·
     ENS·RELATION-HUB는 문제 전체가 아니므로 `assisted`를 유지한다.
 
-### [ ] TASK-016: Service·Bridge·XChain·DeFi Adapter
+### [x] TASK-016: Service·Bridge·XChain·DeFi Adapter
 
-- Status: In Progress — Bridge(`SVC-BRG-001`)·CEX(`SVC-CEX-001`)·Mixer(`SVC-MIX-001`)·
-  Lending(`SVC-LEND-001`) fixture confirmed · Benchmark automated (17·7·6).
-  `MIXED-XCHAIN-001`은 unsupported 잔여.
+- Status: Done — Contest scope complete. Bridge(`SVC-BRG-001`)·CEX(`SVC-CEX-001`)·
+  Mixer(`SVC-MIX-001`)·Lending(`SVC-LEND-001`) fixture confirmed · Benchmark
+  automated (17·7·6). `MIXED-XCHAIN-001`은 실제 연결 fixture가 없어
+  unsupported/deferred이며 완료 범위에 포함하지 않는다
+  ([73 Closure Receipt](../05_QA_Validation/73_TASK_016_CONTEST_SCOPE_CLOSURE_RECEIPT.md)).
 
 - Work Type: code
 - Priority: Phase 2 · P2
@@ -1472,7 +1474,8 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - [x] CEX exact·partial·conflict와 Benchmark automated를 검증한다.
   - [x] Mixer adapter exact·partial·conflict와 Benchmark automated를 검증한다.
   - [x] Lending adapter exact·partial·conflict와 Benchmark automated를 검증한다.
-  - [ ] 남은 서비스 문제의 Benchmark를 실제 완료 범위만 승격한다.
+  - [x] 실제 완료된 네 service vertical만 Benchmark에 승격하고,
+    `MIXED-XCHAIN-001`은 연결 fixture가 생길 때까지 deferred로 보존한다.
 - Related Concept Docs:
   - [예상문제 은행](../01_Concept_Design/02_SCAN_2026_EXPECTED_PROBLEM_BANK.md) - 서비스·크로스체인 5문항
   - [기능 우선순위](../01_Concept_Design/04_SCAN_2026_TOOL_PRIORITY.md) - P2/P3 승격 조건
@@ -1523,11 +1526,11 @@ Context Receipt·개별 구현 승인을 대체하지 않는다.
   - Libraries intentionally not added: 범용 multi-chain SDK - 범위 폭발 방지.
   - shadcn preset: N/A - 웹 runtime 미구현.
 - Acceptance Criteria:
-  - [ ] 선택 adapter의 결정적 사실과 heuristic이 분리된다.
-  - [ ] 양단·금액·시간 누락은 partial/conflict로 보존된다.
-  - [ ] 서비스 귀속·불법성을 자동 단정하지 않는다.
+  - [x] 선택 adapter의 결정적 사실과 heuristic이 분리된다.
+  - [x] 양단·금액·시간 누락은 partial/conflict로 보존된다.
+  - [x] 서비스 귀속·불법성을 자동 단정하지 않는다.
 - Document Sync Check:
-  - [ ] source·ABI·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
+  - [x] source·ABI·Analysis I/O·fixture·Benchmark·QA를 동기화한다.
 - Context Receipt:
   - Status: PASS — Bridge·CEX 완료 근거와 Lending 계약·UI·fixture·oracle·
     독립 Verifier·Analysis I/O 대안 B를 정독했다. 사용자는 2026-07-31

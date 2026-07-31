@@ -50,8 +50,9 @@ coverage.
 Phase 2 is documented as `TASK-012` through `TASK-019`: generic EVM, NFT/proxy,
 PATH, intelligence, service/xchain, Bitcoin, case reconciliation, and a final
 coverage gate. TASK-012 through TASK-014 are complete; TASK-015 is in progress with
-four confirmed fixtures; TASK-016 Bridge, CEX, Mixer, and Lending are confirmed and
-automated. TASK-017 now automates exact bounded UTXO traversal while change/CoinJoin
+four confirmed fixtures; TASK-016 is complete for the contest scope with Bridge,
+CEX, Mixer, and Lending confirmed and automated; MIXED-XCHAIN is explicitly deferred.
+TASK-017 now automates exact bounded UTXO traversal while change/CoinJoin
 remain assisted. TASK-018 implements bounded Euler exit reconciliation as assisted;
 four case families and TASK-019 remain.
 
@@ -227,7 +228,8 @@ baseline and expected-problem Benchmark 0.1 are closed.
 `TASK-014` is complete with three confirmed fixtures; Benchmark is 17/17 automated (LABEL via TASK-015, Bridge·CEX·Mixer·Lending via TASK-016, exact Bitcoin UTXO via TASK-017).
 `TASK-015` is in progress: four bounded fixtures are confirmed, `OSINT-LBL-001`
 is automated, and common-funder remains candidate. `TASK-016` Bridge, CEX, Mixer, and Lending are confirmed
-and automated. `TASK-017` automates exact bounded
+and automated; its contest scope is complete while `MIXED-XCHAIN-001` remains
+unsupported and deferred. `TASK-017` automates exact bounded
 Bitcoin UTXO traversal while change/CoinJoin remain assisted. `TASK-018` has an
 explicitly approved bounded Euler exit reconciler and one confirmed derived fixture;
 phishing, poisoning, rug-pull, and open-ended mixed cases remain unsupported.

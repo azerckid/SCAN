@@ -149,7 +149,8 @@ coverage를 가장 크게 늘리는 순서는
 
 - automated 사례는 Ethereum mainnet DEX·AUTH·FREEZE, EVM Core 네 query,
   NFT·Proxy, bounded FLOW path·remerge, `OSINT-LBL-001`, `SVC-BRG-001`,
-  `SVC-CEX-001`, `SVC-MIX-001`, `BTC-UTXO-001`에 한정된다(16 automated).
+  `SVC-CEX-001`, `SVC-MIX-001`, `SVC-LEND-001`, `BTC-UTXO-001`에 한정된다
+  (17 automated).
   나머지 TASK-015 confirmed fixture(SANCTIONS·ENS·RELATION-HUB)와 BTC
   change/CoinJoin은 문제 전체가 아니거나 heuristic 경계라 assisted다.
 - fixture oracle은 reviewed 공개 사례에 고정되어 새로운 실전 입력의 일반화
@@ -157,8 +158,8 @@ coverage를 가장 크게 늘리는 순서는
 - `FLOW-MULTI-001`은 raw contribution·합계만, OSINT-SAN/ENS와
   ACTOR-REL-002·BTC-UTXO-002·BTC-CJ-001은 도구보조다. Bitcoin
   change/CoinJoin과 `CRIME-EXP-001`(TASK-018 bounded Euler exit)도 각각 휴리스틱 또는
-  bounded post-incident exit만 제공한다. Assisted 7·Unsupported 7
-  (Lending·`MIXED-XCHAIN-001`·미구현 case family 포함)을 유지한다.
+  bounded post-incident exit만 제공한다. Assisted 7·Unsupported 6
+  (`MIXED-XCHAIN-001`·미구현 case family·ACTOR-REL-001 포함)을 유지한다.
 - Challenge Pack 10개에는 confirmed reference fixture가 없어 이번 0.1에서
   실행하지 않는다.
 - 실행 시간은 단일 로컬 관찰값이며 성능 benchmark로 사용하지 않는다.

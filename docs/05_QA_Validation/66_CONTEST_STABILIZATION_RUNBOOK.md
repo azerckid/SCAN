@@ -2,15 +2,16 @@
 
 > Created: 2026-07-31 04:55
 > Last Updated: 2026-07-31 22:40
-> Status: Active · Bridge+CEX+Mixer+Lending Confirmed · TASK-017 thawed · TASK-018 Euler assisted · combined Benchmark 17/17
+> Status: Active · TASK-016 Contest Scope Complete · TASK-017 thawed · TASK-018 Euler assisted/freeze · TASK-019 final Gate approved · Benchmark 17/17
 
 ## 1. 목적
 
 대회(2026-08-02 09:00 KST) 직전 프로그램의 **사용 가능한 안정 범위**와
 실행·복구 절차를 고정한다. TASK-016 Bridge·CEX·Mixer·Lending과 TASK-017 Bitcoin UTXO,
 bounded TASK-018 Euler exit는 사용자 승인으로 thaw 완료다.
-TASK-018의 미구현 case family·TASK-019·MIXED-XCHAIN 조합·live Rules adapter는
-freeze를 유지하며, 대회 중 실제 출제가 확인된 경우에만 최소 범위로 재개한다.
+TASK-018의 미구현 case family·MIXED-XCHAIN 조합·live Rules adapter는 freeze를
+유지한다. TASK-019는 2026-07-31 사용자 승인으로 최종 offline 통합 Gate만
+thaw하며 신규 adapter나 unsupported 승격을 포함하지 않는다.
 
 ## 2. 역사적 확정 Coverage · 04:55 기준
 
@@ -70,7 +71,9 @@ byte-only replay body만 전달하면 `AnalysisUnavailable`로 거부된다.
 ## 5. Feature Freeze 규칙
 
 - Freeze 대상: TASK-018의 미구현 4개 case family,
-  TASK-019, MIXED-XCHAIN 조합, live Rules adapter.
+  MIXED-XCHAIN 조합, live Rules adapter.
+- **TASK-016 종료:** Bridge·CEX·Mixer·Lending은 confirmed/automated로 대회
+  범위를 완료했다. MIXED-XCHAIN은 실제 연결 fixture 부재로 unsupported/deferred다.
 - **Mixer (2026-07-31 batch):** TASK-016 Mixer(`SVC-MIX-001`)는 publicnode PRIMARY +
   merkle VERIFY complete replay와 code-computed cross-provider match로 `confirmed`·
   Benchmark automated. Canonical hash
