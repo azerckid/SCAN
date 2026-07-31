@@ -37,6 +37,7 @@ class AnalysisType(StrEnum):
     BITCOIN_UTXO = "bitcoin_utxo"
     CEX_CLUSTER = "cex_cluster"
     MIXER_FLOW = "mixer_flow"
+    CASE_RECONCILIATION = "case_reconciliation"
 
 
 class EvmQueryKind(StrEnum):
@@ -350,6 +351,25 @@ class MixerFlowQueryKind(StrEnum):
     EVALUATE_MIXER_CANDIDATES = "evaluate_mixer_candidates"
 
 
+class CaseQueryKind(StrEnum):
+    RECONSTRUCT_INCIDENT = "reconstruct_incident"
+
+
+class CaseCategory(StrEnum):
+    PHISHING = "phishing"
+    ADDRESS_POISONING = "address_poisoning"
+    EXPLOIT = "exploit"
+    RUG_PULL = "rug_pull"
+    MIXED = "mixed"
+
+
+class ReconstructIncidentInputs(ContractModel):
+    case_category: CaseCategory
+    seed_transaction_hash: TransactionHash
+    source_fixture_refs: NonEmptyUniqueList[FixtureId]
+    max_timeline_entries: PositiveInt
+
+
 class ObservationWindowInputs(ContractModel):
     start_block: BlockNumber
     end_block: BlockNumber
@@ -625,6 +645,15 @@ class MixerFlowAnalysisRequest(AnalysisRequestBase):
     inputs: EvaluateMixerFlowInputs
 
 
+class CaseReconciliationAnalysisRequest(AnalysisRequestBase):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
+    chain_id: Literal[1]
+    fixture_id: Literal["FX-CASE-EULER-EXIT-001"]
+    query_kind: Literal[CaseQueryKind.RECONSTRUCT_INCIDENT]
+    inputs: ReconstructIncidentInputs
+
+
 RequestVariant = Annotated[
     DexAnalysisRequest
     | AuthAnalysisRequest
@@ -636,7 +665,8 @@ RequestVariant = Annotated[
     | BridgeTransferAnalysisRequest
     | BitcoinUtxoAnalysisRequest
     | CexClusterAnalysisRequest
-    | MixerFlowAnalysisRequest,
+    | MixerFlowAnalysisRequest
+    | CaseReconciliationAnalysisRequest,
     Field(discriminator="analysis_type"),
 ]
 

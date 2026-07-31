@@ -50,7 +50,8 @@
         "summarize_transaction",
         "assess_heuristics",
         "evaluate_cex_cluster",
-        "evaluate_mixer_candidates"
+        "evaluate_mixer_candidates",
+        "reconstruct_incident"
       ]
     },
     "chain_id": {"enum": [0, 1]},
@@ -362,6 +363,31 @@
     {
       "if": {
         "properties": {
+          "analysis_type": {
+            "const": "case_reconciliation"
+          }
+        },
+        "required": [
+          "analysis_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "query_kind"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "0.2"
+          },
+          "query_kind": {
+            "const": "reconstruct_incident"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
           "query_kind": {
             "const": "object_summary"
           }
@@ -543,6 +569,25 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "query_kind": {
+            "const": "reconstruct_incident"
+          }
+        },
+        "required": [
+          "query_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "$ref": "#/$defs/reconstructIncidentInputs"
+          }
+        }
+      }
     }
   ],
   "additionalProperties": false,
@@ -563,7 +608,8 @@
         "bridge_transfer",
         "bitcoin_utxo",
         "cex_cluster",
-        "mixer_flow"
+        "mixer_flow",
+        "case_reconciliation"
       ]
     },
     "address": {
@@ -1087,6 +1133,37 @@
         },
         "observation_window": {
           "$ref": "#/$defs/observationWindowInputs"
+        }
+      },
+      "additionalProperties": false
+    },
+    "reconstructIncidentInputs": {
+      "type": "object",
+      "required": [
+        "case_category",
+        "seed_transaction_hash",
+        "source_fixture_refs",
+        "max_timeline_entries"
+      ],
+      "properties": {
+        "case_category": {
+          "enum": ["phishing", "address_poisoning", "exploit", "rug_pull", "mixed"]
+        },
+        "seed_transaction_hash": {
+          "$ref": "#/$defs/transactionHash"
+        },
+        "source_fixture_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^FX-[A-Z0-9-]+$"
+          }
+        },
+        "max_timeline_entries": {
+          "type": "integer",
+          "exclusiveMinimum": 0
         }
       },
       "additionalProperties": false

@@ -1011,16 +1011,18 @@
     {
       "problem_id": "CRIME-EXP-001",
       "difficulty": "high",
-      "coverage": "unsupported",
-      "reason": "Attack-trace interpretation, protocol exploit decoding, and post-exploit path analysis are absent.",
+      "coverage": "assisted",
+      "reason": "The confirmed Euler composition deterministically reconstructs a selected post-incident exit path and excludes an unrelated inflow, but attack-trace interpretation, exploit causation, ownership, and full continuous-fund coverage remain outside the analyzer.",
       "reusable_capabilities": [
         "EVM-LOG",
-        "BASE-PROVENANCE"
+        "BASE-PROVENANCE",
+        "PATH",
+        "CASE-RECON"
       ],
       "blocking_gaps": [
         "EVM-TRACE",
         "EXPLOIT-DECODE",
-        "PATH"
+        "SEED-DISCOVERY"
       ]
     },
     {

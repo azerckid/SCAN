@@ -43,6 +43,9 @@ CEX_CLUSTER_EXAMPLE = (
 MIXER_FLOW_EXAMPLE = (
     REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-SVC-MIX-001/analysis-request.json"
 )
+CASE_RECONCILIATION_EXAMPLE = (
+    REPOSITORY_ROOT / "docs/05_QA_Validation/fixtures/FX-CASE-EULER-EXIT-001/analysis-request.json"
+)
 SCHEMA_FILES = {
     "request": "analysis-request.schema.json",
     "result": "analysis-result.schema.json",
@@ -223,6 +226,38 @@ def evm_special_family_probes(evm_request: dict[str, object]) -> list[Probe]:
                 "include_beacon",
                 value=True,
             ),
+            False,
+        ),
+    ]
+
+
+def case_reconciliation_family_probes(evm_request: dict[str, object]) -> list[Probe]:
+    """Keep case_reconciliation isolated from existing Analysis I/O families."""
+    case_request = load_json(CASE_RECONCILIATION_EXAMPLE)
+    return [
+        Probe("case_reconciliation request", "request", case_request, True),
+        Probe(
+            "evm core request with case query_kind",
+            "request",
+            changed(evm_request, "query_kind", value="reconstruct_incident"),
+            False,
+        ),
+        Probe(
+            "case request with evm query_kind",
+            "request",
+            changed(case_request, "query_kind", value="object_summary"),
+            False,
+        ),
+        Probe(
+            "case request legacy schema version",
+            "request",
+            changed(case_request, "schema_version", value="0.1"),
+            False,
+        ),
+        Probe(
+            "case request bitcoin chain",
+            "request",
+            changed(case_request, "chain_id", value=0),
             False,
         ),
     ]
@@ -668,6 +703,7 @@ def build_probes() -> list[Probe]:
         *bitcoin_utxo_family_probes(evm_request, evm_result),
         *cex_cluster_family_probes(evm_request, evm_result),
         *mixer_flow_family_probes(evm_request, evm_result),
+        *case_reconciliation_family_probes(evm_request),
         *result_status_probes(dex_result, auth_result, freeze_result, error, evm_result),
         *result_component_probes(dex_result),
         *error_probes(error),

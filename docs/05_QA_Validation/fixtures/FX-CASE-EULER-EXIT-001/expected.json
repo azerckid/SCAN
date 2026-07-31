@@ -1,0 +1,54 @@
+{
+  "$schema": "../../schemas/fixture-expected.schema.json",
+  "schema_version": "0.1",
+  "fixture_version": "0.1",
+  "fixture_id": "FX-CASE-EULER-EXIT-001",
+  "status": "confirmed",
+  "query_kind": "reconstruct_incident",
+  "expected_status": "partial",
+  "case_scope": "selected_post_incident_exit",
+  "expected_facts": {
+    "selected_path_hop_count": 3,
+    "branch_count": 4,
+    "merge_node": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5",
+    "unrelated_inflow_excluded": true,
+    "continuous_scope_scanned": false,
+    "full_incident_reconstruction": false,
+    "address_ownership": "not_assessed",
+    "criminal_intent": "not_assessed",
+    "exploit_causation": "not_assessed"
+  },
+  "tolerance": {
+    "integer_raw": 0
+  },
+  "scoring": {
+    "requirements": [
+      {
+        "requirement_id": "REQ-CASE-TIMELINE",
+        "description": "The three selected exit transfers must remain ordered and bound to the confirmed FLOW path.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-CASE-EXPECTED-0",
+          "EV-CASE-EVIDENCE-0"
+        ]
+      },
+      {
+        "requirement_id": "REQ-CASE-UNRELATED-FUND",
+        "description": "The unrelated external inflow must remain excluded from the seed ledger.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-CASE-EXPECTED-1",
+          "EV-CASE-EVIDENCE-1"
+        ]
+      },
+      {
+        "requirement_id": "REQ-CASE-ATTRIBUTION-BOUNDARY",
+        "description": "External chronology must not become ownership, criminal-intent, or exploit-causation fact.",
+        "mandatory": true,
+        "evidence_refs": [
+          "EV-CASE-CONTEXT"
+        ]
+      }
+    ]
+  }
+}

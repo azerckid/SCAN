@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.1",
+  "fixture_id": "FX-CASE-EULER-EXIT-001",
+  "status": "confirmed",
+  "captured_at": "2026-07-31T11:00:00Z",
+  "chain_id": 1,
+  "case_category": "exploit",
+  "seed_transaction_hash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+  "source_fixture_refs": [
+    "FX-FLOW-PATH-001",
+    "FX-FLOW-REMERGE-001"
+  ],
+  "source_pins": [
+    {
+      "fixture_id": "FX-FLOW-PATH-001",
+      "expected_sha256": "b761531a1364ddc28e5c6bb6a1d0b3b1432ee053fa2591210570a6113a099504",
+      "evidence_sha256": "05f9cab3d8aad9ee66238339f3c2aa2626d3060a19634b377df48cb79149ec85"
+    },
+    {
+      "fixture_id": "FX-FLOW-REMERGE-001",
+      "expected_sha256": "627c47ffb39dcb8c5179883a8c84c1ac92fca14ef08cf23dd5cfbfd804437cad",
+      "evidence_sha256": "b5b193f0511a2d7dac327a33a1dd214ba41bb4aa0e9bb7e8f341c1ea7d5ffe88"
+    }
+  ],
+  "incident_context_url": "https://www.euler.finance/blog/war-peace-behind-the-scenes-of-eulers-240m-exploit-recovery",
+  "continuous_scope_scanned": false,
+  "attribution_assessed": false
+}

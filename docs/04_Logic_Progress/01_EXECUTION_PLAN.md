@@ -1,7 +1,7 @@
 # SCAN 2026 예상문제 Coverage 확장 Execution Plan
 > Created: 2026-07-29 01:55
 > Last Updated: 2026-07-31 06:30
-> Status: TASK-012~014 Complete · TASK-015 Analyzer Passed · TASK-016 Bridge+CEX+Mixer Confirmed·Automated · Lending freeze · TASK-017 Bitcoin on main · Benchmark 16 Automated / 6 Assisted / 8 Unsupported
+> Status: Active · TASK-001~014 Done · TASK-015 In Progress · TASK-016 Bridge+CEX+Mixer Confirmed·Automated · Lending freeze · TASK-017 Bitcoin UTXO automated · TASK-018 Euler exit assisted · TASK-019 Proposed · Benchmark 16·7·7
 
 ## 1. 목적
 
@@ -263,7 +263,7 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
   Verifier·analyzer·Benchmark automated(13→14)를 완료했다
   ([68 Receipt](../05_QA_Validation/68_TASK_016_CEX_FINAL_PROMOTION_RECEIPT.md)).
   `MIXED-XCHAIN-001`은 unsupported 유지.
-- [x] Mixer adapter(`SVC-MIX-001`)는 confirmed fixture·Benchmark automated(16/16)·ASSISTED 6·UNSUPPORTED 8로 승격했다. Lending은 confirmed fixture 확보 전 구현하지 않는다(Draft PR #113 별도). `MIXED-XCHAIN-001`은 unsupported.
+- [x] Mixer adapter(`SVC-MIX-001`)는 confirmed fixture·Benchmark automated(16/16)·ASSISTED 7·UNSUPPORTED 7로 승격했다. Lending은 confirmed fixture 확보 전 구현하지 않는다(Draft PR #113 별도). `MIXED-XCHAIN-001`은 unsupported.
 
 ### [ ] Wave 6 — 출제가 확인된 비EVM
 
@@ -274,9 +274,10 @@ credential 회전·live rate-limit/timeout과 선택적 독립 Trace는 실전 l
 ### [ ] Wave 7 — 범죄·복합 사건
 
 - [ ] `TASK-018` phishing/poison/exploit/rug/mixed case reference answer를 확정한다.
-- [ ] 기술적 사실·외부 귀속·범죄 의도·현재 상태를 분리한다.
-- [ ] seed discovery·관련 없는 자금 제외·사건 timeline 규칙을 승인한다.
-- [ ] 기존 엔진 결과를 복사하지 않고 evidence ref로 조합한다.
+  Euler selected-exit composition 1개만 confirmed; 나머지는 미지원.
+- [x] 기술적 사실·외부 귀속·범죄 의도·현재 상태를 분리한다.
+- [x] seed discovery·관련 없는 자금 제외·사건 timeline 규칙을 승인한다.
+- [x] 기존 엔진 결과를 복사하지 않고 evidence ref+SHA pin으로 조합한다.
 
 ### [ ] Wave 8 — 통합
 

@@ -373,6 +373,24 @@ class MixerFlowFailedAnalysisResult(FailedAnalysisResult):
     analysis_type: Literal[AnalysisType.MIXER_FLOW]
 
 
+class CaseReconciliationCompleteAnalysisResult(CompleteAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
+    chain_id: Literal[1]
+
+
+class CaseReconciliationPartialAnalysisResult(PartialAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
+    chain_id: Literal[1]
+
+
+class CaseReconciliationFailedAnalysisResult(FailedAnalysisResult):
+    schema_version: Literal["0.2"]
+    analysis_type: Literal[AnalysisType.CASE_RECONCILIATION]
+    chain_id: Literal[1]
+
+
 ResultVariant = (
     LegacyCompleteAnalysisResult
     | LegacyPartialAnalysisResult
@@ -401,6 +419,9 @@ ResultVariant = (
     | MixerFlowCompleteAnalysisResult
     | MixerFlowPartialAnalysisResult
     | MixerFlowFailedAnalysisResult
+    | CaseReconciliationCompleteAnalysisResult
+    | CaseReconciliationPartialAnalysisResult
+    | CaseReconciliationFailedAnalysisResult
 )
 
 
